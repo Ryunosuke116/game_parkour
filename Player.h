@@ -1,4 +1,6 @@
 #pragma once
+#include "PlayerStateActionBase.h"
+
 class Player : public BaseChara
 {
 private:
@@ -18,21 +20,25 @@ private:
 	bool isJump_second;				//二段ジャンプしたか
 	bool isPush;					//ボタンを押したか
 
-	enum class animNum : int
+	enum animNum : int
 	{
-		Braced_Hang_To_Crouch,		//しゃがんでぶらさがる
-		Falling_To_Roll,			//着地して転がる
-		Hangring_Idle,				//ぶらさがる
-		Hard_Landing,				//着地する
-		Idle,						//静止時
-		Jump,						//ジャンプ
-		Quick_Roll,					//転がる
-		Run,						//走る
-		Run_Jump,					//走りながらジャンプ
-		Run_To_Stop,				//止まる
-		Running_Forward_Flip,		//走りながら回転ジャンプ
-		Falling_Idle				//落ちているとき
+		braced_Hang_To_Crouch,		//しゃがんでぶらさがる
+		falling_To_Roll,			//着地して転がる
+		hangring_Idle,				//ぶらさがる
+		hard_Landing,				//着地する
+		idle,						//静止時
+		jump,						//ジャンプ
+		quick_Roll,					//転がる
+		run,						//走る
+		run_Jump,					//走りながらジャンプ
+		run_To_Stop,				//止まる
+		running_Forward_Flip,		//走りながら回転ジャンプ
+		falling_Idle				//落ちているとき
 	};
+
+	//他クラス
+	std::shared_ptr<PlayerStateActionBase> nowState = NULL;
+
 public:
 	Player();
 	~Player();
@@ -41,10 +47,11 @@ public:
 	void Update(const Input& input, const VECTOR& cameraDirection);
 	void Draw();
 	void Move(const Input& input, VECTOR& moveVec, const VECTOR& cameraDirection);
-	void Jump(const Input& input);
+	void JumpMove(const Input& input);
 	void JumpCalclation();
 	void ChangeMotion(const int& motionNum, const float playAnimSpeed)override;
 	void MotionUpdate() override;
+	void ChangeState();
 
 	struct PadInput
 	{

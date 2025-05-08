@@ -11,12 +11,12 @@ protected:
 
 	int prevAttachIndex;			//前のアニメーション情報
 	float prevPlayTime_anim;		//前回の再生時間
-	float prevTotalTime_anim;		//前回の総再生時間
-	float prevPlayAnimSpeed;
+	float prevPlayAnimSpeed;		//前回のアニメーションスピード
 
-	int currentAttachIndex;
-	float currentPlayTime_anim;			//現在の再生時間
-	float currentPlayAnimSpeed;
+	int currentAttachIndex;			//現在のアニメーション情報
+	float currentPlayTime_anim;		//現在の再生時間
+	float currentPlayAnimSpeed;		//前回のアニメーションスピード
+
 	float animBlendRate;
 	float keepPlayTime_anim;
 

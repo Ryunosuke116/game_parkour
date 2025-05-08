@@ -11,7 +11,6 @@ BaseChara::BaseChara() :
     prevAttachIndex(-1),
     animBlendRate(-1),
     prevPlayTime_anim(-1),
-    prevTotalTime_anim(-1),
     currentPlayAnimSpeed(-1),
     prevPlayAnimSpeed(-1),
     targetMoveDirection(VGet(0.0f, 0.0f, 0.0f)),
