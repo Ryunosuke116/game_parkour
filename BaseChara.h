@@ -7,16 +7,16 @@ protected:
 	int motionNum;
 	int HP;
 	int nowFrameNumber;
-	int animNumber;
+	int animNumber_Now;
 
 	int prevAttachIndex;			//前のアニメーション情報
 	float prevPlayTime_anim;		//前回の再生時間
-	float prevTotalTime_anim;		//前回の総再生時間
-	float prevPlayAnimSpeed;
+	float prevPlayAnimSpeed;		//前回のアニメーションスピード
 
-	int currentAttachIndex;
-	float currentPlayTime_anim;			//現在の再生時間
-	float currentPlayAnimSpeed;
+	int currentAttachIndex;			//現在のアニメーション情報
+	float currentPlayTime_anim;		//現在の再生時間
+	float currentPlayAnimSpeed;		//前回のアニメーションスピード
+
 	float animBlendRate;
 	float keepPlayTime_anim;
 
@@ -43,7 +43,7 @@ public:
 	virtual void ChangeMotion(const int& motionNum, const float playAnimSpeed);
 	virtual void MotionUpdate();
 	virtual void Move(const Input& input, VECTOR& moveVec, const VECTOR& cameraDirection);
-	void UpdateAngle(int& modelHandle);
+	void UpdateAngle(const VECTOR direction);
 
 	/////////////////////////////////////////////
 	// ゲッター

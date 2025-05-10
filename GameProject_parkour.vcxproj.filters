@@ -5,10 +5,6 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="ヘッダー ファイル">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
     <Filter Include="リソース ファイル">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
@@ -33,6 +29,16 @@
     </Filter>
     <Filter Include="ソース ファイル\map">
       <UniqueIdentifier>{0564d51b-3b2a-45a6-905c-a0ad4e3256b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\player\state">
+      <UniqueIdentifier>{25ee530f-5c21-4ee8-9271-3b0bedbca70d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\player\state\Base">
+      <UniqueIdentifier>{94073645-165e-4d0d-b42d-68b29060cef2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -66,6 +72,21 @@
     <ClCompile Include="Map.cpp">
       <Filter>ソース ファイル\map</Filter>
     </ClCompile>
+    <ClCompile Include="Idle.cpp">
+      <Filter>ソース ファイル\player\state</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerStateActionBase.cpp">
+      <Filter>ソース ファイル\player\state\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="Run.cpp">
+      <Filter>ソース ファイル\player\state</Filter>
+    </ClCompile>
+    <ClCompile Include="Jump.cpp">
+      <Filter>ソース ファイル\player\state</Filter>
+    </ClCompile>
+    <ClCompile Include="Falling_Idle.cpp">
+      <Filter>ソース ファイル\player\state</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include.h">
@@ -97,6 +118,24 @@
     </ClInclude>
     <ClInclude Include="Map.h">
       <Filter>ソース ファイル\map</Filter>
+    </ClInclude>
+    <ClInclude Include="Idle.h">
+      <Filter>ソース ファイル\player\state</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerStateActionBase.h">
+      <Filter>ソース ファイル\player\state\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Run.h">
+      <Filter>ソース ファイル\player\state</Filter>
+    </ClInclude>
+    <ClInclude Include="Jump.h">
+      <Filter>ソース ファイル\player\state</Filter>
+    </ClInclude>
+    <ClInclude Include="Falling_Idle.h">
+      <Filter>ソース ファイル\player\state</Filter>
+    </ClInclude>
+    <ClInclude Include="playerState.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

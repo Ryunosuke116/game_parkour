@@ -11,7 +11,6 @@ BaseChara::BaseChara() :
     prevAttachIndex(-1),
     animBlendRate(-1),
     prevPlayTime_anim(-1),
-    prevTotalTime_anim(-1),
     currentPlayAnimSpeed(-1),
     prevPlayAnimSpeed(-1),
     targetMoveDirection(VGet(0.0f, 0.0f, 0.0f)),
@@ -57,7 +56,7 @@ void BaseChara::Move(const Input& input, VECTOR& moveVec, const VECTOR& cameraDi
 /// <summary>
 /// 向き
 /// </summary>
-void BaseChara::UpdateAngle(int& modelHandle)
+void BaseChara::UpdateAngle(const VECTOR direction)
 {
     // プレイヤーの移動方向にモデルの方向を近づける
     float targetAngle;			// 目標角度
@@ -177,6 +176,7 @@ void BaseChara::MotionUpdate()
         //総再生時間を超えたらリセット
         if (currentPlayTime_anim >= totalTime_anim)
         {
+            keepPlayTime_anim = currentPlayTime_anim;
             currentPlayTime_anim = static_cast<float>(fmod(currentPlayTime_anim, totalTime_anim));
         }
 

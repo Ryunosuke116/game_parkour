@@ -1,3 +1,4 @@
+#include"playerState.h"
 #include "Include.h"
 
 /// <summary>
@@ -22,9 +23,20 @@ Player::~Player()
 /// </summary>
 void Player::Initialize()
 {
-	position = VGet(0.0f, 0.0f, 0.0f);
-	MV1SetRotationXYZ(modelHandle, VGet(0, 0, 0));
-	ChangeMotion(Idle, PlayAnimSpeed);
+    position = VGet(0.0f, 0.0f, 0.0f);
+    MV1SetRotationXYZ(modelHandle, VGet(0, 0, 0));
+   // ChangeMotion(animNum::idle, PlayAnimSpeed);
+    currentJumpSpeed = 0.0f;
+    isMove = false;
+    isJump = false;
+    isJump_second = false;
+    isPush = false;
+   
+    this->nowAnimState.currentAttachIndex = -1;
+    this->nowAnimState.currentPlayAnimSpeed = 0.0f;
+    this->nowAnimState.currentPlayTime_anim = 0.0f;
+    this->nowAnimState.currentTotalPlayTime_anim = 0.0f;
+    nowState = std::make_shared<Idle>(modelHandle, prevAttachIndex,nowAnimState);
 }
 
 /// <summary>
@@ -35,11 +47,16 @@ void Player::Update(const Input& input, const VECTOR& cameraDirection)
 	VECTOR moveVec = VGet(0.0f, 0.0f, 0.0f);
 
     Move(input, moveVec, cameraDirection);
+    JumpMove(input);
+
+    ChangeState();
+
+    nowState->MotionUpdate();
 
     //動いていないとき
-    if (!isMove)
+    if (!isMove && !isJump)
     {
-        ChangeMotion(Idle, PlayAnimSpeed);
+        //ChangeMotion(animNum::idle, PlayAnimSpeed);
     }
 
     if (VSize(moveVec) != 0)
@@ -52,10 +69,12 @@ void Player::Update(const Input& input, const VECTOR& cameraDirection)
 
     position = VAdd(position, moveVec);
 
+    JumpCalclation();
+
     // プレイヤーのモデルの座標を更新する
     MV1SetPosition(modelHandle, position);
 
-	MotionUpdate();
+	//MotionUpdate();
 
     UpdateAngle(targetMoveDirection);
 }
@@ -91,9 +110,9 @@ void Player::Move(const Input& input, VECTOR& moveVec, const VECTOR& cameraDirec
     //上入力されたとき
     if (padInput.isUp(input))
     {
-        if (animNumber != Run)
+        if (animNumber_Now != animNum::run && !isJump)
         {
-            ChangeMotion(Run, PlayAnimSpeed);
+           // ChangeMotion(animNum::run, PlayAnimSpeed);
         }
         moveVec = VAdd(moveVec, upMove);
         isMove = true;
@@ -102,9 +121,9 @@ void Player::Move(const Input& input, VECTOR& moveVec, const VECTOR& cameraDirec
     //下入力されたとき
     if (padInput.isDown(input))
     {
-        if (animNumber != Run)
+        if (animNumber_Now != animNum::run && !isJump)
         {
-            ChangeMotion(Run, PlayAnimSpeed);
+           // ChangeMotion(animNum::run, PlayAnimSpeed);
         }
         moveVec = VAdd(moveVec, VScale(upMove, -1.0f));
         isMove = true;
@@ -113,9 +132,9 @@ void Player::Move(const Input& input, VECTOR& moveVec, const VECTOR& cameraDirec
     //左入力されたとき
     if (padInput.isLeft(input))
     {
-        if (animNumber != Run)
+        if (animNumber_Now != animNum::run && !isJump)
         {
-            ChangeMotion(Run, PlayAnimSpeed);
+           // ChangeMotion(animNum::run, PlayAnimSpeed);
         }
         moveVec = VAdd(moveVec, rightMove);
         isMove = true;
@@ -124,9 +143,9 @@ void Player::Move(const Input& input, VECTOR& moveVec, const VECTOR& cameraDirec
     //右入力されたとき
     if (padInput.isRight(input))
     {
-        if (animNumber != Run)
+        if (animNumber_Now != animNum::run && !isJump)
         {
-            ChangeMotion(Run, PlayAnimSpeed);
+            //ChangeMotion(animNum::run, PlayAnimSpeed);
         }
         moveVec = VAdd(moveVec, VScale(rightMove, -1.0f));
         isMove = true;
@@ -139,55 +158,85 @@ void Player::Move(const Input& input, VECTOR& moveVec, const VECTOR& cameraDirec
 }
 
 /// <summary>
-/// プレイヤーの回転制御
+/// ジャンプ
 /// </summary>
-void Player::UpdateAngle(const VECTOR direction)
+void Player::JumpMove(const Input& input)
 {
-    // プレイヤーの移動方向にモデルの方向を近づける
-    float targetAngle;			// 目標角度
-    float difference;			// 目標角度と現在の角度との差
-
-    // 目標の方向ベクトルから角度値を算出する
-    targetAngle = static_cast<float>(atan2(direction.x, direction.z));
-
-    // 目標の角度と現在の角度との差を割り出す
-    // 最初は単純に引き算
-    difference = targetAngle - angle;
-
-    // ある方向からある方向の差が１８０度以上になることは無いので
-    // 差の値が１８０度以上になっていたら修正する
-    if (difference < -DX_PI_F)
+    if (padInput.isJump(input))
     {
-        difference += DX_TWO_PI_F;
-    }
-    else if (difference > DX_PI_F)
-    {
-        difference -= DX_TWO_PI_F;
-    }
-
-    // 角度の差が０に近づける
-    if (difference > 0.0f)
-    {
-        // 差がプラスの場合は引く
-        difference -= angleSpeed;
-        if (difference < 0.0f)
+        //一回目のジャンプ
+        if (!isJump)
         {
-            difference = 0.0f;
+            isPush = true;
+            currentJumpSpeed = addJumpPower;
+            isJump = true;
+            if (isMove)
+            {
+               // ChangeMotion(animNum::run_Jump, PlayAnimSpeed);
+            }
+            else
+            {
+               // ChangeMotion(animNum::jump, PlayAnimSpeed);
+            }
+        }
+        //二段ジャンプ
+        if (isJump && !isPush && !isJump_second)
+        {
+            isPush = true;
+            isJump_second = true;
+            currentJumpSpeed = addJumpPower;
+            if (isMove)
+            {
+               // ChangeMotion(animNum::run_Jump, PlayAnimSpeed);
+            }
+            else
+            {
+                //ChangeMotion(animNum::jump, PlayAnimSpeed);
+            }
         }
     }
     else
     {
-        // 差がマイナスの場合は足す
-        difference += angleSpeed;
-        if (difference > 0.0f)
-        {
-            difference = 0.0f;
-        }
+        isPush = false;
+    }
+}
+
+/// <summary>
+/// ジャンプ処理
+/// </summary>
+void Player::JumpCalclation()
+{
+    //ジャンプの時は少し遅らせて加算する
+    //currentPlayTime_anim > 5.0f && isJump
+    if (isJump)
+    {
+        position.y += currentJumpSpeed;
+    }
+    //ランジャンプのときは即座に加算
+   /* else if (animNumber_Now == (animNum::run_Jump))
+    {
+        position.y += currentJumpSpeed;
+    }*/
+
+    //重力を加算する
+    if (isJump && currentPlayTime_anim > 5.0f && animNumber_Now == animNum::jump)
+    {
+        currentJumpSpeed += -gravity;
+    }
+    else if (isJump && animNumber_Now == animNum::run_Jump)
+    {
+        currentJumpSpeed += -gravity;
     }
 
-    // モデルの角度を更新
-    angle = targetAngle - difference;
-    MV1SetRotationXYZ(modelHandle, VGet(0.0f, angle + DX_PI_F, 0.0f));
+    //条件を満たしたらジャンプ終了
+    if (position.y < 0.0f)
+    {
+        position.y = 0.0f;
+        isJump = false;
+        isJump_second = false;
+    }
+
+
 }
 
 /// <summary>
@@ -196,12 +245,76 @@ void Player::UpdateAngle(const VECTOR direction)
 /// <param name="motionNum"></param>
 void Player::ChangeMotion(const int& motionNum, const float playAnimSpeed)
 {
-    if (animNumber == motionNum)
+    if (animNumber_Now == motionNum && !isJump)
     {
         return;
     }
     BaseChara::ChangeMotion(motionNum, playAnimSpeed);
-    animNumber = motionNum;
+    animNumber_Now = motionNum;
+}
+
+void Player::MotionUpdate()
+{
+    BaseChara::MotionUpdate();
+    if (motionNum == animNum::jump)
+    {
+        if (keepPlayTime_anim >= totalTime_anim)
+        {
+             ChangeMotion(animNum::falling_Idle, PlayAnimSpeed);
+        }
+    }
+}
+
+void Player::ChangeState()
+{
+
+    if (!isMove && !isJump && animNumber_Now != animNum::idle)
+    {
+        SetNowAnimState(nowState->GetNowAnimState());
+        prevAttachIndex = nowState->GetPrevAttachIndex();
+        nowState = nullptr;
+        animNumber_Now = animNum::idle;
+        nowState = std::make_shared<Idle>(modelHandle, prevAttachIndex,nowAnimState);
+    }
+
+    if (isMove && position.y == 0.0f && animNumber_Now != animNum::run)
+    {
+        SetNowAnimState(nowState->GetNowAnimState());
+        prevAttachIndex = nowState->GetPrevAttachIndex();
+        nowState = nullptr;
+        animNumber_Now = animNum::run;
+        nowState = std::make_shared<Run>(modelHandle, prevAttachIndex,nowAnimState);
+    }
+
+    if (isJump && animNumber_Now != animNum::jump)
+    {
+        SetNowAnimState(nowState->GetNowAnimState());
+        prevAttachIndex = nowState->GetPrevAttachIndex();
+        nowState = nullptr;
+        animNumber_Now = animNum::jump;
+        nowState = std::make_shared<Jump>(modelHandle, prevAttachIndex,nowAnimState);
+    }
+
+    if (isJump && currentJumpSpeed < 0.0f && animNumber_Now != animNum::falling_Idle)
+    {
+        SetNowAnimState(nowState->GetNowAnimState());
+        prevAttachIndex = nowState->GetPrevAttachIndex();
+        nowState = nullptr;
+        animNumber_Now = animNum::falling_Idle;
+        nowState = std::make_shared<Falling_Idle>(modelHandle, prevAttachIndex,nowAnimState);
+    }
+}
+
+/// <summary>
+/// アニメーション情報をセット
+/// </summary>
+/// <param name="AnimState"></param>
+void Player::SetNowAnimState(PlayerStateActionBase::NowAnimState animState)
+{
+    nowAnimState.currentAttachIndex = animState.currentAttachIndex;
+    nowAnimState.currentPlayAnimSpeed = animState.currentPlayAnimSpeed;
+    nowAnimState.currentPlayTime_anim = animState.currentPlayTime_anim;
+    nowAnimState.currentTotalPlayTime_anim = animState.currentTotalPlayTime_anim;
 }
 
 /// <summary>
@@ -259,6 +372,21 @@ bool Player::PadInput::isLeft(const Input& input)
 {
     if (input.GetNowFrameInput() & PAD_INPUT_LEFT ||
         CheckHitKey(KEY_INPUT_LEFT))
+    {
+        return true;
+    }
+    return false;
+}
+
+/// <summary>
+/// ジャンプ入力
+/// </summary>
+/// <param name="input"></param>
+/// <returns></returns>
+bool Player::PadInput::isJump(const Input& input)
+{
+    if (CheckHitKey(KEY_INPUT_SPACE) ||
+        input.GetNowFrameNewInput() & PAD_INPUT_A)
     {
         return true;
     }
