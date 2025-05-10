@@ -8,6 +8,7 @@
 /// コンストラクタ
 /// </summary>
 /// <param name="modelHandle"></param>
+<<<<<<< HEAD
 Jump::Jump(int modelHandle, int& prevAttachIndex, NowAnimState nowAnimState) :
     PlayerStateActionBase(modelHandle, prevAttachIndex,nowAnimState)
 {
@@ -15,6 +16,11 @@ Jump::Jump(int modelHandle, int& prevAttachIndex, NowAnimState nowAnimState) :
     this->nowAnimState.currentAttachIndex = MV1AttachAnim(modelHandle, animNum::Jump);
 
     this->nowAnimState.currentPlayAnimSpeed = playAnimSpeed;
+=======
+Jump::Jump(int modelHandle) : PlayerStateActionBase(modelHandle)
+{
+    currentPlayAnimSpeed = playAnimSpeed;
+>>>>>>> 8b302d9ef8b09144ecd1ac2a71429c183d434d1c
 }
 
 /// <summary>
@@ -22,5 +28,9 @@ Jump::Jump(int modelHandle, int& prevAttachIndex, NowAnimState nowAnimState) :
 /// </summary>
 Jump::~Jump()
 {
+<<<<<<< HEAD
     MV1DetachAnim(modelHandle, this->nowAnimState.currentAttachIndex);
+=======
+    MV1DetachAnim(modelHandle, currentAttachIndex);
+>>>>>>> 8b302d9ef8b09144ecd1ac2a71429c183d434d1c
 }

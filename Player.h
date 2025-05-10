@@ -38,7 +38,10 @@ private:
 
 	//‘¼ƒNƒ‰ƒX
 	std::shared_ptr<PlayerStateActionBase> nowState = NULL;
+<<<<<<< HEAD
 	PlayerStateActionBase::NowAnimState nowAnimState;
+=======
+>>>>>>> 8b302d9ef8b09144ecd1ac2a71429c183d434d1c
 
 public:
 	Player();
@@ -64,8 +67,11 @@ public:
 	};
 
 	PadInput padInput;
+<<<<<<< HEAD
 
 	void SetNowAnimState(PlayerStateActionBase::NowAnimState animState);
 
+=======
+>>>>>>> 8b302d9ef8b09144ecd1ac2a71429c183d434d1c
 };
 

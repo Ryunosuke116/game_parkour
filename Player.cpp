@@ -31,12 +31,16 @@ void Player::Initialize()
     isJump = false;
     isJump_second = false;
     isPush = false;
+<<<<<<< HEAD
    
     this->nowAnimState.currentAttachIndex = -1;
     this->nowAnimState.currentPlayAnimSpeed = 0.0f;
     this->nowAnimState.currentPlayTime_anim = 0.0f;
     this->nowAnimState.currentTotalPlayTime_anim = 0.0f;
     nowState = std::make_shared<Idle>(modelHandle, prevAttachIndex,nowAnimState);
+=======
+    nowState = std::make_shared<Idle>(modelHandle);
+>>>>>>> 8b302d9ef8b09144ecd1ac2a71429c183d434d1c
 }
 
 /// <summary>
@@ -268,6 +272,7 @@ void Player::MotionUpdate()
 void Player::ChangeState()
 {
 
+<<<<<<< HEAD
     if (!isMove && !isJump && animNumber_Now != animNum::idle)
     {
         SetNowAnimState(nowState->GetNowAnimState());
@@ -302,10 +307,39 @@ void Player::ChangeState()
         nowState = nullptr;
         animNumber_Now = animNum::falling_Idle;
         nowState = std::make_shared<Falling_Idle>(modelHandle, prevAttachIndex,nowAnimState);
+=======
+    if (!isMove && !isJump)
+    {
+        nowState = nullptr;
+        animNumber_Now = animNum::idle;
+        nowState = std::make_shared<Idle>(modelHandle);
+    }
+
+    if (isMove && position.y == 0.0f)
+    {
+        nowState = nullptr;
+        animNumber_Now = animNum::run;
+        nowState = std::make_shared<Run>(modelHandle);
+    }
+
+    if (isJump)
+    {
+        nowState = nullptr;
+        animNumber_Now = animNum::jump;
+        nowState = std::make_shared<Jump>(modelHandle);
+    }
+
+    if (isJump && currentJumpSpeed < 0.0f)
+    {
+        nowState = nullptr;
+        animNumber_Now = animNum::falling_Idle;
+        nowState = std::make_shared<Falling_Idle>(modelHandle);
+>>>>>>> 8b302d9ef8b09144ecd1ac2a71429c183d434d1c
     }
 }
 
 /// <summary>
+<<<<<<< HEAD
 /// アニメーション情報をセット
 /// </summary>
 /// <param name="AnimState"></param>
@@ -318,6 +352,8 @@ void Player::SetNowAnimState(PlayerStateActionBase::NowAnimState animState)
 }
 
 /// <summary>
+=======
+>>>>>>> 8b302d9ef8b09144ecd1ac2a71429c183d434d1c
 /// 上入力
 /// </summary>
 /// <param name="input"></param>

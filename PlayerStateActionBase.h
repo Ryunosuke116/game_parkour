@@ -2,6 +2,7 @@
 class PlayerStateActionBase
 {
 public:
+<<<<<<< HEAD
 	struct NowAnimState
 	{
 		int currentAttachIndex;				//現在のアニメーション情報
@@ -11,10 +12,14 @@ public:
 	};
 
 	PlayerStateActionBase(int modelHandle, int& prevAttachIndex, NowAnimState nowAnimState);
+=======
+	PlayerStateActionBase(int modelHandle);
+>>>>>>> 8b302d9ef8b09144ecd1ac2a71429c183d434d1c
 	~PlayerStateActionBase() {};
 
 	virtual void MotionUpdate();
 
+<<<<<<< HEAD
 
 
 	//////////////////////////////////////////////
@@ -23,6 +28,8 @@ public:
 	int GetPrevAttachIndex() { return prevAttachIndex; }
 	NowAnimState GetNowAnimState() { return nowAnimState; }
 
+=======
+>>>>>>> 8b302d9ef8b09144ecd1ac2a71429c183d434d1c
 protected:
 
 	static constexpr float	AnimBlendSpeed = 0.1f;		// アニメーションのブレンド率変化速度
@@ -35,7 +42,15 @@ protected:
 	float prevTotalPlayTime_anim;	//前回の総再生時間
 	float prevPlayAnimSpeed;		//前回のアニメーションスピード
 
+<<<<<<< HEAD
 	NowAnimState nowAnimState;
+=======
+	int currentAttachIndex;				//現在のアニメーション情報
+	float currentPlayTime_anim;			//現在の再生時間
+	float currentTotalPlayTime_anim;	//現在の総再生時間
+	float currentPlayAnimSpeed;			//前回のアニメーションスピード
+
+>>>>>>> 8b302d9ef8b09144ecd1ac2a71429c183d434d1c
 
 	//移動
 	//VECTOR moveVec;

@@ -8,6 +8,7 @@
 /// コンストラクタ
 /// </summary>
 /// <param name="modelHandle"></param>
+<<<<<<< HEAD
 PlayerStateActionBase::PlayerStateActionBase(int modelHandle, int& prevAttachIndex, NowAnimState nowAnimState):
     modelHandle(-1),
     animBlendRate(0.0f),
@@ -22,6 +23,10 @@ PlayerStateActionBase::PlayerStateActionBase(int modelHandle, int& prevAttachInd
     this->nowAnimState.currentPlayTime_anim = 0.0f;
     this->nowAnimState.currentTotalPlayTime_anim = 0.0f;
 
+=======
+PlayerStateActionBase::PlayerStateActionBase(int modelHandle)
+{
+>>>>>>> 8b302d9ef8b09144ecd1ac2a71429c183d434d1c
 	this->modelHandle = modelHandle;
 
     if (prevAttachIndex != -1)
@@ -31,6 +36,7 @@ PlayerStateActionBase::PlayerStateActionBase(int modelHandle, int& prevAttachInd
     }
 
     //いままで情報をprevに保存
+<<<<<<< HEAD
     this->prevAttachIndex = nowAnimState.currentAttachIndex;
     prevPlayTime_anim = nowAnimState.currentPlayTime_anim;
     prevPlayAnimSpeed = nowAnimState.currentPlayAnimSpeed;
@@ -40,6 +46,20 @@ PlayerStateActionBase::PlayerStateActionBase(int modelHandle, int& prevAttachInd
 
     // アタッチしたアニメーションの総再生時間を取得する
    // this->nowAnimState.currentTotalPlayTime_anim = MV1GetAttachAnimTotalTime(modelHandle, nowAnimState.currentAttachIndex);
+=======
+    prevAttachIndex = currentAttachIndex;
+    prevPlayTime_anim = currentPlayTime_anim;
+    prevPlayAnimSpeed = currentPlayAnimSpeed;
+
+    // ３Ｄモデルの０番目のアニメーションをアタッチする
+    currentAttachIndex = MV1AttachAnim(modelHandle, animNum::Idle);
+
+    // 再生時間の初期化
+    currentPlayTime_anim = 0.0f;
+
+    // アタッチしたアニメーションの総再生時間を取得する
+    currentTotalPlayTime_anim = MV1GetAttachAnimTotalTime(modelHandle, currentAttachIndex);
+>>>>>>> 8b302d9ef8b09144ecd1ac2a71429c183d434d1c
 
     // ブレンド率はPrevが有効ではない場合は１．０ｆ( 現在モーションが１００％の状態 )にする
     animBlendRate = prevAttachIndex == -1 ? 1.0f : 0.0f;
@@ -59,6 +79,7 @@ void PlayerStateActionBase::MotionUpdate()
         }
     }
 
+<<<<<<< HEAD
     if (nowAnimState.currentAttachIndex != -1)
     {
         // アタッチしたアニメーションの総再生時間を取得する
@@ -78,6 +99,27 @@ void PlayerStateActionBase::MotionUpdate()
 
         //アニメーションのモデルに対する反映率をセット
         MV1SetAttachAnimBlendRate(modelHandle, nowAnimState.currentAttachIndex, animBlendRate);
+=======
+    if (currentAttachIndex != -1)
+    {
+        // アタッチしたアニメーションの総再生時間を取得する
+        totalTime_anim = MV1GetAttachAnimTotalTime(modelHandle, currentAttachIndex);
+
+        //再生時間更新
+        currentPlayTime_anim += currentPlayAnimSpeed;
+
+        //総再生時間を超えたらリセット
+        if (currentPlayTime_anim >= totalTime_anim)
+        {
+            currentPlayTime_anim = static_cast<float>(fmod(currentPlayTime_anim, totalTime_anim));
+        }
+
+        // 再生時間をセットする
+        MV1SetAttachAnimTime(modelHandle, currentAttachIndex, currentPlayTime_anim);
+
+        //アニメーションのモデルに対する反映率をセット
+        MV1SetAttachAnimBlendRate(modelHandle, currentAttachIndex, animBlendRate);
+>>>>>>> 8b302d9ef8b09144ecd1ac2a71429c183d434d1c
     }
 
 

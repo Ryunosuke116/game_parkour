@@ -8,6 +8,7 @@
 /// コンストラクタ
 /// </summary>
 /// <param name="modelHandle"></param>
+<<<<<<< HEAD
 Idle::Idle(int modelHandle, int& prevAttachIndex, NowAnimState nowAnimState) : 
     PlayerStateActionBase(modelHandle, prevAttachIndex,nowAnimState)
 {
@@ -15,6 +16,11 @@ Idle::Idle(int modelHandle, int& prevAttachIndex, NowAnimState nowAnimState) :
     this->nowAnimState.currentAttachIndex = MV1AttachAnim(modelHandle, animNum::Idle);
 
     this->nowAnimState.currentPlayAnimSpeed = playAnimSpeed;
+=======
+Idle::Idle(int modelHandle) : PlayerStateActionBase(modelHandle)
+{
+    currentPlayAnimSpeed = playAnimSpeed;
+>>>>>>> 8b302d9ef8b09144ecd1ac2a71429c183d434d1c
 }
 
 /// <summary>
@@ -22,5 +28,9 @@ Idle::Idle(int modelHandle, int& prevAttachIndex, NowAnimState nowAnimState) :
 /// </summary>
 Idle::~Idle()
 {
+<<<<<<< HEAD
     MV1DetachAnim(modelHandle, this->nowAnimState.currentAttachIndex);
+=======
+    MV1DetachAnim(modelHandle, currentAttachIndex);
+>>>>>>> 8b302d9ef8b09144ecd1ac2a71429c183d434d1c
 }
