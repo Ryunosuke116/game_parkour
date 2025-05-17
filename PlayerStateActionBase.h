@@ -1,56 +1,65 @@
 #pragma once
+#include <memory>
+
+class Input;
+
 class PlayerStateActionBase
 {
 public:
-<<<<<<< HEAD
-	struct NowAnimState
+
+	struct PlayerData
 	{
-		int currentAttachIndex;				//現在のアニメーション情報
-		float currentPlayTime_anim;			//現在の再生時間
-		float currentTotalPlayTime_anim;	//現在の総再生時間
-		float currentPlayAnimSpeed;			//前回のアニメーションスピード
+		bool isMove;					//動いているか
+		bool isJump;					//ジャンプしたか
+		bool isJump_second;				//二段ジャンプしたか
+		bool isRool;					//転がるか
 	};
 
-	PlayerStateActionBase(int modelHandle, int& prevAttachIndex, NowAnimState nowAnimState);
-=======
-	PlayerStateActionBase(int modelHandle);
->>>>>>> 8b302d9ef8b09144ecd1ac2a71429c183d434d1c
+	struct OldAnimState
+	{
+		int AttachIndex;			//前のアニメーション情報
+		float PlayTime_anim;		//前回の再生時間
+		float TotalPlayTime_anim;	//前回の総再生時間
+		float PlayAnimSpeed;		//前回のアニメーションスピード
+	};
+
+	struct NowAnimState
+	{
+		int AttachIndex;				//現在のアニメーション情報
+		float PlayTime_anim;			//現在の再生時間
+		float TotalPlayTime_anim;	//現在の総再生時間
+		float PlayAnimSpeed;			//前回のアニメーションスピード
+	};
+
+	PlayerStateActionBase(int& modelHandle,
+		OldAnimState& oldAnimState, NowAnimState& nowAnimState);
 	~PlayerStateActionBase() {};
 
-	virtual void MotionUpdate();
-
-<<<<<<< HEAD
+	virtual bool MotionUpdate(PlayerData& playerData);
+	void SetOldAnimState();
+	void ResetOldAnimState();
+	void ResetNowAnimState();
 
 
 	//////////////////////////////////////////////
 	// ゲッター
 	//////////////////////////////////////////////
-	int GetPrevAttachIndex() { return prevAttachIndex; }
-	NowAnimState GetNowAnimState() { return nowAnimState; }
+	//int GetPrevAttachIndex() { return oldAnimState.AttachIndex; }
+	const OldAnimState GetOldAnimState() const { return oldAnimState; }
+	const NowAnimState GetNowAnimState() const { return nowAnimState; }
 
-=======
->>>>>>> 8b302d9ef8b09144ecd1ac2a71429c183d434d1c
 protected:
 
+
 	static constexpr float	AnimBlendSpeed = 0.1f;		// アニメーションのブレンド率変化速度
+	
 
 	int modelHandle;			//モデルハンドル
 	float animBlendRate;
 
-	int prevAttachIndex;			//前のアニメーション情報
-	float prevPlayTime_anim;		//前回の再生時間
-	float prevTotalPlayTime_anim;	//前回の総再生時間
-	float prevPlayAnimSpeed;		//前回のアニメーションスピード
-
-<<<<<<< HEAD
+	OldAnimState oldAnimState;
 	NowAnimState nowAnimState;
-=======
-	int currentAttachIndex;				//現在のアニメーション情報
-	float currentPlayTime_anim;			//現在の再生時間
-	float currentTotalPlayTime_anim;	//現在の総再生時間
-	float currentPlayAnimSpeed;			//前回のアニメーションスピード
-
->>>>>>> 8b302d9ef8b09144ecd1ac2a71429c183d434d1c
+	PlayerData  playerData;
 
 	//移動
 	//VECTOR moveVec;
@@ -70,5 +79,8 @@ protected:
 		Running_Forward_Flip,		//走りながら回転ジャンプ
 		Falling_Idle				//落ちているとき
 	};
+
+	std::shared_ptr<Input> input = NULL;
+
 };
 

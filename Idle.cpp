@@ -8,19 +8,15 @@
 /// コンストラクタ
 /// </summary>
 /// <param name="modelHandle"></param>
-<<<<<<< HEAD
-Idle::Idle(int modelHandle, int& prevAttachIndex, NowAnimState nowAnimState) : 
-    PlayerStateActionBase(modelHandle, prevAttachIndex,nowAnimState)
+Idle::Idle(int& modelHandle,
+    OldAnimState& oldAnimState, NowAnimState& nowAnimState) :
+    PlayerStateActionBase(modelHandle, oldAnimState,nowAnimState)
 {
     // ３Ｄモデルの０番目のアニメーションをアタッチする
-    this->nowAnimState.currentAttachIndex = MV1AttachAnim(modelHandle, animNum::Idle);
+    this->nowAnimState.AttachIndex = MV1AttachAnim(modelHandle, animNum::Idle);
 
-    this->nowAnimState.currentPlayAnimSpeed = playAnimSpeed;
-=======
-Idle::Idle(int modelHandle) : PlayerStateActionBase(modelHandle)
-{
-    currentPlayAnimSpeed = playAnimSpeed;
->>>>>>> 8b302d9ef8b09144ecd1ac2a71429c183d434d1c
+    this->nowAnimState.PlayTime_anim = 0.0f;
+    this->nowAnimState.PlayAnimSpeed = playAnimSpeed;
 }
 
 /// <summary>
@@ -28,9 +24,5 @@ Idle::Idle(int modelHandle) : PlayerStateActionBase(modelHandle)
 /// </summary>
 Idle::~Idle()
 {
-<<<<<<< HEAD
-    MV1DetachAnim(modelHandle, this->nowAnimState.currentAttachIndex);
-=======
-    MV1DetachAnim(modelHandle, currentAttachIndex);
->>>>>>> 8b302d9ef8b09144ecd1ac2a71429c183d434d1c
+  //  MV1DetachAnim(modelHandle, this->nowAnimState.AttachIndex);
 }

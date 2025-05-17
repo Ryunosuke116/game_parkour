@@ -40,6 +40,9 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
+    <Filter Include="ソース ファイル\field">
+      <UniqueIdentifier>{64988ae3-2089-4141-9140-37e45360d8db}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -59,9 +62,6 @@
     </ClCompile>
     <ClCompile Include="Input.cpp">
       <Filter>ソース ファイル\input</Filter>
-    </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>ソース ファイル\player</Filter>
     </ClCompile>
     <ClCompile Include="BaseChara.cpp">
       <Filter>ソース ファイル\Base</Filter>
@@ -86,6 +86,18 @@
     </ClCompile>
     <ClCompile Include="Falling_Idle.cpp">
       <Filter>ソース ファイル\player\state</Filter>
+    </ClCompile>
+    <ClCompile Include="Run_Jump.cpp">
+      <Filter>ソース ファイル\player\state</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>ソース ファイル\player</Filter>
+    </ClCompile>
+    <ClCompile Include="Quick_Roll.cpp">
+      <Filter>ソース ファイル\player\state</Filter>
+    </ClCompile>
+    <ClCompile Include="Field.cpp">
+      <Filter>ソース ファイル\field</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -136,6 +148,15 @@
     </ClInclude>
     <ClInclude Include="playerState.h">
       <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Run_Jump.h">
+      <Filter>ソース ファイル\player\state</Filter>
+    </ClInclude>
+    <ClInclude Include="Quick_Roll.h">
+      <Filter>ソース ファイル\player\state</Filter>
+    </ClInclude>
+    <ClInclude Include="Field.h">
+      <Filter>ソース ファイル\field</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

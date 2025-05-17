@@ -3,46 +3,43 @@
 #include "DxLib.h"
 #include "PlayerStateActionBase.h"
 #include "Input.h"
-#include "Jump.h"
+#include "Quick_Roll.h"
+
 
 /// <summary>
 /// コンストラクタ
 /// </summary>
 /// <param name="modelHandle"></param>
-Jump::Jump(int& modelHandle,
-    OldAnimState& oldAnimState, NowAnimState& nowAnimState) :
-    PlayerStateActionBase(modelHandle, oldAnimState,nowAnimState)
+/// <param name="oldAnimState"></param>
+/// <param name="nowAnimState"></param>
+Quick_Roll::Quick_Roll(int& modelHandle,
+	OldAnimState& oldAnimState, NowAnimState& nowAnimState) :
+	PlayerStateActionBase(modelHandle, oldAnimState, nowAnimState)
 {
-    input = std::make_shared<Input>();
+	// ３Ｄモデルの０番目のアニメーションをアタッチする
+	this->nowAnimState.AttachIndex = MV1AttachAnim(modelHandle, animNum::Quick_Roll);
 
-    // ３Ｄモデルの０番目のアニメーションをアタッチする
-    this->nowAnimState.AttachIndex = MV1AttachAnim(modelHandle, animNum::Jump);
-
-    this->nowAnimState.PlayTime_anim = 5.0f;
-    this->nowAnimState.PlayAnimSpeed = playAnimSpeed;
-    this->nowAnimState.TotalPlayTime_anim = MV1GetAttachAnimTotalTime(modelHandle, this->nowAnimState.AttachIndex);
-    isPush = false;
+	this->nowAnimState.PlayTime_anim = 0.0f;
+	this->nowAnimState.PlayAnimSpeed = playAnimSpeed;
 }
 
 /// <summary>
 /// デストラクタ
 /// </summary>
-Jump::~Jump()
+Quick_Roll::~Quick_Roll()
 {
-  //  MV1DetachAnim(modelHandle, this->nowAnimState.AttachIndex);
+
 }
 
 /// <summary>
-/// アニメーション更新 
+/// アニメーション更新
 /// </summary>
+/// <param name="playerData"></param>
 /// <returns></returns>
-bool Jump::MotionUpdate(PlayerData& playerData)
+bool Quick_Roll::MotionUpdate(PlayerData& playerData)
 {
-    input->Update();
-
-    bool flag = false;
-
     float totalTime_anim;
+    float flag = false;
 
     // ブレンド率が１以下の場合は１に近づける
     if (animBlendRate < 1.0f)
@@ -56,16 +53,6 @@ bool Jump::MotionUpdate(PlayerData& playerData)
 
     if (nowAnimState.AttachIndex != -1)
     {
-        //二段ジャンプしたらプレイタイムリセット
-        if (!isPush)
-        {
-            if (playerData.isJump_second)
-            {
-                nowAnimState.PlayTime_anim = 5.0f;
-                isPush = true;
-            }
-        }
-
         // アタッチしたアニメーションの総再生時間を取得する
         totalTime_anim = MV1GetAttachAnimTotalTime(modelHandle, nowAnimState.AttachIndex);
 
@@ -75,8 +62,8 @@ bool Jump::MotionUpdate(PlayerData& playerData)
         //総再生時間を超えたらリセット
         if (nowAnimState.PlayTime_anim >= totalTime_anim)
         {
-            flag = true;
-           
+            playerData.isRool = false;
+            nowAnimState.PlayTime_anim = static_cast<float>(fmod(nowAnimState.PlayTime_anim, totalTime_anim));
         }
 
         // 再生時間をセットする
@@ -109,5 +96,5 @@ bool Jump::MotionUpdate(PlayerData& playerData)
         MV1SetAttachAnimBlendRate(modelHandle, oldAnimState.AttachIndex, 1.0f - animBlendRate);
     }
 
-    return flag;
+    return false;
 }

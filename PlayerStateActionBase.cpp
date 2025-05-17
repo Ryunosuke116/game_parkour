@@ -2,70 +2,47 @@
 #include <vector>
 #include <memory>
 #include "DxLib.h"
+#include "input.h"
 #include "PlayerStateActionBase.h"
 
 /// <summary>
 /// コンストラクタ
 /// </summary>
 /// <param name="modelHandle"></param>
-<<<<<<< HEAD
-PlayerStateActionBase::PlayerStateActionBase(int modelHandle, int& prevAttachIndex, NowAnimState nowAnimState):
+/// <param name="prevAttachIndex"></param>
+/// <param name="oldAnimState"></param>
+/// <param name="nowAnimState"></param>
+PlayerStateActionBase::PlayerStateActionBase(int& modelHandle,
+    OldAnimState& oldAnimState, NowAnimState& nowAnimState):
     modelHandle(-1),
-    animBlendRate(0.0f),
-    prevAttachIndex(-1),
-    prevPlayTime_anim(0.0f),
-    prevTotalPlayTime_anim(0.0f),
-    prevPlayAnimSpeed(0.0f)
+    animBlendRate(0.0f)
 {
+    this->modelHandle = modelHandle;
+    nowAnimState.PlayTime_anim = 0.0f;
 
-    this->nowAnimState.currentAttachIndex = 0;
-    this->nowAnimState.currentPlayAnimSpeed = 0.0f;
-    this->nowAnimState.currentPlayTime_anim = 0.0f;
-    this->nowAnimState.currentTotalPlayTime_anim = 0.0f;
+    //いままで情報をprevに保存
+    this->oldAnimState.AttachIndex = oldAnimState.AttachIndex;
 
-=======
-PlayerStateActionBase::PlayerStateActionBase(int modelHandle)
-{
->>>>>>> 8b302d9ef8b09144ecd1ac2a71429c183d434d1c
-	this->modelHandle = modelHandle;
-
-    if (prevAttachIndex != -1)
+    if (this->oldAnimState.AttachIndex != -1)
     {
-        MV1DetachAnim(modelHandle, prevAttachIndex);
-        prevAttachIndex = -1;
+        MV1DetachAnim(this->modelHandle, this->oldAnimState.AttachIndex);
+        this->oldAnimState.AttachIndex = -1;
     }
 
     //いままで情報をprevに保存
-<<<<<<< HEAD
-    this->prevAttachIndex = nowAnimState.currentAttachIndex;
-    prevPlayTime_anim = nowAnimState.currentPlayTime_anim;
-    prevPlayAnimSpeed = nowAnimState.currentPlayAnimSpeed;
-
-    // 再生時間の初期化
-    //nowAnimState.currentPlayTime_anim = 0.0f;
-
-    // アタッチしたアニメーションの総再生時間を取得する
-   // this->nowAnimState.currentTotalPlayTime_anim = MV1GetAttachAnimTotalTime(modelHandle, nowAnimState.currentAttachIndex);
-=======
-    prevAttachIndex = currentAttachIndex;
-    prevPlayTime_anim = currentPlayTime_anim;
-    prevPlayAnimSpeed = currentPlayAnimSpeed;
-
-    // ３Ｄモデルの０番目のアニメーションをアタッチする
-    currentAttachIndex = MV1AttachAnim(modelHandle, animNum::Idle);
-
-    // 再生時間の初期化
-    currentPlayTime_anim = 0.0f;
-
-    // アタッチしたアニメーションの総再生時間を取得する
-    currentTotalPlayTime_anim = MV1GetAttachAnimTotalTime(modelHandle, currentAttachIndex);
->>>>>>> 8b302d9ef8b09144ecd1ac2a71429c183d434d1c
+    this->oldAnimState.AttachIndex = nowAnimState.AttachIndex;
+    this->oldAnimState.PlayTime_anim = nowAnimState.PlayTime_anim;
+    this->oldAnimState.PlayAnimSpeed = nowAnimState.PlayAnimSpeed;
 
     // ブレンド率はPrevが有効ではない場合は１．０ｆ( 現在モーションが１００％の状態 )にする
-    animBlendRate = prevAttachIndex == -1 ? 1.0f : 0.0f;
+    animBlendRate = this->oldAnimState.AttachIndex == -1 ? 1.0f : 0.0f;
 }
 
-void PlayerStateActionBase::MotionUpdate()
+/// <summary>
+/// アニメーション更新
+/// </summary>
+/// <returns></returns>
+bool PlayerStateActionBase::MotionUpdate(PlayerData& playerData)
 {
     float totalTime_anim;
 
@@ -79,70 +56,74 @@ void PlayerStateActionBase::MotionUpdate()
         }
     }
 
-<<<<<<< HEAD
-    if (nowAnimState.currentAttachIndex != -1)
+    if (nowAnimState.AttachIndex != -1)
     {
         // アタッチしたアニメーションの総再生時間を取得する
-        totalTime_anim = MV1GetAttachAnimTotalTime(modelHandle, nowAnimState.currentAttachIndex);
+        totalTime_anim = MV1GetAttachAnimTotalTime(modelHandle, nowAnimState.AttachIndex);
 
         //再生時間更新
-        nowAnimState.currentPlayTime_anim += nowAnimState.currentPlayAnimSpeed;
+        nowAnimState.PlayTime_anim += nowAnimState.PlayAnimSpeed;
 
         //総再生時間を超えたらリセット
-        if (nowAnimState.currentPlayTime_anim >= totalTime_anim)
+        if (nowAnimState.PlayTime_anim >= totalTime_anim)
         {
-            nowAnimState.currentPlayTime_anim = static_cast<float>(fmod(nowAnimState.currentPlayTime_anim, totalTime_anim));
+            nowAnimState.PlayTime_anim = static_cast<float>(fmod(nowAnimState.PlayTime_anim, totalTime_anim));
         }
 
         // 再生時間をセットする
-        MV1SetAttachAnimTime(modelHandle, nowAnimState.currentAttachIndex, nowAnimState.currentPlayTime_anim);
+        MV1SetAttachAnimTime(modelHandle, nowAnimState.AttachIndex, nowAnimState.PlayTime_anim);
 
         //アニメーションのモデルに対する反映率をセット
-        MV1SetAttachAnimBlendRate(modelHandle, nowAnimState.currentAttachIndex, animBlendRate);
-=======
-    if (currentAttachIndex != -1)
-    {
-        // アタッチしたアニメーションの総再生時間を取得する
-        totalTime_anim = MV1GetAttachAnimTotalTime(modelHandle, currentAttachIndex);
-
-        //再生時間更新
-        currentPlayTime_anim += currentPlayAnimSpeed;
-
-        //総再生時間を超えたらリセット
-        if (currentPlayTime_anim >= totalTime_anim)
-        {
-            currentPlayTime_anim = static_cast<float>(fmod(currentPlayTime_anim, totalTime_anim));
-        }
-
-        // 再生時間をセットする
-        MV1SetAttachAnimTime(modelHandle, currentAttachIndex, currentPlayTime_anim);
-
-        //アニメーションのモデルに対する反映率をセット
-        MV1SetAttachAnimBlendRate(modelHandle, currentAttachIndex, animBlendRate);
->>>>>>> 8b302d9ef8b09144ecd1ac2a71429c183d434d1c
+        MV1SetAttachAnimBlendRate(modelHandle, nowAnimState.AttachIndex, animBlendRate);
     }
 
 
     //再生しているアニメーション２の処理
-    if (prevAttachIndex != -1)
+    if (oldAnimState.AttachIndex != -1)
     {
         // アニメーションの総時間を取得
-        totalTime_anim = MV1GetAttachAnimTotalTime(modelHandle, prevAttachIndex);
+        totalTime_anim = MV1GetAttachAnimTotalTime(modelHandle, oldAnimState.AttachIndex);
 
         // 再生時間を進める
-        prevPlayTime_anim += prevPlayAnimSpeed;
+        oldAnimState.PlayTime_anim += oldAnimState.PlayAnimSpeed;
 
         // 再生時間が総時間に到達していたら再生時間をループさせる
-        if (prevPlayTime_anim > totalTime_anim)
+        if (oldAnimState.PlayTime_anim > totalTime_anim)
         {
-            prevPlayTime_anim = static_cast<float>(fmod(prevPlayTime_anim, totalTime_anim));
+            oldAnimState.PlayTime_anim = static_cast<float>(fmod(oldAnimState.PlayTime_anim, totalTime_anim));
         }
 
         // 変更した再生時間をモデルに反映させる
-        MV1SetAttachAnimTime(modelHandle, prevAttachIndex, prevPlayTime_anim);
+        MV1SetAttachAnimTime(modelHandle, oldAnimState.AttachIndex, oldAnimState.PlayTime_anim);
 
         // アニメーション２のモデルに対する反映率をセット
-        MV1SetAttachAnimBlendRate(modelHandle, prevAttachIndex, 1.0f - animBlendRate);
+        MV1SetAttachAnimBlendRate(modelHandle, oldAnimState.AttachIndex, 1.0f - animBlendRate);
     }
+
+    return false;
 }
 
+void PlayerStateActionBase::SetOldAnimState()
+{
+    oldAnimState.AttachIndex = nowAnimState.AttachIndex;
+    oldAnimState.PlayAnimSpeed = nowAnimState.PlayAnimSpeed;
+    oldAnimState.PlayTime_anim = nowAnimState.PlayTime_anim;
+    oldAnimState.TotalPlayTime_anim = nowAnimState.TotalPlayTime_anim;
+}
+
+void PlayerStateActionBase::ResetOldAnimState()
+{
+    oldAnimState.AttachIndex = -1;
+    oldAnimState.PlayAnimSpeed = 0.0f;
+    oldAnimState.PlayTime_anim = 0.0f;
+    oldAnimState.TotalPlayTime_anim = 0.0f;
+
+}
+
+void PlayerStateActionBase::ResetNowAnimState()
+{
+    nowAnimState.AttachIndex = -1;
+    nowAnimState.PlayAnimSpeed = 0.0f;
+    nowAnimState.PlayTime_anim = 0.0f;
+    nowAnimState.TotalPlayTime_anim = 0.0f;
+}

@@ -148,6 +148,7 @@
     <ClCompile Include="BaseScene.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Falling_Idle.cpp" />
+    <ClCompile Include="Field.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Idle.cpp" />
     <ClCompile Include="Input.cpp" />
@@ -156,7 +157,9 @@
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerStateActionBase.cpp" />
+    <ClCompile Include="Quick_Roll.cpp" />
     <ClCompile Include="Run.cpp" />
+    <ClCompile Include="Run_Jump.cpp" />
     <ClCompile Include="SceneManager.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -165,6 +168,7 @@
     <ClInclude Include="BaseScene.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Falling_Idle.h" />
+    <ClInclude Include="Field.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Idle.h" />
     <ClInclude Include="Include.h" />
@@ -174,7 +178,9 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="playerState.h" />
     <ClInclude Include="PlayerStateActionBase.h" />
+    <ClInclude Include="Quick_Roll.h" />
     <ClInclude Include="Run.h" />
+    <ClInclude Include="Run_Jump.h" />
     <ClInclude Include="SceneManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

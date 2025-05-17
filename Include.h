@@ -15,6 +15,7 @@
 #include "BaseObject.h"
 #include "BaseChara.h"
 #include "BaseScene.h"
+#include "Field.h"
 #include "Map.h"
 #include "Player.h"
 #include "Game.h"

@@ -15,10 +15,8 @@ private:
 
 	float currentJumpSpeed;			//現在のジャンプスピード
 
-	bool isMove;					//動いているか
-	bool isJump;					//ジャンプしたか
-	bool isJump_second;				//二段ジャンプしたか
 	bool isPush;					//ボタンを押したか
+	bool isChageState;				//アニメーションを変更するか
 
 	enum animNum : int
 	{
@@ -36,42 +34,42 @@ private:
 		falling_Idle				//落ちているとき
 	};
 
+	struct PadInput
+	{
+		bool isUp(Input& input);
+		bool isDown(Input& input);
+		bool isRight(Input& input);
+		bool isLeft(Input& input);
+		bool isJump(Input& input);
+		bool isRoll(Input& input);
+	};
+
+	PadInput padInput;
+
 	//他クラス
 	std::shared_ptr<PlayerStateActionBase> nowState = NULL;
-<<<<<<< HEAD
+	PlayerStateActionBase::OldAnimState oldAnimState;
 	PlayerStateActionBase::NowAnimState nowAnimState;
-=======
->>>>>>> 8b302d9ef8b09144ecd1ac2a71429c183d434d1c
+	std::shared_ptr<Input> input = NULL;
+	PlayerStateActionBase::PlayerData playerData;
 
 public:
 	Player();
 	~Player();
 
 	void Initialize();
-	void Update(const Input& input, const VECTOR& cameraDirection);
+	void Update(const VECTOR& cameraDirection);
 	void Draw();
-	void Move(const Input& input, VECTOR& moveVec, const VECTOR& cameraDirection);
-	void JumpMove(const Input& input);
-	void JumpCalclation();
-	void ChangeMotion(const int& motionNum, const float playAnimSpeed)override;
-	void MotionUpdate() override;
+	void Move(VECTOR& moveVec, const VECTOR& cameraDirection);
+	void JumpMove();
+	void JumpCalclation(float playTime_anim);
+	void RollMove();
+	//void ChangeMotion(const int& motionNum, const float playAnimSpeed)override;
+	//void MotionUpdate();
 	void ChangeState();
 
-	struct PadInput
-	{
-		bool isUp(const Input& input);
-		bool isDown(const Input& input);
-		bool isRight(const Input& input);
-		bool isLeft(const Input& input);
-		bool isJump(const Input& input);
-	};
 
-	PadInput padInput;
-<<<<<<< HEAD
-
+	void SetOldAnimState(PlayerStateActionBase::OldAnimState animState);
 	void SetNowAnimState(PlayerStateActionBase::NowAnimState animState);
-
-=======
->>>>>>> 8b302d9ef8b09144ecd1ac2a71429c183d434d1c
 };
 

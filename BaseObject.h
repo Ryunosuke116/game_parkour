@@ -3,7 +3,7 @@ class BaseObject
 {
 protected:
 	int modelHandle;
-	VECTOR positon;
+	VECTOR position;
 public:
 	BaseObject();
 	~BaseObject();

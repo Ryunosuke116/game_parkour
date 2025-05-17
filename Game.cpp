@@ -35,7 +35,7 @@ void Game::Initialize()
 /// </summary>
 void Game::Update()
 {
-	player->Update(*input,camera->GetCameraDirection());
+	player->Update(camera->GetCameraDirection());
 	camera->Update(player->GetPosition());
 	map->Update();
 }
