@@ -11,7 +11,7 @@ public:
 	bool MotionUpdate(PlayerData& playerData)override;
 
 private:
-	static constexpr float playAnimSpeed = 1.0f;	    // 移動速度
+	static constexpr float playAnimSpeed = 0.9f;	    // 移動速度
 
 	bool isPush;		//ボタンを押したか
 };

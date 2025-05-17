@@ -10,6 +10,7 @@ Game::Game(SceneManager& manager) :BaseScene{ manager }
 	camera = std::make_shared<Camera>();
 	map = std::make_shared<Map>();
 	input = std::make_shared<Input>();
+	field = std::make_shared<Field>();
 }
 
 /// <summary>
@@ -46,4 +47,5 @@ void Game::Draw()
 	player->Draw();
 	camera->Draw();
 	map->Draw();
+	field->Draw();
 }

@@ -17,7 +17,7 @@ Quick_Roll::Quick_Roll(int& modelHandle,
 	PlayerStateActionBase(modelHandle, oldAnimState, nowAnimState)
 {
 	// ３Ｄモデルの０番目のアニメーションをアタッチする
-	this->nowAnimState.AttachIndex = MV1AttachAnim(modelHandle, animNum::Quick_Roll);
+	this->nowAnimState.AttachIndex = MV1AttachAnim(modelHandle, animNum::jump_Over);
 
 	this->nowAnimState.PlayTime_anim = 0.0f;
 	this->nowAnimState.PlayAnimSpeed = playAnimSpeed;
@@ -59,12 +59,22 @@ bool Quick_Roll::MotionUpdate(PlayerData& playerData)
         //再生時間更新
         nowAnimState.PlayTime_anim += nowAnimState.PlayAnimSpeed;
 
+        if (nowAnimState.PlayTime_anim >= 40.0f)
+        {
+            if (!playerData.isGround)
+            {
+                flag = true;
+            }
+        }
+
         //総再生時間を超えたらリセット
         if (nowAnimState.PlayTime_anim >= totalTime_anim)
         {
             playerData.isRool = false;
-            nowAnimState.PlayTime_anim = static_cast<float>(fmod(nowAnimState.PlayTime_anim, totalTime_anim));
+
+           // nowAnimState.PlayTime_anim = static_cast<float>(fmod(nowAnimState.PlayTime_anim, totalTime_anim));
         }
+
 
         // 再生時間をセットする
         MV1SetAttachAnimTime(modelHandle, nowAnimState.AttachIndex, nowAnimState.PlayTime_anim);
@@ -96,5 +106,5 @@ bool Quick_Roll::MotionUpdate(PlayerData& playerData)
         MV1SetAttachAnimBlendRate(modelHandle, oldAnimState.AttachIndex, 1.0f - animBlendRate);
     }
 
-    return false;
+    return flag;
 }

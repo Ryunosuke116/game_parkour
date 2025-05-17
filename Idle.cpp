@@ -13,7 +13,7 @@ Idle::Idle(int& modelHandle,
     PlayerStateActionBase(modelHandle, oldAnimState,nowAnimState)
 {
     // ３Ｄモデルの０番目のアニメーションをアタッチする
-    this->nowAnimState.AttachIndex = MV1AttachAnim(modelHandle, animNum::Idle);
+    this->nowAnimState.AttachIndex = MV1AttachAnim(modelHandle, animNum::idle);
 
     this->nowAnimState.PlayTime_anim = 0.0f;
     this->nowAnimState.PlayAnimSpeed = playAnimSpeed;

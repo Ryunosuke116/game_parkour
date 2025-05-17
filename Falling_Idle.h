@@ -8,7 +8,7 @@ public:
 		OldAnimState& oldAnimState, NowAnimState& nowAnimState);
 	~Falling_Idle();
 
-	bool  MotionUpdate(PlayerData& playerData)override;
+	//bool  MotionUpdate(PlayerData& playerData)override;
 
 private:
 	static constexpr float playAnimSpeed = 0.4f;	    // ˆÚ“®‘¬“x

@@ -13,7 +13,7 @@ Run::Run(int& modelHandle,
 	PlayerStateActionBase(modelHandle,  oldAnimState,nowAnimState)
 {
 	// ３Ｄモデルの０番目のアニメーションをアタッチする
-	this->nowAnimState.AttachIndex = MV1AttachAnim(modelHandle, animNum::Run);
+	this->nowAnimState.AttachIndex = MV1AttachAnim(modelHandle, animNum::run);
 
 	this->nowAnimState.PlayTime_anim = 0.0f;
 	this->nowAnimState.PlayAnimSpeed = playAnimSpeed;

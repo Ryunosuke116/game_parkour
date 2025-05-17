@@ -9,8 +9,8 @@ private:
 	static constexpr float attackAnimSpeed = 1.0f;	//攻撃速度
 	static constexpr float rollAnimSpeed = 1.5f;	//攻撃速度
 	static constexpr float angleSpeed = 0.3f;
-	static constexpr float addJumpPower = 1.9f;		//ジャンプパワー
-	static constexpr float gravity = 0.1f;
+	static constexpr float addJumpPower = 2.0f;		//ジャンプパワー
+	static constexpr float gravity = -0.07f;
 
 
 	float currentJumpSpeed;			//現在のジャンプスピード
@@ -21,17 +21,18 @@ private:
 	enum animNum : int
 	{
 		braced_Hang_To_Crouch,		//しゃがんでぶらさがる
+		falling_Idle,				//落ちているとき
 		falling_To_Roll,			//着地して転がる
 		hangring_Idle,				//ぶらさがる
 		hard_Landing,				//着地する
 		idle,						//静止時
 		jump,						//ジャンプ
+		jump_Over,					//ロールジャンプ
 		quick_Roll,					//転がる
 		run,						//走る
 		run_Jump,					//走りながらジャンプ
 		run_To_Stop,				//止まる
 		running_Forward_Flip,		//走りながら回転ジャンプ
-		falling_Idle				//落ちているとき
 	};
 
 	struct PadInput
@@ -64,9 +65,11 @@ public:
 	void JumpMove();
 	void JumpCalclation(float playTime_anim);
 	void RollMove();
+	void RollCalclation(VECTOR& moveVec);
 	//void ChangeMotion(const int& motionNum, const float playAnimSpeed)override;
 	//void MotionUpdate();
 	void ChangeState();
+	void GravityCalclation();
 
 
 	void SetOldAnimState(PlayerStateActionBase::OldAnimState animState);

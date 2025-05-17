@@ -20,7 +20,7 @@ Run_Jump::Run_Jump(int& modelHandle,
 	//MV1DetachAnim(this->modelHandle, this->nowAnimState.AttachIndex);
 
 	// ３Ｄモデルの０番目のアニメーションをアタッチする
-	this->nowAnimState.AttachIndex = MV1AttachAnim(modelHandle, animNum::Run_Jump);
+	this->nowAnimState.AttachIndex = MV1AttachAnim(modelHandle, animNum::run_Jump);
 
 	this->nowAnimState.PlayTime_anim = 0.0f;
 	this->nowAnimState.PlayAnimSpeed = playAnimSpeed;
@@ -42,6 +42,8 @@ Run_Jump::~Run_Jump()
 
 bool Run_Jump::MotionUpdate(PlayerData& playerData)
 {
+	bool flag = false;
+
 	if (!isPush)
 	{
  		if (playerData.isJump_second)
@@ -51,8 +53,12 @@ bool Run_Jump::MotionUpdate(PlayerData& playerData)
 		}
 	}
 	
+	if (nowAnimState.PlayTime_anim >= 22.0f)
+	{
+		flag = true;
+	}
 
 	PlayerStateActionBase::MotionUpdate(playerData);
 
-	return false;
+	return flag;
 }

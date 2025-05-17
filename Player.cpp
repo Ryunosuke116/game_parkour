@@ -6,7 +6,7 @@
 /// </summary>
 Player::Player()
 {
-	modelHandle = MV1LoadModel("material/mv1/human/human_0508.mv1");
+	modelHandle = MV1LoadModel("material/mv1/human/human_0517.mv1");
 	MV1SetScale(modelHandle, VGet(modelScale, modelScale, modelScale));
     input = std::make_shared<Input>();
 }
@@ -34,6 +34,7 @@ void Player::Initialize()
     playerData.isJump_second = false;
     playerData.isMove = false;
     playerData.isRool = false;
+    playerData.isGround = true;
    
     oldAnimState.AttachIndex = -1;
     oldAnimState.PlayAnimSpeed = 0.0f;
@@ -69,12 +70,17 @@ void Player::Update(const VECTOR& cameraDirection)
     {
         targetMoveDirection = moveVec;
     }
+    
+    RollCalclation(moveVec);
+
+    //ジャンプ計算
+    JumpCalclation(nowState->GetNowAnimState().PlayTime_anim);
+
+    GravityCalclation();
 
     //進むスピードを乗算
     moveVec = VScale(moveVec, MoveSpeed);
 
-    JumpCalclation(nowState->GetNowAnimState().PlayTime_anim);
-    
     position = VAdd(position, moveVec);
 
 
@@ -208,26 +214,41 @@ void Player::JumpCalclation(float playTime_anim)
     {
         position.y += currentJumpSpeed;
     }
+    else if (!playerData.isGround)
+    {
+        position.y += currentJumpSpeed;
+    }
 
+}
+
+/// <summary>
+/// 重力計算
+/// </summary>
+void Player::GravityCalclation()
+{
     //重力を加算する
-    if (playerData.isJump && playTime_anim > 7.0f && animNumber_Now == animNum::jump )
-    {
-        currentJumpSpeed += -gravity;
-    }
-    else if (playerData.isJump && animNumber_Now == animNum::run_Jump ||
-        animNumber_Now == animNum::falling_Idle)
-    {
-        currentJumpSpeed += -gravity;
-    }
+    //if (playerData.isJump && playTime_anim > 7.0f && animNumber_Now == animNum::jump)
+    //{
+    //    currentJumpSpeed += -gravity;
+    //}
+    //else 
 
-    //条件を満たしたらジャンプ終了
-    if (position.y < 0.0f)
+    if (position.y <= 0.0f)
     {
         position.y = 0.0f;
         playerData.isJump = false;
         playerData.isJump_second = false;
+        playerData.isGround = true;
+    }
+    else
+    {
+        playerData.isGround = false;
     }
 
+    if (!playerData.isGround && !playerData.isRool)
+    {
+        currentJumpSpeed += gravity;
+    }
 
 }
 
@@ -243,6 +264,16 @@ void Player::RollMove()
 
 }
 
+/// <summary>
+/// ロール計算
+/// </summary>
+void Player::RollCalclation(VECTOR& moveVec)
+{
+    if (playerData.isRool)
+    {
+        moveVec = targetMoveDirection;
+    }
+}
 
 /// <summary>
 /// アニメーション変更
@@ -317,6 +348,8 @@ void Player::ChangeState()
     //転がる
     if (playerData.isRool && animNumber_Now != animNum::quick_Roll)
     {
+        currentJumpSpeed = 0.0f;
+
         SetNowAnimState(nowState->GetNowAnimState());
         SetOldAnimState(nowState->GetOldAnimState());
 
