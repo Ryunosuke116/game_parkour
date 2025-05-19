@@ -5,7 +5,7 @@ class Idle : public PlayerStateActionBase
 {
 public:
 	Idle(int& modelHandle, 
-		OldAnimState& oldAnimState, NowAnimState& nowAnimState);
+		OldAnimState& oldAnimState, NowAnimState& nowAnimStatel, PlayerData& playerData);
 	~Idle();
 
 	//void  MotionUpdate()override;

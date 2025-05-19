@@ -11,7 +11,7 @@ public:
 
 private:
 
-	static constexpr float playAnimSpeed = 0.4f;	    // 移動速度
+	static constexpr float playAnimSpeed = 0.6f;	    // 移動速度
 
 	bool isPush;		//ボタンを押したか
 };

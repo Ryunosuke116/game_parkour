@@ -27,9 +27,6 @@
     <Filter Include="ソース ファイル\player">
       <UniqueIdentifier>{177446bf-eb68-46e6-99cd-5c968117d403}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\map">
-      <UniqueIdentifier>{0564d51b-3b2a-45a6-905c-a0ad4e3256b2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\player\state">
       <UniqueIdentifier>{25ee530f-5c21-4ee8-9271-3b0bedbca70d}</UniqueIdentifier>
     </Filter>
@@ -42,6 +39,9 @@
     </Filter>
     <Filter Include="ソース ファイル\field">
       <UniqueIdentifier>{64988ae3-2089-4141-9140-37e45360d8db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\map">
+      <UniqueIdentifier>{0564d51b-3b2a-45a6-905c-a0ad4e3256b2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -98,6 +98,12 @@
     </ClCompile>
     <ClCompile Include="Field.cpp">
       <Filter>ソース ファイル\field</Filter>
+    </ClCompile>
+    <ClCompile Include="Run_To_Stop.cpp">
+      <Filter>ソース ファイル\player\state</Filter>
+    </ClCompile>
+    <ClCompile Include="Idle_To_Sprint.cpp">
+      <Filter>ソース ファイル\player\state</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -157,6 +163,12 @@
     </ClInclude>
     <ClInclude Include="Field.h">
       <Filter>ソース ファイル\field</Filter>
+    </ClInclude>
+    <ClInclude Include="Run_To_Stop.h">
+      <Filter>ソース ファイル\player\state</Filter>
+    </ClInclude>
+    <ClInclude Include="Idle_To_Sprint.h">
+      <Filter>ソース ファイル\player\state</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -6,7 +6,7 @@
 /// </summary>
 Player::Player()
 {
-	modelHandle = MV1LoadModel("material/mv1/human/human_0517.mv1");
+	modelHandle = MV1LoadModel("material/mv1/human/human_0519.mv1");
 	MV1SetScale(modelHandle, VGet(modelScale, modelScale, modelScale));
     input = std::make_shared<Input>();
 }
@@ -33,8 +33,10 @@ void Player::Initialize()
     playerData.isJump = false;
     playerData.isJump_second = false;
     playerData.isMove = false;
-    playerData.isRool = false;
+    playerData.isRoll = false;
     playerData.isGround = true;
+    playerData.isSprint = false;
+    playerData.isStopRun = false;
    
     oldAnimState.AttachIndex = -1;
     oldAnimState.PlayAnimSpeed = 0.0f;
@@ -46,7 +48,7 @@ void Player::Initialize()
     nowAnimState.TotalPlayTime_anim = 0.0f;
     
     animNumber_Now = animNum::idle;
-    nowState = std::make_shared<Idle>(modelHandle,oldAnimState, nowAnimState);
+    nowState = std::make_shared<Idle>(modelHandle,oldAnimState, nowAnimState, playerData);
 }
 
 /// <summary>
@@ -54,7 +56,7 @@ void Player::Initialize()
 /// </summary>
 void Player::Update(const VECTOR& cameraDirection)
 {
-	VECTOR moveVec = VGet(0.0f, 0.0f, 0.0f);
+    VECTOR moveVec = VGet(0.0f, 0.0f, 0.0f);
 
     this->input->Update();
 
@@ -70,7 +72,7 @@ void Player::Update(const VECTOR& cameraDirection)
     {
         targetMoveDirection = moveVec;
     }
-    
+
     RollCalclation(moveVec);
 
     //ジャンプ計算
@@ -79,7 +81,15 @@ void Player::Update(const VECTOR& cameraDirection)
     GravityCalclation();
 
     //進むスピードを乗算
-    moveVec = VScale(moveVec, MoveSpeed);
+    //ロールアクション中はそれに応じた速度
+    if (playerData.isRoll)
+    {
+        moveVec = VScale(moveVec, rollMoveSpeed);
+    }
+    else
+    {
+        moveVec = VScale(moveVec, MoveSpeed);
+    }
 
     position = VAdd(position, moveVec);
 
@@ -98,6 +108,15 @@ void Player::Draw()
 	MV1DrawModel(modelHandle);
     printfDx("playerPosition.x %f\nplayerPosition.y %f\nplayerPosition.x %f\n",
         position.x, position.y, position.z);
+    printfDx("isMove %d\n", playerData.isMove);
+    printfDx("isJump %d\n", playerData.isJump);
+    printfDx("isJump_second %d\n", playerData.isJump_second);
+    printfDx("isGround %d\n", playerData.isGround);
+    printfDx("isRoll %d\n", playerData.isRoll);
+    printfDx("isSprint %d\n", playerData.isSprint);
+    printfDx("isStopRun %d\n", playerData.isStopRun);
+    printfDx("isChageState %d\n", isChageState);
+    nowState->Draw();
 }
 
 /// <summary>
@@ -127,6 +146,7 @@ void Player::Move(VECTOR& moveVec, const VECTOR& cameraDirection)
         }
         moveVec = VAdd(moveVec, upMove);
         playerData.isMove = true;
+        playerData.isStopRun = true;
     }
 
     //下入力されたとき
@@ -138,6 +158,7 @@ void Player::Move(VECTOR& moveVec, const VECTOR& cameraDirection)
         }
         moveVec = VAdd(moveVec, VScale(upMove, -1.0f));
         playerData.isMove = true;
+        playerData.isStopRun = true;
     }
 
     //左入力されたとき
@@ -149,6 +170,7 @@ void Player::Move(VECTOR& moveVec, const VECTOR& cameraDirection)
         }
         moveVec = VAdd(moveVec, rightMove);
         playerData.isMove = true;
+        playerData.isStopRun = true;
     }
 
     //右入力されたとき
@@ -160,6 +182,7 @@ void Player::Move(VECTOR& moveVec, const VECTOR& cameraDirection)
         }
         moveVec = VAdd(moveVec, VScale(rightMove, -1.0f));
         playerData.isMove = true;
+        playerData.isStopRun = true;
     }
 
     //0でなければ正規化
@@ -202,9 +225,8 @@ void Player::JumpMove()
 /// </summary>
 void Player::JumpCalclation(float playTime_anim)
 {
-    //ジャンプの時は少し遅らせて加算する
     //currentPlayTime_anim > 5.0f && isJump
-    if (playTime_anim > 7.0f && playerData.isJump && animNumber_Now == animNum::jump)
+    if (playerData.isJump && animNumber_Now == animNum::jump)
     {
         position.y += currentJumpSpeed;
     }
@@ -233,19 +255,21 @@ void Player::GravityCalclation()
     //}
     //else 
 
+
+
     if (position.y <= 0.0f)
     {
         position.y = 0.0f;
+        playerData.isGround = true;
         playerData.isJump = false;
         playerData.isJump_second = false;
-        playerData.isGround = true;
     }
     else
     {
         playerData.isGround = false;
     }
 
-    if (!playerData.isGround && !playerData.isRool)
+    if (!playerData.isGround)
     {
         currentJumpSpeed += gravity;
     }
@@ -259,7 +283,7 @@ void Player::RollMove()
 {
     if (padInput.isRoll(*input))
     {
-        playerData.isRool = true;
+        playerData.isRoll = true;
     }
 
 }
@@ -269,7 +293,7 @@ void Player::RollMove()
 /// </summary>
 void Player::RollCalclation(VECTOR& moveVec)
 {
-    if (playerData.isRool)
+    if (playerData.isRoll)
     {
         moveVec = targetMoveDirection;
     }
@@ -281,7 +305,7 @@ void Player::RollCalclation(VECTOR& moveVec)
 void Player::ChangeState()
 {
     //立ち
-    if (!playerData.isMove && !playerData.isJump && !playerData.isRool &&
+    if (!playerData.isMove && !playerData.isJump && !playerData.isRoll && !playerData.isStopRun &&
         animNumber_Now != animNum::idle)
     {
         //アニメーション情報を保存
@@ -291,13 +315,13 @@ void Player::ChangeState()
         //nowStateの中身を削除
         nowState = nullptr;
         animNumber_Now = animNum::idle;
-        nowState = std::make_shared<Idle>(modelHandle,oldAnimState, nowAnimState);
+        nowState = std::make_shared<Idle>(modelHandle,oldAnimState, nowAnimState,playerData);
        // nowState->ResetNowAnimState();
     
     }
 
     //走る
-    if (playerData.isMove && !playerData.isRool && 
+    if (playerData.isMove && !playerData.isRoll && playerData.isSprint &&
         position.y == 0.0f && animNumber_Now != animNum::run)
     {
         SetNowAnimState(nowState->GetNowAnimState());
@@ -311,19 +335,21 @@ void Player::ChangeState()
     }
     
     //ジャンプ
-    if (!playerData.isMove && playerData.isJump && animNumber_Now != animNum::jump && padInput.isJump(*input))
+    if (!playerData.isMove && playerData.isJump && !playerData.isJump_second && animNumber_Now != animNum::jump && padInput.isJump(*input))
     {
-        SetNowAnimState(nowState->GetNowAnimState());
+         SetNowAnimState(nowState->GetNowAnimState());
         SetOldAnimState(nowState->GetOldAnimState());
 
        // prevAttachIndex = nowState->GetPrevAttachIndex();
         nowState = nullptr;
         animNumber_Now = animNum::jump;
         nowState = std::make_shared<Jump>(modelHandle, oldAnimState, nowAnimState);
+
+        playerData.isRoll = false;
     }
 
     //ランジャンプ
-    if (playerData.isJump && playerData.isMove && animNumber_Now != animNum::run_Jump && padInput.isJump(*input))
+    if (playerData.isJump && playerData.isMove && !playerData.isJump_second && animNumber_Now != animNum::run_Jump && padInput.isJump(*input))
     {
         SetNowAnimState(nowState->GetNowAnimState());
         SetOldAnimState(nowState->GetOldAnimState());
@@ -332,10 +358,12 @@ void Player::ChangeState()
         nowState = nullptr;
         animNumber_Now = animNum::run_Jump;
         nowState = std::make_shared<Run_Jump>(modelHandle, oldAnimState, nowAnimState);
+
+        playerData.isRoll = false;
     }
     
     //落下中
-    if (isChageState && playerData.isJump && animNumber_Now != animNum::falling_Idle)
+    if (isChageState && playerData.isJump && !playerData.isRoll && animNumber_Now != animNum::falling_Idle)
     {
         SetNowAnimState(nowState->GetNowAnimState());
         SetOldAnimState(nowState->GetOldAnimState());
@@ -346,7 +374,7 @@ void Player::ChangeState()
     }
 
     //転がる
-    if (playerData.isRool && animNumber_Now != animNum::quick_Roll)
+    if (playerData.isRoll && animNumber_Now != animNum::quick_Roll && padInput.isRoll(*input))
     {
         currentJumpSpeed = 0.0f;
 
@@ -356,6 +384,30 @@ void Player::ChangeState()
         nowState = nullptr;
         animNumber_Now = animNum::quick_Roll;
         nowState = std::make_shared<Quick_Roll>(modelHandle, oldAnimState, nowAnimState);
+    }
+
+    //走り出し
+    if (!playerData.isSprint && playerData.isMove && !playerData.isRoll && !playerData.isJump &&
+        animNumber_Now != animNum::idle_To_Sprint)
+    {
+        SetNowAnimState(nowState->GetNowAnimState());
+        SetOldAnimState(nowState->GetOldAnimState());
+
+        nowState = nullptr;
+        animNumber_Now = animNum::idle_To_Sprint;
+        nowState = std::make_shared<Idle_To_Sprint>(modelHandle, oldAnimState, nowAnimState);
+    }
+
+    //走り終わり
+    if (playerData.isStopRun && !playerData.isMove && playerData.isGround && !playerData.isRoll && !playerData.isJump &&
+        animNumber_Now != animNum::run_To_Stop)
+    {
+        SetNowAnimState(nowState->GetNowAnimState());
+        SetOldAnimState(nowState->GetOldAnimState());
+
+        nowState = nullptr;
+        animNumber_Now = animNum::run_To_Stop;
+        nowState = std::make_shared<Run_To_Stop>(modelHandle, oldAnimState, nowAnimState);
     }
 }
 

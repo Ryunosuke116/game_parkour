@@ -57,12 +57,24 @@ bool Quick_Roll::MotionUpdate(PlayerData& playerData)
         totalTime_anim = MV1GetAttachAnimTotalTime(modelHandle, nowAnimState.AttachIndex);
 
         //再生時間更新
-        nowAnimState.PlayTime_anim += nowAnimState.PlayAnimSpeed;
+
+        //空中にいるとき40fでアニメーションを止める
+        if (!playerData.isGround)
+        {
+          /*  if (nowAnimState.PlayTime_anim <= 33.0f)
+            {
+                nowAnimState.PlayTime_anim += nowAnimState.PlayAnimSpeed;
+       
+            }*/
+        }
+ 
+            nowAnimState.PlayTime_anim += nowAnimState.PlayAnimSpeed;
 
         if (nowAnimState.PlayTime_anim >= 40.0f)
         {
             if (!playerData.isGround)
             {
+               // playerData.isRoll = false;
                 flag = true;
             }
         }
@@ -70,7 +82,7 @@ bool Quick_Roll::MotionUpdate(PlayerData& playerData)
         //総再生時間を超えたらリセット
         if (nowAnimState.PlayTime_anim >= totalTime_anim)
         {
-            playerData.isRool = false;
+            playerData.isRoll = false;
 
            // nowAnimState.PlayTime_anim = static_cast<float>(fmod(nowAnimState.PlayTime_anim, totalTime_anim));
         }

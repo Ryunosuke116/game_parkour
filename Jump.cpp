@@ -73,14 +73,10 @@ bool Jump::MotionUpdate(PlayerData& playerData)
         nowAnimState.PlayTime_anim += nowAnimState.PlayAnimSpeed;
 
         //総再生時間を超えたらリセット
-        if (nowAnimState.PlayTime_anim >= 19.0f)
+        if (nowAnimState.PlayTime_anim >= totalTime_anim)
         {
             flag = true;
         }
-       /* if (nowAnimState.PlayTime_anim >= totalTime_anim)
-        {
-            flag = true;
-        }*/
 
         // 再生時間をセットする
         MV1SetAttachAnimTime(modelHandle, nowAnimState.AttachIndex, nowAnimState.PlayTime_anim);

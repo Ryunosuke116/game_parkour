@@ -5,4 +5,6 @@
 #include "Run.h"
 #include "Run_Jump.h"
 #include "Quick_Roll.h"
+#include "Idle_To_Sprint.h"
+#include "Run_To_Stop.h"
 #include "PlayerStateActionBase.h"

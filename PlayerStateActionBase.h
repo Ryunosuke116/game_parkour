@@ -12,8 +12,10 @@ public:
 		bool isMove;					//動いているか
 		bool isJump;					//ジャンプしたか
 		bool isJump_second;				//二段ジャンプしたか
-		bool isRool;					//転がるか
+		bool isRoll;					//転がるか
 		bool isGround;					//接地しているか
+		bool isSprint;					//走り出しか
+		bool isStopRun;					//走り終わったか
 	};
 
 	struct OldAnimState
@@ -40,6 +42,7 @@ public:
 	void SetOldAnimState();
 	void ResetOldAnimState();
 	void ResetNowAnimState();
+	void Draw();
 
 
 	//////////////////////////////////////////////
@@ -73,13 +76,14 @@ protected:
 		hangring_Idle,				//ぶらさがる
 		hard_Landing,				//着地する
 		idle,						//静止時
+		idle_To_Sprint,				//走り出し
 		jump,						//ジャンプ
 		jump_Over,					//ロールジャンプ
 		quick_Roll,					//転がる
 		run,						//走る
 		run_Jump,					//走りながらジャンプ
 		run_To_Stop,				//止まる
-		running_Forward_Flip,		//走りながら回転ジャンプ
+		running_Forward_Flip		//走りながら回転ジャンプ
 	};
 
 	std::shared_ptr<Input> input = NULL;

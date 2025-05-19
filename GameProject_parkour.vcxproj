@@ -151,6 +151,7 @@
     <ClCompile Include="Field.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Idle.cpp" />
+    <ClCompile Include="Idle_To_Sprint.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Jump.cpp" />
     <ClCompile Include="main.cpp" />
@@ -160,6 +161,7 @@
     <ClCompile Include="Quick_Roll.cpp" />
     <ClCompile Include="Run.cpp" />
     <ClCompile Include="Run_Jump.cpp" />
+    <ClCompile Include="Run_To_Stop.cpp" />
     <ClCompile Include="SceneManager.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -171,6 +173,7 @@
     <ClInclude Include="Field.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Idle.h" />
+    <ClInclude Include="Idle_To_Sprint.h" />
     <ClInclude Include="Include.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Jump.h" />
@@ -181,6 +184,7 @@
     <ClInclude Include="Quick_Roll.h" />
     <ClInclude Include="Run.h" />
     <ClInclude Include="Run_Jump.h" />
+    <ClInclude Include="Run_To_Stop.h" />
     <ClInclude Include="SceneManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
