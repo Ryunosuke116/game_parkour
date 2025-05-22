@@ -8,8 +8,11 @@ public:
 	BaseObject();
 	~BaseObject();
 
-	virtual void Initialize();
-	virtual void Update();
-	virtual void Draw();
+	//ƒˆ‰¼‘zŠÖ”	
+	virtual void Initialize() abstract;
+	virtual void Update() abstract;
+	virtual void Draw() abstract;
+
+	const int GetModelHandle() { return modelHandle; }
 };
 

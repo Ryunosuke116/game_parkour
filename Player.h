@@ -5,15 +5,18 @@ class Player : public BaseChara
 {
 private:
 	static constexpr float modelScale = 0.06f;
-	static constexpr float MoveSpeed = 0.4f;	    // 移動速度
+	static constexpr float MaxMoveSpeed = 1.6f;	    // 移動速度
 	static constexpr float attackAnimSpeed = 1.0f;	//攻撃速度
 	static constexpr float rollMoveSpeed = 1.2f;	//ロール速度
 	static constexpr float angleSpeed = 0.3f;
 	static constexpr float addJumpPower = 2.0f;		//ジャンプパワー
 	static constexpr float gravity = -0.07f;
 
-
+	VECTOR directionLinePos[4];
+	VECTOR footPosition;
+	VECTOR centerPosition;
 	float currentJumpSpeed;			//現在のジャンプスピード
+	float nowMoveSpeed;
 
 	bool isPush;					//ボタンを押したか
 	bool isChageState;				//アニメーションを変更するか
@@ -71,9 +74,30 @@ public:
 	//void MotionUpdate();
 	void ChangeState();
 	void GravityCalclation();
-
+	void SettingRay();
 
 	void SetOldAnimState(PlayerStateActionBase::OldAnimState animState);
 	void SetNowAnimState(PlayerStateActionBase::NowAnimState animState);
+
+	enum RayDirction
+	{
+		front,
+		back,
+		right,
+		left
+	};
+
+	//////////////////////////////////
+	//　ゲッター
+	///////////////////////////////////
+
+	VECTOR GetCenterPos() { return centerPosition; }
+	VECTOR GetFootPos() { return footPosition; }
+
+	//////////////////////////////////
+	/// セッター
+	/////////////////////////////////
+	void SetIsGround(bool flag) { playerData.isGround = flag; }
+	void SetPos(VECTOR newPos) { position = newPos; }
 };
 

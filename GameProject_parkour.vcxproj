@@ -147,9 +147,11 @@
     <ClCompile Include="BaseObject.cpp" />
     <ClCompile Include="BaseScene.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="Falling_Idle.cpp" />
     <ClCompile Include="Field.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="HitCheck.cpp" />
     <ClCompile Include="Idle.cpp" />
     <ClCompile Include="Idle_To_Sprint.cpp" />
     <ClCompile Include="Input.cpp" />
@@ -169,9 +171,11 @@
     <ClInclude Include="BaseObject.h" />
     <ClInclude Include="BaseScene.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="Falling_Idle.h" />
     <ClInclude Include="Field.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="HitCheck.h" />
     <ClInclude Include="Idle.h" />
     <ClInclude Include="Idle_To_Sprint.h" />
     <ClInclude Include="Include.h" />

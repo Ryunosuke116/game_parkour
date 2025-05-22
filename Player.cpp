@@ -4,7 +4,9 @@
 /// <summary>
 /// /インストラクタ
 /// </summary>
-Player::Player()
+Player::Player() :
+    centerPosition(VGet(0.0f,0.0f,0.0f)),
+    footPosition(VGet(0.0f, 0.0f, 0.0f))
 {
 	modelHandle = MV1LoadModel("material/mv1/human/human_0519.mv1");
 	MV1SetScale(modelHandle, VGet(modelScale, modelScale, modelScale));
@@ -24,7 +26,8 @@ Player::~Player()
 /// </summary>
 void Player::Initialize()
 {
-    position = VGet(0.0f, 0.0f, 0.0f);
+    //position = VGet(0.0f, 5.0f, 0.0f);
+    position = VGet(2145.0f, 0.0f, 917.0f);
     MV1SetRotationXYZ(modelHandle, VGet(0, 0, 0));
    // ChangeMotion(animNum::idle, PlayAnimSpeed);
     currentJumpSpeed = 0.0f;
@@ -37,6 +40,9 @@ void Player::Initialize()
     playerData.isGround = true;
     playerData.isSprint = false;
     playerData.isStopRun = false;
+    playerData.isJumpAll = false;
+    playerData.isRoll_PlayAnim = false;
+    playerData.isJump_PlayAnim = false;
    
     oldAnimState.AttachIndex = -1;
     oldAnimState.PlayAnimSpeed = 0.0f;
@@ -46,6 +52,7 @@ void Player::Initialize()
     nowAnimState.PlayAnimSpeed = 0.0f;
     nowAnimState.PlayTime_anim = 0.0f;
     nowAnimState.TotalPlayTime_anim = 0.0f;
+    nowMoveSpeed = 0.0f;
     
     animNumber_Now = animNum::idle;
     nowState = std::make_shared<Idle>(modelHandle,oldAnimState, nowAnimState, playerData);
@@ -68,6 +75,7 @@ void Player::Update(const VECTOR& cameraDirection)
 
     isChageState = nowState->MotionUpdate(playerData);
 
+    //移動方向ベクトルが0でない場合コピー
     if (VSize(moveVec) != 0)
     {
         targetMoveDirection = moveVec;
@@ -88,16 +96,44 @@ void Player::Update(const VECTOR& cameraDirection)
     }
     else
     {
-        moveVec = VScale(moveVec, MoveSpeed);
+        //徐々にスピードを上げる
+        nowMoveSpeed += 0.05f;
+
+        if (nowMoveSpeed >= MaxMoveSpeed)
+        {
+            nowMoveSpeed = MaxMoveSpeed;
+        }
+
+        moveVec = VScale(moveVec, nowMoveSpeed);
+
+        if (!playerData.isMove)
+        {
+            nowMoveSpeed = 0.0f;
+        }
     }
 
     position = VAdd(position, moveVec);
-
 
     // プレイヤーのモデルの座標を更新する
     MV1SetPosition(modelHandle, position);
 
     UpdateAngle(targetMoveDirection);
+
+    if (CheckHitKey(KEY_INPUT_1))
+    {
+        nowFrameNumber++;
+    }
+    else if (CheckHitKey(KEY_INPUT_2))
+    {
+        nowFrameNumber--;
+    }
+
+    //2胴体
+    //0真下
+    centerPosition = MV1GetFramePosition(modelHandle, 2);
+    footPosition = MV1GetFramePosition(modelHandle, 0);
+
+    SettingRay();
 }
 
 /// <summary>
@@ -106,8 +142,13 @@ void Player::Update(const VECTOR& cameraDirection)
 void Player::Draw()
 {
 	MV1DrawModel(modelHandle);
+    DrawSphere3D(centerPosition, 13.0f, 30, GetColor(0, 0, 0),
+        GetColor(255, 0, 0), FALSE);
+
     printfDx("playerPosition.x %f\nplayerPosition.y %f\nplayerPosition.x %f\n",
         position.x, position.y, position.z);
+    printfDx("frame現在数%d\n", nowFrameNumber);
+    printfDx("nowMoveSpeed %f\n", nowMoveSpeed);
     printfDx("isMove %d\n", playerData.isMove);
     printfDx("isJump %d\n", playerData.isJump);
     printfDx("isJump_second %d\n", playerData.isJump_second);
@@ -115,8 +156,18 @@ void Player::Draw()
     printfDx("isRoll %d\n", playerData.isRoll);
     printfDx("isSprint %d\n", playerData.isSprint);
     printfDx("isStopRun %d\n", playerData.isStopRun);
+    printfDx("isJumpAll %d\n", playerData.isJumpAll);
     printfDx("isChageState %d\n", isChageState);
+    printfDx("animNumber_Now %d\n", animNumber_Now);
+    printfDx("currentJumpSpeed %f\n", currentJumpSpeed);
     nowState->Draw();
+
+    //線
+    DrawLine3D(centerPosition, footPosition, GetColor(255, 0, 0));
+    DrawLine3D(centerPosition, directionLinePos[RayDirction::front], GetColor(255, 0, 0));
+    DrawLine3D(centerPosition, directionLinePos[RayDirction::back], GetColor(255, 0, 0));
+    DrawLine3D(centerPosition, directionLinePos[RayDirction::right], GetColor(255, 0, 0));
+    DrawLine3D(centerPosition, directionLinePos[RayDirction::left], GetColor(255, 0, 0));
 }
 
 /// <summary>
@@ -212,6 +263,10 @@ void Player::JumpMove()
             isPush = true;
             playerData.isJump_second = true;
             currentJumpSpeed = addJumpPower;
+            if (animNumber_Now == animNum::jump || animNumber_Now == animNum::run_Jump)
+            {
+                playerData.isJumpAll = true;
+            }
         }
     }
     else
@@ -255,19 +310,20 @@ void Player::GravityCalclation()
     //}
     //else 
 
-
-
-    if (position.y <= 0.0f)
+    if (playerData.isGround)
     {
-        position.y = 0.0f;
-        playerData.isGround = true;
+        //position.y = 0.0f;
+      //  playerData.isGround = true;
         playerData.isJump = false;
         playerData.isJump_second = false;
+        playerData.isJumpAll = false;
+        playerData.isRoll_PlayAnim = false;
+        currentJumpSpeed = 0.0f;
     }
-    else
+   /* else
     {
         playerData.isGround = false;
-    }
+    }*/
 
     if (!playerData.isGround)
     {
@@ -281,7 +337,7 @@ void Player::GravityCalclation()
 /// </summary>
 void Player::RollMove()
 {
-    if (padInput.isRoll(*input))
+    if (padInput.isRoll(*input) && !playerData.isRoll_PlayAnim)
     {
         playerData.isRoll = true;
     }
@@ -308,48 +364,59 @@ void Player::ChangeState()
     if (!playerData.isMove && !playerData.isJump && !playerData.isRoll && !playerData.isStopRun &&
         animNumber_Now != animNum::idle)
     {
-        //アニメーション情報を保存
+        //nowState内のアニメーション情報を保存
         SetNowAnimState(nowState->GetNowAnimState());
         SetOldAnimState(nowState->GetOldAnimState());
 
         //nowStateの中身を削除
         nowState = nullptr;
         animNumber_Now = animNum::idle;
+
+        //nowStateを更新
         nowState = std::make_shared<Idle>(modelHandle,oldAnimState, nowAnimState,playerData);
-       // nowState->ResetNowAnimState();
     
     }
 
     //走る
     if (playerData.isMove && !playerData.isRoll && playerData.isSprint &&
-        position.y == 0.0f && animNumber_Now != animNum::run)
+        playerData.isGround && animNumber_Now != animNum::run)
     {
+        //nowState内のアニメーション情報を保存
         SetNowAnimState(nowState->GetNowAnimState());
         SetOldAnimState(nowState->GetOldAnimState());
 
-        //prevAttachIndex = nowState->GetPrevAttachIndex();
+        //nowStateの中身を削除
         nowState = nullptr;
         animNumber_Now = animNum::run;
+
+        //nowStateを更新
         nowState = std::make_shared<Run>(modelHandle, oldAnimState,nowAnimState);
-       // nowState->ResetNowAnimState();
     }
     
     //ジャンプ
-    if (!playerData.isMove && playerData.isJump && !playerData.isJump_second && animNumber_Now != animNum::jump && padInput.isJump(*input))
+    if (!playerData.isMove && (playerData.isJump || playerData.isJump_second) && !playerData.isJumpAll &&
+        animNumber_Now != animNum::jump && padInput.isJump(*input))
     {
          SetNowAnimState(nowState->GetNowAnimState());
         SetOldAnimState(nowState->GetOldAnimState());
 
-       // prevAttachIndex = nowState->GetPrevAttachIndex();
         nowState = nullptr;
         animNumber_Now = animNum::jump;
+
+        //nowStateを更新
         nowState = std::make_shared<Jump>(modelHandle, oldAnimState, nowAnimState);
 
         playerData.isRoll = false;
+
+        if (playerData.isJump && playerData.isJump_second)
+        {
+            playerData.isJumpAll = true;
+        }
     }
 
     //ランジャンプ
-    if (playerData.isJump && playerData.isMove && !playerData.isJump_second && animNumber_Now != animNum::run_Jump && padInput.isJump(*input))
+    if (playerData.isMove && (playerData.isJump || playerData.isJump_second) && !playerData.isJumpAll &&
+        animNumber_Now != animNum::run_Jump && padInput.isJump(*input))
     {
         SetNowAnimState(nowState->GetNowAnimState());
         SetOldAnimState(nowState->GetOldAnimState());
@@ -360,10 +427,16 @@ void Player::ChangeState()
         nowState = std::make_shared<Run_Jump>(modelHandle, oldAnimState, nowAnimState);
 
         playerData.isRoll = false;
+
+        if (playerData.isJump && playerData.isJump_second)
+        {
+            playerData.isJumpAll = true;
+        }
     }
     
     //落下中
-    if (isChageState && playerData.isJump && !playerData.isRoll && animNumber_Now != animNum::falling_Idle)
+    if (isChageState && playerData.isJump && !playerData.isRoll
+        && animNumber_Now != animNum::falling_Idle)
     {
         SetNowAnimState(nowState->GetNowAnimState());
         SetOldAnimState(nowState->GetOldAnimState());
@@ -371,10 +444,12 @@ void Player::ChangeState()
         nowState = nullptr;
         animNumber_Now = animNum::falling_Idle;
         nowState = std::make_shared<Falling_Idle>(modelHandle, oldAnimState, nowAnimState);
+
     }
 
     //転がる
-    if (playerData.isRoll && animNumber_Now != animNum::quick_Roll && padInput.isRoll(*input))
+    if (playerData.isRoll && animNumber_Now != animNum::quick_Roll && !playerData.isRoll_PlayAnim &&
+        padInput.isRoll(*input))
     {
         currentJumpSpeed = 0.0f;
 
@@ -384,6 +459,11 @@ void Player::ChangeState()
         nowState = nullptr;
         animNumber_Now = animNum::quick_Roll;
         nowState = std::make_shared<Quick_Roll>(modelHandle, oldAnimState, nowAnimState);
+
+        if (!playerData.isGround)
+        {
+            playerData.isRoll_PlayAnim = true;
+        }
     }
 
     //走り出し
@@ -429,6 +509,33 @@ void Player::SetNowAnimState(PlayerStateActionBase::NowAnimState animState)
     nowAnimState.PlayAnimSpeed = animState.PlayAnimSpeed;
     nowAnimState.PlayTime_anim = animState.PlayTime_anim;
     nowAnimState.TotalPlayTime_anim = animState.TotalPlayTime_anim;
+}
+
+void Player::SettingRay()
+{
+    float angle[4];
+    // float angle= static_cast<float>(atan2(targetMoveDirection.x, targetMoveDirection.z));
+    angle[RayDirction::front] = DX_PI;
+    angle[RayDirction::right] = DX_PI / 2.0f;
+
+    directionLinePos[RayDirction::front] = VGet(cosf(angle[RayDirction::front]), 0.0f, sinf(angle[RayDirction::front]));
+    directionLinePos[RayDirction::front] = VScale(directionLinePos[RayDirction::front], 5.0f);
+    directionLinePos[RayDirction::back] = VScale(directionLinePos[RayDirction::front], -1.0f);
+
+    directionLinePos[RayDirction::front] = VAdd(centerPosition, directionLinePos[RayDirction::front]);
+    directionLinePos[RayDirction::front].y = centerPosition.y;
+
+    directionLinePos[RayDirction::back] = VAdd(centerPosition, directionLinePos[RayDirction::back]);
+    directionLinePos[RayDirction::back].y = centerPosition.y;
+
+    directionLinePos[RayDirction::right] = VGet(cosf(angle[RayDirction::right]), 0.0f, sinf(angle[RayDirction::right]));
+    directionLinePos[RayDirction::right] = VScale(directionLinePos[RayDirction::right], 5.0f);
+    directionLinePos[RayDirction::left] = VScale(directionLinePos[RayDirction::right], -1.0f);
+    directionLinePos[RayDirction::right] = VAdd(centerPosition, directionLinePos[RayDirction::right]);
+    directionLinePos[RayDirction::right].y = centerPosition.y;
+
+    directionLinePos[RayDirction::left] = VAdd(centerPosition, directionLinePos[RayDirction::left]);
+    directionLinePos[RayDirction::left].y = centerPosition.y;
 }
 
 /// <summary>

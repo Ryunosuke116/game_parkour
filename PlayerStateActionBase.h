@@ -12,10 +12,13 @@ public:
 		bool isMove;					//動いているか
 		bool isJump;					//ジャンプしたか
 		bool isJump_second;				//二段ジャンプしたか
+		bool isJump_PlayAnim;			//ジャンプのアニメを再生するか
 		bool isRoll;					//転がるか
+		bool isRoll_PlayAnim;			//ロールアクションのアニメを再生するか
 		bool isGround;					//接地しているか
 		bool isSprint;					//走り出しか
 		bool isStopRun;					//走り終わったか
+		bool isJumpAll;					//全てのジャンプが完了したか
 	};
 
 	struct OldAnimState

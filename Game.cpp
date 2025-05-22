@@ -11,6 +11,8 @@ Game::Game(SceneManager& manager) :BaseScene{ manager }
 	map = std::make_shared<Map>();
 	input = std::make_shared<Input>();
 	field = std::make_shared<Field>();
+	hitCheck = std::make_shared<HitCheck>();
+	collisionManager = std::make_shared<CollisionManager>();
 }
 
 /// <summary>
@@ -29,6 +31,7 @@ void Game::Initialize()
 	player->Initialize();
 	camera->Initialize();
 	map->Initialize();
+	field->Initialize();
 }
 
 /// <summary>
@@ -39,6 +42,7 @@ void Game::Update()
 	player->Update(camera->GetCameraDirection());
 	camera->Update(player->GetPosition());
 	map->Update();
+	collisionManager->Update(*player, field->GetModelHandle());
 }
 
 void Game::Draw()
@@ -48,4 +52,6 @@ void Game::Draw()
 	camera->Draw();
 	map->Draw();
 	field->Draw();
+	/*printfDx("hitCheck %d\n", hitCheck->HitRayJudge(field->GetModelHandle(), -1,
+		player->GetCenterPos(), player->GetFootPos()));*/
 }

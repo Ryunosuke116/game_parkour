@@ -6,6 +6,7 @@
 Map::Map()
 {
 	modelHandle = MV1LoadModel("material/skyDome/sunSet.mv1");
+	MV1SetScale(modelHandle, VGet(2.0f, 2.0f, 2.0f));
 }
 
 /// <summary>
@@ -16,3 +17,26 @@ Map::~Map()
 
 }
 
+/// <summary>
+/// ‰Šú‰»
+/// </summary>
+void Map::Initialize()
+{
+
+}
+
+/// <summary>
+/// XV
+/// </summary>
+void Map::Update()
+{
+
+}
+
+/// <summary>
+/// •`‰æ
+/// </summary>
+void Map::Draw()
+{
+	MV1DrawModel(modelHandle);
+}

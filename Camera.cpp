@@ -41,6 +41,7 @@ void Camera::Initialize()
 void Camera::Update(const VECTOR& playerPosition)
 {
 	lookPosition = playerPosition;
+	aimPosition.y = playerPosition.y + 20.0f;
 
 	//ÉJÉÅÉâà⁄ìÆèàóù
 	if (CheckHitKey(KEY_INPUT_A))
@@ -68,7 +69,12 @@ void Camera::Update(const VECTOR& playerPosition)
 /// </summary>
 void Camera::Draw()
 {
-
+	printfDx("lookPosition.x %f\n", lookPosition.x);
+	printfDx("lookPosition.y %f\n", lookPosition.y);
+	printfDx("lookPosition.z %f\n", lookPosition.z);
+	printfDx("aimPosition.x %f\n", aimPosition.x);
+	printfDx("aimPosition.y %f\n", aimPosition.y);
+	printfDx("aimPosition.z %f\n", aimPosition.z);
 }
 
 void Camera::RotateUpdate(const VECTOR& playerPosition)

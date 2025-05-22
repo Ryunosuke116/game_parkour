@@ -37,5 +37,6 @@ void BaseObject::Update()
 /// </summary>
 void BaseObject::Draw()
 {
+	//MV1SetWireFrameDrawFlag(modelHandle,TRUE);
 	MV1DrawModel(modelHandle);
 }

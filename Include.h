@@ -18,5 +18,7 @@
 #include "Field.h"
 #include "Map.h"
 #include "Player.h"
+#include "HitCheck.h"
+#include "CollisionManager.h"
 #include "Game.h"
 #include "SceneManager.h"
