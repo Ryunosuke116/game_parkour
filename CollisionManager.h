@@ -6,6 +6,8 @@ class CollisionManager
 {
 public:
 	void Update(Player& player, int modelHandle);
+	bool CalculateIntersection(const VECTOR& rayStartPos, const VECTOR& rayEndPos,
+		const VECTOR& planePoint, const VECTOR& planeNormal, VECTOR& intersection);
 
 private:
 	HitCheck hitCheck;

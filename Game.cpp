@@ -39,10 +39,10 @@ void Game::Initialize()
 /// </summary>
 void Game::Update()
 {
+	collisionManager->Update(*player, field->GetModelHandle());
 	player->Update(camera->GetCameraDirection());
 	camera->Update(player->GetPosition());
 	map->Update();
-	collisionManager->Update(*player, field->GetModelHandle());
 }
 
 void Game::Draw()

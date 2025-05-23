@@ -134,6 +134,11 @@ void Player::Update(const VECTOR& cameraDirection)
     footPosition = MV1GetFramePosition(modelHandle, 0);
 
     SettingRay();
+
+    topPosition = position;
+    bottomPosition = position;
+    topPosition.y = topPosition.y + 17.0f;
+    bottomPosition.y = bottomPosition.y + 3.0f;
 }
 
 /// <summary>
@@ -141,8 +146,15 @@ void Player::Update(const VECTOR& cameraDirection)
 /// </summary>
 void Player::Draw()
 {
+    VECTOR topPosition = position;
+    VECTOR bottomPosition = position;
+    topPosition.y = topPosition.y + 19.0f;
+    bottomPosition.y = bottomPosition.y + 3.0f;
+    
 	MV1DrawModel(modelHandle);
-    DrawSphere3D(centerPosition, 13.0f, 30, GetColor(0, 0, 0),
+    //DrawSphere3D(centerPosition, 13.0f, 30, GetColor(0, 0, 0),
+    //    GetColor(255, 0, 0), FALSE);
+    DrawCapsule3D(topPosition, bottomPosition, 3.0f, 30, GetColor(0, 0, 0),
         GetColor(255, 0, 0), FALSE);
 
     printfDx("playerPosition.x %f\nplayerPosition.y %f\nplayerPosition.x %f\n",
@@ -163,7 +175,7 @@ void Player::Draw()
     nowState->Draw();
 
     //ê¸
-    DrawLine3D(centerPosition, footPosition, GetColor(255, 0, 0));
+    DrawLine3D(topPosition, bottomPosition, GetColor(255, 0, 0));
     DrawLine3D(centerPosition, directionLinePos[RayDirction::front], GetColor(255, 0, 0));
     DrawLine3D(centerPosition, directionLinePos[RayDirction::back], GetColor(255, 0, 0));
     DrawLine3D(centerPosition, directionLinePos[RayDirction::right], GetColor(255, 0, 0));
