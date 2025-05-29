@@ -17,7 +17,7 @@ private:
 	VECTOR centerPosition;
 	VECTOR topPosition;
 	VECTOR bottomPosition;
-	
+
 	float currentJumpSpeed;			//現在のジャンプスピード
 	float nowMoveSpeed;
 
@@ -96,8 +96,8 @@ public:
 
 	VECTOR GetCenterPos() { return centerPosition; }
 	VECTOR GetFootPos() { return footPosition; }
-	VECTOR GetTopPosition() { return topPosition; }
-	VECTOR GetBottomPosition() { return bottomPosition; }
+	VECTOR GetTopPos() { return topPosition; }
+	VECTOR GetBottomPos() { return bottomPosition; }
 
 	//////////////////////////////////
 	/// セッター

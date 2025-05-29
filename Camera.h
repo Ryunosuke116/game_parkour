@@ -22,6 +22,7 @@ public:
 	void Draw();
 	void RotateUpdate(const VECTOR& playerPosition);
 	void Leap(VECTOR& changePosition, const VECTOR& playerPosition, const float& speed);
+	void LeapCalc_single(float& changePos, const float targetPos, const float speed);
 	void LockOnCamera();
 	bool isObjectVisible();
 

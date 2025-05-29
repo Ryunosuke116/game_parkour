@@ -7,12 +7,13 @@
 Field::Field()
 {
 	//modelHandle = MV1LoadModel("material/mv1/field.mv1");
-	modelHandle = MV1LoadModel("material/mv1/city/city.mv1");
+	modelHandle = MV1LoadModel("material/mv1/city/city_floor.mv1");
 	position = VGet(0, 0, 0);
 	//モデルの大きさ調整
 	//MV1SetScale(modelHandle, VGet(1.0f, 0.17f, 1.0f));
-	MV1SetScale(modelHandle, VGet(0.1f, 0.1f, 0.1f));
+	MV1SetScale(modelHandle, VGet(0.05f, 0.05f, 0.05f));
 	MV1SetPosition(modelHandle, position);
+
 }
 
 /// <summary>
@@ -29,7 +30,7 @@ Field::~Field()
 void Field::Initialize()
 {
 	// モデルの０番目のフレームのコリジョン情報を構築
-	MV1SetupCollInfo(modelHandle, -1, 8, 8, 8);
+	MV1SetupCollInfo(modelHandle, -1, 1, 1, 1);
 }
 
 /// <summary>
@@ -37,6 +38,25 @@ void Field::Initialize()
 /// </summary>
 void Field::Update()
 {
+	if (CheckHitKey(KEY_INPUT_1))
+	{
+		if (!isPush)
+		{
+			if (!isPoly)
+			{
+				isPoly = true;
+			}
+			else
+			{
+				isPoly = false;
+			}
+			isPush = true;
+		}
+	}
+	else
+	{
+		isPush = false;
+	}
 
 }
 
@@ -45,6 +65,13 @@ void Field::Update()
 /// </summary>
 void Field::Draw()
 {
-	//MV1SetWireFrameDrawFlag(modelHandle, TRUE);
+	if (isPoly)
+	{
+		MV1SetWireFrameDrawFlag(modelHandle, TRUE);
+	}
+	else
+	{
+		MV1SetWireFrameDrawFlag(modelHandle, FALSE);
+	}
 	MV1DrawModel(modelHandle);
 }

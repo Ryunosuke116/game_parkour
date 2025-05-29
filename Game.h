@@ -10,6 +10,8 @@ public:
 	void Draw();
 private:
 
+	VECTOR lightPos;
+
 	//’è‹`
 	std::shared_ptr<Player> player = NULL;
 	std::shared_ptr<Camera> camera = NULL;

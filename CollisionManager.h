@@ -6,14 +6,16 @@ class CollisionManager
 {
 public:
 	void Update(Player& player, int modelHandle);
-	bool CalculateIntersection(const VECTOR& rayStartPos, const VECTOR& rayEndPos,
-		const VECTOR& planePoint, const VECTOR& planeNormal, VECTOR& intersection);
+	bool WallCollisionCheck(Player& player, int modelHandle);
+	void Draw();
 
 private:
 	HitCheck hitCheck;
 	MV1_COLL_RESULT_POLY hitPoly_Ground;
-	std::vector<MV1_COLL_RESULT_POLY> hitPoly_Wall;
-	MV1_COLL_RESULT_POLY_DIM hitPoly;
 
+	MV1_COLL_RESULT_POLY_DIM hitPoly_Wall;
+
+	VECTOR subPos;
+	VECTOR normal;
 };
 

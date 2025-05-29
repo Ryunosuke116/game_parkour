@@ -28,6 +28,8 @@ void Player::Initialize()
 {
     //position = VGet(0.0f, 5.0f, 0.0f);
     position = VGet(2145.0f, 0.0f, 917.0f);
+    position = VGet(1070.0f, 0.0f, 450.0f);
+
     MV1SetRotationXYZ(modelHandle, VGet(0, 0, 0));
    // ChangeMotion(animNum::idle, PlayAnimSpeed);
     currentJumpSpeed = 0.0f;
@@ -133,12 +135,12 @@ void Player::Update(const VECTOR& cameraDirection)
     centerPosition = MV1GetFramePosition(modelHandle, 2);
     footPosition = MV1GetFramePosition(modelHandle, 0);
 
-    SettingRay();
-
     topPosition = position;
     bottomPosition = position;
     topPosition.y = topPosition.y + 17.0f;
     bottomPosition.y = bottomPosition.y + 3.0f;
+
+    SettingRay();
 }
 
 /// <summary>
@@ -146,15 +148,8 @@ void Player::Update(const VECTOR& cameraDirection)
 /// </summary>
 void Player::Draw()
 {
-    VECTOR topPosition = position;
-    VECTOR bottomPosition = position;
-    topPosition.y = topPosition.y + 19.0f;
-    bottomPosition.y = bottomPosition.y + 3.0f;
-    
 	MV1DrawModel(modelHandle);
-    //DrawSphere3D(centerPosition, 13.0f, 30, GetColor(0, 0, 0),
-    //    GetColor(255, 0, 0), FALSE);
-    DrawCapsule3D(topPosition, bottomPosition, 3.0f, 30, GetColor(0, 0, 0),
+    DrawSphere3D(bottomPosition, 3.5f, 30, GetColor(0, 0, 0),
         GetColor(255, 0, 0), FALSE);
 
     printfDx("playerPosition.x %f\nplayerPosition.y %f\nplayerPosition.x %f\n",
@@ -175,7 +170,7 @@ void Player::Draw()
     nowState->Draw();
 
     //ê¸
-    DrawLine3D(topPosition, bottomPosition, GetColor(255, 0, 0));
+    DrawLine3D(centerPosition, footPosition, GetColor(255, 0, 0));
     DrawLine3D(centerPosition, directionLinePos[RayDirction::front], GetColor(255, 0, 0));
     DrawLine3D(centerPosition, directionLinePos[RayDirction::back], GetColor(255, 0, 0));
     DrawLine3D(centerPosition, directionLinePos[RayDirction::right], GetColor(255, 0, 0));

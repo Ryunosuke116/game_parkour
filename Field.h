@@ -3,7 +3,8 @@
 class Field : public BaseObject
 {
 private:
-
+	bool isPush;
+	bool isPoly;
 public:
 
 	Field();

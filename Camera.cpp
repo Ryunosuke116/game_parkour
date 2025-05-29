@@ -41,6 +41,10 @@ void Camera::Initialize()
 void Camera::Update(const VECTOR& playerPosition)
 {
 	lookPosition = playerPosition;
+	//lookPosition.y = -23.0f;
+	
+	lookPosition.x = playerPosition.x;
+	lookPosition.z = playerPosition.z;
 	aimPosition.y = playerPosition.y + 20.0f;
 
 	//ÉJÉÅÉâà⁄ìÆèàóù
@@ -120,4 +124,12 @@ void Camera::Leap(VECTOR& changePosition, const VECTOR& playerPosition, const fl
 
 	scalePosition = VScale(SubPosition, speed);
 	changePosition = VAdd(changePosition, scalePosition);
+}
+
+void Camera::LeapCalc_single(float& changePos, const float targetPos, const float speed)
+{
+	float sub = targetPos - changePos;
+	float scale = sub * speed;
+
+	changePos = changePos + scale;
 }

@@ -32,6 +32,7 @@ void Game::Initialize()
 	camera->Initialize();
 	map->Initialize();
 	field->Initialize();
+	lightPos = VGet(0, 30, 3000);
 }
 
 /// <summary>
@@ -39,10 +40,12 @@ void Game::Initialize()
 /// </summary>
 void Game::Update()
 {
-	collisionManager->Update(*player, field->GetModelHandle());
 	player->Update(camera->GetCameraDirection());
 	camera->Update(player->GetPosition());
 	map->Update();
+	field->Update();
+	collisionManager->Update(*player, field->GetModelHandle());
+
 }
 
 void Game::Draw()
@@ -52,6 +55,14 @@ void Game::Draw()
 	camera->Draw();
 	map->Draw();
 	field->Draw();
+	collisionManager->Draw();
+	printfDx("LightPos.x %f\n", GetLightPosition().x);
+	printfDx("LightPos.y %f\n", GetLightPosition().y);
+	printfDx("LightPos.z %f\n", GetLightPosition().z);
+	printfDx("LightDir.x %f\n", GetLightDirection().x);
+	printfDx("LightDir.y %f\n", GetLightDirection().y);
+	printfDx("LightDir.z %f\n", GetLightDirection().z);
+	
 	/*printfDx("hitCheck %d\n", hitCheck->HitRayJudge(field->GetModelHandle(), -1,
 		player->GetCenterPos(), player->GetFootPos()));*/
 }
