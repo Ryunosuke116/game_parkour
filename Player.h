@@ -70,6 +70,7 @@ public:
 	void Update(const VECTOR& cameraDirection);
 	void Draw();
 	void Move(VECTOR& moveVec, const VECTOR& cameraDirection);
+	void MoveCalc(VECTOR& moveVec);
 	void JumpMove();
 	void JumpCalclation(float playTime_anim);
 	void RollMove();

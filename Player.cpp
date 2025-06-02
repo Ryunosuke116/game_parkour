@@ -98,20 +98,22 @@ void Player::Update(const VECTOR& cameraDirection)
     }
     else
     {
-        //徐々にスピードを上げる
-        nowMoveSpeed += 0.05f;
+        ////徐々にスピードを上げる
+        //nowMoveSpeed += 0.05f;
 
-        if (nowMoveSpeed >= MaxMoveSpeed)
-        {
-            nowMoveSpeed = MaxMoveSpeed;
-        }
+        //if (nowMoveSpeed >= MaxMoveSpeed)
+        //{
+        //    nowMoveSpeed = MaxMoveSpeed;
+        //}
 
-        moveVec = VScale(moveVec, nowMoveSpeed);
+        //moveVec = VScale(moveVec, nowMoveSpeed);
 
-        if (!playerData.isMove)
-        {
-            nowMoveSpeed = 0.0f;
-        }
+        //if (!playerData.isMove)
+        //{
+        //    nowMoveSpeed = 0.0f;
+        //}
+
+        MoveCalc(moveVec);
     }
 
     position = VAdd(position, moveVec);
@@ -250,6 +252,42 @@ void Player::Move(VECTOR& moveVec, const VECTOR& cameraDirection)
     {
         moveVec = VNorm(moveVec);
     }
+}
+
+/// <summary>
+/// 移動スピード計算
+/// </summary>
+void Player::MoveCalc(VECTOR& moveVec)
+{
+    if (playerData.isMove)
+    {
+        //徐々にスピードを上げる
+        nowMoveSpeed += 0.05f;
+
+        if (nowMoveSpeed >= MaxMoveSpeed)
+        {
+            nowMoveSpeed = MaxMoveSpeed;
+        }
+    }
+    else
+    {
+        //接地しているときに止まったらすぐ止まる
+        if (playerData.isGround)
+        {
+            nowMoveSpeed = 0.0f;
+        }
+        else
+        {
+            nowMoveSpeed -= 0.02f;
+
+            if (nowMoveSpeed <= 0.0f)
+            {
+                nowMoveSpeed = 0.0f;
+            }
+        }
+    }
+
+    moveVec = VScale(targetMoveDirection, nowMoveSpeed);
 }
 
 /// <summary>

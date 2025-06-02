@@ -3,192 +3,157 @@
 
 void CollisionManager::Update(Player& player,int modelHandle)
 {
+
+
+	bool isHitGround = hitCheck.HitRayJudge(modelHandle, -1, player.GetCenterPos(), player.GetFootPos(),hitPoly_Ground);
+
+	bool hitWall = WallCollisionCheck(player, modelHandle);		//壁に衝突しているか
+	
+	////////////////////////
+	// これでいきたい
+	// //////////////////////
 	//bool isHitGround = false;
 
-	////当たった場合
-	//if (hitPoly.HitNum >= 1)
+
+	//hitCheck.CapsuleHitWallJudge(modelHandle, -1, player.GetTopPos(), player.GetBottomPos(), hitPoly_Wall);
+
+	//int wallNum = 0;
+	//int floorNum = 0;
+
+	////検出されたポリゴンを判定
+	//for (int i = 0; i < hitPoly_Wall.HitNum; i++)
 	//{
-	//	float maxY = -FLT_MAX;
-	//	int groundIndex = -1;
-	//	//ヒットした全ポリゴンを調べる
-	//	for (int i = 0; i < hitPoly.HitNum; i++)
+	//	//壁判定
+	//	if (hitPoly_Wall.Dim[i].Normal.x >= 0.7f || hitPoly_Wall.Dim[i].Normal.z >= 0.7f ||
+	//		hitPoly_Wall.Dim[i].Normal.x <= -0.7f || hitPoly_Wall.Dim[i].Normal.z <= -0.7f)
 	//	{
-	//		MV1_COLL_RESULT_POLY poly = hitPoly.Dim[i];
-
-	//		if (poly.Normal.x >= 0.9f || poly.Normal.z >= 0.9f)
-	//		{
-	//			if (poly.HitPosition.y > maxY)
-	//			{
-	//				maxY = poly.HitPosition.y;
-	//				groundIndex = i;
-	//			}
-	//		}
+	//		wall[wallNum] = &hitPoly_Wall.Dim[i];
+	//		wallNum++;
 	//	}
+	//	//床判定
+	//	else if(hitPoly_Wall.Dim[i].Normal.y >= 0.7f)
+	//	{
+	//		floor[floorNum] = &hitPoly_Wall.Dim[i];
+	//		floorNum++;
+	//		isHitGround = true;
+	//	}
+	//}
 
-	//	//if (groundIndex != -1)
-	//	//{
-	//	//	MV1_COLL_RESULT_POLY groundPoly = hitPoly.Dim[groundIndex];
 
-	//	//	VECTOR newPlayerPos = VGet(0.0f, 0.0f, 0.0f);
-	//	//	//足元と床の差を計算
-	//	//	newPlayerPos.y = groundPoly.HitPosition.y - player.GetFootPos().y;
-	//	//	//足元と床との差が0.1以上の場合のみplayerの位置に加算
-	//	//	if (newPlayerPos.y >= 0.1f)
-	//	//	{
-	//	//		newPlayerPos = VAdd(player.GetPosition(), newPlayerPos);
-	//	//		player.SetPos(newPlayerPos);
-	//	//	}
-	//	//	isHitGround = groundPoly.HitFlag;
-	//	//}
+	//VECTOR addPos = VGet(0.0f, 0.0f, 0.0f);
 
+	////壁の押し戻し
+	//for (int i = 0; i < wallNum; i++)
+	//{
+	//	normal = wall[i]->Normal;
+	//	normal.y = 0.0f;
+	//	normal = VNorm(normal);
+
+	//	//カプセルの中心座標を求める
+	//	VECTOR centerPos = VAdd(player.GetTopPos(), player.GetBottomPos());
+	//	centerPos = VScale(centerPos, 0.5f);
+
+	//	//面と球の接触座標を調べる
+	//	bool flag = TestSphereTriangle(centerPos, wall[i]->Position[0], wall[i]->Position[1], wall[i]->Position[2], hitPos);
+
+	//	//球の接触している座標を求める
+	//	// そうするには？↓
+	//	//法線方向とは逆の方向にセンターポジションから加算する
+	//	VECTOR contact = VScale(normal, -3.5f);
+
+	//	//接触している座標
+	//	contact = VAdd(centerPos, contact);
+
+	//	//球の接触座標→面の接触座標を求める
+	//	VECTOR pos = VSub(hitPos, contact);
+	//	pos.y = 0.0f;
+
+	//	//これまでの押し戻し量よりも大きければ更新する
+	//	if (VSize(addPos) <= VSize(pos))
+	//	{
+	//		addPos = pos;
+	//	}
 
 	//}
 
-	//bool isHitGround = hitCheck.HitRayJudge(modelHandle, -1, player.GetCenterPos(), player.GetFootPos(),hitPoly_Ground);
-
-	//bool isHitGround = hitCheck.SphereHitJudge(modelHandle, -1, player.GetBottomPos(), hitPoly_Ground_sphere);
-
-//	bool hitWall = WallCollisionCheck(player, modelHandle);		//壁に衝突しているか
-	bool isHitGround = false;;
-
-
-	hitCheck.CapsuleHitWallJudge(modelHandle, -1, player.GetTopPos(), player.GetBottomPos(), hitPoly_Wall);
-
-	int wallNum = 0;
-	int floorNum = 0;
-
-	//検出されたポリゴンを判定
-	for (int i = 0; i < hitPoly_Wall.HitNum; i++)
-	{
-		//壁判定
-		if (hitPoly_Wall.Dim[i].Normal.x >= 0.7f || hitPoly_Wall.Dim[i].Normal.z >= 0.7f ||
-			hitPoly_Wall.Dim[i].Normal.x <= -0.7f || hitPoly_Wall.Dim[i].Normal.z <= -0.7f)
-		{
-			wall[wallNum] = &hitPoly_Wall.Dim[i];
-			wallNum++;
-		}
-		//床判定
-		else if(hitPoly_Wall.Dim[i].Normal.y >= 0.7f)
-		{
-			floor[floorNum] = &hitPoly_Wall.Dim[i];
-			floorNum++;
-			isHitGround = true;
-		}
-	}
-
-	//床の押し戻し
-	for (int i = 0; i < floorNum; i++)
-	{
-		VECTOR newPlayerPos = VGet(0.0f, 0.0f, 0.0f);
-
-		//面と球の接触座標を調べる
-		bool flag = TestSphereTriangle(player.GetBottomPos(), floor[i]->Position[0], floor[i]->Position[1], floor[i]->Position[2], hitPos);
-
-		//足元と床の差を計算
-		newPlayerPos.y = hitPos.y - player.GetFootPos().y;
-
-		//足元と床との差が0.1以上の場合のみplayerの位置に加算
-		if (newPlayerPos.y >= 0.1f)
-		{
-			newPlayerPos = VAdd(player.GetPosition(), newPlayerPos);
-			player.SetPos(newPlayerPos);
-		}
-	}
-
-	VECTOR addPos = VGet(0.0f, 0.0f, 0.0f);
-
-	//壁の押し戻し
-	for (int i = 0; i < wallNum; i++)
-	{
-		normal = wall[i]->Normal;
-		normal.y = 0.0f;
-		normal = VNorm(normal);
-
-		//カプセルの中心座標を求める
-		VECTOR centerPos = VAdd(player.GetTopPos(), player.GetBottomPos());
-		centerPos = VScale(centerPos, 0.5f);
-
-		//面と球の接触座標を調べる
-		bool flag = TestSphereTriangle(centerPos, wall[i]->Position[0], wall[i]->Position[1], wall[i]->Position[2], hitPos);
-
-
-		//球の接触している座標を求める
-		// そうするには？↓
-		//法線方向とは逆の方向にセンターポジションから加算する
-		VECTOR contact = VScale(normal, -3.5f);
-
-		//接触している座標
-		contact = VAdd(centerPos, contact);
-
-		//球の接触座標→面の接触座標を求める
-		VECTOR pos = VSub(hitPos, contact);
-		pos.y = 0.0f;
-
-		//これまでの押し戻し量よりも大きければ更新する
-		if (VSize(addPos) <= VSize(pos))
-		{
-			addPos = pos;
-		}
-
-	}
-
-	if (VSize(addPos) != 0)
-	{
-		VECTOR newPos = VAdd(player.GetPosition(), addPos);
-		player.SetPos(newPos);
-	}
-
-	//if (isHitGround)
+	//if (VSize(addPos) != 0)
 	//{
-	//	if (!hitWall)
+	//	VECTOR newPos = VAdd(player.GetPosition(), addPos);
+	//	player.SetPos(newPos);
+	//}
+
+	////床の押し戻し
+	//for (int i = 0; i < floorNum; i++)
+	//{
+	//	VECTOR newPlayerPos = VGet(0.0f, 0.0f, 0.0f);
+
+	//	//面と球の接触座標を調べる
+	//	bool flag = TestSphereTriangle(player.GetBottomPos(),
+	//		floor[i]->Position[0], floor[i]->Position[1], 
+	//		floor[i]->Position[2], hitPos);
+
+	//	//足元と床の差を計算
+	//	newPlayerPos.y = hitPos.y - player.GetFootPos().y;
+
+	//	//足元と床との差が0.1以上の場合のみplayerの位置に加算
+	//	if (newPlayerPos.y >= 0.1f)
 	//	{
-	//		//if (hitPoly_Ground.Normal.y >= 0.7f)
-	//		//{
-	//		//	VECTOR newPlayerPos = VGet(0.0f, 0.0f, 0.0f);
-
-	//		//	//足元と床の差を計算
-	//		//	newPlayerPos.y = hitPoly_Ground.HitPosition.y - player.GetFootPos().y;
-	//		//	subPos.y = hitPoly_Ground.Normal.y;
-
-	//		//	//足元と床との差が0.1以上の場合のみplayerの位置に加算
-	//		//	if (newPlayerPos.y >= 0.1f)
-	//		//	{
-	//		//		newPlayerPos = VAdd(player.GetPosition(), newPlayerPos);
-	//		//		player.SetPos(newPlayerPos);
-	//		//	}
-	//		//}
-
-	//		for (int i = 0; i < hitPoly_Ground_sphere.HitNum; i++)
-	//		{
-	//			MV1_COLL_RESULT_POLY poly = hitPoly_Ground_sphere.Dim[i];
-
-	//			if (poly.Normal.y >= 0.7f)
-	//			{
-	//				VECTOR newPlayerPos = VGet(0.0f, 0.0f, 0.0f);
-
-	//				//面と球の接触座標を調べる
-	//				bool flag = TestSphereTriangle(player.GetBottomPos(), poly.Position[0], poly.Position[1], poly.Position[2], hitPos);
-
-	//				//足元と床の差を計算
-	//				newPlayerPos.y = hitPos.y - player.GetFootPos().y;
-	//				subPos.y = poly.Normal.y;
-
-	//				//足元と床との差が0.1以上の場合のみplayerの位置に加算
-	//				if (newPlayerPos.y >= 0.1f)
-	//				{
-	//					newPlayerPos = VAdd(player.GetPosition(), newPlayerPos);
-	//					player.SetPos(newPlayerPos);
-	//				}
-	//			}
-	//			else
-	//			{
-	//				isHitGround = false;
-	//			}
-	//		}
-
+	//		newPlayerPos = VAdd(player.GetPosition(), newPlayerPos);
+	//		player.SetPos(newPlayerPos);
 	//	}
 	//}
-	
+
+
+	if (isHitGround)
+	{
+		if (!hitWall)
+		{
+			//if (hitPoly_Ground.Normal.y >= 0.7f)
+			//{
+			//	VECTOR newPlayerPos = VGet(0.0f, 0.0f, 0.0f);
+
+			//	//足元と床の差を計算
+			//	newPlayerPos.y = hitPoly_Ground.HitPosition.y - player.GetFootPos().y;
+			//	subPos.y = hitPoly_Ground.Normal.y;
+
+			//	//足元と床との差が0.1以上の場合のみplayerの位置に加算
+			//	if (newPlayerPos.y >= 0.1f)
+			//	{
+			//		newPlayerPos = VAdd(player.GetPosition(), newPlayerPos);
+			//		player.SetPos(newPlayerPos);
+			//	}
+			//}
+
+			for (int i = 0; i < hitPoly_Ground_sphere.HitNum; i++)
+			{
+				MV1_COLL_RESULT_POLY poly = hitPoly_Ground_sphere.Dim[i];
+
+				if (poly.Normal.y >= 0.7f)
+				{
+					VECTOR newPlayerPos = VGet(0.0f, 0.0f, 0.0f);
+
+					//面と球の接触座標を調べる
+					bool flag = TestSphereTriangle(player.GetBottomPos(), poly.Position[0], poly.Position[1], poly.Position[2], hitPos);
+
+					//足元と床の差を計算
+					newPlayerPos.y = hitPos.y - player.GetFootPos().y;
+					subPos.y = poly.Normal.y;
+
+					//足元と床との差が0.1以上の場合のみplayerの位置に加算
+					if (newPlayerPos.y >= 0.1f)
+					{
+						newPlayerPos = VAdd(player.GetPosition(), newPlayerPos);
+						player.SetPos(newPlayerPos);
+					}
+				}
+				else
+				{
+					isHitGround = false;
+				}
+			}
+
+		}
+	}
 	
 	//接地しているか
 	player.SetIsGround(isHitGround);
