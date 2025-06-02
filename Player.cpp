@@ -26,7 +26,7 @@ Player::~Player()
 /// </summary>
 void Player::Initialize()
 {
-    //position = VGet(0.0f, 5.0f, 0.0f);
+    position = VGet(0.0f, 5.0f, 0.0f);
     position = VGet(2145.0f, 0.0f, 917.0f);
     position = VGet(1070.0f, 0.0f, 450.0f);
 
@@ -149,7 +149,9 @@ void Player::Update(const VECTOR& cameraDirection)
 void Player::Draw()
 {
 	MV1DrawModel(modelHandle);
-    DrawSphere3D(bottomPosition, 3.5f, 30, GetColor(0, 0, 0),
+    //DrawSphere3D(bottomPosition, 3.5f, 30, GetColor(0, 0, 0),
+    //    GetColor(255, 0, 0), FALSE);
+    DrawCapsule3D(topPosition, bottomPosition, 3.5f, 30, GetColor(0, 0, 0),
         GetColor(255, 0, 0), FALSE);
 
     printfDx("playerPosition.x %f\nplayerPosition.y %f\nplayerPosition.x %f\n",
@@ -332,7 +334,7 @@ void Player::GravityCalclation()
         playerData.isGround = false;
     }*/
 
-    if (!playerData.isGround)
+    if (!playerData.isGround && animNumber_Now != animNum::quick_Roll)
     {
         currentJumpSpeed += gravity;
     }

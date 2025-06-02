@@ -7,6 +7,9 @@ public:
 
 	bool HitRayJudge(const int& modelHandle, int frameIndex,
 		VECTOR linePos_start, VECTOR linePos_end, MV1_COLL_RESULT_POLY& hitPoly);
+	bool SphereHitJudge(const int& modelHandle, int frameIndex,
+		VECTOR linePos_end, MV1_COLL_RESULT_POLY_DIM& hitPoly);
+
 	void CapsuleHitWallJudge(const int& modelHandle, int frameIndex,
 		VECTOR linePos_start, VECTOR linePos_end, MV1_COLL_RESULT_POLY_DIM& hitPoly);
 

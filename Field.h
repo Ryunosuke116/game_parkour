@@ -5,6 +5,7 @@ class Field : public BaseObject
 private:
 	bool isPush;
 	bool isPoly;
+	float y;
 public:
 
 	Field();

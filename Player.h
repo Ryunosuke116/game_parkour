@@ -7,10 +7,11 @@ private:
 	static constexpr float modelScale = 0.06f;
 	static constexpr float MaxMoveSpeed = 1.6f;	    // 移動速度
 	static constexpr float attackAnimSpeed = 1.0f;	//攻撃速度
-	static constexpr float rollMoveSpeed = 1.2f;	//ロール速度
+	static constexpr float rollMoveSpeed = 2.5f;	//ロール速度
 	static constexpr float angleSpeed = 0.3f;
 	static constexpr float addJumpPower = 2.0f;		//ジャンプパワー
 	static constexpr float gravity = -0.07f;
+
 
 	VECTOR directionLinePos[4];
 	VECTOR footPosition;
@@ -98,6 +99,7 @@ public:
 	VECTOR GetFootPos() { return footPosition; }
 	VECTOR GetTopPos() { return topPosition; }
 	VECTOR GetBottomPos() { return bottomPosition; }
+	bool GetIsGround() { return playerData.isGround; }
 
 	//////////////////////////////////
 	/// セッター

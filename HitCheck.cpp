@@ -28,10 +28,12 @@ bool HitCheck::HitRayJudge(const int& modelHandle, int frameIndex,
 	return hitPoly.HitFlag;
 }
 
-void HitCheck::CapsuleHitWallJudge(const int& modelHandle, int frameIndex,
-	VECTOR linePos_start, VECTOR linePos_end, MV1_COLL_RESULT_POLY_DIM& hitPoly)
+bool HitCheck::SphereHitJudge(const int& modelHandle, int frameIndex, VECTOR linePos_end, MV1_COLL_RESULT_POLY_DIM& hitPoly)
 {
 	hitPoly = MV1CollCheck_Sphere(modelHandle, frameIndex, linePos_end, 3.5f);
+
+	if (hitPoly.HitNum >= 1)return true;
+	return false;
 	
 	//hitPoly = MV1CollCheck_Capsule(modelHandle, frameIndex,linePos_start, linePos_end, 3.5f);
 
@@ -81,20 +83,34 @@ void HitCheck::CapsuleHitWallJudge(const int& modelHandle, int frameIndex,
 	//		}
 	//	}
 
-	//	for (int i = 0;  i < 3;  i++)
+	//	/*for (int i = 0;  i < 3;  i++)
 	//	{
 	//		VECTOR A = poly.Position[0];
 	//		VECTOR B = poly.Position[1];
 	//		VECTOR C = poly.Position[2];
 
 	//		projection[i] = VDot(VSub(linePos_start, poly.Position[i]), VSub(poly.Position[i]))
-	//	}
+	//	}*/
 
 	//}
 
 
+
 }
 
+void HitCheck::CapsuleHitWallJudge(const int& modelHandle, int frameIndex,
+	VECTOR linePos_start, VECTOR linePos_end, MV1_COLL_RESULT_POLY_DIM& hitPoly)
+{
+	hitPoly = MV1CollCheck_Capsule(modelHandle, frameIndex, linePos_start, linePos_end, 3.5f);
+}
+
+/// <summary>
+/// 垂線の足の計算
+/// </summary>
+/// <param name="point"></param>
+/// <param name="P"></param>
+/// <param name="Q"></param>
+/// <returns></returns>
 float HitCheck::projectionCalc(const VECTOR& point, const VECTOR& P, const VECTOR& Q)
 {
 	//線分ベクトル
@@ -106,5 +122,9 @@ float HitCheck::projectionCalc(const VECTOR& point, const VECTOR& P, const VECTO
 
 	float t = VDot(PQ, P_point) / len2;
 
-	return t;
+	VECTOR foot = VAdd(P, VScale(PQ, t));
+	foot = VSub(point, foot);
+	float D = VSize(foot);
+
+	return D;
 }
