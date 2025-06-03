@@ -26,9 +26,9 @@ Player::~Player()
 /// </summary>
 void Player::Initialize()
 {
-    position = VGet(0.0f, 5.0f, 0.0f);
     position = VGet(2145.0f, 0.0f, 917.0f);
     position = VGet(1070.0f, 0.0f, 450.0f);
+    position = VGet(0.0f, 5.0f, 0.0f);
 
     MV1SetRotationXYZ(modelHandle, VGet(0, 0, 0));
    // ChangeMotion(animNum::idle, PlayAnimSpeed);
@@ -98,21 +98,6 @@ void Player::Update(const VECTOR& cameraDirection)
     }
     else
     {
-        ////徐々にスピードを上げる
-        //nowMoveSpeed += 0.05f;
-
-        //if (nowMoveSpeed >= MaxMoveSpeed)
-        //{
-        //    nowMoveSpeed = MaxMoveSpeed;
-        //}
-
-        //moveVec = VScale(moveVec, nowMoveSpeed);
-
-        //if (!playerData.isMove)
-        //{
-        //    nowMoveSpeed = 0.0f;
-        //}
-
         MoveCalc(moveVec);
     }
 

@@ -7,15 +7,15 @@
 Field::Field()
 {
 	//modelHandle = MV1LoadModel("material/mv1/field.mv1");
-	modelHandle = MV1LoadModel("material/mv1/city/city_0525.mv1");
-	//modelHandle = MV1LoadModel("material/mv1/0531.mv1");
+	//modelHandle = MV1LoadModel("material/mv1/city/city_0525.mv1");
+	modelHandle = MV1LoadModel("material/mv1/new_city/0603.mv1");
 
 	position = VGet(0, 0, 0);
 	y = 0.0f;
 	//ÉÇÉfÉãÇÃëÂÇ´Ç≥í≤êÆ
 	//MV1SetScale(modelHandle, VGet(1.0f, 0.17f, 1.0f));
-	MV1SetScale(modelHandle, VGet(0.05f, 0.05f, 0.05f));
-	//MV1SetScale(modelHandle, VGet(1.0f, 1.0f, 1.0f));
+	//MV1SetScale(modelHandle, VGet(0.05f, 0.05f, 0.05f));
+	MV1SetScale(modelHandle, VGet(1.0f, 1.0f, 1.0f));
 	MV1SetRotationXYZ(modelHandle, VGet(0.0f, y * DX_PI_F / 180.0f, 0.0f));
 
 	MV1SetPosition(modelHandle, position);

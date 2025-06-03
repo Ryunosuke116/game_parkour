@@ -5,7 +5,8 @@ void CollisionManager::Update(Player& player,int modelHandle)
 {
 
 
-	bool isHitGround = hitCheck.HitRayJudge(modelHandle, -1, player.GetCenterPos(), player.GetFootPos(),hitPoly_Ground);
+	//bool isHitGround = hitCheck.HitRayJudge(modelHandle, -1, player.GetCenterPos(), player.GetFootPos(),hitPoly_Ground);
+	bool isHitGround;
 
 	bool hitWall = WallCollisionCheck(player, modelHandle);		//•Ç‚ÉÕ“Ë‚µ‚Ä‚¢‚é‚©
 	
@@ -15,7 +16,17 @@ void CollisionManager::Update(Player& player,int modelHandle)
 	//bool isHitGround = false;
 
 
-	//hitCheck.CapsuleHitWallJudge(modelHandle, -1, player.GetTopPos(), player.GetBottomPos(), hitPoly_Wall);
+	hitCheck.CapsuleHitWallJudge(modelHandle, -1, player.GetTopPos(), player.GetBottomPos(), hitPoly_Ground_sphere);
+
+	if (hitPoly_Ground_sphere.HitNum >= 1)
+	{
+		isHitGround = true;
+	}
+	else
+	{
+		isHitGround = false;
+	}
+
 
 	//int wallNum = 0;
 	//int floorNum = 0;
