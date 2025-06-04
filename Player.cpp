@@ -5,11 +5,12 @@
 /// /インストラクタ
 /// </summary>
 Player::Player() :
-    centerPosition(VGet(0.0f,0.0f,0.0f)),
-    footPosition(VGet(0.0f, 0.0f, 0.0f))
+    centerPosition(VGet(0.0f, 0.0f, 0.0f)),
+    footPosition(VGet(0.0f, 0.0f, 0.0f)),
+    moveVec(VGet(0.0f, 0.0f, 0.0f))
 {
-	modelHandle = MV1LoadModel("material/mv1/human/human_0519.mv1");
-	MV1SetScale(modelHandle, VGet(modelScale, modelScale, modelScale));
+    modelHandle = MV1LoadModel("material/mv1/human/human_0519.mv1");
+    MV1SetScale(modelHandle, VGet(modelScale, modelScale, modelScale));
     input = std::make_shared<Input>();
 }
 
@@ -65,7 +66,19 @@ void Player::Initialize()
 /// </summary>
 void Player::Update(const VECTOR& cameraDirection)
 {
-    VECTOR moveVec = VGet(0.0f, 0.0f, 0.0f);
+    moveVec = VGet(0.0f, 0.0f, 0.0f);
+
+    //接地している場合リセットする
+    if (playerData.isGround)
+    {
+        //position.y = 0.0f;
+      //  playerData.isGround = true;
+        playerData.isJump = false;
+        playerData.isJump_second = false;
+        playerData.isJumpAll = false;
+        playerData.isRoll_PlayAnim = false;
+        currentJumpSpeed = 0.0f;
+    }
 
     this->input->Update();
 
@@ -88,6 +101,7 @@ void Player::Update(const VECTOR& cameraDirection)
     //ジャンプ計算
     JumpCalclation(nowState->GetNowAnimState().PlayTime_anim);
 
+    //重力計算
     GravityCalclation();
 
     //進むスピードを乗算
@@ -342,16 +356,6 @@ void Player::GravityCalclation()
     //}
     //else 
 
-    if (playerData.isGround)
-    {
-        //position.y = 0.0f;
-      //  playerData.isGround = true;
-        playerData.isJump = false;
-        playerData.isJump_second = false;
-        playerData.isJumpAll = false;
-        playerData.isRoll_PlayAnim = false;
-        currentJumpSpeed = 0.0f;
-    }
    /* else
     {
         playerData.isGround = false;

@@ -18,6 +18,7 @@ private:
 	VECTOR centerPosition;
 	VECTOR topPosition;
 	VECTOR bottomPosition;
+	VECTOR moveVec;
 
 	float currentJumpSpeed;			//現在のジャンプスピード
 	float nowMoveSpeed;
@@ -100,8 +101,10 @@ public:
 	VECTOR GetFootPos() { return footPosition; }
 	VECTOR GetTopPos() { return topPosition; }
 	VECTOR GetBottomPos() { return bottomPosition; }
+	VECTOR GetMoveVec() { return moveVec; }
 	bool GetIsGround() { return playerData.isGround; }
 	int GetModelHandle() { return modelHandle; }
+	PlayerStateActionBase::PlayerData GetData() { return playerData; }
 
 	//////////////////////////////////
 	/// セッター

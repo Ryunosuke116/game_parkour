@@ -159,6 +159,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PlayerManager.cpp" />
     <ClCompile Include="PlayerStateActionBase.cpp" />
     <ClCompile Include="Quick_Roll.cpp" />
     <ClCompile Include="Run.cpp" />
@@ -183,6 +184,7 @@
     <ClInclude Include="Jump.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="PlayerManager.h" />
     <ClInclude Include="playerState.h" />
     <ClInclude Include="PlayerStateActionBase.h" />
     <ClInclude Include="Quick_Roll.h" />

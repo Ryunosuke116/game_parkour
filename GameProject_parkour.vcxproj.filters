@@ -114,6 +114,9 @@
     <ClCompile Include="CollisionManager.cpp">
       <Filter>ソース ファイル\Collision</Filter>
     </ClCompile>
+    <ClCompile Include="PlayerManager.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include.h">
@@ -184,6 +187,9 @@
     </ClInclude>
     <ClInclude Include="CollisionManager.h">
       <Filter>ソース ファイル\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerManager.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -20,5 +20,6 @@
 #include "Player.h"
 #include "HitCheck.h"
 #include "CollisionManager.h"
+#include "PlayerManager.h"
 #include "Game.h"
 #include "SceneManager.h"

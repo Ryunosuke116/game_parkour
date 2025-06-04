@@ -1,19 +1,28 @@
 #include "Include.h"
 
 
-void CollisionManager::Update(Player& player,int modelHandle)
+void CollisionManager::Update(Player& player, int modelHandle)
 {
 	//playerの状態によって当たり判定の優先順位を決める
 	//何回か当たり判定を繰り返す
 	//prevとnewのposを作る
 
+	VECTOR oldPos = player.GetPosition();
+	VECTOR newPos = VAdd(oldPos, player.GetMoveVec());
+
+	VECTOR topPosition = newPos;
+	VECTOR bottomPosition = newPos;
+	topPosition.y = topPosition.y + 17.0f;
+	bottomPosition.y = bottomPosition.y + 3.0f;
 
 	//bool isHitGround = hitCheck.HitRayJudge(modelHandle, -1, player.GetCenterPos(), player.GetFootPos(),hitPoly_Ground);
 	bool isHitGround;
 
-	bool hitWall = WallCollisionCheck(player, modelHandle);		//壁に衝突しているか
+	bool hitWall = WallCollisionCheck(player, modelHandle);		//壁に衝突していたら押し戻す
 	
+	//もう一度衝突チェック
 	hitCheck.CapsuleHitWallJudge(modelHandle, -1, player.GetTopPos(), player.GetBottomPos(), hitPoly_Ground_sphere);
+
 
 	if (hitPoly_Ground_sphere.HitNum >= 1)
 	{
@@ -29,145 +38,35 @@ void CollisionManager::Update(Player& player,int modelHandle)
 	// //////////////////////
 	//bool isHitGround = false;
 
+	VECTOR addPos = VGet(0.0f, 0.0f, 0.0f);
 
 
-
-	//int wallNum = 0;
-	//int floorNum = 0;
-
-	////検出されたポリゴンを判定
-	//for (int i = 0; i < hitPoly_Wall.HitNum; i++)
-	//{
-	//	//壁判定
-	//	if (hitPoly_Wall.Dim[i].Normal.x >= 0.7f || hitPoly_Wall.Dim[i].Normal.z >= 0.7f ||
-	//		hitPoly_Wall.Dim[i].Normal.x <= -0.7f || hitPoly_Wall.Dim[i].Normal.z <= -0.7f)
-	//	{
-	//		wall[wallNum] = &hitPoly_Wall.Dim[i];
-	//		wallNum++;
-	//	}
-	//	//床判定
-	//	else if(hitPoly_Wall.Dim[i].Normal.y >= 0.7f)
-	//	{
-	//		floor[floorNum] = &hitPoly_Wall.Dim[i];
-	//		floorNum++;
-	//		isHitGround = true;
-	//	}
-	//}
-
-
-	//VECTOR addPos = VGet(0.0f, 0.0f, 0.0f);
-
-	////壁の押し戻し
-	//for (int i = 0; i < wallNum; i++)
-	//{
-	//	normal = wall[i]->Normal;
-	//	normal.y = 0.0f;
-	//	normal = VNorm(normal);
-
-	//	//カプセルの中心座標を求める
-	//	VECTOR centerPos = VAdd(player.GetTopPos(), player.GetBottomPos());
-	//	centerPos = VScale(centerPos, 0.5f);
-
-	//	//面と球の接触座標を調べる
-	//	bool flag = TestSphereTriangle(centerPos, wall[i]->Position[0], wall[i]->Position[1], wall[i]->Position[2], hitPos);
-
-	//	//球の接触している座標を求める
-	//	// そうするには？↓
-	//	//法線方向とは逆の方向にセンターポジションから加算する
-	//	VECTOR contact = VScale(normal, -3.5f);
-
-	//	//接触している座標
-	//	contact = VAdd(centerPos, contact);
-
-	//	//球の接触座標→面の接触座標を求める
-	//	VECTOR pos = VSub(hitPos, contact);
-	//	pos.y = 0.0f;
-
-	//	//これまでの押し戻し量よりも大きければ更新する
-	//	if (VSize(addPos) <= VSize(pos))
-	//	{
-	//		addPos = pos;
-	//	}
-
-	//}
-
-	//if (VSize(addPos) != 0)
-	//{
-	//	VECTOR newPos = VAdd(player.GetPosition(), addPos);
-	//	player.SetPos(newPos);
-	//}
-
-	////床の押し戻し
-	//for (int i = 0; i < floorNum; i++)
-	//{
-	//	VECTOR newPlayerPos = VGet(0.0f, 0.0f, 0.0f);
-
-	//	//面と球の接触座標を調べる
-	//	bool flag = TestSphereTriangle(player.GetBottomPos(),
-	//		floor[i]->Position[0], floor[i]->Position[1], 
-	//		floor[i]->Position[2], hitPos);
-
-	//	//足元と床の差を計算
-	//	newPlayerPos.y = hitPos.y - player.GetFootPos().y;
-
-	//	//足元と床との差が0.1以上の場合のみplayerの位置に加算
-	//	if (newPlayerPos.y >= 0.1f)
-	//	{
-	//		newPlayerPos = VAdd(player.GetPosition(), newPlayerPos);
-	//		player.SetPos(newPlayerPos);
-	//	}
-	//}
-
-
-	if (isHitGround)
+	if (isHitGround && !player.GetData().isJump)
 	{
-		if (!hitWall)
+		hitCheck.CapsuleHitWallJudge(modelHandle, -1, topPosition, bottomPosition, hitPoly_Ground_sphere);
+
+		for (int i = 0; i < hitPoly_Ground_sphere.HitNum; i++)
 		{
-			//if (hitPoly_Ground.Normal.y >= 0.7f)
-			//{
-			//	VECTOR newPlayerPos = VGet(0.0f, 0.0f, 0.0f);
+			MV1_COLL_RESULT_POLY poly = hitPoly_Ground_sphere.Dim[i];
 
-			//	//足元と床の差を計算
-			//	newPlayerPos.y = hitPoly_Ground.HitPosition.y - player.GetFootPos().y;
-			//	subPos.y = hitPoly_Ground.Normal.y;
-
-			//	//足元と床との差が0.1以上の場合のみplayerの位置に加算
-			//	if (newPlayerPos.y >= 0.1f)
-			//	{
-			//		newPlayerPos = VAdd(player.GetPosition(), newPlayerPos);
-			//		player.SetPos(newPlayerPos);
-			//	}
-			//}
-
-			for (int i = 0; i < hitPoly_Ground_sphere.HitNum; i++)
+			if (poly.Normal.y >= 0.7f)
 			{
-				MV1_COLL_RESULT_POLY poly = hitPoly_Ground_sphere.Dim[i];
+				VECTOR newPlayerPos = VGet(0.0f, 0.0f, 0.0f);
 
-				if (poly.Normal.y >= 0.7f)
+				//面と球の接触座標を調べる
+				bool flag = TestSphereTriangle(bottomPosition, poly.Position[0], poly.Position[1], poly.Position[2], hitPos);
+
+				//足元と床の差を計算
+				newPlayerPos.y = hitPos.y - player.GetFootPos().y;
+				subPos.y = poly.Normal.y;
+
+				//足元と床との差が0.1以上の場合のみplayerの位置に加算
+				if (newPlayerPos.y >= 0.1f)
 				{
-					VECTOR newPlayerPos = VGet(0.0f, 0.0f, 0.0f);
-
-					//面と球の接触座標を調べる
-					bool flag = TestSphereTriangle(player.GetBottomPos(), poly.Position[0], poly.Position[1], poly.Position[2], hitPos);
-
-					//足元と床の差を計算
-					newPlayerPos.y = hitPos.y - player.GetFootPos().y;
-					subPos.y = poly.Normal.y;
-
-					//足元と床との差が0.1以上の場合のみplayerの位置に加算
-					if (newPlayerPos.y >= 0.1f)
-					{
-						newPlayerPos = VAdd(player.GetPosition(), newPlayerPos);
-						player.SetPos(newPlayerPos);
-					}
+					newPlayerPos = VAdd(newPos, newPlayerPos);
+					player.SetPos(newPlayerPos);
 				}
-				else
-				{
-					isHitGround = false;
-				}
-
 			}
-
 		}
 	}
 	
@@ -239,15 +138,21 @@ bool CollisionManager::WallCollisionCheck(Player& player, int modelHandle)
 	//	}
 	//}
 
-	hitCheck.CapsuleHitWallJudge(modelHandle, -1, player.GetTopPos(),VAdd(player.GetBottomPos(),VGet(0.0f,1.0f,0.0f)), hitPoly_Wall);
+	VECTOR oldPos = player.GetPosition();
+	VECTOR newPos = VAdd(oldPos, player.GetMoveVec());
+
+	VECTOR topPosition = newPos;
+	VECTOR bottomPosition = newPos;
+	topPosition.y = topPosition.y + 17.0f;
+	bottomPosition.y = bottomPosition.y + 3.0f;
+
+	hitCheck.CapsuleHitWallJudge(modelHandle, -1, topPosition,VAdd(bottomPosition,VGet(0.0f,1.0f,0.0f)), hitPoly_Wall);
 
 	if (hitPoly_Wall.HitNum >= 1)
 	{
 		float maxY = -FLT_MAX;
 		int groundIndex = -1;
 		VECTOR addPos = VGet(0.0f, 0.0f, 0.0f);
-
-		MV1_COLL_RESULT_POLY oldPoly;
 
 			//ヒットした全ポリゴンを調べる
 		for (int i = 0; i < hitPoly_Wall.HitNum; i++)
@@ -263,13 +168,8 @@ bool CollisionManager::WallCollisionCheck(Player& player, int modelHandle)
 				normal = VNorm(normal);
 				
 				//カプセルの中心座標を求める
-				VECTOR centerPos = VAdd(player.GetTopPos(), player.GetBottomPos());
+				VECTOR centerPos = VAdd(topPosition, bottomPosition);
 				centerPos = VScale(centerPos, 0.5f);
-
-				//前回と当たっているメッシュが同じか見る
-				if(VSize(poly.Position[0]) == VSize(oldPoly.Position[0]) &&
-					VSize(poly.Position[1]) == VSize(oldPoly.Position[1]) && 
-					VSize(poly.Position[2]) == VSize(oldPoly.Position[2]))
 
 				//面と球の接触座標を調べる
 				bool flag = TestSphereTriangle(centerPos, poly.Position[0], poly.Position[1], poly.Position[2], hitPos);
@@ -282,6 +182,9 @@ bool CollisionManager::WallCollisionCheck(Player& player, int modelHandle)
 				//接触している座標
 				contact = VAdd(centerPos, contact);
 
+				//少し膜をはる
+				contact = VAdd(contact, VScale(poly.Normal, -0.1f));
+
 				
 				//球の接触座標→面の接触座標を求める
 				VECTOR pos = VSub(hitPos, contact);
@@ -293,14 +196,15 @@ bool CollisionManager::WallCollisionCheck(Player& player, int modelHandle)
 					addPos = pos;
 				}
 			}
-
-			oldPoly = poly;
 		}
 
 		if (VSize(addPos) != 0)
 		{
- 			VECTOR newPos = VAdd(player.GetPosition(), addPos);
+ 			newPos = VAdd(newPos, addPos);
 			player.SetPos(newPos);
+
+			// プレイヤーのモデルの座標を更新する
+			MV1SetPosition(player.GetModelHandle(), player.GetPosition());
 			return true;
 		}
 	}
