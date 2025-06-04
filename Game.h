@@ -19,6 +19,6 @@ private:
 	std::shared_ptr<Input> input = NULL;
 	std::shared_ptr<Field> field = NULL;
 	std::shared_ptr<HitCheck> hitCheck = NULL;
-	std::shared_ptr<CollisionManager> collisionManager = NULL;
+	std::shared_ptr<PlayerManager> playerManager = NULL;
 };
 

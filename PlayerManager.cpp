@@ -24,6 +24,9 @@ PlayerManager::~PlayerManager()
 void PlayerManager::Update(int mapHandle, Player& player)
 {
 	collisionManager->Update(player, mapHandle);
+
+	// プレイヤーのモデルの座標を更新する
+	MV1SetPosition(player.GetModelHandle(), player.GetPosition());
 }
 
 /// <summary>

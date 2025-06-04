@@ -7,15 +7,9 @@ void CollisionManager::Update(Player& player, int modelHandle)
 	//何回か当たり判定を繰り返す
 	//prevとnewのposを作る
 
-	VECTOR oldPos = player.GetPosition();
-	VECTOR newPos = VAdd(oldPos, player.GetMoveVec());
+	oldPos = player.GetPosition();
+	newPos = VAdd(oldPos, player.GetMoveVec());
 
-	VECTOR topPosition = newPos;
-	VECTOR bottomPosition = newPos;
-	topPosition.y = topPosition.y + 17.0f;
-	bottomPosition.y = bottomPosition.y + 3.0f;
-
-	//bool isHitGround = hitCheck.HitRayJudge(modelHandle, -1, player.GetCenterPos(), player.GetFootPos(),hitPoly_Ground);
 	bool isHitGround;
 
 	bool hitWall = WallCollisionCheck(player, modelHandle);		//壁に衝突していたら押し戻す
@@ -23,6 +17,10 @@ void CollisionManager::Update(Player& player, int modelHandle)
 	//もう一度衝突チェック
 	hitCheck.CapsuleHitWallJudge(modelHandle, -1, player.GetTopPos(), player.GetBottomPos(), hitPoly_Ground_sphere);
 
+	VECTOR topPosition = newPos;
+	VECTOR bottomPosition = newPos;
+	topPosition.y = topPosition.y + 17.0f;
+	bottomPosition.y = bottomPosition.y + 3.0f;
 
 	if (hitPoly_Ground_sphere.HitNum >= 1)
 	{
@@ -54,10 +52,10 @@ void CollisionManager::Update(Player& player, int modelHandle)
 				VECTOR newPlayerPos = VGet(0.0f, 0.0f, 0.0f);
 
 				//面と球の接触座標を調べる
-				bool flag = TestSphereTriangle(bottomPosition, poly.Position[0], poly.Position[1], poly.Position[2], hitPos);
+				bool flag = TestSphereTriangle(bottomPosition, poly.Position[0], poly.Position[1], poly.Position[2], hitPos_ground);
 
 				//足元と床の差を計算
-				newPlayerPos.y = hitPos.y - player.GetFootPos().y;
+				newPlayerPos.y = hitPos_ground.y - player.GetFootPos().y;
 				subPos.y = poly.Normal.y;
 
 				//足元と床との差が0.1以上の場合のみplayerの位置に加算
@@ -69,8 +67,6 @@ void CollisionManager::Update(Player& player, int modelHandle)
 			}
 		}
 	}
-	
-
 	//接地しているか
 	player.SetIsGround(isHitGround);
 
@@ -138,13 +134,12 @@ bool CollisionManager::WallCollisionCheck(Player& player, int modelHandle)
 	//	}
 	//}
 
-	VECTOR oldPos = player.GetPosition();
-	VECTOR newPos = VAdd(oldPos, player.GetMoveVec());
 
 	VECTOR topPosition = newPos;
 	VECTOR bottomPosition = newPos;
 	topPosition.y = topPosition.y + 17.0f;
 	bottomPosition.y = bottomPosition.y + 3.0f;
+	bool flag = false;
 
 	hitCheck.CapsuleHitWallJudge(modelHandle, -1, topPosition,VAdd(bottomPosition,VGet(0.0f,1.0f,0.0f)), hitPoly_Wall);
 
@@ -172,7 +167,7 @@ bool CollisionManager::WallCollisionCheck(Player& player, int modelHandle)
 				centerPos = VScale(centerPos, 0.5f);
 
 				//面と球の接触座標を調べる
-				bool flag = TestSphereTriangle(centerPos, poly.Position[0], poly.Position[1], poly.Position[2], hitPos);
+				bool flag = TestSphereTriangle(centerPos, poly.Position[0], poly.Position[1], poly.Position[2], hitPos_wall);
 
 				//球の接触している座標を求める
 				// そうするには？↓
@@ -182,12 +177,11 @@ bool CollisionManager::WallCollisionCheck(Player& player, int modelHandle)
 				//接触している座標
 				contact = VAdd(centerPos, contact);
 
-				//少し膜をはる
+				//面に少し膜をはる
 				contact = VAdd(contact, VScale(poly.Normal, -0.1f));
 
-				
 				//球の接触座標→面の接触座標を求める
-				VECTOR pos = VSub(hitPos, contact);
+				VECTOR pos = VSub(hitPos_wall, contact);
 				pos.y = 0.0f;
 
 				//これまでの押し戻し量よりも大きければ更新する
@@ -198,20 +192,20 @@ bool CollisionManager::WallCollisionCheck(Player& player, int modelHandle)
 			}
 		}
 
+		//押し戻し量を適用する
 		if (VSize(addPos) != 0)
 		{
  			newPos = VAdd(newPos, addPos);
-			player.SetPos(newPos);
-
-			// プレイヤーのモデルの座標を更新する
-			MV1SetPosition(player.GetModelHandle(), player.GetPosition());
-			return true;
+			flag = true;
 		}
 	}
 
+	//最後にプレイヤーのpositionを更新
+	player.SetPos(newPos);
+
 	// 検出したプレイヤーの周囲のポリゴン情報を開放する
 	MV1CollResultPolyDimTerminate(hitPoly_Wall);
-	return false;
+	return flag;
 
 }
 
@@ -309,6 +303,8 @@ void CollisionManager::Draw()
 	printfDx("NormalPos.y %f\n", subPos.y);
 	printfDx("NormalPos_Wall.x %f\n", normal.x);
 	printfDx("NormalPos_Wall.z %f\n", normal.z);
-	DrawSphere3D(hitPos, 2.0f, 30, GetColor(0, 0, 0),
+	DrawSphere3D(hitPos_wall, 2.0f, 30, GetColor(0, 0, 0),
+		GetColor(255, 0, 0), FALSE);
+	DrawSphere3D(hitPos_ground, 2.0f, 30, GetColor(0, 0, 0),
 		GetColor(255, 0, 0), FALSE);
 }

@@ -115,10 +115,10 @@ void Player::Update(const VECTOR& cameraDirection)
         MoveCalc(moveVec);
     }
 
-    position = VAdd(position, moveVec);
+    //position = VAdd(position, moveVec);
 
-    // プレイヤーのモデルの座標を更新する
-    MV1SetPosition(modelHandle, position);
+    //// プレイヤーのモデルの座標を更新する
+    //MV1SetPosition(modelHandle, position);
 
     UpdateAngle(targetMoveDirection);
 

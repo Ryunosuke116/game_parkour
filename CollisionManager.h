@@ -24,7 +24,10 @@ private:
 
 	VECTOR subPos;
 	VECTOR normal;
-	VECTOR hitPos;
+	VECTOR hitPos_wall;
+	VECTOR hitPos_ground;
 	VECTOR playerCenterPos;
+	VECTOR oldPos;
+	VECTOR newPos;
 };
 

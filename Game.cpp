@@ -12,7 +12,7 @@ Game::Game(SceneManager& manager) :BaseScene{ manager }
 	input = std::make_shared<Input>();
 	field = std::make_shared<Field>();
 	hitCheck = std::make_shared<HitCheck>();
-	collisionManager = std::make_shared<CollisionManager>();
+	playerManager = std::make_shared<PlayerManager>();
 }
 
 /// <summary>
@@ -42,9 +42,9 @@ void Game::Update()
 {
 	player->Update(camera->GetCameraDirection());
 	camera->Update(player->GetPosition());
+	playerManager->Update(field->GetModelHandle(), *player);
 	map->Update();
 	field->Update();
-	collisionManager->Update(*player, field->GetModelHandle());
 
 }
 
@@ -55,7 +55,7 @@ void Game::Draw()
 	camera->Draw();
 	map->Draw();
 	field->Draw();
-	collisionManager->Draw();
+	playerManager->Draw();
 	printfDx("LightPos.x %f\n", GetLightPosition().x);
 	printfDx("LightPos.y %f\n", GetLightPosition().y);
 	printfDx("LightPos.z %f\n", GetLightPosition().z);
