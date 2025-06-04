@@ -141,7 +141,7 @@ void Player::Draw()
     DrawCapsule3D(topPosition, bottomPosition, 3.5f, 30, GetColor(0, 0, 0),
         GetColor(255, 0, 0), FALSE);
 
-    printfDx("playerPosition.x %f\nplayerPosition.y %f\nplayerPosition.x %f\n",
+    printfDx("playerPosition.x %f\nplayerPosition.y %f\nplayerPosition.z %f\n",
         position.x, position.y, position.z);
     printfDx("frameåªç›êî%d\n", nowFrameNumber);
     printfDx("nowMoveSpeed %f\n", nowMoveSpeed);

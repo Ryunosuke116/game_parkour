@@ -14,6 +14,8 @@ public:
 		VECTOR linePos_start, VECTOR linePos_end, MV1_COLL_RESULT_POLY_DIM& hitPoly);
 
 	float projectionCalc(const VECTOR& point, const VECTOR& P, const VECTOR& Q);
+	
+	void NormalCalc();
 
 	/*MV1_COLL_RESULT_POLY GetHitPoly_Ground() { return hitPoly_Ground; }*/
 

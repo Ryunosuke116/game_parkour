@@ -113,18 +113,25 @@ void HitCheck::CapsuleHitWallJudge(const int& modelHandle, int frameIndex,
 /// <returns></returns>
 float HitCheck::projectionCalc(const VECTOR& point, const VECTOR& P, const VECTOR& Q)
 {
-	//線分ベクトル
-	VECTOR PQ = VSub(Q, P);
-	VECTOR P_point = VSub(point, P);
-	
-	//PQの内積(2乗)
-	float len2 = VDot(PQ, PQ);
+	////線分ベクトル
+	//VECTOR PQ = VSub(Q, P);
+	//VECTOR P_point = VSub(point, P);
+	//
+	////PQの内積(2乗)
+	//float len2 = VDot(PQ, PQ);
 
-	float t = VDot(PQ, P_point) / len2;
+	//float t = VDot(PQ, P_point) / len2;
 
-	VECTOR foot = VAdd(P, VScale(PQ, t));
-	foot = VSub(point, foot);
-	float D = VSize(foot);
+	//VECTOR foot = VAdd(P, VScale(PQ, t));
+	//foot = VSub(point, foot);
+	//float D = VSize(foot);
+
+	VECTOR a, normal;
+	VECTOR AP = VSub(point, a);
+
+	float D = VDot(AP, normal) / VDot(normal, normal);
+
+	//VECTOR q = VSub(q, VScale(D, normal));
 
 	return D;
 }

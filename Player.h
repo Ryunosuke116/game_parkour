@@ -101,6 +101,7 @@ public:
 	VECTOR GetTopPos() { return topPosition; }
 	VECTOR GetBottomPos() { return bottomPosition; }
 	bool GetIsGround() { return playerData.isGround; }
+	int GetModelHandle() { return modelHandle; }
 
 	//////////////////////////////////
 	/// セッター

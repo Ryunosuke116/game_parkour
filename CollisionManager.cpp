@@ -3,6 +3,9 @@
 
 void CollisionManager::Update(Player& player,int modelHandle)
 {
+	//playerの状態によって当たり判定の優先順位を決める
+	//何回か当たり判定を繰り返す
+	//prevとnewのposを作る
 
 
 	//bool isHitGround = hitCheck.HitRayJudge(modelHandle, -1, player.GetCenterPos(), player.GetFootPos(),hitPoly_Ground);
@@ -10,12 +13,6 @@ void CollisionManager::Update(Player& player,int modelHandle)
 
 	bool hitWall = WallCollisionCheck(player, modelHandle);		//壁に衝突しているか
 	
-	////////////////////////
-	// これでいきたい
-	// //////////////////////
-	//bool isHitGround = false;
-
-
 	hitCheck.CapsuleHitWallJudge(modelHandle, -1, player.GetTopPos(), player.GetBottomPos(), hitPoly_Ground_sphere);
 
 	if (hitPoly_Ground_sphere.HitNum >= 1)
@@ -26,6 +23,13 @@ void CollisionManager::Update(Player& player,int modelHandle)
 	{
 		isHitGround = false;
 	}
+
+	////////////////////////
+	// これでいきたい
+	// //////////////////////
+	//bool isHitGround = false;
+
+
 
 
 	//int wallNum = 0;
@@ -161,11 +165,13 @@ void CollisionManager::Update(Player& player,int modelHandle)
 				{
 					isHitGround = false;
 				}
+
 			}
 
 		}
 	}
 	
+
 	//接地しているか
 	player.SetIsGround(isHitGround);
 
@@ -241,6 +247,8 @@ bool CollisionManager::WallCollisionCheck(Player& player, int modelHandle)
 		int groundIndex = -1;
 		VECTOR addPos = VGet(0.0f, 0.0f, 0.0f);
 
+		MV1_COLL_RESULT_POLY oldPoly;
+
 			//ヒットした全ポリゴンを調べる
 		for (int i = 0; i < hitPoly_Wall.HitNum; i++)
 		{
@@ -258,31 +266,35 @@ bool CollisionManager::WallCollisionCheck(Player& player, int modelHandle)
 				VECTOR centerPos = VAdd(player.GetTopPos(), player.GetBottomPos());
 				centerPos = VScale(centerPos, 0.5f);
 
+				//前回と当たっているメッシュが同じか見る
+				if(VSize(poly.Position[0]) == VSize(oldPoly.Position[0]) &&
+					VSize(poly.Position[1]) == VSize(oldPoly.Position[1]) && 
+					VSize(poly.Position[2]) == VSize(oldPoly.Position[2]))
+
 				//面と球の接触座標を調べる
 				bool flag = TestSphereTriangle(centerPos, poly.Position[0], poly.Position[1], poly.Position[2], hitPos);
-
 
 				//球の接触している座標を求める
 				// そうするには？↓
 				//法線方向とは逆の方向にセンターポジションから加算する
-					VECTOR contact = VScale(normal, -3.5f);
+				VECTOR contact = VScale(normal, -3.5f);
 				
 				//接触している座標
 				contact = VAdd(centerPos, contact);
-				
 
-			//	VECTOR pos = VScale(VSub(hitPos, player.GetPosition()), 2.0f);
 				
 				//球の接触座標→面の接触座標を求める
 				VECTOR pos = VSub(hitPos, contact);
 				pos.y = 0.0f;
 
 				//これまでの押し戻し量よりも大きければ更新する
-					if (VSize(addPos) <= VSize(pos))
+				if (VSize(addPos) <= VSize(pos))
 				{
 					addPos = pos;
 				}
 			}
+
+			oldPoly = poly;
 		}
 
 		if (VSize(addPos) != 0)

@@ -6,6 +6,7 @@ private:
 	bool isPush;
 	bool isPoly;
 	float y;
+	int boxHandle;
 public:
 
 	Field();
