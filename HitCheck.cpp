@@ -88,3 +88,20 @@ float HitCheck::projectionCalc(const VECTOR& point, const VECTOR& P, const VECTO
 
 	return D;
 }
+
+
+void HitCheck::AABB()
+{
+	float r = 3.5f;
+	float min_X, min_Y, min_Z;
+	float max_X, max_Y, max_Z;
+
+	min_X = r * -1.0f;
+	min_X = r * -1.0f;
+	min_Z = r * -1.0f;
+	max_X = r * 1.0f;
+	max_Y = r * 1.0f;
+	max_Z = r * 1.0f;
+
+
+}

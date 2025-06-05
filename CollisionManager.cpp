@@ -29,8 +29,8 @@ bool CollisionManager::GroundCollisionCheck(Player& player, int modelHandle, VEC
 	//prev‚Ænew‚Ìpos‚ðì‚é
 	VECTOR topPosition = newPos;
 	VECTOR bottomPosition = newPos;
-	topPosition.y = topPosition.y + 17.0f;
-	bottomPosition.y = bottomPosition.y + 3.0f;
+	topPosition.y = topPosition.y + player.GetAddTopPos();
+	bottomPosition.y = bottomPosition.y + player.GetAddBottomPos();
 	VECTOR footPos= MV1GetFramePosition(player.GetModelHandle(), 0);
 
 	//°‚ÆÕ“Ë‚µ‚Ä‚¢‚é‚©
@@ -55,7 +55,6 @@ bool CollisionManager::GroundCollisionCheck(Player& player, int modelHandle, VEC
 
 				//‘«Œ³‚Æ°‚Ì·‚ðŒvŽZ
  				newPlayerPos.y = hitPos_ground.y - footPos.y;
-				subPos.y = poly.Normal.y;
 
 				//‘«Œ³‚Æ°‚Æ‚Ì·‚ª0.1ˆÈã‚Ìê‡‚Ì‚Ýplayer‚ÌˆÊ’u‚É‰ÁŽZ
 				if (newPlayerPos.y >= 0.1f)
@@ -86,7 +85,7 @@ bool CollisionManager::WallCollisionCheck(Player& player, int modelHandle, VECTO
 	bool flag = false;
 
 	//•Ç‚ÆÕ“Ë‚µ‚Ä‚¢‚é‚©
-	hitCheck.CapsuleHitWallJudge(modelHandle, -1, topPosition,VAdd(bottomPosition,VGet(0.0f,1.0f,0.0f)), hitPoly_Wall);
+	hitCheck.CapsuleHitWallJudge(modelHandle, -1, topPosition,bottomPosition, hitPoly_Wall);
 
 	//Õ“Ë‚µ‚Ä‚¢‚é‚Æ‚±‚ð‘S•”’²‚×‚Ä‰Ÿ‚µ–ß‚µ—Ê‚ðŒvŽZ‚·‚é
 	if (hitPoly_Wall.HitNum >= 1)

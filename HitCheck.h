@@ -15,7 +15,7 @@ public:
 
 	float projectionCalc(const VECTOR& point, const VECTOR& P, const VECTOR& Q);
 	
-	void NormalCalc();
+	void AABB();
 
 	/*MV1_COLL_RESULT_POLY GetHitPoly_Ground() { return hitPoly_Ground; }*/
 
