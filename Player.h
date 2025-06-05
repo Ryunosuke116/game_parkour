@@ -10,7 +10,10 @@ private:
 	static constexpr float rollMoveSpeed = 2.5f;	//ロール速度
 	static constexpr float angleSpeed = 0.3f;
 	static constexpr float addJumpPower = 2.0f;		//ジャンプパワー
-	static constexpr float gravity = -0.07f;
+	static constexpr float gravity = -0.06f;
+	static constexpr float addTopPos = 17.0f;
+	static constexpr float addBottomPos = 3.0f;
+	static constexpr float radius = 3.5f;
 
 
 	VECTOR directionLinePos[4];
@@ -105,6 +108,9 @@ public:
 	bool GetIsGround() { return playerData.isGround; }
 	int GetModelHandle() { return modelHandle; }
 	PlayerStateActionBase::PlayerData GetData() { return playerData; }
+	float GetAddTopPos() { return addTopPos; }
+	float GetAddBottomPos() { return addBottomPos; }
+	float GetRadius() { return radius; }
 
 	//////////////////////////////////
 	/// セッター

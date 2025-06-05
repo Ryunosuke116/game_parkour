@@ -39,7 +39,7 @@ void Field::Initialize()
 {
 	// モデルの０番目のフレームのコリジョン情報を構築
 	MV1SetupCollInfo(modelHandle, -1, 1, 1, 1);
-	SetLightPosition(VGet(0.0f, -200.0f, 0.0f));
+
 }
 
 /// <summary>

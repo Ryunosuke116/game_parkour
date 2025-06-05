@@ -1,47 +1,46 @@
 #include "Include.h"
+#include <utility>
 
+/// @brief 更新
+/// @param player 
+/// @param modelHandle 
+/// @return 
+std::pair<bool,VECTOR> CollisionManager::Update(Player& player, int modelHandle)
+{
+	VECTOR oldPos = player.GetPosition();
+	VECTOR newPos = VAdd(oldPos, player.GetMoveVec());
 
-void CollisionManager::Update(Player& player, int modelHandle)
+	//壁衝突判定
+	WallCollisionCheck(player, modelHandle, newPos,oldPos);
+
+	//床衝突判定
+	return std::make_pair(GroundCollisionCheck(player, modelHandle, newPos), newPos);
+}
+
+/// @brief 床との衝突判定処理
+/// @param player 
+/// @param modelHandle 
+/// @param newPos 
+/// @return 
+bool CollisionManager::GroundCollisionCheck(Player& player, int modelHandle, VECTOR& newPos)
 {
 	//playerの状態によって当たり判定の優先順位を決める
 	//何回か当たり判定を繰り返す
 	//prevとnewのposを作る
-
-	oldPos = player.GetPosition();
-	newPos = VAdd(oldPos, player.GetMoveVec());
-
-	bool isHitGround;
-
-	bool hitWall = WallCollisionCheck(player, modelHandle);		//壁に衝突していたら押し戻す
-	
-	//もう一度衝突チェック
-	hitCheck.CapsuleHitWallJudge(modelHandle, -1, player.GetTopPos(), player.GetBottomPos(), hitPoly_Ground_sphere);
-
 	VECTOR topPosition = newPos;
 	VECTOR bottomPosition = newPos;
 	topPosition.y = topPosition.y + 17.0f;
 	bottomPosition.y = bottomPosition.y + 3.0f;
+	VECTOR footPos= MV1GetFramePosition(player.GetModelHandle(), 0);
 
-	if (hitPoly_Ground_sphere.HitNum >= 1)
-	{
-		isHitGround = true;
-	}
-	else
-	{
-		isHitGround = false;
-	}
-
-	////////////////////////
-	// これでいきたい
-	// //////////////////////
-	//bool isHitGround = false;
+	//床と衝突しているか
+	bool isHitGround = hitCheck.SphereHitJudge(modelHandle, -1, bottomPosition, hitPoly_Ground_sphere);
 
 	VECTOR addPos = VGet(0.0f, 0.0f, 0.0f);
 
-
+	//ジャンプ中ではない場合に処理
 	if (isHitGround && !player.GetData().isJump)
 	{
-		hitCheck.CapsuleHitWallJudge(modelHandle, -1, topPosition, bottomPosition, hitPoly_Ground_sphere);
 
 		for (int i = 0; i < hitPoly_Ground_sphere.HitNum; i++)
 		{
@@ -52,23 +51,22 @@ void CollisionManager::Update(Player& player, int modelHandle)
 				VECTOR newPlayerPos = VGet(0.0f, 0.0f, 0.0f);
 
 				//面と球の接触座標を調べる
-				bool flag = TestSphereTriangle(bottomPosition, poly.Position[0], poly.Position[1], poly.Position[2], hitPos_ground);
+				bool flag = TestSphereTriangle(bottomPosition, poly.Position[0], poly.Position[1], poly.Position[2], hitPos_ground, player.GetRadius());
 
 				//足元と床の差を計算
-				newPlayerPos.y = hitPos_ground.y - player.GetFootPos().y;
+ 				newPlayerPos.y = hitPos_ground.y - footPos.y;
 				subPos.y = poly.Normal.y;
 
 				//足元と床との差が0.1以上の場合のみplayerの位置に加算
 				if (newPlayerPos.y >= 0.1f)
 				{
-					newPlayerPos = VAdd(newPos, newPlayerPos);
-					player.SetPos(newPlayerPos);
+					newPos = VAdd(newPos, newPlayerPos);
 				}
 			}
 		}
 	}
 	//接地しているか
-	player.SetIsGround(isHitGround);
+	return isHitGround;
 
 }
 
@@ -78,62 +76,8 @@ void CollisionManager::Update(Player& player, int modelHandle)
 /// <param name="player"></param>
 /// <param name="modelHandle"></param>
 /// <returns></returns>
-bool CollisionManager::WallCollisionCheck(Player& player, int modelHandle)
+bool CollisionManager::WallCollisionCheck(Player& player, int modelHandle, VECTOR& newPos, VECTOR& oldPos)
 {
-	//hitCheck.SphereHitWallJudge(modelHandle, -1, player.GetTopPos(), player.GetBottomPos(), hitPoly_Wall);
-
-	//当たった場合
-	//if (hitPoly_Wall.HitNum >= 1)
-	//{
-	//	float maxY = -FLT_MAX;
-	//	int groundIndex = -1;
-	//	VECTOR addPos = VGet(0.0f, 0.0f, 0.0f);
-
-	//	//ヒットした全ポリゴンを調べる
-	//	for (int i = 0; i < hitPoly_Wall.HitNum; i++)
-	//	{
-	//		MV1_COLL_RESULT_POLY poly = hitPoly_Wall.Dim[i];
-
-	//		//壁かどうかを調べる
-	//		if (poly.Normal.x >= 0.7f || poly.Normal.z >= 0.7f)
-	//		{
-
-	//			float difference_Y = poly.HitPosition.y - player.GetFootPos().y;
-	//			
-	//			//小さな段差だったら壁として扱わない
-	//			if (difference_Y <= 0.5f)
-	//			{
- //					continue;
-	//			}
-	//			
-	//			normal = poly.Normal;
-	//			normal.y = 0.0f;
-	//			normal = VNorm(normal);
-
-	//			VECTOR hitDir = VSub(poly.HitPosition, player.GetBottomPos());
-	//			hitDir = VNorm(hitDir);
-	//			//hitDir = VScale(hitDir, 3.5f);
-	//			hitDir = VScale(normal, -3.5f);
-	//			hitDir = VAdd(player.GetBottomPos(), hitDir);
-
-	//			VECTOR pos= VSub(poly.HitPosition, hitDir);
-	//			pos.y = 0.0f;
-
-	//			if (VSize(addPos) <= VSize(pos))
-	//			{
-	//				addPos = pos;
-	//			}
-	//		}
-	//	}
-
-	//	if (VSize(addPos) != 0)
-	//	{
-	//		VECTOR newPos = VAdd(player.GetPosition(), addPos);
-	//		player.SetPos(newPos);
-	//		return true;
-	//	}
-	//}
-
 
 	VECTOR topPosition = newPos;
 	VECTOR bottomPosition = newPos;
@@ -141,8 +85,10 @@ bool CollisionManager::WallCollisionCheck(Player& player, int modelHandle)
 	bottomPosition.y = bottomPosition.y + 3.0f;
 	bool flag = false;
 
+	//壁と衝突しているか
 	hitCheck.CapsuleHitWallJudge(modelHandle, -1, topPosition,VAdd(bottomPosition,VGet(0.0f,1.0f,0.0f)), hitPoly_Wall);
 
+	//衝突しているとこを全部調べて押し戻し量を計算する
 	if (hitPoly_Wall.HitNum >= 1)
 	{
 		float maxY = -FLT_MAX;
@@ -167,7 +113,7 @@ bool CollisionManager::WallCollisionCheck(Player& player, int modelHandle)
 				centerPos = VScale(centerPos, 0.5f);
 
 				//面と球の接触座標を調べる
-				bool flag = TestSphereTriangle(centerPos, poly.Position[0], poly.Position[1], poly.Position[2], hitPos_wall);
+				bool flag = TestSphereTriangle(centerPos, poly.Position[0], poly.Position[1], poly.Position[2], hitPos_wall,player.GetRadius());
 
 				//球の接触している座標を求める
 				// そうするには？↓
@@ -200,15 +146,18 @@ bool CollisionManager::WallCollisionCheck(Player& player, int modelHandle)
 		}
 	}
 
-	//最後にプレイヤーのpositionを更新
-	player.SetPos(newPos);
-
 	// 検出したプレイヤーの周囲のポリゴン情報を開放する
 	MV1CollResultPolyDimTerminate(hitPoly_Wall);
 	return flag;
 
 }
 
+/// @brief 面との接触座標の計算
+/// @param centerPos 
+/// @param a 
+/// @param b 
+/// @param c 
+/// @return 
 VECTOR CollisionManager::ClosestPtToPointTriangle(VECTOR centerPos, VECTOR a, VECTOR b, VECTOR c)
 {
 
@@ -284,7 +233,7 @@ VECTOR CollisionManager::ClosestPtToPointTriangle(VECTOR centerPos, VECTOR a, VE
 /// 球の中心に対するabc上の最近接点である点pも返す
 /// </summary>
 /// <returns></returns>
-bool CollisionManager::TestSphereTriangle(VECTOR centerPos, VECTOR a, VECTOR b, VECTOR c,VECTOR& q)
+bool CollisionManager::TestSphereTriangle(VECTOR centerPos, VECTOR a, VECTOR b, VECTOR c,VECTOR& q, const float radius)
 {
 	//球の中心対する最近接点である三角形ABC上にある点pを見つける
 	q = ClosestPtToPointTriangle(centerPos,a,b,c);
@@ -292,7 +241,7 @@ bool CollisionManager::TestSphereTriangle(VECTOR centerPos, VECTOR a, VECTOR b, 
 	//球と三角形が交差するのは、球の中心から点qまでの(平方した)距離が(平方した)球の半径よりも小さい場合
 	VECTOR v = VSub(q, centerPos);
 
-	return VDot(v, v) <= 3.5f * 3.5f;
+	return VDot(v, v) <= radius * radius;
 }
 
 /// <summary>
