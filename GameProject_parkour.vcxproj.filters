@@ -117,6 +117,9 @@
     <ClCompile Include="PlayerManager.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Hangring_Idle.cpp">
+      <Filter>ソース ファイル\player\state</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include.h">
@@ -190,6 +193,9 @@
     </ClInclude>
     <ClInclude Include="PlayerManager.h">
       <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Hangring_Idle.h">
+      <Filter>ソース ファイル\player\state</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

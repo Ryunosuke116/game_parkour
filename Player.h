@@ -16,7 +16,7 @@ private:
 	static constexpr float radius = 3.5f;
 
 
-	VECTOR directionLinePos[4];
+	VECTOR linePos_end;
 	VECTOR footPosition;
 	VECTOR centerPosition;
 	VECTOR topPosition;
@@ -76,7 +76,7 @@ public:
 	void Move(VECTOR& moveVec, const VECTOR& cameraDirection);
 	void MoveCalc(VECTOR& moveVec);
 	void JumpMove();
-	void JumpCalclation(float playTime_anim);
+	void JumpCalclation(float playTime_anim, VECTOR& moveVec);
 	void RollMove();
 	void RollCalclation(VECTOR& moveVec);
 	//void ChangeMotion(const int& motionNum, const float playAnimSpeed)override;
@@ -88,13 +88,7 @@ public:
 	void SetOldAnimState(PlayerStateActionBase::OldAnimState animState);
 	void SetNowAnimState(PlayerStateActionBase::NowAnimState animState);
 
-	enum RayDirction
-	{
-		front,
-		back,
-		right,
-		left
-	};
+	
 
 	//////////////////////////////////
 	//　ゲッター

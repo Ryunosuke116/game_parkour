@@ -98,11 +98,6 @@ void Player::Update(const VECTOR& cameraDirection)
 
     RollCalclation(moveVec);
 
-    //ジャンプ計算
-    JumpCalclation(nowState->GetNowAnimState().PlayTime_anim);
-
-    //重力計算
-    GravityCalclation();
 
     //進むスピードを乗算
     //ロールアクション中はそれに応じた速度
@@ -114,6 +109,12 @@ void Player::Update(const VECTOR& cameraDirection)
     {
         MoveCalc(moveVec);
     }
+
+    //ジャンプ計算
+    JumpCalclation(nowState->GetNowAnimState().PlayTime_anim,moveVec);
+
+    //重力計算
+    GravityCalclation();
 
     //position = VAdd(position, moveVec);
 
@@ -173,11 +174,8 @@ void Player::Draw()
     nowState->Draw();
 
     //線
-    DrawLine3D(centerPosition, footPosition, GetColor(255, 0, 0));
-    DrawLine3D(centerPosition, directionLinePos[RayDirction::front], GetColor(255, 0, 0));
-    DrawLine3D(centerPosition, directionLinePos[RayDirction::back], GetColor(255, 0, 0));
-    DrawLine3D(centerPosition, directionLinePos[RayDirction::right], GetColor(255, 0, 0));
-    DrawLine3D(centerPosition, directionLinePos[RayDirction::left], GetColor(255, 0, 0));
+   // DrawLine3D(centerPosition, footPosition, GetColor(255, 0, 0));
+    DrawLine3D(topPosition, linePos_end, GetColor(255, 0, 0));
 }
 
 /// <summary>
@@ -324,22 +322,22 @@ void Player::JumpMove()
 /// <summary>
 /// ジャンプ処理
 /// </summary>
-void Player::JumpCalclation(float playTime_anim)
+void Player::JumpCalclation(float playTime_anim,VECTOR& moveVec)
 {
     //currentPlayTime_anim > 5.0f && isJump
     if (playerData.isJump && animNumber_Now == animNum::jump)
     {
-        position.y += currentJumpSpeed;
+        moveVec.y += currentJumpSpeed;
     }
     //ランジャンプのときは即座に加算
     else if (animNumber_Now == animNum::run_Jump ||
         animNumber_Now == animNum::falling_Idle)
     {
-        position.y += currentJumpSpeed;
+        moveVec.y += currentJumpSpeed;
     }
     else if (!playerData.isGround)
     {
-        position.y += currentJumpSpeed;
+        moveVec.y += currentJumpSpeed;
     }
 
 }
@@ -550,29 +548,9 @@ void Player::SetNowAnimState(PlayerStateActionBase::NowAnimState animState)
 
 void Player::SettingRay()
 {
-    float angle[4];
-    // float angle= static_cast<float>(atan2(targetMoveDirection.x, targetMoveDirection.z));
-    angle[RayDirction::front] = DX_PI;
-    angle[RayDirction::right] = DX_PI / 2.0f;
-
-    directionLinePos[RayDirction::front] = VGet(cosf(angle[RayDirction::front]), 0.0f, sinf(angle[RayDirction::front]));
-    directionLinePos[RayDirction::front] = VScale(directionLinePos[RayDirction::front], 5.0f);
-    directionLinePos[RayDirction::back] = VScale(directionLinePos[RayDirction::front], -1.0f);
-
-    directionLinePos[RayDirction::front] = VAdd(centerPosition, directionLinePos[RayDirction::front]);
-    directionLinePos[RayDirction::front].y = centerPosition.y;
-
-    directionLinePos[RayDirction::back] = VAdd(centerPosition, directionLinePos[RayDirction::back]);
-    directionLinePos[RayDirction::back].y = centerPosition.y;
-
-    directionLinePos[RayDirction::right] = VGet(cosf(angle[RayDirction::right]), 0.0f, sinf(angle[RayDirction::right]));
-    directionLinePos[RayDirction::right] = VScale(directionLinePos[RayDirction::right], 5.0f);
-    directionLinePos[RayDirction::left] = VScale(directionLinePos[RayDirction::right], -1.0f);
-    directionLinePos[RayDirction::right] = VAdd(centerPosition, directionLinePos[RayDirction::right]);
-    directionLinePos[RayDirction::right].y = centerPosition.y;
-
-    directionLinePos[RayDirction::left] = VAdd(centerPosition, directionLinePos[RayDirction::left]);
-    directionLinePos[RayDirction::left].y = centerPosition.y;
+    linePos_end = VAdd(position, VScale(targetMoveDirection, 10.0f));
+    linePos_end.y = topPosition.y - 1.0f;
+  
 }
 
 /// <summary>

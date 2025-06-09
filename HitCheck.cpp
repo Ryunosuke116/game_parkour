@@ -27,9 +27,6 @@ bool HitCheck::HitRayJudge(const int& modelHandle, int frameIndex,
 {
 	hitPoly = MV1CollCheck_Line(modelHandle, frameIndex, linePos_start, linePos_end);
 
-	DrawSphere3D(hitPoly.HitPosition, 2.0f, 30, GetColor(0, 0, 0),
-		GetColor(255, 0, 0), FALSE);
-
 	return hitPoly.HitFlag;
 }
 

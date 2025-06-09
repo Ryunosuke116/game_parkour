@@ -151,6 +151,7 @@
     <ClCompile Include="Falling_Idle.cpp" />
     <ClCompile Include="Field.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Hangring_Idle.cpp" />
     <ClCompile Include="HitCheck.cpp" />
     <ClCompile Include="Idle.cpp" />
     <ClCompile Include="Idle_To_Sprint.cpp" />
@@ -176,6 +177,7 @@
     <ClInclude Include="Falling_Idle.h" />
     <ClInclude Include="Field.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="Hangring_Idle.h" />
     <ClInclude Include="HitCheck.h" />
     <ClInclude Include="Idle.h" />
     <ClInclude Include="Idle_To_Sprint.h" />

@@ -42,7 +42,7 @@ void Game::Update()
 {
 	player->Update(camera->GetCameraDirection());
 	camera->Update(player->GetPosition());
-	playerManager->Update(field->GetModelHandle(), *player);
+	playerManager->Update(field->GetMeshHandle(), *player);
 	map->Update();
 	field->Update();
 

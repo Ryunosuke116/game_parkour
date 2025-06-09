@@ -5,8 +5,8 @@ class Field : public BaseObject
 private:
 	bool isPush;
 	bool isPoly;
-	float y;
 	int boxHandle;
+	int meshHandle;
 public:
 
 	Field();
@@ -16,6 +16,7 @@ public:
 	void Update()override;
 	void Draw()override;
 
+	int GetMeshHandle() { return meshHandle; }
 
 };
 

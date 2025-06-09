@@ -16,9 +16,12 @@ public:
 
 	bool TestSphereTriangle(VECTOR centerPos, VECTOR a, VECTOR b, VECTOR c, VECTOR& q, const float radius);
 
+	void CliffGrabbing(Player& player,int modelHandle);
+
 private:
 	HitCheck hitCheck;
 	MV1_COLL_RESULT_POLY hitPoly_Ground;
+	
 
 	MV1_COLL_RESULT_POLY_DIM hitPoly_Wall;
 	MV1_COLL_RESULT_POLY_DIM hitPoly_Ground_sphere;
@@ -28,6 +31,6 @@ private:
 	VECTOR hitPos_wall;
 	VECTOR hitPos_ground;
 	VECTOR playerCenterPos;
-	
+	VECTOR oldPolyPos;
 };
 

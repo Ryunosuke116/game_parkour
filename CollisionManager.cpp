@@ -54,12 +54,16 @@ bool CollisionManager::GroundCollisionCheck(Player& player, int modelHandle, VEC
 				bool flag = TestSphereTriangle(bottomPosition, poly.Position[0], poly.Position[1], poly.Position[2], hitPos_ground, player.GetRadius());
 
 				//‘«Œ³‚Æ°‚Ì·‚ðŒvŽZ
- 				newPlayerPos.y = hitPos_ground.y - footPos.y;
+ 				//newPlayerPos.y = hitPos_ground.y - footPos.y;
+
+				newPlayerPos.y = hitPos_ground.y;
 
 				//‘«Œ³‚Æ°‚Æ‚Ì·‚ª0.1ˆÈã‚Ìê‡‚Ì‚Ýplayer‚ÌˆÊ’u‚É‰ÁŽZ
 				if (newPlayerPos.y >= 0.1f)
 				{
-					newPos = VAdd(newPos, newPlayerPos);
+					//newPos = VAdd(newPos, newPlayerPos);
+					newPos.y = newPlayerPos.y;
+					oldPolyPos = hitPos_ground;
 				}
 			}
 		}
@@ -85,7 +89,7 @@ bool CollisionManager::WallCollisionCheck(Player& player, int modelHandle, VECTO
 	bool flag = false;
 
 	//•Ç‚ÆÕ“Ë‚µ‚Ä‚¢‚é‚©
-	hitCheck.CapsuleHitWallJudge(modelHandle, -1, topPosition,bottomPosition, hitPoly_Wall);
+	hitCheck.CapsuleHitWallJudge(modelHandle, -1, topPosition,VAdd(bottomPosition,VGet(0.0f,1.0f,0.0f)), hitPoly_Wall);
 
 	//Õ“Ë‚µ‚Ä‚¢‚é‚Æ‚±‚ð‘S•”’²‚×‚Ä‰Ÿ‚µ–ß‚µ—Ê‚ðŒvŽZ‚·‚é
 	if (hitPoly_Wall.HitNum >= 1)
@@ -101,7 +105,8 @@ bool CollisionManager::WallCollisionCheck(Player& player, int modelHandle, VECTO
 
 			//•Ç‚©‚Ç‚¤‚©‚ð’²‚×‚é
 			if (poly.Normal.x >= 0.7f || poly.Normal.z >= 0.7f ||
-				poly.Normal.x <= -0.7f || poly.Normal.z <= -0.7f)
+				poly.Normal.x <= -0.7f || poly.Normal.z <= -0.7f &&
+				poly.Normal.y <= 0.7f)
 			{
 				normal = poly.Normal;
 				normal.y = 0.0f;
@@ -148,6 +153,16 @@ bool CollisionManager::WallCollisionCheck(Player& player, int modelHandle, VECTO
 	// ŒŸo‚µ‚½ƒvƒŒƒCƒ„[‚ÌŽüˆÍ‚Ìƒ|ƒŠƒSƒ“î•ñ‚ðŠJ•ú‚·‚é
 	MV1CollResultPolyDimTerminate(hitPoly_Wall);
 	return flag;
+
+}
+
+/// <summary>
+/// ŠR‚Â‚©‚Ý”»’è
+/// </summary>
+/// <param name="player"></param>
+/// <param name="modelHandle"></param>
+void CollisionManager::CliffGrabbing(Player& player, int modelHandle)
+{
 
 }
 
