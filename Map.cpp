@@ -3,9 +3,9 @@
 /// <summary>
 /// コンストラクタ
 /// </summary>
-Map::Map()
+Map::Map(const char* path)
 {
-	modelHandle = MV1LoadModel("material/skyDome/sunSet.mv1");
+	modelHandle = MV1LoadModel(path);
 	MV1SetScale(modelHandle, VGet(2.0f, 2.0f, 2.0f));
 }
 

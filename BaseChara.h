@@ -36,9 +36,9 @@ public:
 	BaseChara();
 	~BaseChara();
 
-	virtual void Initialize();
-	virtual void Update();
-	virtual void Draw();
+	virtual void Initialize()abstract;
+	virtual void Update()abstract;
+	virtual void Draw()abstract;
 
 	virtual void ChangeMotion(const int& motionNum, const float playAnimSpeed);
 	virtual void MotionUpdate();

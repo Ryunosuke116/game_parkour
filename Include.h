@@ -21,5 +21,6 @@
 #include "HitCheck.h"
 #include "CollisionManager.h"
 #include "PlayerManager.h"
+#include "ObjectManager.h"
 #include "Game.h"
 #include "SceneManager.h"

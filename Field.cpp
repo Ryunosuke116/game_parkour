@@ -4,13 +4,13 @@
 /// <summary>
 /// コンストラクタ
 /// </summary>
-Field::Field()
+Field::Field(const char* path) 
 {
 	//modelHandle = MV1LoadModel("material/mv1/field.mv1");
 	//modelHandle = MV1LoadModel("material/mv1/city/city_0525.mv1");
-	modelHandle = MV1LoadModel("material/mv1/new_city/0604.mv1");
+	modelHandle = MV1LoadModel(path);
 	boxHandle = MV1LoadModel("material/mv1/new_city/0604_box.mv1");
-	meshHandle = MV1LoadModel("material/mv1/new_city/0610_mesh.mv1");
+	//meshHandle = MV1LoadModel("material/mv1/new_city/0610_mesh.mv1");
 
 	position = VGet(0, 0, 0);
 	//モデルの大きさ調整
@@ -19,7 +19,7 @@ Field::Field()
 	MV1SetScale(modelHandle, VGet(1.0f, 1.0f, 1.0f));
 
 	MV1SetPosition(modelHandle, position);
-	MV1SetPosition(meshHandle, position);
+	//MV1SetPosition(meshHandle, position);
 	MV1SetPosition(boxHandle, position);
 
 }
@@ -40,16 +40,16 @@ void Field::Initialize()
 	// モデルの０番目のフレームのコリジョン情報を構築
 	MV1SetupCollInfo(modelHandle, -1, 1, 1, 1);
 	// モデルの０番目のフレームのコリジョン情報を構築
-	MV1SetupCollInfo(meshHandle, -1, 1, 1, 1);
+	//MV1SetupCollInfo(meshHandle, -1, 1, 1, 1);
 
 	int a = MV1GetMaterialNum(meshHandle);
 
 	for (int i = 0; i < a; i++)
 	{
 		// ３Ｄモデルに含まれる０番目のマテリアルの描画ブレンドモードを DX_BLENDMODE_ADD に変更する
-		MV1SetMaterialDrawBlendMode(meshHandle, i, DX_BLENDMODE_ADD);
+		//MV1SetMaterialDrawBlendMode(meshHandle, i, DX_BLENDMODE_ADD);
 		// マテリアルのブレンドパラメータを 128 に変更する
-		MV1SetMaterialDrawBlendParam(meshHandle, i, 0);
+		//MV1SetMaterialDrawBlendParam(meshHandle, i, 0);
 	}
 }
 
@@ -91,15 +91,15 @@ void Field::Draw()
 	if (isPoly)
 	{
 		MV1SetWireFrameDrawFlag(modelHandle, TRUE);
-		MV1SetWireFrameDrawFlag(meshHandle, TRUE);
+		//MV1SetWireFrameDrawFlag(meshHandle, TRUE);
 	}
 	else
 	{
 		MV1SetWireFrameDrawFlag(modelHandle, FALSE);
-		MV1SetWireFrameDrawFlag(meshHandle, FALSE);
+		//MV1SetWireFrameDrawFlag(meshHandle, FALSE);
 	}
 
 	MV1DrawModel(modelHandle);
 	 
-	MV1DrawModel(meshHandle);
+	//MV1DrawModel(meshHandle);
 }

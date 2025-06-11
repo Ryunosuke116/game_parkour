@@ -71,6 +71,7 @@ public:
 	~Player();
 
 	void Initialize();
+	void Update()override;
 	void Update(const VECTOR& cameraDirection);
 	void Draw();
 	void Move(VECTOR& moveVec, const VECTOR& cameraDirection);

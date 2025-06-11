@@ -644,3 +644,5 @@ bool Player::PadInput::isRoll(Input& input)
     }
     return false;
 }
+
+void Player::Update() {};

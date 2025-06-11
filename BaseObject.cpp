@@ -1,11 +1,11 @@
 #include "Include.h"
 
+
 /// <summary>
 /// インスタンス
 /// </summary>
 BaseObject::BaseObject()
 {
-	
 }
 
 /// <summary>

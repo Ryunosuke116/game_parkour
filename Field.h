@@ -9,7 +9,7 @@ private:
 	int meshHandle;
 public:
 
-	Field();
+	Field(const char* path);
 	~Field();
 
 	void Initialize()override;

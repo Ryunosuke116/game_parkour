@@ -46,6 +46,21 @@
     <Filter Include="ソース ファイル\Collision">
       <UniqueIdentifier>{2330dc01-06b8-4627-a8c4-ec50186a5a27}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\coin">
+      <UniqueIdentifier>{ee632bc8-260c-4376-bdbe-b6979949e267}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\manager\object">
+      <UniqueIdentifier>{733bd2bf-452d-40b4-a80b-71e93c23b571}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\manager\player">
+      <UniqueIdentifier>{2a33576b-268e-4832-9dee-8902d408c493}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\manager\scene">
+      <UniqueIdentifier>{6ed27899-6b7f-44a8-b8d7-0648099a58a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\mesh">
+      <UniqueIdentifier>{0960e21f-eac8-4067-ad0e-cfc094d6d27c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -56,9 +71,6 @@
     </ClCompile>
     <ClCompile Include="Game.cpp">
       <Filter>ソース ファイル\scene</Filter>
-    </ClCompile>
-    <ClCompile Include="SceneManager.cpp">
-      <Filter>ソース ファイル\manager</Filter>
     </ClCompile>
     <ClCompile Include="Camera.cpp">
       <Filter>ソース ファイル\camera</Filter>
@@ -114,11 +126,26 @@
     <ClCompile Include="CollisionManager.cpp">
       <Filter>ソース ファイル\Collision</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerManager.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Hangring_Idle.cpp">
       <Filter>ソース ファイル\player\state</Filter>
+    </ClCompile>
+    <ClCompile Include="CoinObject.cpp">
+      <Filter>ソース ファイル\coin</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseManager.cpp">
+      <Filter>ソース ファイル\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectManager.cpp">
+      <Filter>ソース ファイル\manager\object</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerManager.cpp">
+      <Filter>ソース ファイル\manager\player</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneManager.cpp">
+      <Filter>ソース ファイル\manager\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="FieldMesh.cpp">
+      <Filter>ソース ファイル\mesh</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -130,9 +157,6 @@
     </ClInclude>
     <ClInclude Include="Game.h">
       <Filter>ソース ファイル\scene</Filter>
-    </ClInclude>
-    <ClInclude Include="SceneManager.h">
-      <Filter>ソース ファイル\manager</Filter>
     </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>ソース ファイル\camera</Filter>
@@ -191,11 +215,26 @@
     <ClInclude Include="CollisionManager.h">
       <Filter>ソース ファイル\Collision</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerManager.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Hangring_Idle.h">
       <Filter>ソース ファイル\player\state</Filter>
+    </ClInclude>
+    <ClInclude Include="CoinObject.h">
+      <Filter>ソース ファイル\coin</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseManager.h">
+      <Filter>ソース ファイル\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectManager.h">
+      <Filter>ソース ファイル\manager\object</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerManager.h">
+      <Filter>ソース ファイル\manager\player</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneManager.h">
+      <Filter>ソース ファイル\manager\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="FieldMesh.h">
+      <Filter>ソース ファイル\mesh</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
