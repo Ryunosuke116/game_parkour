@@ -5,22 +5,23 @@ class HitCheck;
 class CollisionManager
 {
 public:
-	bool GroundCollisionCheck(Player& player, int modelHandle, VECTOR& newPos);
-	bool WallCollisionCheck(Player& player, int modelHandle, VECTOR& newPos, VECTOR& oldPos);
+	bool GroundCollisionCheck(int modelHandle, VECTOR& newPos, float addTopPos, float radius, float addBottomPos, bool isJump);
+	bool WallCollisionCheck(int modelHandle, VECTOR& newPos, VECTOR& oldPos, float radius, float addTopPos, float addBottomPos);
 	//bool Update(Player& player, int modelHandle);
 	void Draw();
 
-	std::pair<bool, VECTOR> Update(Player& player, int modelHandle);
+	std::pair<bool, VECTOR> Update(int modelHandle, const VECTOR& playerPos, const VECTOR& moveVec, float radius, float addTopPos, float addBottomPos, bool isJump);
 
 	VECTOR ClosestPtToPointTriangle(VECTOR centerPos, VECTOR a, VECTOR b, VECTOR c);
 
 	bool TestSphereTriangle(VECTOR centerPos, VECTOR a, VECTOR b, VECTOR c, VECTOR& q, const float radius);
 
-	void CliffGrabbing(Player& player,int modelHandle);
+	void CliffGrabbing(int modelHandle);
 
 private:
 	HitCheck hitCheck;
 	MV1_COLL_RESULT_POLY hitPoly_Ground;
+	MV1_COLL_RESULT_POLY oldPoly;
 	
 
 	MV1_COLL_RESULT_POLY_DIM hitPoly_Wall;

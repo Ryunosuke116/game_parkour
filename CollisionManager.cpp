@@ -5,16 +5,19 @@
 /// @param player 
 /// @param modelHandle 
 /// @return 
-std::pair<bool,VECTOR> CollisionManager::Update(Player& player, int modelHandle)
+std::pair<bool, VECTOR> CollisionManager::Update(int modelHandle, const VECTOR& playerPos, const VECTOR& moveVec,float radius, float addTopPos, float addBottomPos, bool isJump)
 {
-	VECTOR oldPos = player.GetPosition();
-	VECTOR newPos = VAdd(oldPos, player.GetMoveVec());
+	VECTOR oldPos = playerPos;
+	VECTOR newPos = VAdd(oldPos, moveVec);
 
 	//•ÇÕ“Ë”»’è
-	WallCollisionCheck(player, modelHandle, newPos,oldPos);
+	WallCollisionCheck(modelHandle, newPos, oldPos, radius,addTopPos, addBottomPos);
+
+//	WallCollisionCheck(player, modelHandle, newPos, oldPos);
+
 
 	//°Õ“Ë”»’è
-	return std::make_pair(GroundCollisionCheck(player, modelHandle, newPos), newPos);
+	return std::make_pair(GroundCollisionCheck(modelHandle, newPos, addTopPos, addBottomPos,radius, isJump), newPos);
 }
 
 /// @brief °‚Æ‚ÌÕ“Ë”»’èˆ—
@@ -22,16 +25,15 @@ std::pair<bool,VECTOR> CollisionManager::Update(Player& player, int modelHandle)
 /// @param modelHandle 
 /// @param newPos 
 /// @return 
-bool CollisionManager::GroundCollisionCheck(Player& player, int modelHandle, VECTOR& newPos)
+bool CollisionManager::GroundCollisionCheck(int modelHandle, VECTOR& newPos, float addTopPos, float addBottomPos, float radius, bool isJump)
 {
 	//player‚Ìó‘Ô‚É‚æ‚Á‚Ä“–‚½‚è”»’è‚Ì—Dæ‡ˆÊ‚ğŒˆ‚ß‚é
 	//‰½‰ñ‚©“–‚½‚è”»’è‚ğŒJ‚è•Ô‚·
 	//prev‚Ænew‚Ìpos‚ğì‚é
 	VECTOR topPosition = newPos;
 	VECTOR bottomPosition = newPos;
-	topPosition.y = topPosition.y + player.GetAddTopPos();
-	bottomPosition.y = bottomPosition.y + player.GetAddBottomPos();
-	VECTOR footPos= MV1GetFramePosition(player.GetModelHandle(), 0);
+	topPosition.y = topPosition.y + addTopPos;
+	bottomPosition.y = bottomPosition.y + addBottomPos;
 
 	//°‚ÆÕ“Ë‚µ‚Ä‚¢‚é‚©
 	bool isHitGround = hitCheck.SphereHitJudge(modelHandle, -1, bottomPosition, hitPoly_Ground_sphere);
@@ -39,7 +41,7 @@ bool CollisionManager::GroundCollisionCheck(Player& player, int modelHandle, VEC
 	VECTOR addPos = VGet(0.0f, 0.0f, 0.0f);
 
 	//ƒWƒƒƒ“ƒv’†‚Å‚Í‚È‚¢ê‡‚Éˆ—
-	if (isHitGround && !player.GetData().isJump)
+	if (isHitGround && !isJump)
 	{
 
 		for (int i = 0; i < hitPoly_Ground_sphere.HitNum; i++)
@@ -51,7 +53,7 @@ bool CollisionManager::GroundCollisionCheck(Player& player, int modelHandle, VEC
 				VECTOR newPlayerPos = VGet(0.0f, 0.0f, 0.0f);
 
 				//–Ê‚Æ‹…‚ÌÚGÀ•W‚ğ’²‚×‚é
-				bool flag = TestSphereTriangle(bottomPosition, poly.Position[0], poly.Position[1], poly.Position[2], hitPos_ground, player.GetRadius());
+				bool flag = TestSphereTriangle(bottomPosition, poly.Position[0], poly.Position[1], poly.Position[2], hitPos_ground, radius);
 
 				//‘«Œ³‚Æ°‚Ì·‚ğŒvZ
  				//newPlayerPos.y = hitPos_ground.y - footPos.y;
@@ -79,13 +81,13 @@ bool CollisionManager::GroundCollisionCheck(Player& player, int modelHandle, VEC
 /// <param name="player"></param>
 /// <param name="modelHandle"></param>
 /// <returns></returns>
-bool CollisionManager::WallCollisionCheck(Player& player, int modelHandle, VECTOR& newPos, VECTOR& oldPos)
+bool CollisionManager::WallCollisionCheck(int modelHandle, VECTOR& newPos, VECTOR& oldPos, float radius, float addTopPos, float addBottomPos)
 {
 
 	VECTOR topPosition = newPos;
 	VECTOR bottomPosition = newPos;
-	topPosition.y = topPosition.y + 17.0f;
-	bottomPosition.y = bottomPosition.y + 3.0f;
+	topPosition.y = topPosition.y + addTopPos;
+	bottomPosition.y = bottomPosition.y + addBottomPos;
 	bool flag = false;
 
 	//•Ç‚ÆÕ“Ë‚µ‚Ä‚¢‚é‚©
@@ -117,7 +119,7 @@ bool CollisionManager::WallCollisionCheck(Player& player, int modelHandle, VECTO
 				centerPos = VScale(centerPos, 0.5f);
 
 				//–Ê‚Æ‹…‚ÌÚGÀ•W‚ğ’²‚×‚é
-				bool flag = TestSphereTriangle(centerPos, poly.Position[0], poly.Position[1], poly.Position[2], hitPos_wall,player.GetRadius());
+				bool flag = TestSphereTriangle(centerPos, poly.Position[0], poly.Position[1], poly.Position[2], hitPos_wall,radius);
 
 				//‹…‚ÌÚG‚µ‚Ä‚¢‚éÀ•W‚ğ‹‚ß‚é
 				// ‚»‚¤‚·‚é‚É‚ÍH«
@@ -138,6 +140,7 @@ bool CollisionManager::WallCollisionCheck(Player& player, int modelHandle, VECTO
 				if (VSize(addPos) <= VSize(pos))
 				{
 					addPos = pos;
+					oldPoly = poly;
 				}
 			}
 		}
@@ -161,7 +164,7 @@ bool CollisionManager::WallCollisionCheck(Player& player, int modelHandle, VECTO
 /// </summary>
 /// <param name="player"></param>
 /// <param name="modelHandle"></param>
-void CollisionManager::CliffGrabbing(Player& player, int modelHandle)
+void CollisionManager::CliffGrabbing(int modelHandle)
 {
 
 }

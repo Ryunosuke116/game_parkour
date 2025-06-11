@@ -65,6 +65,7 @@ private:
 	PlayerStateActionBase::NowAnimState nowAnimState;
 	std::shared_ptr<Input> input = NULL;
 	PlayerStateActionBase::PlayerData playerData;
+	std::shared_ptr<CollisionManager> collisionManager = NULL;
 
 public:
 	Player();
@@ -72,7 +73,7 @@ public:
 
 	void Initialize();
 	void Update()override;
-	void Update(const VECTOR& cameraDirection);
+	void Update(const VECTOR& cameraDirection, const int mapHandle);
 	void Draw();
 	void Move(VECTOR& moveVec, const VECTOR& cameraDirection);
 	void MoveCalc(VECTOR& moveVec);

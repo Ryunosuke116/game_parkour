@@ -28,7 +28,8 @@ void ObjectManager::Create()
 	fieldMesh = std::make_shared<FieldMesh>("material/mv1/new_city/0610_mesh.mv1");
 	player = std::make_shared<Player>();
 	camera = std::make_shared<Camera>();
-	playerManager = std::make_shared<PlayerManager>();
+	//playerManager = std::make_shared<PlayerManager>();
+	actualPlayer = std::dynamic_pointer_cast<Player>(player);
 }
 
 /// <summary>
@@ -48,9 +49,9 @@ void ObjectManager::Initialize()
 /// </summary>
 void ObjectManager::Update()
 {
-	player->Update(camera->GetCameraDirection());
+	actualPlayer->Update(camera->GetCameraDirection(),fieldMesh->GetModelHandle());
 	camera->Update(player->GetPosition());
-	playerManager->Update(fieldMesh->GetModelHandle(), *player);
+	//playerManager->Update(fieldMesh->GetModelHandle(), *actualPlayer);
 	map->Update();
 	field->Update();
 	fieldMesh->Update();
@@ -63,6 +64,7 @@ void ObjectManager::Draw()
 {
 	player->Draw();
 	camera->Draw();
+	//playerManager->Draw();
 	map->Draw();
 	field->Draw();
 	fieldMesh->Draw();

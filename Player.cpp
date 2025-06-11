@@ -12,6 +12,7 @@ Player::Player() :
     modelHandle = MV1LoadModel("material/mv1/human/human_0519.mv1");
     MV1SetScale(modelHandle, VGet(modelScale, modelScale, modelScale));
     input = std::make_shared<Input>();
+    collisionManager = std::make_shared<CollisionManager>();
 }
 
 /// <summary>
@@ -64,7 +65,7 @@ void Player::Initialize()
 /// <summary>
 /// 更新
 /// </summary>
-void Player::Update(const VECTOR& cameraDirection)
+void Player::Update(const VECTOR& cameraDirection,const int mapHandle)
 {
     moveVec = VGet(0.0f, 0.0f, 0.0f);
 
@@ -86,9 +87,7 @@ void Player::Update(const VECTOR& cameraDirection)
     RollMove();
     JumpMove();
 
-    ChangeState();
 
-    isChageState = nowState->MotionUpdate(playerData);
 
     //移動方向ベクトルが0でない場合コピー
     if (VSize(moveVec) != 0)
@@ -116,12 +115,23 @@ void Player::Update(const VECTOR& cameraDirection)
     //重力計算
     GravityCalclation();
 
+    auto result = collisionManager->Update(mapHandle, position, moveVec, radius, addTopPos, addBottomPos, playerData.isJump);
+    playerData.isGround = result.first;
+    SetPos(result.second);
+
     //position = VAdd(position, moveVec);
 
     //// プレイヤーのモデルの座標を更新する
     //MV1SetPosition(modelHandle, position);
 
+    ChangeState();
+
+    isChageState = nowState->MotionUpdate(playerData);
+
     UpdateAngle(targetMoveDirection);
+
+    // プレイヤーのモデルの座標を更新する
+    MV1SetPosition(modelHandle, position);
 
     if (CheckHitKey(KEY_INPUT_1))
     {
