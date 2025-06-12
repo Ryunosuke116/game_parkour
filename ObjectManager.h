@@ -14,6 +14,7 @@ public:
 private:
 	std::shared_ptr<BaseObject> map = NULL;
 	std::shared_ptr<BaseObject> field = NULL;
+	std::shared_ptr<BaseObject> coin = NULL;
 	std::shared_ptr<BaseChara> player = NULL;
 	std::shared_ptr<Camera> camera = NULL;
 	std::shared_ptr<PlayerManager> playerManager = NULL;

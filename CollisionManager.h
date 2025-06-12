@@ -10,7 +10,7 @@ public:
 	//bool Update(Player& player, int modelHandle);
 	void Draw();
 
-	std::pair<bool, VECTOR> Update(int modelHandle, const VECTOR& playerPos, const VECTOR& moveVec, float radius, float addTopPos, float addBottomPos, bool isJump);
+	std::tuple<bool, bool, VECTOR> Update(int modelHandle, const VECTOR& playerPos, const VECTOR& moveVec, float radius, float addTopPos, float addBottomPos, bool isJump);
 
 	VECTOR ClosestPtToPointTriangle(VECTOR centerPos, VECTOR a, VECTOR b, VECTOR c);
 

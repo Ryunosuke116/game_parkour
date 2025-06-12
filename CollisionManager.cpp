@@ -5,19 +5,48 @@
 /// @param player 
 /// @param modelHandle 
 /// @return 
-std::pair<bool, VECTOR> CollisionManager::Update(int modelHandle, const VECTOR& playerPos, const VECTOR& moveVec,float radius, float addTopPos, float addBottomPos, bool isJump)
+std::tuple<bool, bool, VECTOR> CollisionManager::Update(int modelHandle, const VECTOR& playerPos, const VECTOR& moveVec,float radius, float addTopPos, float addBottomPos, bool isJump)
 {
 	VECTOR oldPos = playerPos;
 	VECTOR newPos = VAdd(oldPos, moveVec);
 
-	//•ÇÕ“Ë”»’è
-	WallCollisionCheck(modelHandle, newPos, oldPos, radius,addTopPos, addBottomPos);
-
 //	WallCollisionCheck(player, modelHandle, newPos, oldPos);
+	VECTOR topPosition = newPos;
+	VECTOR bottomPosition = newPos;
+	topPosition.y = topPosition.y + addTopPos;
+	bottomPosition.y = bottomPosition.y + addBottomPos + 1.5f;
+	bool afterWallCheck = false;
+
+	//if (!isJump)
+	//{
+	//	//•Ç‚ÆÕ“Ë‚µ‚Ä‚¢‚é‚©
+	//	hitCheck.CapsuleHitWallJudge(modelHandle, -1, 5.0f, topPosition, VAdd(bottomPosition, VGet(0.0f, 1.0f, 0.0f)), hitPoly_Wall);
+
+	//	if (hitPoly_Wall.HitNum >= 1)
+	//	{
+	//		for (int i = 0; i < hitPoly_Wall.HitNum - 1; i++)
+	//		{
+	//			MV1_COLL_RESULT_POLY nowPoly = hitPoly_Wall.Dim[i];
+	//			MV1_COLL_RESULT_POLY poly = hitPoly_Wall.Dim[i + 1];
+
+	//			if (nowPoly.MeshIndex != poly.MeshIndex)
+	//			{
+	//				afterWallCheck = true;
+	//				newPos = oldPos;
+	//			}
+	//		}
+	//	}
+	//}
+
+	//if (!afterWallCheck)
+	//{
+	//	//•ÇÕ“Ë”»’è
+	//}
+		WallCollisionCheck(modelHandle, newPos, oldPos, radius,addTopPos, addBottomPos);
 
 
 	//°Õ“Ë”»’è
-	return std::make_pair(GroundCollisionCheck(modelHandle, newPos, addTopPos, addBottomPos,radius, isJump), newPos);
+	return std::make_tuple(afterWallCheck,GroundCollisionCheck(modelHandle, newPos, addTopPos, addBottomPos,radius, isJump), newPos);
 }
 
 /// @brief °‚Æ‚ÌÕ“Ë”»’èˆ—
@@ -91,7 +120,7 @@ bool CollisionManager::WallCollisionCheck(int modelHandle, VECTOR& newPos, VECTO
 	bool flag = false;
 
 	//•Ç‚ÆÕ“Ë‚µ‚Ä‚¢‚é‚©
-	hitCheck.CapsuleHitWallJudge(modelHandle, -1, topPosition,VAdd(bottomPosition,VGet(0.0f,1.0f,0.0f)), hitPoly_Wall);
+	hitCheck.CapsuleHitWallJudge(modelHandle, -1, 3.5f,topPosition,VAdd(bottomPosition,VGet(0.0f,1.0f,0.0f)), hitPoly_Wall);
 
 	//Õ“Ë‚µ‚Ä‚¢‚é‚Æ‚±‚ð‘S•”’²‚×‚Ä‰Ÿ‚µ–ß‚µ—Ê‚ðŒvŽZ‚·‚é
 	if (hitPoly_Wall.HitNum >= 1)

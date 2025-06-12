@@ -116,8 +116,15 @@ void Player::Update(const VECTOR& cameraDirection,const int mapHandle)
     GravityCalclation();
 
     auto result = collisionManager->Update(mapHandle, position, moveVec, radius, addTopPos, addBottomPos, playerData.isJump);
-    playerData.isGround = result.first;
-    SetPos(result.second);
+    playerData.isGround = std::get<1>(result);
+    SetPos(std::get<2>(result));
+
+    if (std::get<0>(result))
+    {
+        moveVec.x = 0.0f;
+        moveVec.z = 0.0f;
+        playerData.isMove = false;
+    }
 
     //position = VAdd(position, moveVec);
 
@@ -164,6 +171,11 @@ void Player::Draw()
     //DrawSphere3D(bottomPosition, 3.5f, 30, GetColor(0, 0, 0),
     //    GetColor(255, 0, 0), FALSE);
     DrawCapsule3D(topPosition, bottomPosition, radius, 30, GetColor(0, 0, 0),
+        GetColor(255, 0, 0), FALSE);
+
+    bottomPosition.y += 1.5f;
+
+    DrawCapsule3D(topPosition, bottomPosition, 5.0f, 5, GetColor(0, 0, 0),
         GetColor(255, 0, 0), FALSE);
 
     printfDx("playerPosition.x %f\nplayerPosition.y %f\nplayerPosition.z %f\n",

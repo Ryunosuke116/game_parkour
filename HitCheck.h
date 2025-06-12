@@ -10,7 +10,7 @@ public:
 	bool SphereHitJudge(const int& modelHandle, int frameIndex,
 		VECTOR linePos_end, MV1_COLL_RESULT_POLY_DIM& hitPoly);
 
-	void CapsuleHitWallJudge(const int& modelHandle, int frameIndex,
+	void CapsuleHitWallJudge(const int& modelHandle, int frameIndex, float radius,
 		VECTOR linePos_start, VECTOR linePos_end, MV1_COLL_RESULT_POLY_DIM& hitPoly);
 
 	float projectionCalc(const VECTOR& point, const VECTOR& P, const VECTOR& Q);

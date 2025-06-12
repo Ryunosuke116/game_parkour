@@ -50,10 +50,10 @@ bool HitCheck::SphereHitJudge(const int& modelHandle, int frameIndex, VECTOR lin
 /// @param linePos_start 
 /// @param linePos_end 
 /// @param hitPoly 
-void HitCheck::CapsuleHitWallJudge(const int& modelHandle, int frameIndex,
+void HitCheck::CapsuleHitWallJudge(const int& modelHandle, int frameIndex,float radius,
 	VECTOR linePos_start, VECTOR linePos_end, MV1_COLL_RESULT_POLY_DIM& hitPoly)
 {
-	hitPoly = MV1CollCheck_Capsule(modelHandle, frameIndex, linePos_start, linePos_end, 3.5f);
+	hitPoly = MV1CollCheck_Capsule(modelHandle, frameIndex, linePos_start, linePos_end, radius);
 }
 
 /// <summary>
