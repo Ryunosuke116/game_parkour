@@ -115,7 +115,7 @@ void Player::Update(const VECTOR& cameraDirection,const int mapHandle)
     //d—ÍŒvŽZ
     GravityCalclation();
 
-    auto result = collisionManager->Update(mapHandle, position, moveVec, radius, addTopPos, addBottomPos, playerData.isJump);
+    auto result = collisionManager->Update(mapHandle, position, moveVec,targetMoveDirection, radius, addTopPos, addBottomPos, playerData.isJump);
     playerData.isGround = std::get<1>(result);
     SetPos(std::get<2>(result));
 
@@ -198,6 +198,7 @@ void Player::Draw()
     //ü
    // DrawLine3D(centerPosition, footPosition, GetColor(255, 0, 0));
     DrawLine3D(topPosition, linePos_end, GetColor(255, 0, 0));
+    collisionManager->Draw();
 }
 
 /// <summary>

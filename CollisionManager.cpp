@@ -5,45 +5,48 @@
 /// @param player 
 /// @param modelHandle 
 /// @return 
-std::tuple<bool, bool, VECTOR> CollisionManager::Update(int modelHandle, const VECTOR& playerPos, const VECTOR& moveVec,float radius, float addTopPos, float addBottomPos, bool isJump)
+std::tuple<bool, bool, VECTOR> CollisionManager::Update(int modelHandle, const VECTOR& playerPos,
+	const VECTOR& moveVec, VECTOR& moveDirection, float radius, float addTopPos, float addBottomPos, bool isJump)
 {
 	VECTOR oldPos = playerPos;
-	VECTOR newPos = VAdd(oldPos, moveVec);
+	VECTOR newPos = VAdd(oldPos, moveVec);	
 
 //	WallCollisionCheck(player, modelHandle, newPos, oldPos);
-	VECTOR topPosition = newPos;
-	VECTOR bottomPosition = newPos;
+	VECTOR playerDirAfterPos = VAdd(oldPos, VScale(moveDirection, 3.0f));
+	VECTOR topPosition = oldPos;
+	VECTOR bottomPosition = oldPos;
 	topPosition.y = topPosition.y + addTopPos;
-	bottomPosition.y = bottomPosition.y + addBottomPos + 1.5f;
+	bottomPosition.y = bottomPosition.y + addBottomPos;
 	bool afterWallCheck = false;
 
-	//if (!isJump)
-	//{
-	//	//壁と衝突しているか
-	//	hitCheck.CapsuleHitWallJudge(modelHandle, -1, 5.0f, topPosition, VAdd(bottomPosition, VGet(0.0f, 1.0f, 0.0f)), hitPoly_Wall);
-
-	//	if (hitPoly_Wall.HitNum >= 1)
-	//	{
-	//		for (int i = 0; i < hitPoly_Wall.HitNum - 1; i++)
-	//		{
-	//			MV1_COLL_RESULT_POLY nowPoly = hitPoly_Wall.Dim[i];
-	//			MV1_COLL_RESULT_POLY poly = hitPoly_Wall.Dim[i + 1];
-
-	//			if (nowPoly.MeshIndex != poly.MeshIndex)
-	//			{
-	//				afterWallCheck = true;
-	//				newPos = oldPos;
-	//			}
-	//		}
-	//	}
-	//}
-
-	//if (!afterWallCheck)
-	//{
-	//	//壁衝突判定
-	//}
+	
+	if (!afterWallCheck)
+	{
+		//壁衝突判定
 		WallCollisionCheck(modelHandle, newPos, oldPos, radius,addTopPos, addBottomPos);
+	}
 
+	if (!isJump)
+	{
+		//壁と衝突しているか
+		hitCheck.CapsuleHitWallJudge(modelHandle, -1, 3.5f, topPosition, VAdd(bottomPosition, VGet(0.0f, 1.0f, 0.0f)), hitPoly_Wall);
+
+		if (hitPoly_Wall.HitNum >= 1)
+		{
+			for (int i = 0; i < hitPoly_Wall.HitNum - 1; i++)
+			{
+				MV1_COLL_RESULT_POLY nowPoly = hitPoly_Wall.Dim[i];
+				MV1_COLL_RESULT_POLY poly = hitPoly_Wall.Dim[i + 1];
+
+				if (poly.Normal.x!= nowPoly.Normal.x ||
+					poly.Normal.z != nowPoly.Normal.z)
+				{
+					afterWallCheck = true;
+					newPos = oldPos;
+				}
+			}
+		}
+	}
 
 	//床衝突判定
 	return std::make_tuple(afterWallCheck,GroundCollisionCheck(modelHandle, newPos, addTopPos, addBottomPos,radius, isJump), newPos);
@@ -137,8 +140,15 @@ bool CollisionManager::WallCollisionCheck(int modelHandle, VECTOR& newPos, VECTO
 			//壁かどうかを調べる
 			if (poly.Normal.x >= 0.7f || poly.Normal.z >= 0.7f ||
 				poly.Normal.x <= -0.7f || poly.Normal.z <= -0.7f &&
-				poly.Normal.y <= 0.7f)
+				poly.Normal.y <= 0.8f)
 			{
+
+				//カプセルの大きさ
+ 				topPosition = newPos;
+				bottomPosition = newPos;
+				topPosition.y = topPosition.y + addTopPos;
+				bottomPosition.y = bottomPosition.y + addBottomPos;
+
 				normal = poly.Normal;
 				normal.y = 0.0f;
 				normal = VNorm(normal);
@@ -165,21 +175,24 @@ bool CollisionManager::WallCollisionCheck(int modelHandle, VECTOR& newPos, VECTO
 				VECTOR pos = VSub(hitPos_wall, contact);
 				pos.y = 0.0f;
 
-				//これまでの押し戻し量よりも大きければ更新する
-				if (VSize(addPos) <= VSize(pos))
-				{
-					addPos = pos;
-					oldPoly = poly;
-				}
+				newPos = VAdd(newPos, pos);
+				flag = true;
+
+				////これまでの押し戻し量よりも大きければ更新する
+				//if (VSize(addPos) <= VSize(pos))
+				//{
+				//	addPos = pos;
+				//	oldPoly = poly;
+				//}
 			}
 		}
 
 		//押し戻し量を適用する
-		if (VSize(addPos) != 0)
+		/*if (VSize(addPos) != 0)
 		{
  			newPos = VAdd(newPos, addPos);
 			flag = true;
-		}
+		}*/
 	}
 
 	// 検出したプレイヤーの周囲のポリゴン情報を開放する
