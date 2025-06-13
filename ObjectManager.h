@@ -21,5 +21,6 @@ private:
 	std::shared_ptr<BaseObject> fieldMesh = NULL;
 
 	std::shared_ptr<Player> actualPlayer = NULL;
+	std::shared_ptr<CoinObject> actualCoin = NULL;
 };
 

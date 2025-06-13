@@ -1,3 +1,4 @@
+
 #include "CoinObject.h"
 
 /// @brief コンストラクタ
@@ -23,8 +24,13 @@ void CoinObject::Initialize()
 }
 
 /// @brief 更新
-void CoinObject::Update()
+void CoinObject::Update(const VECTOR& playerpos_top,const VECTOR& playerPos_bottom,const float radius)
 {
+	VECTOR nearCapsulePos = hitCheck.CapsuleHitConfirmation(playerpos_top, playerPos_bottom, position, radius, 4.5f);
+
+	bool hitFlag = hitCheck.HitConfirmation(position, nearCapsulePos, 4.5f, radius);
+
+
 
 }
 
@@ -32,5 +38,6 @@ void CoinObject::Update()
 void CoinObject::Draw()
 {
 	MV1DrawModel(modelHandle);
+	DrawSphere3D(position, 4.5f, 5, GetColor(0, 0, 0), GetColor(255, 0, 0), FALSE);
 }
 

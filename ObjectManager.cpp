@@ -1,6 +1,5 @@
 #include "BaseManager.h"
 #include "FieldMesh.h"
-#include "CoinObject.h"
 #include "Include.h"
 
 /// <summary>
@@ -32,6 +31,7 @@ void ObjectManager::Create()
 	camera = std::make_shared<Camera>();
 	//playerManager = std::make_shared<PlayerManager>();
 	actualPlayer = std::dynamic_pointer_cast<Player>(player);
+	actualCoin = std::dynamic_pointer_cast<CoinObject>(coin);
 }
 
 /// <summary>
@@ -55,6 +55,7 @@ void ObjectManager::Update()
 	actualPlayer->Update(camera->GetCameraDirection(),fieldMesh->GetModelHandle());
 	camera->Update(player->GetPosition());
 	//playerManager->Update(fieldMesh->GetModelHandle(), *actualPlayer);
+	actualCoin->Update(actualPlayer->GetTopPos(), actualPlayer->GetBottomPos(), actualPlayer->GetRadius());
 	map->Update();
 	field->Update();
 	fieldMesh->Update();
