@@ -11,8 +11,6 @@ public:
 
 	std::tuple<bool, bool, VECTOR> Update(int modelHandle, const VECTOR& playerPos, const VECTOR& moveVec, VECTOR& moveDirection, float radius, float addTopPos, float addBottomPos, bool isJump);
 
-	VECTOR ClosestPtToPointTriangle(VECTOR centerPos, VECTOR a, VECTOR b, VECTOR c);
-
 	bool TestSphereTriangle(VECTOR centerPos, VECTOR a, VECTOR b, VECTOR c, VECTOR& q, const float radius);
 
 	void CliffGrabbing(int modelHandle);

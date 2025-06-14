@@ -212,81 +212,6 @@ void CollisionManager::CliffGrabbing(int modelHandle)
 
 }
 
-/// @brief 面との接触座標の計算
-/// @param centerPos 
-/// @param a 
-/// @param b 
-/// @param c 
-/// @return 
-VECTOR CollisionManager::ClosestPtToPointTriangle(VECTOR centerPos, VECTOR a, VECTOR b, VECTOR c)
-{
-
-	//PがAの外側の頂点座標の中にあるかどうかチェック
-	VECTOR ab = VSub(b, a);
-	VECTOR ac = VSub(c, a);
-	VECTOR ap = VSub(centerPos, a);
-
-	float d1 = VDot(ab, ap);
-	float d2 = VDot(ac, ap);
-
-	if (d1 <= 0.0f && d2 <= 0.0f)
-	{
-		//return a;	//重心座標(1,0,0)
-	}
-
-	//PがBの外側の頂点領域の中にあるかどうかチェック
-	VECTOR bp = VSub(centerPos, b);
-	float d3 = VDot(ab, bp);
-	float d4 = VDot(ac, bp);
-
-	if (d3 >= 0.0f && d4 <= d3)
-	{
-		//return b;
-	}
-
-	//PがABの辺領域の中にあるかどうかチェックし、あればPのAB上に対する射影を返す
-	float vc = d1 * d4 - d3 * d2;
-	if (vc <= 0.0f && d1 >= 0.0f && d3 <= 0.0f)
-	{
-		float v = d1 / (d1 - d3);
-		//return VAdd(a, VScale(ab, v));
-	}
-
-	//PがCの外側の頂点領域の中にあるかどうかチェック
-	VECTOR cp = VSub(centerPos, c);
-	float d5 = VDot(ab, cp);
-	float d6 = VDot(ac, cp);
-	if (d6 >= 0.0f && d5 <= d6)
-	{
-		//return c;
-	}
-
-	//PがACの辺領域の中にあるかどうかチェックし、あればPのAC上に対する射影を返す
-	float vb = d5 * d2 - d1 * d6;
-
-	if (vb <= 0.0f && d2 >= 0.0f && d6 <= 0.0f)
-	{
-		float w = d2 / (d2 - d6);
-		//return VAdd(a, VScale(ac, w));
-	}
-
-	//PがBCの辺領域の中にあるかどうかチェックし、あればPのBC上に対する射影を返す
-	float va = d3 * d6 - d5 * d4;
-
-	if (va <= 0.0f && (d4 - d3) >= 0.0f && (d5 - d6) >= 0.0f)
-	{
-		float w = (d4 - d3) / ((d4 - d3) + (d5 - d6));
-		//return VAdd(b, VScale(VSub(c, b), w));
-	}
-
-	//Pは面領域の中にある。Qをその重心座標(u,v,w)を用いて計算
-	float denom = 1.0f / (va + vb + vc);
-	float v = vb * denom;
-	float w = vc * denom;
-	
-	return VAdd(a,VAdd(VScale(ab, v),VScale(ac,w)));
-
-}
 
 /// <summary>
 /// 球sが三角形ABCと交差している場合はtrueを返し、そうでなければfalseを返す
@@ -296,7 +221,7 @@ VECTOR CollisionManager::ClosestPtToPointTriangle(VECTOR centerPos, VECTOR a, VE
 bool CollisionManager::TestSphereTriangle(VECTOR centerPos, VECTOR a, VECTOR b, VECTOR c,VECTOR& q, const float radius)
 {
 	//球の中心対する最近接点である三角形ABC上にある点pを見つける
-	q = ClosestPtToPointTriangle(centerPos,a,b,c);
+	q = hitCheck.ClosestPtToPointTriangle(centerPos, a, b, c);
 
 	//球と三角形が交差するのは、球の中心から点qまでの(平方した)距離が(平方した)球の半径よりも小さい場合
 	VECTOR v = VSub(q, centerPos);
