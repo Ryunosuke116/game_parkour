@@ -173,3 +173,17 @@ VECTOR HitCheck::CapsuleHitConfirmation(VECTOR capsulePosition_1, VECTOR capsule
 	return AX;
 
 }
+
+void HitCheck::SegmentTriangleDistance(const VECTOR& p, const VECTOR& q, const VECTOR& a, const VECTOR& b, const VECTOR& c)
+{
+	VECTOR PQ = VSub(q, p);
+
+	const int num = 50;
+	for (int i = 0; i < num; i++)
+	{
+		float t = float(i) / num;
+
+		VECTOR PT = VAdd(p, VScale(PQ, t));
+	}
+	
+}

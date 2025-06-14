@@ -175,8 +175,8 @@ void Player::Draw()
 
     bottomPosition.y += 1.5f;
 
-    DrawCapsule3D(topPosition, bottomPosition, 5.0f, 5, GetColor(0, 0, 0),
-        GetColor(255, 0, 0), FALSE);
+ /*   DrawCapsule3D(topPosition, bottomPosition, 5.0f, 5, GetColor(0, 0, 0),
+        GetColor(255, 0, 0), FALSE);*/
 
     printfDx("playerPosition.x %f\nplayerPosition.y %f\nplayerPosition.z %f\n",
         position.x, position.y, position.z);

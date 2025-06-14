@@ -14,5 +14,8 @@ public:
 	void Draw()override;
 
 	HitCheck hitCheck;
+private:
+	bool hitFlag;
+	float radian_Y;
 };
 

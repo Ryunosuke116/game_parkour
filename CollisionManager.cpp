@@ -154,6 +154,7 @@ bool CollisionManager::WallCollisionCheck(int modelHandle, VECTOR& newPos, VECTO
 				normal = VNorm(normal);
 				
 				//カプセルの中心座標を求める
+				float topHitPos = Triangle_Point_MinLength_Square(poly.Position[0], poly.Position[1], poly.Position[2], topPosition);
 				VECTOR centerPos = VAdd(topPosition, bottomPosition);
 				centerPos = VScale(centerPos, 0.5f);
 
