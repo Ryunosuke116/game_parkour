@@ -177,7 +177,6 @@ void HitCheck::AABB()
 	max_Y = r * 1.0f;
 	max_Z = r * 1.0f;
 
-
 }
 
 /// <summary>
@@ -250,40 +249,99 @@ VECTOR HitCheck::CapsuleHitConfirmation(VECTOR capsulePosition_1, VECTOR capsule
 
 }
 
-std::pair<VECTOR, VECTOR> HitCheck::SegmentTriangleDistance(const VECTOR& p, const VECTOR& q, const VECTOR& a, const VECTOR& b, const VECTOR& c)
+std::pair<VECTOR, VECTOR> HitCheck::SegmentTriangleDistance(const VECTOR& p, const VECTOR& q, const VECTOR& a, const VECTOR& b, const VECTOR& c, const VECTOR& normal)
 {
 	//線分の方向ベクトル
 	VECTOR PQ = VSub(q, p);
 
 	//線分を50分割して一つずつ調べる
-	const int num = 50;
+	const int num = 100;
 	float minSize = 1000;
 	VECTOR returnPoint;
 	VECTOR returnPT;
 
-	for (int i = 0; i < num; i++)
+	VECTOR point_P = ClosestPtToPointTriangle(p, a, b, c);
+	VECTOR point_Q = ClosestPtToPointTriangle(q, a, b, c);
+
+	//面積を求める
+	float area = fabs(Calclation::area(a, b, c));
+	float area_1 = fabs(Calclation::area(a, b, point_P));
+	float area_2 = fabs(Calclation::area(b, c, point_P));
+	float area_3 = fabs(Calclation::area(c, a, point_P));
+	float area_4 = fabs(Calclation::area(a, b, point_Q));
+	float area_5 = fabs(Calclation::area(b, c, point_Q));
+	float area_6 = fabs(Calclation::area(c, a, point_Q));
+
+	//総面積と点を使った面積の合計の差が無いか
+	float abs_P = abs((area_1 + area_2 + area_3) - area);
+	float abs_Q = abs((area_4 + area_5 + area_6) - area);
+
+	//0より上かつ差があるか
+	bool area_equal_p = abs_P < 1e-10;
+	bool inside_p = area_1 > 0 && area_2 > 0 && area_3 > 0;
+
+	bool area_equal_q = abs_Q < 1e-10;
+	bool inside_q = area_4 > 0 && area_5 > 0 && area_6 > 0;
+
+	if ((area_equal_p && inside_p) && (area_equal_q && inside_q))
 	{
-
-		float t = float(i) / num;
-
-		VECTOR PT = VAdd(p, VScale(PQ, t));
-
-		VECTOR point = ClosestPtToPointTriangle(PT, a, b, c);
-
-		VECTOR size = VSub(point, PT);
-
-
-
-		//一番距離が近いものを選択
-		if (minSize > VSize(size))
+		//小さい方を返す
+		if (VSize(point_P) < VSize(point_Q))
 		{
-			minSize = VSize(size);
-			returnPT = PT;
-			returnPoint = point;
+			return std::make_pair(p, point_P);
 		}
-
+		else
+		{
+			return std::make_pair(q, point_Q);
+		}
+	}
+	else
+	{
+		float a;
 	}
 
+	bool flag = false;
+
+	for (int i = 0; i < num; i++)
+	{
+		float t = float(i) / num;
+
+		//線分のどこを調べるか
+		VECTOR PT = VAdd(p, VScale(PQ, t));
+
+		//面のどこに当たっているか
+		VECTOR point = ClosestPtToPointTriangle(PT, a, b, c);
+
+		float area_PT_1 = fabs(Calclation::area(a, b, PT));
+		float area_PT_2 = fabs(Calclation::area(b, c, PT));
+		float area_PT_3 = fabs(Calclation::area(c, a, PT));
+
+		bool area_equal_PT = abs((area_PT_1 + area_PT_2 + area_PT_3) - area) < 1e-10;
+		bool inside_PT = area_PT_1 > 0 && area_PT_2 > 0 && area_PT_3 > 0;
+
+		//線分の点から接触面までの大きさ
+		VECTOR size = VSub(point, PT);
+
+		//三角形の内側かどうか
+		if (area_equal_PT && inside_PT)
+		{
+			//一番距離が近いものを選択
+			if (minSize > VSize(size))
+			{
+				minSize = VSize(size);
+				returnPT = PT;
+				returnPoint = point;
+				flag = true;
+			}
+		}
+	}
+
+	if (!flag)
+	{
+		return std::make_pair(q, point_Q);
+	}
+
+	//一番近い線分の点と面の衝突ポイントを返す
 	return std::make_pair(returnPT, returnPoint);
 	
 }

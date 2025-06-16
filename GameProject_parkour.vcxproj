@@ -147,6 +147,7 @@
     <ClCompile Include="BaseManager.cpp" />
     <ClCompile Include="BaseObject.cpp" />
     <ClCompile Include="BaseScene.cpp" />
+    <ClCompile Include="Calclation.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CoinObject.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
@@ -177,6 +178,7 @@
     <ClInclude Include="BaseManager.h" />
     <ClInclude Include="BaseObject.h" />
     <ClInclude Include="BaseScene.h" />
+    <ClInclude Include="Calclation.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CoinObject.h" />
     <ClInclude Include="CollisionManager.h" />

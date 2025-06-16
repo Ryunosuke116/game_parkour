@@ -26,27 +26,27 @@ std::tuple<bool, bool, VECTOR> CollisionManager::Update(int modelHandle, const V
 		WallCollisionCheck(modelHandle, newPos, oldPos, radius,addTopPos, addBottomPos);
 	}
 
-	if (!isJump)
-	{
-		//•Ç‚ÆÕ“Ë‚µ‚Ä‚¢‚é‚©
-		hitCheck.CapsuleHitWallJudge(modelHandle, -1, 3.5f, topPosition, VAdd(bottomPosition, VGet(0.0f, 1.0f, 0.0f)), hitPoly_Wall);
+	//if (!isJump)
+	//{
+	//	//•Ç‚ÆÕ“Ë‚µ‚Ä‚¢‚é‚©
+	//	hitCheck.CapsuleHitWallJudge(modelHandle, -1, 3.5f, topPosition, VAdd(bottomPosition, VGet(0.0f, 1.0f, 0.0f)), hitPoly_Wall);
 
-		if (hitPoly_Wall.HitNum >= 1)
-		{
-			for (int i = 0; i < hitPoly_Wall.HitNum - 1; i++)
-			{
-				MV1_COLL_RESULT_POLY nowPoly = hitPoly_Wall.Dim[i];
-				MV1_COLL_RESULT_POLY poly = hitPoly_Wall.Dim[i + 1];
+	//	if (hitPoly_Wall.HitNum >= 1)
+	//	{
+	//		for (int i = 0; i < hitPoly_Wall.HitNum - 1; i++)
+	//		{
+	//			MV1_COLL_RESULT_POLY nowPoly = hitPoly_Wall.Dim[i];
+	//			MV1_COLL_RESULT_POLY poly = hitPoly_Wall.Dim[i + 1];
 
-				if (poly.Normal.x!= nowPoly.Normal.x ||
-					poly.Normal.z != nowPoly.Normal.z)
-				{
-					afterWallCheck = true;
-					newPos = oldPos;
-				}
-			}
-		}
-	}
+	//			if (poly.Normal.x!= nowPoly.Normal.x ||
+	//				poly.Normal.z != nowPoly.Normal.z)
+	//			{
+	//				afterWallCheck = true;
+	//				newPos = oldPos;
+	//			}
+	//		}
+	//	}
+	//}
 
 	//°Õ“Ë”»’è
 	return std::make_tuple(afterWallCheck,GroundCollisionCheck(modelHandle, newPos, addTopPos, addBottomPos,radius, isJump), newPos);
@@ -161,19 +161,34 @@ bool CollisionManager::WallCollisionCheck(int modelHandle, VECTOR& newPos, VECTO
 				//–Ê‚Æ‹…‚ÌÚGÀ•W‚ð’²‚×‚é
 				bool flag = TestSphereTriangle(centerPos, poly.Position[0], poly.Position[1], poly.Position[2], hitPos_wall,radius);
 
+				auto result = hitCheck.SegmentTriangleDistance(topPosition, bottomPosition, poly.Position[0], poly.Position[1], poly.Position[2],poly.Normal);
+
 				//‹…‚ÌÚG‚µ‚Ä‚¢‚éÀ•W‚ð‹‚ß‚é
 				// ‚»‚¤‚·‚é‚É‚ÍH«
 				//–@ü•ûŒü‚Æ‚Í‹t‚Ì•ûŒü‚ÉƒZƒ“ƒ^[ƒ|ƒWƒVƒ‡ƒ“‚©‚ç‰ÁŽZ‚·‚é
 				VECTOR contact = VScale(normal, -3.5f);
+
+				hitPos_wall = result.second;
 				
+				////ÚG‚µ‚Ä‚¢‚éÀ•W
+				//contact = VAdd(centerPos, contact);
+
+				////–Ê‚É­‚µ–Œ‚ð‚Í‚é
+				//contact = VAdd(contact, VScale(poly.Normal, -0.1f));
+
+				////‹…‚ÌÚGÀ•W¨–Ê‚ÌÚGÀ•W‚ð‹‚ß‚é
+				//VECTOR pos = VSub(hitPos_wall, contact);
+				//pos.y = 0.0f;
+
+
 				//ÚG‚µ‚Ä‚¢‚éÀ•W
-				contact = VAdd(centerPos, contact);
+				contact = VAdd(result.first, contact);
 
 				//–Ê‚É­‚µ–Œ‚ð‚Í‚é
 				contact = VAdd(contact, VScale(poly.Normal, -0.1f));
 
 				//‹…‚ÌÚGÀ•W¨–Ê‚ÌÚGÀ•W‚ð‹‚ß‚é
-				VECTOR pos = VSub(hitPos_wall, contact);
+				VECTOR pos = VSub(result.second, contact);
 				pos.y = 0.0f;
 
 				newPos = VAdd(newPos, pos);
@@ -237,6 +252,9 @@ void CollisionManager::Draw()
 	printfDx("NormalPos.y %f\n", subPos.y);
 	printfDx("NormalPos_Wall.x %f\n", normal.x);
 	printfDx("NormalPos_Wall.z %f\n", normal.z);
+	printfDx("hitPos_wall.x %f\n", hitPos_wall.x);
+	printfDx("hitPos_wall.y %f\n", hitPos_wall.y);
+	printfDx("hitPos_wall.z %f\n", hitPos_wall.z);
 	DrawSphere3D(hitPos_wall, 2.0f, 30, GetColor(0, 0, 0),
 		GetColor(255, 0, 0), FALSE);
 	DrawSphere3D(hitPos_ground, 2.0f, 30, GetColor(0, 0, 0),

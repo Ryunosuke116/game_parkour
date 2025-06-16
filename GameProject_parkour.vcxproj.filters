@@ -147,6 +147,9 @@
     <ClCompile Include="FieldMesh.cpp">
       <Filter>ソース ファイル\mesh</Filter>
     </ClCompile>
+    <ClCompile Include="Calclation.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include.h">
@@ -235,6 +238,9 @@
     </ClInclude>
     <ClInclude Include="FieldMesh.h">
       <Filter>ソース ファイル\mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Calclation.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
