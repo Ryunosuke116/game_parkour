@@ -312,11 +312,14 @@ std::pair<VECTOR, VECTOR> HitCheck::SegmentTriangleDistance(const VECTOR& p, con
 		//面のどこに当たっているか
 		VECTOR point = ClosestPtToPointTriangle(PT, a, b, c);
 
-		float area_PT_1 = fabs(Calclation::area(a, b, PT));
-		float area_PT_2 = fabs(Calclation::area(b, c, PT));
-		float area_PT_3 = fabs(Calclation::area(c, a, PT));
+		float area_PT_1 = fabs(Calclation::area(a, b, point));
+		float area_PT_2 = fabs(Calclation::area(b, c, point));
+		float area_PT_3 = fabs(Calclation::area(c, a, point));
 
-		bool area_equal_PT = abs((area_PT_1 + area_PT_2 + area_PT_3) - area) < 1e-10;
+		//総面積と点を使った面積の合計の差が無いか
+		float absPT = abs((area_PT_1 + area_PT_2 + area_PT_3) - area);
+
+		bool area_equal_PT = absPT < 1e-10;
 		bool inside_PT = area_PT_1 > 0 && area_PT_2 > 0 && area_PT_3 > 0;
 
 		//線分の点から接触面までの大きさ
