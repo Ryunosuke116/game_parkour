@@ -24,8 +24,8 @@ ObjectManager::~ObjectManager()
 void ObjectManager::Create()
 {
 	map = std::make_shared<Map>("material/skyDome/sunSet.mv1");
-	field = std::make_shared<Field>("material/mv1/new_city/0604.mv1");
-	fieldMesh = std::make_shared<FieldMesh>("material/mv1/new_city/0610_mesh.mv1");
+	field = std::make_shared<Field>("material/mv1/new_city/new_city_0617.mv1");
+	fieldMesh = std::make_shared<FieldMesh>("material/mv1/new_city/new_city_mesh_0617.mv1");
 	coin = std::make_shared<CoinObject>("material/mv1/Coin.mv1");
 	player = std::make_shared<Player>();
 	camera = std::make_shared<Camera>();
