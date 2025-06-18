@@ -49,13 +49,29 @@ void FieldMesh::Update()
 	{
 		if (!isPush)
 		{
+			int a = MV1GetMaterialNum(modelHandle);
+
 			if (!isPoly)
 			{
 				isPoly = true;
+				for (int i = 0; i < a; i++)
+				{
+					// ３Ｄモデルに含まれる０番目のマテリアルの描画ブレンドモードを DX_BLENDMODE_ADD に変更する
+					MV1SetMaterialDrawBlendMode(modelHandle, i, DX_BLENDMODE_ADD);
+					// マテリアルのブレンドパラメータを 128 に変更する
+					MV1SetMaterialDrawBlendParam(modelHandle, i, 255);
+				}
 			}
 			else
 			{
 				isPoly = false;
+				for (int i = 0; i < a; i++)
+				{
+					// ３Ｄモデルに含まれる０番目のマテリアルの描画ブレンドモードを DX_BLENDMODE_ADD に変更する
+					MV1SetMaterialDrawBlendMode(modelHandle, i, DX_BLENDMODE_ADD);
+					// マテリアルのブレンドパラメータを 128 に変更する
+					MV1SetMaterialDrawBlendParam(modelHandle, i, 0);
+				}
 			}
 			isPush = true;
 		}

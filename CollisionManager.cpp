@@ -90,6 +90,31 @@ bool CollisionManager::GroundCollisionCheck(int modelHandle, VECTOR& newPos, flo
 				//足元と床の差を計算
  				//newPlayerPos.y = hitPos_ground.y - footPos.y;
 
+
+				//線分と点の最近点
+				VECTOR nearPoint_1 = Calclation::NearestPoint(poly.Position[0], poly.Position[1], hitPos_ground);
+				VECTOR nearPoint_2 = Calclation::NearestPoint(poly.Position[0], poly.Position[2], hitPos_ground);
+				VECTOR nearPoint_3 = Calclation::NearestPoint(poly.Position[1], poly.Position[2], hitPos_ground);
+
+				float d1 = VSquareSize(VSub(nearPoint_1, hitPos_ground));
+				float d2 = VSquareSize(VSub(nearPoint_2, hitPos_ground));
+				float d3 = VSquareSize(VSub(nearPoint_3, hitPos_ground));
+
+
+				//球と面の接触点を求める
+				if (d1 <= d2 && d1 <= d3)
+				{
+					nearestPoint = nearPoint_1;
+				}
+				else if (d2 <= d3)
+				{
+					nearestPoint = nearPoint_2;
+				}
+				else
+				{
+					nearestPoint = nearPoint_3;
+				}
+
 				newPlayerPos.y = hitPos_ground.y;
 
 				//足元と床との差が0.1以上の場合のみplayerの位置に加算
@@ -161,7 +186,11 @@ bool CollisionManager::WallCollisionCheck(int modelHandle, VECTOR& newPos, VECTO
 				//面と球の接触座標を調べる
 				bool flag = TestSphereTriangle(centerPos, poly.Position[0], poly.Position[1], poly.Position[2], hitPos_wall,radius);
 
+				//線分のどこに当たったか
 				auto result = hitCheck.SegmentTriangleDistance(topPosition, bottomPosition, poly.Position[0], poly.Position[1], poly.Position[2],poly.Normal);
+
+				//oldとnewの間でoldから一番近い壁はどれか
+		
 
 				//球の接触している座標を求める
 				// そうするには？↓
@@ -258,5 +287,7 @@ void CollisionManager::Draw()
 	DrawSphere3D(hitPos_wall, 2.0f, 30, GetColor(0, 0, 0),
 		GetColor(255, 0, 0), FALSE);
 	DrawSphere3D(hitPos_ground, 2.0f, 30, GetColor(0, 0, 0),
+		GetColor(255, 0, 0), FALSE);
+	DrawSphere3D(nearestPoint, 2.0f, 30, GetColor(0, 0, 0),
 		GetColor(255, 0, 0), FALSE);
 }

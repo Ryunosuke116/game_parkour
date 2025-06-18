@@ -249,6 +249,16 @@ VECTOR HitCheck::CapsuleHitConfirmation(VECTOR capsulePosition_1, VECTOR capsule
 
 }
 
+/// <summary>
+/// 面積を使った点の内外判定計算
+/// </summary>
+/// <param name="p"></param>
+/// <param name="q"></param>
+/// <param name="a"></param>
+/// <param name="b"></param>
+/// <param name="c"></param>
+/// <param name="normal"></param>
+/// <returns></returns>
 std::pair<VECTOR, VECTOR> HitCheck::SegmentTriangleDistance(const VECTOR& p, const VECTOR& q, const VECTOR& a, const VECTOR& b, const VECTOR& c, const VECTOR& normal)
 {
 	//線分の方向ベクトル

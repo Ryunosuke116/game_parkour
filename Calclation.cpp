@@ -21,6 +21,39 @@ float Calclation::area(const VECTOR& a, const VECTOR& b, const VECTOR& c)
 	return 0.5f * VSize(cross);
 }
 
+VECTOR Calclation::NearestPoint(const VECTOR& position_1, const VECTOR& position_2,
+	const VECTOR& point)
+{
+	//線分と点の最近点
+	VECTOR AB = VSub(position_1, position_2);
+	VECTOR AP = VSub(point, position_1);
+
+	//ベクトルの長さ
+	float vectorLength = pow(VSquareSize(AB), 0.5f);
+
+	//単位ベクトル
+	VECTOR unitVector = VGet(0, 0, 0);
+	unitVector.x = AB.x / vectorLength;
+	unitVector.y = AB.y / vectorLength;
+	unitVector.z = AB.z / vectorLength;
+	//内積
+	float productionVector = VDot(unitVector, AP);
+
+	VECTOR AX;
+	AX = VAdd(position_1, VScale(unitVector, productionVector));
+
+	if (AX.y <= position_2.y)
+	{
+		AX.y = position_2.y;
+	}
+	if (AX.y >= position_1.y)
+	{
+		AX.y = position_1.y;
+	}
+
+	return AX;
+}
+
 void Calclation::Initialize()
 {
 	if (instance != nullptr)

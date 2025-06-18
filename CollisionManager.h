@@ -30,5 +30,6 @@ private:
 	VECTOR hitPos_ground;
 	VECTOR playerCenterPos;
 	VECTOR oldPolyPos;
+	VECTOR nearestPoint;
 };
 
