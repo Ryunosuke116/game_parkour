@@ -87,16 +87,16 @@ void Player::Update(const VECTOR& cameraDirection,const int mapHandle)
     RollMove();
     JumpMove();
 
-
-
     //移動方向ベクトルが0でない場合コピー
     if (VSize(moveVec) != 0)
     {
         targetMoveDirection = moveVec;
     }
 
-    RollCalclation(moveVec);
+    //状態変更
+    ChangeState();
 
+    RollCalclation(moveVec);
 
     //進むスピードを乗算
     //ロールアクション中はそれに応じた速度
@@ -131,7 +131,6 @@ void Player::Update(const VECTOR& cameraDirection,const int mapHandle)
     //// プレイヤーのモデルの座標を更新する
     //MV1SetPosition(modelHandle, position);
 
-    ChangeState();
 
     isChageState = nowState->MotionUpdate(playerData);
 
