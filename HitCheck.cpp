@@ -273,27 +273,7 @@ std::pair<VECTOR, VECTOR> HitCheck::SegmentTriangleDistance(const VECTOR& p, con
 	VECTOR point_P = ClosestPtToPointTriangle(p, a, b, c);
 	VECTOR point_Q = ClosestPtToPointTriangle(q, a, b, c);
 
-	//面積を求める
-	float area = fabs(Calclation::area(a, b, c));
-	float area_1 = fabs(Calclation::area(a, b, point_P));
-	float area_2 = fabs(Calclation::area(b, c, point_P));
-	float area_3 = fabs(Calclation::area(c, a, point_P));
-	float area_4 = fabs(Calclation::area(a, b, point_Q));
-	float area_5 = fabs(Calclation::area(b, c, point_Q));
-	float area_6 = fabs(Calclation::area(c, a, point_Q));
-
-	//総面積と点を使った面積の合計の差が無いか
-	float abs_P = abs((area_1 + area_2 + area_3) - area);
-	float abs_Q = abs((area_4 + area_5 + area_6) - area);
-
-	//0より上かつ差があるか
-	bool area_equal_p = abs_P < 1e-10;
-	bool inside_p = area_1 > 0 && area_2 > 0 && area_3 > 0;
-
-	bool area_equal_q = abs_Q < 1e-10;
-	bool inside_q = area_4 > 0 && area_5 > 0 && area_6 > 0;
-
-	if ((area_equal_p && inside_p) && (area_equal_q && inside_q))
+ 	if (TriangleAreaCheck(point_P, a, b, c) && TriangleAreaCheck(point_Q, a, b, c))
 	{
 		//小さい方を返す
 		if (VSize(point_P) < VSize(point_Q))
@@ -322,22 +302,13 @@ std::pair<VECTOR, VECTOR> HitCheck::SegmentTriangleDistance(const VECTOR& p, con
 		//面のどこに当たっているか
 		VECTOR point = ClosestPtToPointTriangle(PT, a, b, c);
 
-		float area_PT_1 = fabs(Calclation::area(a, b, point));
-		float area_PT_2 = fabs(Calclation::area(b, c, point));
-		float area_PT_3 = fabs(Calclation::area(c, a, point));
-
-		//総面積と点を使った面積の合計の差が無いか
-		float absPT = abs((area_PT_1 + area_PT_2 + area_PT_3) - area);
-
-		bool area_equal_PT = absPT < 1e-10;
-		bool inside_PT = area_PT_1 > 0 && area_PT_2 > 0 && area_PT_3 > 0;
-
-		//線分の点から接触面までの大きさ
-		VECTOR size = VSub(point, PT);
-
 		//三角形の内側かどうか
-		if (area_equal_PT && inside_PT)
+		if (TriangleAreaCheck(point, a, b, c))
 		{
+
+			//線分の点から接触面までの大きさ
+			VECTOR size = VSub(point, PT);
+
 			//一番距離が近いものを選択
 			if (minSize > VSize(size))
 			{
@@ -357,4 +328,64 @@ std::pair<VECTOR, VECTOR> HitCheck::SegmentTriangleDistance(const VECTOR& p, con
 	//一番近い線分の点と面の衝突ポイントを返す
 	return std::make_pair(returnPT, returnPoint);
 	
+}
+
+/// @brief 三角形の内側に点があるか
+/// @param point 
+/// @param a 
+/// @param b 
+/// @param c 
+/// @return 
+bool HitCheck::TriangleAreaCheck(const VECTOR& point, const VECTOR& a, const VECTOR& b, const VECTOR& c)
+{
+	//面積を求める
+	float area = fabs(Calclation::area(a, b, c));
+	float area_1 = fabs(Calclation::area(a, b, point));
+	float area_2 = fabs(Calclation::area(b, c, point));
+	float area_3 = fabs(Calclation::area(c, a, point));
+
+	//総面積と点を使った面積の合計の差が無いか
+	float abs_ = abs((area_1 + area_2 + area_3) - area);
+
+	//0より上かつ差があるか
+	bool area_equal = abs_ < 1e-10;
+	bool inside = area_1 > 0 && area_2 > 0 && area_3 > 0;
+
+	return (area_equal && inside) ? true : false;
+}
+
+/// @brief 三角形の内側に点があるか
+///			高さは同じとする
+/// @param point 
+/// @param a 
+/// @param b 
+/// @param c 
+/// @return 
+bool HitCheck::TriangleAreaCheck_ground(const VECTOR& point, const VECTOR& a, const VECTOR& b, const VECTOR& c)
+{
+
+	VECTOR point_ = point;
+	VECTOR a_ = a;
+	VECTOR b_ = b;
+	VECTOR c_ = c;
+
+	point_.y = 0.0f;
+	a_.y = 0.0f;
+	b_.y = 0.0f;
+	c_.y = 0.0f;
+
+	//面積を求める
+	float area = fabs(Calclation::area(a_, b_, c_));
+	float area_1 = fabs(Calclation::area(a_, b_, point_));
+	float area_2 = fabs(Calclation::area(b_, c_, point_));
+	float area_3 = fabs(Calclation::area(c_, a_, point_));
+
+	//総面積と点を使った面積の合計の差が無いか
+	float abs_ = abs((area_1 + area_2 + area_3) - area);
+
+	//0より上かつ差があるか
+	bool area_equal = abs_ < 1e-1;
+	bool inside = area_1 > 0 && area_2 > 0 && area_3 > 0;
+
+	return (area_equal && inside) ? true : false;
 }

@@ -284,6 +284,7 @@ void Player::MoveCalc(VECTOR& moveVec)
         //徐々にスピードを上げる
         nowMoveSpeed += 0.05f;
 
+        //maxに達したらそこで止める
         if (nowMoveSpeed >= MaxMoveSpeed)
         {
             nowMoveSpeed = MaxMoveSpeed;
@@ -296,10 +297,13 @@ void Player::MoveCalc(VECTOR& moveVec)
         {
             nowMoveSpeed = 0.0f;
         }
+        //空中にいるとき
         else
         {
+            //徐々に下げる
             nowMoveSpeed -= 0.02f;
 
+            //止める
             if (nowMoveSpeed <= 0.0f)
             {
                 nowMoveSpeed = 0.0f;

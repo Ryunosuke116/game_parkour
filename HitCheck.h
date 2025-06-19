@@ -16,6 +16,7 @@ public:
 	HitCheck();
 	~HitCheck();
 
+	//“–‚½‚è”»’è
 	bool HitRayJudge(const int& modelHandle, int frameIndex,
 		VECTOR linePos_start, VECTOR linePos_end, MV1_COLL_RESULT_POLY& hitPoly);
 	bool SphereHitJudge(const int& modelHandle, int frameIndex,
@@ -26,7 +27,10 @@ public:
 
 	float projectionCalc(const VECTOR& point, const VECTOR& P, const VECTOR& Q);
 
+	bool TriangleAreaCheck(const VECTOR& point, const VECTOR& a, const VECTOR& b, const VECTOR& c);
 	bool HitConfirmation(VECTOR position_1, VECTOR position_2, const float radius_1, const float radius_2);
+	bool TriangleAreaCheck_ground(const VECTOR& point, const VECTOR& a, const VECTOR& b, const VECTOR& c);
+
 	VECTOR CapsuleHitConfirmation(VECTOR capsulePosition_1, VECTOR capsulePosition_2, VECTOR position, const float radius_1, const float radius_2);
 	VECTOR ClosestPtToPointTriangle(VECTOR centerPos, VECTOR a, VECTOR b, VECTOR c);
 

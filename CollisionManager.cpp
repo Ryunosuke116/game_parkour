@@ -49,7 +49,7 @@ std::tuple<bool, bool, VECTOR> CollisionManager::Update(int modelHandle, const V
 	//}
 
 	//°Õ“Ë”»’è
-	return std::make_tuple(afterWallCheck,GroundCollisionCheck(modelHandle, newPos, addTopPos, addBottomPos,radius, isJump), newPos);
+	return std::make_tuple(afterWallCheck, GroundCollisionCheck(modelHandle, oldPos, newPos, addTopPos, addBottomPos, radius, isJump), newPos);
 }
 
 /// @brief °‚Æ‚ÌÕ“Ë”»’èˆ—
@@ -57,15 +57,18 @@ std::tuple<bool, bool, VECTOR> CollisionManager::Update(int modelHandle, const V
 /// @param modelHandle 
 /// @param newPos 
 /// @return 
-bool CollisionManager::GroundCollisionCheck(int modelHandle, VECTOR& newPos, float addTopPos, float addBottomPos, float radius, bool isJump)
+bool CollisionManager::GroundCollisionCheck(int modelHandle,const VECTOR& oldPos, VECTOR& newPos, float addTopPos, float addBottomPos, float radius, bool isJump)
 {
 	//player‚Ìó‘Ô‚É‚æ‚Á‚Ä“–‚½‚è”»’è‚Ì—Dæ‡ˆÊ‚ğŒˆ‚ß‚é
 	//‰½‰ñ‚©“–‚½‚è”»’è‚ğŒJ‚è•Ô‚·
 	//prev‚Ænew‚Ìpos‚ğì‚é
 	VECTOR topPosition = newPos;
 	VECTOR bottomPosition = newPos;
+	VECTOR nowBottomPos = oldPos;
+
 	topPosition.y = topPosition.y + addTopPos;
 	bottomPosition.y = bottomPosition.y + addBottomPos;
+	nowBottomPos.y = nowBottomPos.y + addBottomPos;
 
 	//°‚ÆÕ“Ë‚µ‚Ä‚¢‚é‚©
 	bool isHitGround = hitCheck.SphereHitJudge(modelHandle, -1, bottomPosition, hitPoly_Ground_sphere);
@@ -87,35 +90,50 @@ bool CollisionManager::GroundCollisionCheck(int modelHandle, VECTOR& newPos, flo
 				//–Ê‚Æ‹…‚ÌÚGÀ•W‚ğ’²‚×‚é
 				bool flag = TestSphereTriangle(bottomPosition, poly.Position[0], poly.Position[1], poly.Position[2], hitPos_ground, radius);
 
+				VECTOR nowHitPos_ground = hitCheck.ClosestPtToPointTriangle(nowBottomPos, poly.Position[0], poly.Position[1], poly.Position[2]);
+
 				//‘«Œ³‚Æ°‚Ì·‚ğŒvZ
  				//newPlayerPos.y = hitPos_ground.y - footPos.y;
 
-
-				//ü•ª‚Æ“_‚ÌÅ‹ß“_
-				VECTOR nearPoint_1 = Calclation::NearestPoint(poly.Position[0], poly.Position[1], hitPos_ground);
-				VECTOR nearPoint_2 = Calclation::NearestPoint(poly.Position[0], poly.Position[2], hitPos_ground);
-				VECTOR nearPoint_3 = Calclation::NearestPoint(poly.Position[1], poly.Position[2], hitPos_ground);
-
-				float d1 = VSquareSize(VSub(nearPoint_1, hitPos_ground));
-				float d2 = VSquareSize(VSub(nearPoint_2, hitPos_ground));
-				float d3 = VSquareSize(VSub(nearPoint_3, hitPos_ground));
-
-
-				//‹…‚Æ–Ê‚ÌÚG“_‚ğ‹‚ß‚é
-				if (d1 <= d2 && d1 <= d3)
+				if (!hitCheck.TriangleAreaCheck_ground(nowHitPos_ground, poly.Position[0], poly.Position[1], poly.Position[2]))
 				{
-					nearestPoint = nearPoint_1;
-				}
-				else if (d2 <= d3)
-				{
-					nearestPoint = nearPoint_2;
+					//ü•ª‚Æ“_‚ÌÅ‹ß“_
+					VECTOR nearPoint_1 = Calclation::NearestPoint(poly.Position[0], poly.Position[1], hitPos_ground);
+					VECTOR nearPoint_2 = Calclation::NearestPoint(poly.Position[0], poly.Position[2], hitPos_ground);
+					VECTOR nearPoint_3 = Calclation::NearestPoint(poly.Position[1], poly.Position[2], hitPos_ground);
+
+					float d1 = VSquareSize(VSub(nearPoint_1, hitPos_ground));
+					float d2 = VSquareSize(VSub(nearPoint_2, hitPos_ground));
+					float d3 = VSquareSize(VSub(nearPoint_3, hitPos_ground));
+
+
+					//‹…‚Æ–Ê‚ÌÚG“_‚ğ‹‚ß‚é
+					if (d1 <= d2 && d1 <= d3)
+					{
+						nearestPoint = nearPoint_1;
+					}
+					else if (d2 <= d3)
+					{
+						nearestPoint = nearPoint_2;
+					}
+					else
+					{
+						nearestPoint = nearPoint_3;
+					}
+
+					//‹…‚ÌÚG“_‚ğŒvZ
+					hitSphere = VSub(nearestPoint, bottomPosition);
+					hitSphere = VNorm(hitSphere);
+					hitSphere = VScale(hitSphere, radius);
+					hitSphere = VAdd(bottomPosition, hitSphere);
+					newPlayerPos.y = nearestPoint.y - hitSphere.y;
+					newPlayerPos.y = newPos.y + newPlayerPos.y;
 				}
 				else
 				{
-					nearestPoint = nearPoint_3;
+					hitSphere = VGet(0.0f, 0.0f, 0.0f);
+					newPlayerPos.y = hitPos_ground.y;
 				}
-
-				newPlayerPos.y = hitPos_ground.y;
 
 				//‘«Œ³‚Æ°‚Æ‚Ì·‚ª0.1ˆÈã‚Ìê‡‚Ì‚İplayer‚ÌˆÊ’u‚É‰ÁZ
 				if (newPlayerPos.y >= 0.1f)
@@ -288,6 +306,6 @@ void CollisionManager::Draw()
 		GetColor(255, 0, 0), FALSE);
 	DrawSphere3D(hitPos_ground, 2.0f, 30, GetColor(0, 0, 0),
 		GetColor(255, 0, 0), FALSE);
-	DrawSphere3D(nearestPoint, 2.0f, 30, GetColor(0, 0, 0),
+	DrawSphere3D(hitSphere, 2.0f, 30, GetColor(0, 0, 0),
 		GetColor(255, 0, 0), FALSE);
 }

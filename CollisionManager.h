@@ -4,7 +4,7 @@ class HitCheck;
 class CollisionManager
 {
 public:
-	bool GroundCollisionCheck(int modelHandle, VECTOR& newPos, float addTopPos, float radius, float addBottomPos, bool isJump);
+	bool GroundCollisionCheck(int modelHandle, const VECTOR& oldPos, VECTOR& newPos, float addTopPos, float radius, float addBottomPos, bool isJump);
 	bool WallCollisionCheck(int modelHandle, VECTOR& newPos, VECTOR& oldPos, float radius, float addTopPos, float addBottomPos);
 	//bool Update(Player& player, int modelHandle);
 	void Draw();
@@ -31,5 +31,6 @@ private:
 	VECTOR playerCenterPos;
 	VECTOR oldPolyPos;
 	VECTOR nearestPoint;
+	VECTOR hitSphere;
 };
 
