@@ -70,11 +70,20 @@ bool CollisionManager::GroundCollisionCheck(int modelHandle,const VECTOR& oldPos
 	topPosition.y = topPosition.y + addTopPos;
 	nowTopPos.y = nowTopPos.y + addTopPos;
 	bottomPosition.y = bottomPosition.y + addBottomPos;
+
 	//ãÖÇÊÇËÇøÇÂÇ¢ëÂÇ´ÇﬂÇ…
 	nowBottomPos.y = nowBottomPos.y + addBottomPos - 5.0f;
 
 	//è∞Ç∆è’ìÀÇµÇƒÇ¢ÇÈÇ©
 	bool isHitGround = hitCheck.SphereHitJudge(modelHandle, -1, bottomPosition, hitPoly_Ground_sphere);
+	
+	MV1_COLL_RESULT_POLY rayPoly_ground;
+
+	//ÉWÉÉÉìÉvÇµÇƒÇ¢Ç»Ç¢Ç∆Ç´Ç…ç‚ìπÇ»ÇÃÇ©Ç«Ç§Ç©
+	if (!isJump)
+	{
+		//isHitGround = hitCheck.HitRayJudge(modelHandle, -1, topPosition, bottomPosition, rayPoly_ground);
+	}
 
 	VECTOR addPos = VGet(0.0f, 0.0f, 0.0f);
 
@@ -156,6 +165,11 @@ bool CollisionManager::GroundCollisionCheck(int modelHandle,const VECTOR& oldPos
 			}
 		}
 	}
+
+	topPos_ray = topPosition;
+	bottomPos_ray = bottomPosition;
+	bottomPos_ray.y = bottomPos_ray.y - 5.0f;
+
 	//ê⁄ínÇµÇƒÇ¢ÇÈÇ©
 	return isHitGround;
 
@@ -319,4 +333,6 @@ void CollisionManager::Draw()
 		GetColor(255, 0, 0), FALSE);
 	DrawSphere3D(hitSphere, 2.0f, 30, GetColor(0, 0, 0),
 		GetColor(255, 0, 0), FALSE);
+
+	DrawLine3D(topPos_ray, bottomPos_ray, GetColor(255, 0, 0));
 }

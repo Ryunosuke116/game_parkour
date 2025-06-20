@@ -32,5 +32,7 @@ private:
 	VECTOR oldPolyPos;
 	VECTOR nearestPoint;
 	VECTOR hitSphere;
+	VECTOR topPos_ray;
+	VECTOR bottomPos_ray;
 };
 
