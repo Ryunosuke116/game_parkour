@@ -4,10 +4,26 @@
 #include "nlohmann/json.hpp"
 #include "Json.h"
 
-void JsonFile::Initialize()
+void JsonFile::Initialize(const char* path)
 {
-    std::ifstream ifs("Json/path.json");
+
+    if (!instance) {
+        instance = new JsonFile();
+    }
+
+    std::ifstream ifs(path);
     if (ifs) {
-        this->j = nlohmann::json::parse(ifs);
+        instance->j = nlohmann::json::parse(ifs);
     }
 }
+
+void JsonFile::UnInitialize()
+{
+    if (instance)
+    {
+        delete instance;
+        instance = nullptr;
+    }
+}
+
+JsonFile* JsonFile::instance = nullptr;

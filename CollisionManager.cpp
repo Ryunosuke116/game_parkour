@@ -5,51 +5,22 @@
 /// @param player 
 /// @param modelHandle 
 /// @return 
-std::tuple<bool, bool, VECTOR> CollisionManager::Update(int modelHandle, const VECTOR& playerPos,
+std::pair<bool, VECTOR> CollisionManager::Update(int modelHandle, const VECTOR& playerPos,
 	const VECTOR& moveVec, VECTOR& moveDirection, float radius, float addTopPos, float addBottomPos, bool isJump)
 {
 	VECTOR oldPos = playerPos;
 	VECTOR newPos = VAdd(oldPos, moveVec);	
 
-//	WallCollisionCheck(player, modelHandle, newPos, oldPos);
-	VECTOR playerDirAfterPos = VAdd(oldPos, VScale(moveDirection, 3.0f));
 	VECTOR topPosition = oldPos;
 	VECTOR bottomPosition = oldPos;
 	topPosition.y = topPosition.y + addTopPos;
 	bottomPosition.y = bottomPosition.y + addBottomPos;
-	bool afterWallCheck = false;
-
 	
-	if (!afterWallCheck)
-	{
-		//壁衝突判定
-		WallCollisionCheck(modelHandle, newPos, oldPos, radius,addTopPos, addBottomPos);
-	}
-
-	//if (!isJump)
-	//{
-	//	//壁と衝突しているか
-	//	hitCheck.CapsuleHitWallJudge(modelHandle, -1, 3.5f, topPosition, VAdd(bottomPosition, VGet(0.0f, 1.0f, 0.0f)), hitPoly_Wall);
-
-	//	if (hitPoly_Wall.HitNum >= 1)
-	//	{
-	//		for (int i = 0; i < hitPoly_Wall.HitNum - 1; i++)
-	//		{
-	//			MV1_COLL_RESULT_POLY nowPoly = hitPoly_Wall.Dim[i];
-	//			MV1_COLL_RESULT_POLY poly = hitPoly_Wall.Dim[i + 1];
-
-	//			if (poly.Normal.x!= nowPoly.Normal.x ||
-	//				poly.Normal.z != nowPoly.Normal.z)
-	//			{
-	//				afterWallCheck = true;
-	//				newPos = oldPos;
-	//			}
-	//		}
-	//	}
-	//}
+	//壁衝突判定
+	WallCollisionCheck(modelHandle, newPos, oldPos, radius,addTopPos, addBottomPos);
 
 	//床衝突判定
-	return std::make_tuple(afterWallCheck, GroundCollisionCheck(modelHandle, oldPos, newPos, addTopPos, addBottomPos, radius, isJump), newPos);
+	return std::make_pair(GroundCollisionCheck(modelHandle, oldPos, newPos, addTopPos, addBottomPos, radius, isJump), newPos);
 }
 
 /// @brief 床との衝突判定処理
@@ -82,7 +53,22 @@ bool CollisionManager::GroundCollisionCheck(int modelHandle,const VECTOR& oldPos
 	//ジャンプしていないときに坂道なのかどうか
 	if (!isJump)
 	{
-		//isHitGround = hitCheck.HitRayJudge(modelHandle, -1, topPosition, bottomPosition, rayPoly_ground);
+		bool isHitGround_ray = hitCheck.HitRayJudge(modelHandle, -1, topPosition, nowBottomPos, rayPoly_ground);
+
+		if (isHitGround_ray)
+		{
+			VECTOR newPlayerPos = VGet(0.0f, 0.0f, 0.0f);
+			VECTOR footPos = VGet(0.0f, bottomPosition.y - radius, 0.0f);
+
+			//床 - プレイヤーの足元で押し戻し量を計算
+			newPlayerPos.y = rayPoly_ground.HitPosition.y - footPos.y;
+			newPos.y = newPos.y + newPlayerPos.y;
+
+			topPos_ray = topPosition;
+			bottomPos_ray = bottomPosition;
+			bottomPos_ray.y = bottomPos_ray.y - 5.0f;
+		}
+
 	}
 
 	VECTOR addPos = VGet(0.0f, 0.0f, 0.0f);
@@ -150,7 +136,7 @@ bool CollisionManager::GroundCollisionCheck(int modelHandle,const VECTOR& oldPos
 					VECTOR footPos = VGet(0.0f, bottomPosition.y - radius, 0.0f);
 
 					//足元と床の差を計算
-					newPlayerPos.y = hitPos_ground.y - footPos.y;
+ 					newPlayerPos.y = hitPos_ground.y - footPos.y;
 					//newPlayerPos.y = hitPos_ground.y;
 				}
 

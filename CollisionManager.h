@@ -9,7 +9,7 @@ public:
 	//bool Update(Player& player, int modelHandle);
 	void Draw();
 
-	std::tuple<bool, bool, VECTOR> Update(int modelHandle, const VECTOR& playerPos, const VECTOR& moveVec, VECTOR& moveDirection, float radius, float addTopPos, float addBottomPos, bool isJump);
+	std::pair<bool, VECTOR> Update(int modelHandle, const VECTOR& playerPos, const VECTOR& moveVec, VECTOR& moveDirection, float radius, float addTopPos, float addBottomPos, bool isJump);
 
 	bool TestSphereTriangle(VECTOR centerPos, VECTOR a, VECTOR b, VECTOR c, VECTOR& q, const float radius);
 

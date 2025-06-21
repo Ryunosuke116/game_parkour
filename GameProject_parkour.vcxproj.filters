@@ -253,7 +253,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="Json\path.Json">
+    <Text Include="Json\player.Json">
       <Filter>ヘッダー ファイル</Filter>
     </Text>
   </ItemGroup>

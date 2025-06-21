@@ -1,6 +1,7 @@
 #include "BaseManager.h"
 #include "FieldMesh.h"
 #include "Include.h"
+#include "Json.h"
 
 /// <summary>
 /// コンストラクタ

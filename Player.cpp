@@ -1,6 +1,7 @@
 #include"playerState.h"
 #include <fstream>
 #include "Include.h"
+#include "Json.h"
 #include "nlohmann/json.hpp"
 
 /// <summary>
@@ -11,15 +12,10 @@ Player::Player() :
     footPosition(VGet(0.0f, 0.0f, 0.0f)),
     moveVec(VGet(0.0f, 0.0f, 0.0f))
 {
-    using Json = nlohmann::json;
-    Json j;
+    JsonFile::UnInitialize();
+    JsonFile::Initialize("Json/player.json");
 
-    std::ifstream ifs("Json/path.json");
-    if (ifs) {
-        ifs >> j;
-    }
-
-    std::string path = j["playerPath"];
+    std::string path = JsonFile::GetJson()["playerPath"];
 
     modelHandle = MV1LoadModel(path.c_str());
     MV1SetScale(modelHandle, VGet(modelScale, modelScale, modelScale));
@@ -40,8 +36,6 @@ Player::~Player()
 /// </summary>
 void Player::Initialize()
 {
-    position = VGet(2145.0f, 0.0f, 917.0f);
-    position = VGet(1070.0f, 0.0f, 450.0f);
     position = VGet(0.0f, 10.0f, 0.0f);
 
     MV1SetRotationXYZ(modelHandle, VGet(0, 0, 0));
@@ -128,21 +122,8 @@ void Player::Update(const VECTOR& cameraDirection,const int mapHandle)
     GravityCalclation();
 
     auto result = collisionManager->Update(mapHandle, position, moveVec,targetMoveDirection, radius, addTopPos, addBottomPos, playerData.isJump);
-    playerData.isGround = std::get<1>(result);
-    SetPos(std::get<2>(result));
-
-    if (std::get<0>(result))
-    {
-        moveVec.x = 0.0f;
-        moveVec.z = 0.0f;
-        playerData.isMove = false;
-    }
-
-    //position = VAdd(position, moveVec);
-
-    //// プレイヤーのモデルの座標を更新する
-    //MV1SetPosition(modelHandle, position);
-
+    playerData.isGround = result.first;
+    SetPos(result.second);
 
     isChageState = nowState->MotionUpdate(playerData);
 

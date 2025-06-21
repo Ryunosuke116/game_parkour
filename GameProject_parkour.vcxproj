@@ -208,7 +208,7 @@
     <ClInclude Include="SceneManager.h" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="Json\path.Json" />
+    <Text Include="Json\player.Json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
