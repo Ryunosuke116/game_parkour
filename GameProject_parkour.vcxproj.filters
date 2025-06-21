@@ -61,6 +61,9 @@
     <Filter Include="ソース ファイル\mesh">
       <UniqueIdentifier>{0960e21f-eac8-4067-ad0e-cfc094d6d27c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Json">
+      <UniqueIdentifier>{a05c63cd-31b8-4115-a020-863d88bd0a84}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -149,6 +152,9 @@
     </ClCompile>
     <ClCompile Include="Calclation.cpp">
       <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Json.cpp">
+      <Filter>ソース ファイル\Json</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -242,5 +248,13 @@
     <ClInclude Include="Calclation.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="Json.h">
+      <Filter>ソース ファイル\Json</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Json\path.Json">
+      <Filter>ヘッダー ファイル</Filter>
+    </Text>
   </ItemGroup>
 </Project>

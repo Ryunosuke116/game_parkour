@@ -77,7 +77,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <AdditionalIncludeDirectories>Effekseer_h</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>Effekseer_h;include</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -95,7 +95,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <AdditionalIncludeDirectories>Effekseer_h</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>Effekseer_h;include</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -113,7 +113,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <AdditionalIncludeDirectories>Effekseer_h</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>Effekseer_h;include</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -131,7 +131,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <AdditionalIncludeDirectories>Effekseer_h</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>Effekseer_h;include</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -160,6 +160,7 @@
     <ClCompile Include="Idle.cpp" />
     <ClCompile Include="Idle_To_Sprint.cpp" />
     <ClCompile Include="Input.cpp" />
+    <ClCompile Include="Json.cpp" />
     <ClCompile Include="Jump.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
@@ -192,6 +193,7 @@
     <ClInclude Include="Idle_To_Sprint.h" />
     <ClInclude Include="Include.h" />
     <ClInclude Include="Input.h" />
+    <ClInclude Include="Json.h" />
     <ClInclude Include="Jump.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="ObjectManager.h" />
@@ -204,6 +206,9 @@
     <ClInclude Include="Run_Jump.h" />
     <ClInclude Include="Run_To_Stop.h" />
     <ClInclude Include="SceneManager.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Json\path.Json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

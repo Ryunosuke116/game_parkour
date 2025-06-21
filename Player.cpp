@@ -1,5 +1,7 @@
 #include"playerState.h"
+#include <fstream>
 #include "Include.h"
+#include "nlohmann/json.hpp"
 
 /// <summary>
 /// /インストラクタ
@@ -9,7 +11,17 @@ Player::Player() :
     footPosition(VGet(0.0f, 0.0f, 0.0f)),
     moveVec(VGet(0.0f, 0.0f, 0.0f))
 {
-    modelHandle = MV1LoadModel("material/mv1/human/human_0519.mv1");
+    using Json = nlohmann::json;
+    Json j;
+
+    std::ifstream ifs("Json/path.json");
+    if (ifs) {
+        ifs >> j;
+    }
+
+    std::string path = j["playerPath"];
+
+    modelHandle = MV1LoadModel(path.c_str());
     MV1SetScale(modelHandle, VGet(modelScale, modelScale, modelScale));
     input = std::make_shared<Input>();
     collisionManager = std::make_shared<CollisionManager>();
