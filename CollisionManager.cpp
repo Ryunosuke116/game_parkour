@@ -53,21 +53,27 @@ bool CollisionManager::GroundCollisionCheck(int modelHandle,const VECTOR& oldPos
 	//ジャンプしていないときに坂道なのかどうか
 	if (!isJump)
 	{
-		bool isHitGround_ray = hitCheck.HitRayJudge(modelHandle, -1, topPosition, nowBottomPos, rayPoly_ground);
+		//bool isHitGround_ray = hitCheck.HitRayJudge(modelHandle, -1, topPosition, nowBottomPos, rayPoly_ground);
+		//
+		//if (rayPoly_ground.Normal.y < 1.0f && rayPoly_ground.Normal.y>0.7f)
+		//{
+		//	if (isHitGround_ray)
+		//	{
+		//		VECTOR newPlayerPos = VGet(0.0f, 0.0f, 0.0f);
+		//		VECTOR footPos = VGet(0.0f, bottomPosition.y - radius, 0.0f);
 
-		if (isHitGround_ray)
-		{
-			VECTOR newPlayerPos = VGet(0.0f, 0.0f, 0.0f);
-			VECTOR footPos = VGet(0.0f, bottomPosition.y - radius, 0.0f);
+		//		//床 - プレイヤーの足元で押し戻し量を計算
+		//		newPlayerPos.y = rayPoly_ground.HitPosition.y - footPos.y;
+		//		newPos.y = newPos.y + newPlayerPos.y;
 
-			//床 - プレイヤーの足元で押し戻し量を計算
-			newPlayerPos.y = rayPoly_ground.HitPosition.y - footPos.y;
-			newPos.y = newPos.y + newPlayerPos.y;
+		//		//log用
+		//		topPos_ray = topPosition;
+		//		bottomPos_ray = bottomPosition;
+		//		bottomPos_ray.y = bottomPos_ray.y - 5.0f;
+		//	
+		//	}
+		//}
 
-			topPos_ray = topPosition;
-			bottomPos_ray = bottomPosition;
-			bottomPos_ray.y = bottomPos_ray.y - 5.0f;
-		}
 
 	}
 
@@ -144,14 +150,30 @@ bool CollisionManager::GroundCollisionCheck(int modelHandle,const VECTOR& oldPos
 				if (newPlayerPos.y >= 0.1f)
 				{
 					newPos.y = newPos.y + newPlayerPos.y;
-					//newPos = VAdd(newPos, newPlayerPos);
-					//newPos.y = newPlayerPos.y;
 					oldPolyPos = hitPos_ground;
 				}
 			}
 		}
 	}
+	//カプセルが当たっていないときrayをチェック
+	//下り坂はrayでチェック
+	else
+	{
+		isHitGround = hitCheck.HitRayJudge(modelHandle, -1, topPosition, nowBottomPos, rayPoly_ground);
 
+		if (isHitGround && !isJump)
+		{
+			VECTOR newPlayerPos = VGet(0.0f, 0.0f, 0.0f);
+			VECTOR footPos = VGet(0.0f, bottomPosition.y - radius, 0.0f);
+
+			//床 - プレイヤーの足元で押し戻し量を計算
+			newPlayerPos.y = rayPoly_ground.HitPosition.y - footPos.y;
+			newPos.y = newPos.y + newPlayerPos.y;
+
+		}
+	}
+
+	//log用
 	topPos_ray = topPosition;
 	bottomPos_ray = bottomPosition;
 	bottomPos_ray.y = bottomPos_ray.y - 5.0f;
