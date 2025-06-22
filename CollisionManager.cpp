@@ -310,9 +310,9 @@ void CollisionManager::Draw()
 	printfDx("NormalPos.y %f\n", subPos.y);
 	printfDx("NormalPos_Wall.x %f\n", normal.x);
 	printfDx("NormalPos_Wall.z %f\n", normal.z);
-	printfDx("hitPos_wall.x %f\n", hitPos_wall.x);
-	printfDx("hitPos_wall.y %f\n", hitPos_wall.y);
-	printfDx("hitPos_wall.z %f\n", hitPos_wall.z);
+	printfDx("hitPos_ground.x %f\n", hitPos_ground.x);
+	printfDx("hitPos_ground.y %f\n", hitPos_ground.y);
+	printfDx("hitPos_ground.z %f\n", hitPos_ground.z);
 	DrawSphere3D(hitPos_wall, 2.0f, 30, GetColor(0, 0, 0),
 		GetColor(255, 0, 0), FALSE);
 	DrawSphere3D(hitPos_ground, 2.0f, 30, GetColor(0, 0, 0),
