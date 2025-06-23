@@ -37,6 +37,7 @@ bool CollisionManager::GroundCollisionCheck(int modelHandle,const VECTOR& oldPos
 	VECTOR bottomPosition = newPos;
 	VECTOR nowBottomPos = oldPos;
 	VECTOR nowTopPos = oldPos;
+	bool isHitSphere;
 
 	topPosition.y = topPosition.y + addTopPos;
 	nowTopPos.y = nowTopPos.y + addTopPos;
@@ -47,6 +48,7 @@ bool CollisionManager::GroundCollisionCheck(int modelHandle,const VECTOR& oldPos
 
 	//床と衝突しているか
 	bool isHitGround = hitCheck.SphereHitJudge(modelHandle, -1, bottomPosition, hitPoly_Ground_sphere);
+	isHitSphere = isHitGround;
 	
 	MV1_COLL_RESULT_POLY rayPoly_ground;
 
@@ -87,20 +89,26 @@ bool CollisionManager::GroundCollisionCheck(int modelHandle,const VECTOR& oldPos
 		{
 			MV1_COLL_RESULT_POLY poly = hitPoly_Ground_sphere.Dim[i];
 
-			if (poly.Normal.y >= 0.7f)
+			if (poly.Normal.y >= 1.0f)
 			{
-				VECTOR newPlayerPos = VGet(0.0f, 0.0f, 0.0f);
+  				VECTOR newPlayerPos = VGet(0.0f, 0.0f, 0.0f);
 
-				//面と球の接触座標を調べる
-				bool flag = TestSphereTriangle(bottomPosition, poly.Position[0], poly.Position[1], poly.Position[2], hitPos_ground, radius);
+				//未来座標の球の最下部座標
+				VECTOR bottomPos_sphere = bottomPosition;
+				bottomPos_sphere.y -= radius;
+				
+				//次のフレームのplayerの接触座標を求める
+				hitPos_ground = hitCheck.ClosestPtToPointTriangle(bottomPos_sphere, poly.Position[0], poly.Position[1], poly.Position[2]);
 
+				//現在の球と面の接触座標を求める
 				VECTOR nowHitPos_ground = hitCheck.ClosestPtToPointTriangle(nowBottomPos, poly.Position[0], poly.Position[1], poly.Position[2]);
 
 				MV1_COLL_RESULT_POLY rayPoly;
 
+				//現在の座標からrayを伸ばし、当たっていなかったらif文内に行く
 				if (!hitCheck.HitRayJudge(modelHandle, -1, nowTopPos, nowBottomPos, rayPoly))
 				{
-					//三角形の外側のとき
+					//三角形の外側のときのとき球とメッシュの接触部分で押し戻し量を求める
 					if (!hitCheck.TriangleAreaCheck_ground(nowHitPos_ground, poly.Position[0], poly.Position[1], poly.Position[2]))
 					{
 						//線分と点の最近点
@@ -108,6 +116,7 @@ bool CollisionManager::GroundCollisionCheck(int modelHandle,const VECTOR& oldPos
 						VECTOR nearPoint_2 = Calclation::NearestPoint(poly.Position[0], poly.Position[2], nowHitPos_ground);
 						VECTOR nearPoint_3 = Calclation::NearestPoint(poly.Position[1], poly.Position[2], nowHitPos_ground);
 
+						//一番近い座標を選択する
 						float d1 = VSize(VSub(nearPoint_1, nowHitPos_ground));
 						float d2 = VSize(VSub(nearPoint_2, nowHitPos_ground));
 						float d3 = VSize(VSub(nearPoint_3, nowHitPos_ground));
@@ -136,30 +145,42 @@ bool CollisionManager::GroundCollisionCheck(int modelHandle,const VECTOR& oldPos
 						//newPlayerPos.y = newPos.y + newPlayerPos.y;
 					}
 				}
+				//rayが当たっていれば球の最下部ととメッシュで押し戻し量計算
 				else
 				{
+					//球と面の接触しているは球の最下部と面の接触座標と同じなのでリセット
 					hitSphere = VGet(0.0f, 0.0f, 0.0f);
-					VECTOR footPos = VGet(0.0f, bottomPosition.y - radius, 0.0f);
 
-					//足元と床の差を計算
- 					newPlayerPos.y = hitPos_ground.y - footPos.y;
-					//newPlayerPos.y = hitPos_ground.y;
+					//平面であればそのまま足元で計算
+					if (poly.Normal.y >= 1.0f)
+					{
+						VECTOR footPos = VGet(0.0f, bottomPosition.y - radius, 0.0f);
+ 						newPlayerPos.y = hitPos_ground.y - footPos.y;
+					}
 				}
 
 				//足元と床との差が0.1以上の場合のみplayerの位置に加算
 				if (newPlayerPos.y >= 0.1f)
 				{
 					newPos.y = newPos.y + newPlayerPos.y;
-					oldPolyPos = hitPos_ground;
 				}
 			}
 		}
 	}
+	
+	MV1_COLL_RESULT_POLY lastPoly = {};
+
+	//hitPolyの一番最後の情報を受け取る
+	if (hitPoly_Ground_sphere.HitNum >= 1)
+	{
+		lastPoly = hitPoly_Ground_sphere.Dim[hitPoly_Ground_sphere.HitNum - 1];
+	}
+
 	//カプセルが当たっていないときrayをチェック
 	//下り坂はrayでチェック
-	else
+	if (!isHitSphere || lastPoly.Normal.y >= 0.7f)
 	{
-		isHitGround = hitCheck.HitRayJudge(modelHandle, -1, topPosition, nowBottomPos, rayPoly_ground);
+		isHitGround = hitCheck.HitRayJudge(modelHandle, -1, nowTopPos, nowBottomPos, rayPoly_ground);
 
 		if (isHitGround && !isJump)
 		{
