@@ -17,8 +17,10 @@ public:
 	~HitCheck();
 
 	//当たり判定
+	//線とメッシュ
 	bool HitRayJudge(const int& modelHandle, int frameIndex,
 		VECTOR linePos_start, VECTOR linePos_end, MV1_COLL_RESULT_POLY& hitPoly);
+	//球とメッシュ
 	bool SphereHitJudge(const int& modelHandle, int frameIndex,
 		VECTOR linePos_end, MV1_COLL_RESULT_POLY_DIM& hitPoly);
 

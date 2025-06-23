@@ -80,7 +80,7 @@ public:
 	void JumpMove();
 	void JumpCalclation(float playTime_anim, VECTOR& moveVec);
 	void RollMove();
-	void RollCalclation(VECTOR& moveVec);
+	void RollCalclation(VECTOR& moveVec, float playTime_anim);
 	//void ChangeMotion(const int& motionNum, const float playAnimSpeed)override;
 	//void MotionUpdate();
 	void ChangeState();

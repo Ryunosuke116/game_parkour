@@ -102,7 +102,7 @@ void Player::Update(const VECTOR& cameraDirection,const int mapHandle)
     //状態変更
     ChangeState();
 
-    RollCalclation(moveVec);
+    RollCalclation(moveVec, nowState->GetNowAnimState().PlayTime_anim);
 
     //進むスピードを乗算
     //ロールアクション中はそれに応じた速度
@@ -400,11 +400,16 @@ void Player::RollMove()
 /// <summary>
 /// ロール計算
 /// </summary>
-void Player::RollCalclation(VECTOR& moveVec)
+void Player::RollCalclation(VECTOR& moveVec, float playTime_anim)
 {
     if (playerData.isRoll)
     {
-        moveVec = targetMoveDirection;
+        if (playTime_anim >= 10.0f)
+        {
+            //※徐々にスピードを下げていく
+            //途中で向きがあまり帰れないようにする
+            moveVec = targetMoveDirection;
+        }
     }
 }
 

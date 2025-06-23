@@ -84,6 +84,7 @@ bool CollisionManager::GroundCollisionCheck(int modelHandle,const VECTOR& oldPos
 	//ジャンプ中ではない場合に処理
 	if (isHitGround && !isJump)
 	{
+		VECTOR addPos = VGet(0.0f, 0.0f, 0.0f);
 
 		for (int i = 0; i < hitPoly_Ground_sphere.HitNum; i++)
 		{
@@ -98,7 +99,7 @@ bool CollisionManager::GroundCollisionCheck(int modelHandle,const VECTOR& oldPos
 				bottomPos_sphere.y -= radius;
 				
 				//次のフレームのplayerの接触座標を求める
-				hitPos_ground = hitCheck.ClosestPtToPointTriangle(bottomPos_sphere, poly.Position[0], poly.Position[1], poly.Position[2]);
+				hitPos_ground = hitCheck.ClosestPtToPointTriangle(bottomPosition, poly.Position[0], poly.Position[1], poly.Position[2]);
 
 				//現在の球と面の接触座標を求める
 				VECTOR nowHitPos_ground = hitCheck.ClosestPtToPointTriangle(nowBottomPos, poly.Position[0], poly.Position[1], poly.Position[2]);
@@ -155,16 +156,23 @@ bool CollisionManager::GroundCollisionCheck(int modelHandle,const VECTOR& oldPos
 					if (poly.Normal.y >= 1.0f)
 					{
 						VECTOR footPos = VGet(0.0f, bottomPosition.y - radius, 0.0f);
+						
  						newPlayerPos.y = hitPos_ground.y - footPos.y;
+
+						//押し戻し量が一番大きいものを加算する
+						if (addPos.y < newPlayerPos.y)
+						{
+							addPos = newPlayerPos;
+						}
 					}
 				}
-
-				//足元と床との差が0.1以上の場合のみplayerの位置に加算
-				if (newPlayerPos.y >= 0.1f)
-				{
-					newPos.y = newPos.y + newPlayerPos.y;
-				}
 			}
+		}
+
+		//足元と床との差が0.1以上の場合のみplayerの位置に加算
+		if (addPos.y >= 0.1f)
+		{
+			newPos.y = newPos.y + addPos.y;
 		}
 	}
 	
@@ -190,7 +198,6 @@ bool CollisionManager::GroundCollisionCheck(int modelHandle,const VECTOR& oldPos
 			//床 - プレイヤーの足元で押し戻し量を計算
 			newPlayerPos.y = rayPoly_ground.HitPosition.y - footPos.y;
 			newPos.y = newPos.y + newPlayerPos.y;
-
 		}
 	}
 
@@ -325,7 +332,8 @@ bool CollisionManager::WallCollisionCheck(int modelHandle, VECTOR& newPos, VECTO
 /// <param name="modelHandle"></param>
 void CollisionManager::CliffGrabbing(int modelHandle)
 {
-
+	//落下中にplayerの上部から出ているrayで判定を取る
+	//trueの場合に崖をつかむようにする
 }
 
 

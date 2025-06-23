@@ -30,3 +30,10 @@ Hangring_Idle::~Hangring_Idle()
 {
 
 }
+
+bool Hangring_Idle::MotionUpdate(PlayerData& playerData)
+{
+    //ŠR‚ğ’Í‚Ş
+    //ªƒL[‚ğ“ü—Í‚µ‚½‚ç’Í‚ñ‚Å‚¢‚é°‚É—§‚Â
+    return false;
+}

@@ -40,6 +40,9 @@ void Camera::Initialize()
 /// </summary>
 void Camera::Update(const VECTOR& playerPosition)
 {
+
+	VECTOR centerPos = playerPosition;
+
 	lookPosition = playerPosition;
 	//lookPosition.y = -23.0f;
 	
@@ -95,7 +98,6 @@ void Camera::RotateUpdate(const VECTOR& playerPosition)
 
 	//’†S‚©‚ç‚Ì‹——£‚ð‘ª‚é
 	float r = VSize(VSub(playerPosition, lookPosition));
-
 
 	//ˆê’è‚Ì‹——£‚É’B‚µ‚½‚ç‚»‚êˆÈã‚¢‚¯‚È‚¢‚æ‚¤‚É‚·‚é
 	if (r >= maxRange_ || r <= -maxRange_)
