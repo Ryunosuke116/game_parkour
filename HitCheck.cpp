@@ -267,8 +267,8 @@ std::pair<VECTOR, VECTOR> HitCheck::SegmentTriangleDistance(const VECTOR& p, con
 	//ü•ª‚ğ50•ªŠ„‚µ‚Äˆê‚Â‚¸‚Â’²‚×‚é
 	const int num = 100;
 	float minSize = 1000;
-	VECTOR returnPoint;
-	VECTOR returnPT;
+	VECTOR returnPoint;		//–Ê‚Æ‚ÌÚG“_
+	VECTOR returnPT;		//–Ê‚Æˆê”Ô‹ß‚¢ü•ª“_
 
 	VECTOR point_P = ClosestPtToPointTriangle(p, a, b, c);
 	VECTOR point_Q = ClosestPtToPointTriangle(q, a, b, c);
@@ -389,3 +389,5 @@ bool HitCheck::TriangleAreaCheck_ground(const VECTOR& point, const VECTOR& a, co
 
 	return (area_equal && inside) ? true : false;
 }
+
+HitCheck* HitCheck::instance = nullptr;

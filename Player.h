@@ -81,8 +81,6 @@ public:
 	void JumpCalclation(float playTime_anim, VECTOR& moveVec);
 	void RollMove();
 	void RollCalclation(VECTOR& moveVec, float playTime_anim);
-	//void ChangeMotion(const int& motionNum, const float playAnimSpeed)override;
-	//void MotionUpdate();
 	void ChangeState();
 	void GravityCalclation();
 	void SettingRay();
@@ -101,6 +99,7 @@ public:
 	VECTOR GetTopPos() { return topPosition; }
 	VECTOR GetBottomPos() { return bottomPosition; }
 	VECTOR GetMoveVec() { return moveVec; }
+	VECTOR GetlinePos_end() { return linePos_end; }
 	bool GetIsGround() { return playerData.isGround; }
 	int GetModelHandle() { return modelHandle; }
 	PlayerStateActionBase::PlayerData GetData() { return playerData; }

@@ -16,7 +16,6 @@ public:
 	void CliffGrabbing(int modelHandle);
 
 private:
-	HitCheck hitCheck;
 	MV1_COLL_RESULT_POLY hitPoly_Ground;
 	MV1_COLL_RESULT_POLY oldPoly;
 	

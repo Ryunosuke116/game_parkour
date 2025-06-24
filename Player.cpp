@@ -366,18 +366,7 @@ void Player::JumpCalclation(float playTime_anim,VECTOR& moveVec)
 /// </summary>
 void Player::GravityCalclation()
 {
-    //d—Í‚ð‰ÁŽZ‚·‚é
-    //if (playerData.isJump && playTime_anim > 7.0f && animNumber_Now == animNum::jump)
-    //{
-    //    currentJumpSpeed += -gravity;
-    //}
-    //else 
-
-   /* else
-    {
-        playerData.isGround = false;
-    }*/
-
+   
     if (!playerData.isGround)
     {
         currentJumpSpeed += gravity;

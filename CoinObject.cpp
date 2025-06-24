@@ -31,9 +31,9 @@ void CoinObject::Update(){}
 /// @brief XV
 void CoinObject::Update(const VECTOR& playerpos_top,const VECTOR& playerPos_bottom,const float radius)
 {
-	VECTOR nearCapsulePos = hitCheck.CapsuleHitConfirmation(playerpos_top, playerPos_bottom, position, radius, 4.5f);
+	VECTOR nearCapsulePos = HitCheck::CapsuleHitConfirmation(playerpos_top, playerPos_bottom, position, radius, 4.5f);
 
-	hitFlag = hitCheck.HitConfirmation(position, nearCapsulePos, 4.5f, radius);
+	hitFlag = HitCheck::HitConfirmation(position, nearCapsulePos, 4.5f, radius);
 	
 	if (radian_Y >= 360.0f)
 	{

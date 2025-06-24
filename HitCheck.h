@@ -18,34 +18,32 @@ public:
 
 	//当たり判定
 	//線とメッシュ
-	bool HitRayJudge(const int& modelHandle, int frameIndex,
+	static bool HitRayJudge(const int& modelHandle, int frameIndex,
 		VECTOR linePos_start, VECTOR linePos_end, MV1_COLL_RESULT_POLY& hitPoly);
 	//球とメッシュ
-	bool SphereHitJudge(const int& modelHandle, int frameIndex,
+	static bool SphereHitJudge(const int& modelHandle, int frameIndex,
 		VECTOR linePos_end, MV1_COLL_RESULT_POLY_DIM& hitPoly);
+	static bool TriangleAreaCheck(const VECTOR& point, const VECTOR& a, const VECTOR& b, const VECTOR& c);
+	static bool HitConfirmation(VECTOR position_1, VECTOR position_2, const float radius_1, const float radius_2);
+	static bool TriangleAreaCheck_ground(const VECTOR& point, const VECTOR& a, const VECTOR& b, const VECTOR& c);
 
-	void CapsuleHitWallJudge(const int& modelHandle, int frameIndex, float radius,
+	static void CapsuleHitWallJudge(const int& modelHandle, int frameIndex, float radius,
 		VECTOR linePos_start, VECTOR linePos_end, MV1_COLL_RESULT_POLY_DIM& hitPoly);
 
-	float projectionCalc(const VECTOR& point, const VECTOR& P, const VECTOR& Q);
+	static float projectionCalc(const VECTOR& point, const VECTOR& P, const VECTOR& Q);
 
-	bool TriangleAreaCheck(const VECTOR& point, const VECTOR& a, const VECTOR& b, const VECTOR& c);
-	bool HitConfirmation(VECTOR position_1, VECTOR position_2, const float radius_1, const float radius_2);
-	bool TriangleAreaCheck_ground(const VECTOR& point, const VECTOR& a, const VECTOR& b, const VECTOR& c);
 
-	VECTOR CapsuleHitConfirmation(VECTOR capsulePosition_1, VECTOR capsulePosition_2, VECTOR position, const float radius_1, const float radius_2);
-	VECTOR ClosestPtToPointTriangle(VECTOR centerPos, VECTOR a, VECTOR b, VECTOR c);
+	static VECTOR CapsuleHitConfirmation(VECTOR capsulePosition_1, VECTOR capsulePosition_2, VECTOR position, const float radius_1, const float radius_2);
+	static VECTOR ClosestPtToPointTriangle(VECTOR centerPos, VECTOR a, VECTOR b, VECTOR c);
 
-	void AABB();
+	static void AABB();
 	
-	std::pair<VECTOR,VECTOR> SegmentTriangleDistance(const VECTOR& p, const VECTOR& q, const VECTOR& a, const VECTOR& b, const VECTOR& c, const VECTOR& normal);
-
-	/*MV1_COLL_RESULT_POLY GetHitPoly_Ground() { return hitPoly_Ground; }*/
-
-	const std::vector< MV1_COLL_RESULT_POLY>& GetHitPoly_Wall() const { return hitPoly_Wall; }
+	static std::pair<VECTOR,VECTOR> SegmentTriangleDistance(const VECTOR& p, const VECTOR& q, const VECTOR& a, const VECTOR& b, const VECTOR& c, const VECTOR& normal);
 
 
 private:
-	std::vector<MV1_COLL_RESULT_POLY> hitPoly_Wall;
+
+	static HitCheck* instance;
+
 };
 
