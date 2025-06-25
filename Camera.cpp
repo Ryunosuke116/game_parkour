@@ -27,6 +27,7 @@ void Camera::Initialize()
 {
 	aimPosition = VGet(30.0f, 15, -10);
 	lookPosition = VGet(0.0f, 0, 20.0f);
+	spherePosition = lookPosition;
 	a = -177.55f;
 
 	SetCameraPositionAndTarget_UpVecY(aimPosition, lookPosition);
@@ -41,7 +42,7 @@ void Camera::Initialize()
 void Camera::Update(const VECTOR& playerPosition)
 {
 
-	VECTOR centerPos = playerPosition;
+	centerPos = playerPosition;
 
 	lookPosition = playerPosition;
 	//lookPosition.y = -23.0f;
@@ -134,4 +135,14 @@ void Camera::LeapCalc_single(float& changePos, const float targetPos, const floa
 	float scale = sub * speed;
 
 	changePos = changePos + scale;
+}
+
+void Camera::PosCalc()
+{
+	//lookPos‚ª‹…‚ÌŠO‘¤‚É‚¢‚Á‚½ê‡‹…‚Ì’†SÀ•W‚ğ‚¸‚ç‚·
+	if (HitCheck::HitConfirmation(spherePosition, centerPos, radius, 0.5f))
+	{
+
+	}
+	
 }

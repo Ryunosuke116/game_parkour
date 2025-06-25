@@ -149,6 +149,7 @@
     <ClCompile Include="BaseScene.cpp" />
     <ClCompile Include="Calclation.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="CoinManager.cpp" />
     <ClCompile Include="CoinObject.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="Falling_Idle.cpp" />
@@ -181,6 +182,7 @@
     <ClInclude Include="BaseScene.h" />
     <ClInclude Include="Calclation.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="CoinManager.h" />
     <ClInclude Include="CoinObject.h" />
     <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="Falling_Idle.h" />

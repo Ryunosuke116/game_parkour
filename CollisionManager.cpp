@@ -111,7 +111,6 @@ bool CollisionManager::GroundCollisionCheck(int modelHandle,const VECTOR& oldPos
 						hitSphere = VScale(hitSphere, radius);
 						hitSphere = VAdd(bottomPosition, hitSphere);
 						newPlayerPos.y = nearestPoint.y - hitSphere.y;
-						//newPlayerPos.y = newPos.y + newPlayerPos.y;
 					}
 				}
 
@@ -198,7 +197,7 @@ bool CollisionManager::WallCollisionCheck(int modelHandle, VECTOR& newPos, VECTO
 	bool flag = false;
 
 	//•Ç‚ÆÕ“Ë‚µ‚Ä‚¢‚é‚©
-	HitCheck::CapsuleHitWallJudge(modelHandle, -1, 3.5f,topPosition,VAdd(bottomPosition,VGet(0.0f,1.0f,0.0f)), hitPoly_Wall);
+	HitCheck::CapsuleHitWallJudge(modelHandle, -1, radius,topPosition,VAdd(bottomPosition,VGet(0.0f,1.0f,0.0f)), hitPoly_Wall);
 
 	//Õ“Ë‚µ‚Ä‚¢‚é‚Æ‚±‚ð‘S•”’²‚×‚Ä‰Ÿ‚µ–ß‚µ—Ê‚ðŒvŽZ‚·‚é
 	if (hitPoly_Wall.HitNum >= 1)

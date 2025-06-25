@@ -156,6 +156,9 @@
     <ClCompile Include="Json.cpp">
       <Filter>ソース ファイル\Json</Filter>
     </ClCompile>
+    <ClCompile Include="CoinManager.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include.h">
@@ -250,6 +253,9 @@
     </ClInclude>
     <ClInclude Include="Json.h">
       <Filter>ソース ファイル\Json</Filter>
+    </ClInclude>
+    <ClInclude Include="CoinManager.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

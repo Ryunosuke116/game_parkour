@@ -13,7 +13,7 @@ public:
 
 	bool TestSphereTriangle(VECTOR centerPos, VECTOR a, VECTOR b, VECTOR c, VECTOR& q, const float radius);
 
-	void CliffGrabbing(int modelHandle);
+	void CliffGrabbing(int modelHandle, const VECTOR& topPosition);
 
 private:
 	MV1_COLL_RESULT_POLY hitPoly_Ground;
