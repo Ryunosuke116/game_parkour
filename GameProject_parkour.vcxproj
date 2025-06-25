@@ -165,6 +165,7 @@
     <ClCompile Include="Jump.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
+    <ClCompile Include="MoveCalclation.cpp" />
     <ClCompile Include="ObjectManager.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerManager.cpp" />
@@ -198,6 +199,7 @@
     <ClInclude Include="Json.h" />
     <ClInclude Include="Jump.h" />
     <ClInclude Include="Map.h" />
+    <ClInclude Include="MoveCalclation.h" />
     <ClInclude Include="ObjectManager.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerManager.h" />

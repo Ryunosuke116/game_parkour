@@ -7,7 +7,7 @@ private:
 	static constexpr float modelScale = 0.06f;
 	static constexpr float MaxMoveSpeed = 1.6f;	    // 移動速度
 	static constexpr float attackAnimSpeed = 1.0f;	//攻撃速度
-	static constexpr float rollMoveSpeed = 2.5f;	//ロール速度
+	static constexpr float rollMoveSpeed_max = 2.5f;	//ロール速度
 	static constexpr float angleSpeed = 0.3f;
 	static constexpr float addJumpPower = 2.0f;		//ジャンプパワー
 	static constexpr float gravity = -0.06f;
@@ -25,6 +25,7 @@ private:
 
 	float currentJumpSpeed;			//現在のジャンプスピード
 	float nowMoveSpeed;
+	float rollMoveSpeed_now;		//現在のロールスピード
 
 	bool isPush;					//ボタンを押したか
 	bool isChageState;				//アニメーションを変更するか
@@ -76,14 +77,15 @@ public:
 	void Update(const VECTOR& cameraDirection, const int mapHandle);
 	void Draw();
 	void Move(VECTOR& moveVec, const VECTOR& cameraDirection);
-	void MoveCalc(VECTOR& moveVec);
 	void JumpMove();
-	void JumpCalclation(float playTime_anim, VECTOR& moveVec);
 	void RollMove();
-	void RollCalclation(VECTOR& moveVec, float playTime_anim);
 	void ChangeState();
-	void GravityCalclation();
 	void SettingRay();
+
+	void MoveCalc(VECTOR& moveVec);
+	void JumpCalclation(float playTime_anim, VECTOR& moveVec);
+	void GravityCalclation();
+	void RollCalclation(VECTOR& moveVec, float playTime_anim);
 
 	void SetOldAnimState(PlayerStateActionBase::OldAnimState animState);
 	void SetNowAnimState(PlayerStateActionBase::NowAnimState animState);

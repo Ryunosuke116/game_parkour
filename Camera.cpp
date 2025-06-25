@@ -43,13 +43,9 @@ void Camera::Update(const VECTOR& playerPosition)
 {
 
 	centerPos = playerPosition;
+	centerPos.y += 14.0f;
 
-	lookPosition = playerPosition;
-	//lookPosition.y = -23.0f;
-	
-	lookPosition.x = playerPosition.x;
-	lookPosition.z = playerPosition.z;
-	aimPosition.y = playerPosition.y + 20.0f;
+	aimPosition.y = spherePosition.y + 20.0f;
 
 	//カメラ移動処理
 	if (CheckHitKey(KEY_INPUT_A))
@@ -77,6 +73,10 @@ void Camera::Update(const VECTOR& playerPosition)
 /// </summary>
 void Camera::Draw()
 {
+
+	DrawSphere3D(spherePosition, radius, 30, GetColor(0, 0, 0),
+		    GetColor(255, 0, 0), FALSE);
+
 	printfDx("lookPosition.x %f\n", lookPosition.x);
 	printfDx("lookPosition.y %f\n", lookPosition.y);
 	printfDx("lookPosition.z %f\n", lookPosition.z);
@@ -90,29 +90,17 @@ void Camera::RotateUpdate(const VECTOR& playerPosition)
 	float angle = a * DX_PI_F / 360.0f;
 	this->angle = angle;
 
-	//aimPosition = VAdd(aimPosition, addaimPosition);
-	aimPosition.x = lookPosition.x + 60 * cos(angle);
-	aimPosition.z = lookPosition.z + 60 * sin(angle);
+	aimPosition.x = spherePosition.x + 60 * cos(angle);
+	aimPosition.z = spherePosition.z + 60 * sin(angle);
 
 	float maxRange = 5.0f;
 	float maxRange_ = 10.0f;
 
-	//中心からの距離を測る
-	float r = VSize(VSub(playerPosition, lookPosition));
+	PosCalc();
 
-	//一定の距離に達したらそれ以上いけないようにする
-	if (r >= maxRange_ || r <= -maxRange_)
-	{
-		Leap(lookPosition, playerPosition, cameraSpeed);
-	}
-	else if (r >= maxRange || r <= -maxRange)
-	{
-		Leap(lookPosition, playerPosition, cameraSpeed_);
-	}
+	SetCameraPositionAndTarget_UpVecY(aimPosition, spherePosition);
 
-	SetCameraPositionAndTarget_UpVecY(aimPosition, lookPosition);
-
-	cameraDirection = VSub(lookPosition, aimPosition);
+	cameraDirection = VSub(spherePosition, aimPosition);
 	cameraDirection = VNorm(cameraDirection);
 }
 
@@ -140,9 +128,13 @@ void Camera::LeapCalc_single(float& changePos, const float targetPos, const floa
 void Camera::PosCalc()
 {
 	//lookPosが球の外側にいった場合球の中心座標をずらす
-	if (HitCheck::HitConfirmation(spherePosition, centerPos, radius, 0.5f))
+	if (!HitCheck::HitConfirmation(spherePosition, centerPos, radius, 0.5f))
 	{
-
+		Leap(spherePosition, centerPos, 0.2f);
+	}
+	else
+	{
+		Leap(spherePosition, centerPos, 0.05f);
 	}
 	
 }

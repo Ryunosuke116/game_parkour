@@ -74,4 +74,5 @@ void ObjectManager::Draw()
 	field->Draw();
 	coin->Draw();
 	fieldMesh->Draw();
+	
 }

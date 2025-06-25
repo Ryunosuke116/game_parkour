@@ -10,7 +10,8 @@
 Player::Player() :
     centerPosition(VGet(0.0f, 0.0f, 0.0f)),
     footPosition(VGet(0.0f, 0.0f, 0.0f)),
-    moveVec(VGet(0.0f, 0.0f, 0.0f))
+    moveVec(VGet(0.0f, 0.0f, 0.0f)),
+    rollMoveSpeed_now(0.0f)
 {
     JsonFile::UnInitialize();
     JsonFile::Initialize("Json/player.json");
@@ -63,6 +64,7 @@ void Player::Initialize()
     nowAnimState.PlayTime_anim = 0.0f;
     nowAnimState.TotalPlayTime_anim = 0.0f;
     nowMoveSpeed = 0.0f;
+    rollMoveSpeed_now = rollMoveSpeed_max;
     
     animNumber_Now = animNum::idle;
     nowState = std::make_shared<Idle>(modelHandle,oldAnimState, nowAnimState, playerData);
@@ -108,7 +110,8 @@ void Player::Update(const VECTOR& cameraDirection,const int mapHandle)
     //ロールアクション中はそれに応じた速度
     if (playerData.isRoll)
     {
-        moveVec = VScale(moveVec, rollMoveSpeed);
+        if(nowState->GetNowAnimState().PlayTime_anim >= 40.0f)
+        moveVec = VScale(moveVec, rollMoveSpeed_max);
     }
     else
     {
@@ -162,8 +165,8 @@ void Player::Draw()
 	MV1DrawModel(modelHandle);
     //DrawSphere3D(bottomPosition, 3.5f, 30, GetColor(0, 0, 0),
     //    GetColor(255, 0, 0), FALSE);
-    DrawCapsule3D(topPosition, bottomPosition, radius, 30, GetColor(0, 0, 0),
-        GetColor(255, 0, 0), FALSE);
+   // DrawCapsule3D(topPosition, bottomPosition, radius, 30, GetColor(0, 0, 0),
+     //   GetColor(255, 0, 0), FALSE);
 
     bottomPosition.y += 1.5f;
 
@@ -189,8 +192,8 @@ void Player::Draw()
 
     //線
    // DrawLine3D(centerPosition, footPosition, GetColor(255, 0, 0));
-    DrawLine3D(topPosition, linePos_end, GetColor(255, 0, 0));
-    collisionManager->Draw();
+  //  DrawLine3D(topPosition, linePos_end, GetColor(255, 0, 0));
+   // collisionManager->Draw();
 }
 
 /// <summary>

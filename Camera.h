@@ -14,7 +14,7 @@ private:
 
 	static constexpr float cameraSpeed = 0.02f;
 	static constexpr float cameraSpeed_ = 0.01f;
-	static constexpr float radius = 2.0f;
+	static constexpr float radius = 4.0f;
 
 public:
 	Camera();
