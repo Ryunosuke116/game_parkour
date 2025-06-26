@@ -52,9 +52,6 @@
     <Filter Include="ソース ファイル\manager\object">
       <UniqueIdentifier>{733bd2bf-452d-40b4-a80b-71e93c23b571}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\manager\player">
-      <UniqueIdentifier>{2a33576b-268e-4832-9dee-8902d408c493}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\manager\scene">
       <UniqueIdentifier>{6ed27899-6b7f-44a8-b8d7-0648099a58a6}</UniqueIdentifier>
     </Filter>
@@ -63,6 +60,9 @@
     </Filter>
     <Filter Include="ソース ファイル\Json">
       <UniqueIdentifier>{a05c63cd-31b8-4115-a020-863d88bd0a84}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\manager\object\player">
+      <UniqueIdentifier>{2a33576b-268e-4832-9dee-8902d408c493}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -142,7 +142,7 @@
       <Filter>ソース ファイル\manager\object</Filter>
     </ClCompile>
     <ClCompile Include="PlayerManager.cpp">
-      <Filter>ソース ファイル\manager\player</Filter>
+      <Filter>ソース ファイル\manager\object\player</Filter>
     </ClCompile>
     <ClCompile Include="SceneManager.cpp">
       <Filter>ソース ファイル\manager\scene</Filter>
@@ -243,7 +243,7 @@
       <Filter>ソース ファイル\manager\object</Filter>
     </ClInclude>
     <ClInclude Include="PlayerManager.h">
-      <Filter>ソース ファイル\manager\player</Filter>
+      <Filter>ソース ファイル\manager\object\player</Filter>
     </ClInclude>
     <ClInclude Include="SceneManager.h">
       <Filter>ソース ファイル\manager\scene</Filter>

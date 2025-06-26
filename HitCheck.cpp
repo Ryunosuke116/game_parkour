@@ -354,13 +354,15 @@ bool HitCheck::TriangleAreaCheck(const VECTOR& point, const VECTOR& a, const VEC
 	return (area_equal && inside) ? true : false;
 }
 
-/// @brief 三角形の内側に点があるか
+/// <summary>
+/// 三角形の内側に点があるか
 ///			高さは同じとする
-/// @param point 
-/// @param a 
-/// @param b 
-/// @param c 
-/// @return 
+/// </summary>
+/// <param name="point"></param>
+/// <param name="a"></param>
+/// <param name="b"></param>
+/// <param name="c"></param>
+/// <returns></returns>
 bool HitCheck::TriangleAreaCheck_ground(const VECTOR& point, const VECTOR& a, const VECTOR& b, const VECTOR& c)
 {
 

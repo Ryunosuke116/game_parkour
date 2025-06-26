@@ -14,15 +14,75 @@ std::pair<bool, VECTOR> CollisionManager::Update(int modelHandle, const VECTOR& 
 	//壁衝突判定
 	WallCollisionCheck(modelHandle, newPos, oldPos, radius,addTopPos, addBottomPos);
 
+	HeadCollisionCheck(modelHandle, newPos, addTopPos, radius, addBottomPos);
+
 	//床衝突判定
 	return std::make_pair(GroundCollisionCheck(modelHandle, oldPos, newPos, addTopPos, addBottomPos, radius, isJump), newPos);
 }
 
-/// @brief 床との衝突判定処理
-/// @param player 
-/// @param modelHandle 
-/// @param newPos 
-/// @return 
+/// <summary>
+/// 頭上の当たり判定
+/// </summary>
+/// <param name="modelHandle"></param>
+/// <param name="newPos"></param>
+/// <param name="addTopPos"></param>
+/// <param name="radius"></param>
+/// <param name="addBottomPos"></param>
+/// <returns></returns>
+bool CollisionManager::HeadCollisionCheck(int modelHandle, VECTOR& newPos, float addTopPos, float radius, float addBottomPos)
+{
+	VECTOR topPos = newPos;
+	topPos.y += addTopPos;
+	MV1_COLL_RESULT_POLY_DIM hitPoly_head;
+
+	bool isHitHead = HitCheck::SphereHitJudge(modelHandle, -1, topPos, hitPoly_head);
+
+	if (isHitHead)
+	{
+		VECTOR addPos = VGet(0.0f, 0.0f, 0.0f);
+
+		for (int i = 0; i < hitPoly_head.HitNum; i++)
+		{
+			MV1_COLL_RESULT_POLY poly = hitPoly_head.Dim[i];
+			VECTOR newAddPos = VGet(0.0f, 0.0f, 0.0f);
+
+			if (poly.Normal.y <= -0.7f || poly.Normal.y >= 0.7f)
+			{
+				hitPos_head = HitCheck::ClosestPtToPointTriangle(topPos, poly.Position[0], poly.Position[1], poly.Position[2]);
+
+				VECTOR hitDirection = VSub(hitPos_head, topPos);
+				hitDirection = VNorm(hitDirection);
+				hitDirection = VScale(hitDirection, radius);
+
+				VECTOR hitPos_sphere = VAdd(topPos, hitDirection);
+
+
+				newAddPos.y = hitPos_head.y - hitPos_sphere.y;
+			}
+
+			if (addPos.y > newAddPos.y)
+			{
+				addPos = newAddPos;
+			}
+		}
+
+		newPos.y = newPos.y + addPos.y;
+	}
+
+	return false;
+}
+
+/// <summary>
+/// 床との衝突判定処理
+/// </summary>
+/// <param name="modelHandle"></param>
+/// <param name="oldPos"></param>
+/// <param name="newPos"></param>
+/// <param name="addTopPos"></param>
+/// <param name="addBottomPos"></param>
+/// <param name="radius"></param>
+/// <param name="isJump"></param>
+/// <returns></returns>
 bool CollisionManager::GroundCollisionCheck(int modelHandle,const VECTOR& oldPos, VECTOR& newPos, float addTopPos, float addBottomPos, float radius, bool isJump)
 {
 	//playerの状態によって当たり判定の優先順位を決める
@@ -60,8 +120,6 @@ bool CollisionManager::GroundCollisionCheck(int modelHandle,const VECTOR& oldPos
 
 			if (poly.Normal.y >= 1.0f)
 			{
-  				VECTOR newPlayerPos = VGet(0.0f, 0.0f, 0.0f);
-
 				//未来座標の球の最下部座標
 				VECTOR bottomPos_sphere = bottomPosition;
 				bottomPos_sphere.y -= radius;
@@ -69,7 +127,7 @@ bool CollisionManager::GroundCollisionCheck(int modelHandle,const VECTOR& oldPos
 				//次のフレームのplayerの接触座標を求める
 				hitPos_ground = HitCheck::ClosestPtToPointTriangle(bottomPosition, poly.Position[0], poly.Position[1], poly.Position[2]);
 
-				//現在の球と面の接触座標を求める
+				//現在のプレイヤーのカプセルと面の接触座標を求める
 				VECTOR nowHitPos_ground = HitCheck::ClosestPtToPointTriangle(nowBottomPos, poly.Position[0], poly.Position[1], poly.Position[2]);
 
 				MV1_COLL_RESULT_POLY rayPoly;
@@ -77,43 +135,14 @@ bool CollisionManager::GroundCollisionCheck(int modelHandle,const VECTOR& oldPos
 				//現在の座標からrayを伸ばし、当たっていなかったらif文内に行く
 				if (!HitCheck::HitRayJudge(modelHandle, -1, nowTopPos, nowBottomPos, rayPoly))
 				{
-					//三角形の外側のときのとき球とメッシュの接触部分で押し戻し量を求める
+					//カプセルの中心座標が三角形の外側のとき球とメッシュの接触部分で押し戻し量を求める
 					if (!HitCheck::TriangleAreaCheck_ground(nowHitPos_ground, poly.Position[0], poly.Position[1], poly.Position[2]))
 					{
-						//線分と点の最近点
- 						VECTOR nearPoint_1 = Calclation::NearestPoint(poly.Position[0], poly.Position[1], nowHitPos_ground);
-						VECTOR nearPoint_2 = Calclation::NearestPoint(poly.Position[0], poly.Position[2], nowHitPos_ground);
-						VECTOR nearPoint_3 = Calclation::NearestPoint(poly.Position[1], poly.Position[2], nowHitPos_ground);
-
-						//一番近い座標を選択する
-						float d1 = VSize(VSub(nearPoint_1, nowHitPos_ground));
-						float d2 = VSize(VSub(nearPoint_2, nowHitPos_ground));
-						float d3 = VSize(VSub(nearPoint_3, nowHitPos_ground));
-
-
-						//球と面の接触点を求める
-						if (d1 <= d2 && d1 <= d3)
-						{
-							nearestPoint = nearPoint_1;
-						}
-						else if (d2 <= d3)
-						{
-							nearestPoint = nearPoint_2;
-						}
-						else
-						{
-							nearestPoint = nearPoint_3;
-						}
-
-						//球の接触点を計算
-						hitSphere = VSub(nearestPoint, bottomPosition);
-						hitSphere = VNorm(hitSphere);
-						hitSphere = VScale(hitSphere, radius);
-						hitSphere = VAdd(bottomPosition, hitSphere);
-						newPlayerPos.y = nearestPoint.y - hitSphere.y;
+						addPos = CalcPushBack_SphereMeshOutsideTriangle(poly, hitPos_ground, bottomPosition, radius);
 					}
 				}
 
+				//中心座標が三角形の内側だった場合
 				//rayが当たっていれば球の最下部ととメッシュで押し戻し量計算
 				else
 				{
@@ -123,14 +152,19 @@ bool CollisionManager::GroundCollisionCheck(int modelHandle,const VECTOR& oldPos
 					//平面であればそのまま足元で計算
 					if (poly.Normal.y >= 1.0f)
 					{
+
+						VECTOR newAddPos = VGet(0.0f, 0.0f, 0.0f);
+
+						//中心座標から半径分を引くことによって球の最下部を算出
 						VECTOR footPos = VGet(0.0f, bottomPosition.y - radius, 0.0f);
 						
- 						newPlayerPos.y = hitPos_ground.y - footPos.y;
+						//接触座標と球の最下部で押し戻し量を計算
+						newAddPos.y = hitPos_ground.y - footPos.y;
 
 						//押し戻し量が一番大きいものを加算する
-						if (addPos.y < newPlayerPos.y)
+						if (addPos.y < newAddPos.y)
 						{
-							addPos = newPlayerPos;
+							addPos = newAddPos;
 						}
 					}
 				}
@@ -158,6 +192,7 @@ bool CollisionManager::GroundCollisionCheck(int modelHandle,const VECTOR& oldPos
 	{
 		MV1_COLL_RESULT_POLY rayPoly_ground;
 
+		//rayが当たっていれば
 		isHitGround = HitCheck::HitRayJudge(modelHandle, -1, nowTopPos, nowBottomPos, rayPoly_ground);
 
 		if (isHitGround && !isJump)
@@ -293,6 +328,72 @@ bool CollisionManager::TestSphereTriangle(VECTOR centerPos, VECTOR a, VECTOR b, 
 	return VDot(v, v) <= radius * radius;
 }
 
+VECTOR CollisionManager::PushBackCalclation_sphere_mesh(const MV1_COLL_RESULT_POLY& poly, const VECTOR& bottomPos, const VECTOR& newPlayerPos, const float& radius)
+{
+	//球と面の接触しているは球の最下部と面の接触座標と同じなのでリセット
+	hitSphere = VGet(0.0f, 0.0f, 0.0f);
+
+	////平面であればそのまま足元で計算
+	//if (poly.Normal.y >= 1.0f)
+	//{
+	//	VECTOR footPos = VGet(0.0f, bottomPos.y - radius, 0.0f);
+
+	//	newPlayerPos.y = hitPos_ground.y - footPos.y;
+
+	//	//押し戻し量が一番大きいものを加算する
+	//	if (addPos.y < newPlayerPos.y)
+	//	{
+	//		addPos = newPlayerPos;
+	//	}
+	//}
+	return hitSphere;
+}
+
+
+VECTOR CollisionManager::CalcPushBack_SphereMeshOutsideTriangle(const MV1_COLL_RESULT_POLY& poly, const VECTOR& HitPos_ground, const VECTOR& bottomPos, const float& radius)
+{
+	//線分と点の最近点
+	VECTOR nearPoint_1 = Calclation::NearestPoint(poly.Position[0], poly.Position[1], HitPos_ground);
+	VECTOR nearPoint_2 = Calclation::NearestPoint(poly.Position[0], poly.Position[2], HitPos_ground);
+	VECTOR nearPoint_3 = Calclation::NearestPoint(poly.Position[1], poly.Position[2], HitPos_ground);
+
+	//各距離を求める
+	float d1 = VSize(VSub(nearPoint_1, HitPos_ground));
+	float d2 = VSize(VSub(nearPoint_2, HitPos_ground));
+	float d3 = VSize(VSub(nearPoint_3, HitPos_ground));
+
+
+	//一番近い座標を選択する
+	if (d1 <= d2 && d1 <= d3)
+	{
+		nearestPoint = nearPoint_1;
+	}
+	else if (d2 <= d3)
+	{
+		nearestPoint = nearPoint_2;
+	}
+	else
+	{
+		nearestPoint = nearPoint_3;
+	}
+
+	//球と面の接触点を求める
+	//方向計算
+	hitSphere = VSub(nearestPoint, bottomPos);
+	hitSphere = VNorm(hitSphere);
+
+	//接触点の方向に半径を加算
+	hitSphere = VScale(hitSphere, radius);
+
+	//球の中心点から接触点の方向に半径分のベクトルを加算して球の接触点を計算
+	hitSphere = VAdd(bottomPos, hitSphere);
+
+	//面の接触座標と球の接触点で押し戻し量を計算
+	VECTOR addPos = VGet(0.0f, 0.0f, 0.0f);
+	addPos.y = nearestPoint.y - hitSphere.y;
+	return addPos;
+}
+
 /// <summary>
 /// 描画
 /// </summary>
@@ -309,6 +410,8 @@ void CollisionManager::Draw()
 	DrawSphere3D(hitPos_ground, 2.0f, 30, GetColor(0, 0, 0),
 		GetColor(255, 0, 0), FALSE);
 	DrawSphere3D(hitSphere, 2.0f, 30, GetColor(0, 0, 0),
+		GetColor(255, 0, 0), FALSE);
+	DrawSphere3D(hitPos_head, 2.0f, 30, GetColor(0, 0, 0),
 		GetColor(255, 0, 0), FALSE);
 
 	DrawLine3D(topPos_ray, bottomPos_ray, GetColor(255, 0, 0));

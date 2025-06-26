@@ -167,11 +167,6 @@ void Player::Draw()
     DrawCapsule3D(topPosition, bottomPosition, radius, 30, GetColor(0, 0, 0),
         GetColor(255, 0, 0), FALSE);
 
-    bottomPosition.y += 1.5f;
-
-    DrawCapsule3D(topPosition, bottomPosition, 5.0f, 5, GetColor(0, 0, 0),
-        GetColor(255, 0, 0), FALSE);
-
     printfDx("playerPosition.x %f\nplayerPosition.y %f\nplayerPosition.z %f\n",
         position.x, position.y, position.z);
     printfDx("frameŒ»Ý”%d\n", nowFrameNumber);
@@ -192,7 +187,7 @@ void Player::Draw()
     //ü
    // DrawLine3D(centerPosition, footPosition, GetColor(255, 0, 0));
   //  DrawLine3D(topPosition, linePos_end, GetColor(255, 0, 0));
-   // collisionManager->Draw();
+    collisionManager->Draw();
 }
 
 /// <summary>
