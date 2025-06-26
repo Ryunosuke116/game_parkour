@@ -263,6 +263,9 @@
     <ClInclude Include="MoveCalclation.h">
       <Filter>ソース ファイル\player</Filter>
     </ClInclude>
+    <ClInclude Include="AnimTime.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Json\player.Json">

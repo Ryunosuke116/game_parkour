@@ -1,5 +1,6 @@
 #include"playerState.h"
 #include <fstream>
+#include "AnimTime.h"
 #include "Include.h"
 #include "Json.h"
 #include "nlohmann/json.hpp"
@@ -10,8 +11,7 @@
 Player::Player() :
     centerPosition(VGet(0.0f, 0.0f, 0.0f)),
     footPosition(VGet(0.0f, 0.0f, 0.0f)),
-    moveVec(VGet(0.0f, 0.0f, 0.0f)),
-    rollMoveSpeed_now(0.0f)
+    moveVec(VGet(0.0f, 0.0f, 0.0f))
 {
     JsonFile::UnInitialize();
     JsonFile::Initialize("Json/player.json");
@@ -22,6 +22,7 @@ Player::Player() :
     MV1SetScale(modelHandle, VGet(modelScale, modelScale, modelScale));
     input = std::make_shared<Input>();
     collisionManager = std::make_shared<CollisionManager>();
+    moveCalclation = std::make_shared<MoveCalclation>();
 }
 
 /// <summary>
@@ -41,7 +42,7 @@ void Player::Initialize()
 
     MV1SetRotationXYZ(modelHandle, VGet(0, 0, 0));
    // ChangeMotion(animNum::idle, PlayAnimSpeed);
-    currentJumpSpeed = 0.0f;
+
     isPush = false;
     isChageState = false;
     playerData.isJump = false;
@@ -63,9 +64,7 @@ void Player::Initialize()
     nowAnimState.PlayAnimSpeed = 0.0f;
     nowAnimState.PlayTime_anim = 0.0f;
     nowAnimState.TotalPlayTime_anim = 0.0f;
-    nowMoveSpeed = 0.0f;
-    rollMoveSpeed_now = rollMoveSpeed_max;
-    
+
     animNumber_Now = animNum::idle;
     nowState = std::make_shared<Idle>(modelHandle,oldAnimState, nowAnimState, playerData);
 }
@@ -86,7 +85,7 @@ void Player::Update(const VECTOR& cameraDirection,const int mapHandle)
         playerData.isJump_second = false;
         playerData.isJumpAll = false;
         playerData.isRoll_PlayAnim = false;
-        currentJumpSpeed = 0.0f;
+        moveCalclation->SetCurrentJumpSpeed(0.0f);
     }
 
     this->input->Update();
@@ -104,25 +103,25 @@ void Player::Update(const VECTOR& cameraDirection,const int mapHandle)
     //状態変更
     ChangeState();
 
-    RollCalclation(moveVec, nowState->GetNowAnimState().PlayTime_anim);
+    moveVec = moveCalclation->Roll(moveVec, targetMoveDirection,
+        nowState->GetNowAnimState().PlayTime_anim, playerData);
 
     //進むスピードを乗算
     //ロールアクション中はそれに応じた速度
     if (playerData.isRoll)
     {
-        if(nowState->GetNowAnimState().PlayTime_anim >= 40.0f)
         moveVec = VScale(moveVec, rollMoveSpeed_max);
     }
     else
     {
-        MoveCalc(moveVec);
+        moveVec = moveCalclation->Move(moveVec, targetMoveDirection, playerData);
     }
 
     //ジャンプ計算
-    JumpCalclation(nowState->GetNowAnimState().PlayTime_anim,moveVec);
+    moveVec = moveCalclation->Jump(moveVec, animNumber_Now, playerData);
 
     //重力計算
-    GravityCalclation();
+    moveCalclation->Gravity(moveVec, playerData);
 
     auto result = collisionManager->Update(mapHandle, position, moveVec,targetMoveDirection, radius, addTopPos, addBottomPos, playerData.isJump);
     playerData.isGround = result.first;
@@ -163,20 +162,20 @@ void Player::Update(const VECTOR& cameraDirection,const int mapHandle)
 void Player::Draw()
 {
 	MV1DrawModel(modelHandle);
-    //DrawSphere3D(bottomPosition, 3.5f, 30, GetColor(0, 0, 0),
-    //    GetColor(255, 0, 0), FALSE);
-   // DrawCapsule3D(topPosition, bottomPosition, radius, 30, GetColor(0, 0, 0),
-     //   GetColor(255, 0, 0), FALSE);
+    DrawSphere3D(bottomPosition, 3.5f, 30, GetColor(0, 0, 0),
+        GetColor(255, 0, 0), FALSE);
+    DrawCapsule3D(topPosition, bottomPosition, radius, 30, GetColor(0, 0, 0),
+        GetColor(255, 0, 0), FALSE);
 
     bottomPosition.y += 1.5f;
 
- /*   DrawCapsule3D(topPosition, bottomPosition, 5.0f, 5, GetColor(0, 0, 0),
-        GetColor(255, 0, 0), FALSE);*/
+    DrawCapsule3D(topPosition, bottomPosition, 5.0f, 5, GetColor(0, 0, 0),
+        GetColor(255, 0, 0), FALSE);
 
     printfDx("playerPosition.x %f\nplayerPosition.y %f\nplayerPosition.z %f\n",
         position.x, position.y, position.z);
     printfDx("frame現在数%d\n", nowFrameNumber);
-    printfDx("nowMoveSpeed %f\n", nowMoveSpeed);
+    printfDx("nowMoveSpeed %f\n", moveCalclation->GetNowMoveSpeed());
     printfDx("isMove %d\n", playerData.isMove);
     printfDx("isJump %d\n", playerData.isJump);
     printfDx("isJump_second %d\n", playerData.isJump_second);
@@ -187,7 +186,7 @@ void Player::Draw()
     printfDx("isJumpAll %d\n", playerData.isJumpAll);
     printfDx("isChageState %d\n", isChageState);
     printfDx("animNumber_Now %d\n", animNumber_Now);
-    printfDx("currentJumpSpeed %f\n", currentJumpSpeed);
+    printfDx("currentJumpSpeed %f\n", moveCalclation->GetCurrentJumpSpeed());
     nowState->Draw();
 
     //線
@@ -269,45 +268,6 @@ void Player::Move(VECTOR& moveVec, const VECTOR& cameraDirection)
     }
 }
 
-/// <summary>
-/// 移動スピード計算
-/// </summary>
-void Player::MoveCalc(VECTOR& moveVec)
-{
-    if (playerData.isMove)
-    {
-        //徐々にスピードを上げる
-        nowMoveSpeed += 0.05f;
-
-        //maxに達したらそこで止める
-        if (nowMoveSpeed >= MaxMoveSpeed)
-        {
-            nowMoveSpeed = MaxMoveSpeed;
-        }
-    }
-    else
-    {
-        //接地しているときに止まったらすぐ止まる
-        if (playerData.isGround)
-        {
-            nowMoveSpeed = 0.0f;
-        }
-        //空中にいるとき
-        else
-        {
-            //徐々に下げる
-            nowMoveSpeed -= 0.02f;
-
-            //止める
-            if (nowMoveSpeed <= 0.0f)
-            {
-                nowMoveSpeed = 0.0f;
-            }
-        }
-    }
-
-    moveVec = VScale(targetMoveDirection, nowMoveSpeed);
-}
 
 /// <summary>
 /// ジャンプ
@@ -320,7 +280,7 @@ void Player::JumpMove()
         if (!playerData.isJump)
         {
             isPush = true;
-            currentJumpSpeed = addJumpPower;
+            moveCalclation->SetCurrentJumpSpeed(addJumpPower);
             playerData.isJump = true;
         }
         //二段ジャンプ
@@ -328,7 +288,7 @@ void Player::JumpMove()
         {
             isPush = true;
             playerData.isJump_second = true;
-            currentJumpSpeed = addJumpPower;
+            moveCalclation->SetCurrentJumpSpeed(addJumpPower);
             if (animNumber_Now == animNum::jump || animNumber_Now == animNum::run_Jump)
             {
                 playerData.isJumpAll = true;
@@ -339,42 +299,6 @@ void Player::JumpMove()
     {
         isPush = false;
     }
-}
-
-/// <summary>
-/// ジャンプ処理
-/// </summary>
-void Player::JumpCalclation(float playTime_anim,VECTOR& moveVec)
-{
-    //currentPlayTime_anim > 5.0f && isJump
-    if (playerData.isJump && animNumber_Now == animNum::jump)
-    {
-        moveVec.y += currentJumpSpeed;
-    }
-    //ランジャンプのときは即座に加算
-    else if (animNumber_Now == animNum::run_Jump ||
-        animNumber_Now == animNum::falling_Idle)
-    {
-        moveVec.y += currentJumpSpeed;
-    }
-    else if (!playerData.isGround)
-    {
-        moveVec.y += currentJumpSpeed;
-    }
-
-}
-
-/// <summary>
-/// 重力計算
-/// </summary>
-void Player::GravityCalclation()
-{
-   
-    if (!playerData.isGround)
-    {
-        currentJumpSpeed += gravity;
-    }
-
 }
 
 /// <summary>
@@ -389,21 +313,6 @@ void Player::RollMove()
 
 }
 
-/// <summary>
-/// ロール計算
-/// </summary>
-void Player::RollCalclation(VECTOR& moveVec, float playTime_anim)
-{
-    if (playerData.isRoll)
-    {
-        if (playTime_anim >= 10.0f)
-        {
-            //※徐々にスピードを下げていく
-            //途中で向きがあまり帰れないようにする
-            moveVec = targetMoveDirection;
-        }
-    }
-}
 
 /// <summary>
 /// アニメーション変更

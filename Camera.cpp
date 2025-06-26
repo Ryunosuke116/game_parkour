@@ -74,8 +74,8 @@ void Camera::Update(const VECTOR& playerPosition)
 void Camera::Draw()
 {
 
-	DrawSphere3D(spherePosition, radius, 30, GetColor(0, 0, 0),
-		    GetColor(255, 0, 0), FALSE);
+	/*DrawSphere3D(spherePosition, radius, 30, GetColor(0, 0, 0),
+		    GetColor(255, 0, 0), FALSE);*/
 
 	printfDx("lookPosition.x %f\n", lookPosition.x);
 	printfDx("lookPosition.y %f\n", lookPosition.y);
