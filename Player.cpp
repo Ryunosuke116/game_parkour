@@ -3,6 +3,7 @@
 #include "AnimTime.h"
 #include "Include.h"
 #include "Json.h"
+#include "PadInput.h"
 #include "nlohmann/json.hpp"
 
 /// <summary>
@@ -209,7 +210,7 @@ void Player::Move(VECTOR& moveVec, const VECTOR& cameraDirection)
     rightMove.y = 0.0f;
 
     //上入力されたとき
-    if (padInput.isUp(*input))
+    if (PadInput::isUp())
     {
         if (animNumber_Now != animNum::run && !playerData.isJump)
         {
@@ -221,7 +222,7 @@ void Player::Move(VECTOR& moveVec, const VECTOR& cameraDirection)
     }
 
     //下入力されたとき
-    if (padInput.isDown(*input))
+    if (PadInput::isDown())
     {
         if (animNumber_Now != animNum::run && !playerData.isJump)
         {
@@ -233,7 +234,7 @@ void Player::Move(VECTOR& moveVec, const VECTOR& cameraDirection)
     }
 
     //左入力されたとき
-    if (padInput.isLeft(*input))
+    if (PadInput::isLeft())
     {
         if (animNumber_Now != animNum::run && !playerData.isJump)
         {
@@ -245,7 +246,7 @@ void Player::Move(VECTOR& moveVec, const VECTOR& cameraDirection)
     }
 
     //右入力されたとき
-    if (padInput.isRight(*input))
+    if (PadInput::isRight())
     {
         if (animNumber_Now != animNum::run && !playerData.isJump)
         {
@@ -269,7 +270,7 @@ void Player::Move(VECTOR& moveVec, const VECTOR& cameraDirection)
 /// </summary>
 void Player::JumpMove()
 {
-    if (padInput.isJump(*input))
+    if (PadInput::isJump())
     {
         //一回目のジャンプ
         if (!playerData.isJump)
@@ -301,7 +302,7 @@ void Player::JumpMove()
 /// </summary>
 void Player::RollMove()
 {
-    if (padInput.isRoll(*input) && !playerData.isRoll_PlayAnim)
+    if (PadInput::isRoll() && !playerData.isRoll_PlayAnim)
     {
         playerData.isRoll = true;
     }
@@ -349,7 +350,7 @@ void Player::ChangeState()
     
     //ジャンプ
     if (!playerData.isMove && (playerData.isJump || playerData.isJump_second) && !playerData.isJumpAll &&
-        animNumber_Now != animNum::jump && padInput.isJump(*input))
+        animNumber_Now != animNum::jump && PadInput::isJump())
     {
          SetNowAnimState(nowState->GetNowAnimState());
         SetOldAnimState(nowState->GetOldAnimState());
@@ -370,7 +371,7 @@ void Player::ChangeState()
 
     //ランジャンプ
     if (playerData.isMove && (playerData.isJump || playerData.isJump_second) && !playerData.isJumpAll &&
-        animNumber_Now != animNum::run_Jump && padInput.isJump(*input))
+        animNumber_Now != animNum::run_Jump && PadInput::isJump())
     {
         SetNowAnimState(nowState->GetNowAnimState());
         SetOldAnimState(nowState->GetOldAnimState());
@@ -403,7 +404,7 @@ void Player::ChangeState()
 
     //転がる
     if (playerData.isRoll && animNumber_Now != animNum::quick_Roll && !playerData.isRoll_PlayAnim &&
-        padInput.isRoll(*input))
+        PadInput::isRoll())
     {
         playerData.isJump_second = false;
         playerData.isJumpAll = false;
@@ -473,96 +474,96 @@ void Player::SettingRay()
   
 }
 
-/// <summary>
-/// 上入力
-/// </summary>
-/// <param name="input"></param>
-/// <returns></returns>
-bool Player::PadInput::isUp(Input& input)
-{
-    
-    if (input.GetNowFrameInput() & PAD_INPUT_UP ||
-        CheckHitKey(KEY_INPUT_UP))
-    {
-        return true;
-    }
-
-    return false;
-}
-
-/// <summary>
-/// 下入力
-/// </summary>
-/// <param name="input"></param>
-/// <returns></returns>
-bool Player::PadInput::isDown(Input& input)
-{
-    if (input.GetNowFrameInput() & PAD_INPUT_DOWN ||
-        CheckHitKey(KEY_INPUT_DOWN))
-    {
-        return true;
-    }
-    return false;
-}
-
-/// <summary>
-/// 右入力
-/// </summary>
-/// <param name="input"></param>
-/// <returns></returns>
-bool Player::PadInput::isRight(Input& input)
-{
-    if (input.GetNowFrameInput() & PAD_INPUT_RIGHT ||
-        CheckHitKey(KEY_INPUT_RIGHT))
-    {
-        return true;
-    }
-    return false;
-}
-
-/// <summary>
-/// 左入力
-/// </summary>
-/// <param name="input"></param>
-/// <returns></returns>
-bool Player::PadInput::isLeft(Input& input)
-{
-    if (input.GetNowFrameInput() & PAD_INPUT_LEFT ||
-        CheckHitKey(KEY_INPUT_LEFT))
-    {
-        return true;
-    }
-    return false;
-}
-
-/// <summary>
-/// ジャンプ入力
-/// </summary>
-/// <param name="input"></param>
-/// <returns></returns>
-bool Player::PadInput::isJump(Input& input)
-{
-    if (CheckHitKey(KEY_INPUT_SPACE) ||
-        input.GetNowFrameNewInput() & PAD_INPUT_A)
-    {
-        return true;
-    }
-    return false;
-}
-
-/// <summary>
-/// ロール入力
-/// </summary>
-/// <param name="input"></param>
-/// <returns></returns>
-bool Player::PadInput::isRoll(Input& input)
-{
-    if (CheckHitKey(KEY_INPUT_F) ||
-        input.GetNowFrameNewInput() & PAD_INPUT_B)
-    {
-        return true;
-    }
-    return false;
-}
+///// <summary>
+///// 上入力
+///// </summary>
+///// <param name="input"></param>
+///// <returns></returns>
+//bool Player::PadInput::isUp(Input& input)
+//{
+//    
+//    if (input.GetNowFrameInput() & PAD_INPUT_UP ||
+//        CheckHitKey(KEY_INPUT_UP))
+//    {
+//        return true;
+//    }
+//
+//    return false;
+//}
+//
+///// <summary>
+///// 下入力
+///// </summary>
+///// <param name="input"></param>
+///// <returns></returns>
+//bool Player::PadInput::isDown(Input& input)
+//{
+//    if (input.GetNowFrameInput() & PAD_INPUT_DOWN ||
+//        CheckHitKey(KEY_INPUT_DOWN))
+//    {
+//        return true;
+//    }
+//    return false;
+//}
+//
+///// <summary>
+///// 右入力
+///// </summary>
+///// <param name="input"></param>
+///// <returns></returns>
+//bool Player::PadInput::isRight(Input& input)
+//{
+//    if (input.GetNowFrameInput() & PAD_INPUT_RIGHT ||
+//        CheckHitKey(KEY_INPUT_RIGHT))
+//    {
+//        return true;
+//    }
+//    return false;
+//}
+//
+///// <summary>
+///// 左入力
+///// </summary>
+///// <param name="input"></param>
+///// <returns></returns>
+//bool Player::PadInput::isLeft(Input& input)
+//{
+//    if (input.GetNowFrameInput() & PAD_INPUT_LEFT ||
+//        CheckHitKey(KEY_INPUT_LEFT))
+//    {
+//        return true;
+//    }
+//    return false;
+//}
+//
+///// <summary>
+///// ジャンプ入力
+///// </summary>
+///// <param name="input"></param>
+///// <returns></returns>
+//bool Player::PadInput::isJump(Input& input)
+//{
+//    if (CheckHitKey(KEY_INPUT_SPACE) ||
+//        input.GetNowFrameNewInput() & PAD_INPUT_A)
+//    {
+//        return true;
+//    }
+//    return false;
+//}
+//
+///// <summary>
+///// ロール入力
+///// </summary>
+///// <param name="input"></param>
+///// <returns></returns>
+//bool Player::PadInput::isRoll(Input& input)
+//{
+//    if (CheckHitKey(KEY_INPUT_F) ||
+//        input.GetNowFrameNewInput() & PAD_INPUT_B)
+//    {
+//        return true;
+//    }
+//    return false;
+//}
 
 void Player::Update() {};

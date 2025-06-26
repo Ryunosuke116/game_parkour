@@ -26,7 +26,7 @@ private:
 	bool isPush;					//ボタンを押したか
 	bool isChageState;				//アニメーションを変更するか
 
-	struct PadInput
+	/*struct PadInput
 	{
 		bool isUp(Input& input);
 		bool isDown(Input& input);
@@ -34,9 +34,9 @@ private:
 		bool isLeft(Input& input);
 		bool isJump(Input& input);
 		bool isRoll(Input& input);
-	};
+	};*/
 
-	PadInput padInput;
+	//PadInput padInput;
 
 	//他クラス
 	std::shared_ptr<PlayerStateActionBase> nowState = NULL;

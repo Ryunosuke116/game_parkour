@@ -1,4 +1,5 @@
 #pragma once
+
 class Calclation
 {
 private:
@@ -7,6 +8,8 @@ private:
 	~Calclation(){}
 
 	static Calclation* instance;
+
+
 
 public:
 	static void Initialize();

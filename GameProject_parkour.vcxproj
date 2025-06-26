@@ -167,6 +167,7 @@
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="MoveCalclation.cpp" />
     <ClCompile Include="ObjectManager.cpp" />
+    <ClCompile Include="PadInput.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerManager.cpp" />
     <ClCompile Include="PlayerStateActionBase.cpp" />
@@ -201,6 +202,7 @@
     <ClInclude Include="Map.h" />
     <ClInclude Include="MoveCalclation.h" />
     <ClInclude Include="ObjectManager.h" />
+    <ClInclude Include="PadInput.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerManager.h" />
     <ClInclude Include="playerState.h" />

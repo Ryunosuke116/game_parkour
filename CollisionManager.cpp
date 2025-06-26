@@ -103,10 +103,8 @@ bool CollisionManager::GroundCollisionCheck(int modelHandle,const VECTOR& oldPos
 
 	bool isHitGround = false;
 	//床と衝突しているか
-	if (!isJump)
-	{
-		isHitGround = HitCheck::SphereHitJudge(modelHandle, -1, bottomPosition, hitPoly_Ground_sphere);
-	}
+	isHitGround = HitCheck::SphereHitJudge(modelHandle, -1, bottomPosition, hitPoly_Ground_sphere);
+
 	isHitSphere = isHitGround;
 	
 	//ジャンプ中ではない場合に処理
@@ -188,7 +186,7 @@ bool CollisionManager::GroundCollisionCheck(int modelHandle,const VECTOR& oldPos
 
 	//カプセルが当たっていないときrayをチェック
 	//下り坂はrayでチェック
-	if (!isHitSphere || (lastPoly.Normal.y < 1.0f && lastPoly.Normal.y >= 0.7f))
+	if (!isJump && !isHitSphere || (lastPoly.Normal.y < 1.0f && lastPoly.Normal.y >= 0.7f))
 	{
 		MV1_COLL_RESULT_POLY rayPoly_ground;
 

@@ -1,5 +1,6 @@
 #include "BaseManager.h"
 #include "FieldMesh.h"
+#include "PadInput.h"
 #include "Include.h"
 #include "Json.h"
 
@@ -33,6 +34,7 @@ void ObjectManager::Create()
 	//playerManager = std::make_shared<PlayerManager>();
 	actualPlayer = std::dynamic_pointer_cast<Player>(player);
 	actualCoin = std::dynamic_pointer_cast<CoinObject>(coin);
+	
 }
 
 /// <summary>
@@ -46,6 +48,7 @@ void ObjectManager::Initialize()
 	coin->Initialize();
 	player->Initialize();
 	camera->Initialize();
+	PadInput::Initialize();
 }
 
 /// <summary>
@@ -53,6 +56,7 @@ void ObjectManager::Initialize()
 /// </summary>
 void ObjectManager::Update()
 {
+	PadInput::Update();
 	actualPlayer->Update(camera->GetCameraDirection(),fieldMesh->GetModelHandle());
 	camera->Update(player->GetPosition());
 	//playerManager->Update(fieldMesh->GetModelHandle(), *actualPlayer);
