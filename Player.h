@@ -22,6 +22,7 @@ private:
 	VECTOR topPosition;
 	VECTOR bottomPosition;
 	VECTOR moveVec;
+	VECTOR moveVec_memory;
 
 	bool isPush;					//ボタンを押したか
 	bool isChageState;				//アニメーションを変更するか
@@ -55,7 +56,7 @@ public:
 	void Update()override;
 	void Update(const VECTOR& cameraDirection, const int mapHandle);
 	void Draw();
-	void Move(VECTOR& moveVec, const VECTOR& cameraDirection);
+	VECTOR Move(VECTOR& moveVec, const VECTOR& cameraDirection);
 	void JumpMove();
 	void RollMove();
 	void ChangeState();

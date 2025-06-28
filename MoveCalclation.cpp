@@ -97,13 +97,19 @@ VECTOR MoveCalclation::Roll(const VECTOR& moveVec, const VECTOR& moveDirection,
     return move;
 }
 
-VECTOR MoveCalclation::MoveVec()
+VECTOR MoveCalclation::MoveVec(const VECTOR& moveVec,const VECTOR& moveVec_memory,const bool isGround,const bool isRoll)
 {
-    bool isJump, isRoll;
-    VECTOR moveVec, newMoveVec;
+    VECTOR returnPos = moveVec;
 
-    if (isJump || isRoll)
+    if (isGround || !isRoll)
     {
-        moveVec = Calclation::Leap(moveVec, newMoveVec, 0.2f);
+        returnPos = moveVec_memory;
     }
+
+    if (!isGround || isRoll)
+    {
+        returnPos = Calclation::Leap(moveVec, moveVec_memory, 0.2f);
+    }
+
+    return returnPos;
 }

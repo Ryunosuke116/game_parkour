@@ -12,7 +12,8 @@
 Player::Player() :
     centerPosition(VGet(0.0f, 0.0f, 0.0f)),
     footPosition(VGet(0.0f, 0.0f, 0.0f)),
-    moveVec(VGet(0.0f, 0.0f, 0.0f))
+    moveVec(VGet(0.0f, 0.0f, 0.0f)),
+    moveVec_memory(VGet(0.0f, 0.0f, 0.0f))
 {
     JsonFile::UnInitialize();
     JsonFile::Initialize("Json/player.json");
@@ -91,7 +92,7 @@ void Player::Update(const VECTOR& cameraDirection,const int mapHandle)
 
     this->input->Update();
 
-    Move(moveVec, cameraDirection);
+    moveVec_memory = Move(moveVec, cameraDirection);
     RollMove();
     JumpMove();
 
@@ -104,8 +105,10 @@ void Player::Update(const VECTOR& cameraDirection,const int mapHandle)
     //状態変更
     ChangeState();
 
-    moveVec = moveCalclation->Roll(moveVec, targetMoveDirection,
+    moveVec_memory = moveCalclation->Roll(moveVec, targetMoveDirection,
         nowState->GetNowAnimState().PlayTime_anim, playerData);
+    
+    moveVec = moveCalclation->MoveVec(moveVec, moveVec_memory, playerData.isGround, playerData.isRoll);
 
     //進むスピードを乗算
     //ロールアクション中はそれに応じた速度
@@ -196,9 +199,9 @@ void Player::Draw()
 /// </summary>
 /// <param name="input"></param>
 /// <param name="moveVec"></param>
-void Player::Move(VECTOR& moveVec, const VECTOR& cameraDirection)
+VECTOR Player::Move(VECTOR& moveVec, const VECTOR& cameraDirection)
 {
-
+    VECTOR returnPos = moveVec;
     playerData.isMove = false;
     VECTOR rightMove = VCross(cameraDirection, VGet(0.0f, 1.0f, 0.0f));
 
@@ -216,7 +219,7 @@ void Player::Move(VECTOR& moveVec, const VECTOR& cameraDirection)
         {
            // ChangeMotion(animNum::run, PlayAnimSpeed);
         }
-        moveVec = VAdd(moveVec, upMove);
+        returnPos = VAdd(returnPos, upMove);
         playerData.isMove = true;
         playerData.isStopRun = true;
     }
@@ -228,7 +231,7 @@ void Player::Move(VECTOR& moveVec, const VECTOR& cameraDirection)
         {
            // ChangeMotion(animNum::run, PlayAnimSpeed);
         }
-        moveVec = VAdd(moveVec, VScale(upMove, -1.0f));
+        returnPos = VAdd(returnPos, VScale(upMove, -1.0f));
         playerData.isMove = true;
         playerData.isStopRun = true;
     }
@@ -240,7 +243,7 @@ void Player::Move(VECTOR& moveVec, const VECTOR& cameraDirection)
         {
            // ChangeMotion(animNum::run, PlayAnimSpeed);
         }
-        moveVec = VAdd(moveVec, rightMove);
+        returnPos = VAdd(returnPos, rightMove);
         playerData.isMove = true;
         playerData.isStopRun = true;
     }
@@ -252,16 +255,19 @@ void Player::Move(VECTOR& moveVec, const VECTOR& cameraDirection)
         {
             //ChangeMotion(animNum::run, PlayAnimSpeed);
         }
-        moveVec = VAdd(moveVec, VScale(rightMove, -1.0f));
+        returnPos = VAdd(returnPos, VScale(rightMove, -1.0f));
         playerData.isMove = true;
         playerData.isStopRun = true;
     }
 
     //0でなければ正規化
-    if (VSize(moveVec) != 0)
+    if (VSize(returnPos) != 0)
     {
-        moveVec = VNorm(moveVec);
+        returnPos = VNorm(returnPos);
     }
+
+    return returnPos;
+    
 }
 
 
