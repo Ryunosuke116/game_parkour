@@ -1,4 +1,5 @@
 #include "Dxlib.h"
+#include "Calclation.h"
 #include "MoveCalclation.h"
 #include"playerState.h"
 #include "AnimTime.h"
@@ -96,3 +97,13 @@ VECTOR MoveCalclation::Roll(const VECTOR& moveVec, const VECTOR& moveDirection,
     return move;
 }
 
+VECTOR MoveCalclation::MoveVec()
+{
+    bool isJump, isRoll;
+    VECTOR moveVec, newMoveVec;
+
+    if (isJump || isRoll)
+    {
+        moveVec = Calclation::Leap(moveVec, newMoveVec, 0.2f);
+    }
+}

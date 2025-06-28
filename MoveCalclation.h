@@ -15,6 +15,7 @@ public:
 	void Gravity(const VECTOR& moveVec, const PlayerStateActionBase::PlayerData& playerData);
 	VECTOR Roll(const VECTOR& moveVec, const VECTOR& moveDirection, 
 		float playTime_anim, const PlayerStateActionBase::PlayerData& playerData);
+	VECTOR MoveVec();
 
 	float GetCurrentJumpSpeed() { return currentJumpSpeed; }
 	float GetNowMoveSpeed() { return nowMoveSpeed; }

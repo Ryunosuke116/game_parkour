@@ -21,6 +21,8 @@ public:
 	static VECTOR NearestPoint(const VECTOR& position_1, const VECTOR& position_2,
 		 const VECTOR& point);
 
+	static VECTOR Leap(VECTOR& changePosition, const VECTOR& playerPosition, const float& speed);
+
 };
 
 

@@ -54,6 +54,20 @@ VECTOR Calclation::NearestPoint(const VECTOR& position_1, const VECTOR& position
 	return AX;
 }
 
+/// <summary>
+/// ÉâÅ[Év
+/// </summary>
+/// <param name="AimPosition"></param>
+VECTOR Calclation::Leap(VECTOR& changePosition, const VECTOR& playerPosition, const float& speed)
+{
+	VECTOR SubPosition = VSub(playerPosition, changePosition);
+	VECTOR scalePosition = VGet(0, 0, 0);
+
+	scalePosition = VScale(SubPosition, speed);
+
+	return VAdd(changePosition, scalePosition);
+}
+
 void Calclation::Initialize()
 {
 	if (instance != nullptr)

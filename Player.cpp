@@ -329,7 +329,6 @@ void Player::ChangeState()
 
         //nowState‚ğXV
         nowState = std::make_shared<Idle>(modelHandle,oldAnimState, nowAnimState,playerData);
-    
     }
 
     //‘–‚é
