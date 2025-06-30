@@ -105,7 +105,7 @@ void Player::Update(const VECTOR& cameraDirection,const int mapHandle)
     //èÛë‘ïœçX
     ChangeState();
 
-    moveVec_memory = moveCalclation->Roll(moveVec, targetMoveDirection,
+    moveVec = moveCalclation->Roll(moveVec, targetMoveDirection,
         nowState->GetNowAnimState().PlayTime_anim, playerData);
     
     moveVec = moveCalclation->MoveVec(moveVec, moveVec_memory, playerData.isGround, playerData.isRoll);
@@ -219,7 +219,7 @@ VECTOR Player::Move(VECTOR& moveVec, const VECTOR& cameraDirection)
         {
            // ChangeMotion(animNum::run, PlayAnimSpeed);
         }
-        returnPos = VAdd(returnPos, upMove);
+        moveVec = VAdd(moveVec, upMove);
         playerData.isMove = true;
         playerData.isStopRun = true;
     }
@@ -231,7 +231,7 @@ VECTOR Player::Move(VECTOR& moveVec, const VECTOR& cameraDirection)
         {
            // ChangeMotion(animNum::run, PlayAnimSpeed);
         }
-        returnPos = VAdd(returnPos, VScale(upMove, -1.0f));
+        moveVec = VAdd(moveVec, VScale(upMove, -1.0f));
         playerData.isMove = true;
         playerData.isStopRun = true;
     }
@@ -243,7 +243,7 @@ VECTOR Player::Move(VECTOR& moveVec, const VECTOR& cameraDirection)
         {
            // ChangeMotion(animNum::run, PlayAnimSpeed);
         }
-        returnPos = VAdd(returnPos, rightMove);
+        moveVec = VAdd(moveVec, rightMove);
         playerData.isMove = true;
         playerData.isStopRun = true;
     }
@@ -255,15 +255,15 @@ VECTOR Player::Move(VECTOR& moveVec, const VECTOR& cameraDirection)
         {
             //ChangeMotion(animNum::run, PlayAnimSpeed);
         }
-        returnPos = VAdd(returnPos, VScale(rightMove, -1.0f));
+        moveVec = VAdd(moveVec, VScale(rightMove, -1.0f));
         playerData.isMove = true;
         playerData.isStopRun = true;
     }
 
     //0Ç≈Ç»ÇØÇÍÇŒê≥ãKâª
-    if (VSize(returnPos) != 0)
+    if (VSize(moveVec) != 0)
     {
-        returnPos = VNorm(returnPos);
+        moveVec = VNorm(moveVec);
     }
 
     return returnPos;
