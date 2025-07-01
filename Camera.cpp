@@ -130,7 +130,7 @@ void Camera::PosCalc()
 	//lookPos‚ª‹…‚ÌŠO‘¤‚É‚¢‚Á‚½ê‡‹…‚Ì’†SÀ•W‚ğ‚¸‚ç‚·
 	if (!HitCheck::HitConfirmation(spherePosition, centerPos, radius, 0.5f))
 	{
-		Leap(spherePosition, centerPos, 0.2f);
+		Leap(spherePosition, centerPos, 0.1f);
 	}
 	else
 	{

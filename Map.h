@@ -9,6 +9,7 @@ public:
 	~Map();
 	void Initialize()override;
 	void Update()override;
+	void Update(const VECTOR& playerPos);
 	void Draw()override;
 
 };

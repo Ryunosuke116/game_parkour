@@ -3,7 +3,7 @@
 
 /// @brief コンストラクタ
 /// @param path 
-CoinObject::CoinObject(const char* path):
+CoinObject::CoinObject(const char* path, const VECTOR& pos):
 	radian_Y(0.0f)
 {
 	modelHandle = MV1LoadModel(path);

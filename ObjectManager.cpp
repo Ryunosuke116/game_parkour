@@ -26,14 +26,15 @@ ObjectManager::~ObjectManager()
 void ObjectManager::Create()
 {
 	map = std::make_shared<Map>("material/skyDome/sunSet.mv1");
-	field = std::make_shared<Field>("material/mv1/new_city/new_city_0617.mv1");
-	fieldMesh = std::make_shared<FieldMesh>("material/mv1/new_city/new_city_mesh_0617.mv1");
+	field = std::make_shared<Field>("material/mv1/new_city/new_city_0630.mv1");
+	fieldMesh = std::make_shared<FieldMesh>("material/mv1/new_city/new_city_mesh_0630.mv1");
 	coin = std::make_shared<CoinObject>("material/mv1/Coin.mv1");
 	player = std::make_shared<Player>();
 	camera = std::make_shared<Camera>();
 	//playerManager = std::make_shared<PlayerManager>();
 	actualPlayer = std::dynamic_pointer_cast<Player>(player);
 	actualCoin = std::dynamic_pointer_cast<CoinObject>(coin);
+	actualMap = std::dynamic_pointer_cast<Map>(map);
 	
 }
 
@@ -61,7 +62,7 @@ void ObjectManager::Update()
 	camera->Update(player->GetPosition());
 	//playerManager->Update(fieldMesh->GetModelHandle(), *actualPlayer);
 	actualCoin->Update(actualPlayer->GetTopPos(), actualPlayer->GetBottomPos(), actualPlayer->GetRadius());
-	map->Update();
+	actualMap->Update(player->GetPosition());
 	field->Update();
 	fieldMesh->Update();
 }
@@ -78,5 +79,8 @@ void ObjectManager::Draw()
 	field->Draw();
 	coin->Draw();
 	fieldMesh->Draw();
-	
+
+	DrawLine3D(VGet(0.0f, 15.0f, 0.0f), VGet(10.0f, 15.0f, 0.0f), GetColor(255, 0, 0));
+	DrawLine3D(VGet(0.0f, 15.0f, 0.0f), VGet(0.0f, 25.0f, 0.0f), GetColor(0, 255, 0));
+	DrawLine3D(VGet(0.0f, 15.0f, 0.0f), VGet(0.0f, 15.0f, 10.0f), GetColor(0, 0, 255));
 }

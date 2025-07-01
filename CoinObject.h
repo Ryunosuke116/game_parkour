@@ -5,7 +5,7 @@
 class CoinObject : public BaseObject
 {
 public:
-	CoinObject(const char* path);
+	CoinObject(const char* path, const VECTOR& pos);
 	~CoinObject();
 
 	void Initialize()override;

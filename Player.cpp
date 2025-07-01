@@ -57,6 +57,7 @@ void Player::Initialize()
     playerData.isJumpAll = false;
     playerData.isRoll_PlayAnim = false;
     playerData.isJump_PlayAnim = false;
+    playerData.isFalling = false;
    
     oldAnimState.AttachIndex = -1;
     oldAnimState.PlayAnimSpeed = 0.0f;
@@ -127,8 +128,21 @@ void Player::Update(const VECTOR& cameraDirection,const int mapHandle)
     //重力計算
     moveCalclation->Gravity(moveVec, playerData);
 
-    auto result = collisionManager->Update(mapHandle, position, moveVec,targetMoveDirection, radius, addTopPos, addBottomPos, playerData.isJump);
+    auto result = collisionManager->Update(mapHandle, position,
+        moveVec,targetMoveDirection, radius, addTopPos,
+        addBottomPos, playerData.isJump, playerData.isFalling);
+
     playerData.isGround = result.first;
+
+    //落下している場合
+    if (playerData.isFalling)
+    {
+        //接地していた場合falseにする
+        if (playerData.isGround)
+        {
+            playerData.isFalling = false;
+        }
+    }
     SetPos(result.second);
 
     isChageState = nowState->MotionUpdate(playerData);
@@ -173,7 +187,7 @@ void Player::Draw()
 
     printfDx("playerPosition.x %f\nplayerPosition.y %f\nplayerPosition.z %f\n",
         position.x, position.y, position.z);
-    printfDx("frame現在数%d\n", nowFrameNumber);
+   // printfDx("frame現在数%d\n", nowFrameNumber);
     printfDx("nowMoveSpeed %f\n", moveCalclation->GetNowMoveSpeed());
     printfDx("isMove %d\n", playerData.isMove);
     printfDx("isJump %d\n", playerData.isJump);
@@ -183,6 +197,7 @@ void Player::Draw()
     printfDx("isSprint %d\n", playerData.isSprint);
     printfDx("isStopRun %d\n", playerData.isStopRun);
     printfDx("isJumpAll %d\n", playerData.isJumpAll);
+    printfDx("isFalling %d\n", playerData.isFalling);
     printfDx("isChageState %d\n", isChageState);
     printfDx("animNumber_Now %d\n", animNumber_Now);
     printfDx("currentJumpSpeed %f\n", moveCalclation->GetCurrentJumpSpeed());
@@ -190,7 +205,7 @@ void Player::Draw()
 
     //線
    // DrawLine3D(centerPosition, footPosition, GetColor(255, 0, 0));
-  //  DrawLine3D(topPosition, linePos_end, GetColor(255, 0, 0));
+    DrawLine3D(topPosition, linePos_end, GetColor(255, 0, 0));
     collisionManager->Draw();
 }
 
@@ -404,7 +419,7 @@ void Player::ChangeState()
         nowState = nullptr;
         animNumber_Now = animNum::falling_Idle;
         nowState = std::make_shared<Falling_Idle>(modelHandle, oldAnimState, nowAnimState);
-
+        playerData.isFalling = true;
     }
 
     //転がる
@@ -450,6 +465,14 @@ void Player::ChangeState()
         animNumber_Now = animNum::run_To_Stop;
         nowState = std::make_shared<Run_To_Stop>(modelHandle, oldAnimState, nowAnimState);
     }
+
+    //崖つかみ
+    if (playerData.isHangring && playerData.isFalling && 
+        animNumber_Now != animNum::hangring_Idle)
+    {
+        SetNowAnimState(nowState->GetNowAnimState());
+        SetOldAnimState(nowState->GetOldAnimState());
+    }
 }
 
 /// <summary>
@@ -478,97 +501,5 @@ void Player::SettingRay()
     linePos_end.y = topPosition.y - 1.0f;
   
 }
-
-///// <summary>
-///// 上入力
-///// </summary>
-///// <param name="input"></param>
-///// <returns></returns>
-//bool Player::PadInput::isUp(Input& input)
-//{
-//    
-//    if (input.GetNowFrameInput() & PAD_INPUT_UP ||
-//        CheckHitKey(KEY_INPUT_UP))
-//    {
-//        return true;
-//    }
-//
-//    return false;
-//}
-//
-///// <summary>
-///// 下入力
-///// </summary>
-///// <param name="input"></param>
-///// <returns></returns>
-//bool Player::PadInput::isDown(Input& input)
-//{
-//    if (input.GetNowFrameInput() & PAD_INPUT_DOWN ||
-//        CheckHitKey(KEY_INPUT_DOWN))
-//    {
-//        return true;
-//    }
-//    return false;
-//}
-//
-///// <summary>
-///// 右入力
-///// </summary>
-///// <param name="input"></param>
-///// <returns></returns>
-//bool Player::PadInput::isRight(Input& input)
-//{
-//    if (input.GetNowFrameInput() & PAD_INPUT_RIGHT ||
-//        CheckHitKey(KEY_INPUT_RIGHT))
-//    {
-//        return true;
-//    }
-//    return false;
-//}
-//
-///// <summary>
-///// 左入力
-///// </summary>
-///// <param name="input"></param>
-///// <returns></returns>
-//bool Player::PadInput::isLeft(Input& input)
-//{
-//    if (input.GetNowFrameInput() & PAD_INPUT_LEFT ||
-//        CheckHitKey(KEY_INPUT_LEFT))
-//    {
-//        return true;
-//    }
-//    return false;
-//}
-//
-///// <summary>
-///// ジャンプ入力
-///// </summary>
-///// <param name="input"></param>
-///// <returns></returns>
-//bool Player::PadInput::isJump(Input& input)
-//{
-//    if (CheckHitKey(KEY_INPUT_SPACE) ||
-//        input.GetNowFrameNewInput() & PAD_INPUT_A)
-//    {
-//        return true;
-//    }
-//    return false;
-//}
-//
-///// <summary>
-///// ロール入力
-///// </summary>
-///// <param name="input"></param>
-///// <returns></returns>
-//bool Player::PadInput::isRoll(Input& input)
-//{
-//    if (CheckHitKey(KEY_INPUT_F) ||
-//        input.GetNowFrameNewInput() & PAD_INPUT_B)
-//    {
-//        return true;
-//    }
-//    return false;
-//}
 
 void Player::Update() {};

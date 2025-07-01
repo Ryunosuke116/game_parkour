@@ -36,6 +36,6 @@ void Game::Update()
 
 void Game::Draw()
 {
-	objectManager->Draw();
 	clsDx();
+	objectManager->Draw();
 }

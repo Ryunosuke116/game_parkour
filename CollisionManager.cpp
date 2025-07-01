@@ -6,10 +6,15 @@
 /// @param modelHandle 
 /// @return 
 std::pair<bool, VECTOR> CollisionManager::Update(int modelHandle, const VECTOR& playerPos,
-	const VECTOR& moveVec, VECTOR& moveDirection, float radius, float addTopPos, float addBottomPos, bool isJump)
+	const VECTOR& moveVec, VECTOR& moveDirection, float radius, float addTopPos, float addBottomPos, bool isJump, bool isFalling)
 {
 	VECTOR oldPos = playerPos;
 	VECTOR newPos = VAdd(oldPos, moveVec);	
+	VECTOR topPos = newPos;
+	topPos.y += addTopPos;
+
+	//äRÇ¬Ç©Ç›îªíË
+	CliffGrabbing(modelHandle, topPos, moveDirection, isFalling);
 	
 	//ï«è’ìÀîªíË
 	WallCollisionCheck(modelHandle, newPos, oldPos, radius,addTopPos, addBottomPos);
@@ -302,9 +307,23 @@ bool CollisionManager::WallCollisionCheck(int modelHandle, VECTOR& newPos, VECTO
 /// </summary>
 /// <param name="player"></param>
 /// <param name="modelHandle"></param>
-void CollisionManager::CliffGrabbing(int modelHandle, const VECTOR& topPosition)
+void CollisionManager::CliffGrabbing(int modelHandle,
+	const VECTOR& topPosition, const VECTOR& moveDirection, const bool isFalling)
 {
+	VECTOR linePos_end = VAdd(topPosition, VScale(moveDirection, 10.0f));
+	linePos_end.y = topPosition.y - 1.0f;
+
+	MV1_COLL_RESULT_POLY hitPoly;
+
 	//óéâ∫íÜÇ…playerÇÃè„ïîÇ©ÇÁèoÇƒÇ¢ÇÈrayÇ≈îªíËÇéÊÇÈ
+	if (isFalling)
+	{
+		isHitHangring = HitCheck::HitRayJudge(modelHandle, -1, topPosition, linePos_end, hitPoly);
+	}
+	if (isHitHangring && hitPoly.Normal.y >= 0.8f)
+	{
+		hitHangringPos = hitPoly.HitPosition;
+	}
 	
 	//trueÇÃèÍçáÇ…äRÇÇ¬Ç©ÇﬁÇÊÇ§Ç…Ç∑ÇÈ
 }
@@ -411,6 +430,8 @@ void CollisionManager::Draw()
 		GetColor(255, 0, 0), FALSE);
 	DrawSphere3D(hitPos_head, 2.0f, 30, GetColor(0, 0, 0),
 		GetColor(255, 0, 0), FALSE);
+	DrawSphere3D(hitHangringPos, 2.0f, 30, GetColor(0, 0, 0),
+		GetColor(0, 255, 0), FALSE);
 
 	DrawLine3D(topPos_ray, bottomPos_ray, GetColor(255, 0, 0));
 }

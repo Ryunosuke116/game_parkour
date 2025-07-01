@@ -28,10 +28,12 @@ void Map::Initialize()
 /// <summary>
 /// çXêV
 /// </summary>
-void Map::Update()
+void Map::Update(const VECTOR& playerPos)
 {
-
+	MV1SetPosition(modelHandle, playerPos);
 }
+
+void Map::Update() {};
 
 /// <summary>
 /// ï`âÊ

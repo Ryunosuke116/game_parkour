@@ -19,6 +19,8 @@ public:
 		bool isSprint;					//走り出しか
 		bool isStopRun;					//走り終わったか
 		bool isJumpAll;					//全てのジャンプが完了したか
+		bool isFalling;					//落下中か
+		bool isHangring;				//崖つかみ中か
 	};
 
 	struct OldAnimState
