@@ -287,4 +287,9 @@
       <Filter>ヘッダー ファイル</Filter>
     </Text>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="coin.Json">
+      <Filter>ヘッダー ファイル</Filter>
+    </None>
+  </ItemGroup>
 </Project>

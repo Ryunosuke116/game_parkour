@@ -13,8 +13,13 @@ MoveCalclation::MoveCalclation() :
 
 }
 
-/// @brief 
-/// @param moveVec 
+/// <summary>
+/// 移動距離計算
+/// </summary>
+/// <param name="moveVec"></param>
+/// <param name="moveDirection"></param>
+/// <param name="playerData"></param>
+/// <returns></returns>
 VECTOR MoveCalclation::Move(const VECTOR& moveVec, const VECTOR& moveDirection, const PlayerStateActionBase::PlayerData& playerData)
 {
     if (playerData.isMove)
@@ -52,7 +57,13 @@ VECTOR MoveCalclation::Move(const VECTOR& moveVec, const VECTOR& moveDirection, 
     return VScale(moveDirection, nowMoveSpeed);
 }
 
-
+/// <summary>
+/// ジャンプ力計算
+/// </summary>
+/// <param name="moveVec"></param>
+/// <param name="animNumber_Now"></param>
+/// <param name="playerData"></param>
+/// <returns></returns>
 VECTOR MoveCalclation::Jump(const VECTOR& moveVec,const int& animNumber_Now,
     const PlayerStateActionBase::PlayerData& playerData)
 {
@@ -71,6 +82,11 @@ VECTOR MoveCalclation::Jump(const VECTOR& moveVec,const int& animNumber_Now,
     return move;
 }
 
+/// <summary>
+/// 重力計算
+/// </summary>
+/// <param name="moveVec"></param>
+/// <param name="playerData"></param>
 void MoveCalclation::Gravity(const VECTOR& moveVec, const PlayerStateActionBase::PlayerData& playerData)
 {
     if (!playerData.isGround)
@@ -79,6 +95,14 @@ void MoveCalclation::Gravity(const VECTOR& moveVec, const PlayerStateActionBase:
     }
 }
 
+/// <summary>
+/// ロール距離計算
+/// </summary>
+/// <param name="moveVec"></param>
+/// <param name="moveDirection"></param>
+/// <param name="playTime_anim"></param>
+/// <param name="playerData"></param>
+/// <returns></returns>
 VECTOR MoveCalclation::Roll(const VECTOR& moveVec, const VECTOR& moveDirection,
     float playTime_anim, const PlayerStateActionBase::PlayerData& playerData)
 {
@@ -97,6 +121,19 @@ VECTOR MoveCalclation::Roll(const VECTOR& moveVec, const VECTOR& moveDirection,
     return move;
 }
 
+
+///////////////////////////////
+// まだ使うかわからない
+//////////////////////////////
+
+/// <summary>
+/// 
+/// </summary>
+/// <param name="moveVec"></param>
+/// <param name="moveVec_memory"></param>
+/// <param name="isGround"></param>
+/// <param name="isRoll"></param>
+/// <returns></returns>
 VECTOR MoveCalclation::MoveVec(const VECTOR& moveVec,const VECTOR& moveVec_memory,const bool isGround,const bool isRoll)
 {
     VECTOR returnPos = moveVec;

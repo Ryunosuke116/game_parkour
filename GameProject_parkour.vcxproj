@@ -217,6 +217,9 @@
   <ItemGroup>
     <Text Include="Json\player.Json" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="coin.Json" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
