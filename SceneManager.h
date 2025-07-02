@@ -1,4 +1,7 @@
 #pragma once
+#include "BaseScene.h"
+#include <unordered_map>
+
 class SceneManager
 {
 public:

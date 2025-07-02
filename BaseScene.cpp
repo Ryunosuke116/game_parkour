@@ -1,4 +1,6 @@
-#include "Include.h"
+#include "common.h"
+#include "SceneManager.h"
+#include "BaseScene.h"
 
 /// <summary>
 /// インスタンス化

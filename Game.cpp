@@ -1,4 +1,8 @@
-#include "Include.h"
+#include "common.h"
+#include "ObjectManager.h"
+#include "SceneManager.h"
+#include "BaseScene.h"
+#include "Game.h"
 
 /// <summary>
 /// インスタンス化

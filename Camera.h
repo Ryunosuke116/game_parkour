@@ -22,7 +22,7 @@ public:
 
 	void Initialize();
 	void Update(const VECTOR& playerPosition);
-	void Draw();
+	bool Draw();
 	void RotateUpdate(const VECTOR& playerPosition);
 	void PosCalc();
 	void Leap(VECTOR& changePosition, const VECTOR& playerPosition, const float& speed);

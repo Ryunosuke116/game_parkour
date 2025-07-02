@@ -36,13 +36,13 @@ public:
 	BaseChara();
 	~BaseChara();
 
+	//èÉêàâºëzä÷êî
 	virtual void Initialize()abstract;
 	virtual void Update()abstract;
-	virtual void Draw()abstract;
+	virtual bool Draw()abstract;
 
 	virtual void ChangeMotion(const int& motionNum, const float playAnimSpeed);
 	virtual void MotionUpdate();
-	virtual void Move(const Input& input, VECTOR& moveVec, const VECTOR& cameraDirection);
 	void UpdateAngle(const VECTOR direction);
 
 	/////////////////////////////////////////////

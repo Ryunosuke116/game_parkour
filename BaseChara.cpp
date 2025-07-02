@@ -1,4 +1,7 @@
-#include "Include.h"
+#include "common.h"
+#include "Input.h"
+#include "BaseChara.h"
+
 
 BaseChara::BaseChara() :
     modelHandle(-1),
@@ -39,18 +42,9 @@ void BaseChara::Update() {}
 /// <summary>
 /// •`‰æ
 /// </summary>
-void BaseChara::Draw()
+bool BaseChara::Draw()
 {
-}
-
-/// <summary>
-/// ˆÚ“®
-/// </summary>
-/// <param name="input"></param>
-/// <param name="moveVec"></param>
-void BaseChara::Move(const Input& input, VECTOR& moveVec, const VECTOR& cameraDirection)
-{
-
+    return true;
 }
 
 /// <summary>

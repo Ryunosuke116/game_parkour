@@ -1,5 +1,6 @@
 #pragma once
 #include "BaseObject.h"
+
 class FieldMesh : public BaseObject
 {
 public:
@@ -8,7 +9,7 @@ public:
 
 	void Initialize()override;
 	void Update()override;
-	void Draw()override;
+	bool Draw()override;
 
 private:
 	bool isPoly;

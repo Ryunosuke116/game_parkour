@@ -7,7 +7,7 @@ public:
 	~PlayerManager();
 
 	void Update(int mapHandle,Player& player);
-	void Draw();
+	bool Draw();
 
 private:
 	std::shared_ptr<CollisionManager> collisionManager = NULL;

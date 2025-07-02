@@ -1,4 +1,7 @@
-#include "Include.h"
+#include "common.h"
+#include "HitCheck.h"
+#include "Calclation.h"
+#include "CollisionManager.h"
 #include <utility>
 
 /// @brief çXêV
@@ -414,7 +417,7 @@ VECTOR CollisionManager::CalcPushBack_SphereMeshOutsideTriangle(const MV1_COLL_R
 /// <summary>
 /// ï`âÊ
 /// </summary>
-void CollisionManager::Draw()
+bool CollisionManager::Draw()
 {
 	printfDx("NormalPos.y %f\n", subPos.y);
 	printfDx("NormalPos_Wall.x %f\n", normal.x);
@@ -434,4 +437,5 @@ void CollisionManager::Draw()
 		GetColor(0, 255, 0), FALSE);
 
 	DrawLine3D(topPos_ray, bottomPos_ray, GetColor(255, 0, 0));
+	return true;
 }

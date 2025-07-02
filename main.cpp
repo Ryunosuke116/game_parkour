@@ -1,4 +1,7 @@
-#include "Include.h"
+#include "common.h"
+#include "EffekseerForDXLib.h"
+#include "SceneManager.h"
+#include "Game.h"
 #include "nlohmann/json.hpp"
 
 //äÓñ{ê›íË

@@ -1,4 +1,6 @@
 #pragma once
+#include "BaseObject.h"
+
 class Map : public BaseObject
 {
 private:
@@ -10,7 +12,7 @@ public:
 	void Initialize()override;
 	void Update()override;
 	void Update(const VECTOR& playerPos);
-	void Draw()override;
+	bool Draw()override;
 
 };
 

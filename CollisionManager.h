@@ -8,7 +8,7 @@ public:
 	bool HeadCollisionCheck(int modelHandle, VECTOR& newPos, float addTopPos, float radius, float addBottomPos);
 	bool WallCollisionCheck(int modelHandle, VECTOR& newPos, VECTOR& oldPos, float radius, float addTopPos, float addBottomPos);
 	//bool Update(Player& player, int modelHandle);
-	void Draw();
+	bool Draw();
 
 	std::pair<bool, VECTOR> Update(int modelHandle, const VECTOR& playerPos, 
 		const VECTOR& moveVec, VECTOR& moveDirection, float radius, 

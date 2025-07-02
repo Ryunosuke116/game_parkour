@@ -1,9 +1,10 @@
-#include"playerState.h"
+#include "common.h"
 #include <fstream>
+#include"playerState.h"
 #include "AnimTime.h"
-#include "Include.h"
 #include "Json.h"
 #include "PadInput.h"
+#include "Player.h"
 #include "nlohmann/json.hpp"
 
 /// <summary>
@@ -177,7 +178,7 @@ void Player::Update(const VECTOR& cameraDirection,const int mapHandle)
 /// <summary>
 /// •`‰æ
 /// </summary>
-void Player::Draw()
+bool Player::Draw()
 {
 	MV1DrawModel(modelHandle);
     DrawSphere3D(bottomPosition, 3.5f, 30, GetColor(0, 0, 0),
@@ -207,6 +208,7 @@ void Player::Draw()
    // DrawLine3D(centerPosition, footPosition, GetColor(255, 0, 0));
     DrawLine3D(topPosition, linePos_end, GetColor(255, 0, 0));
     collisionManager->Draw();
+    return true;
 }
 
 /// <summary>

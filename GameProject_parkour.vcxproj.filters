@@ -176,9 +176,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Include.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="BaseScene.h">
       <Filter>ソース ファイル\Base</Filter>
     </ClInclude>
@@ -281,6 +278,15 @@
     <ClInclude Include="PadInput.h">
       <Filter>ソース ファイル\Pad</Filter>
     </ClInclude>
+    <ClInclude Include="common.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="objects.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="padInput_interface.h">
+      <Filter>ソース ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Json\player.Json">
@@ -288,7 +294,7 @@
     </Text>
   </ItemGroup>
   <ItemGroup>
-    <None Include="coin.Json">
+    <None Include="Json\coin.Json">
       <Filter>ヘッダー ファイル</Filter>
     </None>
   </ItemGroup>

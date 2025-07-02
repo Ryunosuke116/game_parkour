@@ -103,12 +103,13 @@ bool PlayerStateActionBase::MotionUpdate(PlayerData& playerData)
 }
 
 
-void PlayerStateActionBase::Draw()
+bool PlayerStateActionBase::Draw()
 {
     printfDx("nowAttachIndex %d\n", nowAnimState.AttachIndex);
     printfDx("nowPlayTime_anim %f\n", nowAnimState.PlayTime_anim);
     printfDx("oldAttachIndex %d\n", oldAnimState.AttachIndex);
     printfDx("oldPlayTime_anim %f\n", oldAnimState.PlayTime_anim);
+    return true;
 }
 
 void PlayerStateActionBase::SetOldAnimState()

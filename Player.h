@@ -1,6 +1,8 @@
 #pragma once
 #include "PlayerStateActionBase.h"
 #include "MoveCalclation.h"
+#include "BaseChara.h"
+#include "CollisionManager.h"
 
 class Player : public BaseChara
 {
@@ -55,7 +57,7 @@ public:
 	void Initialize();
 	void Update()override;
 	void Update(const VECTOR& cameraDirection, const int mapHandle);
-	void Draw();
+	bool Draw();
 	VECTOR Move(VECTOR& moveVec, const VECTOR& cameraDirection);
 	void JumpMove();
 	void RollMove();

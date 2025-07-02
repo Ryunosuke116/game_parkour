@@ -10,11 +10,12 @@ public:
 
 	void Initialize()override;
 	void Update()override;
-	void Update(const VECTOR& playerPos, const VECTOR& playerPos_bottom, const float radius);
-	void Draw()override;
+	bool Update(const VECTOR& playerPos, const VECTOR& playerPos_bottom, const float radius);
+	bool Draw()override;
 	void HitPlayerAction(const VECTOR& playerPos, const float& radius);
 
 	HitCheck hitCheck;
+	bool GetHitFlag() { return hitFlag; }
 
 private:
 

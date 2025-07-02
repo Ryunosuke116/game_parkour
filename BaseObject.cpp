@@ -1,5 +1,5 @@
-#include "Include.h"
-
+#include "common.h"
+#include "BaseObject.h"
 
 /// <summary>
 /// インスタンス
@@ -35,8 +35,9 @@ void BaseObject::Update()
 /// <summary>
 /// 描画
 /// </summary>
-void BaseObject::Draw()
+bool BaseObject::Draw()
 {
 	//MV1SetWireFrameDrawFlag(modelHandle,TRUE);
 	MV1DrawModel(modelHandle);
+	return true;
 }

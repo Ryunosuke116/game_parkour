@@ -1,4 +1,7 @@
-#include "Include.h"
+#include "common.h"
+#include "Player.h"
+#include "CollisionManager.h"
+#include "PlayerManager.h"
 
 /// <summary>
 /// コンストラクタ
@@ -34,7 +37,8 @@ void PlayerManager::Update(int mapHandle, Player& player)
 /// <summary>
 /// 描画
 /// </summary>
-void PlayerManager::Draw()
+bool PlayerManager::Draw()
 {
 	collisionManager->Draw();
+	return true;
 }

@@ -1,3 +1,5 @@
+#include "common.h"
+#include "BaseObject.h"
 #include "FieldMesh.h"
 
 /// <summary>
@@ -86,7 +88,7 @@ void FieldMesh::Update()
 /// <summary>
 /// •`‰æ
 /// </summary>
-void FieldMesh::Draw()
+bool FieldMesh::Draw()
 {
 	if (isPoly)
 	{
@@ -98,4 +100,5 @@ void FieldMesh::Draw()
 	}
 
 	MV1DrawModel(modelHandle);
+	return true;
 }

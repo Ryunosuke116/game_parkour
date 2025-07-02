@@ -47,7 +47,7 @@ public:
 	void SetOldAnimState();
 	void ResetOldAnimState();
 	void ResetNowAnimState();
-	void Draw();
+	bool Draw();
 
 
 	//////////////////////////////////////////////

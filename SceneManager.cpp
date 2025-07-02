@@ -1,4 +1,7 @@
-#include "Include.h"
+#include "common.h"
+#include <cassert>
+#include "BaseScene.h"
+#include "SceneManager.h"
 
 SceneManager::SceneManager() :nowScene{ nullptr } {}
 

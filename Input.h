@@ -2,16 +2,16 @@
 class Input
 {
 public:
-	Input();
-	~Input();
+	
+	~Input() {};
 
-	void Update();
+	virtual void Update()abstract;
 
-	int GetNowFrameInput() const { return nowFrameInput; }
-	int GetNowFrameNewInput() const { return nowFrameNewInput; }
+	virtual int GetNowFrameInput() const abstract;
+	virtual int GetNowFrameNewInput() const abstract;
 
-private:
-	int		nowFrameInput;				// 現在のフレームで押されているボタン
-	int		nowFrameNewInput;			// 現在のフレームで新たに押されたボタン
+//private:
+//	int		nowFrameInput;				// 現在のフレームで押されているボタン
+//	int		nowFrameNewInput;			// 現在のフレームで新たに押されたボタン
 };
 

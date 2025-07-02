@@ -195,14 +195,15 @@
     <ClInclude Include="HitCheck.h" />
     <ClInclude Include="Idle.h" />
     <ClInclude Include="Idle_To_Sprint.h" />
-    <ClInclude Include="Include.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Json.h" />
     <ClInclude Include="Jump.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="MoveCalclation.h" />
     <ClInclude Include="ObjectManager.h" />
+    <ClInclude Include="objects.h" />
     <ClInclude Include="PadInput.h" />
+    <ClInclude Include="padInput_interface.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerManager.h" />
     <ClInclude Include="playerState.h" />
@@ -213,12 +214,13 @@
     <ClInclude Include="Run_To_Stop.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="AnimTime.h" />
+    <ClInclude Include="common.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Json\player.Json" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="coin.Json" />
+    <None Include="Json\coin.Json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

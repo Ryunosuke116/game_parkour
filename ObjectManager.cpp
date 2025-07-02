@@ -1,7 +1,5 @@
-#include "BaseManager.h"
-#include "FieldMesh.h"
-#include "PadInput.h"
-#include "Include.h"
+#include "common.h"
+#include "ObjectManager.h"
 #include "Json.h"
 
 /// <summary>
@@ -28,12 +26,11 @@ void ObjectManager::Create()
 	map = std::make_shared<Map>("material/skyDome/sunSet.mv1");
 	field = std::make_shared<Field>("material/mv1/new_city/new_city_0630.mv1");
 	fieldMesh = std::make_shared<FieldMesh>("material/mv1/new_city/new_city_mesh_0630.mv1");
-	coin = std::make_shared<CoinObject>("material/mv1/Coin.mv1");
+	coinManager = std::make_shared<CoinManager>();
 	player = std::make_shared<Player>();
 	camera = std::make_shared<Camera>();
-	//playerManager = std::make_shared<PlayerManager>();
+	
 	actualPlayer = std::dynamic_pointer_cast<Player>(player);
-	actualCoin = std::dynamic_pointer_cast<CoinObject>(coin);
 	actualMap = std::dynamic_pointer_cast<Map>(map);
 	
 }
@@ -46,10 +43,11 @@ void ObjectManager::Initialize()
 	map->Initialize();
 	field->Initialize();
 	fieldMesh->Initialize();
-	coin->Initialize();
+	coinManager->Initialize("material/mv1/Coin.mv1");
 	player->Initialize();
 	camera->Initialize();
 	PadInput::Initialize();
+
 }
 
 /// <summary>
@@ -60,27 +58,26 @@ void ObjectManager::Update()
 	PadInput::Update();
 	actualPlayer->Update(camera->GetCameraDirection(),fieldMesh->GetModelHandle());
 	camera->Update(player->GetPosition());
-	//playerManager->Update(fieldMesh->GetModelHandle(), *actualPlayer);
-	actualCoin->Update(actualPlayer->GetTopPos(), actualPlayer->GetBottomPos(), actualPlayer->GetRadius());
 	actualMap->Update(player->GetPosition());
 	field->Update();
 	fieldMesh->Update();
+	coinManager->Update(actualPlayer);
 }
 
 /// <summary>
 /// •`‰æ
 /// </summary>
-void ObjectManager::Draw()
+bool ObjectManager::Draw()
 {
 	player->Draw();
 	camera->Draw();
-	//playerManager->Draw();
 	map->Draw();
 	field->Draw();
-	coin->Draw();
 	fieldMesh->Draw();
+	coinManager->Draw();
 
 	DrawLine3D(VGet(0.0f, 15.0f, 0.0f), VGet(10.0f, 15.0f, 0.0f), GetColor(255, 0, 0));
 	DrawLine3D(VGet(0.0f, 15.0f, 0.0f), VGet(0.0f, 25.0f, 0.0f), GetColor(0, 255, 0));
 	DrawLine3D(VGet(0.0f, 15.0f, 0.0f), VGet(0.0f, 15.0f, 10.0f), GetColor(0, 0, 255));
+	return true;
 }

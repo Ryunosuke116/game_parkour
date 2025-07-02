@@ -1,5 +1,4 @@
 #pragma once
-#include "DxLib.h"
 
 class BaseObject
 {
@@ -13,7 +12,7 @@ public:
 	//ƒˆ‰¼‘zŠÖ”	
 	virtual void Initialize() abstract;
 	virtual void Update() abstract;
-	virtual void Draw() abstract;
+	virtual bool Draw() abstract;
 
 	const int GetModelHandle() { return modelHandle; }
 };

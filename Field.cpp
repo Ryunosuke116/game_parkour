@@ -1,5 +1,5 @@
-#include "Include.h"
-
+#include "common.h"
+#include "Field.h"
 
 /// <summary>
 /// コンストラクタ
@@ -86,7 +86,7 @@ void Field::Update()
 /// <summary>
 /// 描画
 /// </summary>
-void Field::Draw()
+bool Field::Draw()
 {
 	if (isPoly)
 	{
@@ -102,4 +102,5 @@ void Field::Draw()
 	MV1DrawModel(modelHandle);
 	 
 	//MV1DrawModel(meshHandle);
+	return true;
 }

@@ -1,4 +1,6 @@
-#include "Include.h"
+#include "common.h"
+#include "Map.h"
+#include "BaseObject.h"
 
 /// <summary>
 /// コンストラクタ
@@ -38,7 +40,8 @@ void Map::Update() {};
 /// <summary>
 /// 描画
 /// </summary>
-void Map::Draw()
+bool Map::Draw()
 {
 	MV1DrawModel(modelHandle);
+	return true;
 }

@@ -1,4 +1,8 @@
-#include "Include.h"
+#include "common.h"
+#include "EffekseerForDXLib.h"
+#include "HitCheck.h"
+#include "Camera.h"
+
 
 /// <summary>
 /// インストラクタ
@@ -71,7 +75,7 @@ void Camera::Update(const VECTOR& playerPosition)
 /// <summary>
 /// 描画
 /// </summary>
-void Camera::Draw()
+bool Camera::Draw()
 {
 
 	/*DrawSphere3D(spherePosition, radius, 30, GetColor(0, 0, 0),
@@ -83,6 +87,7 @@ void Camera::Draw()
 	printfDx("aimPosition.x %f\n", aimPosition.x);
 	printfDx("aimPosition.y %f\n", aimPosition.y);
 	printfDx("aimPosition.z %f\n", aimPosition.z);
+	return true;
 }
 
 void Camera::RotateUpdate(const VECTOR& playerPosition)

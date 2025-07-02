@@ -4,11 +4,16 @@
 class CoinManager
 {
 private:
-	std::vector<CoinObject> coins;
+	std::vector<std::shared_ptr<CoinObject>> coins;
 
 public:
+
+	CoinManager();
+	~CoinManager();
+
 	void Initialize(const char* path);
-	void Update();
-	void Draw();
+	void Update(const std::shared_ptr<Player>& player);
+	bool Draw();
+
 };
 

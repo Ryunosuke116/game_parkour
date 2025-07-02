@@ -8,7 +8,8 @@ CoinObject::CoinObject(const char* path, const VECTOR& pos):
 	isHitPlayer(false)
 {
 	modelHandle = MV1LoadModel(path);
-	position = VGet(0.0f, 0.0f, 0.0f);
+	position = pos;
+	MV1SetPosition(modelHandle, position);
 	MV1SetScale(modelHandle, VGet(0.1f, 0.1f, 0.1f));
 
 }
@@ -31,7 +32,7 @@ void CoinObject::Initialize()
 void CoinObject::Update(){}
 
 /// @brief çXêV
-void CoinObject::Update(const VECTOR& playerpos_top,const VECTOR& playerPos_bottom,const float radius)
+bool CoinObject::Update(const VECTOR& playerpos_top,const VECTOR& playerPos_bottom,const float radius)
 {
 	VECTOR nearCapsulePos = HitCheck::CapsuleHitConfirmation(playerpos_top, playerPos_bottom, position, radius, 4.5f);
 
@@ -45,14 +46,17 @@ void CoinObject::Update(const VECTOR& playerpos_top,const VECTOR& playerPos_bott
 	radian_Y += 1.0f;
 
 	MV1SetRotationXYZ(modelHandle, VGet(0.0f, radian_Y * DX_PI_F / 180.0f, 0.0f));
+
+	return hitFlag;
 }
 
 /// @brief ï`âÊ
-void CoinObject::Draw()
+bool CoinObject::Draw()
 {
 	printfDx("coin: %d", hitFlag);
 	MV1DrawModel(modelHandle);
 	DrawSphere3D(position, 4.5f, 5, GetColor(0, 0, 0), GetColor(255, 0, 0), FALSE);
+	return true;
 }
 
 /// <summary>

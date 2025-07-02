@@ -1,43 +1,70 @@
 #include <iostream>
 #include <vector>
 #include <fstream>
+#include "Player.h"
 #include "CoinManager.h"
 #include "Json.h"
 #include "nlohmann/json.hpp"
 
+/// <summary>
+/// コンストラクタ
+/// </summary>
+CoinManager::CoinManager()
+{
 
+}
+
+/// <summary>
+/// デストラクタ
+/// </summary>
+CoinManager::~CoinManager()
+{
+
+}
+
+/// <summary>
+/// 初期化
+/// </summary>
+/// <param name="path"></param>
 void CoinManager::Initialize(const char *path)
 {
-	//JsonFile::UnInitialize();
-	//JsonFile::Initialize("Json/coin.json");
-	//std::string positionPath = JsonFile::GetJson()["playerPath"];
-	//std::ifstream ifs("Json/coin.json");
-	//nlohmann::json j;
-	//ifs >> j;
+	std::ifstream ifs("Json/coin.Json");
+	nlohmann::json j;
+	ifs >> j;
 
-	//for (char i = 'a'; i < 'd'; i++)
-	//{
-	//	//positionPath = JsonFile::GetJson()[i];
-	//	coins.push_back(CoinObject(path, VGet(j[i]["x"], j[i]["y"], j[i]["z"])));
-	//}
+	for (char i = 'a'; i < 'd'; i++)
+	{
+		std::string key(1, i);
+		if (j.contains(key))
+		{
+			coins.push_back(std::make_shared<CoinObject>(path, VGet(j[key]["x"], j[key]["y"], j[key]["z"])));
+		}
+	}
 
-	//for (int i = 0; i < 10; i++)
-	//{
-	//}
 }
 
-void CoinManager::Update()
+void CoinManager::Update(const std::shared_ptr<Player>& player)
 {
-	for (auto& coin : coins)
+	//vector型内の現在位置
+	std::vector<std::shared_ptr<CoinObject>>::iterator it;
+
+	for ( it = coins.begin(); it != coins.end();)
 	{
-		coin.Update();
+		//playerと当たっていたら削除する
+		if ((*it)->Update(player->GetTopPos(), player->GetBottomPos(), player->GetRadius()))
+		{
+			it = coins.erase(it);
+			continue;
+		}
+		it++;
 	}
 }
 
-void CoinManager::Draw()
+bool CoinManager::Draw()
 {
 	for (auto& coin : coins)
 	{
-		coin.Draw();
+		coin->Draw();
 	}
+	return true;
 }

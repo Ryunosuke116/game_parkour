@@ -1,5 +1,6 @@
-#include "Include.h"
-
+#include "common.h"
+#include "HitCheck.h"
+#include "Calclation.h"
 
 /// @brief コンストラクタ
 /// @return 

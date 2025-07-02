@@ -1,4 +1,5 @@
 #pragma once
+#include "BaseObject.h"
 
 class Field : public BaseObject
 {
@@ -14,7 +15,7 @@ public:
 
 	void Initialize()override;
 	void Update()override;
-	void Draw()override;
+	bool Draw()override;
 
 	int GetMeshHandle() { return meshHandle; }
 
