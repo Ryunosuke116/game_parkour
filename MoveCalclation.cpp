@@ -13,6 +13,32 @@ MoveCalclation::MoveCalclation() :
 
 }
 
+VECTOR MoveCalclation::Update(const VECTOR& moveVec, const VECTOR& moveDirection, const float playTime_anim,
+    const int& animNumber_Now, const PlayerStateActionBase::PlayerData& playerData)
+{
+    VECTOR returnVec = moveVec;
+
+    returnVec = Roll(returnVec, moveDirection, playTime_anim, playerData);
+    //進むスピードを乗算
+      //ロールアクション中はそれに応じた速度
+    if (playerData.isRoll)
+    {
+        returnVec = VScale(returnVec, rollMoveSpeed_max);
+    }
+    else
+    {
+        returnVec = Move(returnVec, moveDirection, playerData);
+    }
+
+    //ジャンプ計算
+    returnVec = Jump(returnVec, animNumber_Now, playerData);
+
+    //重力計算
+    Gravity(returnVec, playerData);
+
+    return returnVec;
+}
+
 /// <summary>
 /// 移動距離計算
 /// </summary>

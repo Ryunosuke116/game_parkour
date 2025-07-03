@@ -36,9 +36,7 @@ void PlayerManager::Initialize()
 /// <param name="player"></param>
 void PlayerManager::Update(int mapHandle, const VECTOR& cameraDirection)
 {
-	/*auto result = collisionManager->Update(player, mapHandle);
-	player.SetIsGround(result.first);
-	player.SetPos(result.second);*/
+
 	actualPlayer->Update(cameraDirection, mapHandle);
 
 	// プレイヤーのモデルの座標を更新する

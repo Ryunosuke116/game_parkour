@@ -1,6 +1,7 @@
 #include "common.h"
 #include "EffekseerForDXLib.h"
 #include "HitCheck.h"
+#include "PadInput.h"
 #include "Camera.h"
 
 
@@ -52,11 +53,13 @@ void Camera::Update(const VECTOR& playerPosition)
 	aimPosition.y = spherePosition.y + 20.0f;
 
 	//ƒJƒƒ‰ˆÚ“®ˆ—
-	if (CheckHitKey(KEY_INPUT_A))
+	if (CheckHitKey(KEY_INPUT_A) ||
+		PadInput::GetJoyPad_x_right() < 0.0f)
 	{
 		a += 2.0f;
 	}
-	if (CheckHitKey(KEY_INPUT_D))
+	if (CheckHitKey(KEY_INPUT_D) ||
+		PadInput::GetJoyPad_x_right() > 0.0f)
 	{
 		a -= 2.0f;
 	}

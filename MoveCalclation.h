@@ -9,6 +9,8 @@ public:
 	MoveCalclation();
 	~MoveCalclation(){}
 
+	VECTOR Update(const VECTOR& moveVec, const VECTOR& moveDirection, const float playTime_anim,
+		const int& animNumber_Now, const PlayerStateActionBase::PlayerData& playerData);
 	VECTOR Move(const VECTOR& moveVec, const VECTOR& moveDirection, const PlayerStateActionBase::PlayerData& playerData);
 	VECTOR Jump(const VECTOR& moveVec, const int& animNumber_Now,
 		const PlayerStateActionBase::PlayerData& playerData);

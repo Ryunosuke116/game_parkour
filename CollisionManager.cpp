@@ -310,7 +310,7 @@ bool CollisionManager::WallCollisionCheck(int modelHandle, VECTOR& newPos, VECTO
 /// </summary>
 /// <param name="player"></param>
 /// <param name="modelHandle"></param>
-void CollisionManager::CliffGrabbing(int modelHandle,
+bool CollisionManager::CliffGrabbing(int modelHandle,
 	const VECTOR& topPosition, const VECTOR& moveDirection, const bool isFalling)
 {
 	VECTOR linePos_end = VAdd(topPosition, VScale(moveDirection, 10.0f));
@@ -327,6 +327,8 @@ void CollisionManager::CliffGrabbing(int modelHandle,
 	{
 		hitHangringPos = hitPoly.HitPosition;
 	}
+
+	return isHitHangring;
 	
 	//trueÇÃèÍçáÇ…äRÇÇ¬Ç©ÇﬁÇÊÇ§Ç…Ç∑ÇÈ
 }

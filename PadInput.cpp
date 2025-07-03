@@ -16,9 +16,8 @@ void PadInput::Update()
 /// </summary>
 /// <param name="input"></param>
 /// <returns></returns>
-bool PadInput::PadInput::isUp()
+bool PadInput::isUp()
 {
-
     if (input->GetNowFrameInput() & PAD_INPUT_UP ||
         CheckHitKey(KEY_INPUT_UP))
     {
@@ -33,7 +32,7 @@ bool PadInput::PadInput::isUp()
 /// </summary>
 /// <param name="input"></param>
 /// <returns></returns>
-bool PadInput::PadInput::isDown()
+bool PadInput::isDown()
 {
     if (input->GetNowFrameInput() & PAD_INPUT_DOWN ||
         CheckHitKey(KEY_INPUT_DOWN))
@@ -48,7 +47,7 @@ bool PadInput::PadInput::isDown()
 /// </summary>
 /// <param name="input"></param>
 /// <returns></returns>
-bool PadInput::PadInput::isRight()
+bool PadInput::isRight()
 {
     if (input->GetNowFrameInput() & PAD_INPUT_RIGHT ||
         CheckHitKey(KEY_INPUT_RIGHT))
@@ -63,7 +62,7 @@ bool PadInput::PadInput::isRight()
 /// </summary>
 /// <param name="input"></param>
 /// <returns></returns>
-bool PadInput::PadInput::isLeft()
+bool PadInput::isLeft()
 {
     if (input->GetNowFrameInput() & PAD_INPUT_LEFT ||
         CheckHitKey(KEY_INPUT_LEFT))
@@ -78,7 +77,7 @@ bool PadInput::PadInput::isLeft()
 /// </summary>
 /// <param name="input"></param>
 /// <returns></returns>
-bool PadInput::PadInput::isJump()
+bool PadInput::isJump()
 {
     if (CheckHitKey(KEY_INPUT_SPACE) ||
         input->GetNowFrameNewInput() & PAD_INPUT_A)
@@ -93,7 +92,7 @@ bool PadInput::PadInput::isJump()
 /// </summary>
 /// <param name="input"></param>
 /// <returns></returns>
-bool PadInput::PadInput::isRoll()
+bool PadInput::isRoll()
 {
     if (CheckHitKey(KEY_INPUT_F) ||
         input->GetNowFrameNewInput() & PAD_INPUT_B)
@@ -101,6 +100,26 @@ bool PadInput::PadInput::isRoll()
         return true;
     }
     return false;
+}
+
+float PadInput::GetJoyPad_x_left()
+{
+    return input->GetJoyPad_x_left();
+}
+
+float PadInput::GetJoyPad_y_left()
+{
+    return input->GetJoyPad_y_left();
+}
+
+float PadInput::GetJoyPad_x_right()
+{
+    return input->GetJoyPad_x_right();
+}
+
+float PadInput::GetJoyPad_y_right()
+{
+    return input->GetJoyPad_y_right();
 }
 
 PadInput* PadInput::instance = nullptr;

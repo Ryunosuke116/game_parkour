@@ -6,7 +6,6 @@
 
 void JsonFile::Initialize(const char* path)
 {
-
     if (!instance) {
         instance = new JsonFile();
     }

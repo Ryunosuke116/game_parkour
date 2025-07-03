@@ -5,8 +5,9 @@
 /// コンストラクタ
 /// </summary>
 Input::Input()
-	: nowFrameInput(0)
-	, nowFrameNewInput(0)
+	: nowFrameInput(0),
+	nowFrameNewInput(0),
+	joyPad(new JoyPad{ 0.0f, 0.0f, 0.0f, 0.0f })
 {
 	// 処理なし
 }
@@ -39,12 +40,12 @@ void Input::Update()
 	int input_y_Right;
 
 	//左スティック
-	GetJoypadAnalogInput(&input_x_left, &input_x_Right, DX_INPUT_KEY_PAD1);
+	GetJoypadAnalogInput(&input_x_left, &input_y_left, DX_INPUT_KEY_PAD1);
 	//右スティック
 	GetJoypadAnalogInputRight(&input_x_Right, &input_y_Right, DX_INPUT_KEY_PAD1);
 
-	this->input_x_left = static_cast<float>(input_x_left);
-	this->input_y_left = static_cast<float>(input_y_left);
-	this->input_x_Right = static_cast<float>(input_x_Right);
-	this->input_x_Right = static_cast<float>(input_x_Right);
+	joyPad->input_x_left = static_cast<float>(input_x_left);
+	joyPad->input_y_left = static_cast<float>(input_y_left);
+	joyPad->input_x_Right = static_cast<float>(input_x_Right);
+	joyPad->input_x_Right = static_cast<float>(input_x_Right);
 }

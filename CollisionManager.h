@@ -16,7 +16,7 @@ public:
 
 	bool TestSphereTriangle(VECTOR centerPos, VECTOR a, VECTOR b, VECTOR c, VECTOR& q, const float radius);
 
-	void CliffGrabbing(int modelHandle, 
+	bool CliffGrabbing(int modelHandle, 
 		const VECTOR& topPosition, const VECTOR& moveDirection, const bool isFalling);
 	VECTOR PushBackCalclation_sphere_mesh(const MV1_COLL_RESULT_POLY& poly, const VECTOR& bottomPos, const VECTOR& newPlayerPos, const float& radius);
 	VECTOR CalcPushBack_SphereMeshOutsideTriangle(const MV1_COLL_RESULT_POLY& poly, const VECTOR& HitPos_ground, const VECTOR& bottomPos, const float& radius);

@@ -45,7 +45,6 @@ private:
 	std::shared_ptr<PlayerStateActionBase> nowState = NULL;
 	PlayerStateActionBase::OldAnimState oldAnimState;
 	PlayerStateActionBase::NowAnimState nowAnimState;
-	std::shared_ptr<Input> input = NULL;
 	PlayerStateActionBase::PlayerData playerData;
 	std::shared_ptr<CollisionManager> collisionManager = NULL;
 	std::shared_ptr<MoveCalclation> moveCalclation = NULL;
@@ -61,6 +60,7 @@ public:
 	VECTOR Move(VECTOR& moveVec, const VECTOR& cameraDirection);
 	void JumpMove();
 	void RollMove();
+	void HangringMove();
 	void ChangeState();
 	void SettingRay();
 

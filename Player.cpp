@@ -23,7 +23,6 @@ Player::Player() :
 
     modelHandle = MV1LoadModel(path.c_str());
     MV1SetScale(modelHandle, VGet(modelScale, modelScale, modelScale));
-    input = std::make_shared<Input>();
     collisionManager = std::make_shared<CollisionManager>();
     moveCalclation = std::make_shared<MoveCalclation>();
 }
@@ -83,17 +82,13 @@ void Player::Update(const VECTOR& cameraDirection,const int mapHandle)
     //接地している場合リセットする
     if (playerData.isGround)
     {
-        //position.y = 0.0f;
-      //  playerData.isGround = true;
         playerData.isJump = false;
         playerData.isJump_second = false;
         playerData.isJumpAll = false;
         playerData.isRoll_PlayAnim = false;
         moveCalclation->SetCurrentJumpSpeed(0.0f);
     }
-
-    this->input->Update();
-
+   
     moveVec_memory = Move(moveVec, cameraDirection);
     RollMove();
     JumpMove();
@@ -107,27 +102,9 @@ void Player::Update(const VECTOR& cameraDirection,const int mapHandle)
     //状態変更
     ChangeState();
 
-    moveVec = moveCalclation->Roll(moveVec, targetMoveDirection,
-        nowState->GetNowAnimState().PlayTime_anim, playerData);
-    
-    moveVec = moveCalclation->MoveVec(moveVec, moveVec_memory, playerData.isGround, playerData.isRoll);
-
-    //進むスピードを乗算
-    //ロールアクション中はそれに応じた速度
-    if (playerData.isRoll)
-    {
-        moveVec = VScale(moveVec, rollMoveSpeed_max);
-    }
-    else
-    {
-        moveVec = moveCalclation->Move(moveVec, targetMoveDirection, playerData);
-    }
-
-    //ジャンプ計算
-    moveVec = moveCalclation->Jump(moveVec, animNumber_Now, playerData);
-
-    //重力計算
-    moveCalclation->Gravity(moveVec, playerData);
+    moveVec = moveCalclation->Update(moveVec, targetMoveDirection, 
+        nowState->GetNowAnimState().PlayTime_anim, 
+        animNumber_Now, playerData);
 
     auto result = collisionManager->Update(mapHandle, position,
         moveVec,targetMoveDirection, radius, addTopPos,
@@ -153,7 +130,7 @@ void Player::Update(const VECTOR& cameraDirection,const int mapHandle)
     // プレイヤーのモデルの座標を更新する
     MV1SetPosition(modelHandle, position);
 
-    if (CheckHitKey(KEY_INPUT_1))
+    if (CheckHitKey(KEY_INPUT_3))
     {
         nowFrameNumber++;
     }
@@ -164,6 +141,9 @@ void Player::Update(const VECTOR& cameraDirection,const int mapHandle)
 
     //2胴体
     //0真下
+    //頭 9
+    //左手 65
+    //右手 106
     centerPosition = MV1GetFramePosition(modelHandle, 2);
     footPosition = MV1GetFramePosition(modelHandle, 0);
 
@@ -181,14 +161,14 @@ void Player::Update(const VECTOR& cameraDirection,const int mapHandle)
 bool Player::Draw()
 {
 	MV1DrawModel(modelHandle);
-    DrawSphere3D(bottomPosition, 3.5f, 30, GetColor(0, 0, 0),
+    DrawSphere3D(centerPosition, 1.0f, 30, GetColor(0, 0, 0),
         GetColor(255, 0, 0), FALSE);
-    DrawCapsule3D(topPosition, bottomPosition, radius, 30, GetColor(0, 0, 0),
-        GetColor(255, 0, 0), FALSE);
+   /* DrawCapsule3D(topPosition, bottomPosition, radius, 30, GetColor(0, 0, 0),
+        GetColor(255, 0, 0), FALSE);*/
 
     printfDx("playerPosition.x %f\nplayerPosition.y %f\nplayerPosition.z %f\n",
         position.x, position.y, position.z);
-   // printfDx("frame現在数%d\n", nowFrameNumber);
+    //printfDx("frame現在数%d\n", nowFrameNumber);
     printfDx("nowMoveSpeed %f\n", moveCalclation->GetNowMoveSpeed());
     printfDx("isMove %d\n", playerData.isMove);
     printfDx("isJump %d\n", playerData.isJump);
@@ -229,58 +209,65 @@ VECTOR Player::Move(VECTOR& moveVec, const VECTOR& cameraDirection)
     upMove.y = 0.0f;
     rightMove.y = 0.0f;
 
-    //上入力されたとき
-    if (PadInput::isUp())
-    {
-        if (animNumber_Now != animNum::run && !playerData.isJump)
-        {
-           // ChangeMotion(animNum::run, PlayAnimSpeed);
-        }
-        moveVec = VAdd(moveVec, upMove);
-        playerData.isMove = true;
-        playerData.isStopRun = true;
-    }
+    ////上入力されたとき
+    //if (PadInput::isUp())
+    //{
+    //    if (animNumber_Now != animNum::run && !playerData.isJump)
+    //    {
+    //       // ChangeMotion(animNum::run, PlayAnimSpeed);
+    //    }
+    //    moveVec = VAdd(moveVec, upMove);
+    //    playerData.isMove = true;
+    //    playerData.isStopRun = true;
+    //}
 
-    //下入力されたとき
-    if (PadInput::isDown())
-    {
-        if (animNumber_Now != animNum::run && !playerData.isJump)
-        {
-           // ChangeMotion(animNum::run, PlayAnimSpeed);
-        }
-        moveVec = VAdd(moveVec, VScale(upMove, -1.0f));
-        playerData.isMove = true;
-        playerData.isStopRun = true;
-    }
+    ////下入力されたとき
+    //if (PadInput::isDown())
+    //{
+    //    if (animNumber_Now != animNum::run && !playerData.isJump)
+    //    {
+    //       // ChangeMotion(animNum::run, PlayAnimSpeed);
+    //    }
+    //    moveVec = VAdd(moveVec, VScale(upMove, -1.0f));
+    //    playerData.isMove = true;
+    //    playerData.isStopRun = true;
+    //}
 
-    //左入力されたとき
-    if (PadInput::isLeft())
-    {
-        if (animNumber_Now != animNum::run && !playerData.isJump)
-        {
-           // ChangeMotion(animNum::run, PlayAnimSpeed);
-        }
-        moveVec = VAdd(moveVec, rightMove);
-        playerData.isMove = true;
-        playerData.isStopRun = true;
-    }
+    ////左入力されたとき
+    //if (PadInput::isLeft())
+    //{
+    //    if (animNumber_Now != animNum::run && !playerData.isJump)
+    //    {
+    //       // ChangeMotion(animNum::run, PlayAnimSpeed);
+    //    }
+    //    moveVec = VAdd(moveVec, rightMove);
+    //    playerData.isMove = true;
+    //    playerData.isStopRun = true;
+    //}
 
-    //右入力されたとき
-    if (PadInput::isRight())
-    {
-        if (animNumber_Now != animNum::run && !playerData.isJump)
-        {
-            //ChangeMotion(animNum::run, PlayAnimSpeed);
-        }
-        moveVec = VAdd(moveVec, VScale(rightMove, -1.0f));
-        playerData.isMove = true;
-        playerData.isStopRun = true;
-    }
+    ////右入力されたとき
+    //if (PadInput::isRight())
+    //{
+    //    if (animNumber_Now != animNum::run && !playerData.isJump)
+    //    {
+    //        //ChangeMotion(animNum::run, PlayAnimSpeed);
+    //    }
+    //    moveVec = VAdd(moveVec, VScale(rightMove, -1.0f));
+    //    playerData.isMove = true;
+    //    playerData.isStopRun = true;
+    //}
+
+ /*   moveVec = VGet(PadInput::GetJoyPad_x_left(),
+        0.0f, -PadInput::GetJoyPad_y_left());*/
+    moveVec = VAdd(VScale(rightMove, -PadInput::GetJoyPad_x_left()),
+        VScale(upMove, -PadInput::GetJoyPad_y_left()));
 
     //0でなければ正規化
     if (VSize(moveVec) != 0)
     {
         moveVec = VNorm(moveVec);
+        playerData.isMove = true;
+        playerData.isStopRun = true;
     }
 
     return returnPos;
@@ -330,6 +317,14 @@ void Player::RollMove()
         playerData.isRoll = true;
     }
 
+}
+
+void Player::HangringMove()
+{
+    if (playerData.isHangring)
+    {
+
+    }
 }
 
 
@@ -474,6 +469,7 @@ void Player::ChangeState()
     {
         SetNowAnimState(nowState->GetNowAnimState());
         SetOldAnimState(nowState->GetOldAnimState());
+        playerData.isFalling = false;
     }
 }
 
