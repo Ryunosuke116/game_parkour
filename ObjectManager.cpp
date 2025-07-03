@@ -27,6 +27,7 @@ void ObjectManager::Create()
 	field = std::make_shared<Field>("material/mv1/new_city/new_city_0630.mv1");
 	fieldMesh = std::make_shared<FieldMesh>("material/mv1/new_city/new_city_mesh_0630.mv1");
 	coinManager = std::make_shared<CoinManager>();
+	playerManager = std::make_shared<PlayerManager>();
 	player = std::make_shared<Player>();
 	camera = std::make_shared<Camera>();
 	
@@ -44,7 +45,7 @@ void ObjectManager::Initialize()
 	field->Initialize();
 	fieldMesh->Initialize();
 	coinManager->Initialize("material/mv1/Coin.mv1");
-	player->Initialize();
+	playerManager->Initialize();
 	camera->Initialize();
 	PadInput::Initialize();
 
@@ -56,7 +57,7 @@ void ObjectManager::Initialize()
 void ObjectManager::Update()
 {
 	PadInput::Update();
-	actualPlayer->Update(camera->GetCameraDirection(),fieldMesh->GetModelHandle());
+	playerManager->Update(fieldMesh->GetModelHandle(), camera->GetCameraDirection());
 	camera->Update(player->GetPosition());
 	actualMap->Update(player->GetPosition());
 	field->Update();
@@ -69,7 +70,7 @@ void ObjectManager::Update()
 /// </summary>
 bool ObjectManager::Draw()
 {
-	player->Draw();
+	playerManager->Draw();
 	camera->Draw();
 	map->Draw();
 	field->Draw();

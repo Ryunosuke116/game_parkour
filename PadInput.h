@@ -1,28 +1,28 @@
 #pragma once
 #include "Input.h"
 
-class PadInput : public Input
+class PadInput
 {
 private:
 
-	int nowFrameInput;
-	int nowFrameNewInput;
+	//int nowFrameInput;
+	//int nowFrameNewInput;
 
-	//PadInput() = default;
-	//~PadInput() = default;
+	PadInput() = default;
+	~PadInput() = default;
 
-	//static PadInput* instance;
+	static PadInput* instance;
 public:
 
-	PadInput();
+	/*PadInput();
 	~PadInput();
 
 	void Update() override;
 
 	int GetNowFrameInput() const override { return nowFrameInput; }
-	int GetNowFrameNewInput() const override { return nowFrameNewInput; }
+	int GetNowFrameNewInput() const override { return nowFrameNewInput; }*/
 
-	/*static Input* input;
+	static Input* input;
 
 	static void Initialize();
 	static void Update();
@@ -32,6 +32,6 @@ public:
 	static bool isRight();
 	static bool isLeft();
 	static bool isJump();
-	static bool isRoll();*/
+	static bool isRoll();
 };
 

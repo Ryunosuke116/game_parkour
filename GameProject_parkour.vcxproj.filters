@@ -49,9 +49,6 @@
     <Filter Include="ソース ファイル\coin">
       <UniqueIdentifier>{ee632bc8-260c-4376-bdbe-b6979949e267}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\manager\object">
-      <UniqueIdentifier>{733bd2bf-452d-40b4-a80b-71e93c23b571}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\manager\scene">
       <UniqueIdentifier>{6ed27899-6b7f-44a8-b8d7-0648099a58a6}</UniqueIdentifier>
     </Filter>
@@ -61,9 +58,6 @@
     <Filter Include="ソース ファイル\Json">
       <UniqueIdentifier>{a05c63cd-31b8-4115-a020-863d88bd0a84}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\manager\object\player">
-      <UniqueIdentifier>{2a33576b-268e-4832-9dee-8902d408c493}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\Calclation">
       <UniqueIdentifier>{cf99dbc9-50f2-4910-97b1-cd46a3c5e262}</UniqueIdentifier>
     </Filter>
@@ -72,6 +66,15 @@
     </Filter>
     <Filter Include="ソース ファイル\Pad">
       <UniqueIdentifier>{d2f54360-56d9-43c7-a511-49726d43ccd9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\manager\object">
+      <UniqueIdentifier>{733bd2bf-452d-40b4-a80b-71e93c23b571}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\player\moveCalclation">
+      <UniqueIdentifier>{f9dc51d6-1cdb-4363-bbf5-2cf3ddbf8b9d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\manager\player">
+      <UniqueIdentifier>{2a33576b-268e-4832-9dee-8902d408c493}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -151,7 +154,7 @@
       <Filter>ソース ファイル\manager\object</Filter>
     </ClCompile>
     <ClCompile Include="PlayerManager.cpp">
-      <Filter>ソース ファイル\manager\object\player</Filter>
+      <Filter>ソース ファイル\manager\player</Filter>
     </ClCompile>
     <ClCompile Include="SceneManager.cpp">
       <Filter>ソース ファイル\manager\scene</Filter>
@@ -162,9 +165,6 @@
     <ClCompile Include="Json.cpp">
       <Filter>ソース ファイル\Json</Filter>
     </ClCompile>
-    <ClCompile Include="MoveCalclation.cpp">
-      <Filter>ソース ファイル\player</Filter>
-    </ClCompile>
     <ClCompile Include="Calclation.cpp">
       <Filter>ソース ファイル\Calclation</Filter>
     </ClCompile>
@@ -173,6 +173,9 @@
     </ClCompile>
     <ClCompile Include="PadInput.cpp">
       <Filter>ソース ファイル\Pad</Filter>
+    </ClCompile>
+    <ClCompile Include="MoveCalclation.cpp">
+      <Filter>ソース ファイル\player\moveCalclation</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -252,7 +255,7 @@
       <Filter>ソース ファイル\manager\object</Filter>
     </ClInclude>
     <ClInclude Include="PlayerManager.h">
-      <Filter>ソース ファイル\manager\object\player</Filter>
+      <Filter>ソース ファイル\manager\player</Filter>
     </ClInclude>
     <ClInclude Include="SceneManager.h">
       <Filter>ソース ファイル\manager\scene</Filter>
@@ -262,9 +265,6 @@
     </ClInclude>
     <ClInclude Include="Json.h">
       <Filter>ソース ファイル\Json</Filter>
-    </ClInclude>
-    <ClInclude Include="MoveCalclation.h">
-      <Filter>ソース ファイル\player</Filter>
     </ClInclude>
     <ClInclude Include="AnimTime.h">
       <Filter>ヘッダー ファイル</Filter>
@@ -286,6 +286,9 @@
     </ClInclude>
     <ClInclude Include="padInput_interface.h">
       <Filter>ソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="MoveCalclation.h">
+      <Filter>ソース ファイル\player\moveCalclation</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
