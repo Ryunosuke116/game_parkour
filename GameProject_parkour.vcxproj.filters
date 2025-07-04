@@ -76,6 +76,9 @@
     <Filter Include="ソース ファイル\manager\player">
       <UniqueIdentifier>{2a33576b-268e-4832-9dee-8902d408c493}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\player\state\falling_Idle">
+      <UniqueIdentifier>{b40c3a77-e359-4e55-9ca2-9795527822ca}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -112,9 +115,6 @@
       <Filter>ソース ファイル\player\state</Filter>
     </ClCompile>
     <ClCompile Include="Jump.cpp">
-      <Filter>ソース ファイル\player\state</Filter>
-    </ClCompile>
-    <ClCompile Include="Falling_Idle.cpp">
       <Filter>ソース ファイル\player\state</Filter>
     </ClCompile>
     <ClCompile Include="Run_Jump.cpp">
@@ -174,8 +174,14 @@
     <ClCompile Include="PadInput.cpp">
       <Filter>ソース ファイル\Pad</Filter>
     </ClCompile>
-    <ClCompile Include="MoveCalclation.cpp">
+    <ClCompile Include="PlayerCalclation.cpp">
       <Filter>ソース ファイル\player\moveCalclation</Filter>
+    </ClCompile>
+    <ClCompile Include="HangringCalclation.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Falling_Idle.cpp">
+      <Filter>ソース ファイル\player\state\falling_Idle</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -213,9 +219,6 @@
       <Filter>ソース ファイル\player\state</Filter>
     </ClInclude>
     <ClInclude Include="Jump.h">
-      <Filter>ソース ファイル\player\state</Filter>
-    </ClInclude>
-    <ClInclude Include="Falling_Idle.h">
       <Filter>ソース ファイル\player\state</Filter>
     </ClInclude>
     <ClInclude Include="playerState.h">
@@ -287,8 +290,14 @@
     <ClInclude Include="padInput_interface.h">
       <Filter>ソース ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="MoveCalclation.h">
+    <ClInclude Include="PlayerCalclation.h">
       <Filter>ソース ファイル\player\moveCalclation</Filter>
+    </ClInclude>
+    <ClInclude Include="HangringCalclation.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Falling_Idle.h">
+      <Filter>ソース ファイル\player\state\falling_Idle</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

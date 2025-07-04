@@ -11,6 +11,13 @@
 #include "Calclation.h"
 
 
+/// <summary>
+/// 面積計算
+/// </summary>
+/// <param name="a"></param>
+/// <param name="b"></param>
+/// <param name="c"></param>
+/// <returns></returns>
 float Calclation::area(const VECTOR& a, const VECTOR& b, const VECTOR& c)
 {
 	VECTOR AB = VSub(b, a);
@@ -21,6 +28,13 @@ float Calclation::area(const VECTOR& a, const VECTOR& b, const VECTOR& c)
 	return 0.5f * VSize(cross);
 }
 
+/// <summary>
+/// 線分と点の最接近点
+/// </summary>
+/// <param name="position_1"></param>
+/// <param name="position_2"></param>
+/// <param name="point"></param>
+/// <returns></returns>
 VECTOR Calclation::NearestPoint(const VECTOR& position_1, const VECTOR& position_2,
 	const VECTOR& point)
 {
@@ -52,6 +66,38 @@ VECTOR Calclation::NearestPoint(const VECTOR& position_1, const VECTOR& position
 	}
 
 	return AX;
+}
+
+VECTOR Calclation::SphereMeshOutsideTriangle(const MV1_COLL_RESULT_POLY& poly, const VECTOR& HitPos_ground)
+{
+	VECTOR nearestPoint;
+
+	//線分上の点との最近点
+	VECTOR nearPoint_1 = NearestPoint(poly.Position[0], poly.Position[1], HitPos_ground);
+	VECTOR nearPoint_2 = NearestPoint(poly.Position[0], poly.Position[2], HitPos_ground);
+	VECTOR nearPoint_3 = NearestPoint(poly.Position[1], poly.Position[2], HitPos_ground);
+
+	//各距離を求める
+	float d1 = VSize(VSub(nearPoint_1, HitPos_ground));
+	float d2 = VSize(VSub(nearPoint_2, HitPos_ground));
+	float d3 = VSize(VSub(nearPoint_3, HitPos_ground));
+
+
+	//一番近い座標を選択する
+	if (d1 <= d2 && d1 <= d3)
+	{
+		nearestPoint = nearPoint_1;
+	}
+	else if (d2 <= d3)
+	{
+		nearestPoint = nearPoint_2;
+	}
+	else
+	{
+		nearestPoint = nearPoint_3;
+	}
+
+	return nearestPoint;
 }
 
 /// <summary>

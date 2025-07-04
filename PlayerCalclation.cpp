@@ -1,11 +1,12 @@
 #include "Dxlib.h"
 #include "Calclation.h"
-#include "MoveCalclation.h"
+#include "PlayerCalclation.h"
 #include"playerState.h"
 #include "AnimTime.h"
+#include "HitCheck.h"
 
 
-MoveCalclation::MoveCalclation() :
+PlayerCalclation::PlayerCalclation() :
     currentJumpSpeed(0.0f),
     nowMoveSpeed(0.0f),
     rollMoveSpeed_now(0.0f)
@@ -13,7 +14,7 @@ MoveCalclation::MoveCalclation() :
 
 }
 
-VECTOR MoveCalclation::Update(const VECTOR& moveVec, const VECTOR& moveDirection, const float playTime_anim,
+VECTOR PlayerCalclation::Update(const VECTOR& moveVec, const VECTOR& moveDirection, const float playTime_anim,
     const int& animNumber_Now, const PlayerStateActionBase::PlayerData& playerData)
 {
     VECTOR returnVec = moveVec;
@@ -46,7 +47,7 @@ VECTOR MoveCalclation::Update(const VECTOR& moveVec, const VECTOR& moveDirection
 /// <param name="moveDirection"></param>
 /// <param name="playerData"></param>
 /// <returns></returns>
-VECTOR MoveCalclation::Move(const VECTOR& moveVec, const VECTOR& moveDirection, const PlayerStateActionBase::PlayerData& playerData)
+VECTOR PlayerCalclation::Move(const VECTOR& moveVec, const VECTOR& moveDirection, const PlayerStateActionBase::PlayerData& playerData)
 {
     if (playerData.isMove)
     {
@@ -90,7 +91,7 @@ VECTOR MoveCalclation::Move(const VECTOR& moveVec, const VECTOR& moveDirection, 
 /// <param name="animNumber_Now"></param>
 /// <param name="playerData"></param>
 /// <returns></returns>
-VECTOR MoveCalclation::Jump(const VECTOR& moveVec,const int& animNumber_Now,
+VECTOR PlayerCalclation::Jump(const VECTOR& moveVec,const int& animNumber_Now,
     const PlayerStateActionBase::PlayerData& playerData)
 {
     VECTOR move = moveVec;
@@ -113,7 +114,7 @@ VECTOR MoveCalclation::Jump(const VECTOR& moveVec,const int& animNumber_Now,
 /// </summary>
 /// <param name="moveVec"></param>
 /// <param name="playerData"></param>
-void MoveCalclation::Gravity(const VECTOR& moveVec, const PlayerStateActionBase::PlayerData& playerData)
+void PlayerCalclation::Gravity(const VECTOR& moveVec, const PlayerStateActionBase::PlayerData& playerData)
 {
     if (!playerData.isGround)
     {
@@ -129,7 +130,7 @@ void MoveCalclation::Gravity(const VECTOR& moveVec, const PlayerStateActionBase:
 /// <param name="playTime_anim"></param>
 /// <param name="playerData"></param>
 /// <returns></returns>
-VECTOR MoveCalclation::Roll(const VECTOR& moveVec, const VECTOR& moveDirection,
+VECTOR PlayerCalclation::Roll(const VECTOR& moveVec, const VECTOR& moveDirection,
     float playTime_anim, const PlayerStateActionBase::PlayerData& playerData)
 {
     VECTOR move = moveVec;
@@ -147,6 +148,26 @@ VECTOR MoveCalclation::Roll(const VECTOR& moveVec, const VECTOR& moveDirection,
     return move;
 }
 
+VECTOR PlayerCalclation::HangringAngle(const MV1_COLL_RESULT_POLY& hangringPoly)
+{
+    //張り付く壁の法線ベクトルを利用してplayerの向きを調整
+    VECTOR direction = hangringPoly.Normal;
+    direction.y = 0.0f;
+
+    direction = VScale(direction, -1.0f);
+
+
+    return VNorm(direction);
+}
+
+VECTOR PlayerCalclation::HangringPosition(const VECTOR& handPos_left,const VECTOR& handPos_right,const VECTOR& nearestPoint)
+{
+    VECTOR centerPos = VAdd(handPos_left, handPos_right);
+    centerPos = VScale(centerPos, 0.5f);
+    
+    VECTOR newPos = VSub(nearestPoint, centerPos);
+    return newPos;
+}
 
 ///////////////////////////////
 // まだ使うかわからない
@@ -160,7 +181,7 @@ VECTOR MoveCalclation::Roll(const VECTOR& moveVec, const VECTOR& moveDirection,
 /// <param name="isGround"></param>
 /// <param name="isRoll"></param>
 /// <returns></returns>
-VECTOR MoveCalclation::MoveVec(const VECTOR& moveVec,const VECTOR& moveVec_memory,const bool isGround,const bool isRoll)
+VECTOR PlayerCalclation::MoveVec(const VECTOR& moveVec,const VECTOR& moveVec_memory,const bool isGround,const bool isRoll)
 {
     VECTOR returnPos = moveVec;
 
@@ -176,3 +197,4 @@ VECTOR MoveCalclation::MoveVec(const VECTOR& moveVec,const VECTOR& moveVec_memor
 
     return returnPos;
 }
+

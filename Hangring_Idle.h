@@ -7,7 +7,7 @@ public:
 		OldAnimState& oldAnimState, NowAnimState& nowAnimStatel, PlayerData& playerData);
 	~Hangring_Idle();
 
-	bool MotionUpdate(PlayerData& playerData)override;
+	//bool MotionUpdate(PlayerData& playerData)override;
 
 private:
 	static constexpr float playAnimSpeed = 0.4f;	    // アニメーション速度

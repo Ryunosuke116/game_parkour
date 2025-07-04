@@ -14,6 +14,7 @@ public:
 	void Initialize();
 	void Update(int mapHandle,const VECTOR& cameraDirection);
 	bool Draw();
+	VECTOR PositionCheck(const VECTOR& hangringPos, const VECTOR& playerPos);
 
 	std::shared_ptr<Player> GetPlayer()const { return actualPlayer; }
 

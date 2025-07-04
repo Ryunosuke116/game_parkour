@@ -31,9 +31,9 @@ Hangring_Idle::~Hangring_Idle()
 
 }
 
-bool Hangring_Idle::MotionUpdate(PlayerData& playerData)
-{
-    //崖を掴む
-    //↑キーを入力したら掴んでいる床に立つ
-    return false;
-}
+//bool Hangring_Idle::MotionUpdate(PlayerData& playerData)
+//{
+//    //崖を掴む
+//    //↑キーを入力したら掴んでいる床に立つ
+//    return false;
+//}

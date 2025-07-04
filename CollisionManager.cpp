@@ -8,16 +8,13 @@
 /// @param player 
 /// @param modelHandle 
 /// @return 
-std::pair<bool, VECTOR> CollisionManager::Update(int modelHandle, const VECTOR& playerPos,
+std::pair<bool, VECTOR> CollisionManager::Update(int modelHandle, const VECTOR& playerPos,const VECTOR& playerCenterPos,
 	const VECTOR& moveVec, VECTOR& moveDirection, float radius, float addTopPos, float addBottomPos, bool isJump, bool isFalling)
 {
 	VECTOR oldPos = playerPos;
 	VECTOR newPos = VAdd(oldPos, moveVec);	
 	VECTOR topPos = newPos;
 	topPos.y += addTopPos;
-
-	//崖つかみ判定
-	CliffGrabbing(modelHandle, topPos, moveDirection, isFalling);
 	
 	//壁衝突判定
 	WallCollisionCheck(modelHandle, newPos, oldPos, radius,addTopPos, addBottomPos);
@@ -310,25 +307,29 @@ bool CollisionManager::WallCollisionCheck(int modelHandle, VECTOR& newPos, VECTO
 /// </summary>
 /// <param name="player"></param>
 /// <param name="modelHandle"></param>
-bool CollisionManager::CliffGrabbing(int modelHandle,
+std::pair<bool, VECTOR> CollisionManager::CliffGrabbing(int modelHandle,
 	const VECTOR& topPosition, const VECTOR& moveDirection, const bool isFalling)
 {
 	VECTOR linePos_end = VAdd(topPosition, VScale(moveDirection, 10.0f));
 	linePos_end.y = topPosition.y - 1.0f;
-
-	MV1_COLL_RESULT_POLY hitPoly;
+	bool isHitHangring = false;
 
 	//落下中にplayerの上部から出ているrayで判定を取る
 	if (isFalling)
 	{
-		isHitHangring = HitCheck::HitRayJudge(modelHandle, -1, topPosition, linePos_end, hitPoly);
-	}
-	if (isHitHangring && hitPoly.Normal.y >= 0.8f)
-	{
-		hitHangringPos = hitPoly.HitPosition;
+		isHitHangring = HitCheck::HitRayJudge(modelHandle, -1, topPosition, linePos_end, HangringPoly);
+		
+		if (isHitHangring && HangringPoly.Normal.y >= 0.8f)
+		{
+			hitHangringPos = HangringPoly.HitPosition;
+		}
+		else
+		{
+			isHitHangring = false;
+		}
 	}
 
-	return isHitHangring;
+	return std::make_pair(isHitHangring, hitHangringPos);
 	
 	//trueの場合に崖をつかむようにする
 }
@@ -374,30 +375,8 @@ VECTOR CollisionManager::PushBackCalclation_sphere_mesh(const MV1_COLL_RESULT_PO
 
 VECTOR CollisionManager::CalcPushBack_SphereMeshOutsideTriangle(const MV1_COLL_RESULT_POLY& poly, const VECTOR& HitPos_ground, const VECTOR& bottomPos, const float& radius)
 {
-	//線分と点の最近点
-	VECTOR nearPoint_1 = Calclation::NearestPoint(poly.Position[0], poly.Position[1], HitPos_ground);
-	VECTOR nearPoint_2 = Calclation::NearestPoint(poly.Position[0], poly.Position[2], HitPos_ground);
-	VECTOR nearPoint_3 = Calclation::NearestPoint(poly.Position[1], poly.Position[2], HitPos_ground);
 
-	//各距離を求める
-	float d1 = VSize(VSub(nearPoint_1, HitPos_ground));
-	float d2 = VSize(VSub(nearPoint_2, HitPos_ground));
-	float d3 = VSize(VSub(nearPoint_3, HitPos_ground));
-
-
-	//一番近い座標を選択する
-	if (d1 <= d2 && d1 <= d3)
-	{
-		nearestPoint = nearPoint_1;
-	}
-	else if (d2 <= d3)
-	{
-		nearestPoint = nearPoint_2;
-	}
-	else
-	{
-		nearestPoint = nearPoint_3;
-	}
+	nearestPoint = Calclation::SphereMeshOutsideTriangle(poly, HitPos_ground);
 
 	//球と面の接触点を求める
 	//方向計算

@@ -1,6 +1,6 @@
 #pragma once
 #include "PlayerStateActionBase.h"
-#include "MoveCalclation.h"
+#include "PlayerCalclation.h"
 #include "BaseChara.h"
 #include "CollisionManager.h"
 
@@ -25,9 +25,16 @@ private:
 	VECTOR bottomPosition;
 	VECTOR moveVec;
 	VECTOR moveVec_memory;
+	VECTOR hangringPoint;
+	VECTOR headPos;
+	VECTOR handPos_right;
+	VECTOR handPos_left;
+	VECTOR nearestPoint;
+	VECTOR handCenterPos;
 
 	bool isPush;					//ボタンを押したか
 	bool isChageState;				//アニメーションを変更するか
+	bool isCalc;
 
 	/*struct PadInput
 	{
@@ -47,7 +54,7 @@ private:
 	PlayerStateActionBase::NowAnimState nowAnimState;
 	PlayerStateActionBase::PlayerData playerData;
 	std::shared_ptr<CollisionManager> collisionManager = NULL;
-	std::shared_ptr<MoveCalclation> moveCalclation = NULL;
+	std::shared_ptr<PlayerCalclation> playerCalclation = NULL;
 
 public:
 	Player();
@@ -79,6 +86,10 @@ public:
 	VECTOR GetBottomPos() { return bottomPosition; }
 	VECTOR GetMoveVec() { return moveVec; }
 	VECTOR GetlinePos_end() { return linePos_end; }
+	VECTOR GetHangringPoint() { return hangringPoint; }
+	VECTOR GetHeadPos() { return headPos; }
+	VECTOR GetHandPos_right() { return handPos_right; }
+	VECTOR GetHandPos_left() { return handPos_left; }
 	bool GetIsGround() { return playerData.isGround; }
 	int GetModelHandle() { return modelHandle; }
 	PlayerStateActionBase::PlayerData GetData() { return playerData; }

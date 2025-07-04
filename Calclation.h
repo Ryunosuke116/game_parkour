@@ -22,7 +22,7 @@ public:
 		 const VECTOR& point);
 
 	static VECTOR Leap(const VECTOR& changePosition, const VECTOR& playerPosition, const float& speed);
-
+	static VECTOR SphereMeshOutsideTriangle(const MV1_COLL_RESULT_POLY& poly, const VECTOR& HitPos_ground);
 };
 
 

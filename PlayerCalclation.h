@@ -2,12 +2,12 @@
 #include "DxLib.h"
 #include"playerState.h"
 
-class MoveCalclation
+class PlayerCalclation
 {
 public:
 
-	MoveCalclation();
-	~MoveCalclation(){}
+	PlayerCalclation();
+	~PlayerCalclation(){}
 
 	VECTOR Update(const VECTOR& moveVec, const VECTOR& moveDirection, const float playTime_anim,
 		const int& animNumber_Now, const PlayerStateActionBase::PlayerData& playerData);
@@ -18,6 +18,8 @@ public:
 	VECTOR Roll(const VECTOR& moveVec, const VECTOR& moveDirection, 
 		float playTime_anim, const PlayerStateActionBase::PlayerData& playerData);
 	VECTOR MoveVec(const VECTOR& moveVec, const VECTOR& moveVec_memory, const bool isGround, const bool isRoll);
+	VECTOR HangringAngle(const MV1_COLL_RESULT_POLY& hangringPoly);
+	VECTOR HangringPosition(const VECTOR& handPos_left, const VECTOR& handPos_right, const VECTOR& nearestPoint);
 
 	float GetCurrentJumpSpeed() { return currentJumpSpeed; }
 	float GetNowMoveSpeed() { return nowMoveSpeed; }

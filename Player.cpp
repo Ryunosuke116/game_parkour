@@ -5,6 +5,8 @@
 #include "Json.h"
 #include "PadInput.h"
 #include "Player.h"
+#include "HitCheck.h"
+#include "Calclation.h"
 #include "nlohmann/json.hpp"
 
 /// <summary>
@@ -24,7 +26,7 @@ Player::Player() :
     modelHandle = MV1LoadModel(path.c_str());
     MV1SetScale(modelHandle, VGet(modelScale, modelScale, modelScale));
     collisionManager = std::make_shared<CollisionManager>();
-    moveCalclation = std::make_shared<MoveCalclation>();
+    playerCalclation = std::make_shared<PlayerCalclation>();
 }
 
 /// <summary>
@@ -58,6 +60,8 @@ void Player::Initialize()
     playerData.isRoll_PlayAnim = false;
     playerData.isJump_PlayAnim = false;
     playerData.isFalling = false;
+    playerData.isHangring = false;
+    isCalc = false;
    
     oldAnimState.AttachIndex = -1;
     oldAnimState.PlayAnimSpeed = 0.0f;
@@ -86,7 +90,7 @@ void Player::Update(const VECTOR& cameraDirection,const int mapHandle)
         playerData.isJump_second = false;
         playerData.isJumpAll = false;
         playerData.isRoll_PlayAnim = false;
-        moveCalclation->SetCurrentJumpSpeed(0.0f);
+        playerCalclation->SetCurrentJumpSpeed(0.0f);
     }
    
     moveVec_memory = Move(moveVec, cameraDirection);
@@ -99,29 +103,83 @@ void Player::Update(const VECTOR& cameraDirection,const int mapHandle)
         targetMoveDirection = moveVec;
     }
 
+    //崖つかみ判定
+
+    if (!playerData.isHangring)
+    {
+        auto result_cliff = collisionManager->CliffGrabbing(mapHandle, topPosition, targetMoveDirection, playerData.isFalling);
+        playerData.isHangring = result_cliff.first;
+
+
+        if (playerData.isHangring)
+        {
+            hangringPoint = result_cliff.second;
+
+
+        }
+    }
+
     //状態変更
     ChangeState();
 
-    moveVec = moveCalclation->Update(moveVec, targetMoveDirection, 
-        nowState->GetNowAnimState().PlayTime_anim, 
-        animNumber_Now, playerData);
-
-    auto result = collisionManager->Update(mapHandle, position,
-        moveVec,targetMoveDirection, radius, addTopPos,
-        addBottomPos, playerData.isJump, playerData.isFalling);
-
-    playerData.isGround = result.first;
-
-    //落下している場合
-    if (playerData.isFalling)
+    if (CheckHitKey(KEY_INPUT_4))
     {
-        //接地していた場合falseにする
-        if (playerData.isGround)
+        playerData.isHangring = false;
+        isCalc = false;
+        hangringPoint = { NULL };
+    }
+
+    if(!playerData.isHangring)
+    {
+        moveVec = playerCalclation->Update(moveVec, targetMoveDirection,
+            nowState->GetNowAnimState().PlayTime_anim,
+            animNumber_Now, playerData);
+
+        //衝突判定
+        auto result = collisionManager->Update(mapHandle, position,centerPosition,
+            moveVec, targetMoveDirection, radius, addTopPos,
+            addBottomPos, playerData.isJump, playerData.isFalling);
+
+        playerData.isGround = result.first;
+
+        //落下している場合
+        if (playerData.isFalling)
         {
-            playerData.isFalling = false;
+            //接地していた場合falseにする
+            if (playerData.isGround)
+            {
+                playerData.isFalling = false;
+            }
+        }
+        SetPos(result.second);
+    }
+
+    //崖掴み中は壁の法線に合わせて向きを決める
+    if (playerData.isHangring)
+    {
+     /*   MV1_COLL_RESULT_POLY hangringPoly;
+        VECTOR centerRay_end = VAdd(centerPosition, VScale(targetMoveDirection, 10.0f));
+        centerRay_end.y = centerRay_end.y;*/
+
+        nearestPoint = Calclation::SphereMeshOutsideTriangle(collisionManager->GetHangringPoly(), headPos);
+
+        VECTOR direction = VSub(nearestPoint, position);
+        direction.y = 0.0f;
+
+        direction = VNorm(direction);
+
+        //HitCheck::HitRayJudge(mapHandle, -1, centerPosition, centerRay_end, hangringPoly);
+        targetMoveDirection = direction;
+
+        //手の位置に角を合わせる
+        //※未完全
+        if (!isCalc && nowState->GetNowAnimState().PlayTime_anim >= 60.0f)
+        {
+            VECTOR addPos = playerCalclation->HangringPosition(handPos_left, handPos_right, nearestPoint);
+            position = VAdd(position, addPos);
+            isCalc = true;
         }
     }
-    SetPos(result.second);
 
     isChageState = nowState->MotionUpdate(playerData);
 
@@ -139,6 +197,11 @@ void Player::Update(const VECTOR& cameraDirection,const int mapHandle)
         nowFrameNumber--;
     }
 
+    if (CheckHitKey(KEY_INPUT_4))
+    {
+        playerData.isHangring = false;
+    }
+
     //2胴体
     //0真下
     //頭 9
@@ -146,6 +209,11 @@ void Player::Update(const VECTOR& cameraDirection,const int mapHandle)
     //右手 106
     centerPosition = MV1GetFramePosition(modelHandle, 2);
     footPosition = MV1GetFramePosition(modelHandle, 0);
+    headPos = MV1GetFramePosition(modelHandle, 9);
+    handPos_left= MV1GetFramePosition(modelHandle, 65);
+    handPos_right= MV1GetFramePosition(modelHandle, 106);
+    handCenterPos= VAdd(handPos_left, handPos_right);
+    handCenterPos = VScale(handCenterPos, 0.5f);
 
     topPosition = position;
     bottomPosition = position;
@@ -163,13 +231,17 @@ bool Player::Draw()
 	MV1DrawModel(modelHandle);
     DrawSphere3D(centerPosition, 1.0f, 30, GetColor(0, 0, 0),
         GetColor(255, 0, 0), FALSE);
+    DrawSphere3D(handCenterPos, 2.0f, 30, GetColor(0, 0, 0),
+        GetColor(0, 0, 255), FALSE);
+    DrawSphere3D(nearestPoint, 2.0f, 30, GetColor(0, 0, 0),
+        GetColor(255, 0, 255), FALSE);
    /* DrawCapsule3D(topPosition, bottomPosition, radius, 30, GetColor(0, 0, 0),
         GetColor(255, 0, 0), FALSE);*/
 
     printfDx("playerPosition.x %f\nplayerPosition.y %f\nplayerPosition.z %f\n",
         position.x, position.y, position.z);
     //printfDx("frame現在数%d\n", nowFrameNumber);
-    printfDx("nowMoveSpeed %f\n", moveCalclation->GetNowMoveSpeed());
+    printfDx("nowMoveSpeed %f\n", playerCalclation->GetNowMoveSpeed());
     printfDx("isMove %d\n", playerData.isMove);
     printfDx("isJump %d\n", playerData.isJump);
     printfDx("isJump_second %d\n", playerData.isJump_second);
@@ -179,9 +251,10 @@ bool Player::Draw()
     printfDx("isStopRun %d\n", playerData.isStopRun);
     printfDx("isJumpAll %d\n", playerData.isJumpAll);
     printfDx("isFalling %d\n", playerData.isFalling);
+    printfDx("isHangring %d\n", playerData.isHangring);
     printfDx("isChageState %d\n", isChageState);
     printfDx("animNumber_Now %d\n", animNumber_Now);
-    printfDx("currentJumpSpeed %f\n", moveCalclation->GetCurrentJumpSpeed());
+    printfDx("currentJumpSpeed %f\n", playerCalclation->GetCurrentJumpSpeed());
     nowState->Draw();
 
     //線
@@ -286,7 +359,7 @@ void Player::JumpMove()
         if (!playerData.isJump)
         {
             isPush = true;
-            moveCalclation->SetCurrentJumpSpeed(addJumpPower);
+            playerCalclation->SetCurrentJumpSpeed(addJumpPower);
             playerData.isJump = true;
         }
         //二段ジャンプ
@@ -294,7 +367,7 @@ void Player::JumpMove()
         {
             isPush = true;
             playerData.isJump_second = true;
-            moveCalclation->SetCurrentJumpSpeed(addJumpPower);
+            playerCalclation->SetCurrentJumpSpeed(addJumpPower);
             if (animNumber_Now == animNum::jump || animNumber_Now == animNum::run_Jump)
             {
                 playerData.isJumpAll = true;
@@ -467,8 +540,12 @@ void Player::ChangeState()
     if (playerData.isHangring && playerData.isFalling && 
         animNumber_Now != animNum::hangring_Idle)
     {
-        SetNowAnimState(nowState->GetNowAnimState());
         SetOldAnimState(nowState->GetOldAnimState());
+        SetNowAnimState(nowState->GetNowAnimState());
+
+        nowState = nullptr;
+        animNumber_Now = animNum::hangring_Idle;
+        nowState = std::make_shared<Hangring_Idle>(modelHandle, oldAnimState, nowAnimState, playerData);
         playerData.isFalling = false;
     }
 }
