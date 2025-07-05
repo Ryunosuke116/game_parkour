@@ -5,7 +5,7 @@ class Idle_To_Sprint : public PlayerStateActionBase
 {
 public:
 	Idle_To_Sprint(int& modelHandle,
-		OldAnimState& oldAnimState, NowAnimState& nowAnimState);
+		AnimState& oldAnimState, AnimState& nowAnimState);
 	~Idle_To_Sprint();
 
 	bool MotionUpdate(PlayerData& playerData)override;

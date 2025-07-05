@@ -4,7 +4,7 @@ class Hangring_Idle : public PlayerStateActionBase
 {
 public:
 	Hangring_Idle(int& modelHandle,
-		OldAnimState& oldAnimState, NowAnimState& nowAnimStatel, PlayerData& playerData);
+		AnimState& oldAnimState, AnimState& nowAnimStatel, PlayerData& playerData);
 	~Hangring_Idle();
 
 	//bool MotionUpdate(PlayerData& playerData)override;

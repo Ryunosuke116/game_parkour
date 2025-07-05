@@ -5,7 +5,7 @@ class Quick_Roll : public PlayerStateActionBase
 {
 public:
 	Quick_Roll(int& modelHandle,
-		OldAnimState& oldAnimState, NowAnimState& nowAnimState);
+		AnimState& oldAnimState, AnimState& nowAnimState);
 	~Quick_Roll();
 
 	bool MotionUpdate(PlayerData& playerData)override;

@@ -10,7 +10,7 @@
 /// </summary>
 /// <param name="modelHandle"></param>
 Run_To_Stop::Run_To_Stop(int& modelHandle,
-    OldAnimState& oldAnimState, NowAnimState& nowAnimState) :
+    AnimState& oldAnimState, AnimState& nowAnimState) :
     PlayerStateActionBase(modelHandle, oldAnimState, nowAnimState)
 {
     // ３Ｄモデルの０番目のアニメーションをアタッチする

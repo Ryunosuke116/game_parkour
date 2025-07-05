@@ -9,7 +9,7 @@
 /// </summary>
 /// <param name="modelHandle"></param>
 Idle_To_Sprint::Idle_To_Sprint(int& modelHandle,
-    OldAnimState& oldAnimState, NowAnimState& nowAnimState) :
+    AnimState& oldAnimState, AnimState& nowAnimState) :
     PlayerStateActionBase(modelHandle, oldAnimState, nowAnimState)
 {
     // ３Ｄモデルの０番目のアニメーションをアタッチする

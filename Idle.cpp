@@ -9,7 +9,7 @@
 /// </summary>
 /// <param name="modelHandle"></param>
 Idle::Idle(int& modelHandle,
-    OldAnimState& oldAnimState, NowAnimState& nowAnimState, PlayerData& playerData) :
+    AnimState& oldAnimState, AnimState& nowAnimState, PlayerData& playerData) :
     PlayerStateActionBase(modelHandle, oldAnimState,nowAnimState)
 {
     // ３Ｄモデルの０番目のアニメーションをアタッチする

@@ -23,24 +23,16 @@ public:
 		bool isHangring;				//崖つかみ中か
 	};
 
-	struct OldAnimState
+	struct AnimState
 	{
-		int AttachIndex;			//前のアニメーション情報
-		float PlayTime_anim;		//前回の再生時間
-		float TotalPlayTime_anim;	//前回の総再生時間
-		float PlayAnimSpeed;		//前回のアニメーションスピード
-	};
-
-	struct NowAnimState
-	{
-		int AttachIndex;				//現在のアニメーション情報
-		float PlayTime_anim;			//現在の再生時間
-		float TotalPlayTime_anim;	//現在の総再生時間
-		float PlayAnimSpeed;			//前回のアニメーションスピード
+		int AttachIndex;			//アニメーション情報
+		float PlayTime_anim;		//再生時間
+		float TotalPlayTime_anim;	//総再生時間
+		float PlayAnimSpeed;		//アニメーションスピード
 	};
 
 	PlayerStateActionBase(int& modelHandle,
-		OldAnimState& oldAnimState, NowAnimState& nowAnimState);
+		AnimState& oldAnimState, AnimState& nowAnimState);
 	~PlayerStateActionBase() {};
 
 	virtual bool MotionUpdate(PlayerData& playerData);
@@ -54,8 +46,9 @@ public:
 	// ゲッター
 	//////////////////////////////////////////////
 	//int GetPrevAttachIndex() { return oldAnimState.AttachIndex; }
-	const OldAnimState GetOldAnimState() const { return oldAnimState; }
-	const NowAnimState GetNowAnimState() const { return nowAnimState; }
+	const AnimState GetOldAnimState() const { return oldAnimState; }
+	const AnimState GetNowAnimState() const { return nowAnimState; }
+	const float GetAnimBlendRate() { return animBlendRate; }
 
 protected:
 
@@ -66,8 +59,8 @@ protected:
 	int modelHandle;			//モデルハンドル
 	float animBlendRate;
 
-	OldAnimState oldAnimState;
-	NowAnimState nowAnimState;
+	AnimState oldAnimState;
+	AnimState nowAnimState;
 	PlayerData  playerData;
 
 	//移動

@@ -5,7 +5,7 @@ class Run_To_Stop : public PlayerStateActionBase
 {
 public:
 	Run_To_Stop(int& modelHandle,
-		OldAnimState& oldAnimState, NowAnimState& nowAnimState);
+		AnimState& oldAnimState, AnimState& nowAnimState);
 	~Run_To_Stop();
 
 	bool MotionUpdate(PlayerData& playerData)override;

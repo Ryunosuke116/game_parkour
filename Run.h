@@ -5,7 +5,7 @@ class Run : public PlayerStateActionBase
 {
 public:
 	Run(int& modelHandle,
-		OldAnimState& oldAnimState, NowAnimState& nowAnimState);
+		AnimState& oldAnimState, AnimState& nowAnimState);
 	~Run();
 
 	//void MotionUpdate()override;

@@ -98,7 +98,7 @@ void Player::Update(const VECTOR& cameraDirection,const int mapHandle)
     JumpMove();
 
     //移動方向ベクトルが0でない場合コピー
-    if (VSize(moveVec) != 0)
+    if (VSize(moveVec) != 0 && !playerData.isHangring)
     {
         targetMoveDirection = moveVec;
     }
@@ -114,8 +114,6 @@ void Player::Update(const VECTOR& cameraDirection,const int mapHandle)
         if (playerData.isHangring)
         {
             hangringPoint = result_cliff.second;
-
-
         }
     }
 
@@ -157,26 +155,26 @@ void Player::Update(const VECTOR& cameraDirection,const int mapHandle)
     //崖掴み中は壁の法線に合わせて向きを決める
     if (playerData.isHangring)
     {
-     /*   MV1_COLL_RESULT_POLY hangringPoly;
-        VECTOR centerRay_end = VAdd(centerPosition, VScale(targetMoveDirection, 10.0f));
-        centerRay_end.y = centerRay_end.y;*/
+        if (!isCalc)
+        {
+            nearestPoint = Calclation::SphereMeshOutsideTriangle(collisionManager->GetHangringPoly(), headPos);
 
-        nearestPoint = Calclation::SphereMeshOutsideTriangle(collisionManager->GetHangringPoly(), headPos);
 
-        VECTOR direction = VSub(nearestPoint, position);
-        direction.y = 0.0f;
+            VECTOR direction = VSub(nearestPoint, position);
+            direction.y = 0.0f;
 
-        direction = VNorm(direction);
+            direction = VNorm(direction);
 
-        //HitCheck::HitRayJudge(mapHandle, -1, centerPosition, centerRay_end, hangringPoly);
-        targetMoveDirection = direction;
+            targetMoveDirection = direction;
+            isCalc = true;
+        }
 
         //手の位置に角を合わせる
         //※未完全
-        if (!isCalc && nowState->GetNowAnimState().PlayTime_anim >= 60.0f)
-        {
             VECTOR addPos = playerCalclation->HangringPosition(handPos_left, handPos_right, nearestPoint);
             position = VAdd(position, addPos);
+        if (nowState->GetAnimBlendRate() < 1.0f)
+        {
             isCalc = true;
         }
     }
@@ -554,7 +552,7 @@ void Player::ChangeState()
 /// アニメーション情報をセット
 /// </summary>
 /// <param name="AnimState"></param>
-void Player::SetOldAnimState(PlayerStateActionBase::OldAnimState animState)
+void Player::SetOldAnimState(PlayerStateActionBase::AnimState animState)
 {
     oldAnimState.AttachIndex = animState.AttachIndex;
     oldAnimState.PlayAnimSpeed = animState.PlayAnimSpeed;
@@ -562,7 +560,7 @@ void Player::SetOldAnimState(PlayerStateActionBase::OldAnimState animState)
     oldAnimState.TotalPlayTime_anim = animState.TotalPlayTime_anim;
 }
 
-void Player::SetNowAnimState(PlayerStateActionBase::NowAnimState animState)
+void Player::SetNowAnimState(PlayerStateActionBase::AnimState animState)
 {
     nowAnimState.AttachIndex = animState.AttachIndex;
     nowAnimState.PlayAnimSpeed = animState.PlayAnimSpeed;

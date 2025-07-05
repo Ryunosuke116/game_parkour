@@ -224,18 +224,21 @@ VECTOR HitCheck::CapsuleHitConfirmation(VECTOR capsulePosition_1, VECTOR capsule
 	//ベクトルの長さ
 	float vectorLength = pow((AB.x * AB.x) + (AB.y * AB.y) + (AB.z * AB.z), 0.5f);
 
-	//単位ベクトル
+	//単位ベクトル(正規化)
 	VECTOR unitVector = VGet(0, 0, 0);
 	unitVector.x = AB.x / vectorLength;
 	unitVector.y = AB.y / vectorLength;
 	unitVector.z = AB.z / vectorLength;
+
+	//点の射影位置を計算(スカラー値)
 	float productionVector = (unitVector.x * AP.x) + (unitVector.y * AP.y) + (unitVector.z * AP.z);
 
-	//
+	//線分上の最近点を計算
 	VECTOR AX;
 	AX.x = capsulePosition_1.x + (unitVector.x * productionVector);
 	AX.y = capsulePosition_1.y + (unitVector.y * productionVector);
 	AX.z = capsulePosition_1.z + (unitVector.z * productionVector);
+
 
 	if (AX.y <= capsulePosition_2.y)
 	{

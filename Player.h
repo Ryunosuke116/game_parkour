@@ -50,12 +50,12 @@ private:
 
 	//‘¼ƒNƒ‰ƒX
 	std::shared_ptr<PlayerStateActionBase> nowState = NULL;
-	PlayerStateActionBase::OldAnimState oldAnimState;
-	PlayerStateActionBase::NowAnimState nowAnimState;
+	PlayerStateActionBase::AnimState oldAnimState;
+	PlayerStateActionBase::AnimState nowAnimState;
 	PlayerStateActionBase::PlayerData playerData;
 	std::shared_ptr<CollisionManager> collisionManager = NULL;
 	std::shared_ptr<PlayerCalclation> playerCalclation = NULL;
-
+	Calclation::NearestResult nearestResult;
 public:
 	Player();
 	~Player();
@@ -71,8 +71,8 @@ public:
 	void ChangeState();
 	void SettingRay();
 
-	void SetOldAnimState(PlayerStateActionBase::OldAnimState animState);
-	void SetNowAnimState(PlayerStateActionBase::NowAnimState animState);
+	void SetOldAnimState(PlayerStateActionBase::AnimState animState);
+	void SetNowAnimState(PlayerStateActionBase::AnimState animState);
 
 	
 

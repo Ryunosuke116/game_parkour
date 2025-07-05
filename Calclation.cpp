@@ -68,6 +68,12 @@ VECTOR Calclation::NearestPoint(const VECTOR& position_1, const VECTOR& position
 	return AX;
 }
 
+/// <summary>
+/// 点に対して最も近い三角形の辺
+/// </summary>
+/// <param name="poly"></param>
+/// <param name="HitPos_ground"></param>
+/// <returns></returns>
 VECTOR Calclation::SphereMeshOutsideTriangle(const MV1_COLL_RESULT_POLY& poly, const VECTOR& HitPos_ground)
 {
 	VECTOR nearestPoint;
@@ -98,6 +104,71 @@ VECTOR Calclation::SphereMeshOutsideTriangle(const MV1_COLL_RESULT_POLY& poly, c
 	}
 
 	return nearestPoint;
+}
+
+
+Calclation::NearestResult Calclation::SphereMeshOutsideTriangle_line(const MV1_COLL_RESULT_POLY& poly, const VECTOR& HitPos_ground)
+{
+	VECTOR nearestPoint;
+
+	NearestResult result;
+
+	//線分上の点との最近点
+	VECTOR nearPoint_1 = NearestPoint(poly.Position[0], poly.Position[1], HitPos_ground);
+	VECTOR nearPoint_2 = NearestPoint(poly.Position[0], poly.Position[2], HitPos_ground);
+	VECTOR nearPoint_3 = NearestPoint(poly.Position[1], poly.Position[2], HitPos_ground);
+
+	//各距離を求める
+	float d1 = VSize(VSub(nearPoint_1, HitPos_ground));
+	float d2 = VSize(VSub(nearPoint_2, HitPos_ground));
+	float d3 = VSize(VSub(nearPoint_3, HitPos_ground));
+
+
+	//一番近い座標を選択する
+	if (d1 <= d2 && d1 <= d3)
+	{
+		result.nearestPoint = nearPoint_1;
+		result.linePos_start = poly.Position[0];
+		result.linePos_end = poly.Position[1];
+	}
+	else if (d2 <= d3)
+	{
+		result.nearestPoint = nearPoint_2;
+		result.linePos_start = poly.Position[0];
+		result.linePos_end = poly.Position[2];
+	}
+	else
+	{
+		result.nearestPoint = nearPoint_3;
+		result.linePos_start = poly.Position[1];
+		result.linePos_end = poly.Position[2];
+	}
+
+	return result;
+}
+
+VECTOR Calclation::ProjectionDirection(const VECTOR& point, const VECTOR& P, const VECTOR& Q)
+{
+	VECTOR AB = VSub(capsulePosition_2, capsulePosition_1);
+	VECTOR AP = VSub(position, capsulePosition_1);
+
+	//ベクトルの長さ
+	float vectorLength = pow((AB.x * AB.x) + (AB.y * AB.y) + (AB.z * AB.z), 0.5f);
+
+	//単位ベクトル(正規化)
+	VECTOR unitVector = VGet(0, 0, 0);
+	unitVector.x = AB.x / vectorLength;
+	unitVector.y = AB.y / vectorLength;
+	unitVector.z = AB.z / vectorLength;
+
+	//点の射影位置を計算(スカラー値)
+	float productionVector = (unitVector.x * AP.x) + (unitVector.y * AP.y) + (unitVector.z * AP.z);
+
+	//線分上の最近点を計算
+	VECTOR AX;
+	AX.x = capsulePosition_1.x + (unitVector.x * productionVector);
+	AX.y = capsulePosition_1.y + (unitVector.y * productionVector);
+	AX.z = capsulePosition_1.z + (unitVector.z * productionVector);
 }
 
 /// <summary>

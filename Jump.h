@@ -5,7 +5,7 @@ class Jump : public PlayerStateActionBase
 {
 public:
 	Jump(int& modelHandle,
-		OldAnimState& oldAnimState, NowAnimState& nowAnimState);
+		AnimState& oldAnimState, AnimState& nowAnimState);
 	~Jump();
 
 	bool MotionUpdate(PlayerData& playerData)override;

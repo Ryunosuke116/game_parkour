@@ -13,7 +13,7 @@
 /// <param name="oldAnimState"></param>
 /// <param name="nowAnimState"></param>
 PlayerStateActionBase::PlayerStateActionBase(int& modelHandle,
-    OldAnimState& oldAnimState, NowAnimState& nowAnimState):
+    AnimState& oldAnimState, AnimState& nowAnimState):
     modelHandle(-1),
     animBlendRate(0.0f)
 {

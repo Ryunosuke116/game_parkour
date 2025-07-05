@@ -7,7 +7,7 @@
 /// コンストラクタ
 /// </summary>
 Falling_Idle::Falling_Idle(int& modelHandle,
-	OldAnimState& oldAnimState, NowAnimState& nowAnimState) :
+	AnimState& oldAnimState, AnimState& nowAnimState) :
 	PlayerStateActionBase(modelHandle, oldAnimState,nowAnimState)
 {
 	this->nowAnimState.PlayAnimSpeed = playAnimSpeed;

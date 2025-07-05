@@ -5,7 +5,7 @@ class Run_Jump : public PlayerStateActionBase
 {
 public:
 	Run_Jump(int& modelHandle,
-		OldAnimState& oldAnimState, NowAnimState& nowAnimState);
+		AnimState& oldAnimState, AnimState& nowAnimState);
 	~Run_Jump();
 	bool MotionUpdate(PlayerData& playerData)override;
 

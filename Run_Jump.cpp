@@ -12,7 +12,7 @@
 /// <param name="oldAnimState"></param>
 /// <param name="nowAnimState"></param>
 Run_Jump::Run_Jump(int& modelHandle,
-	OldAnimState& oldAnimState, NowAnimState& nowAnimState) :
+	AnimState& oldAnimState, AnimState& nowAnimState) :
 	PlayerStateActionBase(modelHandle, oldAnimState, nowAnimState)
 {
 	input = std::make_shared<Input>();

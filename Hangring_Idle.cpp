@@ -12,7 +12,7 @@
 /// <param name="nowAnimState"></param>
 /// <param name="playerData"></param>
 Hangring_Idle::Hangring_Idle(int& modelHandle,
-    OldAnimState& oldAnimState, NowAnimState& nowAnimState, PlayerData& playerData) :
+    AnimState& oldAnimState, AnimState& nowAnimState, PlayerData& playerData) :
     PlayerStateActionBase(modelHandle, oldAnimState, nowAnimState)
 {
     // ３Ｄモデルの０番目のアニメーションをアタッチする

@@ -13,7 +13,7 @@
 /// <param name="oldAnimState"></param>
 /// <param name="nowAnimState"></param>
 Quick_Roll::Quick_Roll(int& modelHandle,
-	OldAnimState& oldAnimState, NowAnimState& nowAnimState) :
+    AnimState& oldAnimState, AnimState& nowAnimState) :
 	PlayerStateActionBase(modelHandle, oldAnimState, nowAnimState)
 {
 	// ３Ｄモデルの０番目のアニメーションをアタッチする
