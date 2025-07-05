@@ -4,6 +4,7 @@
 #include "PlayerStateActionBase.h"
 #include "Input.h"
 #include "Jump.h"
+#include "AnimTime.h"
 
 /// <summary>
 /// コンストラクタ

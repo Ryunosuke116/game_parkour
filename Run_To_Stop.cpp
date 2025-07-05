@@ -3,6 +3,7 @@
 #include "DxLib.h"
 #include "PlayerStateActionBase.h"
 #include "Run_To_Stop.h"
+#include "AnimTime.h"
 
 
 /// <summary>

@@ -2,6 +2,7 @@
 #include "DxLib.h"
 #include "PlayerStateActionBase.h"
 #include "Falling_Idle.h"
+#include "AnimTime.h"
 
 /// <summary>
 /// コンストラクタ

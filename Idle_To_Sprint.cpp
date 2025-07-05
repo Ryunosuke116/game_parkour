@@ -3,6 +3,7 @@
 #include "DxLib.h"
 #include "PlayerStateActionBase.h"
 #include "Idle_To_Sprint.h"
+#include "AnimTime.h"
 
 /// <summary>
 /// コンストラクタ

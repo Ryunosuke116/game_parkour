@@ -18,6 +18,7 @@ public:
 		VECTOR linePos_end;
 		VECTOR nearestPoint;
 	};
+
 	static void Initialize();
 
 	static void UnInitialize();
@@ -27,7 +28,7 @@ public:
 	static VECTOR NearestPoint(const VECTOR& position_1, const VECTOR& position_2,
 		 const VECTOR& point);
 
-	static VECTOR ProjectionDirection(const VECTOR& point, const VECTOR& P, const VECTOR& Q);
+	static VECTOR ProjectionDirection(const VECTOR& point, const VECTOR& a, const VECTOR& b);
 
 	static VECTOR Leap(const VECTOR& changePosition, const VECTOR& playerPosition, const float& speed);
 	static VECTOR SphereMeshOutsideTriangle(const MV1_COLL_RESULT_POLY& poly, const VECTOR& HitPos_ground);

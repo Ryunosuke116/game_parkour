@@ -3,6 +3,7 @@
 #include "PlayerCalclation.h"
 #include "BaseChara.h"
 #include "CollisionManager.h"
+#include "Calclation.h"
 
 class Player : public BaseChara
 {
@@ -55,7 +56,6 @@ private:
 	PlayerStateActionBase::PlayerData playerData;
 	std::shared_ptr<CollisionManager> collisionManager = NULL;
 	std::shared_ptr<PlayerCalclation> playerCalclation = NULL;
-	Calclation::NearestResult nearestResult;
 public:
 	Player();
 	~Player();

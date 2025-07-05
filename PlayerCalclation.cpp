@@ -169,6 +169,22 @@ VECTOR PlayerCalclation::HangringPosition(const VECTOR& handPos_left,const VECTO
     return newPos;
 }
 
+VECTOR PlayerCalclation::HangringDirection(const MV1_COLL_RESULT_POLY& hangringPoly, const VECTOR& centerPos)
+{
+    //点に最も近い線分との最近接点
+    nearestResult = Calclation::SphereMeshOutsideTriangle_line(hangringPoly, centerPos);
+
+    //射影ベクトル
+    VECTOR a = Calclation::ProjectionDirection(centerPos, nearestResult.linePos_start, nearestResult.linePos_end);
+
+    VECTOR direction = VSub(a, centerPos);
+    direction.y = 0.0f;
+
+    direction = VNorm(direction);
+
+    return direction;
+}
+
 ///////////////////////////////
 // まだ使うかわからない
 //////////////////////////////

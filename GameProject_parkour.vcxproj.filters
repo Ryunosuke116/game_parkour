@@ -103,6 +103,9 @@
     <Filter Include="ソース ファイル\player\state\run_to_stop">
       <UniqueIdentifier>{ad1bbf69-df63-42d0-af47-aa4948d1fdff}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\player\state\braced_Hang_To_Crouch">
+      <UniqueIdentifier>{c70c1186-0912-4049-a392-2034c0bc5f83}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -177,9 +180,6 @@
     <ClCompile Include="PlayerCalclation.cpp">
       <Filter>ソース ファイル\player\moveCalclation</Filter>
     </ClCompile>
-    <ClCompile Include="HangringCalclation.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Falling_Idle.cpp">
       <Filter>ソース ファイル\player\state\falling_Idle</Filter>
     </ClCompile>
@@ -206,6 +206,9 @@
     </ClCompile>
     <ClCompile Include="Run_To_Stop.cpp">
       <Filter>ソース ファイル\player\state\run_to_stop</Filter>
+    </ClCompile>
+    <ClCompile Include="Braced_Hang_To_Crouch.cpp">
+      <Filter>ソース ファイル\player\state\braced_Hang_To_Crouch</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -293,9 +296,6 @@
     <ClInclude Include="PlayerCalclation.h">
       <Filter>ソース ファイル\player\moveCalclation</Filter>
     </ClInclude>
-    <ClInclude Include="HangringCalclation.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Falling_Idle.h">
       <Filter>ソース ファイル\player\state\falling_Idle</Filter>
     </ClInclude>
@@ -322,6 +322,9 @@
     </ClInclude>
     <ClInclude Include="Run_To_Stop.h">
       <Filter>ソース ファイル\player\state\run_to_stop</Filter>
+    </ClInclude>
+    <ClInclude Include="Braced_Hang_To_Crouch.h">
+      <Filter>ソース ファイル\player\state\braced_Hang_To_Crouch</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

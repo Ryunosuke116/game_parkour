@@ -8,4 +8,5 @@
 #include "Idle_To_Sprint.h"
 #include "Run_To_Stop.h"
 #include "Hangring_Idle.h"
+#include "Braced_Hang_To_Crouch.h"
 #include "PlayerStateActionBase.h"

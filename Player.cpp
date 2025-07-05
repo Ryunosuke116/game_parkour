@@ -81,6 +81,7 @@ void Player::Initialize()
 /// </summary>
 void Player::Update(const VECTOR& cameraDirection,const int mapHandle)
 {
+    //リセット
     moveVec = VGet(0.0f, 0.0f, 0.0f);
 
     //接地している場合リセットする
@@ -93,7 +94,8 @@ void Player::Update(const VECTOR& cameraDirection,const int mapHandle)
         playerCalclation->SetCurrentJumpSpeed(0.0f);
     }
    
-    moveVec_memory = Move(moveVec, cameraDirection);
+    //行動指示
+    Move(moveVec, cameraDirection);
     RollMove();
     JumpMove();
 
@@ -104,9 +106,9 @@ void Player::Update(const VECTOR& cameraDirection,const int mapHandle)
     }
 
     //崖つかみ判定
-
     if (!playerData.isHangring)
     {
+        //掴めるところがあるか
         auto result_cliff = collisionManager->CliffGrabbing(mapHandle, topPosition, targetMoveDirection, playerData.isFalling);
         playerData.isHangring = result_cliff.first;
 
@@ -120,6 +122,7 @@ void Player::Update(const VECTOR& cameraDirection,const int mapHandle)
     //状態変更
     ChangeState();
 
+    
     if (CheckHitKey(KEY_INPUT_4))
     {
         playerData.isHangring = false;
@@ -127,6 +130,7 @@ void Player::Update(const VECTOR& cameraDirection,const int mapHandle)
         hangringPoint = { NULL };
     }
 
+    //崖つかみ中ではない場合
     if(!playerData.isHangring)
     {
         moveVec = playerCalclation->Update(moveVec, targetMoveDirection,
@@ -157,26 +161,16 @@ void Player::Update(const VECTOR& cameraDirection,const int mapHandle)
     {
         if (!isCalc)
         {
-            nearestPoint = Calclation::SphereMeshOutsideTriangle(collisionManager->GetHangringPoly(), headPos);
-
-
-            VECTOR direction = VSub(nearestPoint, position);
-            direction.y = 0.0f;
-
-            direction = VNorm(direction);
-
-            targetMoveDirection = direction;
+            targetMoveDirection = playerCalclation->HangringDirection(collisionManager->GetHangringPoly(), centerPosition);
             isCalc = true;
         }
 
         //手の位置に角を合わせる
         //※未完全
-            VECTOR addPos = playerCalclation->HangringPosition(handPos_left, handPos_right, nearestPoint);
-            position = VAdd(position, addPos);
-        if (nowState->GetAnimBlendRate() < 1.0f)
-        {
-            isCalc = true;
-        }
+        VECTOR addPos = playerCalclation->HangringPosition(handPos_left,
+            handPos_right, playerCalclation->GetNearestResult().nearestPoint);
+      
+        position = VAdd(position, addPos);
     }
 
     isChageState = nowState->MotionUpdate(playerData);

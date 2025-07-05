@@ -1,6 +1,7 @@
 #pragma once
 #include "DxLib.h"
 #include"playerState.h"
+#include"Calclation.h"
 
 class PlayerCalclation
 {
@@ -21,9 +22,11 @@ public:
 	VECTOR HangringAngle(const MV1_COLL_RESULT_POLY& hangringPoly);
 	VECTOR HangringPosition(const VECTOR& handPos_left, const VECTOR& handPos_right, const VECTOR& nearestPoint);
 
+	VECTOR HangringDirection(const MV1_COLL_RESULT_POLY& hangringPoly, const VECTOR& centerPos);
+
 	float GetCurrentJumpSpeed() { return currentJumpSpeed; }
 	float GetNowMoveSpeed() { return nowMoveSpeed; }
-
+	Calclation::NearestResult GetNearestResult() { return nearestResult; }
 	void SetCurrentJumpSpeed(const float& jumpSpeed) { currentJumpSpeed = jumpSpeed; }
 
 private:
@@ -35,6 +38,7 @@ private:
 	float currentJumpSpeed;			//現在のジャンプスピード
 	float nowMoveSpeed;
 	float rollMoveSpeed_now;		//現在のロールスピード
+	Calclation::NearestResult nearestResult;
 
 };
 

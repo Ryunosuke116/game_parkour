@@ -106,7 +106,12 @@ VECTOR Calclation::SphereMeshOutsideTriangle(const MV1_COLL_RESULT_POLY& poly, c
 	return nearestPoint;
 }
 
-
+/// <summary>
+/// 点に対して最も近い三角形の辺
+/// </summary>
+/// <param name="poly"></param>
+/// <param name="HitPos_ground"></param>
+/// <returns></returns>
 Calclation::NearestResult Calclation::SphereMeshOutsideTriangle_line(const MV1_COLL_RESULT_POLY& poly, const VECTOR& HitPos_ground)
 {
 	VECTOR nearestPoint;
@@ -147,10 +152,15 @@ Calclation::NearestResult Calclation::SphereMeshOutsideTriangle_line(const MV1_C
 	return result;
 }
 
-VECTOR Calclation::ProjectionDirection(const VECTOR& point, const VECTOR& P, const VECTOR& Q)
+/// @brief 
+/// @param point 
+/// @param a 
+/// @param b 
+/// @return 
+VECTOR Calclation::ProjectionDirection(const VECTOR& point, const VECTOR& a, const VECTOR& b)
 {
-	VECTOR AB = VSub(capsulePosition_2, capsulePosition_1);
-	VECTOR AP = VSub(position, capsulePosition_1);
+	VECTOR AB = VSub(b, a);
+	VECTOR AP = VSub(point, a);
 
 	//ベクトルの長さ
 	float vectorLength = pow((AB.x * AB.x) + (AB.y * AB.y) + (AB.z * AB.z), 0.5f);
@@ -166,9 +176,11 @@ VECTOR Calclation::ProjectionDirection(const VECTOR& point, const VECTOR& P, con
 
 	//線分上の最近点を計算
 	VECTOR AX;
-	AX.x = capsulePosition_1.x + (unitVector.x * productionVector);
-	AX.y = capsulePosition_1.y + (unitVector.y * productionVector);
-	AX.z = capsulePosition_1.z + (unitVector.z * productionVector);
+	AX.x = a.x + (unitVector.x * productionVector);
+	AX.y = a.y + (unitVector.y * productionVector);
+	AX.z = a.z + (unitVector.z * productionVector);
+
+	return AX;
 }
 
 /// <summary>
