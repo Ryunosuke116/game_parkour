@@ -21,7 +21,7 @@ Braced_Hang_To_Crouch::Braced_Hang_To_Crouch(int& modelHandle,
 
     this->nowAnimState.PlayTime_anim = 0.0f;
     this->nowAnimState.PlayAnimSpeed = playAnimSpeed;
-
+    this->nowAnimState.TotalPlayTime_anim = MV1GetAttachAnimTotalTime(modelHandle, this->nowAnimState.AttachIndex);
 }
 
 /// <summary>

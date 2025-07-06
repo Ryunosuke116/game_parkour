@@ -21,7 +21,7 @@ Hangring_Idle::Hangring_Idle(int& modelHandle,
 
     this->nowAnimState.PlayTime_anim = 0.0f;
     this->nowAnimState.PlayAnimSpeed = playAnimSpeed;
-
+    this->nowAnimState.TotalPlayTime_anim = MV1GetAttachAnimTotalTime(modelHandle, this->nowAnimState.AttachIndex);
 }
 
 /// <summary>

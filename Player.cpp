@@ -61,6 +61,7 @@ void Player::Initialize()
     playerData.isJump_PlayAnim = false;
     playerData.isFalling = false;
     playerData.isHangring = false;
+    playerData.isHang_to_Crouch = false;
     isCalc = false;
    
     oldAnimState.AttachIndex = -1;
@@ -100,7 +101,7 @@ void Player::Update(const VECTOR& cameraDirection,const int mapHandle)
     JumpMove();
 
     //移動方向ベクトルが0でない場合コピー
-    if (VSize(moveVec) != 0 && !playerData.isHangring)
+    if (VSize(moveVec) != 0 && !playerData.isHangring && !playerData.isHang_to_Crouch)
     {
         targetMoveDirection = moveVec;
     }
@@ -130,8 +131,11 @@ void Player::Update(const VECTOR& cameraDirection,const int mapHandle)
         hangringPoint = { NULL };
     }
 
+    // || 
+    //(nowState->GetNowAnimState().PlayTime_anim >= 22.0f &&
+      // animNumber_Now == animNum::braced_Hang_To_Crouch)
     //崖つかみ中ではない場合
-    if(!playerData.isHangring)
+    if((!playerData.isHangring && !playerData.isHang_to_Crouch))
     {
         moveVec = playerCalclation->Update(moveVec, targetMoveDirection,
             nowState->GetNowAnimState().PlayTime_anim,
@@ -157,20 +161,62 @@ void Player::Update(const VECTOR& cameraDirection,const int mapHandle)
     }
 
     //崖掴み中は壁の法線に合わせて向きを決める
-    if (playerData.isHangring)
+    HangringMove();
+
+    //////////////////////////////////
+    //  コード整理しろ！
+    /////////////////////////////////
+    if (playerData.isHang_to_Crouch && !playerData.isHangring)
     {
-        if (!isCalc)
+        //指定のフレームまでは手に合わせて座標を更新
+        if (nowState->GetNowAnimState().PlayTime_anim <= 22.0f)
         {
-            targetMoveDirection = playerCalclation->HangringDirection(collisionManager->GetHangringPoly(), centerPosition);
-            isCalc = true;
+            VECTOR addPos = playerCalclation->HangringPosition(handPos_left,
+                handPos_right, playerCalclation->GetNearestResult().nearestPoint);
+            
+            position = VAdd(position, addPos);
+        }
+        //
+        else
+        {
+            //上り終わった後に少しずつ前進する
+            VECTOR addPos = VScale(targetMoveDirection, 0.35f);
+            position = VAdd(position, addPos);
+
+            //胸の位置が床の位置をすぎたら足もとを基準に床との衝突判定をする
+            VECTOR chestPos = MV1GetFramePosition(modelHandle, 6);
+
+            VECTOR nowPos = chestPos;
+            nowPos.y = position.y;
+
+            VECTOR newPos = VAdd(nowPos, moveVec);
+
+            //足のフレーム座標で衝突判定
+            VECTOR food = MV1GetFramePosition(modelHandle, 167);
+
+            auto result = collisionManager->GroundCollisionCheck_Hang_to_Crouch(mapHandle, nowPos, newPos, food, addTopPos, radius, addBottomPos);
+        
+            //playerの座標はフレーム座標を基準にしていないため縦だけずらす
+            position.y = result.second.y;
+
+            //上り終わったらplayerDataを初期化
+            if (nowState->GetNowAnimState().PlayTime_anim >=
+                nowState->GetNowAnimState().TotalPlayTime_anim - 1.0f)
+            {
+                playerData.isHang_to_Crouch = false;
+                playerData.isMove = false;
+                playerData.isJump = false;
+                playerData.isRoll = false;
+                playerData.isStopRun = false;
+                auto result = collisionManager->GroundCollisionCheck_Hang_to_Crouch(mapHandle, nowPos, newPos, food, addTopPos, radius, addBottomPos);
+
+                //playerData.isGround = result.first;
+                position.y = result.second.y;
+            }
         }
 
-        //手の位置に角を合わせる
-        //※未完全
-        VECTOR addPos = playerCalclation->HangringPosition(handPos_left,
-            handPos_right, playerCalclation->GetNearestResult().nearestPoint);
-      
-        position = VAdd(position, addPos);
+
+       
     }
 
     isChageState = nowState->MotionUpdate(playerData);
@@ -199,6 +245,10 @@ void Player::Update(const VECTOR& cameraDirection,const int mapHandle)
     //頭 9
     //左手 65
     //右手 106
+    //足もと 167
+    //頭 9
+    //胸 6
+    //腹 4
     centerPosition = MV1GetFramePosition(modelHandle, 2);
     footPosition = MV1GetFramePosition(modelHandle, 0);
     headPos = MV1GetFramePosition(modelHandle, 9);
@@ -206,6 +256,8 @@ void Player::Update(const VECTOR& cameraDirection,const int mapHandle)
     handPos_right= MV1GetFramePosition(modelHandle, 106);
     handCenterPos= VAdd(handPos_left, handPos_right);
     handCenterPos = VScale(handCenterPos, 0.5f);
+
+    VECTOR food= MV1GetFramePosition(modelHandle, 167);
 
     topPosition = position;
     bottomPosition = position;
@@ -221,18 +273,35 @@ void Player::Update(const VECTOR& cameraDirection,const int mapHandle)
 bool Player::Draw()
 {
 	MV1DrawModel(modelHandle);
-    DrawSphere3D(centerPosition, 1.0f, 30, GetColor(0, 0, 0),
+    DrawSphere3D(centerPosition, 2.0f, 30, GetColor(0, 0, 0),
         GetColor(255, 0, 0), FALSE);
     DrawSphere3D(handCenterPos, 2.0f, 30, GetColor(0, 0, 0),
         GetColor(0, 0, 255), FALSE);
-    DrawSphere3D(nearestPoint, 2.0f, 30, GetColor(0, 0, 0),
+    DrawSphere3D(playerCalclation->GetNearestResult().nearestPoint, 2.0f, 30, GetColor(0, 0, 0),
         GetColor(255, 0, 255), FALSE);
-   /* DrawCapsule3D(topPosition, bottomPosition, radius, 30, GetColor(0, 0, 0),
+
+    VECTOR nowFrame = MV1GetFramePosition(modelHandle, nowFrameNumber);
+
+    DrawSphere3D(nowFrame, 2.0f, 30, GetColor(0, 0, 0),
+        GetColor(255, 0, 255), FALSE);
+
+    VECTOR food = MV1GetFramePosition(modelHandle, 167);
+    VECTOR head = MV1GetFramePosition(modelHandle, 9);
+    VECTOR mune = MV1GetFramePosition(modelHandle, 6);
+    VECTOR top = mune;
+    top.y = top.y + (head.y - mune.y);
+    VECTOR bottom = mune;
+    bottom.y = bottom.y + (food.y - mune.y);
+
+    DrawCapsule3D(topPosition, bottomPosition, radius, 30, GetColor(0, 0, 0),
+        GetColor(255, 0, 0), FALSE);
+
+   /* DrawCapsule3D(top, bottom, radius, 30, GetColor(0, 0, 0),
         GetColor(255, 0, 0), FALSE);*/
 
     printfDx("playerPosition.x %f\nplayerPosition.y %f\nplayerPosition.z %f\n",
         position.x, position.y, position.z);
-    //printfDx("frame現在数%d\n", nowFrameNumber);
+    printfDx("frame現在数%d\n", nowFrameNumber);
     printfDx("nowMoveSpeed %f\n", playerCalclation->GetNowMoveSpeed());
     printfDx("isMove %d\n", playerData.isMove);
     printfDx("isJump %d\n", playerData.isJump);
@@ -274,56 +343,6 @@ VECTOR Player::Move(VECTOR& moveVec, const VECTOR& cameraDirection)
     upMove.y = 0.0f;
     rightMove.y = 0.0f;
 
-    ////上入力されたとき
-    //if (PadInput::isUp())
-    //{
-    //    if (animNumber_Now != animNum::run && !playerData.isJump)
-    //    {
-    //       // ChangeMotion(animNum::run, PlayAnimSpeed);
-    //    }
-    //    moveVec = VAdd(moveVec, upMove);
-    //    playerData.isMove = true;
-    //    playerData.isStopRun = true;
-    //}
-
-    ////下入力されたとき
-    //if (PadInput::isDown())
-    //{
-    //    if (animNumber_Now != animNum::run && !playerData.isJump)
-    //    {
-    //       // ChangeMotion(animNum::run, PlayAnimSpeed);
-    //    }
-    //    moveVec = VAdd(moveVec, VScale(upMove, -1.0f));
-    //    playerData.isMove = true;
-    //    playerData.isStopRun = true;
-    //}
-
-    ////左入力されたとき
-    //if (PadInput::isLeft())
-    //{
-    //    if (animNumber_Now != animNum::run && !playerData.isJump)
-    //    {
-    //       // ChangeMotion(animNum::run, PlayAnimSpeed);
-    //    }
-    //    moveVec = VAdd(moveVec, rightMove);
-    //    playerData.isMove = true;
-    //    playerData.isStopRun = true;
-    //}
-
-    ////右入力されたとき
-    //if (PadInput::isRight())
-    //{
-    //    if (animNumber_Now != animNum::run && !playerData.isJump)
-    //    {
-    //        //ChangeMotion(animNum::run, PlayAnimSpeed);
-    //    }
-    //    moveVec = VAdd(moveVec, VScale(rightMove, -1.0f));
-    //    playerData.isMove = true;
-    //    playerData.isStopRun = true;
-    //}
-
- /*   moveVec = VGet(PadInput::GetJoyPad_x_left(),
-        0.0f, -PadInput::GetJoyPad_y_left());*/
     moveVec = VAdd(VScale(rightMove, -PadInput::GetJoyPad_x_left()),
         VScale(upMove, -PadInput::GetJoyPad_y_left()));
 
@@ -384,11 +403,28 @@ void Player::RollMove()
 
 }
 
+
 void Player::HangringMove()
 {
     if (playerData.isHangring)
     {
+        if (!isCalc)
+        {
+            targetMoveDirection = playerCalclation->HangringDirection(collisionManager->GetHangringPoly(), centerPosition);
+            isCalc = true;
+        }
 
+        //手の位置に角を合わせる
+        //※未完全
+        VECTOR addPos = playerCalclation->HangringPosition(handPos_left,
+            handPos_right, playerCalclation->GetNearestResult().nearestPoint);
+
+        position = VAdd(position, addPos);
+
+        if (PadInput::isUp())
+        {
+            playerData.isHang_to_Crouch = true;
+        }
     }
 }
 
@@ -539,6 +575,19 @@ void Player::ChangeState()
         animNumber_Now = animNum::hangring_Idle;
         nowState = std::make_shared<Hangring_Idle>(modelHandle, oldAnimState, nowAnimState, playerData);
         playerData.isFalling = false;
+    }
+
+    if (playerData.isHangring && playerData.isHang_to_Crouch &&
+        animNumber_Now != animNum::braced_Hang_To_Crouch)
+    {
+        SetOldAnimState(nowState->GetOldAnimState());
+        SetNowAnimState(nowState->GetNowAnimState());
+
+        nowState = nullptr;
+        animNumber_Now = animNum::braced_Hang_To_Crouch;
+        nowState = std::make_shared<Braced_Hang_To_Crouch>(modelHandle, oldAnimState, nowAnimState, playerData);
+        playerData.isHangring = false;
+        isCalc = false;
     }
 }
 

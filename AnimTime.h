@@ -17,3 +17,54 @@ enum animNum : int
 	run_To_Stop,				//~‚Ü‚é
 	running_Forward_Flip		//‘–‚è‚È‚ª‚ç‰ñ“]ƒWƒƒƒ“ƒv
 };
+
+////ã“ü—Í‚³‚ê‚½‚Æ‚«
+ //if (PadInput::isUp())
+ //{
+ //    if (animNumber_Now != animNum::run && !playerData.isJump)
+ //    {
+ //       // ChangeMotion(animNum::run, PlayAnimSpeed);
+ //    }
+ //    moveVec = VAdd(moveVec, upMove);
+ //    playerData.isMove = true;
+ //    playerData.isStopRun = true;
+ //}
+
+ ////‰º“ü—Í‚³‚ê‚½‚Æ‚«
+ //if (PadInput::isDown())
+ //{
+ //    if (animNumber_Now != animNum::run && !playerData.isJump)
+ //    {
+ //       // ChangeMotion(animNum::run, PlayAnimSpeed);
+ //    }
+ //    moveVec = VAdd(moveVec, VScale(upMove, -1.0f));
+ //    playerData.isMove = true;
+ //    playerData.isStopRun = true;
+ //}
+
+ ////¶“ü—Í‚³‚ê‚½‚Æ‚«
+ //if (PadInput::isLeft())
+ //{
+ //    if (animNumber_Now != animNum::run && !playerData.isJump)
+ //    {
+ //       // ChangeMotion(animNum::run, PlayAnimSpeed);
+ //    }
+ //    moveVec = VAdd(moveVec, rightMove);
+ //    playerData.isMove = true;
+ //    playerData.isStopRun = true;
+ //}
+
+ ////‰E“ü—Í‚³‚ê‚½‚Æ‚«
+ //if (PadInput::isRight())
+ //{
+ //    if (animNumber_Now != animNum::run && !playerData.isJump)
+ //    {
+ //        //ChangeMotion(animNum::run, PlayAnimSpeed);
+ //    }
+ //    moveVec = VAdd(moveVec, VScale(rightMove, -1.0f));
+ //    playerData.isMove = true;
+ //    playerData.isStopRun = true;
+ //}
+
+/*   moveVec = VGet(PadInput::GetJoyPad_x_left(),
+       0.0f, -PadInput::GetJoyPad_y_left());*/

@@ -30,7 +30,6 @@ private:
 	VECTOR headPos;
 	VECTOR handPos_right;
 	VECTOR handPos_left;
-	VECTOR nearestPoint;
 	VECTOR handCenterPos;
 
 	bool isPush;					//ƒ{ƒ^ƒ“‚ð‰Ÿ‚µ‚½‚©

@@ -21,6 +21,8 @@ public:
 	VECTOR PushBackCalclation_sphere_mesh(const MV1_COLL_RESULT_POLY& poly, const VECTOR& bottomPos, const VECTOR& newPlayerPos, const float& radius);
 	VECTOR CalcPushBack_SphereMeshOutsideTriangle(const MV1_COLL_RESULT_POLY& poly, const VECTOR& HitPos_ground, const VECTOR& bottomPos, const float& radius);
 
+	std::pair<bool, VECTOR>GroundCollisionCheck_Hang_to_Crouch(int modelHandle, const VECTOR& oldPos, const VECTOR& newPos, const VECTOR& foot, float addTopPos, float addBottomPos, float radius);
+
 	const MV1_COLL_RESULT_POLY GetHangringPoly() { return HangringPoly; }
 
 private:

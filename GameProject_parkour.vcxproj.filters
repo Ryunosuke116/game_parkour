@@ -12,9 +12,6 @@
     <Filter Include="ソース ファイル\Base">
       <UniqueIdentifier>{e6d7322f-8b86-418c-9e4a-56bebf97fe86}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\scene">
-      <UniqueIdentifier>{807cd1ef-3b24-4a77-a629-7dad3c8a1009}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\manager">
       <UniqueIdentifier>{c3d54e97-a0bd-410e-83c8-25079eaae248}</UniqueIdentifier>
     </Filter>
@@ -106,6 +103,9 @@
     <Filter Include="ソース ファイル\player\state\braced_Hang_To_Crouch">
       <UniqueIdentifier>{c70c1186-0912-4049-a392-2034c0bc5f83}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\player\scene">
+      <UniqueIdentifier>{807cd1ef-3b24-4a77-a629-7dad3c8a1009}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -115,7 +115,7 @@
       <Filter>ソース ファイル\Base</Filter>
     </ClCompile>
     <ClCompile Include="Game.cpp">
-      <Filter>ソース ファイル\scene</Filter>
+      <Filter>ソース ファイル\player\scene</Filter>
     </ClCompile>
     <ClCompile Include="Camera.cpp">
       <Filter>ソース ファイル\camera</Filter>
@@ -216,7 +216,7 @@
       <Filter>ソース ファイル\Base</Filter>
     </ClInclude>
     <ClInclude Include="Game.h">
-      <Filter>ソース ファイル\scene</Filter>
+      <Filter>ソース ファイル\player\scene</Filter>
     </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>ソース ファイル\camera</Filter>

@@ -21,6 +21,7 @@ public:
 		bool isJumpAll;					//全てのジャンプが完了したか
 		bool isFalling;					//落下中か
 		bool isHangring;				//崖つかみ中か
+		bool isHang_to_Crouch;			//上に上がる
 	};
 
 	struct AnimState
@@ -50,6 +51,8 @@ public:
 	const AnimState GetNowAnimState() const { return nowAnimState; }
 	const float GetAnimBlendRate() { return animBlendRate; }
 
+	
+
 protected:
 
 
@@ -58,6 +61,7 @@ protected:
 
 	int modelHandle;			//モデルハンドル
 	float animBlendRate;
+	int animNumber_old;
 
 	AnimState oldAnimState;
 	AnimState nowAnimState;
