@@ -1,18 +1,22 @@
 #pragma once
+#include "PlayerStateActionBase.h"
+
 class HitCheck;
 
 class CollisionManager
 {
 public:
-	bool GroundCollisionCheck(int modelHandle, const VECTOR& oldPos, VECTOR& newPos, float addTopPos, float radius, float addBottomPos, bool isJump);
+	bool GroundCollisionCheck(int modelHandle, const VECTOR& oldPos,
+		VECTOR& newPos, const VECTOR& footPos, float addBottomPos,
+		const PlayerStateActionBase::PlayerData& playerData);
 	bool HeadCollisionCheck(int modelHandle, VECTOR& newPos, float addTopPos, float radius, float addBottomPos);
 	bool WallCollisionCheck(int modelHandle, VECTOR& newPos, VECTOR& oldPos, float radius, float addTopPos, float addBottomPos);
 	//bool Update(Player& player, int modelHandle);
 	bool Draw();
 
 	std::pair<bool, VECTOR> Update(int modelHandle, const VECTOR& playerPos, const VECTOR& playerCenterPos,
-		const VECTOR& moveVec, VECTOR& moveDirection, float radius, 
-		float addTopPos, float addBottomPos, bool isJump, bool isFalling);
+		const VECTOR& footPos, const VECTOR& moveVec, VECTOR& moveDirection, float radius, 
+		float addTopPos, float addBottomPos, const PlayerStateActionBase::PlayerData& playerData);
 
 	bool TestSphereTriangle(VECTOR centerPos, VECTOR a, VECTOR b, VECTOR c, VECTOR& q, const float radius);
 

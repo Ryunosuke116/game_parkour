@@ -22,6 +22,7 @@ public:
 	static void Initialize();
 
 	static void UnInitialize();
+	static float radToDeg(float radian);
 
 	static float area(const VECTOR& a, const VECTOR& b, const VECTOR& c);
 

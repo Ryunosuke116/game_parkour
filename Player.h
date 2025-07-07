@@ -67,6 +67,7 @@ public:
 	void JumpMove();
 	void RollMove();
 	void HangringMove();
+	void Hang_to_CrouchMove(const int mapHandle);
 	void ChangeState();
 	void SettingRay();
 

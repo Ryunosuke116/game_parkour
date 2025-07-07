@@ -197,6 +197,16 @@ VECTOR Calclation::Leap(const VECTOR& changePosition, const VECTOR& playerPositi
 	return VAdd(changePosition, scalePosition);
 }
 
+/// <summary>
+/// ƒ‰ƒWƒAƒ“‚©‚ç“x‚É•ÏŠ·
+/// </summary>
+/// <param name="radian"></param>
+/// <returns></returns>
+float Calclation::radToDeg(float radian)
+{
+	return radian * 180.0f / DX_PI_F;
+}
+
 void Calclation::Initialize()
 {
 	if (instance != nullptr)

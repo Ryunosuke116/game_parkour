@@ -82,6 +82,7 @@ void Player::Initialize()
 /// </summary>
 void Player::Update(const VECTOR& cameraDirection,const int mapHandle)
 {
+    footPosition = MV1GetFramePosition(modelHandle, 2);
     //リセット
     moveVec = VGet(0.0f, 0.0f, 0.0f);
 
@@ -123,28 +124,18 @@ void Player::Update(const VECTOR& cameraDirection,const int mapHandle)
     //状態変更
     ChangeState();
 
-    
-    if (CheckHitKey(KEY_INPUT_4))
-    {
-        playerData.isHangring = false;
-        isCalc = false;
-        hangringPoint = { NULL };
-    }
-
-    // || 
-    //(nowState->GetNowAnimState().PlayTime_anim >= 22.0f &&
-      // animNumber_Now == animNum::braced_Hang_To_Crouch)
     //崖つかみ中ではない場合
     if((!playerData.isHangring && !playerData.isHang_to_Crouch))
     {
+        //移動量計算
         moveVec = playerCalclation->Update(moveVec, targetMoveDirection,
             nowState->GetNowAnimState().PlayTime_anim,
             animNumber_Now, playerData);
 
         //衝突判定
         auto result = collisionManager->Update(mapHandle, position,centerPosition,
-            moveVec, targetMoveDirection, radius, addTopPos,
-            addBottomPos, playerData.isJump, playerData.isFalling);
+            footPosition,moveVec, targetMoveDirection, radius, addTopPos,
+            addBottomPos, playerData);
 
         playerData.isGround = result.first;
 
@@ -163,61 +154,7 @@ void Player::Update(const VECTOR& cameraDirection,const int mapHandle)
     //崖掴み中は壁の法線に合わせて向きを決める
     HangringMove();
 
-    //////////////////////////////////
-    //  コード整理しろ！
-    /////////////////////////////////
-    if (playerData.isHang_to_Crouch && !playerData.isHangring)
-    {
-        //指定のフレームまでは手に合わせて座標を更新
-        if (nowState->GetNowAnimState().PlayTime_anim <= 22.0f)
-        {
-            VECTOR addPos = playerCalclation->HangringPosition(handPos_left,
-                handPos_right, playerCalclation->GetNearestResult().nearestPoint);
-            
-            position = VAdd(position, addPos);
-        }
-        //
-        else
-        {
-            //上り終わった後に少しずつ前進する
-            VECTOR addPos = VScale(targetMoveDirection, 0.35f);
-            position = VAdd(position, addPos);
-
-            //胸の位置が床の位置をすぎたら足もとを基準に床との衝突判定をする
-            VECTOR chestPos = MV1GetFramePosition(modelHandle, 6);
-
-            VECTOR nowPos = chestPos;
-            nowPos.y = position.y;
-
-            VECTOR newPos = VAdd(nowPos, moveVec);
-
-            //足のフレーム座標で衝突判定
-            VECTOR food = MV1GetFramePosition(modelHandle, 167);
-
-            auto result = collisionManager->GroundCollisionCheck_Hang_to_Crouch(mapHandle, nowPos, newPos, food, addTopPos, radius, addBottomPos);
-        
-            //playerの座標はフレーム座標を基準にしていないため縦だけずらす
-            position.y = result.second.y;
-
-            //上り終わったらplayerDataを初期化
-            if (nowState->GetNowAnimState().PlayTime_anim >=
-                nowState->GetNowAnimState().TotalPlayTime_anim - 1.0f)
-            {
-                playerData.isHang_to_Crouch = false;
-                playerData.isMove = false;
-                playerData.isJump = false;
-                playerData.isRoll = false;
-                playerData.isStopRun = false;
-                auto result = collisionManager->GroundCollisionCheck_Hang_to_Crouch(mapHandle, nowPos, newPos, food, addTopPos, radius, addBottomPos);
-
-                //playerData.isGround = result.first;
-                position.y = result.second.y;
-            }
-        }
-
-
-       
-    }
+    Hang_to_CrouchMove(mapHandle);
 
     isChageState = nowState->MotionUpdate(playerData);
 
@@ -238,8 +175,9 @@ void Player::Update(const VECTOR& cameraDirection,const int mapHandle)
     if (CheckHitKey(KEY_INPUT_4))
     {
         playerData.isHangring = false;
+        isCalc = false;
+        hangringPoint = { NULL };
     }
-
     //2胴体
     //0真下
     //頭 9
@@ -250,7 +188,6 @@ void Player::Update(const VECTOR& cameraDirection,const int mapHandle)
     //胸 6
     //腹 4
     centerPosition = MV1GetFramePosition(modelHandle, 2);
-    footPosition = MV1GetFramePosition(modelHandle, 0);
     headPos = MV1GetFramePosition(modelHandle, 9);
     handPos_left= MV1GetFramePosition(modelHandle, 65);
     handPos_right= MV1GetFramePosition(modelHandle, 106);
@@ -273,8 +210,8 @@ void Player::Update(const VECTOR& cameraDirection,const int mapHandle)
 bool Player::Draw()
 {
 	MV1DrawModel(modelHandle);
-    DrawSphere3D(centerPosition, 2.0f, 30, GetColor(0, 0, 0),
-        GetColor(255, 0, 0), FALSE);
+    DrawSphere3D(footPosition, 2.0f, 30, GetColor(0, 0, 0),
+        GetColor(255, 255, 255), FALSE);
     DrawSphere3D(handCenterPos, 2.0f, 30, GetColor(0, 0, 0),
         GetColor(0, 0, 255), FALSE);
     DrawSphere3D(playerCalclation->GetNearestResult().nearestPoint, 2.0f, 30, GetColor(0, 0, 0),
@@ -282,7 +219,7 @@ bool Player::Draw()
 
     VECTOR nowFrame = MV1GetFramePosition(modelHandle, nowFrameNumber);
 
-    DrawSphere3D(nowFrame, 2.0f, 30, GetColor(0, 0, 0),
+    DrawSphere3D(position, 2.0f, 30, GetColor(0, 0, 0),
         GetColor(255, 0, 255), FALSE);
 
     VECTOR food = MV1GetFramePosition(modelHandle, 167);
@@ -424,6 +361,62 @@ void Player::HangringMove()
         if (PadInput::isUp())
         {
             playerData.isHang_to_Crouch = true;
+        }
+    }
+}
+
+void Player::Hang_to_CrouchMove(const int mapHandle)
+{
+   //////////////////////////////////
+   //  コード整理しろ！
+   /////////////////////////////////
+    if (playerData.isHang_to_Crouch && !playerData.isHangring)
+    {
+        //指定のフレームまでは手に合わせて座標を更新
+        if (nowState->GetNowAnimState().PlayTime_anim <= 22.0f)
+        {
+            VECTOR addPos = playerCalclation->HangringPosition(handPos_left,
+                handPos_right, playerCalclation->GetNearestResult().nearestPoint);
+
+            position = VAdd(position, addPos);
+        }
+        //
+        else
+        {
+            //上り終わった後に少しずつ前進する
+            VECTOR addPos = VScale(targetMoveDirection, 0.35f);
+            position = VAdd(position, addPos);
+
+            //胸の位置が床の位置をすぎたら足もとを基準に床との衝突判定をする
+            VECTOR chestPos = MV1GetFramePosition(modelHandle, 6);
+
+            VECTOR nowPos = chestPos;
+            nowPos.y = position.y;
+
+            VECTOR newPos = VAdd(nowPos, moveVec);
+
+            //足のフレーム座標で衝突判定
+            VECTOR food = MV1GetFramePosition(modelHandle, 167);
+
+            auto result = collisionManager->GroundCollisionCheck_Hang_to_Crouch(mapHandle, nowPos, newPos, food, addTopPos, radius, addBottomPos);
+
+            //playerの座標はフレーム座標を基準にしていないため縦だけずらす
+            position.y = result.second.y;
+
+            //上り終わったらplayerDataを初期化
+            if (nowState->GetNowAnimState().PlayTime_anim >=
+                nowState->GetNowAnimState().TotalPlayTime_anim - 1.0f)
+            {
+                playerData.isHang_to_Crouch = false;
+                playerData.isMove = false;
+                playerData.isJump = false;
+                playerData.isRoll = false;
+                playerData.isStopRun = false;
+                auto result = collisionManager->GroundCollisionCheck_Hang_to_Crouch(mapHandle, nowPos, newPos, food, addTopPos, radius, addBottomPos);
+
+                //playerData.isGround = result.first;
+                position.y = result.second.y;
+            }
         }
     }
 }

@@ -1,6 +1,7 @@
 #include "common.h"
 #include "HitCheck.h"
 #include "Calclation.h"
+#include "PlayerStateActionBase.h"
 #include "CollisionManager.h"
 #include <utility>
 
@@ -8,8 +9,8 @@
 /// @param player 
 /// @param modelHandle 
 /// @return 
-std::pair<bool, VECTOR> CollisionManager::Update(int modelHandle, const VECTOR& playerPos,const VECTOR& playerCenterPos,
-	const VECTOR& moveVec, VECTOR& moveDirection, float radius, float addTopPos, float addBottomPos, bool isJump, bool isFalling)
+std::pair<bool, VECTOR> CollisionManager::Update(int modelHandle, const VECTOR& playerPos,const VECTOR& playerCenterPos,const VECTOR& footPos,
+	const VECTOR& moveVec, VECTOR& moveDirection, float radius, float addTopPos, float addBottomPos, const PlayerStateActionBase::PlayerData& playerData)
 {
 	VECTOR oldPos = playerPos;
 	VECTOR newPos = VAdd(oldPos, moveVec);	
@@ -22,7 +23,7 @@ std::pair<bool, VECTOR> CollisionManager::Update(int modelHandle, const VECTOR& 
 	HeadCollisionCheck(modelHandle, newPos, addTopPos, radius, addBottomPos);
 
 	//床衝突判定
-	return std::make_pair(GroundCollisionCheck(modelHandle, oldPos, newPos, addTopPos, addBottomPos, radius, isJump), newPos);
+	return std::make_pair(GroundCollisionCheck(modelHandle, oldPos, newPos, footPos, addBottomPos, playerData), newPos);
 }
 
 /// <summary>
@@ -88,7 +89,9 @@ bool CollisionManager::HeadCollisionCheck(int modelHandle, VECTOR& newPos, float
 /// <param name="radius"></param>
 /// <param name="isJump"></param>
 /// <returns></returns>
-bool CollisionManager::GroundCollisionCheck(int modelHandle,const VECTOR& oldPos, VECTOR& newPos, float addTopPos, float addBottomPos, float radius, bool isJump)
+bool CollisionManager::GroundCollisionCheck(int modelHandle,const VECTOR& oldPos,
+	VECTOR& newPos,const VECTOR& footPos, float addBottomPos,
+	const PlayerStateActionBase::PlayerData& playerData)
 {
 	//playerの状態によって当たり判定の優先順位を決める
 	//何回か当たり判定を繰り返す
@@ -99,145 +102,38 @@ bool CollisionManager::GroundCollisionCheck(int modelHandle,const VECTOR& oldPos
 	VECTOR nowTopPos = oldPos;
 	bool isHitSphere;
 
-	topPosition.y = topPosition.y + addTopPos;
-	nowTopPos.y = nowTopPos.y + addTopPos;
-	bottomPosition.y = bottomPosition.y + addBottomPos;
+	topPosition.y = topPosition.y + 13.0f;
+	nowTopPos.y = nowTopPos.y + 13.0f;
 
-	//球よりちょい大きめに
-	
 	//※ジャンプしている間ではなく落下中にしたい
-	if (isJump)
+	if (playerData.isFalling || playerData.isJump)
 	{
-		nowBottomPos.y = nowBottomPos.y + addBottomPos - radius;
+		nowBottomPos.y = newPos.y;
 	}
 	else
 	{
-		nowBottomPos.y = nowBottomPos.y + addBottomPos - radius-5.0f;
+		nowBottomPos.y = newPos.y - 5.0f;
 	}
 
 	bool isHitGround = false;
-	////床と衝突しているか
-	//isHitGround = HitCheck::SphereHitJudge(modelHandle, -1, bottomPosition, hitPoly_Ground_sphere);
-
-	//isHitSphere = isHitGround;
-	//
-	////ジャンプ中ではない場合に処理
-	//if (isHitGround && !isJump)
-	//{
-	//	VECTOR addPos = VGet(0.0f, 0.0f, 0.0f);
-
-	//	for (int i = 0; i < hitPoly_Ground_sphere.HitNum; i++)
-	//	{
-	//		MV1_COLL_RESULT_POLY poly = hitPoly_Ground_sphere.Dim[i];
-
-	//		if (poly.Normal.y >= 1.0f)
-	//		{
-	//			//未来座標の球の最下部座標
-	//			VECTOR bottomPos_sphere = bottomPosition;
-	//			bottomPos_sphere.y -= radius;
-	//			
-	//			//次のフレームのplayerの接触座標を求める
-	//			hitPos_ground = HitCheck::ClosestPtToPointTriangle(bottomPosition, poly.Position[0], poly.Position[1], poly.Position[2]);
-
-	//			//現在のプレイヤーのカプセルと面の接触座標を求める
-	//			VECTOR nowHitPos_ground = HitCheck::ClosestPtToPointTriangle(nowBottomPos, poly.Position[0], poly.Position[1], poly.Position[2]);
-
-	//			MV1_COLL_RESULT_POLY rayPoly;
-
-	//			//現在の座標からrayを伸ばし、当たっていなかったらif文内に行く
-	//			if (!HitCheck::HitRayJudge(modelHandle, -1, nowTopPos, nowBottomPos, rayPoly))
-	//			{
-	//				//カプセルの中心座標が三角形の外側のとき球とメッシュの接触部分で押し戻し量を求める
-	//				if (!HitCheck::TriangleAreaCheck_ground(nowHitPos_ground, poly.Position[0], poly.Position[1], poly.Position[2]))
-	//				{
-	//					addPos = CalcPushBack_SphereMeshOutsideTriangle(poly, hitPos_ground, bottomPosition, radius);
-	//				}
-	//			}
-
-	//			//中心座標が三角形の内側だった場合
-	//			//rayが当たっていれば球の最下部ととメッシュで押し戻し量計算
-	//			else
-	//			{
-	//				//球と面の接触しているは球の最下部と面の接触座標と同じなのでリセット
-	//				hitSphere = VGet(0.0f, 0.0f, 0.0f);
-
-	//				//平面であればそのまま足元で計算
-	//				if (poly.Normal.y >= 1.0f)
-	//				{
-
-	//					VECTOR newAddPos = VGet(0.0f, 0.0f, 0.0f);
-
-	//					//中心座標から半径分を引くことによって球の最下部を算出
-	//					VECTOR footPos = VGet(0.0f, bottomPosition.y - radius, 0.0f);
-	//					
-	//					//接触座標と球の最下部で押し戻し量を計算
-	//					newAddPos.y = hitPos_ground.y - footPos.y;
-
-	//					//押し戻し量が一番大きいものを加算する
-	//					if (addPos.y < newAddPos.y)
-	//					{
-	//						addPos = newAddPos;
-	//					}
-	//				}
-	//			}
-	//		}
-	//	}
-
-	//	//足元と床との差が0.1以上の場合のみplayerの位置に加算
-	//	if (addPos.y >= 0.1f)
-	//	{
-	//		newPos.y = newPos.y + addPos.y;
-	//	}
-	//}
-	//
-	//MV1_COLL_RESULT_POLY lastPoly = {};
-
-	////hitPolyの一番最後の情報を受け取る
-	//if (hitPoly_Ground_sphere.HitNum >= 1)
-	//{
-	//	lastPoly = hitPoly_Ground_sphere.Dim[hitPoly_Ground_sphere.HitNum - 1];
-	//}
-
-	////カプセルが当たっていないときrayをチェック
-	////下り坂はrayでチェック
-	//if (!isJump && !isHitSphere || (lastPoly.Normal.y < 1.0f && lastPoly.Normal.y >= 0.7f))
-	//{
-	//	MV1_COLL_RESULT_POLY rayPoly_ground;
-
-	//	//rayが当たっていれば
-	//	isHitGround = HitCheck::HitRayJudge(modelHandle, -1, nowTopPos, nowBottomPos, rayPoly_ground);
-
-	//	if (isHitGround && !isJump)
-	//	{
-	//		VECTOR newPlayerPos = VGet(0.0f, 0.0f, 0.0f);
-	//		VECTOR footPos = VGet(0.0f, bottomPosition.y - radius, 0.0f);
-
-	//		//床 - プレイヤーの足元で押し戻し量を計算
-	//		newPlayerPos.y = rayPoly_ground.HitPosition.y - footPos.y;
-	//		newPos.y = newPos.y + newPlayerPos.y;
-	//	}
-	//}
 
 	MV1_COLL_RESULT_POLY rayPoly_ground;
 
 	//rayが当たっていれば
-	isHitGround = HitCheck::HitRayJudge(modelHandle, -1, nowTopPos, nowBottomPos, rayPoly_ground);
+	isHitGround = HitCheck::HitRayJudge(modelHandle, -1, topPosition, nowBottomPos, rayPoly_ground);
 
-	if (isHitGround && !isJump)
+	if (isHitGround)
 	{
 		VECTOR newPlayerPos = VGet(0.0f, 0.0f, 0.0f);
-		VECTOR footPos = VGet(0.0f, bottomPosition.y - radius, 0.0f);
 
 		//床 - プレイヤーの足元で押し戻し量を計算
-		newPlayerPos.y = rayPoly_ground.HitPosition.y - footPos.y;
+		newPlayerPos.y = rayPoly_ground.HitPosition.y - newPos.y;
 		newPos.y = newPos.y + newPlayerPos.y;
 	}
-
 
 	//log用
 	topPos_ray = topPosition;
 	bottomPos_ray = nowBottomPos;
-	//bottomPos_ray.y = bottomPos_ray.y - 5.0f;
 
 	//接地しているか
 	return isHitGround;
@@ -255,20 +151,21 @@ bool CollisionManager::GroundCollisionCheck(int modelHandle,const VECTOR& oldPos
 /// <param name="radius"></param>
 /// <param name="isJump"></param>
 /// <returns></returns>
-std::pair<bool, VECTOR> CollisionManager::GroundCollisionCheck_Hang_to_Crouch(int modelHandle, const VECTOR& oldPos, const VECTOR& newPos, const VECTOR& foot, float addTopPos, float addBottomPos, float radius)
+std::pair<bool, VECTOR> CollisionManager::GroundCollisionCheck_Hang_to_Crouch(int modelHandle, const VECTOR& oldPos,
+	const VECTOR& newPos, const VECTOR& foot, float addTopPos,
+	float addBottomPos, float radius)
 {
-	//playerの状態によって当たり判定の優先順位を決める
-	//何回か当たり判定を繰り返す
+
 	//prevとnewのposを作る
-	VECTOR topPosition = newPos;
-	VECTOR bottomPosition = newPos;
+	VECTOR newTopPosition = newPos;
+	VECTOR newBottomPosition = newPos;
 	VECTOR nowBottomPos = oldPos;
 	VECTOR nowTopPos = oldPos;
 	bool isHitSphere;
 
-	topPosition.y = topPosition.y + addTopPos;
+	newTopPosition.y = newTopPosition.y + addTopPos;
 	nowTopPos.y = nowTopPos.y + addTopPos;
-	bottomPosition.y = bottomPosition.y + addBottomPos;
+	newBottomPosition.y = newBottomPosition.y + addBottomPos;
 
 	nowBottomPos.y = nowBottomPos.y + addBottomPos - radius;
 
@@ -283,7 +180,7 @@ std::pair<bool, VECTOR> CollisionManager::GroundCollisionCheck_Hang_to_Crouch(in
 	if (isHitGround)
 	{
 		VECTOR newPlayerPos = VGet(0.0f, 0.0f, 0.0f);
-		VECTOR footPos = VGet(0.0f, bottomPosition.y - radius, 0.0f);
+		VECTOR footPos = VGet(0.0f, newBottomPosition.y - radius, 0.0f);
 
 		//床 - プレイヤーの足元で押し戻し量を計算
 		newPlayerPos.y = rayPoly_ground.HitPosition.y - foot.y;
@@ -324,6 +221,10 @@ bool CollisionManager::WallCollisionCheck(int modelHandle, VECTOR& newPos, VECTO
 		for (int i = 0; i < hitPoly_Wall.HitNum; i++)
 		{
 			MV1_COLL_RESULT_POLY poly = hitPoly_Wall.Dim[i];
+
+			float degree_x = Calclation::radToDeg(poly.Normal.x);
+			float degree_z = Calclation::radToDeg(poly.Normal.z);
+
 
 			//壁かどうかを調べる
 			if (poly.Normal.x >= 0.7f || poly.Normal.z >= 0.7f ||
