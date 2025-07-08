@@ -6,7 +6,7 @@
 #include "PadInput.h"
 #include "Player.h"
 #include "HitCheck.h"
-#include "Calclation.h"
+#include "Calculation.h"
 #include "nlohmann/json.hpp"
 
 /// <summary>
@@ -16,7 +16,8 @@ Player::Player() :
     centerPosition(VGet(0.0f, 0.0f, 0.0f)),
     footPosition(VGet(0.0f, 0.0f, 0.0f)),
     moveVec(VGet(0.0f, 0.0f, 0.0f)),
-    moveVec_memory(VGet(0.0f, 0.0f, 0.0f))
+    moveVec_memory(VGet(0.0f, 0.0f, 0.0f)),
+    isCalc_moveVec(false)
 {
     JsonFile::UnInitialize();
     JsonFile::Initialize("Json/player.json");
@@ -26,7 +27,7 @@ Player::Player() :
     modelHandle = MV1LoadModel(path.c_str());
     MV1SetScale(modelHandle, VGet(modelScale, modelScale, modelScale));
     collisionManager = std::make_shared<CollisionManager>();
-    playerCalclation = std::make_shared<PlayerCalclation>();
+    playerCalculation = std::make_shared<PlayerCalculation>();
 }
 
 /// <summary>
@@ -48,7 +49,7 @@ void Player::Initialize()
    // ChangeMotion(animNum::idle, PlayAnimSpeed);
 
     isPush = false;
-    isChageState = false;
+    isChangeState = false;
     playerData.isJump = false;
     playerData.isJump_second = false;
     playerData.isMove = false;
@@ -60,9 +61,10 @@ void Player::Initialize()
     playerData.isRoll_PlayAnim = false;
     playerData.isJump_PlayAnim = false;
     playerData.isFalling = false;
-    playerData.isHangring = false;
+    playerData.isHanging = false;
     playerData.isHang_to_Crouch = false;
     isCalc = false;
+    isCalc_moveVec = false;
    
     oldAnimState.AttachIndex = -1;
     oldAnimState.PlayAnimSpeed = 0.0f;
@@ -82,6 +84,7 @@ void Player::Initialize()
 /// </summary>
 void Player::Update(const VECTOR& cameraDirection,const int mapHandle)
 {
+
     footPosition = MV1GetFramePosition(modelHandle, 2);
     //リセット
     moveVec = VGet(0.0f, 0.0f, 0.0f);
@@ -93,70 +96,51 @@ void Player::Update(const VECTOR& cameraDirection,const int mapHandle)
         playerData.isJump_second = false;
         playerData.isJumpAll = false;
         playerData.isRoll_PlayAnim = false;
-        playerCalclation->SetCurrentJumpSpeed(0.0f);
+        playerCalculation->SetCurrentJumpSpeed(0.0f);
     }
-   
+
     //行動指示
-    Move(moveVec, cameraDirection);
+    Move(moveVec_memory, cameraDirection);
     RollMove();
     JumpMove();
+    bool isFree = !playerData.isHanging
+        && !playerData.isHang_to_Crouch &&
+        !playerData.isFalling && !playerData.isJump;
+
+    if (isFree)
+    {
+        moveVec = moveVec_memory;
+    }
+    else
+    {
+        //todo::
+        //ゆっくり最新の方向に向く
+    }
+
+    isCalc_moveVec = VSize(moveVec_memory) != 0 && isFree;
+
 
     //移動方向ベクトルが0でない場合コピー
-    if (VSize(moveVec) != 0 && !playerData.isHangring && !playerData.isHang_to_Crouch)
+    if (isCalc_moveVec)
     {
         targetMoveDirection = moveVec;
     }
 
     //崖つかみ判定
-    if (!playerData.isHangring)
-    {
-        //掴めるところがあるか
-        auto result_cliff = collisionManager->CliffGrabbing(mapHandle, topPosition, targetMoveDirection, playerData.isFalling);
-        playerData.isHangring = result_cliff.first;
-
-
-        if (playerData.isHangring)
-        {
-            hangringPoint = result_cliff.second;
-        }
-    }
+    HangingCheck(mapHandle);
 
     //状態変更
     ChangeState();
 
     //崖つかみ中ではない場合
-    if((!playerData.isHangring && !playerData.isHang_to_Crouch))
-    {
-        //移動量計算
-        moveVec = playerCalclation->Update(moveVec, targetMoveDirection,
-            nowState->GetNowAnimState().PlayTime_anim,
-            animNumber_Now, playerData);
-
-        //衝突判定
-        auto result = collisionManager->Update(mapHandle, position,centerPosition,
-            footPosition,moveVec, targetMoveDirection, radius, addTopPos,
-            addBottomPos, playerData);
-
-        playerData.isGround = result.first;
-
-        //落下している場合
-        if (playerData.isFalling)
-        {
-            //接地していた場合falseにする
-            if (playerData.isGround)
-            {
-                playerData.isFalling = false;
-            }
-        }
-        SetPos(result.second);
-    }
+    NormalMove(mapHandle);
 
     //崖掴み中は壁の法線に合わせて向きを決める
-    HangringMove();
+    HangingMove();
 
     Hang_to_CrouchMove(mapHandle);
 
-    isChageState = nowState->MotionUpdate(playerData);
+    isChangeState = nowState->MotionUpdate(playerData);
 
     UpdateAngle(targetMoveDirection);
 
@@ -174,9 +158,9 @@ void Player::Update(const VECTOR& cameraDirection,const int mapHandle)
 
     if (CheckHitKey(KEY_INPUT_4))
     {
-        playerData.isHangring = false;
+        playerData.isHanging = false;
         isCalc = false;
-        hangringPoint = { NULL };
+        hangingPoint = { NULL };
     }
     //2胴体
     //0真下
@@ -214,7 +198,7 @@ bool Player::Draw()
         GetColor(255, 255, 255), FALSE);
     DrawSphere3D(handCenterPos, 2.0f, 30, GetColor(0, 0, 0),
         GetColor(0, 0, 255), FALSE);
-    DrawSphere3D(playerCalclation->GetNearestResult().nearestPoint, 2.0f, 30, GetColor(0, 0, 0),
+    DrawSphere3D(playerCalculation->GetNearestResult().nearestPoint, 2.0f, 30, GetColor(0, 0, 0),
         GetColor(255, 0, 255), FALSE);
 
     VECTOR nowFrame = MV1GetFramePosition(modelHandle, nowFrameNumber);
@@ -239,7 +223,7 @@ bool Player::Draw()
     printfDx("playerPosition.x %f\nplayerPosition.y %f\nplayerPosition.z %f\n",
         position.x, position.y, position.z);
     printfDx("frame現在数%d\n", nowFrameNumber);
-    printfDx("nowMoveSpeed %f\n", playerCalclation->GetNowMoveSpeed());
+    printfDx("nowMoveSpeed %f\n", playerCalculation->GetNowMoveSpeed());
     printfDx("isMove %d\n", playerData.isMove);
     printfDx("isJump %d\n", playerData.isJump);
     printfDx("isJump_second %d\n", playerData.isJump_second);
@@ -249,10 +233,10 @@ bool Player::Draw()
     printfDx("isStopRun %d\n", playerData.isStopRun);
     printfDx("isJumpAll %d\n", playerData.isJumpAll);
     printfDx("isFalling %d\n", playerData.isFalling);
-    printfDx("isHangring %d\n", playerData.isHangring);
-    printfDx("isChageState %d\n", isChageState);
+    printfDx("isHanging %d\n", playerData.isHanging);
+    printfDx("isChangeState %d\n", isChangeState);
     printfDx("animNumber_Now %d\n", animNumber_Now);
-    printfDx("currentJumpSpeed %f\n", playerCalclation->GetCurrentJumpSpeed());
+    printfDx("currentJumpSpeed %f\n", playerCalculation->GetCurrentJumpSpeed());
     nowState->Draw();
 
     //線
@@ -260,6 +244,60 @@ bool Player::Draw()
     DrawLine3D(topPosition, linePos_end, GetColor(255, 0, 0));
     collisionManager->Draw();
     return true;
+}
+
+/// <summary>
+/// 掴めるところがあるか
+/// </summary>
+/// <param name="mapHandle"></param>
+void Player::HangingCheck(const int mapHandle)
+{
+    if (!playerData.isHanging)
+    {
+        //掴めるところがあるか
+        auto result_cliff = collisionManager->CliffGrabbing(mapHandle,
+            topPosition, targetMoveDirection, playerData.isFalling);
+
+        playerData.isHanging = result_cliff.first;
+
+        if (playerData.isHanging)
+        {
+            hangingPoint = result_cliff.second;
+        }
+    }
+}
+
+/// <summary>
+/// 通常時の演算処理
+/// </summary>
+/// <param name="mapHandle"></param>
+void Player::NormalMove(const int mapHandle)
+{
+    if ((!playerData.isHanging && !playerData.isHang_to_Crouch))
+    {
+        //移動量計算
+        moveVec = playerCalculation->Update(moveVec, targetMoveDirection,
+            nowState->GetNowAnimState().PlayTime_anim,
+            animNumber_Now, playerData);
+
+        //衝突判定
+        auto result = collisionManager->Update(mapHandle, position, centerPosition,
+            footPosition, moveVec, targetMoveDirection, radius, addTopPos,
+            addBottomPos, playerData);
+
+        playerData.isGround = result.first;
+
+        //落下している場合
+        if (playerData.isFalling)
+        {
+            //接地していた場合falseにする
+            if (playerData.isGround)
+            {
+                playerData.isFalling = false;
+            }
+        }
+        SetPos(result.second);
+    }
 }
 
 /// <summary>
@@ -280,6 +318,7 @@ VECTOR Player::Move(VECTOR& moveVec, const VECTOR& cameraDirection)
     upMove.y = 0.0f;
     rightMove.y = 0.0f;
 
+    //パッド or arrowキーの入力方向で計算
     moveVec = VAdd(VScale(rightMove, -PadInput::GetJoyPad_x_left()),
         VScale(upMove, -PadInput::GetJoyPad_y_left()));
 
@@ -307,7 +346,7 @@ void Player::JumpMove()
         if (!playerData.isJump)
         {
             isPush = true;
-            playerCalclation->SetCurrentJumpSpeed(addJumpPower);
+            playerCalculation->SetCurrentJumpSpeed(addJumpPower);
             playerData.isJump = true;
         }
         //二段ジャンプ
@@ -315,7 +354,7 @@ void Player::JumpMove()
         {
             isPush = true;
             playerData.isJump_second = true;
-            playerCalclation->SetCurrentJumpSpeed(addJumpPower);
+            playerCalculation->SetCurrentJumpSpeed(addJumpPower);
             if (animNumber_Now == animNum::jump || animNumber_Now == animNum::run_Jump)
             {
                 playerData.isJumpAll = true;
@@ -340,21 +379,23 @@ void Player::RollMove()
 
 }
 
-
-void Player::HangringMove()
+/// <summary>
+/// 崖に掴まる
+/// </summary>
+void Player::HangingMove()
 {
-    if (playerData.isHangring)
+    if (playerData.isHanging)
     {
         if (!isCalc)
         {
-            targetMoveDirection = playerCalclation->HangringDirection(collisionManager->GetHangringPoly(), centerPosition);
+            targetMoveDirection = playerCalculation->HangingDirection(collisionManager->GetHangingPoly(), centerPosition);
             isCalc = true;
         }
 
         //手の位置に角を合わせる
         //※未完全
-        VECTOR addPos = playerCalclation->HangringPosition(handPos_left,
-            handPos_right, playerCalclation->GetNearestResult().nearestPoint);
+        VECTOR addPos = playerCalculation->HangingPosition(handPos_left,
+            handPos_right, playerCalculation->GetNearestResult().nearestPoint);
 
         position = VAdd(position, addPos);
 
@@ -365,18 +406,22 @@ void Player::HangringMove()
     }
 }
 
+/// <summary>
+/// 登り
+/// </summary>
+/// <param name="mapHandle"></param>
 void Player::Hang_to_CrouchMove(const int mapHandle)
 {
    //////////////////////////////////
    //  コード整理しろ！
    /////////////////////////////////
-    if (playerData.isHang_to_Crouch && !playerData.isHangring)
+    if (playerData.isHang_to_Crouch && !playerData.isHanging)
     {
         //指定のフレームまでは手に合わせて座標を更新
         if (nowState->GetNowAnimState().PlayTime_anim <= 22.0f)
         {
-            VECTOR addPos = playerCalclation->HangringPosition(handPos_left,
-                handPos_right, playerCalclation->GetNearestResult().nearestPoint);
+            VECTOR addPos = playerCalculation->HangingPosition(handPos_left,
+                handPos_right, playerCalculation->GetNearestResult().nearestPoint);
 
             position = VAdd(position, addPos);
         }
@@ -501,7 +546,7 @@ void Player::ChangeState()
     }
     
     //落下中
-    if (isChageState && playerData.isJump && !playerData.isRoll
+    if (isChangeState && playerData.isJump && !playerData.isRoll
         && animNumber_Now != animNum::falling_Idle)
     {
         SetNowAnimState(nowState->GetNowAnimState());
@@ -558,19 +603,19 @@ void Player::ChangeState()
     }
 
     //崖つかみ
-    if (playerData.isHangring && playerData.isFalling && 
-        animNumber_Now != animNum::hangring_Idle)
+    if (playerData.isHanging && playerData.isFalling && 
+        animNumber_Now != animNum::hanging_Idle)
     {
         SetOldAnimState(nowState->GetOldAnimState());
         SetNowAnimState(nowState->GetNowAnimState());
 
         nowState = nullptr;
-        animNumber_Now = animNum::hangring_Idle;
-        nowState = std::make_shared<Hangring_Idle>(modelHandle, oldAnimState, nowAnimState, playerData);
+        animNumber_Now = animNum::hanging_Idle;
+        nowState = std::make_shared<Hanging_Idle>(modelHandle, oldAnimState, nowAnimState, playerData);
         playerData.isFalling = false;
     }
 
-    if (playerData.isHangring && playerData.isHang_to_Crouch &&
+    if (playerData.isHanging && playerData.isHang_to_Crouch &&
         animNumber_Now != animNum::braced_Hang_To_Crouch)
     {
         SetOldAnimState(nowState->GetOldAnimState());
@@ -579,7 +624,7 @@ void Player::ChangeState()
         nowState = nullptr;
         animNumber_Now = animNum::braced_Hang_To_Crouch;
         nowState = std::make_shared<Braced_Hang_To_Crouch>(modelHandle, oldAnimState, nowAnimState, playerData);
-        playerData.isHangring = false;
+        playerData.isHanging = false;
         isCalc = false;
     }
 }

@@ -1,11 +1,11 @@
 #pragma once
 #include "PlayerStateActionBase.h"
-class Hangring_Idle : public PlayerStateActionBase
+class Hanging_Idle : public PlayerStateActionBase
 {
 public:
-	Hangring_Idle(int& modelHandle,
+	Hanging_Idle(int& modelHandle,
 		AnimState& oldAnimState, AnimState& nowAnimStatel, PlayerData& playerData);
-	~Hangring_Idle();
+	~Hanging_Idle();
 
 	//bool MotionUpdate(PlayerData& playerData)override;
 

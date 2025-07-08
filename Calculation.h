@@ -1,13 +1,13 @@
 #pragma once
 
-class Calclation
+class Calculation
 {
 private:
 
-	Calclation(){}
-	~Calclation(){}
+	Calculation(){}
+	~Calculation(){}
 
-	static Calclation* instance;
+	static Calculation* instance;
 
 
 

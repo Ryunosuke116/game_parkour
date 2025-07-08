@@ -22,17 +22,17 @@ public:
 
 	std::pair<bool, VECTOR> CliffGrabbing(int modelHandle,
 		const VECTOR& topPosition, const VECTOR& moveDirection, const bool isFalling);
-	VECTOR PushBackCalclation_sphere_mesh(const MV1_COLL_RESULT_POLY& poly, const VECTOR& bottomPos, const VECTOR& newPlayerPos, const float& radius);
+	VECTOR PushBackCalculation_sphere_mesh(const MV1_COLL_RESULT_POLY& poly, const VECTOR& bottomPos, const VECTOR& newPlayerPos, const float& radius);
 	VECTOR CalcPushBack_SphereMeshOutsideTriangle(const MV1_COLL_RESULT_POLY& poly, const VECTOR& HitPos_ground, const VECTOR& bottomPos, const float& radius);
 
 	std::pair<bool, VECTOR>GroundCollisionCheck_Hang_to_Crouch(int modelHandle, const VECTOR& oldPos, const VECTOR& newPos, const VECTOR& foot, float addTopPos, float addBottomPos, float radius);
 
-	const MV1_COLL_RESULT_POLY GetHangringPoly() { return HangringPoly; }
+	const MV1_COLL_RESULT_POLY GetHangingPoly() { return HangingPoly; }
 
 private:
 	MV1_COLL_RESULT_POLY hitPoly_Ground;
 	MV1_COLL_RESULT_POLY oldPoly;
-	MV1_COLL_RESULT_POLY HangringPoly;
+	MV1_COLL_RESULT_POLY HangingPoly;
 
 	MV1_COLL_RESULT_POLY_DIM hitPoly_Wall;
 	MV1_COLL_RESULT_POLY_DIM hitPoly_Ground_sphere;
@@ -48,6 +48,6 @@ private:
 	VECTOR hitSphere;
 	VECTOR topPos_ray;
 	VECTOR bottomPos_ray;
-	VECTOR hitHangringPos;
+	VECTOR hitHangingPos;
 };
 

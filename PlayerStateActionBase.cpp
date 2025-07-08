@@ -33,8 +33,6 @@ PlayerStateActionBase::PlayerStateActionBase(int& modelHandle,
     this->oldAnimState.PlayTime_anim = nowAnimState.PlayTime_anim;
     this->oldAnimState.PlayAnimSpeed = nowAnimState.PlayAnimSpeed;
 
-
-
     // ƒuƒŒƒ“ƒh—¦‚ÍPrev‚ª—LŒø‚Å‚Í‚È‚¢ê‡‚Í‚PD‚O‚†( Œ»Ýƒ‚[ƒVƒ‡ƒ“‚ª‚P‚O‚O“‚Ìó‘Ô )‚É‚·‚é
     animBlendRate = this->oldAnimState.AttachIndex == -1 ? 1.0f : 0.0f;
 }

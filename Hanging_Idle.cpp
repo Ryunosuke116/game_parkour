@@ -2,7 +2,7 @@
 #include <memory>
 #include "DxLib.h"
 #include "PlayerStateActionBase.h"
-#include "Hangring_Idle.h"
+#include "Hanging_Idle.h"
 #include "AnimTime.h"
 
 /// <summary>
@@ -12,12 +12,12 @@
 /// <param name="oldAnimState"></param>
 /// <param name="nowAnimState"></param>
 /// <param name="playerData"></param>
-Hangring_Idle::Hangring_Idle(int& modelHandle,
+Hanging_Idle::Hanging_Idle(int& modelHandle,
     AnimState& oldAnimState, AnimState& nowAnimState, PlayerData& playerData) :
     PlayerStateActionBase(modelHandle, oldAnimState, nowAnimState)
 {
     // ３Ｄモデルの０番目のアニメーションをアタッチする
-    this->nowAnimState.AttachIndex = MV1AttachAnim(modelHandle, animNum::hangring_Idle);
+    this->nowAnimState.AttachIndex = MV1AttachAnim(modelHandle, animNum::hanging_Idle);
 
     this->nowAnimState.PlayTime_anim = 0.0f;
     this->nowAnimState.PlayAnimSpeed = playAnimSpeed;
@@ -27,12 +27,12 @@ Hangring_Idle::Hangring_Idle(int& modelHandle,
 /// <summary>
 /// デストラクタ
 /// </summary>
-Hangring_Idle::~Hangring_Idle()
+Hanging_Idle::~Hanging_Idle()
 {
 
 }
 
-//bool Hangring_Idle::MotionUpdate(PlayerData& playerData)
+//bool Hanging_Idle::MotionUpdate(PlayerData& playerData)
 //{
 //    //崖を掴む
 //    //↑キーを入力したら掴んでいる床に立つ

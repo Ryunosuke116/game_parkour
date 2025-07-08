@@ -55,9 +55,6 @@
     <Filter Include="ソース ファイル\Json">
       <UniqueIdentifier>{a05c63cd-31b8-4115-a020-863d88bd0a84}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\Calclation">
-      <UniqueIdentifier>{cf99dbc9-50f2-4910-97b1-cd46a3c5e262}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\manager\coin">
       <UniqueIdentifier>{c758f02e-15db-456a-bfba-6b68200967d1}</UniqueIdentifier>
     </Filter>
@@ -78,9 +75,6 @@
     </Filter>
     <Filter Include="ソース ファイル\player\state\idle">
       <UniqueIdentifier>{ae649b4f-c1a5-45cd-87a9-b445c1eae15e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\player\state\hangring_Idle">
-      <UniqueIdentifier>{da44a1cc-a0e2-47f0-b13e-bed6339938ff}</UniqueIdentifier>
     </Filter>
     <Filter Include="ソース ファイル\player\state\idle_to_sprint">
       <UniqueIdentifier>{ef170e75-9be3-4c0d-babc-fc0764ed8cbc}</UniqueIdentifier>
@@ -105,6 +99,12 @@
     </Filter>
     <Filter Include="ソース ファイル\player\scene">
       <UniqueIdentifier>{807cd1ef-3b24-4a77-a629-7dad3c8a1009}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\player\state\hanging_Idle">
+      <UniqueIdentifier>{da44a1cc-a0e2-47f0-b13e-bed6339938ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Calculation">
+      <UniqueIdentifier>{cf99dbc9-50f2-4910-97b1-cd46a3c5e262}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -168,8 +168,8 @@
     <ClCompile Include="Json.cpp">
       <Filter>ソース ファイル\Json</Filter>
     </ClCompile>
-    <ClCompile Include="Calclation.cpp">
-      <Filter>ソース ファイル\Calclation</Filter>
+    <ClCompile Include="Calculation.cpp">
+      <Filter>ソース ファイル\Calculation</Filter>
     </ClCompile>
     <ClCompile Include="CoinManager.cpp">
       <Filter>ソース ファイル\manager\coin</Filter>
@@ -177,14 +177,14 @@
     <ClCompile Include="PadInput.cpp">
       <Filter>ソース ファイル\Pad</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerCalclation.cpp">
+    <ClCompile Include="PlayerCalculation.cpp">
       <Filter>ソース ファイル\player\moveCalclation</Filter>
     </ClCompile>
     <ClCompile Include="Falling_Idle.cpp">
       <Filter>ソース ファイル\player\state\falling_Idle</Filter>
     </ClCompile>
-    <ClCompile Include="Hangring_Idle.cpp">
-      <Filter>ソース ファイル\player\state\hangring_Idle</Filter>
+    <ClCompile Include="Hanging_Idle.cpp">
+      <Filter>ソース ファイル\player\state\hanging_Idle</Filter>
     </ClCompile>
     <ClCompile Include="Idle.cpp">
       <Filter>ソース ファイル\player\state\idle</Filter>
@@ -275,8 +275,8 @@
     <ClInclude Include="AnimTime.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Calclation.h">
-      <Filter>ソース ファイル\Calclation</Filter>
+    <ClInclude Include="Calculation.h">
+      <Filter>ソース ファイル\Calculation</Filter>
     </ClInclude>
     <ClInclude Include="CoinManager.h">
       <Filter>ソース ファイル\manager\coin</Filter>
@@ -293,14 +293,14 @@
     <ClInclude Include="padInput_interface.h">
       <Filter>ソース ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerCalclation.h">
+    <ClInclude Include="PlayerCalculation.h">
       <Filter>ソース ファイル\player\moveCalclation</Filter>
     </ClInclude>
     <ClInclude Include="Falling_Idle.h">
       <Filter>ソース ファイル\player\state\falling_Idle</Filter>
     </ClInclude>
-    <ClInclude Include="Hangring_Idle.h">
-      <Filter>ソース ファイル\player\state\hangring_Idle</Filter>
+    <ClInclude Include="Hanging_Idle.h">
+      <Filter>ソース ファイル\player\state\hanging_Idle</Filter>
     </ClInclude>
     <ClInclude Include="Idle.h">
       <Filter>ソース ファイル\player\state\idle</Filter>

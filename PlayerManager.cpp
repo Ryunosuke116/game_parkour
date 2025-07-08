@@ -2,7 +2,7 @@
 #include "Player.h"
 #include "CollisionManager.h"
 #include "PlayerManager.h"
-#include "Calclation.h"
+#include "Calculation.h"
 
 /// <summary>
 /// コンストラクタ
@@ -40,9 +40,9 @@ void PlayerManager::Update(int mapHandle, const VECTOR& cameraDirection)
 
 	actualPlayer->Update(cameraDirection, mapHandle);
 
-	/*if(actualPlayer->GetData().isHangring)
+	/*if(actualPlayer->GetData().isHanging)
 	{
-		actualPlayer->SetPos(PositionCheck(actualPlayer->GetHangringPoint(), actualPlayer->GetPosition()));
+		actualPlayer->SetPos(PositionCheck(actualPlayer->GetHangingPoint(), actualPlayer->GetPosition()));
 	}*/
 
 	// プレイヤーのモデルの座標を更新する
@@ -59,13 +59,13 @@ bool PlayerManager::Draw()
 	return true;
 }
 
-VECTOR PlayerManager::PositionCheck(const VECTOR& hangringPos, const VECTOR& playerPos)
+VECTOR PlayerManager::PositionCheck(const VECTOR& hangingPos, const VECTOR& playerPos)
 {
 	VECTOR newPlayerPos = playerPos;
-	VECTOR hangring = hangringPos;
-	hangring.y = playerPos.y;
+	VECTOR hanging = hangingPos;
+	hanging.y = playerPos.y;
 
-	Calclation::Leap(newPlayerPos, hangring, 0.1f);
+	Calculation::Leap(newPlayerPos, hanging, 0.1f);
 
 	return newPlayerPos;
 }

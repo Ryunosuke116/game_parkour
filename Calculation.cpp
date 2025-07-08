@@ -8,7 +8,7 @@
 #include <cmath>
 #include <memory>
 #include "DxLib.h"
-#include "Calclation.h"
+#include "Calculation.h"
 
 
 /// <summary>
@@ -18,7 +18,7 @@
 /// <param name="b"></param>
 /// <param name="c"></param>
 /// <returns></returns>
-float Calclation::area(const VECTOR& a, const VECTOR& b, const VECTOR& c)
+float Calculation::area(const VECTOR& a, const VECTOR& b, const VECTOR& c)
 {
 	VECTOR AB = VSub(b, a);
 	VECTOR AC = VSub(c, a);
@@ -35,7 +35,7 @@ float Calclation::area(const VECTOR& a, const VECTOR& b, const VECTOR& c)
 /// <param name="position_2"></param>
 /// <param name="point"></param>
 /// <returns></returns>
-VECTOR Calclation::NearestPoint(const VECTOR& position_1, const VECTOR& position_2,
+VECTOR Calculation::NearestPoint(const VECTOR& position_1, const VECTOR& position_2,
 	const VECTOR& point)
 {
 	//線分と点の最近点
@@ -74,7 +74,7 @@ VECTOR Calclation::NearestPoint(const VECTOR& position_1, const VECTOR& position
 /// <param name="poly"></param>
 /// <param name="HitPos_ground"></param>
 /// <returns></returns>
-VECTOR Calclation::SphereMeshOutsideTriangle(const MV1_COLL_RESULT_POLY& poly, const VECTOR& HitPos_ground)
+VECTOR Calculation::SphereMeshOutsideTriangle(const MV1_COLL_RESULT_POLY& poly, const VECTOR& HitPos_ground)
 {
 	VECTOR nearestPoint;
 
@@ -112,7 +112,7 @@ VECTOR Calclation::SphereMeshOutsideTriangle(const MV1_COLL_RESULT_POLY& poly, c
 /// <param name="poly"></param>
 /// <param name="HitPos_ground"></param>
 /// <returns></returns>
-Calclation::NearestResult Calclation::SphereMeshOutsideTriangle_line(const MV1_COLL_RESULT_POLY& poly, const VECTOR& HitPos_ground)
+Calculation::NearestResult Calculation::SphereMeshOutsideTriangle_line(const MV1_COLL_RESULT_POLY& poly, const VECTOR& HitPos_ground)
 {
 	VECTOR nearestPoint;
 
@@ -157,7 +157,7 @@ Calclation::NearestResult Calclation::SphereMeshOutsideTriangle_line(const MV1_C
 /// @param a 
 /// @param b 
 /// @return 
-VECTOR Calclation::ProjectionDirection(const VECTOR& point, const VECTOR& a, const VECTOR& b)
+VECTOR Calculation::ProjectionDirection(const VECTOR& point, const VECTOR& a, const VECTOR& b)
 {
 	VECTOR AB = VSub(b, a);
 	VECTOR AP = VSub(point, a);
@@ -187,7 +187,7 @@ VECTOR Calclation::ProjectionDirection(const VECTOR& point, const VECTOR& a, con
 /// ラープ
 /// </summary>
 /// <param name="AimPosition"></param>
-VECTOR Calclation::Leap(const VECTOR& changePosition, const VECTOR& playerPosition, const float& speed)
+VECTOR Calculation::Leap(const VECTOR& changePosition, const VECTOR& playerPosition, const float& speed)
 {
 	VECTOR SubPosition = VSub(playerPosition, changePosition);
 	VECTOR scalePosition = VGet(0, 0, 0);
@@ -202,22 +202,22 @@ VECTOR Calclation::Leap(const VECTOR& changePosition, const VECTOR& playerPositi
 /// </summary>
 /// <param name="radian"></param>
 /// <returns></returns>
-float Calclation::radToDeg(float radian)
+float Calculation::radToDeg(float radian)
 {
 	return radian * 180.0f / DX_PI_F;
 }
 
-void Calclation::Initialize()
+void Calculation::Initialize()
 {
 	if (instance != nullptr)
 	{
 		return;
 	}
 
-	instance = new Calclation;
+	instance = new Calculation;
 }
 
-void Calclation::UnInitialize()
+void Calculation::UnInitialize()
 {
 	if (instance)
 	{
@@ -227,4 +227,4 @@ void Calclation::UnInitialize()
 	}
 }
 
-Calclation* Calclation::instance = nullptr;
+Calculation* Calculation::instance = nullptr;

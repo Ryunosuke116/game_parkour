@@ -1,6 +1,6 @@
 #include "common.h"
 #include "HitCheck.h"
-#include "Calclation.h"
+#include "Calculation.h"
 
 /// @brief コンストラクタ
 /// @return 
@@ -343,10 +343,10 @@ std::pair<VECTOR, VECTOR> HitCheck::SegmentTriangleDistance(const VECTOR& p, con
 bool HitCheck::TriangleAreaCheck(const VECTOR& point, const VECTOR& a, const VECTOR& b, const VECTOR& c)
 {
 	//面積を求める
-	float area = fabs(Calclation::area(a, b, c));
-	float area_1 = fabs(Calclation::area(a, b, point));
-	float area_2 = fabs(Calclation::area(b, c, point));
-	float area_3 = fabs(Calclation::area(c, a, point));
+	float area = fabs(Calculation::area(a, b, c));
+	float area_1 = fabs(Calculation::area(a, b, point));
+	float area_2 = fabs(Calculation::area(b, c, point));
+	float area_3 = fabs(Calculation::area(c, a, point));
 
 	//総面積と点を使った面積の合計の差が無いか
 	float abs_ = abs((area_1 + area_2 + area_3) - area);
@@ -381,10 +381,10 @@ bool HitCheck::TriangleAreaCheck_ground(const VECTOR& point, const VECTOR& a, co
 	c_.y = 0.0f;
 
 	//面積を求める
-	float area = fabs(Calclation::area(a_, b_, c_));
-	float area_1 = fabs(Calclation::area(a_, b_, point_));
-	float area_2 = fabs(Calclation::area(b_, c_, point_));
-	float area_3 = fabs(Calclation::area(c_, a_, point_));
+	float area = fabs(Calculation::area(a_, b_, c_));
+	float area_1 = fabs(Calculation::area(a_, b_, point_));
+	float area_2 = fabs(Calculation::area(b_, c_, point_));
+	float area_3 = fabs(Calculation::area(c_, a_, point_));
 
 	//総面積と点を使った面積の合計の差が無いか
 	float abs_ = abs((area_1 + area_2 + area_3) - area);

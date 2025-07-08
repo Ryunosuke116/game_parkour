@@ -1,14 +1,14 @@
 #pragma once
 #include "DxLib.h"
 #include"playerState.h"
-#include"Calclation.h"
+#include"Calculation.h"
 
-class PlayerCalclation
+class PlayerCalculation
 {
 public:
 
-	PlayerCalclation();
-	~PlayerCalclation(){}
+	PlayerCalculation();
+	~PlayerCalculation(){}
 
 	VECTOR Update(const VECTOR& moveVec, const VECTOR& moveDirection, const float playTime_anim,
 		const int& animNumber_Now, const PlayerStateActionBase::PlayerData& playerData);
@@ -19,14 +19,14 @@ public:
 	VECTOR Roll(const VECTOR& moveVec, const VECTOR& moveDirection, 
 		float playTime_anim, const PlayerStateActionBase::PlayerData& playerData);
 	VECTOR MoveVec(const VECTOR& moveVec, const VECTOR& moveVec_memory, const bool isGround, const bool isRoll);
-	VECTOR HangringAngle(const MV1_COLL_RESULT_POLY& hangringPoly);
-	VECTOR HangringPosition(const VECTOR& handPos_left, const VECTOR& handPos_right, const VECTOR& nearestPoint);
+	VECTOR HangingAngle(const MV1_COLL_RESULT_POLY& hangingPoly);
+	VECTOR HangingPosition(const VECTOR& handPos_left, const VECTOR& handPos_right, const VECTOR& nearestPoint);
 
-	VECTOR HangringDirection(const MV1_COLL_RESULT_POLY& hangringPoly, const VECTOR& centerPos);
+	VECTOR HangingDirection(const MV1_COLL_RESULT_POLY& hangingPoly, const VECTOR& centerPos);
 
 	float GetCurrentJumpSpeed() { return currentJumpSpeed; }
 	float GetNowMoveSpeed() { return nowMoveSpeed; }
-	Calclation::NearestResult GetNearestResult() { return nearestResult; }
+	Calculation::NearestResult GetNearestResult() { return nearestResult; }
 	void SetCurrentJumpSpeed(const float& jumpSpeed) { currentJumpSpeed = jumpSpeed; }
 
 private:
@@ -38,7 +38,11 @@ private:
 	float currentJumpSpeed;			//現在のジャンプスピード
 	float nowMoveSpeed;
 	float rollMoveSpeed_now;		//現在のロールスピード
-	Calclation::NearestResult nearestResult;
+	float decelerationSpeed;		//減速速度
+
+	bool isCalc_deceleration;
+
+	Calculation::NearestResult nearestResult;
 
 };
 

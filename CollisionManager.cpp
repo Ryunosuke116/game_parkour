@@ -1,6 +1,6 @@
 #include "common.h"
 #include "HitCheck.h"
-#include "Calclation.h"
+#include "Calculation.h"
 #include "PlayerStateActionBase.h"
 #include "CollisionManager.h"
 #include <utility>
@@ -125,7 +125,7 @@ bool CollisionManager::GroundCollisionCheck(int modelHandle,const VECTOR& oldPos
 	if (isHitGround)
 	{
 		VECTOR newPlayerPos = VGet(0.0f, 0.0f, 0.0f);
-
+		
 		//床 - プレイヤーの足元で押し戻し量を計算
 		newPlayerPos.y = rayPoly_ground.HitPosition.y - newPos.y;
 		newPos.y = newPos.y + newPlayerPos.y;
@@ -222,8 +222,8 @@ bool CollisionManager::WallCollisionCheck(int modelHandle, VECTOR& newPos, VECTO
 		{
 			MV1_COLL_RESULT_POLY poly = hitPoly_Wall.Dim[i];
 
-			float degree_x = Calclation::radToDeg(poly.Normal.x);
-			float degree_z = Calclation::radToDeg(poly.Normal.z);
+			float degree_x = Calculation::radToDeg(poly.Normal.x);
+			float degree_z = Calculation::radToDeg(poly.Normal.z);
 
 
 			//壁かどうかを調べる
@@ -287,26 +287,26 @@ bool CollisionManager::WallCollisionCheck(int modelHandle, VECTOR& newPos, VECTO
 std::pair<bool, VECTOR> CollisionManager::CliffGrabbing(int modelHandle,
 	const VECTOR& topPosition, const VECTOR& moveDirection, const bool isFalling)
 {
-	VECTOR linePos_end = VAdd(topPosition, VScale(moveDirection, 10.0f));
-	linePos_end.y = topPosition.y - 1.0f;
-	bool isHitHangring = false;
+	VECTOR linePos_end = VAdd(topPosition, VScale(moveDirection, 6.0f));
+	linePos_end.y = topPosition.y - 5.0f;
+	bool isHitHanging = false;
 
 	//落下中にplayerの上部から出ているrayで判定を取る
 	if (isFalling)
 	{
-		isHitHangring = HitCheck::HitRayJudge(modelHandle, -1, topPosition, linePos_end, HangringPoly);
+		isHitHanging = HitCheck::HitRayJudge(modelHandle, -1, topPosition, linePos_end, HangingPoly);
 		
-		if (isHitHangring && HangringPoly.Normal.y >= 0.8f)
+		if (isHitHanging && HangingPoly.Normal.y >= 0.8f)
 		{
-			hitHangringPos = HangringPoly.HitPosition;
+			hitHangingPos = HangingPoly.HitPosition;
 		}
 		else
 		{
-			isHitHangring = false;
+			isHitHanging = false;
 		}
 	}
 
-	return std::make_pair(isHitHangring, hitHangringPos);
+	return std::make_pair(isHitHanging, hitHangingPos);
 	
 	//trueの場合に崖をつかむようにする
 }
@@ -328,7 +328,7 @@ bool CollisionManager::TestSphereTriangle(VECTOR centerPos, VECTOR a, VECTOR b, 
 	return VDot(v, v) <= radius * radius;
 }
 
-VECTOR CollisionManager::PushBackCalclation_sphere_mesh(const MV1_COLL_RESULT_POLY& poly, const VECTOR& bottomPos, const VECTOR& newPlayerPos, const float& radius)
+VECTOR CollisionManager::PushBackCalculation_sphere_mesh(const MV1_COLL_RESULT_POLY& poly, const VECTOR& bottomPos, const VECTOR& newPlayerPos, const float& radius)
 {
 	//球と面の接触しているは球の最下部と面の接触座標と同じなのでリセット
 	hitSphere = VGet(0.0f, 0.0f, 0.0f);
@@ -353,7 +353,7 @@ VECTOR CollisionManager::PushBackCalclation_sphere_mesh(const MV1_COLL_RESULT_PO
 VECTOR CollisionManager::CalcPushBack_SphereMeshOutsideTriangle(const MV1_COLL_RESULT_POLY& poly, const VECTOR& HitPos_ground, const VECTOR& bottomPos, const float& radius)
 {
 
-	nearestPoint = Calclation::SphereMeshOutsideTriangle(poly, HitPos_ground);
+	nearestPoint = Calculation::SphereMeshOutsideTriangle(poly, HitPos_ground);
 
 	//球と面の接触点を求める
 	//方向計算
@@ -391,7 +391,7 @@ bool CollisionManager::Draw()
 		GetColor(255, 0, 0), FALSE);
 	DrawSphere3D(hitPos_head, 2.0f, 30, GetColor(0, 0, 0),
 		GetColor(255, 0, 0), FALSE);
-	DrawSphere3D(hitHangringPos, 2.0f, 30, GetColor(0, 0, 0),
+	DrawSphere3D(hitHangingPos, 2.0f, 30, GetColor(0, 0, 0),
 		GetColor(0, 255, 0), FALSE);
 
 	DrawLine3D(topPos_ray, bottomPos_ray, GetColor(255, 0, 0));

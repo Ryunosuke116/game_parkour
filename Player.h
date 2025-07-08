@@ -1,9 +1,9 @@
 #pragma once
 #include "PlayerStateActionBase.h"
-#include "PlayerCalclation.h"
+#include "PlayerCalculation.h"
 #include "BaseChara.h"
 #include "CollisionManager.h"
-#include "Calclation.h"
+#include "Calculation.h"
 
 class Player : public BaseChara
 {
@@ -26,15 +26,16 @@ private:
 	VECTOR bottomPosition;
 	VECTOR moveVec;
 	VECTOR moveVec_memory;
-	VECTOR hangringPoint;
+	VECTOR hangingPoint;
 	VECTOR headPos;
 	VECTOR handPos_right;
 	VECTOR handPos_left;
 	VECTOR handCenterPos;
 
 	bool isPush;					//ボタンを押したか
-	bool isChageState;				//アニメーションを変更するか
+	bool isChangeState;				//アニメーションを変更するか
 	bool isCalc;
+	bool isCalc_moveVec;
 
 	/*struct PadInput
 	{
@@ -54,7 +55,7 @@ private:
 	PlayerStateActionBase::AnimState nowAnimState;
 	PlayerStateActionBase::PlayerData playerData;
 	std::shared_ptr<CollisionManager> collisionManager = NULL;
-	std::shared_ptr<PlayerCalclation> playerCalclation = NULL;
+	std::shared_ptr<PlayerCalculation> playerCalculation = NULL;
 public:
 	Player();
 	~Player();
@@ -66,10 +67,12 @@ public:
 	VECTOR Move(VECTOR& moveVec, const VECTOR& cameraDirection);
 	void JumpMove();
 	void RollMove();
-	void HangringMove();
+	void HangingMove();
 	void Hang_to_CrouchMove(const int mapHandle);
 	void ChangeState();
 	void SettingRay();
+	void HangingCheck(const int mapHandle);
+	void NormalMove(const int mapHandle);
 
 	void SetOldAnimState(PlayerStateActionBase::AnimState animState);
 	void SetNowAnimState(PlayerStateActionBase::AnimState animState);
@@ -86,7 +89,7 @@ public:
 	VECTOR GetBottomPos() { return bottomPosition; }
 	VECTOR GetMoveVec() { return moveVec; }
 	VECTOR GetlinePos_end() { return linePos_end; }
-	VECTOR GetHangringPoint() { return hangringPoint; }
+	VECTOR GetHangingPoint() { return hangingPoint; }
 	VECTOR GetHeadPos() { return headPos; }
 	VECTOR GetHandPos_right() { return handPos_right; }
 	VECTOR GetHandPos_left() { return handPos_left; }

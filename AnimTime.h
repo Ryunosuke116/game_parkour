@@ -5,7 +5,7 @@ enum animNum : int
 	braced_Hang_To_Crouch,		//‚µ‚á‚ª‚ñ‚Å‚Ô‚ç‚³‚ª‚é
 	falling_Idle,				//—‚¿‚Ä‚¢‚é‚Æ‚«
 	falling_To_Roll,			//’…’n‚µ‚Ä“]‚ª‚é
-	hangring_Idle,				//‚Ô‚ç‚³‚ª‚é
+	hanging_Idle,				//‚Ô‚ç‚³‚ª‚é
 	hard_Landing,				//’…’n‚·‚é
 	idle,						//Ã~
 	idle_To_Sprint,				//‘–‚èo‚µ

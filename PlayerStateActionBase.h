@@ -20,7 +20,7 @@ public:
 		bool isStopRun;					//走り終わったか
 		bool isJumpAll;					//全てのジャンプが完了したか
 		bool isFalling;					//落下中か
-		bool isHangring;				//崖つかみ中か
+		bool isHanging;				//崖つかみ中か
 		bool isHang_to_Crouch;			//上に上がる
 	};
 

@@ -1,20 +1,21 @@
 #include "Dxlib.h"
-#include "Calclation.h"
-#include "PlayerCalclation.h"
+#include "Calculation.h"
+#include "PlayerCalculation.h"
 #include"playerState.h"
 #include "AnimTime.h"
 #include "HitCheck.h"
 
 
-PlayerCalclation::PlayerCalclation() :
+PlayerCalculation::PlayerCalculation() :
     currentJumpSpeed(0.0f),
     nowMoveSpeed(0.0f),
-    rollMoveSpeed_now(0.0f)
+    rollMoveSpeed_now(0.0f),
+    isCalc_deceleration(false)
 {
 
 }
 
-VECTOR PlayerCalclation::Update(const VECTOR& moveVec, const VECTOR& moveDirection, const float playTime_anim,
+VECTOR PlayerCalculation::Update(const VECTOR& moveVec, const VECTOR& moveDirection, const float playTime_anim,
     const int& animNumber_Now, const PlayerStateActionBase::PlayerData& playerData)
 {
     VECTOR returnVec = moveVec;
@@ -47,10 +48,15 @@ VECTOR PlayerCalclation::Update(const VECTOR& moveVec, const VECTOR& moveDirecti
 /// <param name="moveDirection"></param>
 /// <param name="playerData"></param>
 /// <returns></returns>
-VECTOR PlayerCalclation::Move(const VECTOR& moveVec, const VECTOR& moveDirection, const PlayerStateActionBase::PlayerData& playerData)
+VECTOR PlayerCalculation::Move(const VECTOR& moveVec, const VECTOR& moveDirection, const PlayerStateActionBase::PlayerData& playerData)
 {
     if (playerData.isMove)
     {
+        if (isCalc_deceleration)
+        {
+            isCalc_deceleration = false;
+        }
+
         //徐々にスピードを上げる
         nowMoveSpeed += 0.05f;
 
@@ -65,7 +71,19 @@ VECTOR PlayerCalclation::Move(const VECTOR& moveVec, const VECTOR& moveDirection
         //接地しているときに止まったらすぐ止まる
         if (playerData.isGround)
         {
-            nowMoveSpeed = 0.0f;
+            //アニメーションフレームに合わせて減速
+            if (!isCalc_deceleration)
+            {
+                const float stopFrame = 10.0f;
+                decelerationSpeed = nowMoveSpeed / stopFrame;
+            }
+
+            nowMoveSpeed -= decelerationSpeed;
+
+            if (nowMoveSpeed < 0.0f)
+            {
+                nowMoveSpeed = 0.0f;
+            }
         }
         //空中にいるとき
         else
@@ -91,7 +109,7 @@ VECTOR PlayerCalclation::Move(const VECTOR& moveVec, const VECTOR& moveDirection
 /// <param name="animNumber_Now"></param>
 /// <param name="playerData"></param>
 /// <returns></returns>
-VECTOR PlayerCalclation::Jump(const VECTOR& moveVec,const int& animNumber_Now,
+VECTOR PlayerCalculation::Jump(const VECTOR& moveVec,const int& animNumber_Now,
     const PlayerStateActionBase::PlayerData& playerData)
 {
     VECTOR move = moveVec;
@@ -114,7 +132,7 @@ VECTOR PlayerCalclation::Jump(const VECTOR& moveVec,const int& animNumber_Now,
 /// </summary>
 /// <param name="moveVec"></param>
 /// <param name="playerData"></param>
-void PlayerCalclation::Gravity(const VECTOR& moveVec, const PlayerStateActionBase::PlayerData& playerData)
+void PlayerCalculation::Gravity(const VECTOR& moveVec, const PlayerStateActionBase::PlayerData& playerData)
 {
     if (!playerData.isGround)
     {
@@ -130,7 +148,7 @@ void PlayerCalclation::Gravity(const VECTOR& moveVec, const PlayerStateActionBas
 /// <param name="playTime_anim"></param>
 /// <param name="playerData"></param>
 /// <returns></returns>
-VECTOR PlayerCalclation::Roll(const VECTOR& moveVec, const VECTOR& moveDirection,
+VECTOR PlayerCalculation::Roll(const VECTOR& moveVec, const VECTOR& moveDirection,
     float playTime_anim, const PlayerStateActionBase::PlayerData& playerData)
 {
     VECTOR move = moveVec;
@@ -148,10 +166,10 @@ VECTOR PlayerCalclation::Roll(const VECTOR& moveVec, const VECTOR& moveDirection
     return move;
 }
 
-VECTOR PlayerCalclation::HangringAngle(const MV1_COLL_RESULT_POLY& hangringPoly)
+VECTOR PlayerCalculation::HangingAngle(const MV1_COLL_RESULT_POLY& hangingPoly)
 {
     //張り付く壁の法線ベクトルを利用してplayerの向きを調整
-    VECTOR direction = hangringPoly.Normal;
+    VECTOR direction = hangingPoly.Normal;
     direction.y = 0.0f;
 
     direction = VScale(direction, -1.0f);
@@ -160,7 +178,7 @@ VECTOR PlayerCalclation::HangringAngle(const MV1_COLL_RESULT_POLY& hangringPoly)
     return VNorm(direction);
 }
 
-VECTOR PlayerCalclation::HangringPosition(const VECTOR& handPos_left,const VECTOR& handPos_right,const VECTOR& nearestPoint)
+VECTOR PlayerCalculation::HangingPosition(const VECTOR& handPos_left,const VECTOR& handPos_right,const VECTOR& nearestPoint)
 {
     VECTOR centerPos = VAdd(handPos_left, handPos_right);
     centerPos = VScale(centerPos, 0.5f);
@@ -169,13 +187,13 @@ VECTOR PlayerCalclation::HangringPosition(const VECTOR& handPos_left,const VECTO
     return newPos;
 }
 
-VECTOR PlayerCalclation::HangringDirection(const MV1_COLL_RESULT_POLY& hangringPoly, const VECTOR& centerPos)
+VECTOR PlayerCalculation::HangingDirection(const MV1_COLL_RESULT_POLY& hangingPoly, const VECTOR& centerPos)
 {
     //点に最も近い線分との最近接点
-    nearestResult = Calclation::SphereMeshOutsideTriangle_line(hangringPoly, centerPos);
+    nearestResult = Calculation::SphereMeshOutsideTriangle_line(hangingPoly, centerPos);
 
     //射影ベクトル
-    VECTOR a = Calclation::ProjectionDirection(centerPos, nearestResult.linePos_start, nearestResult.linePos_end);
+    VECTOR a = Calculation::ProjectionDirection(centerPos, nearestResult.linePos_start, nearestResult.linePos_end);
 
     VECTOR direction = VSub(a, centerPos);
     direction.y = 0.0f;
@@ -197,7 +215,7 @@ VECTOR PlayerCalclation::HangringDirection(const MV1_COLL_RESULT_POLY& hangringP
 /// <param name="isGround"></param>
 /// <param name="isRoll"></param>
 /// <returns></returns>
-VECTOR PlayerCalclation::MoveVec(const VECTOR& moveVec,const VECTOR& moveVec_memory,const bool isGround,const bool isRoll)
+VECTOR PlayerCalculation::MoveVec(const VECTOR& moveVec,const VECTOR& moveVec_memory,const bool isGround,const bool isRoll)
 {
     VECTOR returnPos = moveVec;
 
@@ -208,7 +226,7 @@ VECTOR PlayerCalclation::MoveVec(const VECTOR& moveVec,const VECTOR& moveVec_mem
 
     if (!isGround || isRoll)
     {
-        returnPos = Calclation::Leap(moveVec, moveVec_memory, 0.2f);
+        returnPos = Calculation::Leap(moveVec, moveVec_memory, 0.2f);
     }
 
     return returnPos;
