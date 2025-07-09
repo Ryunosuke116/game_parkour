@@ -6,6 +6,11 @@ void PadInput::Initialize()
     input = new Input;
 }
 
+void PadInput::finalize()
+{
+    delete(input);
+}
+
 void PadInput::Update()
 {
     input->Update();
@@ -122,5 +127,5 @@ float PadInput::GetJoyPad_y_right()
     return input->GetJoyPad_y_right();
 }
 
-PadInput* PadInput::instance = nullptr;
+//PadInput* PadInput::instance = nullptr;
 Input* PadInput::input = nullptr;

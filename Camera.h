@@ -10,6 +10,7 @@ private:
 	VECTOR spherePosition;
 	VECTOR centerPos;
 	float angle;
+	float distance;
 	float a;
 
 	static constexpr float cameraSpeed = 0.02f;
@@ -29,6 +30,8 @@ public:
 	void LeapCalc_single(float& changePos, const float targetPos, const float speed);
 	void LockOnCamera();
 	bool isObjectVisible();
+
+	void CameraPosCalc(const int& mapHandle);
 
 	///////////////////////////////////////////////////////
 	// ÉQÉbÉ^Å[

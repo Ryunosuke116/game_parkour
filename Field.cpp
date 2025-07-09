@@ -43,6 +43,7 @@ void Field::Initialize()
 	//MV1SetupCollInfo(meshHandle, -1, 1, 1, 1);
 
 	int a = MV1GetMaterialNum(meshHandle);
+	isPoly = false;
 
 	for (int i = 0; i < a; i++)
 	{

@@ -50,14 +50,14 @@ bool BaseChara::Draw()
 /// <summary>
 /// 向き
 /// </summary>
-void BaseChara::UpdateAngle(const VECTOR direction)
+void BaseChara::UpdateAngle(const VECTOR& direction)
 {
     // プレイヤーの移動方向にモデルの方向を近づける
     float targetAngle;			// 目標角度
     float difference;			// 目標角度と現在の角度との差
 
     // 目標の方向ベクトルから角度値を算出する
-    targetAngle = static_cast<float>(atan2(targetMoveDirection.x, targetMoveDirection.z));
+    targetAngle = static_cast<float>(atan2(direction.x, direction.z));
 
     // 目標の角度と現在の角度との差を割り出す
     // 最初は単純に引き算

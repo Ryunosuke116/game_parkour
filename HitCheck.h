@@ -20,6 +20,7 @@ public:
 	//線とメッシュ
 	static bool HitRayJudge(const int& modelHandle, int frameIndex,
 		VECTOR linePos_start, VECTOR linePos_end, MV1_COLL_RESULT_POLY& hitPoly);
+
 	//球とメッシュ
 	static bool SphereHitJudge(const int& modelHandle, int frameIndex,
 		VECTOR linePos_end, MV1_COLL_RESULT_POLY_DIM& hitPoly);
@@ -32,8 +33,8 @@ public:
 
 	static float projectionCalc(const VECTOR& point, const VECTOR& P, const VECTOR& Q);
 
-
 	static VECTOR CapsuleHitConfirmation(VECTOR capsulePosition_1, VECTOR capsulePosition_2, VECTOR position, const float radius_1, const float radius_2);
+
 	static VECTOR ClosestPtToPointTriangle(VECTOR centerPos, VECTOR a, VECTOR b, VECTOR c);
 
 	static void AABB();
@@ -43,7 +44,6 @@ public:
 
 private:
 
-	static HitCheck* instance;
 
 };
 

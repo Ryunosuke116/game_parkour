@@ -8,7 +8,8 @@
 /// <summary>
 /// インストラクタ
 /// </summary>
-Camera::Camera()
+Camera::Camera():
+	distance(0.0f)
 {
 	// グラフィックの描画先を裏画面にセット
 	SetDrawScreen(DX_SCREEN_BACK);
@@ -34,6 +35,7 @@ void Camera::Initialize()
 	lookPosition = VGet(0.0f, 0, 20.0f);
 	spherePosition = lookPosition;
 	a = -177.55f;
+	distance = 60.0f;
 
 	SetCameraPositionAndTarget_UpVecY(aimPosition, lookPosition);
 
@@ -98,8 +100,8 @@ void Camera::RotateUpdate(const VECTOR& playerPosition)
 	float angle = a * DX_PI_F / 360.0f;
 	this->angle = angle;
 
-	aimPosition.x = spherePosition.x + 60 * cos(angle);
-	aimPosition.z = spherePosition.z + 60 * sin(angle);
+	aimPosition.x = spherePosition.x + distance * cos(angle);
+	aimPosition.z = spherePosition.z + distance * sin(angle);
 
 	float maxRange = 5.0f;
 	float maxRange_ = 10.0f;
@@ -110,6 +112,21 @@ void Camera::RotateUpdate(const VECTOR& playerPosition)
 
 	cameraDirection = VSub(spherePosition, aimPosition);
 	cameraDirection = VNorm(cameraDirection);
+}
+
+void Camera::CameraPosCalc(const int& mapHandle)
+{
+	MV1_COLL_RESULT_POLY hitPoly;
+	
+	//rayが当たっている場合カメラの位置をいじる
+	if (HitCheck::HitRayJudge(mapHandle, -1, spherePosition, aimPosition, hitPoly))
+	{
+		VECTOR newPos;
+		VECTOR dirction;
+
+		
+	}
+
 }
 
 /// <summary>

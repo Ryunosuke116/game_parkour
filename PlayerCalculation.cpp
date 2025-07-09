@@ -7,8 +7,8 @@
 
 
 PlayerCalculation::PlayerCalculation() :
-    currentJumpSpeed(0.0f),
-    nowMoveSpeed(0.0f),
+    jumpSpeed_now(0.0f),
+    moveSpeed_now(0.0f),
     rollMoveSpeed_now(0.0f),
     isCalc_deceleration(false)
 {
@@ -58,12 +58,12 @@ VECTOR PlayerCalculation::Move(const VECTOR& moveVec, const VECTOR& moveDirectio
         }
 
         //徐々にスピードを上げる
-        nowMoveSpeed += 0.05f;
+        moveSpeed_now += 0.05f;
 
         //maxに達したらそこで止める
-        if (nowMoveSpeed >= MaxMoveSpeed)
+        if (moveSpeed_now >= MaxMoveSpeed)
         {
-            nowMoveSpeed = MaxMoveSpeed;
+            moveSpeed_now = MaxMoveSpeed;
         }
     }
     else
@@ -75,31 +75,31 @@ VECTOR PlayerCalculation::Move(const VECTOR& moveVec, const VECTOR& moveDirectio
             if (!isCalc_deceleration)
             {
                 const float stopFrame = 10.0f;
-                decelerationSpeed = nowMoveSpeed / stopFrame;
+                decelerationSpeed = moveSpeed_now / stopFrame;
             }
 
-            nowMoveSpeed -= decelerationSpeed;
+            moveSpeed_now -= decelerationSpeed;
 
-            if (nowMoveSpeed < 0.0f)
+            if (moveSpeed_now < 0.0f)
             {
-                nowMoveSpeed = 0.0f;
+                moveSpeed_now = 0.0f;
             }
         }
         //空中にいるとき
         else
         {
             //徐々に下げる
-            nowMoveSpeed -= 0.02f;
+            moveSpeed_now -= 0.02f;
 
             //止める
-            if (nowMoveSpeed <= 0.0f)
+            if (moveSpeed_now <= 0.0f)
             {
-                nowMoveSpeed = 0.0f;
+                moveSpeed_now = 0.0f;
             }
         }
     }
 
-    return VScale(moveDirection, nowMoveSpeed);
+    return VScale(moveDirection, moveSpeed_now);
 }
 
 /// <summary>
@@ -117,11 +117,11 @@ VECTOR PlayerCalculation::Jump(const VECTOR& moveVec,const int& animNumber_Now,
     if (animNumber_Now == animNum::falling_Idle || (playerData.isJump && animNumber_Now == animNum::jump ||
         animNumber_Now == animNum::run_Jump))
     {
-        move.y += currentJumpSpeed;
+        move.y += jumpSpeed_now;
     }
     else if (!playerData.isGround)
     {
-        move.y += currentJumpSpeed;
+        move.y += jumpSpeed_now;
     }
 
     return move;
@@ -136,7 +136,7 @@ void PlayerCalculation::Gravity(const VECTOR& moveVec, const PlayerStateActionBa
 {
     if (!playerData.isGround)
     {
-        currentJumpSpeed += gravity;
+        jumpSpeed_now += gravity;
     }
 }
 
@@ -158,7 +158,7 @@ VECTOR PlayerCalculation::Roll(const VECTOR& moveVec, const VECTOR& moveDirectio
         if (playTime_anim >= 10.0f)
         {
             //※徐々にスピードを下げていく
-            //途中で向きがあまり帰れないようにする
+            //途中で向きがあまり変更できないようにする
             move = moveDirection;
         }
     }
@@ -166,6 +166,11 @@ VECTOR PlayerCalculation::Roll(const VECTOR& moveVec, const VECTOR& moveDirectio
     return move;
 }
 
+/// <summary>
+/// 崖に掴まっているときの方向計算
+/// </summary>
+/// <param name="hangingPoly"></param>
+/// <returns></returns>
 VECTOR PlayerCalculation::HangingAngle(const MV1_COLL_RESULT_POLY& hangingPoly)
 {
     //張り付く壁の法線ベクトルを利用してplayerの向きを調整
@@ -178,6 +183,13 @@ VECTOR PlayerCalculation::HangingAngle(const MV1_COLL_RESULT_POLY& hangingPoly)
     return VNorm(direction);
 }
 
+/// <summary>
+/// 掴まる場所計算
+/// </summary>
+/// <param name="handPos_left"></param>
+/// <param name="handPos_right"></param>
+/// <param name="nearestPoint"></param>
+/// <returns></returns>
 VECTOR PlayerCalculation::HangingPosition(const VECTOR& handPos_left,const VECTOR& handPos_right,const VECTOR& nearestPoint)
 {
     VECTOR centerPos = VAdd(handPos_left, handPos_right);
@@ -201,6 +213,12 @@ VECTOR PlayerCalculation::HangingDirection(const MV1_COLL_RESULT_POLY& hangingPo
     direction = VNorm(direction);
 
     return direction;
+}
+
+void PlayerCalculation::Reset_move()
+{
+    moveSpeed_now = 0.0f;
+    jumpSpeed_now = 0.0f;
 }
 
 ///////////////////////////////

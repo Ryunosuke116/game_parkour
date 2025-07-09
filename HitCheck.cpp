@@ -268,7 +268,7 @@ std::pair<VECTOR, VECTOR> HitCheck::SegmentTriangleDistance(const VECTOR& p, con
 	//線分の方向ベクトル
 	VECTOR PQ = VSub(q, p);
 
-	//線分を50分割して一つずつ調べる
+	//線分をx分割して一つずつ調べる
 	const int num = 100;
 	float minSize = 1000;
 	VECTOR returnPoint;		//面との接触点
@@ -395,5 +395,3 @@ bool HitCheck::TriangleAreaCheck_ground(const VECTOR& point, const VECTOR& a, co
 
 	return (area_equal && inside) ? true : false;
 }
-
-HitCheck* HitCheck::instance = nullptr;

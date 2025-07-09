@@ -35,6 +35,7 @@ void Game::Initialize()
 /// </summary>
 void Game::Update()
 {
+	PadInput::Update();
 	objectManager->Update();
 }
 

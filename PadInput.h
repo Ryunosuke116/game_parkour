@@ -1,6 +1,10 @@
 #pragma once
 #include "Input.h"
 
+///////////////////////////////////////
+// 一人プレイ前提の作り
+///////////////////////////////////////
+
 class PadInput
 {
 private:
@@ -11,7 +15,9 @@ private:
 	PadInput() = default;
 	~PadInput() = default;
 
-	static PadInput* instance;
+	static Input* input;
+
+	//static PadInput* instance;
 public:
 
 	/*PadInput();
@@ -22,9 +28,9 @@ public:
 	int GetNowFrameInput() const override { return nowFrameInput; }
 	int GetNowFrameNewInput() const override { return nowFrameNewInput; }*/
 
-	static Input* input;
 
 	static void Initialize();
+	static void finalize();
 	static void Update();
 
 	static bool isUp();

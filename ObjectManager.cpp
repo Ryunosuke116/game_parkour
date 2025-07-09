@@ -54,7 +54,7 @@ void ObjectManager::Initialize()
 /// </summary>
 void ObjectManager::Update()
 {
-	PadInput::Update();
+	
 	playerManager->Update(fieldMesh->GetModelHandle(), camera->GetCameraDirection());
 	camera->Update(playerManager->GetPlayer()->GetPosition());
 	actualMap->Update(playerManager->GetPlayer()->GetPosition());

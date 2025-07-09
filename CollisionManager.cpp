@@ -52,6 +52,10 @@ bool CollisionManager::HeadCollisionCheck(int modelHandle, VECTOR& newPos, float
 			MV1_COLL_RESULT_POLY poly = hitPoly_head.Dim[i];
 			VECTOR newAddPos = VGet(0.0f, 0.0f, 0.0f);
 
+			////////////////////////////////////////
+			// todo::
+			// 法線ではなく角度でできるように
+			/////////////////////////////////////////
 			if (poly.Normal.y <= -0.7f || poly.Normal.y >= 0.7f)
 			{
 				hitPos_head = HitCheck::ClosestPtToPointTriangle(topPos, poly.Position[0], poly.Position[1], poly.Position[2]);
@@ -192,6 +196,10 @@ std::pair<bool, VECTOR> CollisionManager::GroundCollisionCheck_Hang_to_Crouch(in
 
 }
 
+////////////////////////////////////////////////////////////
+// ※壁にめり込むので絶対調整！
+///////////////////////////////////////////////////////////
+
 /// <summary>
 /// 壁との当たり判定
 /// </summary>
@@ -208,7 +216,7 @@ bool CollisionManager::WallCollisionCheck(int modelHandle, VECTOR& newPos, VECTO
 	bool flag = false;
 
 	//壁と衝突しているか
-	HitCheck::CapsuleHitWallJudge(modelHandle, -1, radius,topPosition,VAdd(bottomPosition,VGet(0.0f,1.0f,0.0f)), hitPoly_Wall);
+	HitCheck::CapsuleHitWallJudge(modelHandle, -1, radius, topPosition, VAdd(bottomPosition, VGet(0.0f, 1.0f, 0.0f)), hitPoly_Wall);
 
 	//衝突しているとこを全部調べて押し戻し量を計算する
 	if (hitPoly_Wall.HitNum >= 1)
@@ -227,9 +235,9 @@ bool CollisionManager::WallCollisionCheck(int modelHandle, VECTOR& newPos, VECTO
 
 
 			//壁かどうかを調べる
-			if (poly.Normal.x >= 0.7f || poly.Normal.z >= 0.7f ||
-				poly.Normal.x <= -0.7f || poly.Normal.z <= -0.7f &&
-				poly.Normal.y <= 0.8f)
+			if ((poly.Normal.x >= 0.7f || poly.Normal.z >= 0.7f ||
+				poly.Normal.x <= -0.7f || poly.Normal.z <= -0.7f) &&
+				poly.Normal.y <= 0.7f)
 			{
 
 				//カプセルの大きさ

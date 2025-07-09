@@ -18,36 +18,24 @@ private:
 	static constexpr float addBottomPos = 3.0f;
 	static constexpr float radius = 3.5f;
 
-
 	VECTOR linePos_end;
 	VECTOR footPosition;
 	VECTOR centerPosition;
 	VECTOR topPosition;
 	VECTOR bottomPosition;
 	VECTOR moveVec;
-	VECTOR moveVec_memory;
 	VECTOR hangingPoint;
 	VECTOR headPos;
 	VECTOR handPos_right;
 	VECTOR handPos_left;
 	VECTOR handCenterPos;
+	VECTOR moveDirection_now;
 
 	bool isPush;					//ボタンを押したか
 	bool isChangeState;				//アニメーションを変更するか
 	bool isCalc;
 	bool isCalc_moveVec;
 
-	/*struct PadInput
-	{
-		bool isUp(Input& input);
-		bool isDown(Input& input);
-		bool isRight(Input& input);
-		bool isLeft(Input& input);
-		bool isJump(Input& input);
-		bool isRoll(Input& input);
-	};*/
-
-	//PadInput padInput;
 
 	//他クラス
 	std::shared_ptr<PlayerStateActionBase> nowState = NULL;
@@ -73,6 +61,9 @@ public:
 	void SettingRay();
 	void HangingCheck(const int mapHandle);
 	void NormalMove(const int mapHandle);
+	void Reset();
+
+	void Command(const VECTOR& cameraDirection);
 
 	void SetOldAnimState(PlayerStateActionBase::AnimState animState);
 	void SetNowAnimState(PlayerStateActionBase::AnimState animState);

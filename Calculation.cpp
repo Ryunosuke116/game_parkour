@@ -187,9 +187,9 @@ VECTOR Calculation::ProjectionDirection(const VECTOR& point, const VECTOR& a, co
 /// ÉâÅ[Év
 /// </summary>
 /// <param name="AimPosition"></param>
-VECTOR Calculation::Leap(const VECTOR& changePosition, const VECTOR& playerPosition, const float& speed)
+VECTOR Calculation::Leap(const VECTOR& changePosition, const VECTOR& latestPosition, const float& speed)
 {
-	VECTOR SubPosition = VSub(playerPosition, changePosition);
+	VECTOR SubPosition = VSub(latestPosition, changePosition);
 	VECTOR scalePosition = VGet(0, 0, 0);
 
 	scalePosition = VScale(SubPosition, speed);
@@ -209,22 +209,20 @@ float Calculation::radToDeg(float radian)
 
 void Calculation::Initialize()
 {
-	if (instance != nullptr)
+	/*if (instance != nullptr)
 	{
 		return;
 	}
 
-	instance = new Calculation;
+	instance = new Calculation;*/
 }
 
 void Calculation::UnInitialize()
 {
-	if (instance)
-	{
-		delete instance;
+	//if (instance)
+	//{
+	//	delete instance;
 
-		instance = nullptr;
-	}
+	//	instance = nullptr;
+	//}
 }
-
-Calculation* Calculation::instance = nullptr;
