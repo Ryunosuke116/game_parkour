@@ -1,19 +1,26 @@
 #pragma once
 #include "CoinObject.h"
+#include "BaseManager.h"
+#include "Player.h"
 
-class CoinManager
+class CoinManager : public BaseManager
 {
 private:
 	std::vector<std::shared_ptr<CoinObject>> coins;
+	int modelHandle;
 
 public:
 
 	CoinManager();
 	~CoinManager();
 
-	void Initialize(const char* path);
 	void Update(const std::shared_ptr<Player>& player);
-	bool Draw();
+	bool Draw()override;
 
+	void Add();
+
+	void Initialize() override;
+	void Update()override;
+	void Create()override;
 };
 

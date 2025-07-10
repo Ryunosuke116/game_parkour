@@ -59,7 +59,7 @@ void Field::Initialize()
 /// </summary>
 void Field::Update()
 {
-	if (CheckHitKey(KEY_INPUT_1))
+	/*if (CheckHitKey(KEY_INPUT_1))
 	{
 		if (!isPush)
 		{
@@ -77,7 +77,7 @@ void Field::Update()
 	else
 	{
 		isPush = false;
-	}
+	}*/
 
 	// モデルの０番目のフレームのコリジョン情報を構築
 	//MV1SetupCollInfo(modelHandle, -1, 1, 1, 1);

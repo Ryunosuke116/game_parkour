@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <fstream>
+#include <string>
 #include "Player.h"
 #include "CoinManager.h"
 #include "Json.h"
@@ -26,19 +27,21 @@ CoinManager::~CoinManager()
 /// ‰Šú‰»
 /// </summary>
 /// <param name="path"></param>
-void CoinManager::Initialize(const char *path)
+void CoinManager::Initialize()
 {
 	std::ifstream ifs("Json/coin.Json");
 	nlohmann::json j;
 	ifs >> j;
 
-	for (char i = 'a'; i < 'd'; i++)
+	std::string modelPath = j["modelPath"];
+
+	modelHandle = MV1LoadModel(modelPath.c_str());
+
+	for (auto& pos : j["coin_list"])
 	{
-		std::string key(1, i);
-		if (j.contains(key))
-		{
-			coins.push_back(std::make_shared<CoinObject>(path, VGet(j[key]["x"], j[key]["y"], j[key]["z"])));
-		}
+		//std::string key(1, i);
+		coins.push_back(std::make_shared<CoinObject>(modelHandle,
+			VGet(pos[0], pos[1], pos[2])));
 	}
 
 }
@@ -58,6 +61,8 @@ void CoinManager::Update(const std::shared_ptr<Player>& player)
 		}
 		it++;
 	}
+	pos_addObject = player->GetPosition();
+
 }
 
 bool CoinManager::Draw()
@@ -68,3 +73,12 @@ bool CoinManager::Draw()
 	}
 	return true;
 }
+
+void CoinManager::Add()
+{
+	coins.push_back(std::make_shared<CoinObject>(modelHandle, pos_addObject));
+}
+
+void CoinManager::Update(){}
+
+void CoinManager::Create(){}

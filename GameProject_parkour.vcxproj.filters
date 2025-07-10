@@ -106,13 +106,28 @@
     <Filter Include="ソース ファイル\Calculation">
       <UniqueIdentifier>{cf99dbc9-50f2-4910-97b1-cd46a3c5e262}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\layout">
+      <UniqueIdentifier>{d5d9db3e-28bd-4cfe-902b-76f058d3efb3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Base\BaseChara">
+      <UniqueIdentifier>{664a45f2-e5e7-4051-97ee-a2ea2a076b72}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Base\BaseManager">
+      <UniqueIdentifier>{ef9054aa-afc2-4b68-8b2b-943aed8a8bc9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Base\BaseObject">
+      <UniqueIdentifier>{5ac518b0-1420-4c76-901c-f90170dca77b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Base\BaseScene">
+      <UniqueIdentifier>{378eeac6-818c-493c-b8c7-d8a11c305dc3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\manager\json">
+      <UniqueIdentifier>{c2fdffe0-4070-4057-9cf7-b8f503264f1b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="BaseScene.cpp">
-      <Filter>ソース ファイル\Base</Filter>
     </ClCompile>
     <ClCompile Include="Game.cpp">
       <Filter>ソース ファイル\player\scene</Filter>
@@ -122,12 +137,6 @@
     </ClCompile>
     <ClCompile Include="Input.cpp">
       <Filter>ソース ファイル\input</Filter>
-    </ClCompile>
-    <ClCompile Include="BaseChara.cpp">
-      <Filter>ソース ファイル\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="BaseObject.cpp">
-      <Filter>ソース ファイル\Base</Filter>
     </ClCompile>
     <ClCompile Include="Map.cpp">
       <Filter>ソース ファイル\map</Filter>
@@ -149,9 +158,6 @@
     </ClCompile>
     <ClCompile Include="CoinObject.cpp">
       <Filter>ソース ファイル\coin</Filter>
-    </ClCompile>
-    <ClCompile Include="BaseManager.cpp">
-      <Filter>ソース ファイル\Base</Filter>
     </ClCompile>
     <ClCompile Include="ObjectManager.cpp">
       <Filter>ソース ファイル\manager\object</Filter>
@@ -210,11 +216,26 @@
     <ClCompile Include="Braced_Hang_To_Crouch.cpp">
       <Filter>ソース ファイル\player\state\braced_Hang_To_Crouch</Filter>
     </ClCompile>
+    <ClCompile Include="Layout.cpp">
+      <Filter>ソース ファイル\layout</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseChara.cpp">
+      <Filter>ソース ファイル\Base\BaseChara</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseManager.cpp">
+      <Filter>ソース ファイル\Base\BaseManager</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseObject.cpp">
+      <Filter>ソース ファイル\Base\BaseObject</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseScene.cpp">
+      <Filter>ソース ファイル\Base\BaseScene</Filter>
+    </ClCompile>
+    <ClCompile Include="JsonManager.cpp">
+      <Filter>ソース ファイル\manager\json</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BaseScene.h">
-      <Filter>ソース ファイル\Base</Filter>
-    </ClInclude>
     <ClInclude Include="Game.h">
       <Filter>ソース ファイル\player\scene</Filter>
     </ClInclude>
@@ -226,12 +247,6 @@
     </ClInclude>
     <ClInclude Include="Player.h">
       <Filter>ソース ファイル\player</Filter>
-    </ClInclude>
-    <ClInclude Include="BaseChara.h">
-      <Filter>ソース ファイル\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="BaseObject.h">
-      <Filter>ソース ファイル\Base</Filter>
     </ClInclude>
     <ClInclude Include="Map.h">
       <Filter>ソース ファイル\map</Filter>
@@ -253,9 +268,6 @@
     </ClInclude>
     <ClInclude Include="CoinObject.h">
       <Filter>ソース ファイル\coin</Filter>
-    </ClInclude>
-    <ClInclude Include="BaseManager.h">
-      <Filter>ソース ファイル\Base</Filter>
     </ClInclude>
     <ClInclude Include="ObjectManager.h">
       <Filter>ソース ファイル\manager\object</Filter>
@@ -325,6 +337,24 @@
     </ClInclude>
     <ClInclude Include="Braced_Hang_To_Crouch.h">
       <Filter>ソース ファイル\player\state\braced_Hang_To_Crouch</Filter>
+    </ClInclude>
+    <ClInclude Include="Layout.h">
+      <Filter>ソース ファイル\layout</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseChara.h">
+      <Filter>ソース ファイル\Base\BaseChara</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseManager.h">
+      <Filter>ソース ファイル\Base\BaseManager</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseObject.h">
+      <Filter>ソース ファイル\Base\BaseObject</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseScene.h">
+      <Filter>ソース ファイル\Base\BaseScene</Filter>
+    </ClInclude>
+    <ClInclude Include="JsonManager.h">
+      <Filter>ソース ファイル\manager\json</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

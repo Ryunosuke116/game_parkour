@@ -5,7 +5,7 @@
 class CoinObject : public BaseObject
 {
 public:
-	CoinObject(const char* path, const VECTOR& pos);
+	CoinObject(const int& handle, const VECTOR& pos);
 	~CoinObject();
 
 	void Initialize()override;
@@ -24,5 +24,6 @@ private:
 	float radian_Y;
 
 	static constexpr float radius = 4.5f;
+	static constexpr float objectScale = 0.4f;
 };
 

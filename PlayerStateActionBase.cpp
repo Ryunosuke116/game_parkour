@@ -15,7 +15,9 @@
 PlayerStateActionBase::PlayerStateActionBase(int& modelHandle,
     AnimState& oldAnimState, AnimState& nowAnimState):
     modelHandle(-1),
-    animBlendRate(0.0f)
+    animBlendRate(0.0f),
+    nowAnimState({NULL}),
+    oldAnimState({NULL})
 {
     this->modelHandle = modelHandle;
 

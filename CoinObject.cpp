@@ -3,14 +3,14 @@
 
 /// @brief コンストラクタ
 /// @param path 
-CoinObject::CoinObject(const char* path, const VECTOR& pos):
+CoinObject::CoinObject(const int& handle, const VECTOR& pos):
 	radian_Y(0.0f),
 	isHitPlayer(false)
 {
-	modelHandle = MV1LoadModel(path);
+	modelHandle = MV1DuplicateModel(handle);
 	position = pos;
 	MV1SetPosition(modelHandle, position);
-	MV1SetScale(modelHandle, VGet(0.1f, 0.1f, 0.1f));
+	MV1SetScale(modelHandle, VGet(objectScale, objectScale, objectScale));
 
 }
 

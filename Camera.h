@@ -3,6 +3,7 @@ class Camera
 {
 private:
 	VECTOR aimPosition;
+	VECTOR aimPosition_usual;
 	VECTOR lookPosition;
 	VECTOR keepPlayerPosition;
 	VECTOR keepEnemyPosition;
@@ -17,19 +18,19 @@ private:
 	static constexpr float cameraSpeed_ = 0.01f;
 	static constexpr float radius = 4.0f;
 
+	static constexpr float distance_max = 60.0f;
+
 public:
 	Camera();
 	~Camera();
 
 	void Initialize();
-	void Update(const VECTOR& playerPosition);
+	void Update(const VECTOR& playerPosition, const int& mapHandle);
 	bool Draw();
 	void RotateUpdate(const VECTOR& playerPosition);
 	void PosCalc();
 	void Leap(VECTOR& changePosition, const VECTOR& playerPosition, const float& speed);
-	void LeapCalc_single(float& changePos, const float targetPos, const float speed);
-	void LockOnCamera();
-	bool isObjectVisible();
+
 
 	void CameraPosCalc(const int& mapHandle);
 

@@ -3,13 +3,15 @@
 #include "HitCheck.h"
 #include "PadInput.h"
 #include "Camera.h"
+#include "Calculation.h"
 
 
 /// <summary>
 /// インストラクタ
 /// </summary>
 Camera::Camera():
-	distance(0.0f)
+	distance(0.0f),
+	aimPosition_usual(VGet(0.0f, 0.0f, 0.0f))
 {
 	// グラフィックの描画先を裏画面にセット
 	SetDrawScreen(DX_SCREEN_BACK);
@@ -32,7 +34,7 @@ Camera::~Camera()
 void Camera::Initialize()
 {
 	aimPosition = VGet(30.0f, 15, -10);
-	lookPosition = VGet(0.0f, 0, 20.0f);
+	lookPosition = VGet(0.0f, 20.0f, 20.0f);
 	spherePosition = lookPosition;
 	a = -177.55f;
 	distance = 60.0f;
@@ -46,13 +48,13 @@ void Camera::Initialize()
 /// <summary>
 /// 更新
 /// </summary>
-void Camera::Update(const VECTOR& playerPosition)
+void Camera::Update(const VECTOR& playerPosition, const int& mapHandle)
 {
 
 	centerPos = playerPosition;
 	centerPos.y += 14.0f;
 
-	aimPosition.y = spherePosition.y + 20.0f;
+	aimPosition_usual.y = spherePosition.y + 20.0f;
 
 	//カメラ移動処理
 	if (CheckHitKey(KEY_INPUT_A) ||
@@ -75,6 +77,14 @@ void Camera::Update(const VECTOR& playerPosition)
 	}
 
 	RotateUpdate(playerPosition);
+
+	CameraPosCalc(mapHandle);
+
+	SetCameraPositionAndTarget_UpVecY(aimPosition, spherePosition);
+
+	cameraDirection = VSub(spherePosition, aimPosition);
+	cameraDirection = VNorm(cameraDirection);
+
 }
 
 /// <summary>
@@ -100,31 +110,35 @@ void Camera::RotateUpdate(const VECTOR& playerPosition)
 	float angle = a * DX_PI_F / 360.0f;
 	this->angle = angle;
 
-	aimPosition.x = spherePosition.x + distance * cos(angle);
-	aimPosition.z = spherePosition.z + distance * sin(angle);
+	aimPosition_usual.x = spherePosition.x + distance * cos(angle);
+	aimPosition_usual.z = spherePosition.z + distance * sin(angle);
+
+	aimPosition = aimPosition_usual;
 
 	float maxRange = 5.0f;
 	float maxRange_ = 10.0f;
 
+	//注視する座標からplayerがずれたら修正する
 	PosCalc();
-
-	SetCameraPositionAndTarget_UpVecY(aimPosition, spherePosition);
-
-	cameraDirection = VSub(spherePosition, aimPosition);
-	cameraDirection = VNorm(cameraDirection);
 }
 
+/// <summary>
+/// カメラの位置調整
+/// </summary>
+/// <param name="mapHandle"></param>
 void Camera::CameraPosCalc(const int& mapHandle)
 {
 	MV1_COLL_RESULT_POLY hitPoly;
+	VECTOR addPos;
 	
 	//rayが当たっている場合カメラの位置をいじる
 	if (HitCheck::HitRayJudge(mapHandle, -1, spherePosition, aimPosition, hitPoly))
 	{
-		VECTOR newPos;
-		VECTOR dirction;
-
+		VECTOR direction;
 		
+		addPos = VSub(hitPoly.HitPosition, aimPosition_usual);
+		
+		aimPosition = VAdd(aimPosition_usual, addPos);
 	}
 
 }
@@ -142,13 +156,7 @@ void Camera::Leap(VECTOR& changePosition, const VECTOR& playerPosition, const fl
 	changePosition = VAdd(changePosition, scalePosition);
 }
 
-void Camera::LeapCalc_single(float& changePos, const float targetPos, const float speed)
-{
-	float sub = targetPos - changePos;
-	float scale = sub * speed;
 
-	changePos = changePos + scale;
-}
 
 void Camera::PosCalc()
 {

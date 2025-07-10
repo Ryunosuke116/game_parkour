@@ -163,7 +163,9 @@
     <ClCompile Include="Idle_To_Sprint.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Json.cpp" />
+    <ClCompile Include="JsonManager.cpp" />
     <ClCompile Include="Jump.cpp" />
+    <ClCompile Include="Layout.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="PlayerCalculation.cpp" />
@@ -199,7 +201,9 @@
     <ClInclude Include="Idle_To_Sprint.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Json.h" />
+    <ClInclude Include="JsonManager.h" />
     <ClInclude Include="Jump.h" />
+    <ClInclude Include="Layout.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="PlayerCalculation.h" />
     <ClInclude Include="ObjectManager.h" />
