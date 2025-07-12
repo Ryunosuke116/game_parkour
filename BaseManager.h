@@ -1,19 +1,17 @@
 #pragma once
+#include "dxlib.h"
 
 class BaseManager
 {
 public:
-	BaseManager() {};
-	~BaseManager() {};
+
+	virtual ~BaseManager() {};
 
 	//ƒˆ‰¼‘zŠÖ”	
 	virtual void Create() abstract;
 	virtual void Initialize() abstract;
 	virtual void Update() abstract;
 	virtual bool Draw() abstract;
-
-protected:
-	VECTOR pos_addObject;
 
 };
 

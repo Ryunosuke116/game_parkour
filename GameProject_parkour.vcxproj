@@ -144,6 +144,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BaseChara.cpp" />
+    <ClCompile Include="BaseGameObjectManager.cpp" />
     <ClCompile Include="BaseManager.cpp" />
     <ClCompile Include="BaseObject.cpp" />
     <ClCompile Include="BaseScene.cpp" />
@@ -162,14 +163,13 @@
     <ClCompile Include="Idle.cpp" />
     <ClCompile Include="Idle_To_Sprint.cpp" />
     <ClCompile Include="Input.cpp" />
-    <ClCompile Include="Json.cpp" />
     <ClCompile Include="JsonManager.cpp" />
     <ClCompile Include="Jump.cpp" />
     <ClCompile Include="Layout.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="PlayerCalculation.cpp" />
-    <ClCompile Include="ObjectManager.cpp" />
+    <ClCompile Include="GameObjectManager.cpp" />
     <ClCompile Include="PadInput.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerManager.cpp" />
@@ -182,6 +182,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseChara.h" />
+    <ClInclude Include="BaseGameObjectManager.h" />
     <ClInclude Include="BaseManager.h" />
     <ClInclude Include="BaseObject.h" />
     <ClInclude Include="BaseScene.h" />
@@ -200,16 +201,15 @@
     <ClInclude Include="Idle.h" />
     <ClInclude Include="Idle_To_Sprint.h" />
     <ClInclude Include="Input.h" />
-    <ClInclude Include="Json.h" />
     <ClInclude Include="JsonManager.h" />
     <ClInclude Include="Jump.h" />
     <ClInclude Include="Layout.h" />
     <ClInclude Include="Map.h" />
+    <ClInclude Include="ObjectManager_interface.h" />
     <ClInclude Include="PlayerCalculation.h" />
-    <ClInclude Include="ObjectManager.h" />
+    <ClInclude Include="GameObjectManager.h" />
     <ClInclude Include="objects.h" />
     <ClInclude Include="PadInput.h" />
-    <ClInclude Include="padInput_interface.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerManager.h" />
     <ClInclude Include="playerState.h" />

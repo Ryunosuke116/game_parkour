@@ -22,7 +22,7 @@
 #include "Player.h"
 #include "PlayerManager.h"
 #include "CoinObject.h"
-#include "ObjectManager.h"
+#include "GameObjectManager.h"
 #include "Calclation.h"
 #include "Game.h"
 #include "SceneManager.h"

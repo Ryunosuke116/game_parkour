@@ -1,9 +1,10 @@
 #pragma once
 #include "CoinObject.h"
-#include "BaseManager.h"
+#include "BaseGameObjectManager.h"
 #include "Player.h"
 
-class CoinManager : public BaseManager
+
+class CoinManager : public BaseGameObjectManager
 {
 private:
 	std::vector<std::shared_ptr<CoinObject>> coins;
@@ -15,13 +16,13 @@ public:
 	~CoinManager();
 
 	void Update(const std::shared_ptr<Player>& player, const VECTOR& cameraLookPos);
-	bool Draw()override;
 
-	void Add();
 
-	void Initialize() override;
-	void Update()override;
 	void Create()override;
+	void Initialize()override;
+	void Update()override;
+	bool Draw()override;
+	void Add()override;
 
 	int GetModelHandle()const { return modelHandle; }
 };

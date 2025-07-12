@@ -76,7 +76,7 @@ void Camera::Update(const VECTOR& playerPosition, const int& mapHandle)
 		aimPosition.y -= 0.5f;
 	}
 
-	RotateUpdate(playerPosition);
+	RotateUpdate();
 
 	CameraPosCalc(mapHandle);
 
@@ -92,40 +92,66 @@ void Camera::Update(const VECTOR& playerPosition, const int& mapHandle)
 /// </summary>
 void Camera::Update_layout()
 {
+	//y²ªˆÚ“®
 	if (CheckHitKey(KEY_INPUT_UP) && CheckHitKey(KEY_INPUT_LCONTROL))
 	{
 		aimPosition.y += 1.0f;
 		spherePosition.y += 1.0f;
 	}
+	//z²ªˆÚ“®
 	else if (CheckHitKey(KEY_INPUT_UP))
 	{
 		aimPosition.z += 1.0f;
 		spherePosition.z += 1.0f;
 	}
 
+	//y²«ˆÚ“®
 	if (CheckHitKey(KEY_INPUT_DOWN) && CheckHitKey(KEY_INPUT_LCONTROL))
 	{
 		aimPosition.y -= 1.0f;
 		spherePosition.y -= 1.0f;
 	}
-	if (CheckHitKey(KEY_INPUT_DOWN))
+	//z²«ˆÚ“®
+	else if (CheckHitKey(KEY_INPUT_DOWN))
 	{
 		aimPosition.z -= 1.0f;
 		spherePosition.z -= 1.0f;
 	}
 
-	if (CheckHitKey(KEY_INPUT_RIGHT) ||
+	//‰E‰ñ“]
+	if (CheckHitKey(KEY_INPUT_RIGHT) &&
+		CheckHitKey(KEY_INPUT_LSHIFT))
+	{
+		a += 2.0f;
+	}
+	//x²‰EˆÚ“®
+	else if (CheckHitKey(KEY_INPUT_RIGHT) ||
 		PadInput::GetJoyPad_x_right() < 0.0f)
 	{
 		aimPosition.x += 1.0f;
 		spherePosition.x += 1.0f;
 	}
-	if (CheckHitKey(KEY_INPUT_LEFT) ||
+
+	//¶‰ñ“]
+	if (CheckHitKey(KEY_INPUT_LEFT) &&
+		CheckHitKey(KEY_INPUT_LSHIFT))
+	{
+		a -= 2.0f;
+	}
+	//x²¶ˆÚ“®
+	else if (CheckHitKey(KEY_INPUT_LEFT) ||
 		PadInput::GetJoyPad_x_right() > 0.0f)
 	{
 		aimPosition.x -= 1.0f;
 		spherePosition.x -= 1.0f;
 	}
+
+	if (CheckHitKey(KEY_INPUT_9))
+	{
+		a = -177.55f;
+	}
+
+	RotateUpdate();
 
 	SetCameraPositionAndTarget_UpVecY(aimPosition, spherePosition);
 }
@@ -148,7 +174,7 @@ bool Camera::Draw()
 	return true;
 }
 
-void Camera::RotateUpdate(const VECTOR& playerPosition)
+void Camera::RotateUpdate()
 {
 	float angle = a * DX_PI_F / 360.0f;
 	this->angle = angle;

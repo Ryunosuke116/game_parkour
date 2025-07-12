@@ -4,7 +4,6 @@
 #include <string>
 #include "Player.h"
 #include "CoinManager.h"
-#include "Json.h"
 #include "nlohmann/json.hpp"
 
 /// <summary>
@@ -23,21 +22,25 @@ CoinManager::~CoinManager()
 
 }
 
+void CoinManager::Create()
+{
+	std::string modelPath = jsonData["modelPath"];
+
+	modelHandle = MV1LoadModel(modelPath.c_str());
+}
+
 /// <summary>
 /// èâä˙âª
 /// </summary>
 /// <param name="path"></param>
 void CoinManager::Initialize()
 {
-	std::ifstream ifs("Json/coin.Json");
+	/*std::ifstream ifs("Json/coin.Json");
 	nlohmann::json j;
-	ifs >> j;
+	ifs >> j;*/
 
-	std::string modelPath = j["modelPath"];
 
-	modelHandle = MV1LoadModel(modelPath.c_str());
-
-	for (auto& pos : j["coin_list"])
+	for (auto& pos : jsonData["coin_list"])
 	{
 		//std::string key(1, i);
 		coins.push_back(std::make_shared<CoinObject>(modelHandle,
@@ -80,5 +83,3 @@ void CoinManager::Add()
 }
 
 void CoinManager::Update(){}
-
-void CoinManager::Create(){}

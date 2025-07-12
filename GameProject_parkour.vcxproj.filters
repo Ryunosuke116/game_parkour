@@ -97,9 +97,6 @@
     <Filter Include="ソース ファイル\player\state\braced_Hang_To_Crouch">
       <UniqueIdentifier>{c70c1186-0912-4049-a392-2034c0bc5f83}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\player\scene">
-      <UniqueIdentifier>{807cd1ef-3b24-4a77-a629-7dad3c8a1009}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\player\state\hanging_Idle">
       <UniqueIdentifier>{da44a1cc-a0e2-47f0-b13e-bed6339938ff}</UniqueIdentifier>
     </Filter>
@@ -124,13 +121,22 @@
     <Filter Include="ソース ファイル\manager\json">
       <UniqueIdentifier>{c2fdffe0-4070-4057-9cf7-b8f503264f1b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\scene">
+      <UniqueIdentifier>{807cd1ef-3b24-4a77-a629-7dad3c8a1009}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Interface">
+      <UniqueIdentifier>{afce07c3-8b4b-4627-8ebd-9c137f3559d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Base\ObjectManger">
+      <UniqueIdentifier>{3c9af978-4dce-4a6a-a3a2-4ce57e88ddaa}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Game.cpp">
-      <Filter>ソース ファイル\player\scene</Filter>
+      <Filter>ソース ファイル\scene</Filter>
     </ClCompile>
     <ClCompile Include="Camera.cpp">
       <Filter>ソース ファイル\camera</Filter>
@@ -159,7 +165,7 @@
     <ClCompile Include="CoinObject.cpp">
       <Filter>ソース ファイル\coin</Filter>
     </ClCompile>
-    <ClCompile Include="ObjectManager.cpp">
+    <ClCompile Include="GameObjectManager.cpp">
       <Filter>ソース ファイル\manager\object</Filter>
     </ClCompile>
     <ClCompile Include="PlayerManager.cpp">
@@ -170,9 +176,6 @@
     </ClCompile>
     <ClCompile Include="FieldMesh.cpp">
       <Filter>ソース ファイル\mesh</Filter>
-    </ClCompile>
-    <ClCompile Include="Json.cpp">
-      <Filter>ソース ファイル\Json</Filter>
     </ClCompile>
     <ClCompile Include="Calculation.cpp">
       <Filter>ソース ファイル\Calculation</Filter>
@@ -234,10 +237,13 @@
     <ClCompile Include="JsonManager.cpp">
       <Filter>ソース ファイル\manager\json</Filter>
     </ClCompile>
+    <ClCompile Include="BaseGameObjectManager.cpp">
+      <Filter>ソース ファイル\Base\ObjectManger</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
-      <Filter>ソース ファイル\player\scene</Filter>
+      <Filter>ソース ファイル\scene</Filter>
     </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>ソース ファイル\camera</Filter>
@@ -269,7 +275,7 @@
     <ClInclude Include="CoinObject.h">
       <Filter>ソース ファイル\coin</Filter>
     </ClInclude>
-    <ClInclude Include="ObjectManager.h">
+    <ClInclude Include="GameObjectManager.h">
       <Filter>ソース ファイル\manager\object</Filter>
     </ClInclude>
     <ClInclude Include="PlayerManager.h">
@@ -280,9 +286,6 @@
     </ClInclude>
     <ClInclude Include="FieldMesh.h">
       <Filter>ソース ファイル\mesh</Filter>
-    </ClInclude>
-    <ClInclude Include="Json.h">
-      <Filter>ソース ファイル\Json</Filter>
     </ClInclude>
     <ClInclude Include="AnimTime.h">
       <Filter>ヘッダー ファイル</Filter>
@@ -301,9 +304,6 @@
     </ClInclude>
     <ClInclude Include="objects.h">
       <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="padInput_interface.h">
-      <Filter>ソース ファイル</Filter>
     </ClInclude>
     <ClInclude Include="PlayerCalculation.h">
       <Filter>ソース ファイル\player\moveCalclation</Filter>
@@ -355,6 +355,12 @@
     </ClInclude>
     <ClInclude Include="JsonManager.h">
       <Filter>ソース ファイル\manager\json</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectManager_interface.h">
+      <Filter>ソース ファイル\Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseGameObjectManager.h">
+      <Filter>ソース ファイル\Base\ObjectManger</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

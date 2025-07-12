@@ -1,32 +1,26 @@
-#include <iostream>
+#include "common.h"
 #include <fstream>
 #include <filesystem>
-#include "DxLib.h"
+
 
 #include "JsonManager.h"
 
-namespace fs = std::filesystem;
-
 void JsonManager::Initialize()
 {
+	//Jsonディレクトリ内の全ファイルを読み込む
 	for (const auto& entry : std::filesystem::directory_iterator("Json"))
 	{
+		//Jsonファイル
 		std::ifstream file(entry.path());
-
-		files.push_back(&file);
-
+		nlohmann::json j = nlohmann::json::parse(file);
+		
+		//ファイル名をキーにする
 		std::string name = entry.path().filename().string();
-
 		name = name.substr(0, name.size() - 5);
 
-		names.push_back(name);
+		//ディレクトリの分追加
+		Add(name, j);
 	}
-
-	for(auto& file : files)
-	{
-
-	}
-
 }
 
 void JsonManager::Update()
@@ -39,11 +33,10 @@ bool JsonManager::Draw()
 	return false;
 }
 
-void JsonManager::Add(const std::string_view name ,const char* path)
+void JsonManager::Add(const std::string name ,const nlohmann::json file)
 {
-	std::ifstream ifs(path);
-
-	jsons[name] = nlohmann::json::parse(ifs);
+	jsons[name] = file;
 }
 
 void JsonManager::Create(){}
+void JsonManager::Add(){}

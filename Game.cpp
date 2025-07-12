@@ -1,5 +1,5 @@
 #include "common.h"
-#include "ObjectManager.h"
+#include "GameObjectManager.h"
 #include "SceneManager.h"
 #include "BaseScene.h"
 #include "Game.h"
@@ -10,8 +10,8 @@
 /// <param name="manager"></param>
 Game::Game(SceneManager& manager) :BaseScene{ manager }
 {
-	objectManager = std::make_shared<ObjectManager>();
-	objectManager->Create();
+	gameObjectManager = std::make_shared<GameObjectManager>();
+	gameObjectManager->Create();
 }
 
 /// <summary>
@@ -27,7 +27,7 @@ Game::~Game()
 /// </summary>
 void Game::Initialize()
 {
-	objectManager->Initialize();
+	gameObjectManager->Initialize();
 }
 
 /// <summary>
@@ -36,11 +36,11 @@ void Game::Initialize()
 void Game::Update()
 {
 	PadInput::Update();
-	objectManager->Update();
+	gameObjectManager->Update();
 }
 
 void Game::Draw()
 {
 	clsDx();
-	objectManager->Draw();
+	gameObjectManager->Draw();
 }

@@ -10,7 +10,7 @@ public:
 	void Update();
 	void Draw();
 private:
-	std::shared_ptr<BaseManager> objectManager = NULL;
+	std::shared_ptr<BaseManager> gameObjectManager = NULL;
 
 };
 

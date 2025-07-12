@@ -29,7 +29,7 @@ public:
 	void Update(const VECTOR& playerPosition, const int& mapHandle);
 	void Update_layout();
 	bool Draw();
-	void RotateUpdate(const VECTOR& playerPosition);
+	void RotateUpdate();
 	void PosCalc();
 	void Leap(VECTOR& changePosition, const VECTOR& playerPosition, const float& speed);
 

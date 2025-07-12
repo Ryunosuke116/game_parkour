@@ -9,9 +9,6 @@
 /// </summary>
 PlayerManager::PlayerManager()
 {
-	collisionManager = std::make_shared<CollisionManager>();
-	player = std::make_shared<Player>();
-	actualPlayer = std::dynamic_pointer_cast<Player>(player);
 }
 
 /// <summary>
@@ -20,6 +17,12 @@ PlayerManager::PlayerManager()
 PlayerManager::~PlayerManager()
 {
 
+}
+
+void PlayerManager::Create() 
+{
+	player = std::make_shared<Player>(jsonData);
+	actualPlayer = std::dynamic_pointer_cast<Player>(player);
 }
 
 /// <summary>
@@ -55,7 +58,6 @@ void PlayerManager::Update(int mapHandle, const VECTOR& cameraDirection)
 bool PlayerManager::Draw()
 {
 	player->Draw();
-	collisionManager->Draw();
 	return true;
 }
 
@@ -70,5 +72,5 @@ VECTOR PlayerManager::PositionCheck(const VECTOR& hangingPos, const VECTOR& play
 	return newPlayerPos;
 }
 
-void PlayerManager::Update(){}
-void PlayerManager::Create(){}
+void PlayerManager::Update() {}
+void PlayerManager::Add()	 {}

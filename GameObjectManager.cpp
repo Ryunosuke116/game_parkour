@@ -1,11 +1,10 @@
 #include "common.h"
-#include "ObjectManager.h"
-#include "Json.h"
+#include "GameObjectManager.h"
 
 /// <summary>
 /// コンストラクタ
 /// </summary>
-ObjectManager::ObjectManager()
+GameObjectManager::GameObjectManager()
 {
 	
 }
@@ -13,7 +12,7 @@ ObjectManager::ObjectManager()
 /// <summary>
 /// デストラクタ	
 /// </summary>
-ObjectManager::~ObjectManager()
+GameObjectManager::~GameObjectManager()
 {
 
 }
@@ -21,8 +20,11 @@ ObjectManager::~ObjectManager()
 /// <summary>
 /// オブジェクト生成
 /// </summary>
-void ObjectManager::Create()
+void GameObjectManager::Create()
 {
+	jsonManager		= std::make_shared<JsonManager>();
+	jsonManager->Initialize();
+
 	map				= std::make_shared<Map>("material/skyDome/sunSet.mv1");
 	field			= std::make_shared<Field>("material/mv1/new_city/new_city_0710.mv1");
 	fieldMesh		= std::make_shared<FieldMesh>("material/mv1/new_city/new_city_mesh_0710.mv1");
@@ -30,19 +32,24 @@ void ObjectManager::Create()
 	playerManager	= std::make_shared<PlayerManager>();
 	camera			= std::make_shared<Camera>();
 	layout			= std::make_shared<Layout>();
-	jsonManager = std::make_shared<JsonManager>();
 	
 	map_actual			 = std::dynamic_pointer_cast<Map>(map);
 	playerManager_actual = std::dynamic_pointer_cast<PlayerManager>(playerManager);
 	coinManager_actual   = std::dynamic_pointer_cast<CoinManager>(coinManager);
 
+
+	coinManager->HandOver(jsonManager->GetJsons("coin"));
+	playerManager->HandOver(jsonManager->GetJsons("player"));
+
+	playerManager->Create();
+	coinManager->Create();
 	
 }
 
 /// <summary>
 /// 初期化
 /// </summary>
-void ObjectManager::Initialize()
+void GameObjectManager::Initialize()
 {
 	map->Initialize();
 	field->Initialize();
@@ -51,7 +58,6 @@ void ObjectManager::Initialize()
 	playerManager->Initialize();
 	camera->Initialize();
 	PadInput::Initialize();
-	jsonManager->Initialize();
 
 	isCamera = false;
 	isPush = false;
@@ -61,7 +67,7 @@ void ObjectManager::Initialize()
 /// <summary>
 /// 更新
 /// </summary>
-void ObjectManager::Update()
+void GameObjectManager::Update()
 {
 	if (CheckHitKey(KEY_INPUT_0))
 	{
@@ -107,7 +113,7 @@ void ObjectManager::Update()
 /// <summary>
 /// 描画
 /// </summary>
-bool ObjectManager::Draw()
+bool GameObjectManager::Draw()
 {
 	playerManager->Draw();
 	camera->Draw();

@@ -2,27 +2,23 @@
 #include <fstream>
 #include"playerState.h"
 #include "AnimTime.h"
-#include "Json.h"
 #include "PadInput.h"
 #include "Player.h"
 #include "HitCheck.h"
 #include "Calculation.h"
-#include "nlohmann/json.hpp"
 
 /// <summary>
 /// /インストラクタ
 /// </summary>
-Player::Player() :
+Player::Player(nlohmann::json jsonData) :
     centerPosition(VGet(0.0f, 0.0f, 0.0f)),
     footPosition(VGet(0.0f, 0.0f, 0.0f)),
     moveVec(VGet(0.0f, 0.0f, 0.0f)),
     moveDirection_now(VGet(0.0f, 0.0f, 0.0f)),
     isCalc_moveVec(false)
 {
-    JsonFile::UnInitialize();
-    JsonFile::Initialize("Json/player.json");
-
-    std::string path = JsonFile::GetJson()["playerPath"];
+   
+    std::string path = jsonData["playerPath"];
 
     modelHandle = MV1LoadModel(path.c_str());
     MV1SetScale(modelHandle, VGet(modelScale, modelScale, modelScale));

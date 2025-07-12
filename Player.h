@@ -4,6 +4,7 @@
 #include "BaseChara.h"
 #include "CollisionManager.h"
 #include "Calculation.h"
+#include  "nlohmann/json.hpp"
 
 class Player : public BaseChara
 {
@@ -45,7 +46,7 @@ private:
 	std::shared_ptr<CollisionManager> collisionManager = NULL;
 	std::shared_ptr<PlayerCalculation> playerCalculation = NULL;
 public:
-	Player();
+	Player(nlohmann::json jsonData);
 	~Player();
 
 	void Initialize();
