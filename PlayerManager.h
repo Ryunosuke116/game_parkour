@@ -17,7 +17,7 @@ public:
 	void Update(int mapHandle,const VECTOR& cameraDirection);
 	bool Draw()override;
 	void Create()override;
-	void Add()override;
+	
 
 	VECTOR PositionCheck(const VECTOR& hangingPos, const VECTOR& playerPos);
 

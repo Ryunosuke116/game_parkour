@@ -11,5 +11,6 @@ public:
 	void Draw();
 private:
 	std::shared_ptr<BaseManager> objectManager = NULL;
+
 };
 

@@ -15,5 +15,6 @@ public:
 	virtual bool Draw() abstract;
 
 	const int GetModelHandle() { return modelHandle; }
+	const VECTOR GetPosition() { return position; }
 };
 

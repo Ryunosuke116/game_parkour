@@ -1,17 +1,22 @@
 #pragma once
 #include "BaseManager.h"
+#include "CoinManager.h"
 
 class Layout
 {
 private:
 	bool isPush;
+	int modelHandle;
 
 public:
 
 	Layout();
 	~Layout();
 
-	void Update(const VECTOR& pos, BaseManager& manager);
+	void Initialize(const int& modelHandle);
+	void Update(const VECTOR& pos, CoinManager& manager);
+
+	void Draw();
 
 };
 

@@ -14,7 +14,7 @@ public:
 	CoinManager();
 	~CoinManager();
 
-	void Update(const std::shared_ptr<Player>& player);
+	void Update(const std::shared_ptr<Player>& player, const VECTOR& cameraLookPos);
 	bool Draw()override;
 
 	void Add();
@@ -22,5 +22,7 @@ public:
 	void Initialize() override;
 	void Update()override;
 	void Create()override;
+
+	int GetModelHandle()const { return modelHandle; }
 };
 

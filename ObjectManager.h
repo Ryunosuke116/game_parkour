@@ -4,6 +4,7 @@
 #include "BaseObject.h"
 #include "objects.h"
 #include "Layout.h"
+#include "JsonManager.h"
 
 class ObjectManager : public BaseManager
 {
@@ -15,7 +16,6 @@ public:
 	void Initialize()override;
 	void Update()override;
 	bool Draw()override;
-	void Add()override;
 
 private:
 	std::shared_ptr<BaseObject>		map = NULL;
@@ -25,10 +25,13 @@ private:
 	std::shared_ptr<BaseObject>		fieldMesh = NULL;
 	std::shared_ptr<BaseManager>	coinManager = NULL;
 	std::shared_ptr<Layout>			layout = NULL;
+	std::shared_ptr<JsonManager>	jsonManager = NULL;
 
 	std::shared_ptr<Map>			map_actual = NULL;
 	std::shared_ptr<PlayerManager>	playerManager_actual = NULL;
 	std::shared_ptr<CoinManager>	coinManager_actual = NULL;
-
+	
+	bool isCamera;
+	bool isPush;
 };
 

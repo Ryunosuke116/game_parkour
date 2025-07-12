@@ -11,6 +11,7 @@ void JsonFile::Initialize(const char* path)
     }
 
     std::ifstream ifs(path);
+
     if (ifs) {
         instance->j = nlohmann::json::parse(ifs);
     }

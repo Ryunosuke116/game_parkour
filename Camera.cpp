@@ -88,6 +88,49 @@ void Camera::Update(const VECTOR& playerPosition, const int& mapHandle)
 }
 
 /// <summary>
+/// layoutópÉJÉÅÉâ
+/// </summary>
+void Camera::Update_layout()
+{
+	if (CheckHitKey(KEY_INPUT_UP) && CheckHitKey(KEY_INPUT_LCONTROL))
+	{
+		aimPosition.y += 1.0f;
+		spherePosition.y += 1.0f;
+	}
+	else if (CheckHitKey(KEY_INPUT_UP))
+	{
+		aimPosition.z += 1.0f;
+		spherePosition.z += 1.0f;
+	}
+
+	if (CheckHitKey(KEY_INPUT_DOWN) && CheckHitKey(KEY_INPUT_LCONTROL))
+	{
+		aimPosition.y -= 1.0f;
+		spherePosition.y -= 1.0f;
+	}
+	if (CheckHitKey(KEY_INPUT_DOWN))
+	{
+		aimPosition.z -= 1.0f;
+		spherePosition.z -= 1.0f;
+	}
+
+	if (CheckHitKey(KEY_INPUT_RIGHT) ||
+		PadInput::GetJoyPad_x_right() < 0.0f)
+	{
+		aimPosition.x += 1.0f;
+		spherePosition.x += 1.0f;
+	}
+	if (CheckHitKey(KEY_INPUT_LEFT) ||
+		PadInput::GetJoyPad_x_right() > 0.0f)
+	{
+		aimPosition.x -= 1.0f;
+		spherePosition.x -= 1.0f;
+	}
+
+	SetCameraPositionAndTarget_UpVecY(aimPosition, spherePosition);
+}
+
+/// <summary>
 /// ï`âÊ
 /// </summary>
 bool Camera::Draw()

@@ -30,6 +30,7 @@ void ObjectManager::Create()
 	playerManager	= std::make_shared<PlayerManager>();
 	camera			= std::make_shared<Camera>();
 	layout			= std::make_shared<Layout>();
+	jsonManager = std::make_shared<JsonManager>();
 	
 	map_actual			 = std::dynamic_pointer_cast<Map>(map);
 	playerManager_actual = std::dynamic_pointer_cast<PlayerManager>(playerManager);
@@ -50,6 +51,10 @@ void ObjectManager::Initialize()
 	playerManager->Initialize();
 	camera->Initialize();
 	PadInput::Initialize();
+	jsonManager->Initialize();
+
+	isCamera = false;
+	isPush = false;
 
 }
 
@@ -58,14 +63,44 @@ void ObjectManager::Initialize()
 /// </summary>
 void ObjectManager::Update()
 {
-	playerManager_actual->Update(fieldMesh->GetModelHandle(), camera->GetCameraDirection());
-	camera->Update(playerManager_actual->GetPlayer()->GetPosition(),fieldMesh->GetModelHandle());
-	map_actual->Update(playerManager_actual->GetPlayer()->GetPosition());
-	field->Update();
-	fieldMesh->Update();
-	coinManager_actual->Update(playerManager_actual->GetPlayer());
+	if (CheckHitKey(KEY_INPUT_0))
+	{
+		if (!isPush)
+		{
+			if (!isCamera)
+			{
+				isCamera = true;
+				layout->Initialize(coinManager_actual->GetModelHandle());
+			}
+			else
+			{
+				isCamera = false;
+			}
 
-	layout->Update(playerManager_actual->GetPlayer()->GetPosition(),*coinManager);
+			isPush = true;
+		}
+	}
+	else
+	{
+		isPush = false;
+	}
+
+	if (!isCamera)
+	{
+		camera->Update(playerManager_actual->GetPlayer()->GetPosition(),fieldMesh->GetModelHandle());
+	
+		playerManager_actual->Update(fieldMesh->GetModelHandle(), camera->GetCameraDirection());
+		map_actual->Update(playerManager_actual->GetPlayer()->GetPosition());
+		field->Update();
+		fieldMesh->Update();
+	}
+	else
+	{
+		camera->Update_layout();
+		layout->Update(camera->GetSpherePosition(), *coinManager_actual);
+	}
+
+	coinManager_actual->Update(playerManager_actual->GetPlayer(),camera->GetSpherePosition());
 
 }
 
@@ -80,11 +115,13 @@ bool ObjectManager::Draw()
 	field->Draw();
 	fieldMesh->Draw();
 	coinManager->Draw();
+	if (isCamera)
+	{
+		layout->Draw();
+	}
 
 	DrawLine3D(VGet(0.0f, 15.0f, 0.0f), VGet(10.0f, 15.0f, 0.0f), GetColor(255, 0, 0));
 	DrawLine3D(VGet(0.0f, 15.0f, 0.0f), VGet(0.0f, 25.0f, 0.0f), GetColor(0, 255, 0));
 	DrawLine3D(VGet(0.0f, 15.0f, 0.0f), VGet(0.0f, 15.0f, 10.0f), GetColor(0, 0, 255));
 	return true;
 }
-
-void ObjectManager::Add(){}

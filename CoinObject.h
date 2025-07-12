@@ -24,6 +24,6 @@ private:
 	float radian_Y;
 
 	static constexpr float radius = 4.5f;
-	static constexpr float objectScale = 0.4f;
+	static constexpr float objectScale = 0.3f;
 };
 

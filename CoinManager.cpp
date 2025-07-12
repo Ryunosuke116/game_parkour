@@ -46,7 +46,7 @@ void CoinManager::Initialize()
 
 }
 
-void CoinManager::Update(const std::shared_ptr<Player>& player)
+void CoinManager::Update(const std::shared_ptr<Player>& player,const VECTOR& cameraLookPos)
 {
 	//vectorå^ì‡ÇÃåªç›à íu
 	std::vector<std::shared_ptr<CoinObject>>::iterator it;
@@ -61,7 +61,7 @@ void CoinManager::Update(const std::shared_ptr<Player>& player)
 		}
 		it++;
 	}
-	pos_addObject = player->GetPosition();
+	pos_addObject = cameraLookPos;
 
 }
 

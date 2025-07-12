@@ -1,5 +1,6 @@
 #pragma once
-class Camera
+
+class Camera 
 {
 private:
 	VECTOR aimPosition;
@@ -26,6 +27,7 @@ public:
 
 	void Initialize();
 	void Update(const VECTOR& playerPosition, const int& mapHandle);
+	void Update_layout();
 	bool Draw();
 	void RotateUpdate(const VECTOR& playerPosition);
 	void PosCalc();
@@ -38,5 +40,7 @@ public:
 	// ÉQÉbÉ^Å[
 	///////////////////////////////////////////////////////
 	VECTOR GetCameraDirection() { return cameraDirection; }
+	VECTOR GetSpherePosition() { return spherePosition; }
+
 };
 

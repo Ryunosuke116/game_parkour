@@ -72,4 +72,3 @@ VECTOR PlayerManager::PositionCheck(const VECTOR& hangingPos, const VECTOR& play
 
 void PlayerManager::Update(){}
 void PlayerManager::Create(){}
-void PlayerManager::Add(){}
