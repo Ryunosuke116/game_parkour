@@ -211,12 +211,19 @@ bool CollisionManager::WallCollisionCheck(int modelHandle, VECTOR& newPos, VECTO
 
 	VECTOR topPosition = newPos;
 	VECTOR bottomPosition = newPos;
+	VECTOR topPos_now = oldPos;
 	topPosition.y = topPosition.y + addTopPos;
 	bottomPosition.y = bottomPosition.y + addBottomPos;
+	topPos_now.y += addTopPos;
+
+	pos_new = topPosition;
+	pos_now = topPos_now;
+
 	bool flag = false;
 
 	//壁と衝突しているか
-	HitCheck::CapsuleHitWallJudge(modelHandle, -1, radius, topPosition, VAdd(bottomPosition, VGet(0.0f, 1.0f, 0.0f)), hitPoly_Wall);
+	HitCheck::CapsuleHitWallJudge(modelHandle, -1, radius, topPosition,
+		VAdd(bottomPosition, VGet(0.0f, 1.0f, 0.0f)), hitPoly_Wall);
 
 	//衝突しているとこを全部調べて押し戻し量を計算する
 	if (hitPoly_Wall.HitNum >= 1)
@@ -249,34 +256,49 @@ bool CollisionManager::WallCollisionCheck(int modelHandle, VECTOR& newPos, VECTO
 				normal = poly.Normal;
 				normal.y = 0.0f;
 				normal = VNorm(normal);
-				
-				//カプセルの中心座標を求める
-				float topHitPos = Triangle_Point_MinLength_Square(poly.Position[0], poly.Position[1], poly.Position[2], topPosition);
-
+			
 				//線分のどこに当たったか
-				auto result = HitCheck::SegmentTriangleDistance(topPosition, bottomPosition, poly.Position[0], poly.Position[1], poly.Position[2],poly.Normal);
+				auto result = HitCheck::SegmentTriangleDistance(topPosition,
+					bottomPosition, poly.Position[0], poly.Position[1],
+					poly.Position[2],poly.Normal);
 
-				//球の接触している座標を求める
-				// そうするには？↓
-				//法線方向とは逆の方向にセンターポジションから加算する
-				VECTOR contact = VScale(normal, -3.5f);
+				VECTOR addPos = VScale(poly.Normal, -3.5f);
+				addPos.y = 0.0f;
 
-				//面の接触点
-				hitPos_wall = result.second;
+				//当たったところから現在と次フレームの座標でraycast
+				VECTOR pos_now = VAdd(result.first, addPos);
+				MV1_COLL_RESULT_POLY poly_ray;
 
-				//球の接触している座標
-				//面に対して一番近い線分点から面に向かって球の半径を加算する
-				contact = VAdd(result.first, contact);
+				HitCheck::HitRayJudge(modelHandle, -1, pos_now, 
+					result.first, poly_ray);
 
-				//面に少し膜をはる
-				contact = VAdd(contact, VScale(poly.Normal, -0.1f));
+				if (poly_ray.HitFlag)
+				{
+					//球の接触している座標を求める
+						// そうするには？↓
+						//法線方向とは逆の方向にセンターポジションから加算する
+					VECTOR contact = VScale(poly.Normal, -3.5f);
 
-				//球の接触座標→面の接触座標を求める
-				VECTOR pos = VSub(result.second, contact);
-				pos.y = 0.0f;
+					//面の接触点
+					//hitPos_wall = poly_ray.HitPosition;
+					hitPos_wall = result.second;
 
-				newPos = VAdd(newPos, pos);
-				flag = true;
+					//球の接触している座標
+					//面に対して一番近い線分点から面に向かって球の半径を加算する
+					contact = VAdd(result.first, contact);
+
+					//面に少し膜をはる
+					contact = VAdd(contact, VScale(poly.Normal, -0.1f));
+
+					//球の接触座標→面の接触座標を求める
+					VECTOR pos = VSub(result.second, contact);
+					pos.y = 0.0f;
+
+					newPos = VAdd(newPos, pos);
+					flag = true;
+				}
+
+					
 			}
 		}
 	}
@@ -392,16 +414,17 @@ bool CollisionManager::Draw()
 	printfDx("hitPos_ground.y %f\n", hitPos_ground.y);
 	printfDx("hitPos_ground.z %f\n", hitPos_ground.z);
 	DrawSphere3D(hitPos_wall, 2.0f, 30, GetColor(0, 0, 0),
-		GetColor(255, 0, 0), FALSE);
+		GetColor(0, 255, 0), FALSE);
 	DrawSphere3D(hitPos_ground, 2.0f, 30, GetColor(0, 0, 0),
 		GetColor(255, 0, 0), FALSE);
-	DrawSphere3D(hitSphere, 2.0f, 30, GetColor(0, 0, 0),
-		GetColor(255, 0, 0), FALSE);
+
 	DrawSphere3D(hitPos_head, 2.0f, 30, GetColor(0, 0, 0),
-		GetColor(255, 0, 0), FALSE);
+		GetColor(0, 0, 255), FALSE);
 	DrawSphere3D(hitHangingPos, 2.0f, 30, GetColor(0, 0, 0),
 		GetColor(0, 255, 0), FALSE);
 
 	DrawLine3D(topPos_ray, bottomPos_ray, GetColor(255, 0, 0));
+
+	DrawLine3D(pos_now, pos_new, GetColor(0, 0, 255));
 	return true;
 }

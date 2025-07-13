@@ -114,7 +114,8 @@ VECTOR PlayerCalculation::Jump(const VECTOR& moveVec,const int& animNumber_Now,
 {
     VECTOR move = moveVec;
 
-    if (animNumber_Now == animNum::falling_Idle || (playerData.isJump && animNumber_Now == animNum::jump ||
+    if (animNumber_Now == animNum::falling_Idle ||
+        (playerData.isJump ||
         animNumber_Now == animNum::run_Jump))
     {
         move.y += jumpSpeed_now;

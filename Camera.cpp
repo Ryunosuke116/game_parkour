@@ -151,7 +151,7 @@ void Camera::Update_layout()
 		a = -177.55f;
 	}
 
-	RotateUpdate();
+	//RotateUpdate();
 
 	SetCameraPositionAndTarget_UpVecY(aimPosition, spherePosition);
 }

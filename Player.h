@@ -37,7 +37,6 @@ private:
 	bool isCalc;
 	bool isCalc_moveVec;
 
-
 	//‘¼ƒNƒ‰ƒX
 	std::shared_ptr<PlayerStateActionBase> nowState = NULL;
 	PlayerStateActionBase::AnimState oldAnimState;

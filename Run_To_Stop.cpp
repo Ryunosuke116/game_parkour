@@ -75,20 +75,16 @@ bool Run_To_Stop::MotionUpdate(PlayerData& playerData)
         // アニメーションの総時間を取得
         totalTime_anim = MV1GetAttachAnimTotalTime(modelHandle, oldAnimState.AttachIndex);
 
-        // 再生時間を進める
-       // oldAnimState.PlayTime_anim += oldAnimState.PlayAnimSpeed;
-
-        // 再生時間が総時間に到達していたら再生時間をループさせる
-        if (oldAnimState.PlayTime_anim > totalTime_anim)
-        {
-            //oldAnimState.PlayTime_anim = static_cast<float>(fmod(oldAnimState.PlayTime_anim, totalTime_anim));
-        }
-
         // 変更した再生時間をモデルに反映させる
         MV1SetAttachAnimTime(modelHandle, oldAnimState.AttachIndex, oldAnimState.PlayTime_anim);
 
         // アニメーション２のモデルに対する反映率をセット
         MV1SetAttachAnimBlendRate(modelHandle, oldAnimState.AttachIndex, 1.0f - animBlendRate);
+    }
+
+    if (!playerData.isGround)
+    {
+        return true;
     }
 
     return false;

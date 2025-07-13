@@ -101,7 +101,7 @@ void Player::Update(const VECTOR& cameraDirection,const int mapHandle)
 
     bool isFree = !playerData.isHanging
         && !playerData.isHang_to_Crouch &&
-        !playerData.isFalling && !playerData.isJump;
+        !playerData.isFalling && !playerData.isJump && !playerData.isRoll;
 
     isCalc_moveVec = VSize(moveVec) != 0;
 
@@ -127,9 +127,6 @@ void Player::Update(const VECTOR& cameraDirection,const int mapHandle)
     //ŠR‚Â‚©‚Ý”»’è
     HangingCheck(mapHandle);
 
-    //ó‘Ô•ÏX
-    ChangeState();
-
     //ŠR‚Â‚©‚Ý’†‚Å‚Í‚È‚¢ê‡
     NormalMove(mapHandle);
 
@@ -138,6 +135,9 @@ void Player::Update(const VECTOR& cameraDirection,const int mapHandle)
 
     //ã‚É“o‚é
     Hang_to_CrouchMove(mapHandle);
+
+    //ó‘Ô•ÏX
+    ChangeState();
 
     isChangeState = nowState->MotionUpdate(playerData);
 
@@ -418,6 +418,14 @@ void Player::HangingMove()
         if (PadInput::isUp())
         {
             playerData.isHang_to_Crouch = true;
+            isCalc = false;
+        }
+
+        if (PadInput::isDown())
+        {
+            isChangeState = true;
+            playerData.isHanging = false;
+            isCalc = false;
         }
     }
 }
@@ -563,8 +571,8 @@ void Player::ChangeState()
     }
     
     //—Ž‰º’†
-    if (isChangeState && playerData.isJump && !playerData.isRoll
-        && animNumber_Now != animNum::falling_Idle)
+    if (isChangeState && 
+        !playerData.isGround && animNumber_Now != animNum::falling_Idle)
     {
         SetNowAnimState(nowState->GetNowAnimState());
         SetOldAnimState(nowState->GetOldAnimState());
@@ -573,6 +581,7 @@ void Player::ChangeState()
         animNumber_Now = animNum::falling_Idle;
         nowState = std::make_shared<Falling_Idle>(modelHandle, oldAnimState, nowAnimState);
         playerData.isFalling = true;
+        playerData.isRoll = false;
     }
 
     //“]‚ª‚é
@@ -632,6 +641,7 @@ void Player::ChangeState()
         playerData.isFalling = false;
     }
 
+    //ŠR‚Ì‚Ú‚è
     if (playerData.isHanging && playerData.isHang_to_Crouch &&
         animNumber_Now != animNum::braced_Hang_To_Crouch)
     {
@@ -642,7 +652,6 @@ void Player::ChangeState()
         animNumber_Now = animNum::braced_Hang_To_Crouch;
         nowState = std::make_shared<Braced_Hang_To_Crouch>(modelHandle, oldAnimState, nowAnimState, playerData);
         playerData.isHanging = false;
-        isCalc = false;
     }
 }
 

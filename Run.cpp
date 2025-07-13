@@ -27,3 +27,15 @@ Run::~Run()
 {
 //	MV1DetachAnim(modelHandle, nowAnimState.AttachIndex);
 }
+
+bool Run::MotionUpdate(PlayerData& playerData)
+{
+	PlayerStateActionBase::MotionUpdate(playerData);
+
+	if (!playerData.isGround)
+	{
+		return true;
+	}
+
+	return false;
+}

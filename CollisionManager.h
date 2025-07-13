@@ -43,7 +43,8 @@ private:
 	VECTOR hitPos_wall;
 	VECTOR hitPos_ground;
 	VECTOR playerCenterPos;
-	VECTOR oldPolyPos;
+	VECTOR pos_now;
+	VECTOR pos_new;
 	VECTOR nearestPoint;
 	VECTOR hitSphere;
 	VECTOR topPos_ray;
