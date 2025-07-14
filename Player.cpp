@@ -12,7 +12,6 @@
 /// </summary>
 Player::Player(nlohmann::json jsonData) :
     centerPosition(VGet(0.0f, 0.0f, 0.0f)),
-    footPosition(VGet(0.0f, 0.0f, 0.0f)),
     moveVec(VGet(0.0f, 0.0f, 0.0f)),
     moveDirection_now(VGet(0.0f, 0.0f, 0.0f)),
     isCalc_moveVec(false)
@@ -24,6 +23,7 @@ Player::Player(nlohmann::json jsonData) :
     MV1SetScale(modelHandle, VGet(modelScale, modelScale, modelScale));
     collisionManager = std::make_shared<CollisionManager>();
     playerCalculation = std::make_shared<PlayerCalculation>();
+    positionData.footPosition = VGet(0.0f, 0.0f, 0.0f);
 }
 
 /// <summary>
@@ -80,7 +80,7 @@ void Player::Initialize()
 /// </summary>
 void Player::Update(const VECTOR& cameraDirection,const int mapHandle)
 {
-    footPosition = MV1GetFramePosition(modelHandle, 2);
+    positionData.footPosition = MV1GetFramePosition(modelHandle, 2);
 
     //リセット
     moveVec = VGet(0.0f, 0.0f, 0.0f);
@@ -178,12 +178,12 @@ void Player::Update(const VECTOR& cameraDirection,const int mapHandle)
     handCenterPos= VAdd(handPos_left, handPos_right);
     handCenterPos = VScale(handCenterPos, 0.5f);
 
-    VECTOR food = MV1GetFramePosition(modelHandle, 167);
+    VECTOR foot = MV1GetFramePosition(modelHandle, 167);
 
     topPosition = position;
     bottomPosition = position;
-    topPosition.y = topPosition.y + addTopPos;
-    bottomPosition.y = bottomPosition.y + addBottomPos;
+    topPosition.y = topPosition.y + positionData.addTopPos;
+    bottomPosition.y = bottomPosition.y + positionData.addBottomPos;
 
     SettingRay();
 }
@@ -194,7 +194,7 @@ void Player::Update(const VECTOR& cameraDirection,const int mapHandle)
 bool Player::Draw()
 {
 	MV1DrawModel(modelHandle);
-    DrawSphere3D(footPosition, 2.0f, 30, GetColor(0, 0, 0),
+    DrawSphere3D(positionData.footPosition, 2.0f, 30, GetColor(0, 0, 0),
         GetColor(255, 255, 255), FALSE);
     DrawSphere3D(handCenterPos, 2.0f, 30, GetColor(0, 0, 0),
         GetColor(0, 0, 255), FALSE);
@@ -206,15 +206,15 @@ bool Player::Draw()
     DrawSphere3D(position, 2.0f, 30, GetColor(0, 0, 0),
         GetColor(255, 0, 255), FALSE);
 
-    VECTOR food = MV1GetFramePosition(modelHandle, 167);
+    VECTOR foot = MV1GetFramePosition(modelHandle, 167);
     VECTOR head = MV1GetFramePosition(modelHandle, 9);
     VECTOR mune = MV1GetFramePosition(modelHandle, 6);
     VECTOR top = mune;
     top.y = top.y + (head.y - mune.y);
     VECTOR bottom = mune;
-    bottom.y = bottom.y + (food.y - mune.y);
+    bottom.y = bottom.y + (foot.y - mune.y);
 
-    DrawCapsule3D(topPosition, bottomPosition, radius, 30, GetColor(0, 0, 0),
+    DrawCapsule3D(topPosition, bottomPosition, positionData.radius, 30, GetColor(0, 0, 0),
         GetColor(255, 0, 0), FALSE);
 
    /* DrawCapsule3D(top, bottom, radius, 30, GetColor(0, 0, 0),
@@ -295,9 +295,8 @@ void Player::NormalMove(const int mapHandle)
             animNumber_Now, playerData);
 
         //衝突判定
-        auto result = collisionManager->Update(mapHandle, position, centerPosition,
-            footPosition, moveVec, moveDirection_now, radius, addTopPos,
-            addBottomPos, playerData);
+        auto result = collisionManager->Update(mapHandle, position, 
+            moveVec, positionData, playerData);
 
         playerData.isGround = result.first;
 
@@ -464,9 +463,9 @@ void Player::Hang_to_CrouchMove(const int mapHandle)
             VECTOR newPos = VAdd(nowPos, moveVec);
 
             //足のフレーム座標で衝突判定
-            VECTOR food = MV1GetFramePosition(modelHandle, 167);
+            VECTOR foot = MV1GetFramePosition(modelHandle, 167);
 
-            auto result = collisionManager->GroundCollisionCheck_Hang_to_Crouch(mapHandle, nowPos, newPos, food, addTopPos, radius, addBottomPos);
+            auto result = collisionManager->GroundCollisionCheck_Hang_to_Crouch(mapHandle, nowPos, newPos, foot, positionData);
 
             //playerの座標はフレーム座標を基準にしていないため縦だけずらす
             position.y = result.second.y;
@@ -480,7 +479,7 @@ void Player::Hang_to_CrouchMove(const int mapHandle)
                 playerData.isJump = false;
                 playerData.isRoll = false;
                 playerData.isStopRun = false;
-                auto result = collisionManager->GroundCollisionCheck_Hang_to_Crouch(mapHandle, nowPos, newPos, food, addTopPos, radius, addBottomPos);
+                auto result = collisionManager->GroundCollisionCheck_Hang_to_Crouch(mapHandle, nowPos, newPos, foot, positionData);
 
                 //playerData.isGround = result.first;
                 position.y = result.second.y;

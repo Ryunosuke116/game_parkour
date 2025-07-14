@@ -6,17 +6,27 @@ class HitCheck;
 class CollisionManager
 {
 public:
+	struct PositionData
+	{
+		static constexpr float addTopPos = 17.0f;
+		static constexpr float addBottomPos = 3.0f;
+		static constexpr float radius = 3.5f;
+		VECTOR footPosition;
+	};
+
 	bool GroundCollisionCheck(int modelHandle, const VECTOR& oldPos,
-		VECTOR& newPos, const VECTOR& footPos, float addBottomPos,
+		VECTOR& newPos, const PositionData& positionData,
 		const PlayerStateActionBase::PlayerData& playerData);
-	bool HeadCollisionCheck(int modelHandle, VECTOR& newPos, float addTopPos, float radius, float addBottomPos);
-	bool WallCollisionCheck(int modelHandle, VECTOR& newPos, VECTOR& oldPos, float radius, float addTopPos, float addBottomPos);
+	bool HeadCollisionCheck(int modelHandle, VECTOR& newPos, 
+		const PositionData& positionData);
+	bool WallCollisionCheck(int modelHandle, VECTOR& newPos,
+		VECTOR& oldPos, const PositionData& positionData);
 	//bool Update(Player& player, int modelHandle);
 	bool Draw();
 
-	std::pair<bool, VECTOR> Update(int modelHandle, const VECTOR& playerPos, const VECTOR& playerCenterPos,
-		const VECTOR& footPos, const VECTOR& moveVec, VECTOR& moveDirection, float radius, 
-		float addTopPos, float addBottomPos, const PlayerStateActionBase::PlayerData& playerData);
+	std::pair<bool, VECTOR> Update(int modelHandle, const VECTOR& playerPos,
+		const VECTOR& moveVec, const PositionData& positionData,
+		const PlayerStateActionBase::PlayerData& playerData);
 
 	bool TestSphereTriangle(VECTOR centerPos, VECTOR a, VECTOR b, VECTOR c, VECTOR& q, const float radius);
 
@@ -25,7 +35,8 @@ public:
 	VECTOR PushBackCalculation_sphere_mesh(const MV1_COLL_RESULT_POLY& poly, const VECTOR& bottomPos, const VECTOR& newPlayerPos, const float& radius);
 	VECTOR CalcPushBack_SphereMeshOutsideTriangle(const MV1_COLL_RESULT_POLY& poly, const VECTOR& HitPos_ground, const VECTOR& bottomPos, const float& radius);
 
-	std::pair<bool, VECTOR>GroundCollisionCheck_Hang_to_Crouch(int modelHandle, const VECTOR& oldPos, const VECTOR& newPos, const VECTOR& foot, float addTopPos, float addBottomPos, float radius);
+	std::pair<bool, VECTOR>GroundCollisionCheck_Hang_to_Crouch(int modelHandle,
+		const VECTOR& oldPos, const VECTOR& newPos, const VECTOR& foot, const PositionData& positionData);
 
 	float GetTiltAngle_degree()const { return tiltAngle_degree; }
 	MV1_COLL_RESULT_POLY GetHangingPoly() const { return HangingPoly; }
@@ -52,5 +63,11 @@ private:
 	VECTOR bottomPos_ray;
 	VECTOR hitHangingPos;
 	float tiltAngle_degree;
+
+
+	PositionData positionData;
+
+	PositionData GetPositionData() { return positionData; }
+
 };
 

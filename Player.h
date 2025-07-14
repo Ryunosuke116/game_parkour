@@ -15,12 +15,8 @@ private:
 	static constexpr float angleSpeed = 0.3f;
 	static constexpr float addJumpPower = 2.0f;		//ジャンプパワー
 	static constexpr float gravity = -0.06f;
-	static constexpr float addTopPos = 17.0f;
-	static constexpr float addBottomPos = 3.0f;
-	static constexpr float radius = 3.5f;
 
 	VECTOR linePos_end;
-	VECTOR footPosition;
 	VECTOR centerPosition;
 	VECTOR topPosition;
 	VECTOR bottomPosition;
@@ -44,6 +40,8 @@ private:
 	PlayerStateActionBase::PlayerData playerData;
 	std::shared_ptr<CollisionManager> collisionManager = NULL;
 	std::shared_ptr<PlayerCalculation> playerCalculation = NULL;
+	CollisionManager::PositionData positionData;
+
 public:
 	Player(nlohmann::json jsonData);
 	~Player();
@@ -68,14 +66,12 @@ public:
 	void SetOldAnimState(PlayerStateActionBase::AnimState animState);
 	void SetNowAnimState(PlayerStateActionBase::AnimState animState);
 
-	
 
 	//////////////////////////////////
 	//　ゲッター
 	///////////////////////////////////
 
 	VECTOR GetCenterPos() { return centerPosition; }
-	VECTOR GetFootPos() { return footPosition; }
 	VECTOR GetTopPos() { return topPosition; }
 	VECTOR GetBottomPos() { return bottomPosition; }
 	VECTOR GetMoveVec() { return moveVec; }
@@ -87,9 +83,7 @@ public:
 	bool GetIsGround() { return playerData.isGround; }
 	int GetModelHandle() { return modelHandle; }
 	PlayerStateActionBase::PlayerData GetData() { return playerData; }
-	float GetAddTopPos() { return addTopPos; }
-	float GetAddBottomPos() { return addBottomPos; }
-	float GetRadius() { return radius; }
+	float GetRadius() { return positionData.radius; }
 
 	//////////////////////////////////
 	/// セッター
