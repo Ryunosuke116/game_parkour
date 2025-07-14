@@ -30,6 +30,7 @@ private:
 	std::shared_ptr<BaseGameObjectManager>	coinManager   = NULL;
 	std::shared_ptr<Layout>					layout		  = NULL;
 	std::shared_ptr<JsonManager>			jsonManager	  = NULL;
+	std::shared_ptr<BaseObject>				floor_sky	  = NULL;
 
 	std::shared_ptr<Map>			map_actual			 = NULL;
 	std::shared_ptr<PlayerManager>	playerManager_actual = NULL;

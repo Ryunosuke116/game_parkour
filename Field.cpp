@@ -16,7 +16,7 @@ Field::Field(const char* path)
 	//ƒ‚ƒfƒ‹‚Ì‘å‚«‚³’²®
 	//MV1SetScale(modelHandle, VGet(1.0f, 0.17f, 1.0f));
 	//MV1SetScale(modelHandle, VGet(0.05f, 0.05f, 0.05f));
-	MV1SetScale(modelHandle, VGet(1.0f, 1.0f, 1.0f));
+	MV1SetScale(modelHandle, VGet(0.9f, 0.9f, 0.9f));
 
 	MV1SetPosition(modelHandle, position);
 	//MV1SetPosition(meshHandle, position);

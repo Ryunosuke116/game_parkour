@@ -27,7 +27,8 @@ public:
 
 	std::pair<bool, VECTOR>GroundCollisionCheck_Hang_to_Crouch(int modelHandle, const VECTOR& oldPos, const VECTOR& newPos, const VECTOR& foot, float addTopPos, float addBottomPos, float radius);
 
-	const MV1_COLL_RESULT_POLY GetHangingPoly() { return HangingPoly; }
+	float GetTiltAngle_degree()const { return tiltAngle_degree; }
+	MV1_COLL_RESULT_POLY GetHangingPoly() const { return HangingPoly; }
 
 private:
 	MV1_COLL_RESULT_POLY hitPoly_Ground;
@@ -50,5 +51,6 @@ private:
 	VECTOR topPos_ray;
 	VECTOR bottomPos_ray;
 	VECTOR hitHangingPos;
+	float tiltAngle_degree;
 };
 

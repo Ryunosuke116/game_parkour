@@ -27,7 +27,7 @@ public:
 		 const VECTOR& point);
 
 	static VECTOR ProjectionDirection(const VECTOR& point, const VECTOR& a, const VECTOR& b);
-
+	static float Radian(const VECTOR& line_1, const VECTOR& line_2);
 	static VECTOR Leap(const VECTOR& changePosition, const VECTOR& latestPosition, const float& speed);
 	static VECTOR SphereMeshOutsideTriangle(const MV1_COLL_RESULT_POLY& poly, const VECTOR& HitPos_ground);
 	static NearestResult SphereMeshOutsideTriangle_line(const MV1_COLL_RESULT_POLY& poly, const VECTOR& HitPos_ground);

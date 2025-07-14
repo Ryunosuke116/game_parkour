@@ -80,7 +80,6 @@ void Player::Initialize()
 /// </summary>
 void Player::Update(const VECTOR& cameraDirection,const int mapHandle)
 {
-
     footPosition = MV1GetFramePosition(modelHandle, 2);
 
     //ƒŠƒZƒbƒg

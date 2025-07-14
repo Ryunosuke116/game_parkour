@@ -1,10 +1,12 @@
 #pragma once
+#include <string>
 
 class BaseObject
 {
 protected:
 	int modelHandle;
 	VECTOR position;
+	std::string tag;
 public:
 	BaseObject();
 	~BaseObject();
@@ -16,5 +18,6 @@ public:
 
 	const int GetModelHandle() { return modelHandle; }
 	const VECTOR GetPosition() { return position; }
+	const std::string GetTag() { return tag; }
 };
 

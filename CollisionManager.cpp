@@ -4,6 +4,7 @@
 #include "PlayerStateActionBase.h"
 #include "CollisionManager.h"
 #include <utility>
+#include <vector>
 
 /// @brief 更新
 /// @param player 
@@ -128,6 +129,14 @@ bool CollisionManager::GroundCollisionCheck(int modelHandle,const VECTOR& oldPos
 
 	if (isHitGround)
 	{
+		VECTOR playerNormal = VSub(topPosition, bottomPosition);
+		playerNormal = VNorm(playerNormal);
+
+		//playerと床のなす角を求める
+		float cosTheta = Calculation::Radian(playerNormal, rayPoly_ground.Normal);
+		float radian = std::acos(cosTheta);
+		tiltAngle_degree = radian * 180.0f / DX_PI_F;
+
 		VECTOR newPlayerPos = VGet(0.0f, 0.0f, 0.0f);
 		
 		//床 - プレイヤーの足元で押し戻し量を計算
@@ -407,12 +416,15 @@ VECTOR CollisionManager::CalcPushBack_SphereMeshOutsideTriangle(const MV1_COLL_R
 /// </summary>
 bool CollisionManager::Draw()
 {
-	printfDx("NormalPos.y %f\n", subPos.y);
-	printfDx("NormalPos_Wall.x %f\n", normal.x);
-	printfDx("NormalPos_Wall.z %f\n", normal.z);
-	printfDx("hitPos_ground.x %f\n", hitPos_ground.x);
-	printfDx("hitPos_ground.y %f\n", hitPos_ground.y);
-	printfDx("hitPos_ground.z %f\n", hitPos_ground.z);
+	//printfDx("NormalPos.y %f\n", subPos.y);
+	//printfDx("NormalPos_Wall.x %f\n", normal.x);
+	//printfDx("NormalPos_Wall.z %f\n", normal.z);
+	//printfDx("hitPos_ground.x %f\n", hitPos_ground.x);
+	//printfDx("hitPos_ground.y %f\n", hitPos_ground.y);
+	//printfDx("hitPos_ground.z %f\n", hitPos_ground.z);
+
+	printfDx("tiltAngle_degree %f\n", tiltAngle_degree);
+
 	DrawSphere3D(hitPos_wall, 2.0f, 30, GetColor(0, 0, 0),
 		GetColor(0, 255, 0), FALSE);
 	DrawSphere3D(hitPos_ground, 2.0f, 30, GetColor(0, 0, 0),

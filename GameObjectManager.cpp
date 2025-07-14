@@ -32,6 +32,7 @@ void GameObjectManager::Create()
 	playerManager	= std::make_shared<PlayerManager>();
 	camera			= std::make_shared<Camera>();
 	layout			= std::make_shared<Layout>();
+
 	
 	map_actual			 = std::dynamic_pointer_cast<Map>(map);
 	playerManager_actual = std::dynamic_pointer_cast<PlayerManager>(playerManager);
@@ -40,6 +41,7 @@ void GameObjectManager::Create()
 
 	coinManager->HandOver(jsonManager->GetJsons("coin"));
 	playerManager->HandOver(jsonManager->GetJsons("player"));
+	floor_sky = std::make_shared<Floor_sky>(jsonManager->GetJsons("object"));
 
 	playerManager->Create();
 	coinManager->Create();
@@ -57,6 +59,7 @@ void GameObjectManager::Initialize()
 	coinManager->Initialize();
 	playerManager->Initialize();
 	camera->Initialize();
+	floor_sky->Initialize();
 	PadInput::Initialize();
 
 	isCamera = false;
@@ -99,6 +102,7 @@ void GameObjectManager::Update()
 		map_actual->Update(playerManager_actual->GetPlayer()->GetPosition());
 		field->Update();
 		fieldMesh->Update();
+		floor_sky->Update();
 	}
 	else
 	{
@@ -119,6 +123,7 @@ bool GameObjectManager::Draw()
 	camera->Draw();
 	map->Draw();
 	field->Draw();
+	floor_sky->Draw();
 	fieldMesh->Draw();
 	coinManager->Draw();
 	if (isCamera)

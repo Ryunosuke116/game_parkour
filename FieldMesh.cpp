@@ -12,7 +12,9 @@ FieldMesh::FieldMesh(const char* path):
 {
 	modelHandle = MV1LoadModel(path);
 	position = VGet(0, 0, 0);
+	MV1SetScale(modelHandle, VGet(0.9f, 0.9f, 0.9f));
 	MV1SetPosition(modelHandle, position);
+	tag = "field";
 }
 
 /// <summary>

@@ -197,6 +197,21 @@ VECTOR Calculation::Leap(const VECTOR& changePosition, const VECTOR& latestPosit
 	return VAdd(changePosition, scalePosition);
 }
 
+float Calculation::Radian(const VECTOR& line_1,const VECTOR& line_2)
+{
+	float dot = VDot(line_1, line_2);
+	float length_1 = VSize(line_1);
+	float length_2 = VSize(line_2);
+
+	//ƒ¦œZ‘Îô
+	if (length_1 == 0 || length_2 == 0)
+	{
+		return 0.0f;
+	}
+
+	return dot / (length_1 * length_2);
+}
+
 /// <summary>
 /// ƒ‰ƒWƒAƒ“‚©‚ç“x‚É•ÏŠ·
 /// </summary>
