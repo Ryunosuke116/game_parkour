@@ -2,6 +2,7 @@
 #include "HitCheck.h"
 #include "Calculation.h"
 #include "PlayerStateActionBase.h"
+
 #include "CollisionManager.h"
 #include <utility>
 #include <vector>
@@ -10,8 +11,9 @@
 /// @param player 
 /// @param modelHandle 
 /// @return 
-std::pair<bool, VECTOR> CollisionManager::Update(int modelHandle, const VECTOR& playerPos,
-	const VECTOR& moveVec, const PositionData& positionData,
+std::pair<bool, VECTOR> CollisionManager::Update(const std::vector<std::shared_ptr<BaseObject>>& fieldObjects,
+	const VECTOR& playerPos,const VECTOR& moveVec, 
+	const PositionData& positionData,
 	const PlayerStateActionBase::PlayerData& playerData)
 {
 	VECTOR oldPos = playerPos;

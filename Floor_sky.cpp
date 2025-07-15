@@ -20,6 +20,9 @@ void Floor_sky::Initialize()
 	pos_y = 10.0f;
 	position = VGet(5.0f, pos_y, 0.0f);
 	MV1SetPosition(modelHandle, position);
+
+	// モデルの０番目のフレームのコリジョン情報を構築
+	MV1SetupCollInfo(modelHandle, -1, 1, 1, 1);
 }
 
 void Floor_sky::Update()
@@ -45,6 +48,7 @@ void Floor_sky::Update()
 	position.y = pos_y;
 	MV1SetPosition(modelHandle, position);
 	
+	MV1RefreshCollInfo(modelHandle, -1);
 }
 
 bool Floor_sky::Draw()

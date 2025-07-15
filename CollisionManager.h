@@ -1,5 +1,6 @@
 #pragma once
 #include "PlayerStateActionBase.h"
+#include "BaseObject.h"
 
 class HitCheck;
 
@@ -24,7 +25,8 @@ public:
 	//bool Update(Player& player, int modelHandle);
 	bool Draw();
 
-	std::pair<bool, VECTOR> Update(int modelHandle, const VECTOR& playerPos,
+	std::pair<bool, VECTOR> Update(const std::vector<std::shared_ptr<BaseObject>>& fieldObjects,
+		const VECTOR& playerPos,
 		const VECTOR& moveVec, const PositionData& positionData,
 		const PlayerStateActionBase::PlayerData& playerData);
 

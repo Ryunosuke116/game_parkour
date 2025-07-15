@@ -20,7 +20,9 @@ public:
 
 private:
 
-	std::vector<std::shared_ptr<BaseGameObjectManager>>		objectManager_ilst;
+	std::vector<std::shared_ptr<BaseGameObjectManager>>	objectManager_ilst;
+
+	std::vector<std::shared_ptr<BaseObject>> fieldObjects;
 
 	std::shared_ptr<BaseObject>				map			  = NULL;
 	std::shared_ptr<BaseObject>				field		  = NULL;

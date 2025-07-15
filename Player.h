@@ -48,7 +48,8 @@ public:
 
 	void Initialize();
 	void Update()override;
-	void Update(const VECTOR& cameraDirection, const int mapHandle);
+	void Update(const VECTOR& cameraDirection,
+		const std::vector<std::shared_ptr<BaseObject>>& fieldObjects);
 	bool Draw();
 	VECTOR Move(VECTOR& moveVec, const VECTOR& cameraDirection);
 	void JumpMove();
@@ -57,8 +58,8 @@ public:
 	void Hang_to_CrouchMove(const int mapHandle);
 	void ChangeState();
 	void SettingRay();
-	void HangingCheck(const int mapHandle);
-	void NormalMove(const int mapHandle);
+	void HangingCheck(const std::vector<std::shared_ptr<BaseObject>>& fieldObjects);
+	void NormalMove(const std::vector<std::shared_ptr<BaseObject>>& fieldObjects);
 	void Reset();
 
 	void Command(const VECTOR& cameraDirection);

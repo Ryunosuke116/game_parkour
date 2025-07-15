@@ -3,6 +3,7 @@
 #include "CollisionManager.h"
 #include "PlayerManager.h"
 #include "Calculation.h"
+#include "BaseObject.h"
 
 /// <summary>
 /// コンストラクタ
@@ -38,10 +39,11 @@ void PlayerManager::Initialize()
 /// </summary>
 /// <param name="mapHandle"></param>
 /// <param name="player"></param>
-void PlayerManager::Update(int mapHandle, const VECTOR& cameraDirection)
+void PlayerManager::Update(const std::vector<std::shared_ptr<BaseObject>>& fieldObjects ,
+	const VECTOR& cameraDirection)
 {
 
-	actualPlayer->Update(cameraDirection, mapHandle);
+	actualPlayer->Update(cameraDirection, fieldObjects);
 
 	/*if(actualPlayer->GetData().isHanging)
 	{

@@ -25,6 +25,7 @@ void GameObjectManager::Create()
 	jsonManager		= std::make_shared<JsonManager>();
 	jsonManager->Initialize();
 
+
 	map				= std::make_shared<Map>("material/skyDome/sunSet.mv1");
 	field			= std::make_shared<Field>("material/mv1/new_city/new_city_0710.mv1");
 	fieldMesh		= std::make_shared<FieldMesh>("material/mv1/new_city/new_city_mesh_0710.mv1");
@@ -38,6 +39,9 @@ void GameObjectManager::Create()
 	playerManager_actual = std::dynamic_pointer_cast<PlayerManager>(playerManager);
 	coinManager_actual   = std::dynamic_pointer_cast<CoinManager>(coinManager);
 
+
+	fieldObjects.push_back(std::make_shared<FieldMesh>("material/mv1/new_city/new_city_0710.mv1"));
+	fieldObjects.push_back(std::make_shared<Floor_sky>(jsonManager->GetJsons("object")));
 
 	coinManager->HandOver(jsonManager->GetJsons("coin"));
 	playerManager->HandOver(jsonManager->GetJsons("player"));
@@ -53,6 +57,12 @@ void GameObjectManager::Create()
 /// </summary>
 void GameObjectManager::Initialize()
 {
+
+	for (auto& feildObject : fieldObjects)
+	{
+		feildObject->Initialize();
+	}
+
 	map->Initialize();
 	field->Initialize();
 	fieldMesh->Initialize();
@@ -98,11 +108,15 @@ void GameObjectManager::Update()
 	{
 		camera->Update(playerManager_actual->GetPlayer()->GetPosition(),fieldMesh->GetModelHandle());
 	
-		playerManager_actual->Update(fieldMesh->GetModelHandle(), camera->GetCameraDirection());
+		playerManager_actual->Update(fieldObjects, camera->GetCameraDirection());
 		map_actual->Update(playerManager_actual->GetPlayer()->GetPosition());
 		field->Update();
 		fieldMesh->Update();
 		floor_sky->Update();
+		for (auto& feildObject : fieldObjects)
+		{
+			feildObject->Update();
+		}
 	}
 	else
 	{
@@ -125,11 +139,17 @@ bool GameObjectManager::Draw()
 	field->Draw();
 	floor_sky->Draw();
 	fieldMesh->Draw();
+	for (auto& feildObject : fieldObjects)
+	{
+		feildObject->Draw();
+	}
 	coinManager->Draw();
+
 	if (isCamera)
 	{
 		layout->Draw();
 	}
+
 
 	DrawLine3D(VGet(0.0f, 15.0f, 0.0f), VGet(10.0f, 15.0f, 0.0f), GetColor(255, 0, 0));
 	DrawLine3D(VGet(0.0f, 15.0f, 0.0f), VGet(0.0f, 25.0f, 0.0f), GetColor(0, 255, 0));

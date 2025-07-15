@@ -6,6 +6,7 @@
 #include "Player.h"
 #include "HitCheck.h"
 #include "Calculation.h"
+#include "BaseObject.h"
 
 /// <summary>
 /// /インストラクタ
@@ -78,7 +79,8 @@ void Player::Initialize()
 /// <summary>
 /// 更新
 /// </summary>
-void Player::Update(const VECTOR& cameraDirection,const int mapHandle)
+void Player::Update(const VECTOR& cameraDirection, 
+    const std::vector<std::shared_ptr<BaseObject>>& fieldObjects)
 {
     positionData.footPosition = MV1GetFramePosition(modelHandle, 2);
 
@@ -264,7 +266,7 @@ void Player::Command(const VECTOR& cameraDirection)
 /// 掴めるところがあるか
 /// </summary>
 /// <param name="mapHandle"></param>
-void Player::HangingCheck(const int mapHandle)
+void Player::HangingCheck(const std::vector<std::shared_ptr<BaseObject>>& fieldObjects)
 {
     if (!playerData.isHanging)
     {
@@ -285,7 +287,7 @@ void Player::HangingCheck(const int mapHandle)
 /// 通常時の演算処理
 /// </summary>
 /// <param name="mapHandle"></param>
-void Player::NormalMove(const int mapHandle)
+void Player::NormalMove(const std::vector<std::shared_ptr<BaseObject>>& fieldObjects)
 {
     if ((!playerData.isHanging && !playerData.isHang_to_Crouch))
     {

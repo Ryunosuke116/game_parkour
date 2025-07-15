@@ -76,6 +76,7 @@ VECTOR PlayerCalculation::Move(const VECTOR& moveVec, const VECTOR& moveDirectio
             {
                 const float stopFrame = 10.0f;
                 decelerationSpeed = moveSpeed_now / stopFrame;
+                isCalc_deceleration = true;
             }
 
             moveSpeed_now -= decelerationSpeed;

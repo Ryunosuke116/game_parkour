@@ -11,7 +11,8 @@ public:
 	PlayerManager();
 	~PlayerManager();
 	
-	void Update(int mapHandle,const VECTOR& cameraDirection);
+	void Update(const std::vector<std::shared_ptr<BaseObject>>& fieldObjects,
+		const VECTOR& cameraDirection);
 
 	void Create()		override;
 	void Initialize()	override;
