@@ -7,6 +7,8 @@ protected:
 	int modelHandle;
 	VECTOR position;
 	std::string tag;
+	VECTOR pos_difference;
+
 public:
 	BaseObject();
 	~BaseObject();
@@ -19,5 +21,6 @@ public:
 	const int GetModelHandle() { return modelHandle; }
 	const VECTOR GetPosition() { return position; }
 	const std::string GetTag() { return tag; }
+	const VECTOR GetPos_difference() { return pos_difference; }
 };
 

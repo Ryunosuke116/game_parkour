@@ -12,7 +12,6 @@ public:
 	bool Draw()override;
 
 private:
-	float pos_y;
 	bool isUp;
 };
 

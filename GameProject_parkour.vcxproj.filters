@@ -46,9 +46,6 @@
     <Filter Include="ソース ファイル\manager\scene">
       <UniqueIdentifier>{6ed27899-6b7f-44a8-b8d7-0648099a58a6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\mesh">
-      <UniqueIdentifier>{0960e21f-eac8-4067-ad0e-cfc094d6d27c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\Json">
       <UniqueIdentifier>{a05c63cd-31b8-4115-a020-863d88bd0a84}</UniqueIdentifier>
     </Filter>
@@ -130,11 +127,17 @@
     <Filter Include="ソース ファイル\map">
       <UniqueIdentifier>{0564d51b-3b2a-45a6-905c-a0ad4e3256b2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\floor_sky">
-      <UniqueIdentifier>{828f1d62-3c20-4137-8228-5f854e5c690e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ヘッダー ファイル\Json">
       <UniqueIdentifier>{925fd99b-a8db-4041-a1b9-111051243620}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\collisionObject">
+      <UniqueIdentifier>{80e5d24e-986d-4291-ae86-75607b41a3fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\collisionObject\mesh">
+      <UniqueIdentifier>{0960e21f-eac8-4067-ad0e-cfc094d6d27c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\collisionObject\floor_sky">
+      <UniqueIdentifier>{828f1d62-3c20-4137-8228-5f854e5c690e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -181,7 +184,7 @@
       <Filter>ソース ファイル\manager\scene</Filter>
     </ClCompile>
     <ClCompile Include="FieldMesh.cpp">
-      <Filter>ソース ファイル\mesh</Filter>
+      <Filter>ソース ファイル\collisionObject\mesh</Filter>
     </ClCompile>
     <ClCompile Include="Calculation.cpp">
       <Filter>ソース ファイル\Calculation</Filter>
@@ -247,7 +250,7 @@
       <Filter>ソース ファイル\Base\ObjectManger</Filter>
     </ClCompile>
     <ClCompile Include="Floor_sky.cpp">
-      <Filter>ソース ファイル\floor_sky</Filter>
+      <Filter>ソース ファイル\collisionObject\floor_sky</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -294,7 +297,7 @@
       <Filter>ソース ファイル\manager\scene</Filter>
     </ClInclude>
     <ClInclude Include="FieldMesh.h">
-      <Filter>ソース ファイル\mesh</Filter>
+      <Filter>ソース ファイル\collisionObject\mesh</Filter>
     </ClInclude>
     <ClInclude Include="AnimTime.h">
       <Filter>ヘッダー ファイル</Filter>
@@ -372,7 +375,7 @@
       <Filter>ソース ファイル\Base\ObjectManger</Filter>
     </ClInclude>
     <ClInclude Include="Floor_sky.h">
-      <Filter>ソース ファイル\floor_sky</Filter>
+      <Filter>ソース ファイル\collisionObject\floor_sky</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

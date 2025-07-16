@@ -12,7 +12,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
 {
 
     // 画面モードのセット
-    ChangeWindowMode(TRUE);
+    ChangeWindowMode(FALSE);
     SetGraphMode(1600, 900, 16);
 
     // DirectX11を使用するようにする。(DirectX9も可、一部機能不可)

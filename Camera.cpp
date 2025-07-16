@@ -18,6 +18,8 @@ Camera::Camera():
 
 	//奥行0.1～1000までをカメラの描画範囲とする
 	SetCameraNearFar(3.5f, 5000.0f);
+
+	
 }
 
 /// <summary>
@@ -34,12 +36,11 @@ Camera::~Camera()
 void Camera::Initialize()
 {
 	aimPosition = VGet(30.0f, 15, -10);
-	lookPosition = VGet(0.0f, 20.0f, 20.0f);
-	spherePosition = lookPosition;
+	spherePosition = VGet(0.0f, 20.0f, 20.0f);
 	a = -177.55f;
-	distance = 60.0f;
+	distance = 50.0f;
 
-	SetCameraPositionAndTarget_UpVecY(aimPosition, lookPosition);
+	SetCameraPositionAndTarget_UpVecY(aimPosition, spherePosition);
 
 	// DXライブラリのカメラとEffekseerのカメラを同期する。
 	Effekseer_Sync3DSetting();
@@ -54,7 +55,7 @@ void Camera::Update(const VECTOR& playerPosition, const int& mapHandle)
 	centerPos = playerPosition;
 	centerPos.y += 14.0f;
 
-	aimPosition_usual.y = spherePosition.y + 20.0f;
+	aimPosition_usual.y = spherePosition.y + 15.0f;
 
 	//カメラ移動処理
 	if (CheckHitKey(KEY_INPUT_A) ||
@@ -206,6 +207,9 @@ void Camera::CameraPosCalc(const int& mapHandle)
 		VECTOR direction;
 		
 		addPos = VSub(hitPoly.HitPosition, aimPosition_usual);
+		direction = VNorm(addPos);
+
+		//addPos = VAdd(addPos,VScale(direction, 2.0f));
 		
 		aimPosition = VAdd(aimPosition_usual, addPos);
 	}

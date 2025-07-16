@@ -15,6 +15,7 @@ FieldMesh::FieldMesh(const char* path):
 	MV1SetScale(modelHandle, VGet(0.9f, 0.9f, 0.9f));
 	MV1SetPosition(modelHandle, position);
 	tag = "field";
+	pos_difference = VGet(0.0f, 0.0f, 0.0f);
 }
 
 /// <summary>
@@ -34,6 +35,7 @@ void FieldMesh::Initialize()
 	MV1SetupCollInfo(modelHandle, -1, 1, 1, 1);
 
 	int a = MV1GetMaterialNum(modelHandle);
+
 
 	for (int i = 0; i < a; i++)
 	{

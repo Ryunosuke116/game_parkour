@@ -11,6 +11,6 @@ public:
 	bool MotionUpdate(PlayerData& playerData)override;
 
 private:
-	static constexpr float playAnimSpeed = 0.6f;	    // ˆÚ“®‘¬“x
+	static constexpr float playAnimSpeed = 0.5f;	    // ˆÚ“®‘¬“x
 };
 

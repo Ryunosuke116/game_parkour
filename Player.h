@@ -55,7 +55,7 @@ public:
 	void JumpMove();
 	void RollMove();
 	void HangingMove();
-	void Hang_to_CrouchMove(const int mapHandle);
+	void Hang_to_CrouchMove(const std::vector<std::shared_ptr<BaseObject>>& fieldObjects);
 	void ChangeState();
 	void SettingRay();
 	void HangingCheck(const std::vector<std::shared_ptr<BaseObject>>& fieldObjects);

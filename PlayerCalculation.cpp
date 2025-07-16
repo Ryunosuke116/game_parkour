@@ -20,6 +20,8 @@ VECTOR PlayerCalculation::Update(const VECTOR& moveVec, const VECTOR& moveDirect
 {
     VECTOR returnVec = moveVec;
 
+
+
     returnVec = Roll(returnVec, moveDirection, playTime_anim, playerData);
     //進むスピードを乗算
       //ロールアクション中はそれに応じた速度

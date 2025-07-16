@@ -126,16 +126,16 @@ void Player::Update(const VECTOR& cameraDirection,
     }
 
     //崖つかみ判定
-    HangingCheck(mapHandle);
+    HangingCheck(fieldObjects);
 
     //崖つかみ中ではない場合
-    NormalMove(mapHandle);
+    NormalMove(fieldObjects);
 
     //崖掴み中は壁の法線に合わせて向きを決める
     HangingMove();
 
     //上に登る
-    Hang_to_CrouchMove(mapHandle);
+    Hang_to_CrouchMove(fieldObjects);
 
     //状態変更
     ChangeState();
@@ -271,7 +271,7 @@ void Player::HangingCheck(const std::vector<std::shared_ptr<BaseObject>>& fieldO
     if (!playerData.isHanging)
     {
         //掴めるところがあるか
-        auto result_cliff = collisionManager->CliffGrabbing(mapHandle,
+        auto result_cliff = collisionManager->CliffGrabbing(fieldObjects,
             topPosition, moveDirection_now, playerData.isFalling);
 
         playerData.isHanging = result_cliff.first;
@@ -296,11 +296,12 @@ void Player::NormalMove(const std::vector<std::shared_ptr<BaseObject>>& fieldObj
             nowState->GetNowAnimState().PlayTime_anim,
             animNumber_Now, playerData);
 
+
         //衝突判定
-        auto result = collisionManager->Update(mapHandle, position, 
+        auto [isHitGround, newPos, objectTag] = collisionManager->Update(fieldObjects, position,
             moveVec, positionData, playerData);
 
-        playerData.isGround = result.first;
+        playerData.isGround = isHitGround;
 
         //落下している場合
         if (playerData.isFalling)
@@ -311,7 +312,17 @@ void Player::NormalMove(const std::vector<std::shared_ptr<BaseObject>>& fieldObj
                 playerData.isFalling = false;
             }
         }
-        SetPos(result.second);
+
+        //対象のオブジェクトの移動量を加算
+        for (const auto& fieldObject : fieldObjects)
+        {
+            if (objectTag == fieldObject->GetTag())
+            {
+                newPos = VAdd(newPos, fieldObject->GetPos_difference());
+            }
+        }
+
+        SetPos(newPos);
     }
 }
 
@@ -434,7 +445,7 @@ void Player::HangingMove()
 /// 登り
 /// </summary>
 /// <param name="mapHandle"></param>
-void Player::Hang_to_CrouchMove(const int mapHandle)
+void Player::Hang_to_CrouchMove(const std::vector<std::shared_ptr<BaseObject>>& fieldObjects)
 {
    //////////////////////////////////
    //  コード整理しろ！
@@ -467,7 +478,7 @@ void Player::Hang_to_CrouchMove(const int mapHandle)
             //足のフレーム座標で衝突判定
             VECTOR foot = MV1GetFramePosition(modelHandle, 167);
 
-            auto result = collisionManager->GroundCollisionCheck_Hang_to_Crouch(mapHandle, nowPos, newPos, foot, positionData);
+            auto result = collisionManager->GroundCollisionCheck_Hang_to_Crouch(fieldObjects, nowPos, newPos, foot, positionData);
 
             //playerの座標はフレーム座標を基準にしていないため縦だけずらす
             position.y = result.second.y;
@@ -481,7 +492,7 @@ void Player::Hang_to_CrouchMove(const int mapHandle)
                 playerData.isJump = false;
                 playerData.isRoll = false;
                 playerData.isStopRun = false;
-                auto result = collisionManager->GroundCollisionCheck_Hang_to_Crouch(mapHandle, nowPos, newPos, foot, positionData);
+                auto result = collisionManager->GroundCollisionCheck_Hang_to_Crouch(fieldObjects, nowPos, newPos, foot, positionData);
 
                 //playerData.isGround = result.first;
                 position.y = result.second.y;
