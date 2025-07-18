@@ -139,6 +139,9 @@
     <Filter Include="ソース ファイル\collisionObject\floor_sky">
       <UniqueIdentifier>{828f1d62-3c20-4137-8228-5f854e5c690e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\player\state\running_turn">
+      <UniqueIdentifier>{69a95b38-88ec-4a95-ab8c-4e2220089f04}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -251,6 +254,9 @@
     </ClCompile>
     <ClCompile Include="Floor_sky.cpp">
       <Filter>ソース ファイル\collisionObject\floor_sky</Filter>
+    </ClCompile>
+    <ClCompile Include="Running_turn.cpp">
+      <Filter>ソース ファイル\player\state\running_turn</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -376,6 +382,9 @@
     </ClInclude>
     <ClInclude Include="Floor_sky.h">
       <Filter>ソース ファイル\collisionObject\floor_sky</Filter>
+    </ClInclude>
+    <ClInclude Include="Running_turn.h">
+      <Filter>ソース ファイル\player\state\running_turn</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

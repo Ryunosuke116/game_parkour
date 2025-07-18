@@ -177,6 +177,7 @@
     <ClCompile Include="PlayerStateActionBase.cpp" />
     <ClCompile Include="Quick_Roll.cpp" />
     <ClCompile Include="Run.cpp" />
+    <ClCompile Include="Running_turn.cpp" />
     <ClCompile Include="Run_Jump.cpp" />
     <ClCompile Include="Run_To_Stop.cpp" />
     <ClCompile Include="SceneManager.cpp" />
@@ -218,6 +219,7 @@
     <ClInclude Include="PlayerStateActionBase.h" />
     <ClInclude Include="Quick_Roll.h" />
     <ClInclude Include="Run.h" />
+    <ClInclude Include="Running_turn.h" />
     <ClInclude Include="Run_Jump.h" />
     <ClInclude Include="Run_To_Stop.h" />
     <ClInclude Include="SceneManager.h" />

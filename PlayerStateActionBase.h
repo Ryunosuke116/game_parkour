@@ -9,7 +9,9 @@ public:
 
 	struct PlayerData
 	{
+		bool isIdle;					//止まっているか
 		bool isMove;					//動いているか
+		bool isRun;						//走っているか
 		bool isJump;					//ジャンプしたか
 		bool isJump_second;				//二段ジャンプしたか
 		bool isJump_PlayAnim;			//ジャンプのアニメを再生するか
@@ -20,8 +22,9 @@ public:
 		bool isStopRun;					//走り終わったか
 		bool isJumpAll;					//全てのジャンプが完了したか
 		bool isFalling;					//落下中か
-		bool isHanging;				//崖つかみ中か
+		bool isHanging;					//崖つかみ中か
 		bool isHang_to_Crouch;			//上に上がる
+		bool isSlip;				
 	};
 
 	struct AnimState

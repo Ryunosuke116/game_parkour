@@ -85,7 +85,7 @@ bool PadInput::isLeft()
 bool PadInput::isJump()
 {
     if (CheckHitKey(KEY_INPUT_SPACE) ||
-        input->GetNowFrameNewInput() & PAD_INPUT_A)
+        input->GetNowFrameNewInput() & PAD_INPUT_B)
     {
         return true;
     }
@@ -100,7 +100,7 @@ bool PadInput::isJump()
 bool PadInput::isRoll()
 {
     if (CheckHitKey(KEY_INPUT_F) ||
-        input->GetNowFrameNewInput() & PAD_INPUT_B)
+        input->GetNowFrameNewInput() & PAD_INPUT_R)
     {
         return true;
     }

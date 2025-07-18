@@ -33,8 +33,9 @@ public:
 
 	void Reset_move();
 
-	float GetjumpSpeed_now() { return jumpSpeed_now; }
-	float GetmoveSpeed_now() { return moveSpeed_now; }
+	float GetjumpSpeed_now() const { return jumpSpeed_now; }
+	float GetmoveSpeed_now() const { return moveSpeed_now; }
+	float GetmoveSpeed_max() const { return MaxMoveSpeed; }
 	Calculation::NearestResult GetNearestResult() { return nearestResult; }
 	void SetjumpSpeed_now(const float& jumpSpeed) { jumpSpeed_now = jumpSpeed; }
 
@@ -50,6 +51,7 @@ private:
 	float decelerationSpeed;		//Œ¸‘¬‘¬“x
 
 	bool isCalc_deceleration;
+	bool isSlip_after;
 
 	Calculation::NearestResult nearestResult;
 

@@ -60,6 +60,9 @@ void Player::Initialize()
     playerData.isFalling = false;
     playerData.isHanging = false;
     playerData.isHang_to_Crouch = false;
+    playerData.isSlip = false;
+    playerData.isRun = false;
+    playerData.isIdle = true;
     isCalc = false;
     isCalc_moveVec = false;
    
@@ -71,6 +74,8 @@ void Player::Initialize()
     nowAnimState.PlayAnimSpeed = 0.0f;
     nowAnimState.PlayTime_anim = 0.0f;
     nowAnimState.TotalPlayTime_anim = 0.0f;
+    degree_pad_now = 0.0f;
+    padInput_now = VGet(0.0f, 0.0f, 0.0f);
 
     animNumber_Now = animNum::idle;
     nowState = std::make_shared<Idle>(modelHandle, oldAnimState, nowAnimState, playerData);
@@ -137,12 +142,28 @@ void Player::Update(const VECTOR& cameraDirection,
     //上に登る
     Hang_to_CrouchMove(fieldObjects);
 
+    float radian_new = atan2f(moveDirection_now.x, moveDirection_now.z);
+
+    float degree_now = Calculation::radToDeg(angle);
+    float degree_new = Calculation::radToDeg(radian_new);
+
+    float degree_difference = degree_new - degree_now;
+
+    if ((degree_difference >= 160.0f || -160.0f >= degree_difference) &&
+        playerCalculation->GetmoveSpeed_now() >= (playerCalculation->GetmoveSpeed_max() - 0.4f))
+    {
+        playerData.isSlip = true;
+    }
+
+    if (!playerData.isSlip)
+    {
+        UpdateAngle(moveDirection_now);
+    }
+    
     //状態変更
     ChangeState();
 
     isChangeState = nowState->MotionUpdate(playerData);
-
-    UpdateAngle(moveDirection_now);
 
     // プレイヤーのモデルの座標を更新する
     MV1SetPosition(modelHandle, position);
@@ -226,7 +247,10 @@ bool Player::Draw()
         position.x, position.y, position.z);
     printfDx("frame現在数%d\n", nowFrameNumber);
     printfDx("moveSpeed_now %f\n", playerCalculation->GetmoveSpeed_now());
+    printfDx("isIdle %d\n", playerData.isIdle);
     printfDx("isMove %d\n", playerData.isMove);
+    printfDx("isRun %d\n", playerData.isRun);
+    printfDx("isSlip %d\n", playerData.isSlip);
     printfDx("isJump %d\n", playerData.isJump);
     printfDx("isJump_second %d\n", playerData.isJump_second);
     printfDx("isGround %d\n", playerData.isGround);
@@ -242,6 +266,9 @@ bool Player::Draw()
     printfDx("moveDirection_now.x %f\n", moveDirection_now.x);
     printfDx("moveDirection_now.y %f\n", moveDirection_now.y);
     printfDx("moveDirection_now.z %f\n", moveDirection_now.z);
+    printfDx("JoyPad_x_left %f\n", PadInput::GetJoyPad_x_left());
+    printfDx("JoyPad_y_left %f\n", PadInput::GetJoyPad_y_left());
+    printfDx("degree_pad_now %f\n", degree_pad_now);
 
     nowState->Draw();
 
@@ -291,11 +318,15 @@ void Player::NormalMove(const std::vector<std::shared_ptr<BaseObject>>& fieldObj
 {
     if ((!playerData.isHanging && !playerData.isHang_to_Crouch))
     {
+        if (playerCalculation->GetmoveSpeed_now() <= 0.0f)
+        {
+            playerData.isSlip = false;
+        }
+
         //移動量計算
         moveVec = playerCalculation->Update(moveVec, moveDirection_now,
             nowState->GetNowAnimState().PlayTime_anim,
             animNumber_Now, playerData);
-
 
         //衝突判定
         auto [isHitGround, newPos, objectTag] = collisionManager->Update(fieldObjects, position,
@@ -353,8 +384,14 @@ VECTOR Player::Move(VECTOR& moveVec, const VECTOR& cameraDirection)
     {
         moveVec = VNorm(moveVec);
         playerData.isMove = true;
-        playerData.isStopRun = true;
+        playerData.isIdle = false;
     }
+    else
+    {
+     
+
+    }
+
 
     return returnPos;
     
@@ -508,8 +545,10 @@ void Player::Hang_to_CrouchMove(const std::vector<std::shared_ptr<BaseObject>>& 
 void Player::ChangeState()
 {
     //立ち
-    if (!playerData.isMove && !playerData.isJump && !playerData.isRoll && !playerData.isStopRun && 
-        !playerData.isHanging && !playerData.isHang_to_Crouch &&
+    if (!playerData.isMove && !playerData.isRun && !playerData.isJump &&
+        !playerData.isRoll &&
+        !playerData.isStopRun && !playerData.isHanging && 
+        !playerData.isHang_to_Crouch && !playerData.isSlip &&
         animNumber_Now != animNum::idle)
     {
         //nowState内のアニメーション情報を保存
@@ -519,6 +558,7 @@ void Player::ChangeState()
         //nowStateの中身を削除
         nowState = nullptr;
         animNumber_Now = animNum::idle;
+        playerData.isIdle = true;
 
         //nowStateを更新
         nowState = std::make_shared<Idle>(modelHandle,oldAnimState, nowAnimState,playerData);
@@ -526,6 +566,7 @@ void Player::ChangeState()
 
     //走る
     if (playerData.isMove && !playerData.isRoll && playerData.isSprint &&
+        !playerData.isSlip &&
         playerData.isGround && animNumber_Now != animNum::run)
     {
         //nowState内のアニメーション情報を保存
@@ -535,6 +576,8 @@ void Player::ChangeState()
         //nowStateの中身を削除
         nowState = nullptr;
         animNumber_Now = animNum::run;
+        playerData.isRun = true;
+        playerData.isStopRun = false;
 
         //nowStateを更新
         nowState = std::make_shared<Run>(modelHandle, oldAnimState,nowAnimState);
@@ -562,7 +605,8 @@ void Player::ChangeState()
     }
 
     //ランジャンプ
-    if (playerData.isMove && (playerData.isJump || playerData.isJump_second) && !playerData.isJumpAll &&
+    if (playerData.isMove && (playerData.isJump || playerData.isJump_second) &&
+        !playerData.isJumpAll && !playerData.isSlip &&
         animNumber_Now != animNum::run_Jump && PadInput::isJump())
     {
         SetNowAnimState(nowState->GetNowAnimState());
@@ -616,7 +660,8 @@ void Player::ChangeState()
     }
 
     //走り出し
-    if (!playerData.isSprint && playerData.isMove && !playerData.isRoll && !playerData.isJump &&
+    if (!playerData.isSprint && playerData.isMove &&
+        !playerData.isRoll && !playerData.isJump &&
         animNumber_Now != animNum::idle_To_Sprint)
     {
         SetNowAnimState(nowState->GetNowAnimState());
@@ -628,7 +673,9 @@ void Player::ChangeState()
     }
 
     //走り終わり
-    if (playerData.isStopRun && !playerData.isMove && playerData.isGround && !playerData.isRoll && !playerData.isJump &&
+    if (!playerData.isStopRun && !playerData.isIdle && !playerData.isMove &&
+        playerData.isGround &&!playerData.isRoll && !playerData.isJump &&
+        playerData.isRun &&
         animNumber_Now != animNum::run_To_Stop)
     {
         SetNowAnimState(nowState->GetNowAnimState());
@@ -636,6 +683,8 @@ void Player::ChangeState()
 
         nowState = nullptr;
         animNumber_Now = animNum::run_To_Stop;
+        playerData.isStopRun = true;
+        playerData.isRun = false;
         nowState = std::make_shared<Run_To_Stop>(modelHandle, oldAnimState, nowAnimState);
     }
 
@@ -664,6 +713,20 @@ void Player::ChangeState()
         nowState = std::make_shared<Braced_Hang_To_Crouch>(modelHandle, oldAnimState, nowAnimState, playerData);
         playerData.isHanging = false;
     }
+
+    ////急回転
+    //if (playerData.isSlip && animNumber_Now == animNum::run &&
+    //    animNumber_Now != animNum::running_turn)
+    //{
+    //    SetOldAnimState(nowState->GetOldAnimState());
+    //    SetNowAnimState(nowState->GetNowAnimState());
+
+    //    nowState = nullptr;
+    //    animNumber_Now = animNum::running_turn;
+    //    nowState = std::make_shared<Running_turn>(modelHandle, oldAnimState, nowAnimState, playerData);
+
+    //}
+
 }
 
 void Player::Reset()

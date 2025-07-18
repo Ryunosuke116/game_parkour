@@ -10,7 +10,8 @@ PlayerCalculation::PlayerCalculation() :
     jumpSpeed_now(0.0f),
     moveSpeed_now(0.0f),
     rollMoveSpeed_now(0.0f),
-    isCalc_deceleration(false)
+    isCalc_deceleration(false),
+    isSlip_after(false)
 {
 
 }
@@ -20,9 +21,8 @@ VECTOR PlayerCalculation::Update(const VECTOR& moveVec, const VECTOR& moveDirect
 {
     VECTOR returnVec = moveVec;
 
-
-
     returnVec = Roll(returnVec, moveDirection, playTime_anim, playerData);
+
     //進むスピードを乗算
       //ロールアクション中はそれに応じた速度
     if (playerData.isRoll)
@@ -52,11 +52,16 @@ VECTOR PlayerCalculation::Update(const VECTOR& moveVec, const VECTOR& moveDirect
 /// <returns></returns>
 VECTOR PlayerCalculation::Move(const VECTOR& moveVec, const VECTOR& moveDirection, const PlayerStateActionBase::PlayerData& playerData)
 {
-    if (playerData.isMove)
+    if (playerData.isMove && !playerData.isSlip)
     {
         if (isCalc_deceleration)
         {
             isCalc_deceleration = false;
+            if (isSlip_after)
+            {
+                moveSpeed_now = MaxMoveSpeed / 2.0f;
+                isSlip_after = false;
+            }
         }
 
         //徐々にスピードを上げる
@@ -76,9 +81,20 @@ VECTOR PlayerCalculation::Move(const VECTOR& moveVec, const VECTOR& moveDirectio
             //アニメーションフレームに合わせて減速
             if (!isCalc_deceleration)
             {
-                const float stopFrame = 10.0f;
-                decelerationSpeed = moveSpeed_now / stopFrame;
-                isCalc_deceleration = true;
+                //stopアニメーションに応じて止まるタイミングを調整
+                if (!playerData.isSlip)
+                {
+                    const float stopFrame = 10.0f;
+                    decelerationSpeed = moveSpeed_now / stopFrame;
+                    isCalc_deceleration = true;
+                }
+                else if (playerData.isSlip)
+                {
+                    const float stopFrame = 18.0f;
+                    decelerationSpeed = moveSpeed_now / stopFrame;
+                    isCalc_deceleration = true;
+                    isSlip_after = true;
+                }
             }
 
             moveSpeed_now -= decelerationSpeed;

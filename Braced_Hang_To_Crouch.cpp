@@ -1,5 +1,3 @@
-#include <iostream>
-#include <memory>
 #include "DxLib.h"
 #include "PlayerStateActionBase.h"
 #include "Braced_Hang_To_Crouch.h"

@@ -15,7 +15,8 @@ enum animNum : int
 	run,						//走る
 	run_Jump,					//走りながらジャンプ
 	run_To_Stop,				//止まる
-	running_Forward_Flip		//走りながら回転ジャンプ
+	running_Forward_Flip,		//走りながら回転ジャンプ
+	running_turn				//急回転
 };
 
 ////上入力されたとき

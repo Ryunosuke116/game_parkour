@@ -13,7 +13,7 @@ private:
 	static constexpr float MaxMoveSpeed = 1.6f;	    // 移動速度
 	static constexpr float rollMoveSpeed_max = 2.5f;	//ロール速度
 	static constexpr float angleSpeed = 0.3f;
-	static constexpr float addJumpPower = 2.0f;		//ジャンプパワー
+	static constexpr float addJumpPower = 1.7f;		//ジャンプパワー
 	static constexpr float gravity = -0.06f;
 
 	VECTOR linePos_end;
@@ -27,6 +27,9 @@ private:
 	VECTOR handPos_left;
 	VECTOR handCenterPos;
 	VECTOR moveDirection_now;
+	VECTOR padInput_now;
+
+	float degree_pad_now;
 
 	bool isPush;					//ボタンを押したか
 	bool isChangeState;				//アニメーションを変更するか
