@@ -1,7 +1,9 @@
 #include "common.h"
+
 #include "EffekseerForDXLib.h"
 #include "HitCheck.h"
 #include "PadInput.h"
+#include "BaseObject.h"
 #include "Camera.h"
 #include "Calculation.h"
 
@@ -49,7 +51,8 @@ void Camera::Initialize()
 /// <summary>
 /// çXêV
 /// </summary>
-void Camera::Update(const VECTOR& playerPosition, const int& mapHandle)
+void Camera::Update(const VECTOR& playerPosition,
+	const std::vector<std::shared_ptr<BaseObject>>& fieldObjects)
 {
 
 	centerPos = playerPosition;
@@ -78,8 +81,10 @@ void Camera::Update(const VECTOR& playerPosition, const int& mapHandle)
 	}
 
 	RotateUpdate();
-
-	CameraPosCalc(mapHandle);
+	for (const auto& fieldObject : fieldObjects)
+	{
+		CameraPosCalc(fieldObject->GetModelHandle());
+	}
 
 	SetCameraPositionAndTarget_UpVecY(aimPosition, spherePosition);
 

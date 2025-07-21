@@ -22,6 +22,7 @@ protected:
 
 	float totalTime_anim;
 	float angle;
+	float x;
 
 	VECTOR targetMoveDirection;
 	VECTOR framePosition;
@@ -43,7 +44,7 @@ public:
 
 	virtual void ChangeMotion(const int& motionNum, const float playAnimSpeed);
 	virtual void MotionUpdate();
-	void UpdateAngle(const VECTOR& direction);
+	void UpdateAngle(const VECTOR& direction, bool& isTurn_right);
 
 	/////////////////////////////////////////////
 	// ÉQÉbÉ^Å[

@@ -197,25 +197,20 @@ VECTOR Calculation::Leap(const VECTOR& changePosition, const VECTOR& latestPosit
 	return VAdd(changePosition, scalePosition);
 }
 
-/// <summary>
-/// ÉâÉWÉAÉìåvéZ
-/// </summary>
-/// <param name="line_1"></param>
-/// <param name="line_2"></param>
-/// <returns></returns>
-float Calculation::Radian(const VECTOR& line_1,const VECTOR& line_2)
+MATRIX Calculation::Rotate(const VECTOR& wall_normal)
 {
-	float dot = VDot(line_1, line_2);
-	float length_1 = VSize(line_1);
-	float length_2 = VSize(line_2);
+	VECTOR up = wall_normal;
+	VECTOR forward = VGet(0.0f, 1.0f, 0.0f);
+	VECTOR right = VGet(1.0f, 0.0f, 0.0f);
+	forward = VNorm(VCross(up, right));
 
-	//É¶èúéZëŒçÙ
-	if (length_1 == 0 || length_2 == 0)
-	{
-		return 0.0f;
-	}
+	MATRIX rotate;
+	rotate.m[0][0] = right.x;	rotate.m[0][1] = right.y;   rotate.m[0][2] = right.z;   rotate.m[0][3] = 0;
+	rotate.m[1][0] = up.x;      rotate.m[1][1] = up.y;      rotate.m[1][2] = up.z;      rotate.m[1][3] = 0;
+	rotate.m[2][0] = forward.x; rotate.m[2][1] = forward.y; rotate.m[2][2] = forward.z; rotate.m[2][3] = 0;
+	rotate.m[3][0] = 0;         rotate.m[3][1] = 0;         rotate.m[3][2] = 0;         rotate.m[3][3] = 1;
 
-	return dot / (length_1 * length_2);
+	return rotate;
 }
 
 /// <summary>

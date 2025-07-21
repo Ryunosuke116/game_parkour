@@ -18,6 +18,8 @@ Run::Run(int& modelHandle,
 
 	this->nowAnimState.PlayTime_anim = 0.0f;
 	this->nowAnimState.PlayAnimSpeed = playAnimSpeed;
+
+
 }
 
 /// <summary>
@@ -30,6 +32,7 @@ Run::~Run()
 
 bool Run::MotionUpdate(PlayerData& playerData)
 {
+
 	PlayerStateActionBase::MotionUpdate(playerData);
 
 	if (!playerData.isGround)

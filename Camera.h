@@ -1,4 +1,7 @@
 #pragma once
+#include <vector>
+#include <memory>
+#include "BaseObject.h"
 
 class Camera 
 {
@@ -26,7 +29,7 @@ public:
 	~Camera();
 
 	void Initialize();
-	void Update(const VECTOR& playerPosition, const int& mapHandle);
+	void Update(const VECTOR& playerPosition, const std::vector<std::shared_ptr<BaseObject>>& fieldObjects);
 	void Update_layout();
 	bool Draw();
 	void RotateUpdate();

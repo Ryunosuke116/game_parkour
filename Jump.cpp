@@ -77,6 +77,7 @@ bool Jump::MotionUpdate(PlayerData& playerData)
         if (nowAnimState.PlayTime_anim >= totalTime_anim)
         {
             flag = true;
+            playerData.isJump_PlayAnim = false;
         }
 
         // Ä¶ŠÔ‚ğƒZƒbƒg‚·‚é

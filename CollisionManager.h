@@ -27,11 +27,11 @@ public:
 	bool HeadCollisionCheck(const std::vector<std::shared_ptr<BaseObject>>& fieldObjects, VECTOR& newPos,
 		const PositionData& positionData);
 
-	bool WallCollisionCheck(const std::vector<std::shared_ptr<BaseObject>>& fieldObjects, VECTOR& newPos,
+	std::pair<bool, VECTOR> WallCollisionCheck(const std::vector<std::shared_ptr<BaseObject>>& fieldObjects, VECTOR& newPos,
 		VECTOR& oldPos, const PositionData& positionData);
 
 
-	std::tuple<bool, VECTOR,std::string> Update(const std::vector<std::shared_ptr<BaseObject>>& fieldObjects,
+	std::tuple<bool, bool, VECTOR, VECTOR, std::string> Update(const std::vector<std::shared_ptr<BaseObject>>& fieldObjects,
 		const VECTOR& playerPos,
 		const VECTOR& moveVec, const PositionData& positionData,
 		const PlayerStateActionBase::PlayerData& playerData);

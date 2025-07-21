@@ -14,3 +14,4 @@
 #include "CoinObject.h"
 #include "CoinManager.h"
 #include "Floor_sky.h"
+#include "Wall.h"

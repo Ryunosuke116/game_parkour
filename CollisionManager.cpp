@@ -11,7 +11,7 @@
 /// @param player 
 /// @param modelHandle 
 /// @return 
-std::tuple<bool, VECTOR, std::string> CollisionManager::Update(const std::vector<std::shared_ptr<BaseObject>>& fieldObjects,
+std::tuple<bool, bool, VECTOR, VECTOR, std::string> CollisionManager::Update(const std::vector<std::shared_ptr<BaseObject>>& fieldObjects,
 	const VECTOR& playerPos,const VECTOR& moveVec, 
 	const PositionData& positionData,
 	const PlayerStateActionBase::PlayerData& playerData)
@@ -22,7 +22,7 @@ std::tuple<bool, VECTOR, std::string> CollisionManager::Update(const std::vector
 	topPos.y += positionData.addTopPos;
 	
 	//壁衝突判定
-	WallCollisionCheck(fieldObjects, newPos, oldPos, positionData);
+	auto hitWall = WallCollisionCheck(fieldObjects, newPos, oldPos, positionData);
 
 	//頭上衝突判定
 	HeadCollisionCheck(fieldObjects, newPos, positionData);
@@ -31,7 +31,8 @@ std::tuple<bool, VECTOR, std::string> CollisionManager::Update(const std::vector
 	auto returnGround = GroundCollisionCheck(fieldObjects, oldPos, newPos, positionData, playerData);
 
 	//床衝突判定
-	return std::make_tuple(returnGround.first, newPos, returnGround.second);
+	return std::make_tuple(returnGround.first, hitWall.first,
+		hitWall.second, newPos, returnGround.second);
 }
 
 /// <summary>
@@ -150,7 +151,7 @@ std::pair<bool, std::string> CollisionManager::GroundCollisionCheck(const std::v
 			playerNormal = VNorm(playerNormal);
 
 			//playerと床のなす角を求める
-			float cosTheta = Calculation::Radian(playerNormal, rayPoly_ground.Normal);
+			float cosTheta = VDot(playerNormal, rayPoly_ground.Normal) / (VSquareSize(playerNormal) * VSquareSize(rayPoly_ground.Normal));
 			float radian = std::acos(cosTheta);
 			tiltAngle_degree = radian * 180.0f / DX_PI_F;
 
@@ -238,7 +239,7 @@ std::pair<bool, VECTOR> CollisionManager::GroundCollisionCheck_Hang_to_Crouch(co
 /// <param name="player"></param>
 /// <param name="modelHandle"></param>
 /// <returns></returns>
-bool CollisionManager::WallCollisionCheck(const std::vector<std::shared_ptr<BaseObject>>& fieldObjects, VECTOR& newPos,
+std::pair<bool, VECTOR> CollisionManager::WallCollisionCheck(const std::vector<std::shared_ptr<BaseObject>>& fieldObjects, VECTOR& newPos,
 	VECTOR& oldPos, const PositionData& positionData)
 {
 
@@ -253,6 +254,7 @@ bool CollisionManager::WallCollisionCheck(const std::vector<std::shared_ptr<Base
 	pos_now = topPos_now;
 
 	bool flag = false;
+	VECTOR hitPoly_normal;
 
 	for (auto& fieldObject : fieldObjects)
 	{
@@ -306,7 +308,8 @@ bool CollisionManager::WallCollisionCheck(const std::vector<std::shared_ptr<Base
 
 					HitCheck::HitRayJudge(fieldObject->GetModelHandle(), -1, pos_now,
 						result.first, poly_ray);
-
+					
+					//rayが当たっている場合当たった座標で衝突判定
 					if (poly_ray.HitFlag)
 					{
 						//球の接触している座標を求める
@@ -331,6 +334,7 @@ bool CollisionManager::WallCollisionCheck(const std::vector<std::shared_ptr<Base
 
 						newPos = VAdd(newPos, pos);
 						flag = true;
+						hitPoly_normal = poly_ray.Normal;
 					}
 
 
@@ -341,7 +345,7 @@ bool CollisionManager::WallCollisionCheck(const std::vector<std::shared_ptr<Base
 
 	// 検出したプレイヤーの周囲のポリゴン情報を開放する
 	MV1CollResultPolyDimTerminate(hitPoly_Wall);
-	return flag;
+	return std::make_pair(flag, hitPoly_normal);
 
 }
 

@@ -10,8 +10,10 @@ PlayerCalculation::PlayerCalculation() :
     jumpSpeed_now(0.0f),
     moveSpeed_now(0.0f),
     rollMoveSpeed_now(0.0f),
+    run_wall_stopTime(0.0f),
     isCalc_deceleration(false),
-    isSlip_after(false)
+    isSlip_after(false),
+    isRun_Wall_Stop(false)
 {
 
 }
@@ -19,7 +21,7 @@ PlayerCalculation::PlayerCalculation() :
 VECTOR PlayerCalculation::Update(const VECTOR& moveVec, const VECTOR& moveDirection, const float playTime_anim,
     const int& animNumber_Now, const PlayerStateActionBase::PlayerData& playerData)
 {
-    VECTOR returnVec = moveVec;
+    VECTOR returnVec = moveDirection;
 
     returnVec = Roll(returnVec, moveDirection, playTime_anim, playerData);
 
@@ -27,7 +29,12 @@ VECTOR PlayerCalculation::Update(const VECTOR& moveVec, const VECTOR& moveDirect
       //ロールアクション中はそれに応じた速度
     if (playerData.isRoll)
     {
-        returnVec = VScale(returnVec, rollMoveSpeed_max);
+        if (playTime_anim >= 10.0f ||
+            animNumber_Now != animNum::quick_Roll)
+        {
+            returnVec = VScale(returnVec, rollMoveSpeed_max);
+            moveSpeed_now = MaxMoveSpeed;
+        }
     }
     else
     {
@@ -38,7 +45,7 @@ VECTOR PlayerCalculation::Update(const VECTOR& moveVec, const VECTOR& moveDirect
     returnVec = Jump(returnVec, animNumber_Now, playerData);
 
     //重力計算
-    Gravity(returnVec, playerData);
+    Gravity(playerData);
 
     return returnVec;
 }
@@ -50,15 +57,20 @@ VECTOR PlayerCalculation::Update(const VECTOR& moveVec, const VECTOR& moveDirect
 /// <param name="moveDirection"></param>
 /// <param name="playerData"></param>
 /// <returns></returns>
-VECTOR PlayerCalculation::Move(const VECTOR& moveVec, const VECTOR& moveDirection, const PlayerStateActionBase::PlayerData& playerData)
+VECTOR PlayerCalculation::Move(const VECTOR& moveVec, const VECTOR& moveDirection, 
+    const PlayerStateActionBase::PlayerData& playerData)
 {
+    //動いている場合移動スピードを徐々に上げる
     if (playerData.isMove && !playerData.isSlip)
     {
+        //減速スピード計算していたらfalseに
         if (isCalc_deceleration)
         {
             isCalc_deceleration = false;
+
             if (isSlip_after)
             {
+                //スリップ後は最初から移動スピードをもつ
                 moveSpeed_now = MaxMoveSpeed / 2.0f;
                 isSlip_after = false;
             }
@@ -90,7 +102,7 @@ VECTOR PlayerCalculation::Move(const VECTOR& moveVec, const VECTOR& moveDirectio
                 }
                 else if (playerData.isSlip)
                 {
-                    const float stopFrame = 18.0f;
+                    const float stopFrame = 12.0f;
                     decelerationSpeed = moveSpeed_now / stopFrame;
                     isCalc_deceleration = true;
                     isSlip_after = true;
@@ -116,6 +128,11 @@ VECTOR PlayerCalculation::Move(const VECTOR& moveVec, const VECTOR& moveDirectio
                 moveSpeed_now = 0.0f;
             }
         }
+    }
+    
+    if (playerData.isSlip)
+    {
+        return VScale(moveDirection, -moveSpeed_now);
     }
 
     return VScale(moveDirection, moveSpeed_now);
@@ -152,7 +169,7 @@ VECTOR PlayerCalculation::Jump(const VECTOR& moveVec,const int& animNumber_Now,
 /// </summary>
 /// <param name="moveVec"></param>
 /// <param name="playerData"></param>
-void PlayerCalculation::Gravity(const VECTOR& moveVec, const PlayerStateActionBase::PlayerData& playerData)
+void PlayerCalculation::Gravity(const PlayerStateActionBase::PlayerData& playerData)
 {
     if (!playerData.isGround)
     {
@@ -184,6 +201,42 @@ VECTOR PlayerCalculation::Roll(const VECTOR& moveVec, const VECTOR& moveDirectio
     }
 
     return move;
+}
+
+VECTOR PlayerCalculation::Run_Wall(const VECTOR& moveVec,
+    const PlayerStateActionBase::PlayerData& playerData)
+{
+    VECTOR move = moveVec;
+    
+    move.y += jumpSpeed_now;
+
+    if (jumpSpeed_now <= 0.0f && !isRun_Wall_Stop)
+    {
+        isRun_Wall_Stop = true;
+        jumpSpeed_now = 0.0f;
+    }
+
+    //少しの間留まる
+    if (isRun_Wall_Stop)
+    {
+        if (run_wall_stopTime <= 4.0f)
+        {
+            run_wall_stopTime++;
+        }
+        else
+        {
+            //重力計算
+            Gravity(playerData);
+        }
+    }
+    else
+    {
+        //重力計算
+        Gravity(playerData);
+    }
+
+    return move;
+
 }
 
 /// <summary>
@@ -239,6 +292,12 @@ void PlayerCalculation::Reset_move()
 {
     moveSpeed_now = 0.0f;
     jumpSpeed_now = 0.0f;
+}
+
+void PlayerCalculation::Reset_run_wall()
+{
+    run_wall_stopTime = 0.0f;
+    isRun_Wall_Stop = false;
 }
 
 ///////////////////////////////

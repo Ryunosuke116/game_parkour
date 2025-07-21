@@ -1,4 +1,6 @@
 #include "common.h"
+#include <vector>
+#include <memory>
 #include "GameObjectManager.h"
 
 /// <summary>
@@ -28,7 +30,6 @@ void GameObjectManager::Create()
 
 	map				= std::make_shared<Map>("material/skyDome/sunSet.mv1");
 	field			= std::make_shared<Field>("material/mv1/new_city/new_city_0710.mv1");
-	fieldMesh		= std::make_shared<FieldMesh>("material/mv1/new_city/new_city_mesh_0710.mv1");
 	coinManager		= std::make_shared<CoinManager>();
 	playerManager	= std::make_shared<PlayerManager>();
 	camera			= std::make_shared<Camera>();
@@ -42,10 +43,10 @@ void GameObjectManager::Create()
 
 	fieldObjects.push_back(std::make_shared<FieldMesh>("material/mv1/new_city/new_city_0710.mv1"));
 	fieldObjects.push_back(std::make_shared<Floor_sky>(jsonManager->GetJsons("object")));
+	fieldObjects.push_back(std::make_shared<Wall>(jsonManager->GetJsons("object")));
 
 	coinManager->HandOver(jsonManager->GetJsons("coin"));
 	playerManager->HandOver(jsonManager->GetJsons("player"));
-	floor_sky = std::make_shared<Floor_sky>(jsonManager->GetJsons("object"));
 
 	playerManager->Create();
 	coinManager->Create();
@@ -65,11 +66,9 @@ void GameObjectManager::Initialize()
 
 	map->Initialize();
 	field->Initialize();
-	fieldMesh->Initialize();
 	coinManager->Initialize();
 	playerManager->Initialize();
 	camera->Initialize();
-	floor_sky->Initialize();
 	PadInput::Initialize();
 
 	isCamera = false;
@@ -106,13 +105,11 @@ void GameObjectManager::Update()
 
 	if (!isCamera)
 	{
-		camera->Update(playerManager_actual->GetPlayer()->GetPosition(),fieldMesh->GetModelHandle());
+		camera->Update(playerManager_actual->GetPlayer()->GetPosition(),fieldObjects);
 	
 		playerManager_actual->Update(fieldObjects, camera->GetCameraDirection());
 		map_actual->Update(playerManager_actual->GetPlayer()->GetPosition());
 		field->Update();
-		fieldMesh->Update();
-		floor_sky->Update();
 		for (auto& feildObject : fieldObjects)
 		{
 			feildObject->Update();
@@ -137,8 +134,6 @@ bool GameObjectManager::Draw()
 	camera->Draw();
 	map->Draw();
 	field->Draw();
-	floor_sky->Draw();
-	fieldMesh->Draw();
 	for (auto& feildObject : fieldObjects)
 	{
 		feildObject->Draw();

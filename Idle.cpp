@@ -18,7 +18,6 @@ Idle::Idle(int& modelHandle,
 
     this->nowAnimState.PlayTime_anim = 0.0f;
     this->nowAnimState.PlayAnimSpeed = playAnimSpeed;
-    playerData.isSprint = false;
 }
 
 /// <summary>

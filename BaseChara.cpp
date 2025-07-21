@@ -16,6 +16,7 @@ BaseChara::BaseChara() :
     prevPlayTime_anim(-1),
     currentPlayAnimSpeed(-1),
     prevPlayAnimSpeed(-1),
+    x(0.0f),
     targetMoveDirection(VGet(0.0f, 0.0f, 0.0f)),
     position(VGet(0.0f, 0.0f, 0.0f))
 {
@@ -50,7 +51,7 @@ bool BaseChara::Draw()
 /// <summary>
 /// 向き
 /// </summary>
-void BaseChara::UpdateAngle(const VECTOR& direction)
+void BaseChara::UpdateAngle(const VECTOR& direction, bool& isTurn_right)
 {
     // プレイヤーの移動方向にモデルの方向を近づける
     float targetAngle;			// 目標角度
@@ -77,6 +78,8 @@ void BaseChara::UpdateAngle(const VECTOR& direction)
     // 角度の差が０に近づける
     if (difference > 0.0f)
     {
+        isTurn_right = true;
+
         // 差がプラスの場合は引く
         difference -= angleSpeed;
         if (difference < 0.0f)
@@ -86,6 +89,8 @@ void BaseChara::UpdateAngle(const VECTOR& direction)
     }
     else
     {
+        isTurn_right = false;
+
         // 差がマイナスの場合は足す
         difference += angleSpeed;
         if (difference > 0.0f)
@@ -96,7 +101,7 @@ void BaseChara::UpdateAngle(const VECTOR& direction)
 
     // モデルの角度を更新
     angle = targetAngle - difference;
-    MV1SetRotationXYZ(modelHandle, VGet(0.0f, angle + DX_PI_F, 0.0f));
+    MV1SetRotationXYZ(modelHandle, VGet(x * DX_PI_F / 180.0f, angle + DX_PI_F, 0.0f));
 }
 
 /// <summary>

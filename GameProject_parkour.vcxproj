@@ -143,6 +143,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AnimationChanger.cpp" />
     <ClCompile Include="BaseChara.cpp" />
     <ClCompile Include="BaseGameObjectManager.cpp" />
     <ClCompile Include="BaseManager.cpp" />
@@ -181,8 +182,10 @@
     <ClCompile Include="Run_Jump.cpp" />
     <ClCompile Include="Run_To_Stop.cpp" />
     <ClCompile Include="SceneManager.cpp" />
+    <ClCompile Include="Wall.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AnimationChanger.h" />
     <ClInclude Include="BaseChara.h" />
     <ClInclude Include="BaseGameObjectManager.h" />
     <ClInclude Include="BaseManager.h" />
@@ -225,6 +228,7 @@
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="AnimTime.h" />
     <ClInclude Include="common.h" />
+    <ClInclude Include="Wall.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Json\player.Json" />

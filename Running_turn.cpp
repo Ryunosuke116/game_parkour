@@ -12,7 +12,14 @@ Running_turn::Running_turn(int& modelHandle,
     PlayerStateActionBase(modelHandle, oldAnimState, nowAnimState)
 {
     // ３Ｄモデルの０番目のアニメーションをアタッチする
-    this->nowAnimState.AttachIndex = MV1AttachAnim(modelHandle, animNum::running_turn);
+    if (!playerData.isTurn_right)
+    {
+        this->nowAnimState.AttachIndex = MV1AttachAnim(modelHandle, animNum::running_turn_left);
+    }
+    else
+    {
+        this->nowAnimState.AttachIndex = MV1AttachAnim(modelHandle, animNum::running_turn_right);
+    }
 
     this->nowAnimState.PlayTime_anim = 0.0f;
     this->nowAnimState.PlayAnimSpeed = playAnimSpeed;
@@ -58,7 +65,7 @@ bool Running_turn::MotionUpdate(PlayerData& playerData)
         if (nowAnimState.PlayTime_anim >= totalTime_anim)
         {
             playerData.isSlip = false;
-            nowAnimState.PlayTime_anim = 0.0f;
+     
         }
 
         // 再生時間をセットする

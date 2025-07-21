@@ -47,6 +47,7 @@ bool Run_Jump::MotionUpdate(PlayerData& playerData)
 
 	if (!isPush)
 	{
+		//二段ジャンプしたらプレイタイムリセット
  		if (playerData.isJump_second)
 		{
 			nowAnimState.PlayTime_anim = 0.0f;
@@ -57,6 +58,7 @@ bool Run_Jump::MotionUpdate(PlayerData& playerData)
 	if (nowAnimState.PlayTime_anim >= 22.0f)
 	{
 		flag = true;
+		playerData.isJump_run_playAnim = false;
 	}
 
 	PlayerStateActionBase::MotionUpdate(playerData);

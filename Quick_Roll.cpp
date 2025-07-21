@@ -71,7 +71,8 @@ bool Quick_Roll::MotionUpdate(PlayerData& playerData)
         //‘Ä¶ŽžŠÔ‚ð’´‚¦‚½‚çƒŠƒZƒbƒg
         if (nowAnimState.PlayTime_anim >= totalTime_anim)
         {
-            playerData.isRoll = false;
+            playerData.isRoll_PlayAnim = false;
+            playerData.isRollFinished = true;
 
            // nowAnimState.PlayTime_anim = static_cast<float>(fmod(nowAnimState.PlayTime_anim, totalTime_anim));
         }

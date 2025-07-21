@@ -18,7 +18,7 @@ public:
 	VECTOR Jump(const VECTOR& moveVec, const int& animNumber_Now,
 		const PlayerStateActionBase::PlayerData& playerData);
 
-	void Gravity(const VECTOR& moveVec, const PlayerStateActionBase::PlayerData& playerData);
+	void Gravity(const PlayerStateActionBase::PlayerData& playerData);
 
 	VECTOR Roll(const VECTOR& moveVec, const VECTOR& moveDirection, 
 		float playTime_anim, const PlayerStateActionBase::PlayerData& playerData);
@@ -31,7 +31,11 @@ public:
 
 	VECTOR HangingDirection(const MV1_COLL_RESULT_POLY& hangingPoly, const VECTOR& centerPos);
 
+	VECTOR Run_Wall(const VECTOR& moveVec,
+		const PlayerStateActionBase::PlayerData& playerData);
+
 	void Reset_move();
+	void Reset_run_wall();
 
 	float GetjumpSpeed_now() const { return jumpSpeed_now; }
 	float GetmoveSpeed_now() const { return moveSpeed_now; }
@@ -49,9 +53,11 @@ private:
 	float moveSpeed_now;
 	float rollMoveSpeed_now;		//現在のロールスピード
 	float decelerationSpeed;		//減速速度
+	float run_wall_stopTime;		//壁に留まる時間
 
-	bool isCalc_deceleration;
-	bool isSlip_after;
+	bool isCalc_deceleration;		//止まるときに一度だけ減速スピードを計算
+	bool isSlip_after;				//slipした後か
+	bool isRun_Wall_Stop;
 
 	Calculation::NearestResult nearestResult;
 

@@ -4,35 +4,45 @@
 #include "BaseChara.h"
 #include "CollisionManager.h"
 #include "Calculation.h"
+#include "AnimationChanger.h"
 #include  "nlohmann/json.hpp"
 
 class Player : public BaseChara
 {
 private:
+
+	using ObjectList = std::vector<std::shared_ptr<BaseObject>>;
+
 	static constexpr float modelScale = 0.06f;
 	static constexpr float MaxMoveSpeed = 1.6f;	    // 移動速度
 	static constexpr float rollMoveSpeed_max = 2.5f;	//ロール速度
 	static constexpr float angleSpeed = 0.3f;
 	static constexpr float addJumpPower = 1.7f;		//ジャンプパワー
 	static constexpr float gravity = -0.06f;
+	static constexpr float run_wall_rotate_x = 30.0f;
+	static constexpr float entryDegree_wallRun = 20.0f;
 
 	VECTOR linePos_end;
 	VECTOR centerPosition;
 	VECTOR topPosition;
 	VECTOR bottomPosition;
 	VECTOR moveVec;
+	VECTOR moveVec_normal;
 	VECTOR hangingPoint;
 	VECTOR headPos;
 	VECTOR handPos_right;
 	VECTOR handPos_left;
 	VECTOR handCenterPos;
-	VECTOR moveDirection_now;
+	VECTOR moveDirection_now;		//現在向いている方向
 	VECTOR padInput_now;
 
+	float radian_wall;
 	float degree_pad_now;
+	float degree_difference;
+	float degree_pad_wall_difference;
 
 	bool isPush;					//ボタンを押したか
-	bool isChangeState;				//アニメーションを変更するか
+	bool isChange_falling;				//アニメーションを変更するか
 	bool isCalc;
 	bool isCalc_moveVec;
 
@@ -44,6 +54,7 @@ private:
 	std::shared_ptr<CollisionManager> collisionManager = NULL;
 	std::shared_ptr<PlayerCalculation> playerCalculation = NULL;
 	CollisionManager::PositionData positionData;
+	std::shared_ptr<AnimationChanger> animationChecger = NULL;
 
 public:
 	Player(nlohmann::json jsonData);
@@ -59,17 +70,12 @@ public:
 	void RollMove();
 	void HangingMove();
 	void Hang_to_CrouchMove(const std::vector<std::shared_ptr<BaseObject>>& fieldObjects);
-	void ChangeState();
 	void SettingRay();
 	void HangingCheck(const std::vector<std::shared_ptr<BaseObject>>& fieldObjects);
 	void NormalMove(const std::vector<std::shared_ptr<BaseObject>>& fieldObjects);
-	void Reset();
-
+	void StateUpdate(const std::vector<std::shared_ptr<BaseObject>>& fieldObjects);
 	void Command(const VECTOR& cameraDirection);
-
-	void SetOldAnimState(PlayerStateActionBase::AnimState animState);
-	void SetNowAnimState(PlayerStateActionBase::AnimState animState);
-
+	void WallRunUpdate(const std::vector<std::shared_ptr<BaseObject>>& fieldObjects);
 
 	//////////////////////////////////
 	//　ゲッター
