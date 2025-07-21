@@ -451,6 +451,8 @@ void Player::NormalMove(const std::vector<std::shared_ptr<BaseObject>>& fieldObj
 /// <param name="fieldObjects"></param>
 void Player::WallRunUpdate(const std::vector<std::shared_ptr<BaseObject>>& fieldObjects)
 {  
+
+  
     moveVec = playerCalculation->Run_Wall(moveVec,playerData);
 
     auto [isHitGround, isHitWall, isHitWall_normal, newPos,
