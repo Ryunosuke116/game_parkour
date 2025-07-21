@@ -29,7 +29,7 @@ void GameObjectManager::Create()
 
 
 	map				= std::make_shared<Map>("material/skyDome/sunSet.mv1");
-	field			= std::make_shared<Field>("material/mv1/new_city/new_city_0710.mv1");
+	field			= std::make_shared<Field>("material/mv1/new_city/new_city_0722.mv1");
 	coinManager		= std::make_shared<CoinManager>();
 	playerManager	= std::make_shared<PlayerManager>();
 	camera			= std::make_shared<Camera>();
