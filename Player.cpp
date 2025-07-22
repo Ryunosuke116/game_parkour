@@ -10,19 +10,6 @@
 
 
 
-
-
-///////////////////////////
-// アニメーションまわりを直す
-///////////////////////////
-
-
-
-
-
-
-
-
 /// <summary>
 /// /インストラクタ
 /// </summary>
@@ -288,6 +275,7 @@ bool Player::Draw()
     printfDx("isFalling %d\n", playerData.isFalling);
     printfDx("isHanging %d\n", playerData.isHanging);
     printfDx("isTurn_right %d\n", playerData.isTurn_right);
+    printfDx("isRun_wall %d\n", playerData.isRun_wall);
     printfDx("isChange_falling %d\n", isChange_falling);
     printfDx("animNumber_Now %d\n", animNumber_Now);
     printfDx("jumpSpeed_now %f\n", playerCalculation->GetjumpSpeed_now());
@@ -305,7 +293,7 @@ bool Player::Draw()
 
     //線
    // DrawLine3D(centerPosition, footPosition, GetColor(255, 0, 0));
-    DrawLine3D(topPosition, linePos_end, GetColor(255, 0, 0));
+    //DrawLine3D(topPosition, linePos_end, GetColor(255, 0, 0));
     collisionManager->Draw();
     return true;
 }
@@ -318,8 +306,10 @@ void Player::StateUpdate(const std::vector<std::shared_ptr<BaseObject>>& fieldOb
     {
         NormalMove(fieldObjects);
     }
-
-    if (playerData.isRun_wall)
+    
+    //崖つかみ中ではない場合
+    if (playerData.isRun_wall && 
+        (!playerData.isHanging && !playerData.isHang_to_Crouch))
     {
         WallRunUpdate(fieldObjects);
     }
@@ -362,9 +352,11 @@ void Player::HangingCheck(const std::vector<std::shared_ptr<BaseObject>>& fieldO
 
         playerData.isHanging = result_cliff.first;
 
+        //掴める場合掴む座標を取得
         if (playerData.isHanging)
         {
             hangingPoint = result_cliff.second;
+            playerData.isRun_wall = false;
         }
     }
 }
@@ -396,8 +388,11 @@ void Player::NormalMove(const std::vector<std::shared_ptr<BaseObject>>& fieldObj
     if (playerData.isFalling && playerData.isHitWall)
     {
         //スティックが即座に反対方向に向いた場合slipをtrue
+        //radian計算
         radian_wall = atan2f(-isHitWall_normal.x, -isHitWall_normal.z);
         float radian_pad = atan2f(moveVec_normal.x, moveVec_normal.z);
+        
+        //度数計算
         degree_pad_now = Calculation::radToDeg(radian_pad);
         float degree_wall = Calculation::radToDeg(radian_wall);
 
@@ -419,7 +414,6 @@ void Player::NormalMove(const std::vector<std::shared_ptr<BaseObject>>& fieldObj
             moveDirection_now = VScale(isHitWall_normal, -1.0f);
 
             x = run_wall_rotate_x;
-
         }
     }
 
@@ -451,8 +445,6 @@ void Player::NormalMove(const std::vector<std::shared_ptr<BaseObject>>& fieldObj
 /// <param name="fieldObjects"></param>
 void Player::WallRunUpdate(const std::vector<std::shared_ptr<BaseObject>>& fieldObjects)
 {  
-
-  
     moveVec = playerCalculation->Run_Wall(moveVec,playerData);
 
     auto [isHitGround, isHitWall, isHitWall_normal, newPos,

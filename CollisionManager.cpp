@@ -358,7 +358,12 @@ std::pair<bool, VECTOR> CollisionManager::CliffGrabbing(const std::vector<std::s
 	const VECTOR& topPosition, const VECTOR& moveDirection, const bool isFalling)
 {
 	VECTOR linePos_end = VAdd(topPosition, VScale(moveDirection, 6.0f));
-	linePos_end.y = topPosition.y - 5.0f;
+	linePos_end.y = topPosition.y - 7.0f;
+
+	//log—p
+	ray_start_hanging_log = topPosition;
+	ray_end_hanging_log = linePos_end;
+
 	bool isHitHanging = false;
 	bool returnFlag = false;
 
@@ -474,6 +479,7 @@ bool CollisionManager::Draw()
 		GetColor(0, 255, 0), FALSE);
 
 	DrawLine3D(topPos_ray, bottomPos_ray, GetColor(255, 0, 0));
+	DrawLine3D(ray_start_hanging_log, ray_end_hanging_log, GetColor(0, 255, 0));
 
 	DrawLine3D(pos_now, pos_new, GetColor(0, 0, 255));
 	return true;

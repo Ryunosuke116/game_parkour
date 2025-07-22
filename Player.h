@@ -20,7 +20,7 @@ private:
 	static constexpr float addJumpPower = 1.7f;		//ジャンプパワー
 	static constexpr float gravity = -0.06f;
 	static constexpr float run_wall_rotate_x = 30.0f;
-	static constexpr float entryDegree_wallRun = 20.0f;
+	static constexpr float entryDegree_wallRun = 30.0f;
 
 	VECTOR linePos_end;
 	VECTOR centerPosition;

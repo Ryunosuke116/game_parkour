@@ -71,6 +71,9 @@ private:
 	VECTOR topPos_ray;
 	VECTOR bottomPos_ray;
 	VECTOR hitHangingPos;
+
+	VECTOR ray_start_hanging_log;
+	VECTOR ray_end_hanging_log;
 	float tiltAngle_degree;
 
 

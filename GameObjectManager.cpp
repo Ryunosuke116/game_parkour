@@ -41,7 +41,7 @@ void GameObjectManager::Create()
 	coinManager_actual   = std::dynamic_pointer_cast<CoinManager>(coinManager);
 
 
-	fieldObjects.push_back(std::make_shared<FieldMesh>("material/mv1/new_city/new_city_0710.mv1"));
+	fieldObjects.push_back(std::make_shared<FieldMesh>("material/mv1/new_city/new_city_mesh_0710.mv1"));
 	fieldObjects.push_back(std::make_shared<Floor_sky>(jsonManager->GetJsons("object")));
 	fieldObjects.push_back(std::make_shared<Wall>(jsonManager->GetJsons("object")));
 
