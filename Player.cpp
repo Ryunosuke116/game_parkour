@@ -175,6 +175,9 @@ void Player::Update(const VECTOR& cameraDirection,
     DebugDrawer::Instance().InformationInput_capsule(positionData.position_top_Capsule,
         positionData.position_bottom_Capsule, radius,
         GetColor(255, 0, 0));
+    VECTOR nowFrame = MV1GetFramePosition(modelHandle, nowFrameNumber);
+    DebugDrawer::Instance().InformationInput_sphere(nowFrame, 2.0f, GetColor(0, 0, 0));
+    DebugDrawer::Instance().InformationInput_string_float("frameåªç›êî%d\n", nowFrameNumber);
     DebugDrawer::Instance().InformationInput_string_float("coinCount %f\n", angle);
     DebugDrawer::Instance().InformationInput_string_float("JoyPad_x_left %f\n", -PadInput::GetJoyPad_x_left());
     DebugDrawer::Instance().InformationInput_string_float("JoyPad_y_left %f\n", -PadInput::GetJoyPad_y_left());
@@ -307,10 +310,15 @@ void Player::CollisionUpdate()
     
     playerCalculation->SetHandPos_left(MV1GetFramePosition(modelHandle, 65));
     playerCalculation->SetHandPos_right(MV1GetFramePosition(modelHandle, 106));
+    centerPosition = MV1GetFramePosition(modelHandle, 7);
 
     //ray
-    positionData.position_top_ray = MV1GetFramePosition(modelHandle, 9);
+    VECTOR position_center = VScale(VAdd(MV1GetFramePosition(modelHandle, 7), position), 0.5f);
+    position_center = VGet(position.x, position_center.y, position.z);
+    //positionData.position_top_ray = MV1GetFramePosition(modelHandle, 9);
+    positionData.position_top_ray = VGet(position.x, position_center.y + height, position.z);
     positionData.position_bottom_ray = position;
+    
 
     //bottomPosÇÊÇËÇ‡â∫Ç…Ç¢Ç©Ç»Ç¢ÇÊÇ§Ç…
    //ray
@@ -331,7 +339,7 @@ void Player::CollisionUpdate()
     }
 
     //ÉJÉvÉZÉã
-    positionData.position_top_Capsule = MV1GetFramePosition(modelHandle, 9);
+    positionData.position_top_Capsule = VGet(position_center.x, position_center.y + height, centerPosition.z);
     positionData.position_bottom_Capsule = position;
     
     //í≤êÆ

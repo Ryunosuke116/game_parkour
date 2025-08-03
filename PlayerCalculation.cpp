@@ -72,13 +72,6 @@ VECTOR PlayerCalculation::Move(const int& animNumber_Now,
             if (isCalc_deceleration)
             {
                 isCalc_deceleration = false;
-
-                if (isSlip_after)
-                {
-                    //スリップ後は最初から移動スピードをもつ
-                    moveSpeed_now = MaxMoveSpeed / 2.0f;
-                    isSlip_after = false;
-                }
             }
 
             //徐々にスピードを上げる
@@ -104,13 +97,6 @@ VECTOR PlayerCalculation::Move(const int& animNumber_Now,
                         const float stopFrame = 10.0f;
                         decelerationSpeed = moveSpeed_now / stopFrame;
                         isCalc_deceleration = true;
-                    }
-                    else if (playerData.isSlip)
-                    {
-                        const float stopFrame = 12.0f;
-                        decelerationSpeed = moveSpeed_now / stopFrame;
-                        isCalc_deceleration = true;
-                        isSlip_after = true;
                     }
                 }
 

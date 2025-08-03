@@ -21,6 +21,7 @@ private:
 	static constexpr float run_wall_rotate_x = 30.0f;
 	static constexpr float entryDegree_wallRun = 30.0f;
 	static constexpr float radius = 3.5f;
+	static constexpr float height = 10.0f;
 
 	VECTOR linePos_end;
 	VECTOR centerPosition;
