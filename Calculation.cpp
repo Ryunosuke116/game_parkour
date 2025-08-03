@@ -72,21 +72,21 @@ VECTOR Calculation::NearestPoint(const VECTOR& position_1, const VECTOR& positio
 /// 点に対して最も近い三角形の辺
 /// </summary>
 /// <param name="poly"></param>
-/// <param name="HitPos_ground"></param>
+/// <param name="pos"></param>
 /// <returns></returns>
-VECTOR Calculation::SphereMeshOutsideTriangle(const MV1_COLL_RESULT_POLY& poly, const VECTOR& HitPos_ground)
+VECTOR Calculation::SphereMeshOutsideTriangle(const MV1_COLL_RESULT_POLY& poly, const VECTOR& pos)
 {
 	VECTOR nearestPoint;
 
 	//線分上の点との最近点
-	VECTOR nearPoint_1 = NearestPoint(poly.Position[0], poly.Position[1], HitPos_ground);
-	VECTOR nearPoint_2 = NearestPoint(poly.Position[0], poly.Position[2], HitPos_ground);
-	VECTOR nearPoint_3 = NearestPoint(poly.Position[1], poly.Position[2], HitPos_ground);
+	VECTOR nearPoint_1 = NearestPoint(poly.Position[0], poly.Position[1], pos);
+	VECTOR nearPoint_2 = NearestPoint(poly.Position[0], poly.Position[2], pos);
+	VECTOR nearPoint_3 = NearestPoint(poly.Position[1], poly.Position[2], pos);
 
 	//各距離を求める
-	float d1 = VSize(VSub(nearPoint_1, HitPos_ground));
-	float d2 = VSize(VSub(nearPoint_2, HitPos_ground));
-	float d3 = VSize(VSub(nearPoint_3, HitPos_ground));
+	float d1 = VSize(VSub(nearPoint_1, pos));
+	float d2 = VSize(VSub(nearPoint_2, pos));
+	float d3 = VSize(VSub(nearPoint_3, pos));
 
 
 	//一番近い座標を選択する
@@ -112,21 +112,21 @@ VECTOR Calculation::SphereMeshOutsideTriangle(const MV1_COLL_RESULT_POLY& poly, 
 /// <param name="poly"></param>
 /// <param name="HitPos_ground"></param>
 /// <returns></returns>
-Calculation::NearestResult Calculation::SphereMeshOutsideTriangle_line(const MV1_COLL_RESULT_POLY& poly, const VECTOR& HitPos_ground)
+Calculation::NearestResult Calculation::SphereMeshOutsideTriangle_line(const MV1_COLL_RESULT_POLY& poly, const VECTOR& pos)
 {
 	VECTOR nearestPoint;
 
 	NearestResult result;
 
 	//線分上の点との最近点
-	VECTOR nearPoint_1 = NearestPoint(poly.Position[0], poly.Position[1], HitPos_ground);
-	VECTOR nearPoint_2 = NearestPoint(poly.Position[0], poly.Position[2], HitPos_ground);
-	VECTOR nearPoint_3 = NearestPoint(poly.Position[1], poly.Position[2], HitPos_ground);
+	VECTOR nearPoint_1 = NearestPoint(poly.Position[0], poly.Position[1], pos);
+	VECTOR nearPoint_2 = NearestPoint(poly.Position[0], poly.Position[2], pos);
+	VECTOR nearPoint_3 = NearestPoint(poly.Position[1], poly.Position[2], pos);
 
 	//各距離を求める
-	float d1 = VSize(VSub(nearPoint_1, HitPos_ground));
-	float d2 = VSize(VSub(nearPoint_2, HitPos_ground));
-	float d3 = VSize(VSub(nearPoint_3, HitPos_ground));
+	float d1 = VSize(VSub(nearPoint_1, pos));
+	float d2 = VSize(VSub(nearPoint_2, pos));
+	float d3 = VSize(VSub(nearPoint_3, pos));
 
 
 	//一番近い座標を選択する
@@ -152,11 +152,30 @@ Calculation::NearestResult Calculation::SphereMeshOutsideTriangle_line(const MV1
 	return result;
 }
 
-/// @brief 
-/// @param point 
-/// @param a 
-/// @param b 
-/// @return 
+/// <summary>
+/// 投影の正規化ベクトルを返す
+/// </summary>
+/// <param name="plane_normal"></param>
+/// <param name="moveVec"></param>
+/// <returns></returns>
+VECTOR Calculation::Projection(const VECTOR& plane_normal,const VECTOR& moveVec)
+{
+	float dot = VDot(plane_normal, moveVec);	//内積
+	
+	VECTOR projection = VSub(moveVec, VScale(plane_normal, dot));
+	projection = VNorm(projection);
+
+	return projection;
+}
+
+
+/// <summary>
+/// 射影方向
+/// </summary>
+/// <param name="point"></param>
+/// <param name="a"></param>
+/// <param name="b"></param>
+/// <returns></returns>
 VECTOR Calculation::ProjectionDirection(const VECTOR& point, const VECTOR& a, const VECTOR& b)
 {
 	VECTOR AB = VSub(b, a);
@@ -167,6 +186,7 @@ VECTOR Calculation::ProjectionDirection(const VECTOR& point, const VECTOR& a, co
 
 	//単位ベクトル(正規化)
 	VECTOR unitVector = VGet(0, 0, 0);
+	unitVector = VNorm(AB);
 	unitVector.x = AB.x / vectorLength;
 	unitVector.y = AB.y / vectorLength;
 	unitVector.z = AB.z / vectorLength;

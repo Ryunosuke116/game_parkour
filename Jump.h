@@ -1,18 +1,29 @@
 #pragma once
 #include "PlayerStateActionBase.h"
 
+class Player;
+
 class Jump : public PlayerStateActionBase
 {
 public:
-	Jump(int& modelHandle,
-		AnimState& oldAnimState, AnimState& nowAnimState);
+	Jump(int& modelHandle, AnimState& oldAnimState,
+		AnimState& nowAnimState, PlayerData& playerData);
 	~Jump();
 
-	bool MotionUpdate(PlayerData& playerData)override;
+	void Initialize(int& modelHandle, Player& player)override;
+	std::pair<VECTOR, PlayerData> Update(const VECTOR& cameraDirection,
+		const std::vector<std::shared_ptr<BaseObject>>& fieldObjects, Player& player)override;
 
+	bool MotionUpdate(PlayerData& playerData)override;
+	VECTOR Command(const VECTOR& cameraDirection, PlayerData& playerData, Player& player)override;
+	void Enter(PlayerData& playerData) override;		//状態に入ったとき
+	void Exit(PlayerData& playerData) override;			//状態を抜けるとき
 private:
-	static constexpr float playAnimSpeed = 0.4f;	    // 移動速度
+	static constexpr float playAnimSpeed = 0.6f;	    // 移動速度
 
 	bool isPush;		//ボタンを押したか
+	bool isRun;
+	bool isJump_first;
+	bool isJump_second;
 };
 

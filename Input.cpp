@@ -7,9 +7,10 @@
 Input::Input()
 	: nowFrameInput(0),
 	nowFrameNewInput(0),
-	joyPad(new JoyPad{ 0.0f, 0.0f, 0.0f, 0.0f })
+	joyPad(new JoyPad{ 0.0f, 0.0f, 0.0f, 0.0f }),
+	joyPad_old(new JoyPad{ 0.0f, 0.0f, 0.0f, 0.0f })
 {
-	// 処理なし
+	SetJoypadDeadZone(DX_INPUT_KEY_PAD1, 0.4f);
 }
 
 /// <summary>
@@ -43,6 +44,9 @@ void Input::Update()
 	GetJoypadAnalogInput(&input_x_left, &input_y_left, DX_INPUT_KEY_PAD1);
 	//右スティック
 	GetJoypadAnalogInputRight(&input_x_Right, &input_y_Right, DX_INPUT_KEY_PAD1);
+
+	joyPad_old->input_x_left = joyPad->input_x_left;
+	joyPad_old->input_y_left = joyPad->input_y_left;
 
 	joyPad->input_x_left = static_cast<float>(input_x_left);
 	joyPad->input_y_left = static_cast<float>(input_y_left);

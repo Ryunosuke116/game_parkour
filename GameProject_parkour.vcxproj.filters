@@ -49,9 +49,6 @@
     <Filter Include="ソース ファイル\manager\object">
       <UniqueIdentifier>{733bd2bf-452d-40b4-a80b-71e93c23b571}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\player\moveCalclation">
-      <UniqueIdentifier>{f9dc51d6-1cdb-4363-bbf5-2cf3ddbf8b9d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\manager\player">
       <UniqueIdentifier>{2a33576b-268e-4832-9dee-8902d408c493}</UniqueIdentifier>
     </Filter>
@@ -100,9 +97,6 @@
     <Filter Include="ソース ファイル\collisionObject\floor_sky">
       <UniqueIdentifier>{828f1d62-3c20-4137-8228-5f854e5c690e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\player\animationManager">
-      <UniqueIdentifier>{abdff138-57d9-4360-b150-7469ae254d34}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\collisionObject\wall">
       <UniqueIdentifier>{64a5a458-0152-4384-824c-1d742086213b}</UniqueIdentifier>
     </Filter>
@@ -115,23 +109,14 @@
     <Filter Include="ソース ファイル\player\animation\falling_Idle">
       <UniqueIdentifier>{b40c3a77-e359-4e55-9ca2-9795527822ca}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\player\animation\idle">
-      <UniqueIdentifier>{ae649b4f-c1a5-45cd-87a9-b445c1eae15e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\player\animation\idle_to_sprint">
       <UniqueIdentifier>{ef170e75-9be3-4c0d-babc-fc0764ed8cbc}</UniqueIdentifier>
     </Filter>
     <Filter Include="ソース ファイル\player\animation\jump">
       <UniqueIdentifier>{f027c21f-f61a-4446-8085-ab3822338f95}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\player\animation\quick_roll">
-      <UniqueIdentifier>{86aa8a87-aaa1-45df-9575-21d005c28125}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\player\animation\run">
       <UniqueIdentifier>{41af47bd-3a60-436b-b164-77d22ae1b093}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\player\animation\run_jump">
-      <UniqueIdentifier>{8292d61b-8f6b-47bf-9863-c9fbb375498c}</UniqueIdentifier>
     </Filter>
     <Filter Include="ソース ファイル\player\animation\run_to_stop">
       <UniqueIdentifier>{ad1bbf69-df63-42d0-af47-aa4948d1fdff}</UniqueIdentifier>
@@ -142,8 +127,32 @@
     <Filter Include="ソース ファイル\player\animation\hanging_Idle">
       <UniqueIdentifier>{da44a1cc-a0e2-47f0-b13e-bed6339938ff}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\player\animation\running_turn">
-      <UniqueIdentifier>{69a95b38-88ec-4a95-ab8c-4e2220089f04}</UniqueIdentifier>
+    <Filter Include="ソース ファイル\player\animationChanger">
+      <UniqueIdentifier>{abdff138-57d9-4360-b150-7469ae254d34}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\player\animation\idle">
+      <UniqueIdentifier>{ae649b4f-c1a5-45cd-87a9-b445c1eae15e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\player\animation\quick_roll">
+      <UniqueIdentifier>{86aa8a87-aaa1-45df-9575-21d005c28125}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\shadow">
+      <UniqueIdentifier>{fc540499-a255-488c-9209-0f2b29b3851c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Debug">
+      <UniqueIdentifier>{60b018f4-5600-4481-a5d7-0e2b4316e13a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Observer">
+      <UniqueIdentifier>{459a351b-37b9-47ad-bac3-326a179a787f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Observer\coin">
+      <UniqueIdentifier>{e2711408-00da-4bab-8418-b491d612c8f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\UI">
+      <UniqueIdentifier>{c948dba5-aa4d-4d17-aee9-30e4bf5bc655}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\player\moveCalclation">
+      <UniqueIdentifier>{f9dc51d6-1cdb-4363-bbf5-2cf3ddbf8b9d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -222,9 +231,6 @@
     <ClCompile Include="Run.cpp">
       <Filter>ソース ファイル\player\animation\run</Filter>
     </ClCompile>
-    <ClCompile Include="Run_Jump.cpp">
-      <Filter>ソース ファイル\player\animation\run_jump</Filter>
-    </ClCompile>
     <ClCompile Include="Run_To_Stop.cpp">
       <Filter>ソース ファイル\player\animation\run_to_stop</Filter>
     </ClCompile>
@@ -255,17 +261,26 @@
     <ClCompile Include="Floor_sky.cpp">
       <Filter>ソース ファイル\collisionObject\floor_sky</Filter>
     </ClCompile>
-    <ClCompile Include="Running_turn.cpp">
-      <Filter>ソース ファイル\player\animation\running_turn</Filter>
-    </ClCompile>
     <ClCompile Include="AnimationChanger.cpp">
-      <Filter>ソース ファイル\player\animationManager</Filter>
+      <Filter>ソース ファイル\player\animationChanger</Filter>
+    </ClCompile>
+    <ClCompile Include="Wall.cpp">
+      <Filter>ソース ファイル\collisionObject\wall</Filter>
     </ClCompile>
     <ClCompile Include="Player.cpp">
       <Filter>ソース ファイル\player</Filter>
     </ClCompile>
-    <ClCompile Include="Wall.cpp">
-      <Filter>ソース ファイル\collisionObject\wall</Filter>
+    <ClCompile Include="Shadow.cpp">
+      <Filter>ソース ファイル\shadow</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugDrawer.cpp">
+      <Filter>ソース ファイル\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="CoinObserver.cpp">
+      <Filter>ソース ファイル\Observer\coin</Filter>
+    </ClCompile>
+    <ClCompile Include="UI.cpp">
+      <Filter>ソース ファイル\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -356,9 +371,6 @@
     <ClInclude Include="Run.h">
       <Filter>ソース ファイル\player\animation\run</Filter>
     </ClInclude>
-    <ClInclude Include="Run_Jump.h">
-      <Filter>ソース ファイル\player\animation\run_jump</Filter>
-    </ClInclude>
     <ClInclude Include="Run_To_Stop.h">
       <Filter>ソース ファイル\player\animation\run_to_stop</Filter>
     </ClInclude>
@@ -392,14 +404,29 @@
     <ClInclude Include="Floor_sky.h">
       <Filter>ソース ファイル\collisionObject\floor_sky</Filter>
     </ClInclude>
-    <ClInclude Include="Running_turn.h">
-      <Filter>ソース ファイル\player\animation\running_turn</Filter>
-    </ClInclude>
     <ClInclude Include="AnimationChanger.h">
-      <Filter>ソース ファイル\player\animationManager</Filter>
+      <Filter>ソース ファイル\player\animationChanger</Filter>
     </ClInclude>
     <ClInclude Include="Wall.h">
       <Filter>ソース ファイル\collisionObject\wall</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerData.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionData.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Shadow.h">
+      <Filter>ソース ファイル\shadow</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugDrawer.h">
+      <Filter>ソース ファイル\Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="CoinObserver.h">
+      <Filter>ソース ファイル\Observer\coin</Filter>
+    </ClInclude>
+    <ClInclude Include="UI.h">
+      <Filter>ソース ファイル\UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

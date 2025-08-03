@@ -1,5 +1,6 @@
 #pragma once
 #include "BaseManager.h"
+
 class Game : public BaseScene
 {
 public:
@@ -11,6 +12,5 @@ public:
 	void Draw();
 private:
 	std::shared_ptr<BaseManager> gameObjectManager = NULL;
-
 };
 

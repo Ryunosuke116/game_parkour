@@ -36,7 +36,6 @@ void FieldMesh::Initialize()
 
 	int a = MV1GetMaterialNum(modelHandle);
 
-
 	for (int i = 0; i < a; i++)
 	{
 		// ３Ｄモデルに含まれる０番目のマテリアルの描画ブレンドモードを DX_BLENDMODE_ADD に変更する

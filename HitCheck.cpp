@@ -1,6 +1,7 @@
 #include "common.h"
 #include "HitCheck.h"
 #include "Calculation.h"
+#include "DebugDrawer.h"
 
 /// @brief コンストラクタ
 /// @return 
@@ -37,9 +38,11 @@ bool HitCheck::HitRayJudge(const int& modelHandle, int frameIndex,
 /// @param linePos_end 
 /// @param hitPoly 
 /// @return 
-bool HitCheck::SphereHitJudge(const int& modelHandle, int frameIndex, VECTOR linePos_end, MV1_COLL_RESULT_POLY_DIM& hitPoly)
+bool HitCheck::SphereHitJudge(const int& modelHandle, 
+	int frameIndex, const float& radius,
+	VECTOR linePos_end, MV1_COLL_RESULT_POLY_DIM& hitPoly)
 {
-	hitPoly = MV1CollCheck_Sphere(modelHandle, frameIndex, linePos_end, 3.5f);
+	hitPoly = MV1CollCheck_Sphere(modelHandle, frameIndex, linePos_end, radius);
 
 	if (hitPoly.HitNum >= 1)return true;
 	return false;
@@ -363,4 +366,86 @@ bool HitCheck::TriangleAreaCheck_ground(const VECTOR& point, const VECTOR& a, co
 	bool inside = area_1 > 0 && area_2 > 0 && area_3 > 0;
 
 	return (area_equal && inside) ? true : false;
+}
+
+/// <summary>
+/// 崖つかみ判定
+/// </summary>
+/// <param name="player"></param>
+/// <param name="modelHandle"></param>
+HangingData HitCheck::CliffGrabbing(const std::vector<std::shared_ptr<BaseObject>>& fieldObjects,
+	const VECTOR& topPosition, const VECTOR& moveDirection,
+	const float& radius)
+{
+	VECTOR linePos_end = VAdd(topPosition, VScale(moveDirection, 2.0f));
+
+	bool returnFlag = false;
+	HangingData hangingData = { false,VGet(0.0f,0.0f,0.0f),NULL };
+
+	//落下中にplayerの上部から出ているrayで判定を取る
+	for (const auto& fieldObject : fieldObjects)
+	{
+		MV1_COLL_RESULT_POLY_DIM poly_dim;
+
+		HitCheck::SphereHitJudge(fieldObject->GetModelHandle(), -1, radius, linePos_end, poly_dim);
+
+		if (poly_dim.HitNum >= 1)
+		{
+			if (fieldObject->GetTag() != "field")
+			{
+				continue;
+			}
+
+			float minSize = NULL;
+
+			for (int i = 0; i < poly_dim.HitNum; i++)
+			{
+				MV1_COLL_RESULT_POLY poly = poly_dim.Dim[i];
+
+				//平面に当たっていればtrueに
+				if (poly.Normal.y >= 0.8f)
+				{
+					VECTOR neareast = Calculation::SphereMeshOutsideTriangle(poly, linePos_end);
+					DebugDrawer::Instance().InformationInput_sphere(neareast, 2.0f, GetColor(255, 0, 255));
+
+					VECTOR sub = VSub(neareast, linePos_end);
+					float sub_size = VSize(sub);
+
+					//一番差が小さい情報を取得
+					if (minSize == NULL || minSize >= sub_size)
+					{
+						minSize = sub_size;
+						hangingData.hangingPoly = poly;
+
+					}
+					
+					hangingData.isHitHanging = true;
+				}
+			}
+
+			//平面に当たっていなければfalse
+			if (minSize == NULL)
+			{
+				hangingData.isHitHanging = false;
+			}
+		}
+
+		/*MV1_COLL_RESULT_POLY poly;
+		hangingData.isHitHanging = HitCheck::HitRayJudge(fieldObject->GetModelHandle(), -1, topPosition, linePos_end, poly);
+
+
+		if (hangingData.isHitHanging && poly.Normal.y >= 0.8f)
+		{
+			hangingData.hitHangingPos = poly.HitPosition;
+			hangingData.hangingPoly = poly;
+		}
+		else
+		{
+			hangingData.isHitHanging = false;
+		}*/
+	}
+
+	return hangingData;
+
+	//trueの場合に崖をつかむようにする
 }

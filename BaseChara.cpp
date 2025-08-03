@@ -16,9 +16,11 @@ BaseChara::BaseChara() :
     prevPlayTime_anim(-1),
     currentPlayAnimSpeed(-1),
     prevPlayAnimSpeed(-1),
-    x(0.0f),
+    rotate_x(0.0f),
+    isCollisionCheck(true),
     targetMoveDirection(VGet(0.0f, 0.0f, 0.0f)),
-    position(VGet(0.0f, 0.0f, 0.0f))
+    position(VGet(0.0f, 0.0f, 0.0f)),
+    moveVec(VGet(0.0f, 0.0f, 0.0f))
 {
 
 }
@@ -101,7 +103,7 @@ void BaseChara::UpdateAngle(const VECTOR& direction, bool& isTurn_right)
 
     // モデルの角度を更新
     angle = targetAngle - difference;
-    MV1SetRotationXYZ(modelHandle, VGet(x * DX_PI_F / 180.0f, angle + DX_PI_F, 0.0f));
+    MV1SetRotationXYZ(modelHandle, VGet(rotate_x * DX_PI_F / 180.0f, angle + DX_PI_F, 0.0f));
 }
 
 /// <summary>
@@ -208,4 +210,10 @@ void BaseChara::MotionUpdate()
         // アニメーション２のモデルに対する反映率をセット
         MV1SetAttachAnimBlendRate(modelHandle, prevAttachIndex, 1.0f - animBlendRate);
     }
+}
+
+void BaseChara::PositionUpdate()
+{
+    // プレイヤーのモデルの座標を更新する
+    MV1SetPosition(modelHandle, position);
 }

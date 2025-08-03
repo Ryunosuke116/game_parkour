@@ -22,8 +22,11 @@ PlayerManager::~PlayerManager()
 
 void PlayerManager::Create() 
 {
+	collisionManager = std::make_shared<CollisionManager>();
+
 	player = std::make_shared<Player>(jsonData);
 	actualPlayer = std::dynamic_pointer_cast<Player>(player);
+	//characters.push_back(std::make_shared<Player>(jsonData));
 }
 
 /// <summary>
@@ -31,7 +34,12 @@ void PlayerManager::Create()
 /// </summary>
 void PlayerManager::Initialize()
 {
-	player->Initialize();
+	actualPlayer->Initialize();
+
+	/*for (auto& chara : characters)
+	{
+		chara->Initialize();
+	}*/
 }
 
 /// <summary>
@@ -45,13 +53,12 @@ void PlayerManager::Update(const std::vector<std::shared_ptr<BaseObject>>& field
 
 	actualPlayer->Update(cameraDirection, fieldObjects);
 
-	/*if(actualPlayer->GetData().isHanging)
-	{
-		actualPlayer->SetPos(PositionCheck(actualPlayer->GetHangingPoint(), actualPlayer->GetPosition()));
-	}*/
+	collisionManager->Update(*player, fieldObjects, actualPlayer->GetData());
+	
+	actualPlayer->Receive_CollisionResult();
 
-	// プレイヤーのモデルの座標を更新する
-	MV1SetPosition(actualPlayer->GetModelHandle(), actualPlayer->GetPosition());
+	actualPlayer->PositionUpdate();
+	
 }
 
 /// <summary>
@@ -59,7 +66,15 @@ void PlayerManager::Update(const std::vector<std::shared_ptr<BaseObject>>& field
 /// </summary>
 bool PlayerManager::Draw()
 {
-	player->Draw();
+	actualPlayer->Draw();
+
+	/*for (auto& chara : characters)
+	{
+		chara->Draw();
+	}*/
+	collisionManager->Draw();
+	collisionManager->Draw();
+
 	return true;
 }
 

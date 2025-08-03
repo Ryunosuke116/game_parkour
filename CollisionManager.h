@@ -1,6 +1,9 @@
 #pragma once
 #include "PlayerStateActionBase.h"
 #include "BaseObject.h"
+#include "BaseChara.h"
+#include "CollisionData.h"
+#include "PlayerData.h"
 #include <vector>
 #include <string>
 
@@ -9,32 +12,29 @@ class HitCheck;
 class CollisionManager
 {
 public:
-	struct PositionData
-	{
-		static constexpr float addTopPos = 17.0f;
-		static constexpr float addBottomPos = 3.0f;
-		static constexpr float radius = 3.5f;
-		VECTOR footPosition;
-	};
+
 
 	//////////////////////////////////////////
 	//è’ìÀîªíË
 	/////////////////////////////////////////
-	std::pair<bool,std::string> GroundCollisionCheck(const std::vector<std::shared_ptr<BaseObject>>& fieldObjects, const VECTOR& oldPos,
-		VECTOR& newPos, const PositionData& positionData,
-		const PlayerStateActionBase::PlayerData& playerData);
-
-	bool HeadCollisionCheck(const std::vector<std::shared_ptr<BaseObject>>& fieldObjects, VECTOR& newPos,
+	std::pair<bool, std::string> GroundCollisionCheck(const std::vector<std::shared_ptr<BaseObject>>& fieldObjects,
+		const VECTOR& oldPos, VECTOR& newPos, const VECTOR& moveVec,
 		const PositionData& positionData);
 
-	std::pair<bool, VECTOR> WallCollisionCheck(const std::vector<std::shared_ptr<BaseObject>>& fieldObjects, VECTOR& newPos,
-		VECTOR& oldPos, const PositionData& positionData);
+	bool HeadCollisionCheck(const std::vector<std::shared_ptr<BaseObject>>& fieldObjects, VECTOR& newPos,
+		const VECTOR& moveVec, const PositionData& positionData, const float& radius);
 
+	std::pair<bool, VECTOR> WallCollisionCheck(const std::vector<std::shared_ptr<BaseObject>>& fieldObjects,
+		VECTOR& newPos, const VECTOR& moveVec, const PositionData& positionData,
+		const float& radius);
 
-	std::tuple<bool, bool, VECTOR, VECTOR, std::string> Update(const std::vector<std::shared_ptr<BaseObject>>& fieldObjects,
-		const VECTOR& playerPos,
-		const VECTOR& moveVec, const PositionData& positionData,
-		const PlayerStateActionBase::PlayerData& playerData);
+	CollisionResult Check_all(const std::vector<std::shared_ptr<BaseObject>>& fieldObjects,
+		const VECTOR& playerPos, const VECTOR& moveVec, const float& radius,
+		const PositionData& positionData, const PlayerData& playerData);
+
+	void Update(BaseChara& chara,
+		const std::vector<std::shared_ptr<BaseObject>>& fieldObjects,
+		const PlayerData& playerData);
 
 	bool TestSphereTriangle(VECTOR centerPos, VECTOR a, VECTOR b, VECTOR c, VECTOR& q, const float radius);
 
@@ -54,6 +54,7 @@ private:
 	MV1_COLL_RESULT_POLY hitPoly_Ground;
 	MV1_COLL_RESULT_POLY oldPoly;
 	MV1_COLL_RESULT_POLY HangingPoly;
+	MV1_COLL_RESULT_POLY rayPoly_ground_now;
 
 	MV1_COLL_RESULT_POLY_DIM hitPoly_Wall;
 	MV1_COLL_RESULT_POLY_DIM hitPoly_Ground_sphere;
@@ -71,6 +72,8 @@ private:
 	VECTOR topPos_ray;
 	VECTOR bottomPos_ray;
 	VECTOR hitHangingPos;
+	VECTOR projection_ray_start;
+	VECTOR projection_ray_end;
 
 	VECTOR ray_start_hanging_log;
 	VECTOR ray_end_hanging_log;

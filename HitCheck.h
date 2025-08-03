@@ -1,5 +1,5 @@
 #pragma once
-#include <iostream>
+#include "common.h"
 #include <cassert>
 #include <unordered_map>
 #include <string_view>
@@ -8,7 +8,8 @@
 #include <math.h>    
 #include <cmath>
 #include <memory>
-#include "DxLib.h"
+#include "BaseObject.h"
+#include "CollisionData.h"
 
 class HitCheck
 {
@@ -22,7 +23,8 @@ public:
 		VECTOR linePos_start, VECTOR linePos_end, MV1_COLL_RESULT_POLY& hitPoly);
 
 	//ãÖÇ∆ÉÅÉbÉVÉÖ
-	static bool SphereHitJudge(const int& modelHandle, int frameIndex,
+	static bool SphereHitJudge(const int& modelHandle,
+		int frameIndex, const float& radius,
 		VECTOR linePos_end, MV1_COLL_RESULT_POLY_DIM& hitPoly);
 	static bool TriangleAreaCheck(const VECTOR& point, const VECTOR& a, const VECTOR& b, const VECTOR& c);
 	static bool HitConfirmation(VECTOR position_1, VECTOR position_2, const float radius_1, const float radius_2);
@@ -40,7 +42,9 @@ public:
 	static void AABB();
 	
 	static std::pair<VECTOR,VECTOR> SegmentTriangleDistance(const VECTOR& p, const VECTOR& q, const VECTOR& a, const VECTOR& b, const VECTOR& c, const VECTOR& normal);
-
+	static HangingData CliffGrabbing(const std::vector<std::shared_ptr<BaseObject>>& fieldObjects,
+		const VECTOR& topPosition, const VECTOR& moveDirection,
+		const float& radius);
 
 private:
 

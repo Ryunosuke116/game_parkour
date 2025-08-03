@@ -49,7 +49,6 @@ int WINAPI WinMain(HINSTANCE hInstance,
     SetWriteZBuffer3D(TRUE);
 
 
-
     // エスケープキーが押されるかウインドウが閉じられるまでループ
     LONGLONG frameTime = 0;
 

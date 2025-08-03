@@ -1,9 +1,13 @@
-#include <iostream>
+#include "common.h"
 #include <memory>
-#include "DxLib.h"
+#include <vector>
 #include "PlayerStateActionBase.h"
+#include "PlayerData.h"
 #include "Run.h"
 #include "AnimTime.h"
+#include "Player.h"
+#include "PadInput.h"
+#include "HitCheck.h"
 
 /// <summary>
 /// コンストラクタ
@@ -11,14 +15,10 @@
 /// <param name="modelHandle"></param>
 Run::Run(int& modelHandle, 
 	AnimState& oldAnimState, AnimState& nowAnimState) :
-	PlayerStateActionBase(modelHandle,  oldAnimState,nowAnimState)
+	PlayerStateActionBase(modelHandle,  oldAnimState,nowAnimState),
+	degree_difference(0.0f),
+	stopTime(0.0f)
 {
-	// ３Ｄモデルの０番目のアニメーションをアタッチする
-	this->nowAnimState.AttachIndex = MV1AttachAnim(modelHandle, animNum::run);
-
-	this->nowAnimState.PlayTime_anim = 0.0f;
-	this->nowAnimState.PlayAnimSpeed = playAnimSpeed;
-
 
 }
 
@@ -30,10 +30,214 @@ Run::~Run()
 //	MV1DetachAnim(modelHandle, nowAnimState.AttachIndex);
 }
 
+/// <summary>
+/// 初期化
+/// </summary>
+void Run::Initialize(int& modelHandle, Player& player)
+{
+
+	// ３Ｄモデルの０番目のアニメーションをアタッチする
+	this->nowAnimState.AttachIndex = MV1AttachAnim(modelHandle, animNum::run);
+
+	this->nowAnimState.PlayTime_anim = 0.0f;
+	this->nowAnimState.PlayAnimSpeed = playAnimSpeed;
+	animationNum_now = animNum::run;
+}
+
+std::pair<VECTOR, PlayerData> Run::Update(const VECTOR& cameraDirection,
+	const std::vector<std::shared_ptr<BaseObject>>& fieldObjects, Player& player)
+{
+	PlayerData playerData = player.GetData();
+
+	VECTOR moveDir = VGet(0.0f, 0.0f, 0.0f);
+
+	if (playerData.isRun_wall)
+	{
+		auto [moveDir_new,playerData_new] = Update_wallRun(player, fieldObjects);
+	
+		moveDir = moveDir_new;
+		playerData = playerData_new;
+	}
+	else
+	{
+		auto [moveDir_new, playerData_new] = Update_normal(cameraDirection, player);
+	
+		moveDir = moveDir_new;
+		playerData = playerData_new;
+	}
+
+
+
+	/////////////////////////////////////////////////
+	// 現在の技術的に厳しいので一旦無くす
+	////////////////////////////////////////////////// 
+	
+	//if (playerData.isSlip)
+	//{
+	//	player.SetRotate_y(degree_new);
+	//	MV1SetRotationXYZ(modelHandle, VGet(0.0f, degree_new + DX_PI_F, 0.0f));
+	//}
+
+	return std::make_pair(moveDir, playerData);
+}
+
+/// <summary>
+/// 通常時の更新処理
+/// </summary>
+/// <param name="cameraDirection"></param>
+/// <param name="player"></param>
+/// <returns></returns>
+std::pair<VECTOR,PlayerData> Run::Update_normal(const VECTOR& cameraDirection, Player& player )
+{
+	PlayerData playerData = player.GetData();
+
+	VECTOR moveDir = Command(cameraDirection, playerData, player);
+
+	ChangeState(playerData);
+
+	if (!playerData.isGround)
+	{
+		playerData.isFalling = true;
+		isChangeState = true;
+	}
+
+	return std::make_pair(moveDir, playerData);
+}
+
+/// <summary>
+/// 壁走り時の更新処理
+/// </summary>
+/// <param name="player"></param>
+/// <param name="fieldObjects"></param>
+/// <returns></returns>
+std::pair<VECTOR, PlayerData> Run::Update_wallRun(Player& player, 
+	const std::vector<std::shared_ptr<BaseObject>>& fieldObjects)
+{
+
+	PlayerData playerData = player.GetData();
+
+	VECTOR moveDir = VGet(0.0f, 0.0f, 0.0f);
+	const float wallRun_stopTime = player.playerCalculation->GetWallRun_stopTime();
+	const float wallRun_stopTime_max = player.playerCalculation->GetWallRun_stopTime_max();
+
+	//落ちる
+	//壁がない場合
+	if (-PadInput::GetJoyPad_old_y_left() <= -1000)
+	{
+		playerData.isRun_wall = false;
+		playerData.isUse_wallJump = false;
+		playerData.isFalling = true;
+		isChangeState = true;
+		player.playerCalculation->Reset_run_wall();
+		player.SetRotata_x(0.0f);
+
+		return std::make_pair(moveDir, playerData);
+
+	}
+
+	//止まって一定時間過ぎたら落下する
+	if (wallRun_stopTime >= wallRun_stopTime_max)
+	{
+		isChangeState = true;
+		playerData.isFalling = true;
+		playerData.isUse_wallJump = false;
+		player.SetRotata_x(0.0f);
+	}
+
+	//崖掴み判定
+	auto result_cliff = HitCheck::CliffGrabbing(fieldObjects,
+		player.GetPositionData().position_top_ray,
+		player.GetMoveDirection_now(),player.GetRadius());
+
+	//崖掴み時の情報を保存
+	if (result_cliff.isHitHanging)
+	{
+		playerData.isHanging = result_cliff.isHitHanging;
+		isChangeState = true;
+		player.playerCalculation->SetHangingPoint(result_cliff.hitHangingPos);
+		player.playerCalculation->SetHangingPoly(result_cliff.hangingPoly);
+		return std::make_pair(moveDir, playerData);
+	}
+
+	JumpMove(playerData, player);
+
+	//ジャンプする
+	if (playerData.isJump_second)
+	{
+		playerData.isRun_wall = false;
+		playerData.isUse_wallJump = true;
+		//player.SetMoveDirection_now(moveDirection_new);
+		player.playerCalculation->Reset_run_wall();
+
+		VECTOR hitWall_normal = player.playerCalculation->GetHitWall_normal();
+		moveDir = VScale(hitWall_normal, 1.0f);
+		player.SetMoveDirection_now(moveDir);
+		player.SetRotata_x(0.0f);
+	}
+
+	return std::make_pair(moveDir, playerData);
+}
+
+/// <summary>
+/// アニメーション更新
+/// </summary>
+/// <param name="playerData"></param>
+/// <returns></returns>
 bool Run::MotionUpdate(PlayerData& playerData)
 {
 
-	PlayerStateActionBase::MotionUpdate(playerData);
+	float totalTime_anim;
+
+	// ブレンド率が１以下の場合は１に近づける
+	if (animBlendRate < 1.0f)
+	{
+		animBlendRate += AnimBlendSpeed;
+		if (animBlendRate > 1.0f)
+		{
+			animBlendRate = 1.0f;
+		}
+	}
+
+	if (nowAnimState.AttachIndex != -1)
+	{
+		// アタッチしたアニメーションの総再生時間を取得する
+		totalTime_anim = MV1GetAttachAnimTotalTime(modelHandle, nowAnimState.AttachIndex);
+
+		//再生時間更新
+		nowAnimState.PlayTime_anim += nowAnimState.PlayAnimSpeed;
+
+		//総再生時間を超えたらリセット
+		if (nowAnimState.PlayTime_anim >= totalTime_anim)
+		{
+			nowAnimState.PlayTime_anim = static_cast<float>(fmod(nowAnimState.PlayTime_anim, totalTime_anim));
+			if (playerData.isSlip)
+			{
+				playerData.isSlip = false;
+			}
+		}
+
+		// 再生時間をセットする
+		MV1SetAttachAnimTime(modelHandle, nowAnimState.AttachIndex, nowAnimState.PlayTime_anim);
+
+		//アニメーションのモデルに対する反映率をセット
+		MV1SetAttachAnimBlendRate(modelHandle, nowAnimState.AttachIndex, animBlendRate);
+	}
+
+
+	//再生しているアニメーション２の処理
+	if (oldAnimState.AttachIndex != -1)
+	{
+		// アニメーションの総時間を取得
+		totalTime_anim = MV1GetAttachAnimTotalTime(modelHandle, oldAnimState.AttachIndex);
+
+		// 変更した再生時間をモデルに反映させる
+		MV1SetAttachAnimTime(modelHandle, oldAnimState.AttachIndex, oldAnimState.PlayTime_anim);
+
+		// アニメーション２のモデルに対する反映率をセット
+		MV1SetAttachAnimBlendRate(modelHandle, oldAnimState.AttachIndex, 1.0f - animBlendRate);
+	}
+
+	return false;
 
 	if (!playerData.isGround)
 	{
@@ -41,4 +245,159 @@ bool Run::MotionUpdate(PlayerData& playerData)
 	}
 
 	return false;
+}
+
+/// <summary>
+/// 行動入力
+/// 移動方向
+/// ジャンプ
+/// </summary>
+/// <param name="cameraDirection"></param>
+/// <param name="playerData"></param>
+/// <param name="player"></param>
+/// <returns></returns>
+VECTOR Run::Command(const VECTOR& cameraDirection, PlayerData& playerData, Player& player)
+{
+	VECTOR moveDir = VGet(0.0f, 0.0f, 0.0f);
+	angle = player.GetAngle();
+	playerMoveSpeed = player.playerCalculation->GetMoveSpeed_now();
+	playerMoveSpeed_max = player.playerCalculation->GetMoveSpeed_max();
+
+	//moveDirを取得する
+	moveDir = Move(cameraDirection, playerData);
+	JumpMove(playerData, player);
+	RollMove(playerData);
+
+	//前フレームと現在のフレームで入力されてなければ動いてない
+	if (stopTime >= 3.0f)
+	{
+		playerData.isMove = false;
+	}
+	else
+	{
+		playerData.isMove = true;
+	}
+
+	//急転回せずに止まる場合
+	if (!playerData.isMove && !playerData.isRoll &&
+		!playerData.isSlip)
+	{
+		playerData.isStopRun = true;
+		isChangeState = true;
+	}
+
+	return moveDir;
+}
+/// <summary>
+/// 移動方向入力
+/// </summary>
+/// <param name="cameraDirection"></param>
+/// <param name="playerData"></param>
+/// <returns></returns>
+VECTOR Run::Move(const VECTOR& cameraDirection, PlayerData& playerData)
+{
+	VECTOR moveDirection = VGet(0.0f, 0.0f, 0.0f);
+
+	playerData.isMove = false;
+	VECTOR rightMove = VCross(cameraDirection, VGet(0.0f, 1.0f, 0.0f));
+
+	//正規化
+	rightMove = VNorm(rightMove);
+	VECTOR upMove = VNorm(cameraDirection);
+
+	upMove.y = 0.0f;
+	rightMove.y = 0.0f;
+
+	//パッド or arrowキーの入力方向で計算
+	moveDirection = VAdd(VScale(rightMove, -PadInput::GetJoyPad_x_left()),
+		VScale(upMove, -PadInput::GetJoyPad_y_left()));
+
+	////スティックが即座に反対方向に向いた場合slipをtrue
+	//float radian_new = atan2f(moveDirection.x, moveDirection.z);
+
+	//float degree_now = Calculation::radToDeg(angle);
+	//degree_new = Calculation::radToDeg(radian_new);
+
+	//degree_difference = degree_new - degree_now;
+
+	////角度差を-180～180に正規化
+	//while (degree_difference > 180.0f) degree_difference -= 360.0f;
+	//while (degree_difference < -180.0f) degree_difference += 360.0f;
+
+	////絶対値で調べる
+	//if (abs(degree_difference) >= 170.0f &&
+	//	playerData.isGround && playerData.isRun && !playerData.isRoll &&
+	//	playerMoveSpeed >= (playerMoveSpeed_max - 0.4f))
+	//{
+	//	playerData.isSlip = true;
+	//}
+
+	//0でなければ正規化
+	if (VSize(moveDirection) != 0)
+	{
+		moveDirection = VNorm(moveDirection);
+		stopTime = 0.0f;
+	}
+	else
+	{
+		stopTime++;
+	}
+
+	//3fの間入力されてなければ動いてない
+	if (stopTime >= 3.0f)
+	{
+		playerData.isMove = false;
+	}
+	else
+	{
+		playerData.isMove = true;
+	}
+
+
+	//必ず正規化されたものか0を返す
+	return moveDirection;
+
+}
+
+void Run::ChangeState(PlayerData& playerData)
+{
+	//左回転
+	if (playerData.isSlip && !playerData.isTurn_right &&
+		animationNum_now != animNum::running_turn_left)
+	{
+		SwitchingAnimation(animNum::running_turn_left);
+		animationNum_now = animNum::running_turn_left;
+		
+	}
+	//右回転
+	else if (playerData.isSlip && playerData.isTurn_right &&
+		animationNum_now != animNum::running_turn_right)
+	{
+		SwitchingAnimation(animNum::running_turn_right);
+		animationNum_now = animNum::running_turn_right;
+		animBlendRate = 1.0f;
+	}
+	else if (!playerData.isSlip &&
+		animationNum_now != animNum::run)
+	{
+		SwitchingAnimation(animNum::run);
+		animationNum_now = animNum::run;
+		animBlendRate = 1.0f;
+	}
+}
+
+void Run::Enter(PlayerData& playerData)
+{
+	playerData.isRun = true;
+	if (playerData.isRun_wall)
+	{
+		playerData.isJumpAll = false;
+		playerData.isJump_second = false;
+	}
+}
+
+void Run::Exit(PlayerData& playerData)
+{
+	playerData.isRun = false;
+	playerData.isRun_wall = false;
 }

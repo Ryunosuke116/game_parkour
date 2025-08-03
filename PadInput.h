@@ -43,5 +43,9 @@ public:
 	static float GetJoyPad_y_left();
 	static float GetJoyPad_x_right();
 	static float GetJoyPad_y_right();
+	static float GetJoyPad_old_x_left();
+	static float GetJoyPad_old_y_left();
+	static float GetJoyPad_old_x_right();
+	static float GetJoyPad_old_y_right();
 };
 

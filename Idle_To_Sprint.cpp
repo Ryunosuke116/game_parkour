@@ -1,9 +1,12 @@
-#include <iostream>
+#include "common.h"
 #include <memory>
-#include "DxLib.h"
+#include <vector>
 #include "PlayerStateActionBase.h"
+#include "PadInput.h"
+#include "PlayerData.h"
 #include "Idle_To_Sprint.h"
 #include "AnimTime.h"
+#include "Player.h"
 
 /// <summary>
 /// コンストラクタ
@@ -12,6 +15,23 @@
 Idle_To_Sprint::Idle_To_Sprint(int& modelHandle,
     AnimState& oldAnimState, AnimState& nowAnimState) :
     PlayerStateActionBase(modelHandle, oldAnimState, nowAnimState)
+{
+   
+}
+
+/// <summary>
+/// デストラクタ
+/// </summary>
+Idle_To_Sprint::~Idle_To_Sprint()
+{
+    //  MV1DetachAnim(modelHandle, this->nowAnimState.AttachIndex);
+}
+
+/// <summary>
+/// 初期化
+/// </summary>
+/// <param name="modelHandle"></param>
+void Idle_To_Sprint::Initialize(int& modelHandle, Player& player)
 {
     // ３Ｄモデルの０番目のアニメーションをアタッチする
     this->nowAnimState.AttachIndex = MV1AttachAnim(modelHandle, animNum::idle_To_Sprint);
@@ -22,11 +42,40 @@ Idle_To_Sprint::Idle_To_Sprint(int& modelHandle,
 }
 
 /// <summary>
-/// デストラクタ
+/// 更新
 /// </summary>
-Idle_To_Sprint::~Idle_To_Sprint()
+/// <param name="cameraDirection"></param>
+/// <param name="fieldObjects"></param>
+/// <param name="player"></param>
+/// <returns></returns>
+std::pair<VECTOR, PlayerData> Idle_To_Sprint::Update(const VECTOR& cameraDirection,
+    const std::vector<std::shared_ptr<BaseObject>>& fieldObjects, Player& player)
 {
-    //  MV1DetachAnim(modelHandle, this->nowAnimState.AttachIndex);
+    VECTOR moveDirection = VGet(0.0f, 0.0f, 0.0f);
+
+    PlayerData playerData = player.GetData();
+
+    moveDirection = Command(cameraDirection, playerData, player);
+
+    return std::make_pair(moveDirection, playerData);
+}
+
+VECTOR Idle_To_Sprint::Command(const VECTOR& cameraDirection, PlayerData& playerData, Player& player)
+{
+    VECTOR moveDirection = VGet(0.0f, 0.0f, 0.0f);
+
+    //moveDirを取得する
+    moveDirection = Move(cameraDirection, playerData);
+    JumpMove(playerData, player);
+    RollMove(playerData);
+
+    if (VSize(moveDirection) == 0.0f && !playerData.isRoll)
+    {
+        playerData.isIdle = true;
+
+    }
+
+    return moveDirection;
 }
 
 bool Idle_To_Sprint::MotionUpdate(PlayerData& playerData)
@@ -54,7 +103,7 @@ bool Idle_To_Sprint::MotionUpdate(PlayerData& playerData)
         //総再生時間を超えたらリセット
         if (nowAnimState.PlayTime_anim >= 6.0f)
         {
-            playerData.isSprint = true;
+            playerData.isRun = true;
         }
 
         // 再生時間をセットする
@@ -88,4 +137,14 @@ bool Idle_To_Sprint::MotionUpdate(PlayerData& playerData)
     }
 
     return false;
+}
+
+void Idle_To_Sprint::Enter(PlayerData& playerData)
+{
+    playerData.isSprint = true;
+}
+
+void Idle_To_Sprint::Exit(PlayerData& playerData)
+{
+    playerData.isSprint = false;
 }

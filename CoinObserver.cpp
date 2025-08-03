@@ -1,0 +1,1 @@
+#include "CoinObserver.h"

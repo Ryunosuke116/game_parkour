@@ -14,6 +14,7 @@ private:
 	};
 
 	JoyPad* joyPad;
+	JoyPad* joyPad_old;
 public:
 	
 	Input();
@@ -27,6 +28,9 @@ public:
 	float GetJoyPad_y_left() const { return joyPad->input_y_left; }
 	float GetJoyPad_x_right() const { return joyPad->input_x_Right; }
 	float GetJoyPad_y_right() const { return joyPad->input_y_Right; }
-
+	float GetJoyPad_old_x_left() const { return joyPad_old->input_x_left; }
+	float GetJoyPad_old_y_left() const { return joyPad_old->input_y_left; }
+	float GetJoyPad_old_x_right() const { return joyPad_old->input_x_Right; }
+	float GetJoyPad_old_y_right() const { return joyPad_old->input_y_Right; }
 };
 

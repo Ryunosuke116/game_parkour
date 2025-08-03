@@ -127,5 +127,29 @@ float PadInput::GetJoyPad_y_right()
     return input->GetJoyPad_y_right();
 }
 
+////////////////////////////////////
+//‘OƒtƒŒ[ƒ€
+////////////////////////////////////
+
+float PadInput::GetJoyPad_old_x_left()
+{
+    return input->GetJoyPad_old_x_left();
+}
+
+float PadInput::GetJoyPad_old_y_left()
+{
+    return input->GetJoyPad_old_y_left();
+}
+
+float PadInput::GetJoyPad_old_x_right()
+{
+    return input->GetJoyPad_old_x_right();
+}
+
+float PadInput::GetJoyPad_old_y_right()
+{
+    return input->GetJoyPad_old_y_right();
+}
+
 //PadInput* PadInput::instance = nullptr;
 Input* PadInput::input = nullptr;

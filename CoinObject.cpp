@@ -53,9 +53,9 @@ bool CoinObject::Update(const VECTOR& playerpos_top,const VECTOR& playerPos_bott
 /// @brief •`‰æ
 bool CoinObject::Draw()
 {
-	printfDx("coin: %d", hitFlag);
+	//printfDx("coin: %d", hitFlag);
 	MV1DrawModel(modelHandle);
-	DrawSphere3D(position, 4.5f, 5, GetColor(0, 0, 0), GetColor(255, 0, 0), FALSE);
+	//DrawSphere3D(position, 4.5f, 5, GetColor(0, 0, 0), GetColor(255, 0, 0), FALSE);
 	return true;
 }
 

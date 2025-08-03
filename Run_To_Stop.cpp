@@ -1,9 +1,11 @@
-#include <iostream>
+#include "common.h"
 #include <memory>
-#include "DxLib.h"
+#include <vector>
 #include "PlayerStateActionBase.h"
+#include "PlayerData.h"
 #include "Run_To_Stop.h"
 #include "AnimTime.h"
+#include "Player.h"
 
 
 /// <summary>
@@ -14,11 +16,7 @@ Run_To_Stop::Run_To_Stop(int& modelHandle,
     AnimState& oldAnimState, AnimState& nowAnimState) :
     PlayerStateActionBase(modelHandle, oldAnimState, nowAnimState)
 {
-    // ３Ｄモデルの０番目のアニメーションをアタッチする
-    this->nowAnimState.AttachIndex = MV1AttachAnim(modelHandle, animNum::run_To_Stop);
-
-    this->nowAnimState.PlayTime_anim = 0.0f;
-    this->nowAnimState.PlayAnimSpeed = playAnimSpeed;
+  
 }
 
 /// <summary>
@@ -28,6 +26,59 @@ Run_To_Stop::~Run_To_Stop()
 {
     //  MV1DetachAnim(modelHandle, this->nowAnimState.AttachIndex);
 }
+
+/// <summary>
+/// 初期化
+/// </summary>
+/// <param name="modelHandle"></param>
+void Run_To_Stop::Initialize(int& modelHandle, Player& player)
+{
+    // ３Ｄモデルの０番目のアニメーションをアタッチする
+    this->nowAnimState.AttachIndex = MV1AttachAnim(modelHandle, animNum::run_To_Stop);
+
+    this->nowAnimState.PlayTime_anim = 0.0f;
+    this->nowAnimState.PlayAnimSpeed = playAnimSpeed;
+
+}
+
+/// <summary>
+/// 更新
+/// </summary>
+/// <param name="cameraDirection"></param>
+/// <param name="fieldObjects"></param>
+/// <param name="player"></param>
+/// <returns></returns>
+std::pair<VECTOR, PlayerData> Run_To_Stop::Update(const VECTOR& cameraDirection,
+    const std::vector<std::shared_ptr<BaseObject>>& fieldObjects, Player& player)
+{
+    VECTOR moveDirection = VGet(0.0f, 0.0f, 0.0f);
+
+    PlayerData playerData = player.GetData();
+
+    moveDirection = Command(cameraDirection, playerData, player);
+
+    return std::make_pair(moveDirection, playerData);
+}
+
+VECTOR Run_To_Stop::Command(const VECTOR& cameraDirection, PlayerData& playerData, Player& player)
+{
+    VECTOR moveDirection = VGet(0.0f, 0.0f, 0.0f);
+
+    //moveDirを取得する
+    moveDirection = Move(cameraDirection, playerData);
+    JumpMove(playerData, player);
+    RollMove(playerData);
+
+    if (VSize(moveDirection) != 0.0f && !playerData.isRoll)
+    {
+        playerData.isRun = true;
+        playerData.isStopRun = false;
+        isChangeState = true;
+    }
+
+    return moveDirection;
+}
+
 
 /// <summary>
 /// アニメーション更新
@@ -58,7 +109,8 @@ bool Run_To_Stop::MotionUpdate(PlayerData& playerData)
         //総再生時間を超えたらリセット
         if (nowAnimState.PlayTime_anim >= totalTime_anim)
         {
-            playerData.isStopRun = false;
+            playerData.isIdle = true;
+            isChangeState = true;
         }
 
         // 再生時間をセットする
@@ -88,4 +140,14 @@ bool Run_To_Stop::MotionUpdate(PlayerData& playerData)
     }
 
     return false;
+}
+
+void Run_To_Stop::Enter(PlayerData& playerData)
+{
+    playerData.isStopRun = true;
+}
+
+void Run_To_Stop::Exit(PlayerData& playerData)
+{
+    playerData.isStopRun = false;
 }

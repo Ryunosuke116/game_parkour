@@ -6,8 +6,7 @@
 /// </summary>
 Field::Field(const char* path) 
 {
-	//modelHandle = MV1LoadModel("material/mv1/field.mv1");
-	//modelHandle = MV1LoadModel("material/mv1/city/city_0525.mv1");
+	tag = "field";
 	modelHandle = MV1LoadModel(path);
 	boxHandle = MV1LoadModel("material/mv1/new_city/0604_box.mv1");
 	//meshHandle = MV1LoadModel("material/mv1/new_city/0610_mesh.mv1");

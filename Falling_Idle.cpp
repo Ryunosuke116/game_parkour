@@ -1,8 +1,13 @@
-#include <iostream>
-#include "DxLib.h"
+#include "common.h"
+#include <memory>
+#include <vector>
 #include "PlayerStateActionBase.h"
+#include "PlayerData.h"
+#include "PadInput.h"
 #include "Falling_Idle.h"
 #include "AnimTime.h"
+#include "Player.h"
+#include "HitCheck.h"
 
 /// <summary>
 /// コンストラクタ
@@ -11,14 +16,6 @@ Falling_Idle::Falling_Idle(int& modelHandle,
 	AnimState& oldAnimState, AnimState& nowAnimState) :
 	PlayerStateActionBase(modelHandle, oldAnimState,nowAnimState)
 {
-	this->nowAnimState.PlayAnimSpeed = playAnimSpeed;
-
-	// ３Ｄモデルの０番目のアニメーションをアタッチする
-	this->nowAnimState.AttachIndex = MV1AttachAnim(modelHandle, animNum::falling_Idle);
-
-	this->nowAnimState.PlayTime_anim = 0.0f;
-	this->nowAnimState.PlayAnimSpeed = playAnimSpeed;
-	//animBlendRate = 1.0f;
 
 }
 
@@ -31,27 +28,107 @@ Falling_Idle::~Falling_Idle()
 }
 
 /// <summary>
-/// アニメーション更新
+/// 初期化
 /// </summary>
-//bool Falling_Idle::MotionUpdate(PlayerData& playerData)
-//{
-//	// アタッチしたアニメーションの総再生時間を取得する
-//	float totalTime_anim = MV1GetAttachAnimTotalTime(modelHandle, nowAnimState.AttachIndex);
-//
-//	//再生時間更新
-//	nowAnimState.PlayTime_anim += nowAnimState.PlayAnimSpeed;
-//
-//	//総再生時間を超えたらリセット
-//	if (nowAnimState.PlayTime_anim >= totalTime_anim)
-//	{
-//		nowAnimState.PlayTime_anim = static_cast<float>(fmod(nowAnimState.PlayTime_anim, totalTime_anim));
-//	}
-//
-//	// 再生時間をセットする
-//	MV1SetAttachAnimTime(modelHandle, nowAnimState.AttachIndex, nowAnimState.PlayTime_anim);
-//
-//	//アニメーションのモデルに対する反映率をセット
-//	MV1SetAttachAnimBlendRate(modelHandle, nowAnimState.AttachIndex, animBlendRate);
-//
-//	return false;
-//}
+/// <param name="modelHandle"></param>
+void Falling_Idle::Initialize(int& modelHandle, Player& player)
+{
+    this->nowAnimState.PlayAnimSpeed = playAnimSpeed;
+
+    // ３Ｄモデルの０番目のアニメーションをアタッチする
+    this->nowAnimState.AttachIndex = MV1AttachAnim(this->modelHandle, animNum::falling_Idle);
+
+    this->nowAnimState.PlayTime_anim = 0.0f;
+    this->nowAnimState.PlayAnimSpeed = playAnimSpeed;
+}
+
+/// <summary>
+/// 更新
+/// </summary>
+/// <param name="cameraDirection"></param>
+/// <param name="fieldObjects"></param>
+/// <param name="player"></param>
+/// <returns></returns>
+std::pair<VECTOR, PlayerData> Falling_Idle::Update(const VECTOR& cameraDirection,
+    const std::vector<std::shared_ptr<BaseObject>>& fieldObjects, Player& player)
+{
+    VECTOR moveDirection = VGet(0.0f, 0.0f, 0.0f);
+
+    PlayerData playerData = player.GetData();
+
+    moveDirection = Command(cameraDirection, playerData, player);
+
+    FlagReset_jump(playerData);
+
+    //見直し
+    //崖掴み判定
+    auto result_cliff = HitCheck::CliffGrabbing(fieldObjects,
+        player.GetPositionData().position_top_ray,
+        player.GetMoveDirection_now(),player.GetRadius());
+
+    //掴むところが平行だった場合
+    //崖掴み時の情報を保存
+    if (result_cliff.isHitHanging)
+    {
+        //胴体座標
+        VECTOR centerPosition = MV1GetFramePosition(modelHandle, 2);
+       
+        Calculation::NearestResult nearestResult = Calculation::SphereMeshOutsideTriangle_line(result_cliff.hangingPoly, centerPosition);
+       
+        float difference_y = nearestResult.linePos_start.y - nearestResult.linePos_end.y;
+       
+        if (difference_y == 0)
+        {
+            playerData.isHanging = result_cliff.isHitHanging;
+            isChangeState = true;
+            //player.playerCalculation->SetHangingPoint(result_cliff.hitHangingPos);
+            player.playerCalculation->SetHangingPoly(result_cliff.hangingPoly);
+        }
+    }
+
+    //着地したときに動いているかどうかで次のアニメーションを決める
+    if (playerData.isGround)
+    {
+        if (playerData.isMove)
+        {
+            playerData.isRun = true;
+        }
+        else
+        {
+            playerData.isIdle = true;
+        }
+
+        playerData.isUse_wallJump = true;
+        isChangeState = true;
+    }
+
+    return std::make_pair(moveDirection, playerData);
+}
+
+VECTOR Falling_Idle::Command(const VECTOR& cameraDirection, PlayerData& playerData, Player& player)
+{
+    VECTOR moveDirection = VGet(0.0f, 0.0f, 0.0f);
+
+    //moveDirを取得する
+    moveDirection = Move(cameraDirection, playerData);
+    JumpMove(playerData, player);
+    RollMove(playerData);
+    WallRunMove(playerData, player);
+
+    if (playerData.isRun_wall)
+    {
+        moveDirection = VGet(0.0f, 1.0f, 0.0f);
+    }
+
+    return moveDirection;
+}
+
+void Falling_Idle::Enter(PlayerData& playerData)
+{
+    playerData.isFalling = true;
+}
+
+void Falling_Idle::Exit(PlayerData& playerData)
+{
+    playerData.isFalling = false;
+}

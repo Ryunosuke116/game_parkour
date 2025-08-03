@@ -6,12 +6,11 @@
 #include "Calculation.h"
 #include "AnimationChanger.h"
 #include  "nlohmann/json.hpp"
+#include "CoinObserver.h"
 
-class Player : public BaseChara
+class Player : public BaseChara, public CoinObserver
 {
 private:
-
-	using ObjectList = std::vector<std::shared_ptr<BaseObject>>;
 
 	static constexpr float modelScale = 0.06f;
 	static constexpr float MaxMoveSpeed = 1.6f;	    // 移動速度
@@ -21,20 +20,19 @@ private:
 	static constexpr float gravity = -0.06f;
 	static constexpr float run_wall_rotate_x = 30.0f;
 	static constexpr float entryDegree_wallRun = 30.0f;
+	static constexpr float radius = 3.5f;
 
 	VECTOR linePos_end;
 	VECTOR centerPosition;
 	VECTOR topPosition;
 	VECTOR bottomPosition;
-	VECTOR moveVec;
 	VECTOR moveVec_normal;
-	VECTOR hangingPoint;
 	VECTOR headPos;
-	VECTOR handPos_right;
-	VECTOR handPos_left;
 	VECTOR handCenterPos;
 	VECTOR moveDirection_now;		//現在向いている方向
 	VECTOR padInput_now;
+
+	int coinCount;		//コインの所持枚数
 
 	float radian_wall;
 	float degree_pad_now;
@@ -47,14 +45,9 @@ private:
 	bool isCalc_moveVec;
 
 	//他クラス
+	PlayerData playerData;
 	std::shared_ptr<PlayerStateActionBase> nowState = NULL;
-	PlayerStateActionBase::AnimState oldAnimState;
-	PlayerStateActionBase::AnimState nowAnimState;
-	PlayerStateActionBase::PlayerData playerData;
-	std::shared_ptr<CollisionManager> collisionManager = NULL;
-	std::shared_ptr<PlayerCalculation> playerCalculation = NULL;
-	CollisionManager::PositionData positionData;
-	std::shared_ptr<AnimationChanger> animationChecger = NULL;
+	std::shared_ptr<AnimationChanger> animationChanger = NULL;
 
 public:
 	Player(nlohmann::json jsonData);
@@ -65,40 +58,34 @@ public:
 	void Update(const VECTOR& cameraDirection,
 		const std::vector<std::shared_ptr<BaseObject>>& fieldObjects);
 	bool Draw();
-	VECTOR Move(VECTOR& moveVec, const VECTOR& cameraDirection);
-	void JumpMove();
-	void RollMove();
-	void HangingMove();
-	void Hang_to_CrouchMove(const std::vector<std::shared_ptr<BaseObject>>& fieldObjects);
-	void SettingRay();
-	void HangingCheck(const std::vector<std::shared_ptr<BaseObject>>& fieldObjects);
-	void NormalMove(const std::vector<std::shared_ptr<BaseObject>>& fieldObjects);
-	void StateUpdate(const std::vector<std::shared_ptr<BaseObject>>& fieldObjects);
-	void Command(const VECTOR& cameraDirection);
-	void WallRunUpdate(const std::vector<std::shared_ptr<BaseObject>>& fieldObjects);
+	
+	void Receive_CollisionResult();
+	void ChangeState();
+	void CollisionUpdate();
+	void OnCoinPicked(int amount)override { coinCount += amount; }
 
 	//////////////////////////////////
 	//　ゲッター
 	///////////////////////////////////
 
 	VECTOR GetCenterPos() { return centerPosition; }
-	VECTOR GetTopPos() { return topPosition; }
-	VECTOR GetBottomPos() { return bottomPosition; }
+	VECTOR GetTopPos() { return positionData.position_top_Capsule; }
+	VECTOR GetBottomPos() { return positionData.position_bottom_Capsule; }
 	VECTOR GetMoveVec() { return moveVec; }
 	VECTOR GetlinePos_end() { return linePos_end; }
-	VECTOR GetHangingPoint() { return hangingPoint; }
 	VECTOR GetHeadPos() { return headPos; }
-	VECTOR GetHandPos_right() { return handPos_right; }
-	VECTOR GetHandPos_left() { return handPos_left; }
+	VECTOR GetMoveDirection_now() { return moveDirection_now; }
 	bool GetIsGround() { return playerData.isGround; }
 	int GetModelHandle() { return modelHandle; }
-	PlayerStateActionBase::PlayerData GetData() { return playerData; }
-	float GetRadius() { return positionData.radius; }
+	PlayerData GetData() { return playerData; }
+	float GetRadius()const override { return radius; }
 
 	//////////////////////////////////
 	/// セッター
 	/////////////////////////////////
 	void SetIsGround(bool flag) { playerData.isGround = flag; }
 	void SetPos(VECTOR newPos) { position = newPos; }
+	void SetMoveDirection_now(const VECTOR& set) { moveDirection_now = set; }
+	std::shared_ptr<PlayerCalculation> playerCalculation = NULL;
 };
 

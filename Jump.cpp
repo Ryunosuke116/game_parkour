@@ -1,28 +1,24 @@
-#include <iostream>
+#include "common.h"
 #include <memory>
-#include "DxLib.h"
+#include <vector>
 #include "PlayerStateActionBase.h"
-#include "Input.h"
+#include "PadInput.h"
+#include "PlayerData.h"
 #include "Jump.h"
 #include "AnimTime.h"
+#include "Player.h"
 
 /// <summary>
 /// コンストラクタ
 /// </summary>
 /// <param name="modelHandle"></param>
-Jump::Jump(int& modelHandle,
-    AnimState& oldAnimState, AnimState& nowAnimState) :
-    PlayerStateActionBase(modelHandle, oldAnimState,nowAnimState)
+Jump::Jump(int& modelHandle, AnimState& oldAnimState,
+    AnimState& nowAnimState, PlayerData& playerData) :
+    PlayerStateActionBase(modelHandle, oldAnimState,nowAnimState),
+    isJump_first(false),
+    isJump_second(false)
 {
-    input = std::make_shared<Input>();
-
-    // ３Ｄモデルの０番目のアニメーションをアタッチする
-    this->nowAnimState.AttachIndex = MV1AttachAnim(modelHandle, animNum::jump);
-
-    this->nowAnimState.PlayTime_anim = 5.0f;
-    this->nowAnimState.PlayAnimSpeed = playAnimSpeed;
-    this->nowAnimState.TotalPlayTime_anim = MV1GetAttachAnimTotalTime(modelHandle, this->nowAnimState.AttachIndex);
-    isPush = false;
+    
 }
 
 /// <summary>
@@ -34,13 +30,72 @@ Jump::~Jump()
 }
 
 /// <summary>
+/// 初期化
+/// </summary>
+/// <param name="modelHandle"></param>
+void Jump::Initialize(int& modelHandle, Player& player)
+{
+    // ３Ｄモデルの０番目のアニメーションをアタッチする
+    //ランジャンプ
+    if (player.GetData().isMove)
+    {
+        this->nowAnimState.AttachIndex = MV1AttachAnim(modelHandle, animNum::run_Jump);
+        this->nowAnimState.PlayAnimSpeed = playAnimSpeed;
+    }
+
+    //通常ジャンプ
+    if (!player.GetData().isMove)
+    {
+        this->nowAnimState.AttachIndex = MV1AttachAnim(modelHandle, animNum::jump);
+        this->nowAnimState.PlayAnimSpeed = playAnimSpeed;
+    }
+
+    isJump_first = player.GetData().isJump;
+    isJump_second = player.GetData().isJump_second;
+
+    this->nowAnimState.PlayTime_anim = 0.0f;
+}
+
+/// <summary>
+/// 更新
+/// </summary>
+/// <param name="cameraDirection"></param>
+/// <param name="fieldObjects"></param>
+/// <param name="player"></param>
+/// <returns></returns>
+std::pair<VECTOR, PlayerData> Jump::Update(const VECTOR& cameraDirection,
+    const std::vector<std::shared_ptr<BaseObject>>& fieldObjects, Player& player)
+{
+    VECTOR moveDirection = VGet(0.0f, 0.0f, 0.0f);
+
+    //データを取得
+    PlayerData playerData = player.GetData();
+
+    moveDirection = Command(cameraDirection, playerData, player);
+
+    //接地した場合、着地アニメーションに切り替え
+    FlagReset_jump(playerData);
+
+    if (playerData.isGround && !isRun)
+    {
+        playerData.isIdle = true;
+        isChangeState = true;
+    }
+    else if (playerData.isGround && isRun)
+    {
+        playerData.isRun = true;
+        isChangeState = true;
+    }
+
+    return std::make_pair(moveDirection, playerData);
+}
+
+/// <summary>
 /// アニメーション更新 
 /// </summary>
 /// <returns></returns>
 bool Jump::MotionUpdate(PlayerData& playerData)
 {
-    input->Update();
-
     bool flag = false;
 
     float totalTime_anim;
@@ -57,15 +112,6 @@ bool Jump::MotionUpdate(PlayerData& playerData)
 
     if (nowAnimState.AttachIndex != -1)
     {
-        //二段ジャンプしたらプレイタイムリセット
-        if (!isPush)
-        {
-            if (playerData.isJump_second)
-            {
-                nowAnimState.PlayTime_anim = 5.0f;
-                isPush = true;
-            }
-        }
 
         // アタッチしたアニメーションの総再生時間を取得する
         totalTime_anim = MV1GetAttachAnimTotalTime(modelHandle, nowAnimState.AttachIndex);
@@ -76,8 +122,8 @@ bool Jump::MotionUpdate(PlayerData& playerData)
         //総再生時間を超えたらリセット
         if (nowAnimState.PlayTime_anim >= totalTime_anim)
         {
-            flag = true;
-            playerData.isJump_PlayAnim = false;
+            playerData.isFalling = true;
+            isChangeState = true;
         }
 
         // 再生時間をセットする
@@ -111,4 +157,26 @@ bool Jump::MotionUpdate(PlayerData& playerData)
     }
 
     return flag;
+}
+
+VECTOR Jump::Command(const VECTOR& cameraDirection, PlayerData& playerData, Player& player)
+{
+    VECTOR moveDirection = VGet(0.0f, 0.0f, 0.0f);
+
+    //moveDirを取得する
+    moveDirection = Move(cameraDirection, playerData);
+    JumpMove(playerData, player);
+    RollMove(playerData);
+
+    return moveDirection;
+}
+
+void Jump::Enter(PlayerData& playerData)
+{
+    playerData.isJump = true;
+}
+
+void Jump::Exit(PlayerData& playerData)
+{
+    playerData.isJump = false;
 }

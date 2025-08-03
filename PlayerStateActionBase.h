@@ -1,36 +1,15 @@
 #pragma once
 #include <memory>
+#include <vector>
+#include "BaseObject.h"
+#include "PlayerData.h"
 
 class Input;
+class Player;
 
 class PlayerStateActionBase
 {
 public:
-
-	struct PlayerData
-	{
-		bool isIdle;					//止まっているか
-		bool isMove;					//動いているか
-		bool isRun;						//走っているか
-		bool isJump;					//ジャンプしたか
-		bool isJump_second;				//二段ジャンプしたか
-		bool isJump_PlayAnim;			//ジャンプのアニメを再生するか
-		bool isJump_run_playAnim;		//ランジャンプのアニメを再生するか
-		bool isRoll;					//転がるか
-		bool isRoll_PlayAnim;			//ロールアクションのアニメを再生するか
-		bool isRollFinished;			//ロールアクションを終えたか
-		bool isGround;					//接地しているか
-		bool isHitWall;					//壁に当たっているか
-		bool isSprint;					//走り出しか
-		bool isStopRun;					//走り終わったか
-		bool isJumpAll;					//全てのジャンプが完了したか
-		bool isFalling;					//落下中か
-		bool isHanging;					//崖つかみ中か
-		bool isHang_to_Crouch;			//上に上がる
-		bool isSlip;				
-		bool isTurn_right;
-		bool isRun_wall;
-	};
 
 	struct AnimState
 	{
@@ -44,21 +23,35 @@ public:
 		AnimState& oldAnimState, AnimState& nowAnimState);
 	~PlayerStateActionBase() {};
 
+	//純粋仮想関数
+	virtual void Initialize(int& modelHandle, Player& player)abstract;
+	virtual std::pair<VECTOR, PlayerData> Update(const VECTOR& cameraDirection,
+		const std::vector<std::shared_ptr<BaseObject>>& fieldObjects, Player& player)abstract;
+	virtual VECTOR Command(const VECTOR& cameraDirection, PlayerData& playerData, Player& player)abstract;
+	virtual void Enter(PlayerData& playerData) abstract;		//状態に入ったとき
+	virtual void Exit(PlayerData& playerData) abstract;			//状態を抜けるとき
+
 	virtual bool MotionUpdate(PlayerData& playerData);
+	virtual VECTOR Move(const VECTOR& cameraDirection, PlayerData& playerData);
+	virtual void RollMove(PlayerData& playerData);
+	virtual void JumpMove(PlayerData& playerData, Player& player);
+	virtual void WallRunMove(PlayerData& playerData, Player& player);
+
 	void SetOldAnimState();
 	void ResetOldAnimState();
 	void ResetNowAnimState();
 	bool Draw();
-
+	void SwitchingAnimation(const int& animNum);
+	void FlagReset_jump(PlayerData& playerData);
 
 	//////////////////////////////////////////////
 	// ゲッター
 	//////////////////////////////////////////////
 	//int GetPrevAttachIndex() { return oldAnimState.AttachIndex; }
-	const AnimState GetOldAnimState() const { return oldAnimState; }
-	const AnimState GetNowAnimState() const { return nowAnimState; }
-	const float GetAnimBlendRate() { return animBlendRate; }
-
+	AnimState GetOldAnimState() const { return oldAnimState; }
+	AnimState GetNowAnimState() const { return nowAnimState; }
+	float GetAnimBlendRate()const { return animBlendRate; }
+	bool GetIsChangeState()const { return isChangeState; }
 
 	void SetPlayAnimSpeed_now(const float set) { nowAnimState.PlayTime_anim = set; }
 	void SetAnimNumber_old(const int num) { animNumber_old = num; }
@@ -67,14 +60,20 @@ public:
 
 protected:
 	static constexpr float	AnimBlendSpeed = 0.1f;		// アニメーションのブレンド率変化速度
-	
+	static constexpr float entryDegree_wallRun = 40.0f;
+	static constexpr float run_wall_rotate_x = 30.0f;
+
 	int modelHandle;			//モデルハンドル
-	float animBlendRate;
 	int animNumber_old;
+	float animBlendRate;
+
+	bool isPush;
+	bool isChangeState;
+
+	VECTOR moveDirection;
 
 	AnimState oldAnimState;
 	AnimState nowAnimState;
-	PlayerData  playerData;
 
 
 	//移動

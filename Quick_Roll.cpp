@@ -1,10 +1,12 @@
-#include <iostream>
+#include "common.h"
 #include <memory>
-#include "DxLib.h"
+#include <vector>
 #include "PlayerStateActionBase.h"
-#include "Input.h"
+#include "PadInput.h"
+#include "PlayerData.h"
 #include "Quick_Roll.h"
 #include "AnimTime.h"
+#include "Player.h"
 
 
 /// <summary>
@@ -17,11 +19,7 @@ Quick_Roll::Quick_Roll(int& modelHandle,
     AnimState& oldAnimState, AnimState& nowAnimState) :
 	PlayerStateActionBase(modelHandle, oldAnimState, nowAnimState)
 {
-	// ３Ｄモデルの０番目のアニメーションをアタッチする
-	this->nowAnimState.AttachIndex = MV1AttachAnim(modelHandle, animNum::jump_Over);
 
-	this->nowAnimState.PlayTime_anim = 0.0f;
-	this->nowAnimState.PlayAnimSpeed = playAnimSpeed;
 }
 
 /// <summary>
@@ -31,6 +29,64 @@ Quick_Roll::~Quick_Roll()
 {
 
 }
+
+/// <summary>
+/// 初期化
+/// </summary>
+/// <param name="modelHandle"></param>
+void Quick_Roll::Initialize(int& modelHandle, Player& player)
+{
+    // ３Ｄモデルの０番目のアニメーションをアタッチする
+    this->nowAnimState.AttachIndex = MV1AttachAnim(modelHandle, animNum::jump_Over);
+
+    this->nowAnimState.PlayTime_anim = 0.0f;
+    this->nowAnimState.PlayAnimSpeed = playAnimSpeed;
+}
+
+/// <summary>
+/// 更新
+/// </summary>
+/// <param name="cameraDirection"></param>
+/// <param name="fieldObjects"></param>
+/// <param name="player"></param>
+/// <returns></returns>
+std::pair<VECTOR, PlayerData> Quick_Roll::Update(const VECTOR& cameraDirection,
+    const std::vector<std::shared_ptr<BaseObject>>& fieldObjects, Player& player)
+{
+    VECTOR moveDirection = VGet(0.0f, 0.0f, 0.0f);
+
+    PlayerData playerData = player.GetData();
+
+    moveDirection = Command(cameraDirection, playerData, player);
+
+    return std::make_pair(moveDirection, playerData);
+}
+
+VECTOR Quick_Roll::Command(const VECTOR& cameraDirection, PlayerData& playerData, Player& player)
+{
+    VECTOR moveDirection = VGet(0.0f, 0.0f, 0.0f);
+
+    FlagReset_jump(playerData);
+
+    //moveDirを取得する
+    moveDirection = Move(cameraDirection, playerData);
+    JumpMove(playerData, player);
+
+    if (VSize(moveDirection) != 0.0f)
+    {
+        isRun = true;
+        isIdle = false;
+    }
+    else
+    {
+        isRun = false;
+        isIdle = true;
+
+    }
+
+    return moveDirection;
+}
+
 
 /// <summary>
 /// アニメーション更新
@@ -64,17 +120,17 @@ bool Quick_Roll::MotionUpdate(PlayerData& playerData)
         {
             if (!playerData.isGround)
             {
-                flag = true;
+                isChangeState = true;
+                playerData.isFalling = true;
             }
         }
 
         //総再生時間を超えたらリセット
         if (nowAnimState.PlayTime_anim >= totalTime_anim)
         {
-            playerData.isRoll_PlayAnim = false;
-            playerData.isRollFinished = true;
-
-           // nowAnimState.PlayTime_anim = static_cast<float>(fmod(nowAnimState.PlayTime_anim, totalTime_anim));
+            playerData.isRun = isRun;
+            playerData.isIdle = isIdle;
+            isChangeState = true;
         }
 
 
@@ -109,4 +165,15 @@ bool Quick_Roll::MotionUpdate(PlayerData& playerData)
     }
 
     return flag;
+}
+
+void Quick_Roll::Enter(PlayerData& playerData)
+{
+    playerData.isJumpAll = false;
+    playerData.isJump_second = false;
+}
+
+void Quick_Roll::Exit(PlayerData& playerData)
+{
+    playerData.isRoll = false;
 }

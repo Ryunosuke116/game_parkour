@@ -1,38 +1,102 @@
 #include "common.h"
+#include <utility>
+#include <vector>
 #include "HitCheck.h"
 #include "Calculation.h"
 #include "PlayerStateActionBase.h"
-
 #include "CollisionManager.h"
-#include <utility>
-#include <vector>
+#include "BaseChara.h"
+#include "DebugDrawer.h"
 
 /// @brief 更新
 /// @param player 
 /// @param modelHandle 
 /// @return 
-std::tuple<bool, bool, VECTOR, VECTOR, std::string> CollisionManager::Update(const std::vector<std::shared_ptr<BaseObject>>& fieldObjects,
-	const VECTOR& playerPos,const VECTOR& moveVec, 
-	const PositionData& positionData,
-	const PlayerStateActionBase::PlayerData& playerData)
+void CollisionManager::Update(BaseChara& chara,
+	const std::vector<std::shared_ptr<BaseObject>>& fieldObjects,
+	const PlayerData& playerData)
+{
+	if (chara.GetIsCollisionCheck())
+	{
+		chara.SetCollision_result(Check_all(fieldObjects,
+			chara.GetPosition(), chara.GetMoveVec(), chara.GetRadius(),
+			chara.GetPositionData(),playerData));
+	}
+
+}
+
+/// <summary>
+/// 全衝突判定チェック
+/// </summary>
+/// <param name="fieldObjects"></param>
+/// <param name="playerPos"></param>
+/// <param name="moveVec"></param>
+/// <param name="radius"></param>
+/// <param name="positionData"></param>
+/// <returns></returns>
+CollisionResult CollisionManager::Check_all(const std::vector<std::shared_ptr<BaseObject>>& fieldObjects,
+	const VECTOR& playerPos, const VECTOR& moveVec, const float& radius,
+	const PositionData& positionData,const PlayerData& playerData)
 {
 	VECTOR oldPos = playerPos;
-	VECTOR newPos = VAdd(oldPos, moveVec);	
-	VECTOR topPos = newPos;
-	topPos.y += positionData.addTopPos;
-	
+	VECTOR newPos = VAdd(oldPos, moveVec);
+	VECTOR moveVec_new = VGet(0.0f, 0.0f, 0.0f);
+
+	bool isCalc = rayPoly_ground_now.HitFlag;
+
+	//床に沿うように移動する
+	if (isCalc && VSize(moveVec) != 0 &&
+		!playerData.isJump)
+	{
+		//移動量を計算
+		float size = VSize(moveVec);
+		
+		//方向ベクトルを計算
+		moveVec_new = Calculation::Projection(rayPoly_ground_now.Normal, moveVec);
+		
+		//移動量を再計算
+		moveVec_new = VScale(moveVec_new, size);
+
+		newPos = VAdd(oldPos, moveVec_new);
+
+		projection_ray_start = newPos;
+		projection_ray_end = VAdd(newPos, VScale(VNorm(moveVec_new),20.0f));
+	}
+	else
+	{
+		moveVec_new = moveVec;
+	}
+	DebugDrawer::Instance().InformationInput_line(projection_ray_start, projection_ray_end, GetColor(255, 0, 255));
+
+
+	CollisionResult result;
+
 	//壁衝突判定
-	auto hitWall = WallCollisionCheck(fieldObjects, newPos, oldPos, positionData);
+	auto hitWall = WallCollisionCheck(fieldObjects, newPos, moveVec_new, positionData, radius);
 
 	//頭上衝突判定
-	HeadCollisionCheck(fieldObjects, newPos, positionData);
+	HeadCollisionCheck(fieldObjects, newPos, moveVec_new, positionData, radius);
 
 	//床衝突判定
-	auto returnGround = GroundCollisionCheck(fieldObjects, oldPos, newPos, positionData, playerData);
+	auto [isGround,tag] = GroundCollisionCheck(fieldObjects, oldPos, newPos, moveVec_new, positionData);
+
+	//対象のオブジェクトの移動量を加算
+	for (const auto& fieldObject : fieldObjects)
+	{
+		if (tag == fieldObject->GetTag())
+		{
+			newPos = VAdd(newPos, fieldObject->GetPos_difference());
+		}
+	}
 
 	//床衝突判定
-	return std::make_tuple(returnGround.first, hitWall.first,
-		hitWall.second, newPos, returnGround.second);
+	return {
+		newPos,
+		isGround,
+		hitWall.first,
+		hitWall.second,
+		tag 
+	};
 }
 
 /// <summary>
@@ -44,17 +108,17 @@ std::tuple<bool, bool, VECTOR, VECTOR, std::string> CollisionManager::Update(con
 /// <param name="positionData.radius"></param>
 /// <param name="positionData.addBottomPos"></param>
 /// <returns></returns>
-bool CollisionManager::HeadCollisionCheck(const std::vector<std::shared_ptr<BaseObject>>& fieldObjects, VECTOR& newPos,
-	const PositionData& positionData)
+bool CollisionManager::HeadCollisionCheck(const std::vector<std::shared_ptr<BaseObject>>& fieldObjects,
+	VECTOR& newPos, const VECTOR& moveVec, const PositionData& positionData, const float& radius)
 {
-	VECTOR topPos = newPos;
-	topPos.y += positionData.addTopPos;
 	MV1_COLL_RESULT_POLY_DIM hitPoly_head;
+	VECTOR position_top_new = VAdd(positionData.position_top_ray, moveVec);
+	VECTOR position_bottom_new = VAdd(positionData.position_bottom_ray, moveVec);
 
 	//fieldObjectの要素分確認
 	for (auto& fieldObject : fieldObjects)
 	{
-		bool isHitHead = HitCheck::SphereHitJudge(fieldObject->GetModelHandle(), -1, topPos, hitPoly_head);
+		bool isHitHead = HitCheck::SphereHitJudge(fieldObject->GetModelHandle(), -1, radius, position_top_new, hitPoly_head);
 
 		if (isHitHead)
 		{
@@ -71,13 +135,13 @@ bool CollisionManager::HeadCollisionCheck(const std::vector<std::shared_ptr<Base
 				/////////////////////////////////////////
 				if (poly.Normal.y <= -0.7f || poly.Normal.y >= 0.7f)
 				{
-					hitPos_head = HitCheck::ClosestPtToPointTriangle(topPos, poly.Position[0], poly.Position[1], poly.Position[2]);
+					hitPos_head = HitCheck::ClosestPtToPointTriangle(position_top_new, poly.Position[0], poly.Position[1], poly.Position[2]);
 
-					VECTOR hitDirection = VSub(hitPos_head, topPos);
+					VECTOR hitDirection = VSub(hitPos_head, position_top_new);
 					hitDirection = VNorm(hitDirection);
-					hitDirection = VScale(hitDirection, positionData.radius);
+					hitDirection = VScale(hitDirection, radius);
 
-					VECTOR hitPos_sphere = VAdd(topPos, hitDirection);
+					VECTOR hitPos_sphere = VAdd(position_top_new, hitDirection);
 
 
 					newAddPos.y = hitPos_head.y - hitPos_sphere.y;
@@ -108,46 +172,35 @@ bool CollisionManager::HeadCollisionCheck(const std::vector<std::shared_ptr<Base
 /// <param name="positionData.radius"></param>
 /// <param name="isJump"></param>
 /// <returns></returns>
-std::pair<bool, std::string> CollisionManager::GroundCollisionCheck(const std::vector<std::shared_ptr<BaseObject>>& fieldObjects,const VECTOR& oldPos,
-	VECTOR& newPos, const PositionData& positionData,
-	const PlayerStateActionBase::PlayerData& playerData)
+std::pair<bool, std::string> CollisionManager::GroundCollisionCheck(const std::vector<std::shared_ptr<BaseObject>>& fieldObjects,
+	const VECTOR& oldPos, VECTOR& newPos, const VECTOR& moveVec,
+	const PositionData& positionData)
 {
-	//playerの状態によって当たり判定の優先順位を決める
-	//何回か当たり判定を繰り返す
-	//prevとnewのposを作る
-	VECTOR topPosition = newPos;
-	VECTOR bottomPosition = newPos;
-	VECTOR nowBottomPos = oldPos;
-	VECTOR nowTopPos = oldPos;
-	bool isHitSphere;
-
-	topPosition.y = topPosition.y + 13.0f;
-	nowTopPos.y = nowTopPos.y + 13.0f;
-
-	//※ジャンプしている間ではなく落下中にしたい
-	if (playerData.isFalling || playerData.isJump)
-	{
-		nowBottomPos.y = newPos.y;
-	}
-	else
-	{
-		nowBottomPos.y = newPos.y - 5.0f;
-	}
-
 	bool isHitGround = false;
 	bool returnFlag = false;
 	std::string returnTag = "";
 
+	VECTOR position_top_new = VAdd(positionData.position_top_ray, moveVec);
+	VECTOR position_bottom_new = VAdd(positionData.position_bottom_ray, moveVec);
+
+	topPos_ray = position_top_new;
+	bottomPos_ray = position_bottom_new;
 	MV1_COLL_RESULT_POLY rayPoly_ground;
 
 	for (const auto& fieldObject : fieldObjects)
 	{
+
 		//rayが当たっていれば
-		isHitGround = HitCheck::HitRayJudge(fieldObject->GetModelHandle(), -1, topPosition, nowBottomPos, rayPoly_ground);
+		isHitGround = HitCheck::HitRayJudge(fieldObject->GetModelHandle(), -1, position_top_new,
+			position_bottom_new, rayPoly_ground);
 
 		if (isHitGround)
 		{
-			VECTOR playerNormal = VSub(topPosition, bottomPosition);
+			rayPoly_ground_now = rayPoly_ground;
+
+			VECTOR playerNormal = VSub(position_top_new,
+				position_bottom_new);
+
 			playerNormal = VNorm(playerNormal);
 
 			//playerと床のなす角を求める
@@ -156,22 +209,22 @@ std::pair<bool, std::string> CollisionManager::GroundCollisionCheck(const std::v
 			tiltAngle_degree = radian * 180.0f / DX_PI_F;
 
 			VECTOR newPlayerPos = VGet(0.0f, 0.0f, 0.0f);
-		
+
 			//床 - プレイヤーの足元で押し戻し量を計算
 			newPlayerPos.y = rayPoly_ground.HitPosition.y - newPos.y;
 			newPos.y = newPos.y + newPlayerPos.y;
-		}
-
-		if (isHitGround)
-		{
+			
 			returnFlag = true;
 			returnTag = fieldObject->GetTag();
 		}
+
 	}
 
-	//log用
-	topPos_ray = topPosition;
-	bottomPos_ray = nowBottomPos;
+	//どこにもあたっていない場合nullにする
+	if (returnTag == "")
+	{
+		rayPoly_ground_now = { NULL };
+	}
 
 	//接地しているか
 	return std::make_pair(returnFlag, returnTag);
@@ -201,12 +254,6 @@ std::pair<bool, VECTOR> CollisionManager::GroundCollisionCheck_Hang_to_Crouch(co
 	VECTOR nowTopPos = oldPos;
 	bool isHitSphere;
 
-	newTopPosition.y = newTopPosition.y + positionData.addTopPos;
-	nowTopPos.y = nowTopPos.y + positionData.addTopPos;
-	newBottomPosition.y = newBottomPosition.y + positionData.addBottomPos;
-
-	nowBottomPos.y = nowBottomPos.y + positionData.addBottomPos - positionData.radius;
-
 	bool isHitGround = false;
 
 	MV1_COLL_RESULT_POLY rayPoly_ground;
@@ -220,7 +267,6 @@ std::pair<bool, VECTOR> CollisionManager::GroundCollisionCheck_Hang_to_Crouch(co
 		if (isHitGround)
 		{
 			VECTOR newPlayerPos = VGet(0.0f, 0.0f, 0.0f);
-			//VECTOR footPos = VGet(0.0f, newBottomPosition.y - positionData.radius, 0.0f);
 
 			//床 - プレイヤーの足元で押し戻し量を計算
 			newPlayerPos.y = rayPoly_ground.HitPosition.y - foot.y;
@@ -239,28 +285,21 @@ std::pair<bool, VECTOR> CollisionManager::GroundCollisionCheck_Hang_to_Crouch(co
 /// <param name="player"></param>
 /// <param name="modelHandle"></param>
 /// <returns></returns>
-std::pair<bool, VECTOR> CollisionManager::WallCollisionCheck(const std::vector<std::shared_ptr<BaseObject>>& fieldObjects, VECTOR& newPos,
-	VECTOR& oldPos, const PositionData& positionData)
+std::pair<bool, VECTOR> CollisionManager::WallCollisionCheck(const std::vector<std::shared_ptr<BaseObject>>& fieldObjects,
+	VECTOR& newPos, const VECTOR& moveVec, const PositionData& positionData,
+	const float& radius)
 {
 
-	VECTOR topPosition = newPos;
-	VECTOR bottomPosition = newPos;
-	VECTOR topPos_now = oldPos;
-	topPosition.y = topPosition.y + positionData.addTopPos;
-	bottomPosition.y = bottomPosition.y + positionData.addBottomPos;
-	topPos_now.y += positionData.addTopPos;
-
-	pos_new = topPosition;
-	pos_now = topPos_now;
-
+	VECTOR position_top_new = VAdd(positionData.position_top_Capsule, moveVec);
+	VECTOR position_bottom_new = VAdd(positionData.position_bottom_Capsule, moveVec);
 	bool flag = false;
-	VECTOR hitPoly_normal;
+	VECTOR hitPoly_normal = { 0.0f };
 
 	for (auto& fieldObject : fieldObjects)
 	{
 		//壁と衝突しているか
-		HitCheck::CapsuleHitWallJudge(fieldObject->GetModelHandle(), -1, positionData.radius, topPosition,
-			VAdd(bottomPosition, VGet(0.0f, 1.0f, 0.0f)), hitPoly_Wall);
+		HitCheck::CapsuleHitWallJudge(fieldObject->GetModelHandle(), -1, radius, position_top_new,
+			VAdd(position_bottom_new, VGet(0.0f, 1.0f, 0.0f)), hitPoly_Wall);
 
 		//衝突しているとこを全部調べて押し戻し量を計算する
 		if (hitPoly_Wall.HitNum >= 1)
@@ -283,20 +322,16 @@ std::pair<bool, VECTOR> CollisionManager::WallCollisionCheck(const std::vector<s
 					poly.Normal.x <= -0.7f || poly.Normal.z <= -0.7f) &&
 					poly.Normal.y <= 0.7f)
 				{
-
-					//カプセルの大きさ
-					topPosition = newPos;
-					bottomPosition = newPos;
-					topPosition.y = topPosition.y + positionData.addTopPos;
-					bottomPosition.y = bottomPosition.y + positionData.addBottomPos;
+					position_top_new = VGet(newPos.x, position_top_new.y, newPos.z);
+					position_bottom_new = VGet(newPos.x, position_bottom_new.y, newPos.z);
 
 					normal = poly.Normal;
 					normal.y = 0.0f;
 					normal = VNorm(normal);
 
 					//線分のどこに当たったか
-					auto result = HitCheck::SegmentTriangleDistance(topPosition,
-						bottomPosition, poly.Position[0], poly.Position[1],
+					auto result = HitCheck::SegmentTriangleDistance(position_top_new,
+						position_bottom_new, poly.Position[0], poly.Position[1],
 						poly.Position[2], poly.Normal);
 
 					VECTOR addPos = VScale(poly.Normal, -3.5f);
@@ -308,7 +343,7 @@ std::pair<bool, VECTOR> CollisionManager::WallCollisionCheck(const std::vector<s
 
 					HitCheck::HitRayJudge(fieldObject->GetModelHandle(), -1, pos_now,
 						result.first, poly_ray);
-					
+
 					//rayが当たっている場合当たった座標で衝突判定
 					if (poly_ray.HitFlag)
 					{
@@ -336,8 +371,6 @@ std::pair<bool, VECTOR> CollisionManager::WallCollisionCheck(const std::vector<s
 						flag = true;
 						hitPoly_normal = poly_ray.Normal;
 					}
-
-
 				}
 			}
 		}
@@ -407,7 +440,7 @@ bool CollisionManager::TestSphereTriangle(VECTOR centerPos, VECTOR a, VECTOR b, 
 	//球と三角形が交差するのは、球の中心から点qまでの(平方した)距離が(平方した)球の半径よりも小さい場合
 	VECTOR v = VSub(q, centerPos);
 
-	return VDot(v, v) <= positionData.radius * positionData.radius;
+	return VDot(v, v) <= radius * radius;
 }
 
 VECTOR CollisionManager::PushBackCalculation_sphere_mesh(const MV1_COLL_RESULT_POLY& poly, const VECTOR& bottomPos, const VECTOR& newPlayerPos, const float& radius)
@@ -443,7 +476,7 @@ VECTOR CollisionManager::CalcPushBack_SphereMeshOutsideTriangle(const MV1_COLL_R
 	hitSphere = VNorm(hitSphere);
 
 	//接触点の方向に半径を加算
-	hitSphere = VScale(hitSphere, positionData.radius);
+	hitSphere = VScale(hitSphere, radius);
 
 	//球の中心点から接触点の方向に半径分のベクトルを加算して球の接触点を計算
 	hitSphere = VAdd(bottomPos, hitSphere);
@@ -478,9 +511,16 @@ bool CollisionManager::Draw()
 	DrawSphere3D(hitHangingPos, 2.0f, 30, GetColor(0, 0, 0),
 		GetColor(0, 255, 0), FALSE);
 
+	/*DrawSphere3D(projection_ray_start, 2.0f, 30, GetColor(0, 0, 0),
+		GetColor(0, 255, 0), FALSE);
+
+	DrawSphere3D(projection_ray_end, 2.0f, 30, GetColor(0, 0, 0),
+		GetColor(0, 255, 0), FALSE);*/
+
 	DrawLine3D(topPos_ray, bottomPos_ray, GetColor(255, 0, 0));
 	DrawLine3D(ray_start_hanging_log, ray_end_hanging_log, GetColor(0, 255, 0));
 
 	DrawLine3D(pos_now, pos_new, GetColor(0, 0, 255));
+	DrawLine3D(projection_ray_start, projection_ray_end, GetColor(255, 0, 255));
 	return true;
 }

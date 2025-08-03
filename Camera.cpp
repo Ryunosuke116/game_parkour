@@ -171,12 +171,12 @@ bool Camera::Draw()
 	/*DrawSphere3D(spherePosition, radius, 30, GetColor(0, 0, 0),
 		    GetColor(255, 0, 0), FALSE);*/
 
-	printfDx("lookPosition.x %f\n", lookPosition.x);
-	printfDx("lookPosition.y %f\n", lookPosition.y);
-	printfDx("lookPosition.z %f\n", lookPosition.z);
-	printfDx("aimPosition.x %f\n", aimPosition.x);
-	printfDx("aimPosition.y %f\n", aimPosition.y);
-	printfDx("aimPosition.z %f\n", aimPosition.z);
+	//printfDx("lookPosition.x %f\n", lookPosition.x);
+	//printfDx("lookPosition.y %f\n", lookPosition.y);
+	//printfDx("lookPosition.z %f\n", lookPosition.z);
+	//printfDx("aimPosition.x %f\n", aimPosition.x);
+	//printfDx("aimPosition.y %f\n", aimPosition.y);
+	//printfDx("aimPosition.z %f\n", aimPosition.z);
 	return true;
 }
 

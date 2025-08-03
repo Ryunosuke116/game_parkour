@@ -1,53 +1,50 @@
 #include "Dxlib.h"
 #include "Calculation.h"
+#include "PlayerData.h"
 #include "PlayerCalculation.h"
 #include"playerState.h"
 #include "AnimTime.h"
 #include "HitCheck.h"
+#include "DebugDrawer.h"
+
 
 
 PlayerCalculation::PlayerCalculation() :
-    jumpSpeed_now(0.0f),
+    moveVec_old(VGet(0.0f, 0.0f, 0.0f)),
+    jumpPower_now(0.0f),
     moveSpeed_now(0.0f),
     rollMoveSpeed_now(0.0f),
-    run_wall_stopTime(0.0f),
+    wallRun_stopTime(0.0f),
     isCalc_deceleration(false),
     isSlip_after(false),
-    isRun_Wall_Stop(false)
+    isRun_Wall_Stop(false),
+    isJumpPower_add(false)
 {
 
 }
 
-VECTOR PlayerCalculation::Update(const VECTOR& moveVec, const VECTOR& moveDirection, const float playTime_anim,
-    const int& animNumber_Now, const PlayerStateActionBase::PlayerData& playerData)
+VECTOR PlayerCalculation::Update(const VECTOR& moveDirection, 
+    const float playTime_anim, const int& animNumber_Now, 
+    const PlayerData& playerData)
 {
-    VECTOR returnVec = moveDirection;
-
-    returnVec = Roll(returnVec, moveDirection, playTime_anim, playerData);
+    VECTOR moveVec = moveDirection;
 
     //進むスピードを乗算
       //ロールアクション中はそれに応じた速度
-    if (playerData.isRoll)
+    moveVec = Roll(animNumber_Now, moveVec, moveDirection,
+        playTime_anim, playerData);
+   
+    //通常時
+    moveVec = Move(animNumber_Now, moveDirection, moveVec, playerData);
+
+    //崖掴み中
+    if (playerData.isHanging)
     {
-        if (playTime_anim >= 10.0f ||
-            animNumber_Now != animNum::quick_Roll)
-        {
-            returnVec = VScale(returnVec, rollMoveSpeed_max);
-            moveSpeed_now = MaxMoveSpeed;
-        }
-    }
-    else
-    {
-        returnVec = Move(returnVec, moveDirection, playerData);
+        moveVec = HangingPosition();
     }
 
-    //ジャンプ計算
-    returnVec = Jump(returnVec, animNumber_Now, playerData);
 
-    //重力計算
-    Gravity(playerData);
-
-    return returnVec;
+    return moveVec;
 }
 
 /// <summary>
@@ -57,85 +54,117 @@ VECTOR PlayerCalculation::Update(const VECTOR& moveVec, const VECTOR& moveDirect
 /// <param name="moveDirection"></param>
 /// <param name="playerData"></param>
 /// <returns></returns>
-VECTOR PlayerCalculation::Move(const VECTOR& moveVec, const VECTOR& moveDirection, 
-    const PlayerStateActionBase::PlayerData& playerData)
+VECTOR PlayerCalculation::Move(const int& animNumber_Now,
+    const VECTOR& moveDirection, const VECTOR& moveVec, 
+    const PlayerData& playerData)
 {
-    //動いている場合移動スピードを徐々に上げる
-    if (playerData.isMove && !playerData.isSlip)
-    {
-        //減速スピード計算していたらfalseに
-        if (isCalc_deceleration)
-        {
-            isCalc_deceleration = false;
 
-            if (isSlip_after)
+    if (playerData.isHanging) return moveVec;
+
+    VECTOR returnVec = moveVec;
+
+    if (!playerData.isRoll)
+    {
+        //動いている場合移動スピードを徐々に上げる
+        if (playerData.isMove && !playerData.isSlip)
+        {
+            //減速スピード計算していたらfalseに
+            if (isCalc_deceleration)
             {
-                //スリップ後は最初から移動スピードをもつ
-                moveSpeed_now = MaxMoveSpeed / 2.0f;
-                isSlip_after = false;
+                isCalc_deceleration = false;
+
+                if (isSlip_after)
+                {
+                    //スリップ後は最初から移動スピードをもつ
+                    moveSpeed_now = MaxMoveSpeed / 2.0f;
+                    isSlip_after = false;
+                }
+            }
+
+            //徐々にスピードを上げる
+            moveSpeed_now += 0.05f;
+
+            //maxに達したらそこで止める
+            if (moveSpeed_now >= MaxMoveSpeed)
+            {
+                moveSpeed_now = MaxMoveSpeed;
+            }
+        }
+        else
+        {
+            //接地しているときに止まったらすぐ止まる
+            if (playerData.isGround)
+            {
+                //アニメーションフレームに合わせて減速
+                if (!isCalc_deceleration)
+                {
+                    //stopアニメーションに応じて止まるタイミングを調整
+                    if (!playerData.isSlip)
+                    {
+                        const float stopFrame = 10.0f;
+                        decelerationSpeed = moveSpeed_now / stopFrame;
+                        isCalc_deceleration = true;
+                    }
+                    else if (playerData.isSlip)
+                    {
+                        const float stopFrame = 12.0f;
+                        decelerationSpeed = moveSpeed_now / stopFrame;
+                        isCalc_deceleration = true;
+                        isSlip_after = true;
+                    }
+                }
+
+                moveSpeed_now -= decelerationSpeed;
+
+                if (moveSpeed_now < 0.0f)
+                {
+                    moveSpeed_now = 0.0f;
+                }
+            }
+            //空中にいるとき
+            else
+            {
+                //徐々に下げる
+                moveSpeed_now -= 0.02f;
+
+                //止める
+                if (moveSpeed_now <= 0.0f)
+                {
+                    moveSpeed_now = 0.0f;
+                }
             }
         }
 
-        //徐々にスピードを上げる
-        moveSpeed_now += 0.05f;
+        returnVec = VScale(moveDirection, moveSpeed_now);
 
-        //maxに達したらそこで止める
-        if (moveSpeed_now >= MaxMoveSpeed)
+        //急転回している場合
+        if (playerData.isSlip)
         {
-            moveSpeed_now = MaxMoveSpeed;
+            return VScale(moveDirection, -moveSpeed_now);
         }
+    }
+
+
+    //重力だけ前フレームのモノを使用
+    returnVec.y = moveVec_old.y;
+
+    //重力計算
+    returnVec = Gravity(returnVec, playerData);
+
+    //ジャンプ計算
+    if (playerData.isRun_wall)
+    {
+        returnVec = Run_Wall(returnVec, playerData);
     }
     else
     {
-        //接地しているときに止まったらすぐ止まる
-        if (playerData.isGround)
-        {
-            //アニメーションフレームに合わせて減速
-            if (!isCalc_deceleration)
-            {
-                //stopアニメーションに応じて止まるタイミングを調整
-                if (!playerData.isSlip)
-                {
-                    const float stopFrame = 10.0f;
-                    decelerationSpeed = moveSpeed_now / stopFrame;
-                    isCalc_deceleration = true;
-                }
-                else if (playerData.isSlip)
-                {
-                    const float stopFrame = 12.0f;
-                    decelerationSpeed = moveSpeed_now / stopFrame;
-                    isCalc_deceleration = true;
-                    isSlip_after = true;
-                }
-            }
-
-            moveSpeed_now -= decelerationSpeed;
-
-            if (moveSpeed_now < 0.0f)
-            {
-                moveSpeed_now = 0.0f;
-            }
-        }
-        //空中にいるとき
-        else
-        {
-            //徐々に下げる
-            moveSpeed_now -= 0.02f;
-
-            //止める
-            if (moveSpeed_now <= 0.0f)
-            {
-                moveSpeed_now = 0.0f;
-            }
-        }
-    }
-    
-    if (playerData.isSlip)
-    {
-        return VScale(moveDirection, -moveSpeed_now);
+        returnVec = Jump(returnVec, animNumber_Now, playerData);
     }
 
-    return VScale(moveDirection, moveSpeed_now);
+    //moveVecを保存
+    moveVec_old = returnVec;
+
+    return returnVec;
 }
 
 /// <summary>
@@ -146,19 +175,18 @@ VECTOR PlayerCalculation::Move(const VECTOR& moveVec, const VECTOR& moveDirectio
 /// <param name="playerData"></param>
 /// <returns></returns>
 VECTOR PlayerCalculation::Jump(const VECTOR& moveVec,const int& animNumber_Now,
-    const PlayerStateActionBase::PlayerData& playerData)
+    const PlayerData& playerData)
 {
     VECTOR move = moveVec;
 
-    if (animNumber_Now == animNum::falling_Idle ||
-        (playerData.isJump ||
-        animNumber_Now == animNum::run_Jump))
+    if (isJumpPower_add)
     {
-        move.y += jumpSpeed_now;
-    }
-    else if (!playerData.isGround)
-    {
-        move.y += jumpSpeed_now;
+        if (playerData.isJump_second)
+        {
+            move.y = 0.0f;
+        }
+        move.y += jumpPower_now;
+        isJumpPower_add = false;
     }
 
     return move;
@@ -169,12 +197,24 @@ VECTOR PlayerCalculation::Jump(const VECTOR& moveVec,const int& animNumber_Now,
 /// </summary>
 /// <param name="moveVec"></param>
 /// <param name="playerData"></param>
-void PlayerCalculation::Gravity(const PlayerStateActionBase::PlayerData& playerData)
+VECTOR PlayerCalculation::Gravity(const VECTOR& moveVec, const PlayerData& playerData)
 {
+    VECTOR returnVec = moveVec;
+
     if (!playerData.isGround)
     {
-        jumpSpeed_now += gravity;
+        //velocity_gravity += gravity;
+
+        returnVec.y += gravity;
     }
+    else
+    {
+        velocity_gravity = 0.0f;
+        returnVec.y = 0.0f;
+    }
+
+    //接地中は重力を付与しない
+    return returnVec;
 }
 
 /// <summary>
@@ -185,18 +225,27 @@ void PlayerCalculation::Gravity(const PlayerStateActionBase::PlayerData& playerD
 /// <param name="playTime_anim"></param>
 /// <param name="playerData"></param>
 /// <returns></returns>
-VECTOR PlayerCalculation::Roll(const VECTOR& moveVec, const VECTOR& moveDirection,
-    float playTime_anim, const PlayerStateActionBase::PlayerData& playerData)
+VECTOR PlayerCalculation::Roll(const int& animNumber_Now, 
+    const VECTOR& moveVec, const VECTOR& moveDirection,
+    float playTime_anim, const PlayerData& playerData)
 {
     VECTOR move = moveVec;
 
     if (playerData.isRoll)
     {
+        //特定のフレームまで移動しない
         if (playTime_anim >= 10.0f)
         {
             //※徐々にスピードを下げていく
             //途中で向きがあまり変更できないようにする
             move = moveDirection;
+        }
+
+        if (playTime_anim >= 10.0f ||
+            animNumber_Now != animNum::quick_Roll)
+        {
+            move = VScale(moveVec, rollMoveSpeed_max);
+            moveSpeed_now = MaxMoveSpeed;
         }
     }
 
@@ -204,35 +253,36 @@ VECTOR PlayerCalculation::Roll(const VECTOR& moveVec, const VECTOR& moveDirectio
 }
 
 VECTOR PlayerCalculation::Run_Wall(const VECTOR& moveVec,
-    const PlayerStateActionBase::PlayerData& playerData)
+    const PlayerData& playerData)
 {
     VECTOR move = moveVec;
-    
-    move.y += jumpSpeed_now;
 
-    if (jumpSpeed_now <= 0.0f && !isRun_Wall_Stop)
+    //一度だけジャンプ力を付与
+    if (isJumpPower_add)
+    {
+        isRun_Wall_Stop = false;
+        wallRun_stopTime = 0.0f;
+        move.y = 0.0f;
+        move.y += jumpPower_now;
+        isJumpPower_add = false;
+    }
+    
+    //ジャンプ力が0になったら少し留まる
+    if (move.y <= 0.0f && !isRun_Wall_Stop)
     {
         isRun_Wall_Stop = true;
-        jumpSpeed_now = 0.0f;
+        move.y = 0.0f;
     }
 
     //少しの間留まる
     if (isRun_Wall_Stop)
     {
-        if (run_wall_stopTime <= 4.0f)
+        if (wallRun_stopTime <= wallRun_stopTime_max)
         {
-            run_wall_stopTime++;
+            wallRun_stopTime++;
+            move.y = 0.0f;
         }
-        else
-        {
-            //重力計算
-            Gravity(playerData);
-        }
-    }
-    else
-    {
-        //重力計算
-        Gravity(playerData);
+        
     }
 
     return move;
@@ -263,15 +313,22 @@ VECTOR PlayerCalculation::HangingAngle(const MV1_COLL_RESULT_POLY& hangingPoly)
 /// <param name="handPos_right"></param>
 /// <param name="nearestPoint"></param>
 /// <returns></returns>
-VECTOR PlayerCalculation::HangingPosition(const VECTOR& handPos_left,const VECTOR& handPos_right,const VECTOR& nearestPoint)
+VECTOR PlayerCalculation::HangingPosition()
 {
     VECTOR centerPos = VAdd(handPos_left, handPos_right);
     centerPos = VScale(centerPos, 0.5f);
     
-    VECTOR newPos = VSub(nearestPoint, centerPos);
+    VECTOR newPos = VSub(nearestResult.nearestPoint, centerPos);
+    DebugDrawer::Instance().InformationInput_sphere(nearestResult.nearestPoint, 2.0f, GetColor(0, 255, 255));
     return newPos;
 }
 
+/// <summary>
+/// 掴んでいる場所の方向を計算
+/// </summary>
+/// <param name="hangingPoly"></param>
+/// <param name="centerPos"></param>
+/// <returns></returns>
 VECTOR PlayerCalculation::HangingDirection(const MV1_COLL_RESULT_POLY& hangingPoly, const VECTOR& centerPos)
 {
     //点に最も近い線分との最近接点
@@ -279,6 +336,9 @@ VECTOR PlayerCalculation::HangingDirection(const MV1_COLL_RESULT_POLY& hangingPo
 
     //射影ベクトル
     VECTOR a = Calculation::ProjectionDirection(centerPos, nearestResult.linePos_start, nearestResult.linePos_end);
+
+    DebugDrawer::Instance().InformationInput_line(nearestResult.linePos_start, nearestResult.linePos_end, GetColor(255, 0, 0));
+    DebugDrawer::Instance().InformationInput_sphere(a, 2.0f, GetColor(0, 255, 0));
 
     VECTOR direction = VSub(a, centerPos);
     direction.y = 0.0f;
@@ -288,44 +348,17 @@ VECTOR PlayerCalculation::HangingDirection(const MV1_COLL_RESULT_POLY& hangingPo
     return direction;
 }
 
+
 void PlayerCalculation::Reset_move()
 {
     moveSpeed_now = 0.0f;
-    jumpSpeed_now = 0.0f;
+    jumpPower_now = 0.0f;
 }
 
 void PlayerCalculation::Reset_run_wall()
 {
-    run_wall_stopTime = 0.0f;
+    wallRun_stopTime = 0.0f;
     isRun_Wall_Stop = false;
 }
 
-///////////////////////////////
-// まだ使うかわからない
-//////////////////////////////
-
-/// <summary>
-/// 
-/// </summary>
-/// <param name="moveVec"></param>
-/// <param name="moveVec_memory"></param>
-/// <param name="isGround"></param>
-/// <param name="isRoll"></param>
-/// <returns></returns>
-VECTOR PlayerCalculation::MoveVec(const VECTOR& moveVec,const VECTOR& moveVec_memory,const bool isGround,const bool isRoll)
-{
-    VECTOR returnPos = moveVec;
-
-    if (isGround || !isRoll)
-    {
-        returnPos = moveVec_memory;
-    }
-
-    if (!isGround || isRoll)
-    {
-        returnPos = Calculation::Leap(moveVec, moveVec_memory, 0.2f);
-    }
-
-    return returnPos;
-}
 
