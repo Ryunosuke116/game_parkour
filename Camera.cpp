@@ -6,6 +6,7 @@
 #include "BaseObject.h"
 #include "Camera.h"
 #include "Calculation.h"
+#include "DebugDrawer.h"
 
 
 /// <summary>
@@ -39,8 +40,9 @@ void Camera::Initialize()
 {
 	aimPosition = VGet(30.0f, 15, -10);
 	spherePosition = VGet(0.0f, 20.0f, 20.0f);
-	a = -177.55f;
+	angle_now = -177.55f;
 	distance = 50.0f;
+	t = 0;
 
 	SetCameraPositionAndTarget_UpVecY(aimPosition, spherePosition);
 
@@ -54,33 +56,56 @@ void Camera::Initialize()
 void Camera::Update(const VECTOR& playerPosition,
 	const std::vector<std::shared_ptr<BaseObject>>& fieldObjects)
 {
-
 	centerPos = playerPosition;
-	centerPos.y += 14.0f;
+	centerPos.y += 15.0f;
 
 	aimPosition_usual.y = spherePosition.y + 15.0f;
+	min = spherePosition.y;
+	max = spherePosition.y + 40.0f;
+	float min_distance = 15.0f;
+	float max_distance = 60.0f;
+
+	float easedT = Calculation::EaseOutExpo(t);
+
+	aimPosition_usual.y = min + (max - min) * easedT;
+	distance = min_distance + (max_distance - min_distance) * easedT;
 
 	//カメラ移動処理
 	if (CheckHitKey(KEY_INPUT_A) ||
+		PadInput::GetJoyPad_x_left() < 0.0f ||
 		PadInput::GetJoyPad_x_right() < 0.0f)
 	{
-		a += 2.0f;
+		angle_now += 2.0f;
 	}
 	if (CheckHitKey(KEY_INPUT_D) ||
+		PadInput::GetJoyPad_x_left() > 0.0f ||
 		PadInput::GetJoyPad_x_right() > 0.0f)
 	{
-		a -= 2.0f;
+		angle_now -= 2.0f;
 	}
-	if (CheckHitKey(KEY_INPUT_W))
+
+
+	if (PadInput::GetJoyPad_y_right() > 0.0f)
 	{
-		aimPosition.y += 0.5f;
+		t -= 0.01f;
+		if (t <= 0.0f)
+		{
+			t = 0.0f;
+		}
+		
 	}
-	if (CheckHitKey(KEY_INPUT_S))
+	if (PadInput::GetJoyPad_y_right() < 0.0f)
 	{
-		aimPosition.y -= 0.5f;
+		t += 0.01f;
+		if (t >= 1.0f)
+		{
+			t = 1.0f;
+		}
+	
 	}
 
 	RotateUpdate();
+
 	for (const auto& fieldObject : fieldObjects)
 	{
 		CameraPosCalc(fieldObject->GetModelHandle());
@@ -91,6 +116,8 @@ void Camera::Update(const VECTOR& playerPosition,
 	cameraDirection = VSub(spherePosition, aimPosition);
 	cameraDirection = VNorm(cameraDirection);
 
+	DebugDrawer::Instance().InformationInput_string_VECTOR("aimPos x.%f y.%f z.%f\n", aimPosition);
+	DebugDrawer::Instance().InformationInput_string_VECTOR("spherePos x.%f y.%f z.%f\n", spherePosition);
 }
 
 /// <summary>
@@ -128,7 +155,7 @@ void Camera::Update_layout()
 	if (CheckHitKey(KEY_INPUT_RIGHT) &&
 		CheckHitKey(KEY_INPUT_LSHIFT))
 	{
-		a += 2.0f;
+		angle_now += 2.0f;
 	}
 	//x軸右移動
 	else if (CheckHitKey(KEY_INPUT_RIGHT) ||
@@ -142,7 +169,7 @@ void Camera::Update_layout()
 	if (CheckHitKey(KEY_INPUT_LEFT) &&
 		CheckHitKey(KEY_INPUT_LSHIFT))
 	{
-		a -= 2.0f;
+		angle_now -= 2.0f;
 	}
 	//x軸左移動
 	else if (CheckHitKey(KEY_INPUT_LEFT) ||
@@ -154,7 +181,7 @@ void Camera::Update_layout()
 
 	if (CheckHitKey(KEY_INPUT_9))
 	{
-		a = -177.55f;
+		angle_now = -177.55f;
 	}
 
 	//RotateUpdate();
@@ -182,11 +209,11 @@ bool Camera::Draw()
 
 void Camera::RotateUpdate()
 {
-	float angle = a * DX_PI_F / 360.0f;
-	this->angle = angle;
+	float angle_radian = angle_now * DX_PI_F / 360.0f;
+	this->angle_radian = angle_radian;
 
-	aimPosition_usual.x = spherePosition.x + distance * cos(angle);
-	aimPosition_usual.z = spherePosition.z + distance * sin(angle);
+	aimPosition_usual.x = spherePosition.x + distance * cos(angle_radian);
+	aimPosition_usual.z = spherePosition.z + distance * sin(angle_radian);
 
 	aimPosition = aimPosition_usual;
 
@@ -208,13 +235,9 @@ void Camera::CameraPosCalc(const int& mapHandle)
 	
 	//rayが当たっている場合カメラの位置をいじる
 	if (HitCheck::HitRayJudge(mapHandle, -1, spherePosition, aimPosition, hitPoly))
-	{
-		VECTOR direction;
-		
+	{		
 		addPos = VSub(hitPoly.HitPosition, aimPosition_usual);
 		direction = VNorm(addPos);
-
-		//addPos = VAdd(addPos,VScale(direction, 2.0f));
 		
 		aimPosition = VAdd(aimPosition_usual, addPos);
 	}

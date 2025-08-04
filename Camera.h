@@ -14,15 +14,21 @@ private:
 	VECTOR cameraDirection;
 	VECTOR spherePosition;
 	VECTOR centerPos;
-	float angle;
+	VECTOR direction;
+	float angle_radian;
 	float distance;
-	float a;
+	float angle_now;
+	float angle_new;
+	float min;
+	float max;
+	float t;
 
 	static constexpr float cameraSpeed = 0.02f;
 	static constexpr float cameraSpeed_ = 0.01f;
 	static constexpr float radius = 1.0f;
 
 	static constexpr float distance_max = 60.0f;
+
 
 public:
 	Camera();

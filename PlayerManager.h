@@ -20,7 +20,7 @@ public:
 	void Create()		override;
 	void Initialize()	override;
 	void Update()		override;
-	bool Draw()			override;
+	void Draw()			override;
 	void Add()			override;
 
 	VECTOR GetPosition() { return player->GetPosition(); }

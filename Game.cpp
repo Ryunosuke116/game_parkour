@@ -9,7 +9,7 @@
 /// インスタンス化
 /// </summary>
 /// <param name="manager"></param>
-Game::Game(SceneManager& manager) :BaseScene{ manager }
+Game::Game(SceneManager& manager) : BaseScene{ manager }
 {
 	gameObjectManager = std::make_shared<GameObjectManager>();
 	gameObjectManager->Create();

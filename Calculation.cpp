@@ -217,6 +217,23 @@ VECTOR Calculation::Leap(const VECTOR& changePosition, const VECTOR& latestPosit
 	return VAdd(changePosition, scalePosition);
 }
 
+/// <summary>
+/// ラープ
+/// float
+/// </summary>
+/// <param name="change"></param>
+/// <param name="latest"></param>
+/// <param name="speed"></param>
+/// <returns></returns>
+float Calculation::Leap_float(const float& change, const float& latest, const float& speed)
+{
+	float sub = latest - change;
+	float scale = 0;
+	scale = sub * speed;
+
+	return change + scale;
+}
+
 MATRIX Calculation::Rotate(const VECTOR& wall_normal)
 {
 	VECTOR up = wall_normal;
@@ -241,6 +258,16 @@ MATRIX Calculation::Rotate(const VECTOR& wall_normal)
 float Calculation::radToDeg(float radian)
 {
 	return radian * 180.0f / DX_PI_F;
+}
+
+/// <summary>
+/// イースアウト
+/// </summary>
+/// <param name="t"></param>
+/// <returns></returns>
+float Calculation::EaseOutExpo(float t)
+{
+	return 1 - (1 - t) * (1 - t);
 }
 
 void Calculation::Initialize()

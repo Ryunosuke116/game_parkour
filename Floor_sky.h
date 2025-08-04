@@ -4,7 +4,8 @@
 class Floor_sky : public BaseObject
 {
 public:
-	Floor_sky(nlohmann::json jsonData);
+	Floor_sky(const int& handle, const VECTOR& pos,
+		const std::string& objectTag);
 	~Floor_sky();
 
 	void Initialize()override;

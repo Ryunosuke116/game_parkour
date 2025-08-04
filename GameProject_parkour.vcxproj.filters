@@ -154,13 +154,19 @@
     <Filter Include="ソース ファイル\player\moveCalclation">
       <UniqueIdentifier>{f9dc51d6-1cdb-4363-bbf5-2cf3ddbf8b9d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\scene\game">
+      <UniqueIdentifier>{9eccd043-a013-4e79-b8f8-cfb630ddb564}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\scene\title">
+      <UniqueIdentifier>{255ab7dd-7a36-464c-8fbb-98ea412fa487}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\manager\floor_sky">
+      <UniqueIdentifier>{e7a6a41e-22bf-4934-ab49-e4b1b79ec0f6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Game.cpp">
-      <Filter>ソース ファイル\scene</Filter>
     </ClCompile>
     <ClCompile Include="Camera.cpp">
       <Filter>ソース ファイル\camera</Filter>
@@ -282,11 +288,14 @@
     <ClCompile Include="UI.cpp">
       <Filter>ソース ファイル\UI</Filter>
     </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>ソース ファイル\scene\game</Filter>
+    </ClCompile>
+    <ClCompile Include="Title.cpp">
+      <Filter>ソース ファイル\scene\title</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Game.h">
-      <Filter>ソース ファイル\scene</Filter>
-    </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>ソース ファイル\camera</Filter>
     </ClInclude>
@@ -428,12 +437,21 @@
     <ClInclude Include="UI.h">
       <Filter>ソース ファイル\UI</Filter>
     </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>ソース ファイル\scene\game</Filter>
+    </ClInclude>
+    <ClInclude Include="Title.h">
+      <Filter>ソース ファイル\scene\title</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Json\coin.Json">
       <Filter>ヘッダー ファイル\Json</Filter>
     </None>
     <None Include="Json\object.Json">
+      <Filter>ヘッダー ファイル\Json</Filter>
+    </None>
+    <None Include="Json\floor_sky.Json">
       <Filter>ヘッダー ファイル\Json</Filter>
     </None>
   </ItemGroup>

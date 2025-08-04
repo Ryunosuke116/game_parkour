@@ -86,7 +86,7 @@ void Player::Initialize()
 void Player::Update(const VECTOR& cameraDirection, 
     const std::vector<std::shared_ptr<BaseObject>>& fieldObjects)
 {
-    //positionData更新
+     //positionData更新
     CollisionUpdate();
 
     //リセット
@@ -149,6 +149,7 @@ void Player::Update(const VECTOR& cameraDirection,
 
     isChange_falling = nowState->MotionUpdate(playerData);
 
+
     //move計算
     if (!playerData.isHang_to_Crouch)
     {
@@ -156,6 +157,7 @@ void Player::Update(const VECTOR& cameraDirection,
             nowState->GetNowAnimState().PlayTime_anim,
             animationChanger->GetAnimNumber_now(), playerData);
     }
+
 
     if (CheckHitKey(KEY_INPUT_3))
     {
@@ -210,8 +212,6 @@ void Player::Update(const VECTOR& cameraDirection,
     //頭 9
     //胸 6
     //腹 4
-
-
 
 }
 
@@ -315,27 +315,16 @@ void Player::CollisionUpdate()
     //ray
     VECTOR position_center = VScale(VAdd(MV1GetFramePosition(modelHandle, 7), position), 0.5f);
     position_center = VGet(position.x, position_center.y, position.z);
-    //positionData.position_top_ray = MV1GetFramePosition(modelHandle, 9);
     positionData.position_top_ray = VGet(position.x, position_center.y + height, position.z);
     positionData.position_bottom_ray = position;
     
-
-    //bottomPosよりも下にいかないように
-   //ray
-    if (positionData.position_top_ray.y <= positionData.position_bottom_ray.y)
+    positionData.position_top_ray.x = positionData.position_bottom_ray.x;
+    positionData.position_top_ray.z = positionData.position_bottom_ray.z;
+    positionData.position_bottom_ray.y -= 0.1f;
+     
+    if (playerData.isRun && !playerData.isJump)
     {
-        positionData.position_bottom_ray = MV1GetFramePosition(modelHandle, 9);
-        positionData.position_top_ray = position;
-        positionData.position_top_ray.y += 0.1f;
-        isReverse = true;
-    }
-
-    //ray
-    if (!isReverse)
-    {
-        positionData.position_top_ray.x = positionData.position_bottom_ray.x;
-        positionData.position_top_ray.z = positionData.position_bottom_ray.z;
-        positionData.position_bottom_ray.y -= 0.1f;
+        positionData.position_bottom_ray.y -= playerCalculation->GetMoveSpeed_now();
     }
 
     //カプセル

@@ -9,7 +9,7 @@ public:
 	void Create()		override;
 	void Initialize()	override;
 	void Update()		override;
-	bool Draw()			override;
+	void Draw()			override;
 	void Add()			override;
 
 	void Add(const std::string name, const nlohmann::json file);

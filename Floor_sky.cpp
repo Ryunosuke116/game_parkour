@@ -2,12 +2,12 @@
 #include  "nlohmann/json.hpp"
 #include "Floor_sky.h"
 
-Floor_sky::Floor_sky(nlohmann::json jsonData)
+Floor_sky::Floor_sky(const int& handle, const VECTOR& pos,
+	const std::string& objectTag)
 {
-	std::string path = jsonData["path"];
-
-	modelHandle = MV1LoadModel(path.c_str());
-	tag = "moveFloor_1";
+	modelHandle = MV1DuplicateModel(handle);
+	position = pos;
+	tag = objectTag;
 }
 
 Floor_sky::~Floor_sky()
@@ -19,7 +19,6 @@ void Floor_sky::Initialize()
 {
 	isUp = true;
 	pos_difference = VGet(0.0f, 0.0f, 0.0f);
-	position = VGet(5.0f, 10.0f, 10.0f);
 
 	MV1SetPosition(modelHandle, position);
 	MV1SetScale(modelHandle, VGet(0.5f, 0.5f, 0.5f));

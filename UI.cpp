@@ -50,13 +50,13 @@ bool UI::Draw()
 {
 	DrawGraph(x, y, coinHandle, TRUE);
 
-	int num_x = 200;
+	int num_x = 170;
 
 
 	for (char c : num)
 	{
 		int digit = c - '0';
-		DrawGraph(num_x, 700, numberHandle[digit], TRUE);
+		DrawGraph(num_x, 730, numberHandle[digit], TRUE);
 		num_x += 32;
 	}
 

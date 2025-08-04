@@ -44,11 +44,17 @@ void CoinManager::Initialize()
 	{
 		//std::string key(1, i);
 		coins.push_back(std::make_shared<CoinObject>(modelHandle,
-			VGet(pos[0], pos[1], pos[2])));
+			VGet(pos[0], pos[1], pos[2])
+		));
 	}
 
 }
 
+/// <summary>
+/// XVˆ—
+/// </summary>
+/// <param name="player"></param>
+/// <param name="cameraLookPos"></param>
 void CoinManager::Update(const std::shared_ptr<Player>& player,const VECTOR& cameraLookPos)
 {
 	//vectorŒ^“à‚ÌŒ»İˆÊ’u
@@ -71,13 +77,12 @@ void CoinManager::Update(const std::shared_ptr<Player>& player,const VECTOR& cam
 
 }
 
-bool CoinManager::Draw()
+void CoinManager::Draw()
 {
 	for (auto& coin : coins)
 	{
 		coin->Draw();
 	}
-	return true;
 }
 
 void CoinManager::Add()

@@ -28,14 +28,15 @@ void GameObjectManager::Create()
 	jsonManager->Initialize();
 
 
-	map				= std::make_shared<Map>("material/skyDome/sunSet.mv1");
-	field			= std::make_shared<Field>("material/mv1/new_city/new_city_0731.mv1");
-	coinManager		= std::make_shared<CoinManager>();
-	playerManager	= std::make_shared<PlayerManager>();
-	camera			= std::make_shared<Camera>();
-	layout			= std::make_shared<Layout>();
-	shadow			= std::make_shared<Shadow>();
-	ui				= std::make_shared<UI>();
+	map					= std::make_shared<Map>("material/skyDome/sunSet.mv1");
+	field				= std::make_shared<Field>("material/mv1/new_city/new_city_0731.mv1");
+	coinManager			= std::make_shared<CoinManager>();
+	playerManager		= std::make_shared<PlayerManager>();
+	//floor_sky_Manager	= std::make_shared<Floor_skyManager>();
+	camera				= std::make_shared<Camera>();
+	layout				= std::make_shared<Layout>();
+	shadow				= std::make_shared<Shadow>();
+	ui					= std::make_shared<UI>();
 	
 	map_actual			 = std::dynamic_pointer_cast<Map>(map);
 	playerManager_actual = std::dynamic_pointer_cast<PlayerManager>(playerManager);
@@ -43,9 +44,23 @@ void GameObjectManager::Create()
 
 
 	fieldObjects.push_back(std::make_shared<FieldMesh>("material/mv1/new_city/new_city_mesh_0731.mv1"));
-	fieldObjects.push_back(std::make_shared<Floor_sky>(jsonManager->GetJsons("object")));
 	fieldObjects.push_back(std::make_shared<Wall>(jsonManager->GetJsons("object")));
+	
+	nlohmann::json data_floor_sky = jsonManager->GetJsons("floor_sky");
+	std::string path_floor_sky = data_floor_sky["modelPath"];
+	for (auto& data : data_floor_sky["list"])
+	{
+		int modelHandle = MV1LoadModel(path_floor_sky.c_str());
+		std::string tag = data[3].get<std::string>();
 
+		fieldObjects.push_back(std::make_shared<Floor_sky>(
+			modelHandle,
+			VGet(data[0], data[1], data[2]),
+			tag
+		));
+	}
+
+	//floor_sky_Manager->HandOver(jsonManager->GetJsons("floor_sky"));
 	coinManager->HandOver(jsonManager->GetJsons("coin"));
 	playerManager->HandOver(jsonManager->GetJsons("player"));
 
@@ -70,6 +85,7 @@ void GameObjectManager::Initialize()
 	field->Initialize();
 	coinManager->Initialize();
 	playerManager->Initialize();
+	//floor_sky_Manager->Initialize();
 	camera->Initialize();
 	PadInput::Initialize();
 	ui->Initialize();
@@ -117,7 +133,8 @@ void GameObjectManager::Update()
 			fieldObject->Update();
 		}
 		field->Update();
-	
+
+		//floor_sky_Manager->Update();
 		playerManager_actual->Update(fieldObjects, camera->GetCameraDirection());
 		map_actual->Update(playerManager_actual->GetPosition());
 		camera->Update(playerManager_actual->GetPosition(),fieldObjects);
@@ -137,7 +154,7 @@ void GameObjectManager::Update()
 /// <summary>
 /// 描画
 /// </summary>
-bool GameObjectManager::Draw()
+void GameObjectManager::Draw()
 {
 	// シャドウマップへの描画の準備
 	ShadowMap_DrawSetup(shadow->GetShadowMapHandle());
@@ -165,6 +182,7 @@ bool GameObjectManager::Draw()
 	{
 		fieldObject->Draw();
 	}
+	//floor_sky_Manager->Draw();
 	playerManager->Draw();
 	coinManager->Draw();
 
@@ -182,5 +200,4 @@ bool GameObjectManager::Draw()
 	DrawLine3D(VGet(0.0f, 15.0f, 0.0f), VGet(10.0f, 15.0f, 0.0f), GetColor(255, 0, 0));
 	DrawLine3D(VGet(0.0f, 15.0f, 0.0f), VGet(0.0f, 25.0f, 0.0f), GetColor(0, 255, 0));
 	DrawLine3D(VGet(0.0f, 15.0f, 0.0f), VGet(0.0f, 15.0f, 10.0f), GetColor(0, 0, 255));
-	return true;
 }

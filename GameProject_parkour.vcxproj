@@ -183,6 +183,7 @@
     <ClCompile Include="Run_To_Stop.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="Shadow.cpp" />
+    <ClCompile Include="Title.cpp" />
     <ClCompile Include="UI.cpp" />
     <ClCompile Include="Wall.cpp" />
   </ItemGroup>
@@ -233,6 +234,7 @@
     <ClInclude Include="AnimTime.h" />
     <ClInclude Include="common.h" />
     <ClInclude Include="Shadow.h" />
+    <ClInclude Include="Title.h" />
     <ClInclude Include="UI.h" />
     <ClInclude Include="Wall.h" />
   </ItemGroup>
@@ -241,6 +243,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Json\coin.Json" />
+    <None Include="Json\floor_sky.Json" />
     <None Include="Json\object.Json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

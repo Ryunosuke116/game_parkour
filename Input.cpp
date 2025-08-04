@@ -51,5 +51,5 @@ void Input::Update()
 	joyPad->input_x_left = static_cast<float>(input_x_left);
 	joyPad->input_y_left = static_cast<float>(input_y_left);
 	joyPad->input_x_Right = static_cast<float>(input_x_Right);
-	joyPad->input_x_Right = static_cast<float>(input_x_Right);
+	joyPad->input_y_Right = static_cast<float>(input_y_Right);
 }

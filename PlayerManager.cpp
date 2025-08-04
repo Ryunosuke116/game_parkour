@@ -64,7 +64,7 @@ void PlayerManager::Update(const std::vector<std::shared_ptr<BaseObject>>& field
 /// <summary>
 /// •`‰æ
 /// </summary>
-bool PlayerManager::Draw()
+void PlayerManager::Draw()
 {
 	actualPlayer->Draw();
 
@@ -74,8 +74,6 @@ bool PlayerManager::Draw()
 	}*/
 	collisionManager->Draw();
 	collisionManager->Draw();
-
-	return true;
 }
 
 VECTOR PlayerManager::PositionCheck(const VECTOR& hangingPos, const VECTOR& playerPos)

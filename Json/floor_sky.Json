@@ -1,0 +1,9 @@
+{
+  "modelPath": "material/mv1/floor_sky.mv1",
+  "modeltype": "floor_sky",
+  "list": [
+    [ -856.233398, 274.313904, 352.770508, "floor_sky_1" ],
+    [ -958.233398, 274.313904, 157.770508, "floor_sky_2" ]
+
+  ]
+}

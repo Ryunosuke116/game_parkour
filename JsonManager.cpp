@@ -28,10 +28,7 @@ void JsonManager::Update()
 
 }
 
-bool JsonManager::Draw()
-{
-	return false;
-}
+void JsonManager::Draw(){}
 
 void JsonManager::Add(const std::string name ,const nlohmann::json file)
 {
