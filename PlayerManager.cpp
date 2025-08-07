@@ -4,6 +4,7 @@
 #include "PlayerManager.h"
 #include "Calculation.h"
 #include "BaseObject.h"
+#include "DebugDrawer.h"
 
 /// <summary>
 /// コンストラクタ
@@ -36,10 +37,17 @@ void PlayerManager::Initialize()
 {
 	actualPlayer->Initialize();
 
-	/*for (auto& chara : characters)
-	{
-		chara->Initialize();
-	}*/
+	//AABB設定
+	playerAABB.min = actualPlayer->GetPosition();
+	playerAABB.min = VGet(playerAABB.min.x - 3.5f, 
+		playerAABB.min.y,
+		playerAABB.min.z - 3.5f);
+	
+	playerAABB.max = actualPlayer->GetPosition();
+	playerAABB.max = VGet(playerAABB.max.x + 3.5f, 
+		playerAABB.max.y + 20.0f,
+		playerAABB.max.z + 3.5f);
+	
 }
 
 /// <summary>
@@ -58,6 +66,17 @@ void PlayerManager::Update(const std::vector<std::shared_ptr<BaseObject>>& field
 	actualPlayer->Receive_CollisionResult();
 
 	actualPlayer->PositionUpdate();
+
+	playerAABB.min = actualPlayer->GetPosition();
+	playerAABB.min = VGet(playerAABB.min.x - 3.5f,
+		playerAABB.min.y,
+		playerAABB.min.z - 3.5f);
+
+	playerAABB.max = actualPlayer->GetPosition();
+	playerAABB.max = VGet(playerAABB.max.x + 3.5f,
+		playerAABB.max.y + 20.0f,
+		playerAABB.max.z + 3.5f);
+	DebugDrawer::Instance().InformationInput_AABB(playerAABB.min, playerAABB.max, GetColor(255, 0, 0));
 	
 }
 

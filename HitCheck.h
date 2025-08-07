@@ -19,7 +19,7 @@ public:
 
 	//当たり判定
 	//線とメッシュ
-	static bool HitRayJudge(const int& modelHandle, int frameIndex,
+	static bool RayHitJudge(const int& modelHandle, int frameIndex,
 		VECTOR linePos_start, VECTOR linePos_end, MV1_COLL_RESULT_POLY& hitPoly);
 
 	//球とメッシュ
@@ -39,7 +39,7 @@ public:
 
 	static VECTOR ClosestPtToPointTriangle(VECTOR centerPos, VECTOR a, VECTOR b, VECTOR c);
 
-	static void AABB();
+	static bool AABBHitJudge(AABB a, AABB b);
 	
 	static std::pair<VECTOR,VECTOR> SegmentTriangleDistance(const VECTOR& p, const VECTOR& q, const VECTOR& a, const VECTOR& b, const VECTOR& c, const VECTOR& normal);
 	static HangingData CliffGrabbing(const std::vector<std::shared_ptr<BaseObject>>& fieldObjects,

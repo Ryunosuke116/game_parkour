@@ -3,7 +3,8 @@
 #include "Floor_sky.h"
 
 Floor_sky::Floor_sky(const int& handle, const VECTOR& pos,
-	const std::string& objectTag)
+	const std::string& objectTag):
+	moveAmount(0.0f)
 {
 	modelHandle = MV1DuplicateModel(handle);
 	position = pos;
@@ -31,11 +32,11 @@ void Floor_sky::Update()
 {
 	VECTOR newPos = position;
 
-	if (newPos.z >= 15.0f)
+	if (moveAmount >= 15.0f)
 	{
 		isUp = false;
 	}
-	else if (newPos.z <= 7.0f)
+	else if (moveAmount <= 0.0f)
 	{
 		isUp = true;
 	}
@@ -43,10 +44,12 @@ void Floor_sky::Update()
 	if (isUp)
 	{
 		newPos.z += 0.2f;
+		moveAmount += 0.2f;
 	}
 	else
 	{
 		newPos.z -= 0.2f;
+		moveAmount -= 0.2f;
 	}
 
 	//newPos = VAdd(newPos, addPos);

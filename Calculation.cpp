@@ -265,7 +265,7 @@ float Calculation::radToDeg(float radian)
 /// </summary>
 /// <param name="t"></param>
 /// <returns></returns>
-float Calculation::EaseOutExpo(float t)
+float Calculation::EaseOutQuad(float t)
 {
 	return 1 - (1 - t) * (1 - t);
 }

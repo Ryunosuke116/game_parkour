@@ -3,6 +3,7 @@
 #include "Calculation.h"
 #include "DebugDrawer.h"
 
+
 /// @brief コンストラクタ
 /// @return 
 HitCheck::HitCheck()
@@ -24,7 +25,7 @@ HitCheck::~HitCheck()
 /// @param linePos_end 
 /// @param hitPoly 
 /// @return 
-bool HitCheck::HitRayJudge(const int& modelHandle, int frameIndex,
+bool HitCheck::RayHitJudge(const int& modelHandle, int frameIndex,
 	VECTOR linePos_start, VECTOR linePos_end, MV1_COLL_RESULT_POLY& hitPoly)
 {
 	hitPoly = MV1CollCheck_Line(modelHandle, frameIndex, linePos_start, linePos_end);
@@ -136,19 +137,25 @@ VECTOR HitCheck::ClosestPtToPointTriangle(VECTOR centerPos, VECTOR a, VECTOR b, 
 }
 
 
-
-void HitCheck::AABB()
+/// <summary>
+/// AABB同士が接触しているか
+/// </summary>
+/// <param name="a"></param>
+/// <param name="b"></param>
+/// <returns></returns>
+bool HitCheck::AABBHitJudge(AABB a, AABB b)
 {
-	float r = 3.5f;
-	float min_X, min_Y, min_Z;
-	float max_X, max_Y, max_Z;
+	if (a.min.x <= a.max.x &&
+		a.max.x >= b.min.x &&
+		a.min.y <= b.max.y &&
+		a.max.y >= a.min.y &&
+		a.min.z <= a.max.z &&
+		a.max.z >= a.min.z)
+	{
+		return true;
+	}
 
-	min_X = r * -1.0f;
-	min_X = r * -1.0f;
-	min_Z = r * -1.0f;
-	max_X = r * 1.0f;
-	max_Y = r * 1.0f;
-	max_Z = r * 1.0f;
+	return false;
 
 }
 
@@ -431,7 +438,7 @@ HangingData HitCheck::CliffGrabbing(const std::vector<std::shared_ptr<BaseObject
 		}
 
 		/*MV1_COLL_RESULT_POLY poly;
-		hangingData.isHitHanging = HitCheck::HitRayJudge(fieldObject->GetModelHandle(), -1, topPosition, linePos_end, poly);
+		hangingData.isHitHanging = HitCheck::RayHitJudge(fieldObject->GetModelHandle(), -1, topPosition, linePos_end, poly);
 
 
 		if (hangingData.isHitHanging && poly.Normal.y >= 0.8f)

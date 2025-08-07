@@ -35,10 +35,13 @@ public:
 	~Camera();
 
 	void Initialize();
-	void Update(const VECTOR& playerPosition, const std::vector<std::shared_ptr<BaseObject>>& fieldObjects);
+	void Update(const VECTOR& playerPosition, const float& angle_player,
+		const std::vector<std::shared_ptr<BaseObject>>& fieldObjects);
 	void Update_layout();
 	bool Draw();
 	void RotateUpdate();
+	void AngleUpdate(const float& angle_player);
+	void DistanceUpdate();
 	void PosCalc();
 	void Leap(VECTOR& changePosition, const VECTOR& playerPosition, const float& speed);
 

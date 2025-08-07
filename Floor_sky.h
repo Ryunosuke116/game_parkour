@@ -14,5 +14,6 @@ public:
 
 private:
 	bool isUp;
+	float moveAmount;
 };
 

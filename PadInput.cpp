@@ -100,7 +100,27 @@ bool PadInput::isJump()
 bool PadInput::isRoll()
 {
     if (CheckHitKey(KEY_INPUT_F) ||
-        input->GetNowFrameNewInput() & PAD_INPUT_R)
+        input->GetNowFrameInput_direct_Z() < 0)
+    {
+        return true;
+    }
+    return false;
+}
+
+bool PadInput::IsPush_A()
+{
+    if ((input->GetNowFrameNewInput() & PAD_INPUT_A ||
+        CheckHitKey(KEY_INPUT_SPACE)))
+    {
+        return true;
+    }
+    return false;
+}
+
+bool PadInput::IsPush_R()
+{
+    if ((input->GetNowFrameNewInput() & PAD_INPUT_6 ||
+        CheckHitKey(KEY_INPUT_SPACE)))
     {
         return true;
     }

@@ -1,10 +1,15 @@
 #pragma once
+#include "DxLib.h"
+
 class Input
 {
 private:
 	int		nowFrameInput;				// 現在のフレームで押されているボタン
 	int		nowFrameNewInput;			// 現在のフレームで新たに押されたボタン
-	
+	int		nowDirectInput;
+
+	DINPUT_JOYSTATE input_direct;
+
 	struct JoyPad
 	{
 		float input_x_left;
@@ -24,6 +29,7 @@ public:
 
 	int GetNowFrameInput() const { return nowFrameInput; }
 	int GetNowFrameNewInput() const { return nowFrameNewInput; }
+	int GetNowFrameInput_direct_Z()const { return input_direct.Z; }
 	float GetJoyPad_x_left() const { return joyPad->input_x_left; }
 	float GetJoyPad_y_left() const { return joyPad->input_y_left; }
 	float GetJoyPad_x_right() const { return joyPad->input_x_Right; }

@@ -2,6 +2,7 @@
 #include <vector>
 #include <memory>
 #include "GameObjectManager.h"
+#include "DebugDrawer.h"
 
 /// <summary>
 /// コンストラクタ
@@ -37,7 +38,8 @@ void GameObjectManager::Create()
 	layout				= std::make_shared<Layout>();
 	shadow				= std::make_shared<Shadow>();
 	ui					= std::make_shared<UI>();
-	
+	goalArea			= std::make_shared<GoalArea>();
+
 	map_actual			 = std::dynamic_pointer_cast<Map>(map);
 	playerManager_actual = std::dynamic_pointer_cast<PlayerManager>(playerManager);
 	coinManager_actual   = std::dynamic_pointer_cast<CoinManager>(coinManager);
@@ -90,10 +92,11 @@ void GameObjectManager::Initialize()
 	PadInput::Initialize();
 	ui->Initialize();
 	shadow->Initialize();
+	goalArea->Initialize();
 
 	isCamera = false;
 	isPush = false;
-
+	isGoal = false;
 }
 
 /// <summary>
@@ -137,7 +140,8 @@ void GameObjectManager::Update()
 		//floor_sky_Manager->Update();
 		playerManager_actual->Update(fieldObjects, camera->GetCameraDirection());
 		map_actual->Update(playerManager_actual->GetPosition());
-		camera->Update(playerManager_actual->GetPosition(),fieldObjects);
+		camera->Update(playerManager_actual->GetPosition(),
+			playerManager_actual->GetAngle(), fieldObjects);
 
 		ui->Update();
 	}
@@ -149,6 +153,17 @@ void GameObjectManager::Update()
 
 	coinManager_actual->Update(playerManager_actual->GetPlayer(),camera->GetSpherePosition());
 
+	if (HitCheck::AABBHitJudge(playerManager_actual->GetPlayerAABB(),
+		goalArea->GetGoalArea()
+	))
+	{
+		isGoal = true;
+	}
+	else
+	{
+		isGoal = false;
+	}
+	DebugDrawer::Instance().InformationInput_string_bool("isGoal %d\n", isGoal);
 }
 
 /// <summary>

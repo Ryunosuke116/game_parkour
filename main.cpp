@@ -1,6 +1,7 @@
 #include "common.h"
 #include "EffekseerForDXLib.h"
 #include "SceneManager.h"
+#include "Title.h"
 #include "Game.h"
 #include "nlohmann/json.hpp"
 
@@ -54,6 +55,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
 
     SceneManager* sceneManager = new SceneManager();
 
+    sceneManager->Add<Title>("Title");
     sceneManager->Add<Game>("Game");
 
     while (!ProcessMessage() && !ClearDrawScreen() && !CheckHitKey(KEY_INPUT_ESCAPE))

@@ -49,6 +49,12 @@ void DebugDrawer::InformationInput_string_VECTOR(const std::string& text, const 
     texts_VECTOR.push_back({ text, variable });
 }
 
+void DebugDrawer::InformationInput_AABB(const VECTOR& min, const VECTOR& max, unsigned int color)
+{
+    if (!EnableDebugDraw) return;
+    aabbs.push_back({ min,max,color });
+}
+
 void DebugDrawer::Draw()
 {
     if (!EnableDebugDraw) return;
@@ -66,6 +72,11 @@ void DebugDrawer::Draw()
     for (const auto& capsule : capsules)
     {
         DrawCapsule3D(capsule.top, capsule.bottom, capsule.radius, 16, GetColor(0.0f, 0.0f, 0.0f), capsule.color,FALSE);
+    }
+
+    for (const auto& aabb : aabbs)
+    {
+        DrawAABB(aabb.min, aabb.max, aabb.color);
     }
 
     for (const auto& text : texts_int)
@@ -97,9 +108,44 @@ void DebugDrawer::Clear()
 {
     lines.clear();
     spheres.clear();
+    aabbs.clear();
     capsules.clear();
     texts_int.clear();
     texts_float.clear();
     texts_bool.clear();
     texts_VECTOR.clear();
+}
+
+void DebugDrawer::DrawAABB(const VECTOR& min, const VECTOR& max, unsigned int color)
+{
+    VECTOR p[8];
+
+    // 各頂点座標（minとmaxから8点を作る）
+    p[0] = VGet(min.x, min.y, min.z);
+    p[1] = VGet(max.x, min.y, min.z);
+    p[2] = VGet(max.x, max.y, min.z);
+    p[3] = VGet(min.x, max.y, min.z);
+
+    p[4] = VGet(min.x, min.y, max.z);
+    p[5] = VGet(max.x, min.y, max.z);
+    p[6] = VGet(max.x, max.y, max.z);
+    p[7] = VGet(min.x, max.y, max.z);
+
+    // 底面
+    DrawLine3D(p[0], p[1], color);
+    DrawLine3D(p[1], p[2], color);
+    DrawLine3D(p[2], p[3], color);
+    DrawLine3D(p[3], p[0], color);
+
+    // 上面
+    DrawLine3D(p[4], p[5], color);
+    DrawLine3D(p[5], p[6], color);
+    DrawLine3D(p[6], p[7], color);
+    DrawLine3D(p[7], p[4], color);
+
+    // 側面
+    DrawLine3D(p[0], p[4], color);
+    DrawLine3D(p[1], p[5], color);
+    DrawLine3D(p[2], p[6], color);
+    DrawLine3D(p[3], p[7], color);
 }

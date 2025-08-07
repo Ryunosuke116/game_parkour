@@ -15,27 +15,12 @@
     <Filter Include="ソース ファイル\manager">
       <UniqueIdentifier>{c3d54e97-a0bd-410e-83c8-25079eaae248}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\camera">
-      <UniqueIdentifier>{cc117ea6-a7a3-4076-be42-23ed644f3ca4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\input">
-      <UniqueIdentifier>{2d3ddfd7-2f25-4c9a-89cd-db3c1b1aa889}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\player">
-      <UniqueIdentifier>{177446bf-eb68-46e6-99cd-5c968117d403}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ヘッダー ファイル">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
-    <Filter Include="ソース ファイル\field">
-      <UniqueIdentifier>{64988ae3-2089-4141-9140-37e45360d8db}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\Collision">
       <UniqueIdentifier>{2330dc01-06b8-4627-a8c4-ec50186a5a27}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\coin">
-      <UniqueIdentifier>{ee632bc8-260c-4376-bdbe-b6979949e267}</UniqueIdentifier>
     </Filter>
     <Filter Include="ソース ファイル\manager\scene">
       <UniqueIdentifier>{6ed27899-6b7f-44a8-b8d7-0648099a58a6}</UniqueIdentifier>
@@ -43,17 +28,11 @@
     <Filter Include="ソース ファイル\manager\coin">
       <UniqueIdentifier>{c758f02e-15db-456a-bfba-6b68200967d1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\Pad">
-      <UniqueIdentifier>{d2f54360-56d9-43c7-a511-49726d43ccd9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\manager\object">
       <UniqueIdentifier>{733bd2bf-452d-40b4-a80b-71e93c23b571}</UniqueIdentifier>
     </Filter>
     <Filter Include="ソース ファイル\manager\player">
       <UniqueIdentifier>{2a33576b-268e-4832-9dee-8902d408c493}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\Calculation">
-      <UniqueIdentifier>{cf99dbc9-50f2-4910-97b1-cd46a3c5e262}</UniqueIdentifier>
     </Filter>
     <Filter Include="ソース ファイル\layout">
       <UniqueIdentifier>{d5d9db3e-28bd-4cfe-902b-76f058d3efb3}</UniqueIdentifier>
@@ -100,59 +79,11 @@
     <Filter Include="ソース ファイル\collisionObject\wall">
       <UniqueIdentifier>{64a5a458-0152-4384-824c-1d742086213b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\player\animation">
-      <UniqueIdentifier>{25ee530f-5c21-4ee8-9271-3b0bedbca70d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\player\animation\Base">
-      <UniqueIdentifier>{94073645-165e-4d0d-b42d-68b29060cef2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\player\animation\falling_Idle">
-      <UniqueIdentifier>{b40c3a77-e359-4e55-9ca2-9795527822ca}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\player\animation\idle_to_sprint">
-      <UniqueIdentifier>{ef170e75-9be3-4c0d-babc-fc0764ed8cbc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\player\animation\jump">
-      <UniqueIdentifier>{f027c21f-f61a-4446-8085-ab3822338f95}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\player\animation\run">
-      <UniqueIdentifier>{41af47bd-3a60-436b-b164-77d22ae1b093}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\player\animation\run_to_stop">
-      <UniqueIdentifier>{ad1bbf69-df63-42d0-af47-aa4948d1fdff}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\player\animation\braced_Hang_To_Crouch">
-      <UniqueIdentifier>{c70c1186-0912-4049-a392-2034c0bc5f83}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\player\animation\hanging_Idle">
-      <UniqueIdentifier>{da44a1cc-a0e2-47f0-b13e-bed6339938ff}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\player\animationChanger">
-      <UniqueIdentifier>{abdff138-57d9-4360-b150-7469ae254d34}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\player\animation\idle">
-      <UniqueIdentifier>{ae649b4f-c1a5-45cd-87a9-b445c1eae15e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\player\animation\quick_roll">
-      <UniqueIdentifier>{86aa8a87-aaa1-45df-9575-21d005c28125}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\shadow">
-      <UniqueIdentifier>{fc540499-a255-488c-9209-0f2b29b3851c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\Debug">
-      <UniqueIdentifier>{60b018f4-5600-4481-a5d7-0e2b4316e13a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\Observer">
       <UniqueIdentifier>{459a351b-37b9-47ad-bac3-326a179a787f}</UniqueIdentifier>
     </Filter>
     <Filter Include="ソース ファイル\Observer\coin">
       <UniqueIdentifier>{e2711408-00da-4bab-8418-b491d612c8f1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\UI">
-      <UniqueIdentifier>{c948dba5-aa4d-4d17-aee9-30e4bf5bc655}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\player\moveCalclation">
-      <UniqueIdentifier>{f9dc51d6-1cdb-4363-bbf5-2cf3ddbf8b9d}</UniqueIdentifier>
     </Filter>
     <Filter Include="ソース ファイル\scene\game">
       <UniqueIdentifier>{9eccd043-a013-4e79-b8f8-cfb630ddb564}</UniqueIdentifier>
@@ -160,8 +91,92 @@
     <Filter Include="ソース ファイル\scene\title">
       <UniqueIdentifier>{255ab7dd-7a36-464c-8fbb-98ea412fa487}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\manager\floor_sky">
-      <UniqueIdentifier>{e7a6a41e-22bf-4934-ab49-e4b1b79ec0f6}</UniqueIdentifier>
+    <Filter Include="ソース ファイル\object">
+      <UniqueIdentifier>{f5620648-641a-4b56-a6a1-0e7ee83e33d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\object\player">
+      <UniqueIdentifier>{177446bf-eb68-46e6-99cd-5c968117d403}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\object\player\animation">
+      <UniqueIdentifier>{25ee530f-5c21-4ee8-9271-3b0bedbca70d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\object\player\animation\Base">
+      <UniqueIdentifier>{94073645-165e-4d0d-b42d-68b29060cef2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\object\player\animation\falling_Idle">
+      <UniqueIdentifier>{b40c3a77-e359-4e55-9ca2-9795527822ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\object\player\animation\idle_to_sprint">
+      <UniqueIdentifier>{ef170e75-9be3-4c0d-babc-fc0764ed8cbc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\object\player\animation\jump">
+      <UniqueIdentifier>{f027c21f-f61a-4446-8085-ab3822338f95}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\object\player\animation\run">
+      <UniqueIdentifier>{41af47bd-3a60-436b-b164-77d22ae1b093}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\object\player\animation\run_to_stop">
+      <UniqueIdentifier>{ad1bbf69-df63-42d0-af47-aa4948d1fdff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\object\player\animation\braced_Hang_To_Crouch">
+      <UniqueIdentifier>{c70c1186-0912-4049-a392-2034c0bc5f83}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\object\player\animation\hanging_Idle">
+      <UniqueIdentifier>{da44a1cc-a0e2-47f0-b13e-bed6339938ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\object\player\animation\idle">
+      <UniqueIdentifier>{ae649b4f-c1a5-45cd-87a9-b445c1eae15e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\object\player\animation\quick_roll">
+      <UniqueIdentifier>{86aa8a87-aaa1-45df-9575-21d005c28125}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\object\player\animationChanger">
+      <UniqueIdentifier>{abdff138-57d9-4360-b150-7469ae254d34}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\object\player\moveCalclation">
+      <UniqueIdentifier>{f9dc51d6-1cdb-4363-bbf5-2cf3ddbf8b9d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\object\coin">
+      <UniqueIdentifier>{ee632bc8-260c-4376-bdbe-b6979949e267}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\object\camera">
+      <UniqueIdentifier>{cc117ea6-a7a3-4076-be42-23ed644f3ca4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\static">
+      <UniqueIdentifier>{4f17fc1a-f8a2-447c-87ed-88689d1bdfd5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\static\Calculation">
+      <UniqueIdentifier>{cf99dbc9-50f2-4910-97b1-cd46a3c5e262}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\static\hitCheck">
+      <UniqueIdentifier>{747415d6-9e60-46ba-8625-edba46362216}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\static\Debug">
+      <UniqueIdentifier>{60b018f4-5600-4481-a5d7-0e2b4316e13a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\object\shadow">
+      <UniqueIdentifier>{fc540499-a255-488c-9209-0f2b29b3851c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\static\Pad">
+      <UniqueIdentifier>{d2f54360-56d9-43c7-a511-49726d43ccd9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\static\input">
+      <UniqueIdentifier>{2d3ddfd7-2f25-4c9a-89cd-db3c1b1aa889}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\object\UI">
+      <UniqueIdentifier>{c948dba5-aa4d-4d17-aee9-30e4bf5bc655}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\object\field">
+      <UniqueIdentifier>{64988ae3-2089-4141-9140-37e45360d8db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\object\goalArea">
+      <UniqueIdentifier>{6e771206-8e53-4239-8d25-f080ab3d7487}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\scene\result">
+      <UniqueIdentifier>{c1f0c082-192f-467c-81eb-b67f7ef24bda}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\scene\blackOut">
+      <UniqueIdentifier>{339009be-2dcc-4bb8-b021-48b2d122fbf4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -169,28 +184,25 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Camera.cpp">
-      <Filter>ソース ファイル\camera</Filter>
+      <Filter>ソース ファイル\object\camera</Filter>
     </ClCompile>
     <ClCompile Include="Input.cpp">
-      <Filter>ソース ファイル\input</Filter>
+      <Filter>ソース ファイル\static\input</Filter>
     </ClCompile>
     <ClCompile Include="Map.cpp">
       <Filter>ソース ファイル\map</Filter>
     </ClCompile>
     <ClCompile Include="PlayerStateActionBase.cpp">
-      <Filter>ソース ファイル\player\animation\Base</Filter>
+      <Filter>ソース ファイル\object\player\animation\Base</Filter>
     </ClCompile>
     <ClCompile Include="Field.cpp">
-      <Filter>ソース ファイル\field</Filter>
-    </ClCompile>
-    <ClCompile Include="HitCheck.cpp">
-      <Filter>ソース ファイル\Collision</Filter>
+      <Filter>ソース ファイル\object\field</Filter>
     </ClCompile>
     <ClCompile Include="CollisionManager.cpp">
       <Filter>ソース ファイル\Collision</Filter>
     </ClCompile>
     <ClCompile Include="CoinObject.cpp">
-      <Filter>ソース ファイル\coin</Filter>
+      <Filter>ソース ファイル\object\coin</Filter>
     </ClCompile>
     <ClCompile Include="GameObjectManager.cpp">
       <Filter>ソース ファイル\manager\object</Filter>
@@ -205,43 +217,43 @@
       <Filter>ソース ファイル\collisionObject\mesh</Filter>
     </ClCompile>
     <ClCompile Include="Calculation.cpp">
-      <Filter>ソース ファイル\Calculation</Filter>
+      <Filter>ソース ファイル\static\Calculation</Filter>
     </ClCompile>
     <ClCompile Include="CoinManager.cpp">
       <Filter>ソース ファイル\manager\coin</Filter>
     </ClCompile>
     <ClCompile Include="PadInput.cpp">
-      <Filter>ソース ファイル\Pad</Filter>
+      <Filter>ソース ファイル\static\Pad</Filter>
     </ClCompile>
     <ClCompile Include="PlayerCalculation.cpp">
-      <Filter>ソース ファイル\player\moveCalclation</Filter>
+      <Filter>ソース ファイル\object\player\moveCalclation</Filter>
     </ClCompile>
     <ClCompile Include="Falling_Idle.cpp">
-      <Filter>ソース ファイル\player\animation\falling_Idle</Filter>
+      <Filter>ソース ファイル\object\player\animation\falling_Idle</Filter>
     </ClCompile>
     <ClCompile Include="Hanging_Idle.cpp">
-      <Filter>ソース ファイル\player\animation\hanging_Idle</Filter>
+      <Filter>ソース ファイル\object\player\animation\hanging_Idle</Filter>
     </ClCompile>
     <ClCompile Include="Idle.cpp">
-      <Filter>ソース ファイル\player\animation\idle</Filter>
+      <Filter>ソース ファイル\object\player\animation\idle</Filter>
     </ClCompile>
     <ClCompile Include="Idle_To_Sprint.cpp">
-      <Filter>ソース ファイル\player\animation\idle_to_sprint</Filter>
+      <Filter>ソース ファイル\object\player\animation\idle_to_sprint</Filter>
     </ClCompile>
     <ClCompile Include="Jump.cpp">
-      <Filter>ソース ファイル\player\animation\jump</Filter>
+      <Filter>ソース ファイル\object\player\animation\jump</Filter>
     </ClCompile>
     <ClCompile Include="Quick_Roll.cpp">
-      <Filter>ソース ファイル\player\animation\quick_roll</Filter>
+      <Filter>ソース ファイル\object\player\animation\quick_roll</Filter>
     </ClCompile>
     <ClCompile Include="Run.cpp">
-      <Filter>ソース ファイル\player\animation\run</Filter>
+      <Filter>ソース ファイル\object\player\animation\run</Filter>
     </ClCompile>
     <ClCompile Include="Run_To_Stop.cpp">
-      <Filter>ソース ファイル\player\animation\run_to_stop</Filter>
+      <Filter>ソース ファイル\object\player\animation\run_to_stop</Filter>
     </ClCompile>
     <ClCompile Include="Braced_Hang_To_Crouch.cpp">
-      <Filter>ソース ファイル\player\animation\braced_Hang_To_Crouch</Filter>
+      <Filter>ソース ファイル\object\player\animation\braced_Hang_To_Crouch</Filter>
     </ClCompile>
     <ClCompile Include="Layout.cpp">
       <Filter>ソース ファイル\layout</Filter>
@@ -268,25 +280,25 @@
       <Filter>ソース ファイル\collisionObject\floor_sky</Filter>
     </ClCompile>
     <ClCompile Include="AnimationChanger.cpp">
-      <Filter>ソース ファイル\player\animationChanger</Filter>
+      <Filter>ソース ファイル\object\player\animationChanger</Filter>
     </ClCompile>
     <ClCompile Include="Wall.cpp">
       <Filter>ソース ファイル\collisionObject\wall</Filter>
     </ClCompile>
     <ClCompile Include="Player.cpp">
-      <Filter>ソース ファイル\player</Filter>
+      <Filter>ソース ファイル\object\player</Filter>
     </ClCompile>
     <ClCompile Include="Shadow.cpp">
-      <Filter>ソース ファイル\shadow</Filter>
+      <Filter>ソース ファイル\object\shadow</Filter>
     </ClCompile>
     <ClCompile Include="DebugDrawer.cpp">
-      <Filter>ソース ファイル\Debug</Filter>
+      <Filter>ソース ファイル\static\Debug</Filter>
     </ClCompile>
     <ClCompile Include="CoinObserver.cpp">
       <Filter>ソース ファイル\Observer\coin</Filter>
     </ClCompile>
     <ClCompile Include="UI.cpp">
-      <Filter>ソース ファイル\UI</Filter>
+      <Filter>ソース ファイル\object\UI</Filter>
     </ClCompile>
     <ClCompile Include="Game.cpp">
       <Filter>ソース ファイル\scene\game</Filter>
@@ -294,37 +306,46 @@
     <ClCompile Include="Title.cpp">
       <Filter>ソース ファイル\scene\title</Filter>
     </ClCompile>
+    <ClCompile Include="HitCheck.cpp">
+      <Filter>ソース ファイル\static\hitCheck</Filter>
+    </ClCompile>
+    <ClCompile Include="GoalArea.cpp">
+      <Filter>ソース ファイル\object\goalArea</Filter>
+    </ClCompile>
+    <ClCompile Include="Result.cpp">
+      <Filter>ソース ファイル\scene\result</Filter>
+    </ClCompile>
+    <ClCompile Include="BlackOut.cpp">
+      <Filter>ソース ファイル\scene\blackOut</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
-      <Filter>ソース ファイル\camera</Filter>
+      <Filter>ソース ファイル\object\camera</Filter>
     </ClInclude>
     <ClInclude Include="Input.h">
-      <Filter>ソース ファイル\input</Filter>
+      <Filter>ソース ファイル\static\input</Filter>
     </ClInclude>
     <ClInclude Include="Player.h">
-      <Filter>ソース ファイル\player</Filter>
+      <Filter>ソース ファイル\object\player</Filter>
     </ClInclude>
     <ClInclude Include="Map.h">
       <Filter>ソース ファイル\map</Filter>
     </ClInclude>
     <ClInclude Include="PlayerStateActionBase.h">
-      <Filter>ソース ファイル\player\animation\Base</Filter>
+      <Filter>ソース ファイル\object\player\animation\Base</Filter>
     </ClInclude>
     <ClInclude Include="playerState.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Field.h">
-      <Filter>ソース ファイル\field</Filter>
-    </ClInclude>
-    <ClInclude Include="HitCheck.h">
-      <Filter>ソース ファイル\Collision</Filter>
+      <Filter>ソース ファイル\object\field</Filter>
     </ClInclude>
     <ClInclude Include="CollisionManager.h">
       <Filter>ソース ファイル\Collision</Filter>
     </ClInclude>
     <ClInclude Include="CoinObject.h">
-      <Filter>ソース ファイル\coin</Filter>
+      <Filter>ソース ファイル\object\coin</Filter>
     </ClInclude>
     <ClInclude Include="GameObjectManager.h">
       <Filter>ソース ファイル\manager\object</Filter>
@@ -342,13 +363,13 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Calculation.h">
-      <Filter>ソース ファイル\Calculation</Filter>
+      <Filter>ソース ファイル\static\Calculation</Filter>
     </ClInclude>
     <ClInclude Include="CoinManager.h">
       <Filter>ソース ファイル\manager\coin</Filter>
     </ClInclude>
     <ClInclude Include="PadInput.h">
-      <Filter>ソース ファイル\Pad</Filter>
+      <Filter>ソース ファイル\static\Pad</Filter>
     </ClInclude>
     <ClInclude Include="common.h">
       <Filter>ヘッダー ファイル</Filter>
@@ -357,34 +378,34 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="PlayerCalculation.h">
-      <Filter>ソース ファイル\player\moveCalclation</Filter>
+      <Filter>ソース ファイル\object\player\moveCalclation</Filter>
     </ClInclude>
     <ClInclude Include="Falling_Idle.h">
-      <Filter>ソース ファイル\player\animation\falling_Idle</Filter>
+      <Filter>ソース ファイル\object\player\animation\falling_Idle</Filter>
     </ClInclude>
     <ClInclude Include="Hanging_Idle.h">
-      <Filter>ソース ファイル\player\animation\hanging_Idle</Filter>
+      <Filter>ソース ファイル\object\player\animation\hanging_Idle</Filter>
     </ClInclude>
     <ClInclude Include="Idle.h">
-      <Filter>ソース ファイル\player\animation\idle</Filter>
+      <Filter>ソース ファイル\object\player\animation\idle</Filter>
     </ClInclude>
     <ClInclude Include="Idle_To_Sprint.h">
-      <Filter>ソース ファイル\player\animation\idle_to_sprint</Filter>
+      <Filter>ソース ファイル\object\player\animation\idle_to_sprint</Filter>
     </ClInclude>
     <ClInclude Include="Jump.h">
-      <Filter>ソース ファイル\player\animation\jump</Filter>
+      <Filter>ソース ファイル\object\player\animation\jump</Filter>
     </ClInclude>
     <ClInclude Include="Quick_Roll.h">
-      <Filter>ソース ファイル\player\animation\quick_roll</Filter>
+      <Filter>ソース ファイル\object\player\animation\quick_roll</Filter>
     </ClInclude>
     <ClInclude Include="Run.h">
-      <Filter>ソース ファイル\player\animation\run</Filter>
+      <Filter>ソース ファイル\object\player\animation\run</Filter>
     </ClInclude>
     <ClInclude Include="Run_To_Stop.h">
-      <Filter>ソース ファイル\player\animation\run_to_stop</Filter>
+      <Filter>ソース ファイル\object\player\animation\run_to_stop</Filter>
     </ClInclude>
     <ClInclude Include="Braced_Hang_To_Crouch.h">
-      <Filter>ソース ファイル\player\animation\braced_Hang_To_Crouch</Filter>
+      <Filter>ソース ファイル\object\player\animation\braced_Hang_To_Crouch</Filter>
     </ClInclude>
     <ClInclude Include="Layout.h">
       <Filter>ソース ファイル\layout</Filter>
@@ -414,7 +435,7 @@
       <Filter>ソース ファイル\collisionObject\floor_sky</Filter>
     </ClInclude>
     <ClInclude Include="AnimationChanger.h">
-      <Filter>ソース ファイル\player\animationChanger</Filter>
+      <Filter>ソース ファイル\object\player\animationChanger</Filter>
     </ClInclude>
     <ClInclude Include="Wall.h">
       <Filter>ソース ファイル\collisionObject\wall</Filter>
@@ -426,22 +447,34 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Shadow.h">
-      <Filter>ソース ファイル\shadow</Filter>
+      <Filter>ソース ファイル\object\shadow</Filter>
     </ClInclude>
     <ClInclude Include="DebugDrawer.h">
-      <Filter>ソース ファイル\Debug</Filter>
+      <Filter>ソース ファイル\static\Debug</Filter>
     </ClInclude>
     <ClInclude Include="CoinObserver.h">
       <Filter>ソース ファイル\Observer\coin</Filter>
     </ClInclude>
     <ClInclude Include="UI.h">
-      <Filter>ソース ファイル\UI</Filter>
+      <Filter>ソース ファイル\object\UI</Filter>
     </ClInclude>
     <ClInclude Include="Game.h">
       <Filter>ソース ファイル\scene\game</Filter>
     </ClInclude>
     <ClInclude Include="Title.h">
       <Filter>ソース ファイル\scene\title</Filter>
+    </ClInclude>
+    <ClInclude Include="HitCheck.h">
+      <Filter>ソース ファイル\static\hitCheck</Filter>
+    </ClInclude>
+    <ClInclude Include="GoalArea.h">
+      <Filter>ソース ファイル\object\goalArea</Filter>
+    </ClInclude>
+    <ClInclude Include="Result.h">
+      <Filter>ソース ファイル\scene\result</Filter>
+    </ClInclude>
+    <ClInclude Include="BlackOut.h">
+      <Filter>ソース ファイル\scene\blackOut</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

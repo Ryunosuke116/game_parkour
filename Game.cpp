@@ -1,9 +1,9 @@
 #include "common.h"
-#include "GameObjectManager.h"
 #include "SceneManager.h"
 #include "BaseScene.h"
 #include "Game.h"
 #include "DebugDrawer.h"
+#include "HitCheck.h"
 
 /// <summary>
 /// インスタンス化
@@ -13,6 +13,7 @@ Game::Game(SceneManager& manager) : BaseScene{ manager }
 {
 	gameObjectManager = std::make_shared<GameObjectManager>();
 	gameObjectManager->Create();
+	gameObjectManager_actual = std::dynamic_pointer_cast<GameObjectManager>(gameObjectManager);
 }
 
 /// <summary>
@@ -38,6 +39,11 @@ void Game::Update()
 {
 	PadInput::Update();
 	gameObjectManager->Update();
+	
+	if (gameObjectManager_actual->GetIsGoal())
+	{
+
+	}
 }
 
 void Game::Draw()

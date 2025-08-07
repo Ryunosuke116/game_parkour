@@ -22,7 +22,7 @@ public:
 	static float radToDeg(float radian);
 
 	static float area(const VECTOR& a, const VECTOR& b, const VECTOR& c);
-	static float EaseOutExpo(float t);
+	static float EaseOutQuad(float t);
 	static VECTOR NearestPoint(const VECTOR& position_1, const VECTOR& position_2,
 		 const VECTOR& point);
 	static VECTOR Projection(const VECTOR& plane_normal, const VECTOR& moveVec);

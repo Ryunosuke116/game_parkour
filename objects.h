@@ -16,3 +16,4 @@
 #include "Floor_sky.h"
 #include "Wall.h"
 #include "Shadow.h"
+#include "GoalArea.h"

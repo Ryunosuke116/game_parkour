@@ -1,5 +1,6 @@
 #pragma once
 #include "BaseGameObjectManager.h"
+#include "HitCheck.h"
 
 class PlayerManager : public BaseGameObjectManager
 {
@@ -9,6 +10,7 @@ private:
 
 	std::shared_ptr<BaseChara> player = NULL;
 	std::shared_ptr<Player> actualPlayer = NULL;
+	AABB playerAABB;
 public:
 
 	PlayerManager();
@@ -24,10 +26,12 @@ public:
 	void Add()			override;
 
 	VECTOR GetPosition() { return player->GetPosition(); }
+	float GetAngle() { return player->GetAngle(); }
 	
 	VECTOR PositionCheck(const VECTOR& hangingPos, const VECTOR& playerPos);
 
 	std::shared_ptr<Player> GetPlayer() { return actualPlayer; }
+	AABB GetPlayerAABB() { return playerAABB; }
 
 	/*std::shared_ptr<Player> GetPlayer() const {
 		for (auto& chara : characters)

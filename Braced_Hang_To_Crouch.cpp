@@ -172,7 +172,7 @@ std::pair<bool, VECTOR> Braced_Hang_To_Crouch::GroundCollisionCheck_Hang_to_Crou
     for (const auto& fieldObject : fieldObjects)
     {
         //ray‚ª“–‚½‚Á‚Ä‚¢‚ê‚Î
-        isHitGround = HitCheck::HitRayJudge(fieldObject->GetModelHandle(), -1, topPos, bottomPos, rayPoly_ground);
+        isHitGround = HitCheck::RayHitJudge(fieldObject->GetModelHandle(), -1, topPos, bottomPos, rayPoly_ground);
 
         if (isHitGround)
         {

@@ -25,3 +25,9 @@ struct HangingData
 	VECTOR hitHangingPos;
 	MV1_COLL_RESULT_POLY hangingPoly;
 };
+
+struct AABB
+{
+	VECTOR min;
+	VECTOR max;
+};

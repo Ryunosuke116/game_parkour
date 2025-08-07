@@ -191,7 +191,7 @@ std::pair<bool, std::string> CollisionManager::GroundCollisionCheck(const std::v
 	{
 
 		//ray‚ª“–‚½‚Á‚Ä‚¢‚ê‚Î
-		isHitGround = HitCheck::HitRayJudge(fieldObject->GetModelHandle(), -1, position_top_new,
+		isHitGround = HitCheck::RayHitJudge(fieldObject->GetModelHandle(), -1, position_top_new,
 			position_bottom_new, rayPoly_ground);
 
 		if (isHitGround)
@@ -262,7 +262,7 @@ std::pair<bool, VECTOR> CollisionManager::GroundCollisionCheck_Hang_to_Crouch(co
 	for (const auto& fieldObject : fieldObjects)
 	{
 		//ray‚ª“–‚½‚Á‚Ä‚¢‚ê‚Î
-		isHitGround = HitCheck::HitRayJudge(fieldObject->GetModelHandle(), -1, nowTopPos, nowBottomPos, rayPoly_ground);
+		isHitGround = HitCheck::RayHitJudge(fieldObject->GetModelHandle(), -1, nowTopPos, nowBottomPos, rayPoly_ground);
 
 		if (isHitGround)
 		{
@@ -341,7 +341,7 @@ std::pair<bool, VECTOR> CollisionManager::WallCollisionCheck(const std::vector<s
 					VECTOR pos_now = VAdd(result.first, addPos);
 					MV1_COLL_RESULT_POLY poly_ray;
 
-					HitCheck::HitRayJudge(fieldObject->GetModelHandle(), -1, pos_now,
+					HitCheck::RayHitJudge(fieldObject->GetModelHandle(), -1, pos_now,
 						result.first, poly_ray);
 
 					//ray‚ª“–‚½‚Á‚Ä‚¢‚éê‡“–‚½‚Á‚½À•W‚ÅÕ“Ë”»’è
@@ -406,7 +406,7 @@ std::pair<bool, VECTOR> CollisionManager::CliffGrabbing(const std::vector<std::s
 		for (const auto& fieldObject : fieldObjects)
 		{
 			MV1_COLL_RESULT_POLY poly;
-			isHitHanging = HitCheck::HitRayJudge(fieldObject->GetModelHandle(), -1, topPosition, linePos_end, poly);
+			isHitHanging = HitCheck::RayHitJudge(fieldObject->GetModelHandle(), -1, topPosition, linePos_end, poly);
 		
 			if (isHitHanging && poly.Normal.y >= 0.8f)
 			{

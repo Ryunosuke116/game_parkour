@@ -19,6 +19,8 @@ public:
 	void Update()override;
 	void Draw()override;
 
+	bool GetIsGoal() { return isGoal; }
+
 private:
 
 	std::vector<std::shared_ptr<BaseGameObjectManager>>	objectManager_ilst;
@@ -35,6 +37,7 @@ private:
 	std::shared_ptr<JsonManager>			jsonManager			= NULL;
 	std::shared_ptr<Shadow>					shadow				= NULL;
 	std::shared_ptr<UI>						ui					= NULL;
+	std::shared_ptr<GoalArea>				goalArea			= NULL;
 
 	std::shared_ptr<Map>			map_actual			 = NULL;
 	std::shared_ptr<PlayerManager>	playerManager_actual = NULL;
@@ -42,5 +45,6 @@ private:
 	
 	bool isCamera;
 	bool isPush;
+	bool isGoal;
 };
 

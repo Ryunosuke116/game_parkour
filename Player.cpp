@@ -158,7 +158,15 @@ void Player::Update(const VECTOR& cameraDirection,
             animationChanger->GetAnimNumber_now(), playerData);
     }
 
+    if (!playerData.isRun)
+    {
+        positionData.position_bottom_ray = position;
+        positionData.position_bottom_ray.y -= 0.1f;
+    }
 
+    ///////////////////////////////////////
+    //  デバッグ用
+    //////////////////////////////////////
     if (CheckHitKey(KEY_INPUT_3))
     {
         nowFrameNumber++;
@@ -174,34 +182,13 @@ void Player::Update(const VECTOR& cameraDirection,
         isCalc = false;
     }
 
-    DebugDrawer::Instance().InformationInput_capsule(positionData.position_top_Capsule,
-        positionData.position_bottom_Capsule, radius,
-        GetColor(255, 0, 0));
-    VECTOR nowFrame = MV1GetFramePosition(modelHandle, nowFrameNumber);
-    DebugDrawer::Instance().InformationInput_sphere(nowFrame, 2.0f, GetColor(0, 0, 0));
-    DebugDrawer::Instance().InformationInput_string_float("frame現在数%d\n", nowFrameNumber);
-    DebugDrawer::Instance().InformationInput_string_float("coinCount %f\n", angle);
-    DebugDrawer::Instance().InformationInput_string_float("JoyPad_x_left %f\n", -PadInput::GetJoyPad_x_left());
-    DebugDrawer::Instance().InformationInput_string_float("JoyPad_y_left %f\n", -PadInput::GetJoyPad_y_left());
-    DebugDrawer::Instance().InformationInput_string_VECTOR("playerPosition.x %f\nplayerPosition.y %f\nplayerPosition.z %f\n", position);
-    DebugDrawer::Instance().InformationInput_string_bool("isIdle %d\n", playerData.isIdle);
-    DebugDrawer::Instance().InformationInput_string_bool("isMove %d\n", playerData.isMove);
-    DebugDrawer::Instance().InformationInput_string_bool("isRun %d\n", playerData.isRun);
-    DebugDrawer::Instance().InformationInput_string_bool("isRun_wall %d\n", playerData.isRun_wall);
-    DebugDrawer::Instance().InformationInput_string_bool("isUse_wallJump %d\n", playerData.isUse_wallJump);
-    DebugDrawer::Instance().InformationInput_string_bool("isStopRun %d\n", playerData.isStopRun);
-    DebugDrawer::Instance().InformationInput_string_bool("isJump %d\n", playerData.isJump);
-    DebugDrawer::Instance().InformationInput_string_bool("isJump_first %d\n", playerData.isJump_first);
-    DebugDrawer::Instance().InformationInput_string_bool("isJump_second %d\n", playerData.isJump_second);
-    DebugDrawer::Instance().InformationInput_string_bool("isJumpAll %d\n", playerData.isJumpAll);
-    DebugDrawer::Instance().InformationInput_string_bool("isUse_wallJump %d\n", playerData.isUse_wallJump);
-    DebugDrawer::Instance().InformationInput_string_bool("isGround %d\n", playerData.isGround);
-    DebugDrawer::Instance().InformationInput_string_bool("isRoll %d\n", playerData.isRoll);
-    DebugDrawer::Instance().InformationInput_string_bool("isUse_roll %d\n", playerData.isUse_Roll);
-    DebugDrawer::Instance().InformationInput_string_bool("isFalling %d\n", playerData.isFalling);
-    DebugDrawer::Instance().InformationInput_string_bool("isHanging %d\n", playerData.isHanging);
-    DebugDrawer::Instance().InformationInput_string_bool("isHitWall %d\n", playerData.isHitWall);
-    DebugDrawer::Instance().InformationInput_string_bool("isHang_to_Crouch %d\n", playerData.isHang_to_Crouch);
+    float radian_pad = atan2f(-PadInput::GetJoyPad_x_left(), -PadInput::GetJoyPad_y_left());
+
+    //度数計算
+    degree_pad_now = Calculation::radToDeg(radian_pad);
+
+    DebugUpdate();
+    
     nowState->Draw();
     //2胴体
     //0真下
@@ -322,6 +309,7 @@ void Player::CollisionUpdate()
     positionData.position_top_ray.z = positionData.position_bottom_ray.z;
     positionData.position_bottom_ray.y -= 0.1f;
      
+    //投影で歩くためのごまかし
     if (playerData.isRun && !playerData.isJump)
     {
         positionData.position_bottom_ray.y -= playerCalculation->GetMoveSpeed_now();
@@ -359,6 +347,56 @@ void Player::Receive_CollisionResult()
             playerCalculation->SetHitWall_normal(collision_result.isHitWall_normal);
         }
     }
+}
+
+void Player::DebugUpdate()
+{
+    //カプセル
+    DebugDrawer::Instance().InformationInput_capsule(positionData.position_top_Capsule,
+        positionData.position_bottom_Capsule, radius,
+        GetColor(255, 0, 0));
+
+
+    //AABB
+    VECTOR min = VGet(153.0f, 8.0f, 750.0f);
+    VECTOR max = VGet(245.0f, 80.0f, 815.0f);
+    DebugDrawer::Instance().InformationInput_AABB(min, max, GetColor(255, 0, 0));
+   
+
+    //球体
+    VECTOR nowFrame = MV1GetFramePosition(modelHandle, nowFrameNumber);
+    DebugDrawer::Instance().InformationInput_sphere(nowFrame, 2.0f, GetColor(0, 0, 0));
+    
+    //string_VECTOR
+    DebugDrawer::Instance().InformationInput_string_VECTOR("playerPosition.x %f\nplayerPosition.y %f\nplayerPosition.z %f\n", position);
+    
+    //string_flaot
+    DebugDrawer::Instance().InformationInput_string_float("frame現在数%d\n", nowFrameNumber);
+    DebugDrawer::Instance().InformationInput_string_float("coinCount %f\n", angle);
+    DebugDrawer::Instance().InformationInput_string_float("JoyPad_x_left %f\n", -PadInput::GetJoyPad_x_left());
+    DebugDrawer::Instance().InformationInput_string_float("JoyPad_y_left %f\n", -PadInput::GetJoyPad_y_left());
+    DebugDrawer::Instance().InformationInput_string_float("degree_pad_now %f\n", degree_pad_now);
+
+    //string_bool
+    DebugDrawer::Instance().InformationInput_string_bool("isIdle %d\n", playerData.isIdle);
+    DebugDrawer::Instance().InformationInput_string_bool("isMove %d\n", playerData.isMove);
+    DebugDrawer::Instance().InformationInput_string_bool("isRun %d\n", playerData.isRun);
+    DebugDrawer::Instance().InformationInput_string_bool("isRun_wall %d\n", playerData.isRun_wall);
+    DebugDrawer::Instance().InformationInput_string_bool("isUse_wallJump %d\n", playerData.isUse_wallJump);
+    DebugDrawer::Instance().InformationInput_string_bool("isStopRun %d\n", playerData.isStopRun);
+    DebugDrawer::Instance().InformationInput_string_bool("isJump %d\n", playerData.isJump);
+    DebugDrawer::Instance().InformationInput_string_bool("isJump_first %d\n", playerData.isJump_first);
+    DebugDrawer::Instance().InformationInput_string_bool("isJump_second %d\n", playerData.isJump_second);
+    DebugDrawer::Instance().InformationInput_string_bool("isJumpAll %d\n", playerData.isJumpAll);
+    DebugDrawer::Instance().InformationInput_string_bool("isUse_wallJump %d\n", playerData.isUse_wallJump);
+    DebugDrawer::Instance().InformationInput_string_bool("isGround %d\n", playerData.isGround);
+    DebugDrawer::Instance().InformationInput_string_bool("isRoll %d\n", playerData.isRoll);
+    DebugDrawer::Instance().InformationInput_string_bool("isUse_roll %d\n", playerData.isUse_Roll);
+    DebugDrawer::Instance().InformationInput_string_bool("isFalling %d\n", playerData.isFalling);
+    DebugDrawer::Instance().InformationInput_string_bool("isHanging %d\n", playerData.isHanging);
+    DebugDrawer::Instance().InformationInput_string_bool("isHitWall %d\n", playerData.isHitWall);
+    DebugDrawer::Instance().InformationInput_string_bool("isHang_to_Crouch %d\n", playerData.isHang_to_Crouch);
+
 }
 
 

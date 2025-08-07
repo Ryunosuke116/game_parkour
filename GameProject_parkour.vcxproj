@@ -149,6 +149,7 @@
     <ClCompile Include="BaseManager.cpp" />
     <ClCompile Include="BaseObject.cpp" />
     <ClCompile Include="BaseScene.cpp" />
+    <ClCompile Include="BlackOut.cpp" />
     <ClCompile Include="Braced_Hang_To_Crouch.cpp" />
     <ClCompile Include="Calculation.cpp" />
     <ClCompile Include="Camera.cpp" />
@@ -162,6 +163,7 @@
     <ClCompile Include="FieldMesh.cpp" />
     <ClCompile Include="Floor_sky.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GoalArea.cpp" />
     <ClCompile Include="Hanging_Idle.cpp" />
     <ClCompile Include="HitCheck.cpp" />
     <ClCompile Include="Idle.cpp" />
@@ -179,6 +181,7 @@
     <ClCompile Include="PlayerManager.cpp" />
     <ClCompile Include="PlayerStateActionBase.cpp" />
     <ClCompile Include="Quick_Roll.cpp" />
+    <ClCompile Include="Result.cpp" />
     <ClCompile Include="Run.cpp" />
     <ClCompile Include="Run_To_Stop.cpp" />
     <ClCompile Include="SceneManager.cpp" />
@@ -194,6 +197,7 @@
     <ClInclude Include="BaseManager.h" />
     <ClInclude Include="BaseObject.h" />
     <ClInclude Include="BaseScene.h" />
+    <ClInclude Include="BlackOut.h" />
     <ClInclude Include="Braced_Hang_To_Crouch.h" />
     <ClInclude Include="Calculation.h" />
     <ClInclude Include="Camera.h" />
@@ -208,6 +212,7 @@
     <ClInclude Include="FieldMesh.h" />
     <ClInclude Include="Floor_sky.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="GoalArea.h" />
     <ClInclude Include="Hanging_Idle.h" />
     <ClInclude Include="HitCheck.h" />
     <ClInclude Include="Idle.h" />
@@ -228,6 +233,7 @@
     <ClInclude Include="playerState.h" />
     <ClInclude Include="PlayerStateActionBase.h" />
     <ClInclude Include="Quick_Roll.h" />
+    <ClInclude Include="Result.h" />
     <ClInclude Include="Run.h" />
     <ClInclude Include="Run_To_Stop.h" />
     <ClInclude Include="SceneManager.h" />

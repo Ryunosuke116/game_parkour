@@ -1,6 +1,7 @@
 #include "common.h"
 #include "Input.h"
 #include "BaseChara.h"
+#include "DebugDrawer.h"
 
 
 BaseChara::BaseChara() :
@@ -103,6 +104,7 @@ void BaseChara::UpdateAngle(const VECTOR& direction, bool& isTurn_right)
 
     // モデルの角度を更新
     angle = targetAngle - difference;
+    DebugDrawer::Instance().InformationInput_string_float("angle %f\n", angle);
     MV1SetRotationXYZ(modelHandle, VGet(rotate_x * DX_PI_F / 180.0f, angle + DX_PI_F, 0.0f));
 }
 

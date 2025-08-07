@@ -101,7 +101,7 @@ enum animNum : int
 	   //			MV1_COLL_RESULT_POLY rayPoly;
 
 	   //			//現在の座標からrayを伸ばし、当たっていなかったらif文内に行く
-	   //			if (!HitCheck::HitRayJudge(modelHandle, -1, nowTopPos, nowBottomPos, rayPoly))
+	   //			if (!HitCheck::RayHitJudge(modelHandle, -1, nowTopPos, nowBottomPos, rayPoly))
 	   //			{
 	   //				//カプセルの中心座標が三角形の外側のとき球とメッシュの接触部分で押し戻し量を求める
 	   //				if (!HitCheck::TriangleAreaCheck_ground(nowHitPos_ground, poly.Position[0], poly.Position[1], poly.Position[2]))
@@ -161,7 +161,7 @@ enum animNum : int
 	   //	MV1_COLL_RESULT_POLY rayPoly_ground;
 
 	   //	//rayが当たっていれば
-	   //	isHitGround = HitCheck::HitRayJudge(modelHandle, -1, nowTopPos, nowBottomPos, rayPoly_ground);
+	   //	isHitGround = HitCheck::RayHitJudge(modelHandle, -1, nowTopPos, nowBottomPos, rayPoly_ground);
 
 	   //	if (isHitGround && !isJump)
 	   //	{

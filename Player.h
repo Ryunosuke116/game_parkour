@@ -60,6 +60,7 @@ public:
 		const std::vector<std::shared_ptr<BaseObject>>& fieldObjects);
 	bool Draw();
 	
+	void DebugUpdate();
 	void Receive_CollisionResult();
 	void ChangeState();
 	void CollisionUpdate();

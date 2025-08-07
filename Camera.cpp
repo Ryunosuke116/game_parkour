@@ -42,7 +42,7 @@ void Camera::Initialize()
 	spherePosition = VGet(0.0f, 20.0f, 20.0f);
 	angle_now = -177.55f;
 	distance = 50.0f;
-	t = 0;
+	t = 0.7f;
 
 	SetCameraPositionAndTarget_UpVecY(aimPosition, spherePosition);
 
@@ -54,55 +54,15 @@ void Camera::Initialize()
 /// 更新
 /// </summary>
 void Camera::Update(const VECTOR& playerPosition,
+	const float& angle_player,
 	const std::vector<std::shared_ptr<BaseObject>>& fieldObjects)
 {
 	centerPos = playerPosition;
 	centerPos.y += 15.0f;
 
-	aimPosition_usual.y = spherePosition.y + 15.0f;
-	min = spherePosition.y;
-	max = spherePosition.y + 40.0f;
-	float min_distance = 15.0f;
-	float max_distance = 60.0f;
+	DistanceUpdate();
 
-	float easedT = Calculation::EaseOutExpo(t);
-
-	aimPosition_usual.y = min + (max - min) * easedT;
-	distance = min_distance + (max_distance - min_distance) * easedT;
-
-	//カメラ移動処理
-	if (CheckHitKey(KEY_INPUT_A) ||
-		PadInput::GetJoyPad_x_left() < 0.0f ||
-		PadInput::GetJoyPad_x_right() < 0.0f)
-	{
-		angle_now += 2.0f;
-	}
-	if (CheckHitKey(KEY_INPUT_D) ||
-		PadInput::GetJoyPad_x_left() > 0.0f ||
-		PadInput::GetJoyPad_x_right() > 0.0f)
-	{
-		angle_now -= 2.0f;
-	}
-
-
-	if (PadInput::GetJoyPad_y_right() > 0.0f)
-	{
-		t -= 0.01f;
-		if (t <= 0.0f)
-		{
-			t = 0.0f;
-		}
-		
-	}
-	if (PadInput::GetJoyPad_y_right() < 0.0f)
-	{
-		t += 0.01f;
-		if (t >= 1.0f)
-		{
-			t = 1.0f;
-		}
-	
-	}
+	AngleUpdate(angle_player);
 
 	RotateUpdate();
 
@@ -207,10 +167,15 @@ bool Camera::Draw()
 	return true;
 }
 
+/// <summary>
+/// カメラの回転更新
+/// </summary>
 void Camera::RotateUpdate()
 {
 	float angle_radian = angle_now * DX_PI_F / 360.0f;
 	this->angle_radian = angle_radian;
+
+	DebugDrawer::Instance().InformationInput_string_float("angle_camera %f\n", angle_radian);
 
 	aimPosition_usual.x = spherePosition.x + distance * cos(angle_radian);
 	aimPosition_usual.z = spherePosition.z + distance * sin(angle_radian);
@@ -225,6 +190,77 @@ void Camera::RotateUpdate()
 }
 
 /// <summary>
+/// カメラの距離更新
+/// </summary>
+void Camera::DistanceUpdate()
+{
+	min = spherePosition.y;
+	max = spherePosition.y + 40.0f;
+	float min_distance = 15.0f;
+	float max_distance = 70.0f;
+
+	float easedT = Calculation::EaseOutQuad(t);
+
+	aimPosition_usual.y = min + (max - min) * easedT;
+	distance = min_distance + (max_distance - min_distance) * easedT;
+
+	if (PadInput::GetJoyPad_y_right() > 0.0f)
+	{
+		t -= 0.02f;
+		if (t <= 0.0f)
+		{
+			t = 0.0f;
+		}
+
+	}
+	if (PadInput::GetJoyPad_y_right() < 0.0f)
+	{
+		t += 0.02f;
+		if (t >= 1.0f)
+		{
+			t = 1.0f;
+		}
+
+	}
+}
+
+/// <summary>
+/// カメラの回転値更新
+/// </summary>
+void Camera::AngleUpdate(const float& angle_player)
+{
+
+	//カメラ移動処理
+	if ((CheckHitKey(KEY_INPUT_A) ||
+		PadInput::GetJoyPad_x_left() < 0.0f) &&
+		PadInput::GetJoyPad_x_right() == 0.0f)
+	{
+		angle_now += 2.0f;
+	}
+	if ((CheckHitKey(KEY_INPUT_D) ||
+		PadInput::GetJoyPad_x_left() > 0.0f) &&
+		PadInput::GetJoyPad_x_right() == 0.0f)
+	{
+		angle_now -= 2.0f;
+	}
+
+	if (PadInput::GetJoyPad_x_right() < 0.0f)
+	{
+		angle_now += 3.0f;
+	}
+	else if (PadInput::GetJoyPad_x_right() > 0.0f)
+	{
+		angle_now -= 3.0f;
+	}
+
+	if (PadInput::IsPush_R())
+	{
+		angle_now = angle_player;
+	}
+
+}
+
+/// <summary>
 /// カメラの位置調整
 /// </summary>
 /// <param name="mapHandle"></param>
@@ -234,7 +270,7 @@ void Camera::CameraPosCalc(const int& mapHandle)
 	VECTOR addPos;
 	
 	//rayが当たっている場合カメラの位置をいじる
-	if (HitCheck::HitRayJudge(mapHandle, -1, spherePosition, aimPosition, hitPoly))
+	if (HitCheck::RayHitJudge(mapHandle, -1, spherePosition, aimPosition, hitPoly))
 	{		
 		addPos = VSub(hitPoly.HitPosition, aimPosition_usual);
 		direction = VNorm(addPos);
