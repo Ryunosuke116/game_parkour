@@ -108,6 +108,7 @@ VECTOR Calculation::SphereMeshOutsideTriangle(const MV1_COLL_RESULT_POLY& poly, 
 
 /// <summary>
 /// 点に対して最も近い三角形の辺
+/// 最も近い三角形の辺
 /// </summary>
 /// <param name="poly"></param>
 /// <param name="HitPos_ground"></param>
@@ -268,6 +269,29 @@ float Calculation::radToDeg(float radian)
 float Calculation::EaseOutQuad(float t)
 {
 	return 1 - (1 - t) * (1 - t);
+}
+
+/// <summary>
+/// 角度値から方向ベクトルを求める
+/// (0,0,1) = 0°
+/// </summary>
+/// <param name="degree"></param>
+/// <returns></returns>
+VECTOR Calculation::GetDirectionFromDegree(float degree)
+{
+	VECTOR dir = VGet(0.0f, 0.0f, 1.0f);
+
+	//0°の場合はそのまま返す
+	if (degree == 0.0f)
+	{
+		return dir;
+	}
+
+	//ラジアン値に変換
+	float radian = degree * DX_PI_F / 180.0f;
+
+	return VGet(sinf(radian), 0.0f, cosf(radian));
+
 }
 
 void Calculation::Initialize()

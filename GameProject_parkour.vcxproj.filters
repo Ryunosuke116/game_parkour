@@ -67,18 +67,6 @@
     <Filter Include="ヘッダー ファイル\Json">
       <UniqueIdentifier>{925fd99b-a8db-4041-a1b9-111051243620}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\collisionObject">
-      <UniqueIdentifier>{80e5d24e-986d-4291-ae86-75607b41a3fb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\collisionObject\mesh">
-      <UniqueIdentifier>{0960e21f-eac8-4067-ad0e-cfc094d6d27c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\collisionObject\floor_sky">
-      <UniqueIdentifier>{828f1d62-3c20-4137-8228-5f854e5c690e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\collisionObject\wall">
-      <UniqueIdentifier>{64a5a458-0152-4384-824c-1d742086213b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\Observer">
       <UniqueIdentifier>{459a351b-37b9-47ad-bac3-326a179a787f}</UniqueIdentifier>
     </Filter>
@@ -177,6 +165,24 @@
     </Filter>
     <Filter Include="ソース ファイル\scene\blackOut">
       <UniqueIdentifier>{339009be-2dcc-4bb8-b021-48b2d122fbf4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\collisionObject">
+      <UniqueIdentifier>{80e5d24e-986d-4291-ae86-75607b41a3fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\collisionObject\mesh">
+      <UniqueIdentifier>{0960e21f-eac8-4067-ad0e-cfc094d6d27c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\collisionObject\floor_sky">
+      <UniqueIdentifier>{828f1d62-3c20-4137-8228-5f854e5c690e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\collisionObject\wall">
+      <UniqueIdentifier>{64a5a458-0152-4384-824c-1d742086213b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\effect">
+      <UniqueIdentifier>{5c9b5de7-c69a-46b4-bfca-5fd6e341c0d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\object\gameTimer">
+      <UniqueIdentifier>{4366f260-6c87-43af-b722-fcca0dfe2fc4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -317,6 +323,12 @@
     </ClCompile>
     <ClCompile Include="BlackOut.cpp">
       <Filter>ソース ファイル\scene\blackOut</Filter>
+    </ClCompile>
+    <ClCompile Include="Effect.cpp">
+      <Filter>ソース ファイル\effect</Filter>
+    </ClCompile>
+    <ClCompile Include="GameTimer.cpp">
+      <Filter>ソース ファイル\object\gameTimer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -475,6 +487,12 @@
     </ClInclude>
     <ClInclude Include="BlackOut.h">
       <Filter>ソース ファイル\scene\blackOut</Filter>
+    </ClInclude>
+    <ClInclude Include="Effect.h">
+      <Filter>ソース ファイル\effect</Filter>
+    </ClInclude>
+    <ClInclude Include="GameTimer.h">
+      <Filter>ソース ファイル\object\gameTimer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

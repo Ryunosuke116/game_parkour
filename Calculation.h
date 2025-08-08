@@ -29,6 +29,7 @@ public:
 	static MATRIX Rotate(const VECTOR& wall_normal);
 	static VECTOR ProjectionDirection(const VECTOR& point, const VECTOR& a, const VECTOR& b);
 	static VECTOR Leap(const VECTOR& changePosition, const VECTOR& latestPosition, const float& speed);
+	static VECTOR GetDirectionFromDegree(float degree);
 	static float Leap_float(const float& change, const float& latest, const float& speed);
 	static VECTOR SphereMeshOutsideTriangle(const MV1_COLL_RESULT_POLY& poly, const VECTOR& pos);
 	static NearestResult SphereMeshOutsideTriangle_line(const MV1_COLL_RESULT_POLY& poly, const VECTOR& pos);

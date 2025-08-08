@@ -62,6 +62,7 @@ protected:
 	static constexpr float	AnimBlendSpeed = 0.1f;		// アニメーションのブレンド率変化速度
 	static constexpr float entryDegree_wallRun = 40.0f;
 	static constexpr float run_wall_rotate_x = 30.0f;
+	static constexpr float cliff_radius = 4.0f;
 
 	int modelHandle;			//モデルハンドル
 	int animNumber_old;

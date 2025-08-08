@@ -93,8 +93,6 @@ std::pair<VECTOR,PlayerData> Run::Update_normal(const VECTOR& cameraDirection, P
 
 	VECTOR moveDir = Command(cameraDirection, playerData, player);
 
-	ChangeState(playerData);
-
 	if (!playerData.isGround)
 	{
 		playerData.isFalling = true;
@@ -122,13 +120,15 @@ std::pair<VECTOR, PlayerData> Run::Update_wallRun(Player& player,
 
 	//—‚¿‚é
 	//•Ç‚ª‚È‚¢ê‡
-	if (-PadInput::GetJoyPad_old_y_left() <= -1000)
+	if (-PadInput::GetJoyPad_old_y_left() <= -1000 ||
+		!playerData.isHitWall)
 	{
 		playerData.isRun_wall = false;
 		playerData.isUse_wallJump = false;
 		playerData.isFalling = true;
 		isChangeState = true;
 		player.playerCalculation->Reset_run_wall();
+		player.playerCalculation->ResetMoveVec_old();
 		player.SetRotata_x(0.0f);
 
 		return std::make_pair(moveDir, playerData);
@@ -144,19 +144,33 @@ std::pair<VECTOR, PlayerData> Run::Update_wallRun(Player& player,
 		player.SetRotata_x(0.0f);
 	}
 
-	//ŠR’Í‚İ”»’è
-	auto result_cliff = HitCheck::CliffGrabbing(fieldObjects,
-		player.GetPositionData().position_top_ray,
-		player.GetMoveDirection_now(),player.GetRadius());
-
-	//ŠR’Í‚İ‚Ìî•ñ‚ğ•Û‘¶
-	if (result_cliff.isHitHanging)
+	//Œ©’¼‚µ
+   //ŠR’Í‚İ”»’è
+	if (playerData.isUse_Hanging)
 	{
-		playerData.isHanging = result_cliff.isHitHanging;
-		isChangeState = true;
-		player.playerCalculation->SetHangingPoint(result_cliff.hitHangingPos);
-		player.playerCalculation->SetHangingPoly(result_cliff.hangingPoly);
-		return std::make_pair(moveDir, playerData);
+		auto result_cliff = HitCheck::CliffGrabbing(fieldObjects,
+			player.GetPositionData().position_top_ray,
+			player.GetMoveDirection_now(), cliff_radius);
+
+		//’Í‚Ş‚Æ‚±‚ë‚ª•½s‚¾‚Á‚½ê‡
+		//ŠR’Í‚İ‚Ìî•ñ‚ğ•Û‘¶
+		if (result_cliff.isHitHanging)
+		{
+			//“·‘ÌÀ•W
+			VECTOR centerPosition = MV1GetFramePosition(modelHandle, 2);
+
+			Calculation::NearestResult nearestResult = Calculation::SphereMeshOutsideTriangle_line(result_cliff.hangingPoly, centerPosition);
+
+			float difference_y = nearestResult.linePos_start.y - nearestResult.linePos_end.y;
+
+			if (difference_y == 0)
+			{
+				playerData.isHanging = result_cliff.isHitHanging;
+				isChangeState = true;
+				player.playerCalculation->SetNearestResult(nearestResult);
+				return std::make_pair(moveDir, playerData);
+			}
+		}
 	}
 
 	JumpMove(playerData, player);
@@ -210,10 +224,6 @@ bool Run::MotionUpdate(PlayerData& playerData)
 		if (nowAnimState.PlayTime_anim >= totalTime_anim)
 		{
 			nowAnimState.PlayTime_anim = static_cast<float>(fmod(nowAnimState.PlayTime_anim, totalTime_anim));
-			if (playerData.isSlip)
-			{
-				playerData.isSlip = false;
-			}
 		}
 
 		// Ä¶ŠÔ‚ğƒZƒbƒg‚·‚é
@@ -279,8 +289,7 @@ VECTOR Run::Command(const VECTOR& cameraDirection, PlayerData& playerData, Playe
 	}
 
 	//‹}“]‰ñ‚¹‚¸‚É~‚Ü‚éê‡
-	if (!playerData.isMove && !playerData.isRoll &&
-		!playerData.isSlip)
+	if (!playerData.isMove && !playerData.isRoll)
 	{
 		playerData.isStopRun = true;
 		isChangeState = true;
@@ -357,33 +366,6 @@ VECTOR Run::Move(const VECTOR& cameraDirection, PlayerData& playerData)
 	//•K‚¸³‹K‰»‚³‚ê‚½‚à‚Ì‚©0‚ğ•Ô‚·
 	return moveDirection;
 
-}
-
-void Run::ChangeState(PlayerData& playerData)
-{
-	//¶‰ñ“]
-	if (playerData.isSlip && !playerData.isTurn_right &&
-		animationNum_now != animNum::running_turn_left)
-	{
-		SwitchingAnimation(animNum::running_turn_left);
-		animationNum_now = animNum::running_turn_left;
-		
-	}
-	//‰E‰ñ“]
-	else if (playerData.isSlip && playerData.isTurn_right &&
-		animationNum_now != animNum::running_turn_right)
-	{
-		SwitchingAnimation(animNum::running_turn_right);
-		animationNum_now = animNum::running_turn_right;
-		animBlendRate = 1.0f;
-	}
-	else if (!playerData.isSlip &&
-		animationNum_now != animNum::run)
-	{
-		SwitchingAnimation(animNum::run);
-		animationNum_now = animNum::run;
-		animBlendRate = 1.0f;
-	}
 }
 
 void Run::Enter(PlayerData& playerData)

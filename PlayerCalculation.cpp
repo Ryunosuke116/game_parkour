@@ -38,7 +38,7 @@ VECTOR PlayerCalculation::Update(const VECTOR& moveDirection,
     moveVec = Move(animNumber_Now, moveDirection, moveVec, playerData);
 
     //崖掴み中
-    if (playerData.isHanging)
+    if (playerData.isHanging_now)
     {
         moveVec = HangingPosition();
     }
@@ -66,7 +66,7 @@ VECTOR PlayerCalculation::Move(const int& animNumber_Now,
     if (!playerData.isRoll)
     {
         //動いている場合移動スピードを徐々に上げる
-        if (playerData.isMove && !playerData.isSlip)
+        if (playerData.isMove)
         {
             //減速スピード計算していたらfalseに
             if (isCalc_deceleration)
@@ -91,13 +91,9 @@ VECTOR PlayerCalculation::Move(const int& animNumber_Now,
                 //アニメーションフレームに合わせて減速
                 if (!isCalc_deceleration)
                 {
-                    //stopアニメーションに応じて止まるタイミングを調整
-                    if (!playerData.isSlip)
-                    {
-                        const float stopFrame = 10.0f;
-                        decelerationSpeed = moveSpeed_now / stopFrame;
-                        isCalc_deceleration = true;
-                    }
+                    const float stopFrame = 10.0f;
+                    decelerationSpeed = moveSpeed_now / stopFrame;
+                    isCalc_deceleration = true;
                 }
 
                 moveSpeed_now -= decelerationSpeed;
@@ -123,16 +119,12 @@ VECTOR PlayerCalculation::Move(const int& animNumber_Now,
 
         returnVec = VScale(moveDirection, moveSpeed_now);
 
-        //急転回している場合
-        if (playerData.isSlip)
-        {
-            return VScale(moveDirection, -moveSpeed_now);
-        }
     }
 
 
     //重力だけ前フレームのモノを使用
     returnVec.y = moveVec_old.y;
+    DebugDrawer::Instance().InformationInput_string_VECTOR("moveVec_old %f %f %f\n", moveVec_old);
 
     //重力計算
     returnVec = Gravity(returnVec, playerData);
@@ -315,11 +307,8 @@ VECTOR PlayerCalculation::HangingPosition()
 /// <param name="hangingPoly"></param>
 /// <param name="centerPos"></param>
 /// <returns></returns>
-VECTOR PlayerCalculation::HangingDirection(const MV1_COLL_RESULT_POLY& hangingPoly, const VECTOR& centerPos)
+VECTOR PlayerCalculation::HangingDirection( const VECTOR& centerPos)
 {
-    //点に最も近い線分との最近接点
-    nearestResult = Calculation::SphereMeshOutsideTriangle_line(hangingPoly, centerPos);
-
     //射影ベクトル
     VECTOR a = Calculation::ProjectionDirection(centerPos, nearestResult.linePos_start, nearestResult.linePos_end);
 

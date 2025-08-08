@@ -42,12 +42,18 @@ void Hanging_Idle::Initialize(int& modelHandle, Player& player)
     this->nowAnimState.PlayTime_anim = 0.0f;
     this->nowAnimState.PlayAnimSpeed = playAnimSpeed;
     this->nowAnimState.TotalPlayTime_anim = MV1GetAttachAnimTotalTime(modelHandle, this->nowAnimState.AttachIndex);
+    animBlendRate = 1.0f;
+
+    // 再生時間をセットする
+    MV1SetAttachAnimTime(modelHandle, nowAnimState.AttachIndex, nowAnimState.PlayTime_anim);
+    //アニメーションのモデルに対する反映率をセット
+    MV1SetAttachAnimBlendRate(modelHandle, nowAnimState.AttachIndex, animBlendRate);
 
     //胴体座標
     VECTOR centerPosition = MV1GetFramePosition(modelHandle, 2);
 
     player.playerCalculation->Reset_move();
-    player.SetMoveDirection_now(player.playerCalculation->HangingDirection(player.playerCalculation->GetHangingPoly(), centerPosition));
+    player.SetMoveDirection_now(player.playerCalculation->HangingDirection(centerPosition));
     player.SetRotata_x(0.0f);
 }
 
@@ -61,9 +67,11 @@ void Hanging_Idle::Initialize(int& modelHandle, Player& player)
 std::pair<VECTOR, PlayerData> Hanging_Idle::Update(const VECTOR& cameraDirection,
     const std::vector<std::shared_ptr<BaseObject>>& fieldObjects, Player& player)
 {
+    
     VECTOR moveDirection = player.GetMoveDirection_now();
 
     PlayerData playerData = player.GetData();
+    playerData.isHanging_now = true;
     playerData.isGround = true;
 
     //上に登る
@@ -71,14 +79,21 @@ std::pair<VECTOR, PlayerData> Hanging_Idle::Update(const VECTOR& cameraDirection
     {
         playerData.isHang_to_Crouch = true;
         player.SetIsCollisionCheck(false);
+        player.playerCalculation->ResetMoveVec_old();
         isChangeState = true;
+        playerData.isJump_first = false;
+        playerData.isJump_second = false;
+        playerData.isJumpAll = false;
+        playerData.isHanging_now = false;
     }
 
     //降りる
     if (PadInput::isDown())
     {
-        playerData.isFalling = true;
         isChangeState = true;
+        playerData.isFalling = true;
+        playerData.isHanging_now = false;
+        playerData.isUse_Hanging = false;
     }
 
     return std::make_pair(moveDirection, playerData);

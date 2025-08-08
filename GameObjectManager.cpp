@@ -39,6 +39,7 @@ void GameObjectManager::Create()
 	shadow				= std::make_shared<Shadow>();
 	ui					= std::make_shared<UI>();
 	goalArea			= std::make_shared<GoalArea>();
+	gameTimer			= std::make_shared<GameTimer>();
 
 	map_actual			 = std::dynamic_pointer_cast<Map>(map);
 	playerManager_actual = std::dynamic_pointer_cast<PlayerManager>(playerManager);
@@ -53,11 +54,13 @@ void GameObjectManager::Create()
 	for (auto& data : data_floor_sky["list"])
 	{
 		int modelHandle = MV1LoadModel(path_floor_sky.c_str());
-		std::string tag = data[3].get<std::string>();
+		float degree = data[3];
+		std::string tag = data[4].get<std::string>();
 
 		fieldObjects.push_back(std::make_shared<Floor_sky>(
 			modelHandle,
 			VGet(data[0], data[1], data[2]),
+			degree,
 			tag
 		));
 	}
@@ -93,6 +96,7 @@ void GameObjectManager::Initialize()
 	ui->Initialize();
 	shadow->Initialize();
 	goalArea->Initialize();
+	gameTimer->Initialize();
 
 	isCamera = false;
 	isPush = false;
@@ -137,7 +141,7 @@ void GameObjectManager::Update()
 		}
 		field->Update();
 
-		//floor_sky_Manager->Update();
+		gameTimer->Update();
 		playerManager_actual->Update(fieldObjects, camera->GetCameraDirection());
 		map_actual->Update(playerManager_actual->GetPosition());
 		camera->Update(playerManager_actual->GetPosition(),

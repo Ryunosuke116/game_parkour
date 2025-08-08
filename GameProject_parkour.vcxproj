@@ -158,11 +158,13 @@
     <ClCompile Include="CoinObserver.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="DebugDrawer.cpp" />
+    <ClCompile Include="Effect.cpp" />
     <ClCompile Include="Falling_Idle.cpp" />
     <ClCompile Include="Field.cpp" />
     <ClCompile Include="FieldMesh.cpp" />
     <ClCompile Include="Floor_sky.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GameTimer.cpp" />
     <ClCompile Include="GoalArea.cpp" />
     <ClCompile Include="Hanging_Idle.cpp" />
     <ClCompile Include="HitCheck.cpp" />
@@ -207,11 +209,13 @@
     <ClInclude Include="CollisionData.h" />
     <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="DebugDrawer.h" />
+    <ClInclude Include="Effect.h" />
     <ClInclude Include="Falling_Idle.h" />
     <ClInclude Include="Field.h" />
     <ClInclude Include="FieldMesh.h" />
     <ClInclude Include="Floor_sky.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="GameTimer.h" />
     <ClInclude Include="GoalArea.h" />
     <ClInclude Include="Hanging_Idle.h" />
     <ClInclude Include="HitCheck.h" />

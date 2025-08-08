@@ -20,7 +20,6 @@ public:
 	VECTOR Command(const VECTOR& cameraDirection, PlayerData& playerData, Player& player)override;
 	void Enter(PlayerData& playerData) override;		//ó‘Ô‚É“ü‚Á‚½‚Æ‚«
 	void Exit(PlayerData& playerData) override;			//ó‘Ô‚ğ”²‚¯‚é‚Æ‚«
-	void ChangeState(PlayerData& playerData);
 	VECTOR Move(const VECTOR& cameraDirection, PlayerData& playerData)override;
 
 	std::pair<VECTOR, PlayerData> Update_normal(const VECTOR& cameraDirection, Player& player);

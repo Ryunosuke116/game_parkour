@@ -62,8 +62,9 @@ void Player::Initialize()
     playerData.isJump_PlayAnim = false;
     playerData.isFalling = false;
     playerData.isHanging = false;
+    playerData.isHanging_now = false;
+    playerData.isUse_Hanging = true;
     playerData.isHang_to_Crouch = false;
-    playerData.isSlip = false;
     playerData.isRun = false;
     playerData.isRun_wall = false;
     playerData.isUse_wallJump = true;
@@ -109,6 +110,7 @@ void Player::Update(const VECTOR& cameraDirection,
     {
         moveDirection = moveDirection_new;
     }
+
     playerData = data_new;
 
     bool isFree = !playerData.isHanging
@@ -139,10 +141,7 @@ void Player::Update(const VECTOR& cameraDirection,
             targetMoveDirection, speed);
     }
 
-    if (!playerData.isSlip)
-    {
-        UpdateAngle(moveDirection_now, playerData.isTurn_right);
-    }
+    UpdateAngle(moveDirection_now);
    
     //èÛë‘ïœçX
     ChangeState();
@@ -378,6 +377,7 @@ void Player::DebugUpdate()
     DebugDrawer::Instance().InformationInput_string_float("degree_pad_now %f\n", degree_pad_now);
 
     //string_bool
+    DebugDrawer::Instance().InformationInput_string_bool("isGround %d\n", playerData.isGround);
     DebugDrawer::Instance().InformationInput_string_bool("isIdle %d\n", playerData.isIdle);
     DebugDrawer::Instance().InformationInput_string_bool("isMove %d\n", playerData.isMove);
     DebugDrawer::Instance().InformationInput_string_bool("isRun %d\n", playerData.isRun);
@@ -389,11 +389,12 @@ void Player::DebugUpdate()
     DebugDrawer::Instance().InformationInput_string_bool("isJump_second %d\n", playerData.isJump_second);
     DebugDrawer::Instance().InformationInput_string_bool("isJumpAll %d\n", playerData.isJumpAll);
     DebugDrawer::Instance().InformationInput_string_bool("isUse_wallJump %d\n", playerData.isUse_wallJump);
-    DebugDrawer::Instance().InformationInput_string_bool("isGround %d\n", playerData.isGround);
     DebugDrawer::Instance().InformationInput_string_bool("isRoll %d\n", playerData.isRoll);
     DebugDrawer::Instance().InformationInput_string_bool("isUse_roll %d\n", playerData.isUse_Roll);
     DebugDrawer::Instance().InformationInput_string_bool("isFalling %d\n", playerData.isFalling);
     DebugDrawer::Instance().InformationInput_string_bool("isHanging %d\n", playerData.isHanging);
+    DebugDrawer::Instance().InformationInput_string_bool("isHanging_now %d\n", playerData.isHanging_now);
+    DebugDrawer::Instance().InformationInput_string_bool("isUse_Hanging %d\n", playerData.isUse_Hanging);
     DebugDrawer::Instance().InformationInput_string_bool("isHitWall %d\n", playerData.isHitWall);
     DebugDrawer::Instance().InformationInput_string_bool("isHang_to_Crouch %d\n", playerData.isHang_to_Crouch);
 

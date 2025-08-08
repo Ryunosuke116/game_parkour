@@ -54,7 +54,7 @@ bool BaseChara::Draw()
 /// <summary>
 /// 向き
 /// </summary>
-void BaseChara::UpdateAngle(const VECTOR& direction, bool& isTurn_right)
+void BaseChara::UpdateAngle(const VECTOR& direction)
 {
     // プレイヤーの移動方向にモデルの方向を近づける
     float targetAngle;			// 目標角度
@@ -81,8 +81,6 @@ void BaseChara::UpdateAngle(const VECTOR& direction, bool& isTurn_right)
     // 角度の差が０に近づける
     if (difference > 0.0f)
     {
-        isTurn_right = true;
-
         // 差がプラスの場合は引く
         difference -= angleSpeed;
         if (difference < 0.0f)
@@ -92,8 +90,6 @@ void BaseChara::UpdateAngle(const VECTOR& direction, bool& isTurn_right)
     }
     else
     {
-        isTurn_right = false;
-
         // 差がマイナスの場合は足す
         difference += angleSpeed;
         if (difference > 0.0f)

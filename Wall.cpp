@@ -2,6 +2,10 @@
 #include  "nlohmann/json.hpp"
 #include "Wall.h"
 
+/// <summary>
+/// コンストラクタ
+/// </summary>
+/// <param name="jsonData"></param>
 Wall::Wall(nlohmann::json jsonData)
 {
 	std::string path = jsonData["path"];
@@ -10,11 +14,17 @@ Wall::Wall(nlohmann::json jsonData)
 	tag = "moveFloor_1";
 }
 
+/// <summary>
+/// デストラクタ
+/// </summary>
 Wall::~Wall()
 {
 
 }
 
+/// <summary>
+/// 初期化
+/// </summary>
 void Wall::Initialize()
 {
 	pos_difference = VGet(0.0f, 0.0f, 0.0f);
@@ -29,6 +39,9 @@ void Wall::Initialize()
 	MV1SetRotationXYZ(modelHandle, VGet(90.0f * DX_PI_F / 180.0f, 45.0f * DX_PI_F / 180.0f, 0.0f));
 }
 
+/// <summary>
+/// 更新
+/// </summary>
 void Wall::Update()
 {
 	//MV1SetPosition(modelHandle, position);

@@ -53,7 +53,7 @@ public:
 
 	virtual void ChangeMotion(const int& motionNum, const float playAnimSpeed);
 	virtual void MotionUpdate();
-	void UpdateAngle(const VECTOR& direction, bool& isTurn_right);
+	void UpdateAngle(const VECTOR& direction);
 	void PositionUpdate();
 
 	/////////////////////////////////////////////

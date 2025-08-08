@@ -214,7 +214,7 @@ void PlayerStateActionBase::JumpMove(PlayerData& playerData, Player& player)
             playerData.isJump_second = true;
             playerData.isJumpAll = true;
             player.playerCalculation->ChangeIsJumpPower_add_ture();
-            player.playerCalculation->SetJumpPower();
+            player.playerCalculation->SetJumpPower_second();
 
             nowAnimState.PlayTime_anim = 5.0f;
         }
@@ -240,6 +240,7 @@ void PlayerStateActionBase::WallRunMove(PlayerData& playerData, Player& player)
         
         //スティックが即座に反対方向に向いた場合slipをtrue
         //radian計算
+        DebugDrawer::Instance().InformationInput_string_VECTOR("moveDir %f %f %f\n", moveDirection);
         float radian_wall = atan2f(-hitWall_normal.x, -hitWall_normal.z);
         float radian_pad = atan2f(moveDirection.x, moveDirection.z);
 

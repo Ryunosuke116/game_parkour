@@ -1,25 +1,40 @@
 #include "common.h"
 #include  "nlohmann/json.hpp"
 #include "Floor_sky.h"
+#include "Calculation.h"
 
+/// <summary>
+/// コンストラクタ
+/// </summary>
+/// <param name="handle"></param>
+/// <param name="pos"></param>
+/// <param name="objectTag"></param>
 Floor_sky::Floor_sky(const int& handle, const VECTOR& pos,
-	const std::string& objectTag):
+	const float& degree, const std::string& objectTag):
 	moveAmount(0.0f)
 {
 	modelHandle = MV1DuplicateModel(handle);
-	position = pos;
+	position_Init = pos;
+	moveDirection = Calculation::GetDirectionFromDegree(degree);
 	tag = objectTag;
 }
 
+/// <summary>
+/// デストラクタ
+/// </summary>
 Floor_sky::~Floor_sky()
 {
 
 }
 
+/// <summary>
+/// 初期化
+/// </summary>
 void Floor_sky::Initialize()
 {
 	isUp = true;
 	pos_difference = VGet(0.0f, 0.0f, 0.0f);
+	position = position_Init;
 
 	MV1SetPosition(modelHandle, position);
 	MV1SetScale(modelHandle, VGet(0.5f, 0.5f, 0.5f));
@@ -28,6 +43,9 @@ void Floor_sky::Initialize()
 	MV1SetupCollInfo(modelHandle, -1, 1, 1, 1);
 }
 
+/// <summary>
+/// 更新
+/// </summary>
 void Floor_sky::Update()
 {
 	VECTOR newPos = position;
@@ -43,13 +61,13 @@ void Floor_sky::Update()
 
 	if (isUp)
 	{
-		newPos.z += 0.2f;
-		moveAmount += 0.2f;
+		newPos = VAdd(newPos, VScale(moveDirection, velocity));
+		moveAmount += velocity;
 	}
 	else
 	{
-		newPos.z -= 0.2f;
-		moveAmount -= 0.2f;
+		newPos = VAdd(newPos, VScale(moveDirection, -velocity));
+		moveAmount -= velocity;
 	}
 
 	//newPos = VAdd(newPos, addPos);
@@ -63,6 +81,10 @@ void Floor_sky::Update()
 	MV1RefreshCollInfo(modelHandle, -1);
 }
 
+/// <summary>
+/// 描画
+/// </summary>
+/// <returns></returns>
 bool Floor_sky::Draw()
 {
 	MV1DrawModel(modelHandle);

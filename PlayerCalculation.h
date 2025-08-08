@@ -29,13 +29,14 @@ public:
 
 	VECTOR HangingPosition();
 
-	VECTOR HangingDirection(const MV1_COLL_RESULT_POLY& hangingPoly, const VECTOR& centerPos);
+	VECTOR HangingDirection(const VECTOR& centerPos);
 
 	VECTOR Run_Wall(const VECTOR& moveVec,
 		const PlayerData& playerData);
 
 	void Reset_move();
 	void Reset_run_wall();
+	void ResetMoveVec_old() { moveVec_old = VGet(0.0f, 0.0f, 0.0f); }
 
 	bool GetIsJumpPower_add()const { return isJumpPower_add; }
 	float GetjumpSpeed_now() const { return jumpPower_now; }
@@ -50,16 +51,20 @@ public:
 
 	void ChangeIsJumpPower_add_ture() { isJumpPower_add = true; }
 	void SetJumpPower() { jumpPower_now = addJumpPower; }
+	void SetJumpPower_second() { jumpPower_now = addJumpPowe_second; }
 	void SetjumpSpeed_now(const float& jumpSpeed) { jumpPower_now = jumpSpeed; }
 	void SetHangingPoly(const MV1_COLL_RESULT_POLY& set) { hangingPoly = set; }
 	void SetHangingPoint(const VECTOR& set) { hangingPoint = set; }
 	void SetHandPos_right(const VECTOR& set) { handPos_right = set; }
 	void SetHandPos_left(const VECTOR& set) { handPos_left = set; }
 	void SetHitWall_normal(const VECTOR& set) { hitWall_normal = set; }
+	void SetNearestResult(const Calculation::NearestResult& set) { nearestResult = set; }
+
 private:
 	static constexpr float MaxMoveSpeed = 1.6f;	    // 移動速度
 	static constexpr float rollMoveSpeed_max = 2.5f;	//ロール速度
 	static constexpr float addJumpPower = 2.0f;		//ジャンプパワー
+	static constexpr float addJumpPowe_second = 1.5f;		//二段目ジャンプパワー
 	static constexpr float gravity = -0.06f;
 	static constexpr float wallRun_stopTime_max = 10.0f;	
 

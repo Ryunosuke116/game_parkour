@@ -8,6 +8,7 @@
 #include "AnimTime.h"
 #include "Player.h"
 #include "HitCheck.h"
+#include "DebugDrawer.h"
 
 /// <summary>
 /// コンストラクタ
@@ -60,31 +61,38 @@ std::pair<VECTOR, PlayerData> Falling_Idle::Update(const VECTOR& cameraDirection
 
     FlagReset_jump(playerData);
 
+    VECTOR head = MV1GetFramePosition(player.GetModelHandle(), 9);
+
+    DebugDrawer::Instance().InformationInput_sphere(head, cliff_radius, GetColor(255, 255, 255));
+
     //見直し
     //崖掴み判定
-    auto result_cliff = HitCheck::CliffGrabbing(fieldObjects,
-        player.GetPositionData().position_top_ray,
-        player.GetMoveDirection_now(),player.GetRadius());
-
-    //掴むところが平行だった場合
-    //崖掴み時の情報を保存
-    if (result_cliff.isHitHanging)
+    if (playerData.isUse_Hanging)
     {
-        //胴体座標
-        VECTOR centerPosition = MV1GetFramePosition(modelHandle, 2);
-       
-        Calculation::NearestResult nearestResult = Calculation::SphereMeshOutsideTriangle_line(result_cliff.hangingPoly, centerPosition);
-       
-        float difference_y = nearestResult.linePos_start.y - nearestResult.linePos_end.y;
-       
-        if (difference_y == 0)
+        auto result_cliff = HitCheck::CliffGrabbing(fieldObjects,
+            player.GetPositionData().position_top_ray,
+            player.GetMoveDirection_now(), cliff_radius);
+        
+        //掴むところが平行だった場合
+        //崖掴み時の情報を保存
+        if (result_cliff.isHitHanging)
         {
-            playerData.isHanging = result_cliff.isHitHanging;
-            isChangeState = true;
-            //player.playerCalculation->SetHangingPoint(result_cliff.hitHangingPos);
-            player.playerCalculation->SetHangingPoly(result_cliff.hangingPoly);
+            //胴体座標
+            VECTOR centerPosition = MV1GetFramePosition(modelHandle, 2);
+       
+            Calculation::NearestResult nearestResult = Calculation::SphereMeshOutsideTriangle_line(result_cliff.hangingPoly, centerPosition);
+       
+            float difference_y = nearestResult.linePos_start.y - nearestResult.linePos_end.y;
+       
+            if (difference_y == 0)
+            {
+                playerData.isHanging = result_cliff.isHitHanging;
+                isChangeState = true;
+                player.playerCalculation->SetNearestResult(nearestResult);
+            }
         }
     }
+
 
     //着地したときに動いているかどうかで次のアニメーションを決める
     if (playerData.isGround)
@@ -99,6 +107,7 @@ std::pair<VECTOR, PlayerData> Falling_Idle::Update(const VECTOR& cameraDirection
         }
 
         playerData.isUse_wallJump = true;
+        playerData.isUse_Hanging = true;
         isChangeState = true;
     }
 

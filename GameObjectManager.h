@@ -38,6 +38,7 @@ private:
 	std::shared_ptr<Shadow>					shadow				= NULL;
 	std::shared_ptr<UI>						ui					= NULL;
 	std::shared_ptr<GoalArea>				goalArea			= NULL;
+	std::shared_ptr<GameTimer>				gameTimer			= NULL;
 
 	std::shared_ptr<Map>			map_actual			 = NULL;
 	std::shared_ptr<PlayerManager>	playerManager_actual = NULL;

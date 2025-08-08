@@ -360,9 +360,6 @@ std::pair<bool, VECTOR> CollisionManager::WallCollisionCheck(const std::vector<s
 						//–Ê‚É‘Î‚µ‚Äˆê”Ô‹ß‚¢ü•ª“_‚©‚ç–Ê‚ÉŒü‚©‚Á‚Ä‹…‚Ì”¼Œa‚ð‰ÁŽZ‚·‚é
 						contact = VAdd(result.first, contact);
 
-						//–Ê‚É­‚µ–Œ‚ð‚Í‚é
-						contact = VAdd(contact, VScale(poly.Normal, -0.1f));
-
 						//‹…‚ÌÚGÀ•W¨–Ê‚ÌÚGÀ•W‚ð‹‚ß‚é
 						VECTOR pos = VSub(result.second, contact);
 						pos.y = 0.0f;

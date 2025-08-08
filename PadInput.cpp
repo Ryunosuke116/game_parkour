@@ -3,7 +3,10 @@
 
 void PadInput::Initialize()
 {
-    input = new Input;
+    if (input == NULL)
+    {
+        input = new Input;
+    }
 }
 
 void PadInput::finalize()
