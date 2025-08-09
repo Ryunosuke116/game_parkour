@@ -3,6 +3,7 @@
 #include <fstream>
 #include <string>
 #include "Player.h"
+#include "EffectManager.h"
 #include "CoinManager.h"
 #include "nlohmann/json.hpp"
 
@@ -55,7 +56,9 @@ void CoinManager::Initialize()
 /// </summary>
 /// <param name="player"></param>
 /// <param name="cameraLookPos"></param>
-void CoinManager::Update(const std::shared_ptr<Player>& player,const VECTOR& cameraLookPos)
+void CoinManager::Update(const std::shared_ptr<Player>& player,
+	std::shared_ptr<EffectManager>& effectManager, 
+	const VECTOR& cameraLookPos)
 {
 	//vectorå^ì‡ÇÃåªç›à íu
 	std::vector<std::shared_ptr<CoinObject>>::iterator it;
@@ -63,7 +66,10 @@ void CoinManager::Update(const std::shared_ptr<Player>& player,const VECTOR& cam
 	for ( it = coins.begin(); it != coins.end();)
 	{
 		//playerÇ∆ìñÇΩÇ¡ÇƒÇ¢ÇΩÇÁçÌèúÇ∑ÇÈ
-		if ((*it)->Update(player->GetTopPos(), player->GetBottomPos(), player->GetRadius()))
+		if ((*it)->Update(effectManager,
+			player->GetTopPos(), 
+			player->GetBottomPos(),
+			player->GetRadius()))
 		{
 			NotifyCoinPicked(coinValue);
 

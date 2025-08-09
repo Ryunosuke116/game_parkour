@@ -184,6 +184,9 @@
     <Filter Include="ソース ファイル\object\gameTimer">
       <UniqueIdentifier>{4366f260-6c87-43af-b722-fcca0dfe2fc4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\manager\effect">
+      <UniqueIdentifier>{5e5cd968-670e-44f1-a594-3cd0abd7bd68}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -329,6 +332,9 @@
     </ClCompile>
     <ClCompile Include="GameTimer.cpp">
       <Filter>ソース ファイル\object\gameTimer</Filter>
+    </ClCompile>
+    <ClCompile Include="EffectManager.cpp">
+      <Filter>ソース ファイル\manager\effect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -494,6 +500,12 @@
     <ClInclude Include="GameTimer.h">
       <Filter>ソース ファイル\object\gameTimer</Filter>
     </ClInclude>
+    <ClInclude Include="EffectManager.h">
+      <Filter>ソース ファイル\manager\effect</Filter>
+    </ClInclude>
+    <ClInclude Include="EffectData.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Json\coin.Json">
@@ -503,6 +515,9 @@
       <Filter>ヘッダー ファイル\Json</Filter>
     </None>
     <None Include="Json\floor_sky.Json">
+      <Filter>ヘッダー ファイル\Json</Filter>
+    </None>
+    <None Include="Json\effectData.Json">
       <Filter>ヘッダー ファイル\Json</Filter>
     </None>
   </ItemGroup>

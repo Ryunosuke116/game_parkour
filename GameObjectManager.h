@@ -39,11 +39,13 @@ private:
 	std::shared_ptr<UI>						ui					= NULL;
 	std::shared_ptr<GoalArea>				goalArea			= NULL;
 	std::shared_ptr<GameTimer>				gameTimer			= NULL;
+	std::shared_ptr<BaseGameObjectManager>  effectManager		= NULL;
 
 	std::shared_ptr<Map>			map_actual			 = NULL;
 	std::shared_ptr<PlayerManager>	playerManager_actual = NULL;
 	std::shared_ptr<CoinManager>	coinManager_actual   = NULL;
-	
+	std::shared_ptr<EffectManager>  effectManager_actual = NULL;
+
 	bool isCamera;
 	bool isPush;
 	bool isGoal;

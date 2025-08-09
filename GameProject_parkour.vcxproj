@@ -159,6 +159,7 @@
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="DebugDrawer.cpp" />
     <ClCompile Include="Effect.cpp" />
+    <ClCompile Include="EffectManager.cpp" />
     <ClCompile Include="Falling_Idle.cpp" />
     <ClCompile Include="Field.cpp" />
     <ClCompile Include="FieldMesh.cpp" />
@@ -210,6 +211,8 @@
     <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="DebugDrawer.h" />
     <ClInclude Include="Effect.h" />
+    <ClInclude Include="EffectData.h" />
+    <ClInclude Include="EffectManager.h" />
     <ClInclude Include="Falling_Idle.h" />
     <ClInclude Include="Field.h" />
     <ClInclude Include="FieldMesh.h" />
@@ -253,6 +256,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Json\coin.Json" />
+    <None Include="Json\effectData.Json" />
     <None Include="Json\floor_sky.Json" />
     <None Include="Json\object.Json" />
   </ItemGroup>

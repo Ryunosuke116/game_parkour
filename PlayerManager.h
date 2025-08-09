@@ -2,6 +2,8 @@
 #include "BaseGameObjectManager.h"
 #include "HitCheck.h"
 
+class EffectManager;
+
 class PlayerManager : public BaseGameObjectManager
 {
 private:
@@ -17,6 +19,7 @@ public:
 	~PlayerManager();
 	
 	void Update(const std::vector<std::shared_ptr<BaseObject>>& fieldObjects,
+		std::shared_ptr<EffectManager>& effectManager,
 		const VECTOR& cameraDirection);
 
 	void Create()		override;

@@ -37,7 +37,7 @@ void Floor_sky::Initialize()
 	position = position_Init;
 
 	MV1SetPosition(modelHandle, position);
-	MV1SetScale(modelHandle, VGet(0.5f, 0.5f, 0.5f));
+	MV1SetScale(modelHandle, VGet(0.3f, 0.3f, 0.3f));
 
 	// モデルの０番目のフレームのコリジョン情報を構築
 	MV1SetupCollInfo(modelHandle, -1, 1, 1, 1);

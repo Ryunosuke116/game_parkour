@@ -1,6 +1,7 @@
 #include "common.h"
 #include "Player.h"
 #include "CollisionManager.h"
+#include "EffectManager.h"
 #include "PlayerManager.h"
 #include "Calculation.h"
 #include "BaseObject.h"
@@ -56,10 +57,11 @@ void PlayerManager::Initialize()
 /// <param name="mapHandle"></param>
 /// <param name="player"></param>
 void PlayerManager::Update(const std::vector<std::shared_ptr<BaseObject>>& fieldObjects ,
+	std::shared_ptr<EffectManager>& effectManager, 
 	const VECTOR& cameraDirection)
 {
 
-	actualPlayer->Update(cameraDirection, fieldObjects);
+	actualPlayer->Update(cameraDirection,effectManager, fieldObjects);
 
 	collisionManager->Update(*player, fieldObjects, actualPlayer->GetData());
 	

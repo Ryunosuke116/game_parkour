@@ -1,4 +1,5 @@
 
+#include "EffectManager.h"
 #include "CoinObject.h"
 
 /// @brief コンストラクタ
@@ -38,7 +39,9 @@ void CoinObject::Initialize()
 void CoinObject::Update(){}
 
 /// @brief 更新
-bool CoinObject::Update(const VECTOR& playerpos_top,const VECTOR& playerPos_bottom,const float radius)
+bool CoinObject::Update(std::shared_ptr<EffectManager>& effectManager,
+	const VECTOR& playerpos_top,
+	const VECTOR& playerPos_bottom,const float radius)
 {
 	VECTOR nearCapsulePos = HitCheck::CapsuleHitConfirmation(playerpos_top, playerPos_bottom, position, radius, 4.5f);
 

@@ -3,6 +3,7 @@
 #include"playerState.h"
 #include "AnimTime.h"
 #include "PadInput.h"
+#include "EffectManager.h"
 #include "Player.h"
 #include "HitCheck.h"
 #include "Calculation.h"
@@ -42,7 +43,7 @@ Player::~Player()
 /// </summary>
 void Player::Initialize()
 {
-    position = VGet(0.0f, 10.0f, 0.0f);
+    position = VGet(0.0f, 6.74f, 0.0f);
 
     MV1SetRotationXYZ(modelHandle, VGet(0, 0, 0));
 
@@ -74,6 +75,7 @@ void Player::Initialize()
    
     coinCount = 0;
     degree_pad_now = 0.0f;
+    effectTimer = 0.0f;
     padInput_now = VGet(0.0f, 0.0f, 0.0f);
     moveDirection_now = VGet(0.0f, 0.0f, 1.0f);
 
@@ -85,6 +87,7 @@ void Player::Initialize()
 /// 更新
 /// </summary>
 void Player::Update(const VECTOR& cameraDirection, 
+    std::shared_ptr<EffectManager>& effectManager,
     const std::vector<std::shared_ptr<BaseObject>>& fieldObjects)
 {
      //positionData更新
@@ -115,7 +118,9 @@ void Player::Update(const VECTOR& cameraDirection,
 
     bool isFree = !playerData.isHanging
         && !playerData.isHang_to_Crouch &&
-        !playerData.isFalling && !playerData.isJump && !playerData.isRoll;
+        !playerData.isFalling && 
+        !playerData.isJump && 
+        !playerData.isRoll;
 
     isCalc_moveVec = VSize(moveDirection) != 0;
 
@@ -163,6 +168,17 @@ void Player::Update(const VECTOR& cameraDirection,
         positionData.position_bottom_ray.y -= 0.1f;
     }
 
+    if (playerData.isRun)
+    {
+        effectTimer++;
+        if (effectTimer >= 10.0f)
+        {
+            effectManager->SetPosition(position,"foot_smoke");
+            effectManager->PlayEffect("foot_smoke");
+            effectTimer = 0.0f;
+        }
+    }
+
     ///////////////////////////////////////
     //  デバッグ用
     //////////////////////////////////////
@@ -207,70 +223,7 @@ void Player::Update(const VECTOR& cameraDirection,
 bool Player::Draw()
 {
 	MV1DrawModel(modelHandle);
-   /* DrawSphere3D(positionData.footPosition, 2.0f, 30, GetColor(0, 0, 0),
-        GetColor(255, 255, 255), FALSE);
-    DrawSphere3D(handCenterPos, 2.0f, 30, GetColor(0, 0, 0),
-        GetColor(0, 0, 255), FALSE);
-    DrawSphere3D(playerCalculation->GetNearestResult().nearestPoint, 2.0f, 30, GetColor(0, 0, 0),
-        GetColor(255, 0, 255), FALSE);*/
 
-    VECTOR nowFrame = MV1GetFramePosition(modelHandle, nowFrameNumber);
-    VECTOR foot = MV1GetFramePosition(modelHandle, 167);
-
-
-    //DrawCapsule3D(positionData.position_top_Capsule, positionData.position_bottom_Capsule, radius, 30, GetColor(0, 0, 0),
-    //    GetColor(255, 0, 0), FALSE);
-
-   /* DrawCapsule3D(top, bottom, radius, 30, GetColor(0, 0, 0),
-        GetColor(255, 0, 0), FALSE);*/
-
-  
-   
-    /* printfDx("hitWall_normal x %f  y %f  z %f \n", playerCalculation->GetHitWall_normal().x,
-        playerCalculation->GetHitWall_normal().y,
-        playerCalculation->GetHitWall_normal().z);
-    printfDx("coinCount %f\n", angle);*/
-  /*  printfDx("playerPosition.x %f\nplayerPosition.y %f\nplayerPosition.z %f\n",
-        position.x, position.y, position.z);*/
-   // printfDx("coinCount %d\n", coinCount);
-    //printfDx("frame現在数%d\n", nowFrameNumber);
-    //printfDx("moveSpeed_now %f\n", playerCalculation->GetMoveSpeed_now());
-    //printfDx("isIdle %d\n", playerData.isIdle);
-    //printfDx("isMove %d\n", playerData.isMove);
-    //printfDx("isRun %d\n", playerData.isRun);
-    //printfDx("isSlip %d\n", playerData.isSlip);
-    //printfDx("isJump %d\n", playerData.isJump);
-    //printfDx("isJump_second %d\n", playerData.isJump_second);
-    //printfDx("isJumpAll %d\n", playerData.isJumpAll);
-    //printfDx("isUse_wallJump %d\n", playerData.isUse_wallJump);
-    //printfDx("isGround %d\n", playerData.isGround);
-    //printfDx("isRoll %d\n", playerData.isRoll);
-    //printfDx("isRoll_PlayAnim %d\n", playerData.isUse_Roll);
-    //printfDx("isSprint %d\n", playerData.isSprint);
-    //printfDx("isStopRun %d\n", playerData.isStopRun);
-    //printfDx("isFalling %d\n", playerData.isFalling);
-    //printfDx("isHanging %d\n", playerData.isHanging);
-    //printfDx("isTurn_right %d\n", playerData.isTurn_right);
-    //printfDx("isRun_wall %d\n", playerData.isRun_wall);
-    //printfDx("isChange_falling %d\n", isChange_falling);
-  /*  printfDx("JoyPad_x_left %f\n", -PadInput::GetJoyPad_x_left());
-    printfDx("JoyPad_y_left %f\n", -PadInput::GetJoyPad_y_left());*/
-  /*  printfDx("animNumber_Now %d\n", animNumber_Now);
-    printfDx("jumpPower_now %f\n", playerCalculation->GetjumpSpeed_now());
-    printfDx("moveVec_normal.x %f\n", moveVec_normal.x);
-    printfDx("moveVec_normal.y %f\n", moveVec_normal.y);
-    printfDx("moveVec_normal.z %f\n", moveVec_normal.z);
-    printfDx("degree_pad_now %f\n", degree_pad_now);
-    printfDx("degree_pad_wall_difference %f\n", degree_pad_wall_difference);
-    printfDx("degree_difference %f\n", degree_difference);
-    printfDx("x %f\n", x);*/
-
-    //線
-   // DrawLine3D(centerPosition, footPosition, GetColor(255, 0, 0));
-    //DrawLine3D(topPosition, linePos_end, GetColor(255, 0, 0));
-    
-    //collisionManager->Draw();
-    
     return true;
 }
 

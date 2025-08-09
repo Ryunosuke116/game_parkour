@@ -2,6 +2,8 @@
 #include "HitCheck.h"
 #include "BaseObject.h"
 
+class EffectManager;
+
 class CoinObject : public BaseObject
 {
 public:
@@ -10,7 +12,9 @@ public:
 
 	void Initialize()override;
 	void Update()override;
-	bool Update(const VECTOR& playerPos, const VECTOR& playerPos_bottom, const float radius);
+	bool Update(std::shared_ptr<EffectManager>& effectManager, 
+		const VECTOR& playerPos,
+		const VECTOR& playerPos_bottom, const float radius);
 	bool Draw()override;
 	void HitPlayerAction();
 	void Rotate();

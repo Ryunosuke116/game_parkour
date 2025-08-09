@@ -8,6 +8,8 @@
 #include  "nlohmann/json.hpp"
 #include "CoinObserver.h"
 
+class EffectManager;
+
 class Player : public BaseChara, public CoinObserver
 {
 private:
@@ -39,6 +41,7 @@ private:
 	float degree_pad_now;
 	float degree_difference;
 	float degree_pad_wall_difference;
+	float effectTimer;
 
 	bool isPush;					//ボタンを押したか
 	bool isChange_falling;				//アニメーションを変更するか
@@ -57,6 +60,7 @@ public:
 	void Initialize();
 	void Update()override;
 	void Update(const VECTOR& cameraDirection,
+		std::shared_ptr<EffectManager>& effectManager,
 		const std::vector<std::shared_ptr<BaseObject>>& fieldObjects);
 	bool Draw();
 	

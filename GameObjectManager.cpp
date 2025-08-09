@@ -33,7 +33,8 @@ void GameObjectManager::Create()
 	field				= std::make_shared<Field>("material/mv1/new_city/new_city_0731.mv1");
 	coinManager			= std::make_shared<CoinManager>();
 	playerManager		= std::make_shared<PlayerManager>();
-	//floor_sky_Manager	= std::make_shared<Floor_skyManager>();
+	effectManager		= std::make_shared<EffectManager>();
+
 	camera				= std::make_shared<Camera>();
 	layout				= std::make_shared<Layout>();
 	shadow				= std::make_shared<Shadow>();
@@ -44,11 +45,12 @@ void GameObjectManager::Create()
 	map_actual			 = std::dynamic_pointer_cast<Map>(map);
 	playerManager_actual = std::dynamic_pointer_cast<PlayerManager>(playerManager);
 	coinManager_actual   = std::dynamic_pointer_cast<CoinManager>(coinManager);
-
+	effectManager_actual = std::dynamic_pointer_cast<EffectManager>(effectManager);
 
 	fieldObjects.push_back(std::make_shared<FieldMesh>("material/mv1/new_city/new_city_mesh_0731.mv1"));
 	fieldObjects.push_back(std::make_shared<Wall>(jsonManager->GetJsons("object")));
 	
+	//floor_skyを追加
 	nlohmann::json data_floor_sky = jsonManager->GetJsons("floor_sky");
 	std::string path_floor_sky = data_floor_sky["modelPath"];
 	for (auto& data : data_floor_sky["list"])
@@ -65,7 +67,6 @@ void GameObjectManager::Create()
 		));
 	}
 
-	//floor_sky_Manager->HandOver(jsonManager->GetJsons("floor_sky"));
 	coinManager->HandOver(jsonManager->GetJsons("coin"));
 	playerManager->HandOver(jsonManager->GetJsons("player"));
 
@@ -90,13 +91,23 @@ void GameObjectManager::Initialize()
 	field->Initialize();
 	coinManager->Initialize();
 	playerManager->Initialize();
-	//floor_sky_Manager->Initialize();
 	camera->Initialize();
 	PadInput::Initialize();
 	ui->Initialize();
 	shadow->Initialize();
 	goalArea->Initialize();
 	gameTimer->Initialize();
+
+	//エフェクトデータを追加
+	nlohmann::json effectData = jsonManager->GetJsons("effectData");
+	for (auto& data : effectData["list"])
+	{
+		std::string tag = data[1];
+		std::string  path = data[0].get<std::string>();
+		float scale = data[2];
+
+		effectManager_actual->Add(path.c_str(), tag, scale);
+	}
 
 	isCamera = false;
 	isPush = false;
@@ -142,7 +153,7 @@ void GameObjectManager::Update()
 		field->Update();
 
 		gameTimer->Update();
-		playerManager_actual->Update(fieldObjects, camera->GetCameraDirection());
+		playerManager_actual->Update(fieldObjects,effectManager_actual, camera->GetCameraDirection());
 		map_actual->Update(playerManager_actual->GetPosition());
 		camera->Update(playerManager_actual->GetPosition(),
 			playerManager_actual->GetAngle(), fieldObjects);
@@ -155,7 +166,11 @@ void GameObjectManager::Update()
 		layout->Update(camera->GetSpherePosition(), *coinManager_actual);
 	}
 
-	coinManager_actual->Update(playerManager_actual->GetPlayer(),camera->GetSpherePosition());
+	coinManager_actual->Update(playerManager_actual->GetPlayer(),
+		effectManager_actual,
+		camera->GetSpherePosition());
+
+	effectManager_actual->PlayEffectUpdate();
 
 	if (HitCheck::AABBHitJudge(playerManager_actual->GetPlayerAABB(),
 		goalArea->GetGoalArea()
@@ -215,6 +230,7 @@ void GameObjectManager::Draw()
 		layout->Draw();
 	}
 	ui->Draw();
+	effectManager->Draw();
 
 	DrawLine3D(VGet(0.0f, 15.0f, 0.0f), VGet(10.0f, 15.0f, 0.0f), GetColor(255, 0, 0));
 	DrawLine3D(VGet(0.0f, 15.0f, 0.0f), VGet(0.0f, 25.0f, 0.0f), GetColor(0, 255, 0));

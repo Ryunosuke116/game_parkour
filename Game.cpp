@@ -1,9 +1,11 @@
 #include "common.h"
+#include "EffekseerForDXLib.h"
 #include "SceneManager.h"
 #include "BaseScene.h"
 #include "Game.h"
 #include "DebugDrawer.h"
 #include "HitCheck.h"
+
 
 /// <summary>
 /// インスタンス化
@@ -39,7 +41,7 @@ void Game::Update()
 {
 	PadInput::Update();
 	gameObjectManager->Update();
-	
+
 	if (gameObjectManager_actual->GetIsGoal())
 	{
 

@@ -4,6 +4,7 @@
 #include "Player.h"
 #include "CoinObserver.h"
 
+class EffectManager;
 
 class CoinManager : public BaseGameObjectManager
 {
@@ -21,7 +22,9 @@ public:
 	CoinManager();
 	~CoinManager();
 
-	void Update(const std::shared_ptr<Player>& player, const VECTOR& cameraLookPos);
+	void Update(const std::shared_ptr<Player>& player,
+		std::shared_ptr<EffectManager>& effectManager, 
+		const VECTOR& cameraLookPos);
 
 	void Create()override;
 	void Initialize()override;
