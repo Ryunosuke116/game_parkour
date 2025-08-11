@@ -1,8 +1,10 @@
 #pragma once
 #include "common.h"
 #include <string>
+#include <nlohmann/json.hpp>
+#include "Object_interface.h"
 
-class BaseObject
+class BaseObject : public Object_interface
 {
 protected:
 	int modelHandle;
@@ -13,11 +15,7 @@ protected:
 public:
 	BaseObject();
 	~BaseObject();
-
-	//èÉêàâºëzä÷êî	
-	virtual void Initialize() abstract;
-	virtual void Update() abstract;
-	virtual bool Draw() abstract;
+	void Draw()override;
 
 	const int GetModelHandle() { return modelHandle; }
 	const VECTOR GetPosition() { return position; }

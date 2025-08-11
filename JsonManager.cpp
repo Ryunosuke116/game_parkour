@@ -1,8 +1,6 @@
 #include "common.h"
 #include <fstream>
 #include <filesystem>
-
-
 #include "JsonManager.h"
 
 void JsonManager::Initialize()

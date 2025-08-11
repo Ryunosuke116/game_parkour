@@ -49,8 +49,7 @@ void Wall::Update()
 	MV1RefreshCollInfo(modelHandle, -1);
 }
 
-bool Wall::Draw()
+void Wall::Draw()
 {
 	MV1DrawModel(modelHandle);
-	return false;
 }

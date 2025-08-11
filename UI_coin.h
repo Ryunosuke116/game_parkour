@@ -1,30 +1,26 @@
 #pragma once
+#include "BaseUI.h"
 #include "CoinObserver.h"
-#include "BaseObject.h"
-#include <nlohmann/json.hpp>
 
-class UI :public BaseObject, public CoinObserver
+class UI_coin : public BaseUI, public CoinObserver
 {
 public:
+	UI_coin();
+	~UI_coin();
 
-	UI();
-	~UI();
+	void Load(const nlohmann::json& jsonData)override;
 	void Initialize()override;
 	void Update()override;
 	void Draw()override;
-	void Load(const nlohmann::json& jsonData)override{}
 
 	void OnCoinPicked(int amount)override { coinCount += amount; }
 
-
 private:
-	int x;
-	int y;
 	int coinHandle;
 	int numberHandle[10];
 	int crossHandle;
 	int coinCount;
-
 	std::string num;
+
 };
 

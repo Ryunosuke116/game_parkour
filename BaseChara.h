@@ -1,58 +1,39 @@
 #pragma once
 
 #include "CollisionData.h"
+#include "Object_interface.h"
 
-class BaseChara
+class BaseChara : public Object_interface
 {
 protected:
 
 	int modelHandle;
-	int motionNum;
-	int HP;
 	int nowFrameNumber;
 
-	int prevAttachIndex;			//前のアニメーション情報
-	float prevPlayTime_anim;		//前回の再生時間
-	float prevPlayAnimSpeed;		//前回のアニメーションスピード
-
-	int currentAttachIndex;			//現在のアニメーション情報
-	float currentPlayTime_anim;		//現在の再生時間
-	float currentPlayAnimSpeed;		//前回のアニメーションスピード
-
-	float animBlendRate;
-	float keepPlayTime_anim;
-
-	float totalTime_anim;
 	float angle;
 	float rotate_x;
 
 	bool isCollisionCheck;
 
-	VECTOR targetMoveDirection;
-	VECTOR framePosition;
 	VECTOR position;
-	VECTOR moveDirection;
+	VECTOR framePosition;
 	VECTOR moveVec;
+	VECTOR targetMoveDirection;
+	VECTOR moveDirection;
 
 	PositionData positionData;
 	CollisionResult collision_result;
 
 	static constexpr float	MoveSpeed = 0.4f;	    // 移動速度
 	static constexpr float angleSpeed = 0.2f;
-	static constexpr float	AnimBlendSpeed = 0.1f;		// アニメーションのブレンド率変化速度
-	static constexpr float PlayAnimSpeed = 0.5f;	//アニメ再生速度
+
 public:
 
 	BaseChara();
 	~BaseChara();
 
-	//純粋仮想関数
-	virtual void Initialize()abstract;
-	virtual void Update()abstract;
-	virtual bool Draw()abstract;
+	void Draw()override;
 
-	virtual void ChangeMotion(const int& motionNum, const float playAnimSpeed);
-	virtual void MotionUpdate();
 	void UpdateAngle(const VECTOR& direction);
 	void PositionUpdate();
 

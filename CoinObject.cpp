@@ -1,44 +1,61 @@
-
 #include "EffectManager.h"
 #include "CoinObject.h"
 
-/// @brief コンストラクタ
-/// @param path 
-CoinObject::CoinObject(const int& handle, const VECTOR& pos):
+/// <summary>
+/// コンストラクタ
+/// </summary>
+CoinObject::CoinObject():
+	BaseObject(),
 	radian_Y(0.0f),
+	velocity_Y(0.0f),
 	isHitPlayer(false),
 	deleteFlag(false),
 	hitFlag(false)
 {
-	modelHandle = MV1DuplicateModel(handle);
-	position = pos;
-	velocity_Y = 0.0f;
-	MV1SetPosition(modelHandle, position);
-	MV1SetScale(modelHandle, VGet(objectScale, objectScale, objectScale));
 
 }
 
-/// @brief デストラクタ
+/// <summary>
+/// デストラクタ
+/// </summary>
 CoinObject::~CoinObject()
 {
 
 }
 
-/// @brief 初期化
+/// <summary>
+/// 情報読み込み
+/// </summary>
+/// <param name="handle"></param>
+/// <param name="pos"></param>
+void CoinObject::Load(const int& handle, const VECTOR& pos)
+{
+	modelHandle = MV1DuplicateModel(handle);
+	position = pos;
+	MV1SetScale(modelHandle, VGet(objectScale, objectScale, objectScale));
+}
+
+/// <summary>
+/// 初期化
+/// </summary>
 void CoinObject::Initialize()
 {
-	position = VGet(5.0f, 8.0f, 5.0f);
-	velocity_Y = 0.0f;
 	MV1SetPosition(modelHandle, position);
+	velocity_Y = 0.0f;
 	radian_Y = 0.0f;
 	isHitPlayer = false;
 	deleteFlag = false;
 	hitFlag = false;
 }
 
-void CoinObject::Update(){}
-
-/// @brief 更新
+/// <summary>
+/// 更新
+/// </summary>
+/// <param name="effectManager"></param>
+/// <param name="playerpos_top"></param>
+/// <param name="playerPos_bottom"></param>
+/// <param name="radius"></param>
+/// <returns></returns>
 bool CoinObject::Update(std::shared_ptr<EffectManager>& effectManager,
 	const VECTOR& playerpos_top,
 	const VECTOR& playerPos_bottom,const float radius)
@@ -60,13 +77,13 @@ bool CoinObject::Update(std::shared_ptr<EffectManager>& effectManager,
 	return deleteFlag;
 }
 
-/// @brief 描画
-bool CoinObject::Draw()
+/// <summary>
+/// 描画
+/// </summary>
+void CoinObject::Draw()
 {
 	//printfDx("coin: %d", hitFlag);
 	MV1DrawModel(modelHandle);
-	//DrawSphere3D(position, 4.5f, 5, GetColor(0, 0, 0), GetColor(255, 0, 0), FALSE);
-	return true;
 }
 
 /// <summary>

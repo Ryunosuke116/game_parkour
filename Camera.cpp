@@ -152,7 +152,7 @@ void Camera::Update_layout()
 /// <summary>
 /// •`‰æ
 /// </summary>
-bool Camera::Draw()
+void Camera::Draw()
 {
 
 	/*DrawSphere3D(spherePosition, radius, 30, GetColor(0, 0, 0),
@@ -164,7 +164,6 @@ bool Camera::Draw()
 	//printfDx("aimPosition.x %f\n", aimPosition.x);
 	//printfDx("aimPosition.y %f\n", aimPosition.y);
 	//printfDx("aimPosition.z %f\n", aimPosition.z);
-	return true;
 }
 
 /// <summary>

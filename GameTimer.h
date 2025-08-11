@@ -1,5 +1,6 @@
 #pragma once
 #include "BaseObject.h"
+#include <nlohmann/json.hpp>
 
 class GameTimer : public BaseObject
 {
@@ -7,9 +8,11 @@ public:
 	GameTimer();
 	~GameTimer();
 
+	void Load(const nlohmann::json& jsonData)override{}
 	void Initialize()override;
 	void Update()override;
-	bool Draw()override;
+	void Draw()override;
+	
 
 private:
 	int time;

@@ -55,8 +55,8 @@ int WINAPI WinMain(HINSTANCE hInstance,
 
     SceneManager* sceneManager = new SceneManager();
 
-    sceneManager->Add<Game>("Game");
     sceneManager->Add<Title>("Title");
+    sceneManager->Add<Game>("Game");
 
     while (!ProcessMessage() && !ClearDrawScreen() && !CheckHitKey(KEY_INPUT_ESCAPE))
     {

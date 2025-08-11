@@ -4,22 +4,10 @@
 /// <summary>
 /// コンストラクタ
 /// </summary>
-Field::Field(const char* path) 
+Field::Field() : BaseObject(),
+	isPush(false),
+	isPoly(false)
 {
-	tag = "field";
-	modelHandle = MV1LoadModel(path);
-	boxHandle = MV1LoadModel("material/mv1/new_city/0604_box.mv1");
-	//meshHandle = MV1LoadModel("material/mv1/new_city/0610_mesh.mv1");
-
-	position = VGet(0, 0, 0);
-	//モデルの大きさ調整
-	//MV1SetScale(modelHandle, VGet(1.0f, 0.17f, 1.0f));
-	//MV1SetScale(modelHandle, VGet(0.05f, 0.05f, 0.05f));
-	MV1SetScale(modelHandle, VGet(0.9f, 0.9f, 0.9f));
-
-	MV1SetPosition(modelHandle, position);
-	//MV1SetPosition(meshHandle, position);
-	MV1SetPosition(boxHandle, position);
 
 }
 
@@ -31,26 +19,30 @@ Field::~Field()
 
 }
 
+void Field::Load(const nlohmann::json& jsonData)
+{
+	std::string path = jsonData["path"];
+
+	tag = "field";
+	modelHandle = MV1LoadModel(path.c_str());
+	MV1SetScale(modelHandle, VGet(0.9f, 0.9f, 0.9f));
+}
+
 /// <summary>
 /// 初期化
 /// </summary>
 void Field::Initialize()
 {
+	position = VGet(0, 0, 0);
+	MV1SetPosition(modelHandle, position);
+
 	// モデルの０番目のフレームのコリジョン情報を構築
 	MV1SetupCollInfo(modelHandle, -1, 1, 1, 1);
 	// モデルの０番目のフレームのコリジョン情報を構築
 	//MV1SetupCollInfo(meshHandle, -1, 1, 1, 1);
 
-	int a = MV1GetMaterialNum(meshHandle);
 	isPoly = false;
 
-	for (int i = 0; i < a; i++)
-	{
-		// ３Ｄモデルに含まれる０番目のマテリアルの描画ブレンドモードを DX_BLENDMODE_ADD に変更する
-		//MV1SetMaterialDrawBlendMode(meshHandle, i, DX_BLENDMODE_ADD);
-		// マテリアルのブレンドパラメータを 128 に変更する
-		//MV1SetMaterialDrawBlendParam(meshHandle, i, 0);
-	}
 }
 
 /// <summary>
@@ -86,7 +78,7 @@ void Field::Update()
 /// <summary>
 /// 描画
 /// </summary>
-bool Field::Draw()
+void Field::Draw()
 {
 	if (isPoly)
 	{
@@ -100,7 +92,5 @@ bool Field::Draw()
 	}
 
 	MV1DrawModel(modelHandle);
-	 
-	//MV1DrawModel(meshHandle);
-	return true;
+
 }

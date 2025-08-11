@@ -12,6 +12,7 @@
 /// </summary>
 PlayerManager::PlayerManager()
 {
+	tag = "player";
 }
 
 /// <summary>
@@ -26,9 +27,9 @@ void PlayerManager::Create()
 {
 	collisionManager = std::make_shared<CollisionManager>();
 
-	player = std::make_shared<Player>(jsonData);
+	player = std::make_shared<Player>();
 	actualPlayer = std::dynamic_pointer_cast<Player>(player);
-	//characters.push_back(std::make_shared<Player>(jsonData));
+	player->Load(jsonData);
 }
 
 /// <summary>

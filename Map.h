@@ -12,7 +12,7 @@ public:
 	void Initialize()override;
 	void Update()override;
 	void Update(const VECTOR& playerPos);
-	bool Draw()override;
+	void Load(const nlohmann::json& jsonData)override{}
 
 };
 

@@ -7,17 +7,20 @@ class EffectManager;
 class CoinObject : public BaseObject
 {
 public:
-	CoinObject(const int& handle, const VECTOR& pos);
+	CoinObject();
 	~CoinObject();
 
 	void Initialize()override;
-	void Update()override;
+	void Update()override{}
 	bool Update(std::shared_ptr<EffectManager>& effectManager, 
 		const VECTOR& playerPos,
 		const VECTOR& playerPos_bottom, const float radius);
-	bool Draw()override;
+	void Draw()override;
+	void Load(const nlohmann::json& jsonData)override{}
+
 	void HitPlayerAction();
 	void Rotate();
+	void Load(const int& handle, const VECTOR& pos);
 
 	HitCheck hitCheck;
 	bool GetHitFlag() { return hitFlag; }

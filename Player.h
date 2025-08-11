@@ -54,15 +54,15 @@ private:
 	std::shared_ptr<AnimationChanger> animationChanger = NULL;
 
 public:
-	Player(nlohmann::json jsonData);
+	Player();
 	~Player();
 
-	void Initialize();
+	void Load(const nlohmann::json& jsonData)override;
+	void Initialize()override;
 	void Update()override;
 	void Update(const VECTOR& cameraDirection,
 		std::shared_ptr<EffectManager>& effectManager,
 		const std::vector<std::shared_ptr<BaseObject>>& fieldObjects);
-	bool Draw();
 	
 	void DebugUpdate();
 	void Receive_CollisionResult();

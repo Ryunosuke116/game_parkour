@@ -92,7 +92,7 @@ void FieldMesh::Update()
 /// <summary>
 /// •`‰æ
 /// </summary>
-bool FieldMesh::Draw()
+void FieldMesh::Draw()
 {
 	if (isPoly)
 	{
@@ -104,5 +104,4 @@ bool FieldMesh::Draw()
 	}
 
 	MV1DrawModel(modelHandle);
-	return true;
 }

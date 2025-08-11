@@ -12,7 +12,7 @@
 /// </summary>
 CoinManager::CoinManager()
 {
-
+	tag = "coin";
 }
 
 /// <summary>
@@ -20,7 +20,7 @@ CoinManager::CoinManager()
 /// </summary>
 CoinManager::~CoinManager()
 {
-
+	coins.clear();
 }
 
 void CoinManager::Create()
@@ -28,6 +28,13 @@ void CoinManager::Create()
 	std::string modelPath = jsonData["modelPath"];
 
 	modelHandle = MV1LoadModel(modelPath.c_str());
+
+	for (auto& pos : jsonData["coin_list"])
+	{
+		coins.push_back(std::make_shared<CoinObject>());
+		coins.back()->Load(modelHandle,
+			VGet(pos[0], pos[1], pos[2]));
+	}
 }
 
 /// <summary>
@@ -36,17 +43,10 @@ void CoinManager::Create()
 /// <param name="path"></param>
 void CoinManager::Initialize()
 {
-	/*std::ifstream ifs("Json/coin.Json");
-	nlohmann::json j;
-	ifs >> j;*/
 
-
-	for (auto& pos : jsonData["coin_list"])
+	for (auto& coin : coins)
 	{
-		//std::string key(1, i);
-		coins.push_back(std::make_shared<CoinObject>(modelHandle,
-			VGet(pos[0], pos[1], pos[2])
-		));
+		coin->Initialize();
 	}
 
 }
@@ -93,7 +93,9 @@ void CoinManager::Draw()
 
 void CoinManager::Add()
 {
-	coins.push_back(std::make_shared<CoinObject>(modelHandle, pos_addObject));
+	coins.push_back(std::make_shared<CoinObject>());
+	coins.back()->Load(modelHandle,
+		pos_addObject);
 }
 
 /// <summary>

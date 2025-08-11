@@ -15,19 +15,14 @@
 /// <summary>
 /// /インストラクタ
 /// </summary>
-Player::Player(nlohmann::json jsonData) :
+Player::Player() :
+    BaseChara(),
     centerPosition(VGet(0.0f, 0.0f, 0.0f)),
     moveDirection_now(VGet(0.0f, 0.0f, 0.0f)),
     isCalc_moveVec(false),
     playerData({false})
 {
    
-    std::string path = jsonData["playerPath"];
-
-    modelHandle = MV1LoadModel(path.c_str());
-    MV1SetScale(modelHandle, VGet(modelScale, modelScale, modelScale));
-    playerCalculation = std::make_shared<PlayerCalculation>();
-    animationChanger = std::make_shared<AnimationChanger>();
 }
 
 /// <summary>
@@ -36,6 +31,20 @@ Player::Player(nlohmann::json jsonData) :
 Player::~Player()
 {
 
+}
+
+/// <summary>
+/// 読み込み
+/// </summary>
+/// <param name="jsonData"></param>
+void Player::Load(const nlohmann::json& jsonData)
+{
+    std::string path = jsonData["playerPath"];
+
+    modelHandle = MV1LoadModel(path.c_str());
+    MV1SetScale(modelHandle, VGet(modelScale, modelScale, modelScale));
+    playerCalculation = std::make_shared<PlayerCalculation>();
+    animationChanger = std::make_shared<AnimationChanger>();
 }
 
 /// <summary>
@@ -173,8 +182,8 @@ void Player::Update(const VECTOR& cameraDirection,
         effectTimer++;
         if (effectTimer >= 10.0f)
         {
-            effectManager->SetPosition(position,"foot_smoke");
             effectManager->PlayEffect("foot_smoke");
+            effectManager->SetPosition(position,"foot_smoke");
             effectTimer = 0.0f;
         }
     }
@@ -215,16 +224,6 @@ void Player::Update(const VECTOR& cameraDirection,
     //胸 6
     //腹 4
 
-}
-
-/// <summary>
-/// 描画
-/// </summary>
-bool Player::Draw()
-{
-	MV1DrawModel(modelHandle);
-
-    return true;
 }
 
 void Player::ChangeState()

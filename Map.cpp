@@ -37,11 +37,3 @@ void Map::Update(const VECTOR& playerPos)
 
 void Map::Update() {};
 
-/// <summary>
-/// •`‰æ
-/// </summary>
-bool Map::Draw()
-{
-	MV1DrawModel(modelHandle);
-	return true;
-}

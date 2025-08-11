@@ -53,7 +53,7 @@ void GameTimer::Update()
 /// •`‰æ
 /// </summary>
 /// <returns></returns>
-bool GameTimer::Draw()
+void GameTimer::Draw()
 {
-	return false;
+
 }

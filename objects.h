@@ -19,3 +19,4 @@
 #include "GoalArea.h"
 #include "GameTimer.h"
 #include "EffectManager.h"
+#include "UIManager.h"

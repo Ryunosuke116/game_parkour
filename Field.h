@@ -1,23 +1,21 @@
 #pragma once
 #include "BaseObject.h"
+#include <nlohmann/json.hpp>
 
 class Field : public BaseObject
 {
 private:
 	bool isPush;
 	bool isPoly;
-	int boxHandle;
-	int meshHandle;
 public:
 
-	Field(const char* path);
+	Field();
 	~Field();
 
+	void Load(const nlohmann::json& jsonData)override;
 	void Initialize()override;
 	void Update()override;
-	bool Draw()override;
-
-	int GetMeshHandle() { return meshHandle; }
+	void Draw()override;
 
 };
 

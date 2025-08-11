@@ -149,6 +149,7 @@
     <ClCompile Include="BaseManager.cpp" />
     <ClCompile Include="BaseObject.cpp" />
     <ClCompile Include="BaseScene.cpp" />
+    <ClCompile Include="BaseUI.cpp" />
     <ClCompile Include="BlackOut.cpp" />
     <ClCompile Include="Braced_Hang_To_Crouch.cpp" />
     <ClCompile Include="Calculation.cpp" />
@@ -158,7 +159,6 @@
     <ClCompile Include="CoinObserver.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="DebugDrawer.cpp" />
-    <ClCompile Include="Effect.cpp" />
     <ClCompile Include="EffectManager.cpp" />
     <ClCompile Include="Falling_Idle.cpp" />
     <ClCompile Include="Field.cpp" />
@@ -191,6 +191,8 @@
     <ClCompile Include="Shadow.cpp" />
     <ClCompile Include="Title.cpp" />
     <ClCompile Include="UI.cpp" />
+    <ClCompile Include="UIManager.cpp" />
+    <ClCompile Include="UI_coin.cpp" />
     <ClCompile Include="Wall.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -200,6 +202,7 @@
     <ClInclude Include="BaseManager.h" />
     <ClInclude Include="BaseObject.h" />
     <ClInclude Include="BaseScene.h" />
+    <ClInclude Include="BaseUI.h" />
     <ClInclude Include="BlackOut.h" />
     <ClInclude Include="Braced_Hang_To_Crouch.h" />
     <ClInclude Include="Calculation.h" />
@@ -210,7 +213,6 @@
     <ClInclude Include="CollisionData.h" />
     <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="DebugDrawer.h" />
-    <ClInclude Include="Effect.h" />
     <ClInclude Include="EffectData.h" />
     <ClInclude Include="EffectManager.h" />
     <ClInclude Include="Falling_Idle.h" />
@@ -230,6 +232,7 @@
     <ClInclude Include="Layout.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="ObjectManager_interface.h" />
+    <ClInclude Include="Object_interface.h" />
     <ClInclude Include="PlayerCalculation.h" />
     <ClInclude Include="GameObjectManager.h" />
     <ClInclude Include="objects.h" />
@@ -249,6 +252,8 @@
     <ClInclude Include="Shadow.h" />
     <ClInclude Include="Title.h" />
     <ClInclude Include="UI.h" />
+    <ClInclude Include="UIManager.h" />
+    <ClInclude Include="UI_coin.h" />
     <ClInclude Include="Wall.h" />
   </ItemGroup>
   <ItemGroup>
@@ -257,8 +262,10 @@
   <ItemGroup>
     <None Include="Json\coin.Json" />
     <None Include="Json\effectData.Json" />
+    <None Include="Json\field.Json" />
     <None Include="Json\floor_sky.Json" />
     <None Include="Json\object.Json" />
+    <None Include="Json\UI.Json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

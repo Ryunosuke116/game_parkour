@@ -1,0 +1,9 @@
+{
+  "coin": [
+    {
+      "coinPath": "material/png/coin_2d.png",
+      "crossPath": "material/png/number_font/x_32x64.png",
+      "numberPath": "material/png/number_font/suuji32x64_07.png"
+    }
+  ]
+}

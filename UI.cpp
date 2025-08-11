@@ -46,7 +46,7 @@ void UI::Update()
 	}
 }
 
-bool UI::Draw()
+void UI::Draw()
 {
 	DrawGraph(x, y, coinHandle, TRUE);
 
@@ -64,5 +64,4 @@ bool UI::Draw()
 
 	DrawGraph(135, 730, crossHandle, TRUE);
 
-	return false;
 }

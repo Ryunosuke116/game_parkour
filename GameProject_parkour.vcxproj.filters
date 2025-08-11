@@ -28,9 +28,6 @@
     <Filter Include="ソース ファイル\manager\coin">
       <UniqueIdentifier>{c758f02e-15db-456a-bfba-6b68200967d1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\manager\object">
-      <UniqueIdentifier>{733bd2bf-452d-40b4-a80b-71e93c23b571}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\manager\player">
       <UniqueIdentifier>{2a33576b-268e-4832-9dee-8902d408c493}</UniqueIdentifier>
     </Filter>
@@ -178,14 +175,26 @@
     <Filter Include="ソース ファイル\collisionObject\wall">
       <UniqueIdentifier>{64a5a458-0152-4384-824c-1d742086213b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\effect">
-      <UniqueIdentifier>{5c9b5de7-c69a-46b4-bfca-5fd6e341c0d4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\object\gameTimer">
       <UniqueIdentifier>{4366f260-6c87-43af-b722-fcca0dfe2fc4}</UniqueIdentifier>
     </Filter>
     <Filter Include="ソース ファイル\manager\effect">
       <UniqueIdentifier>{5e5cd968-670e-44f1-a594-3cd0abd7bd68}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\manager\object">
+      <UniqueIdentifier>{733bd2bf-452d-40b4-a80b-71e93c23b571}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\object\UI\UI_controlManual">
+      <UniqueIdentifier>{2cc8af79-44e4-41ff-b736-2c506a061bfc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Base\UI">
+      <UniqueIdentifier>{d5b51631-8c3b-41df-8337-fa8a8aa08ccf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\object\UI\coin">
+      <UniqueIdentifier>{8df00727-c934-4d6b-9b46-d1764bc00fed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\manager\UI">
+      <UniqueIdentifier>{0cd8d1ae-02d9-40ae-bcd4-85c71d8cc491}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -327,14 +336,20 @@
     <ClCompile Include="BlackOut.cpp">
       <Filter>ソース ファイル\scene\blackOut</Filter>
     </ClCompile>
-    <ClCompile Include="Effect.cpp">
-      <Filter>ソース ファイル\effect</Filter>
-    </ClCompile>
     <ClCompile Include="GameTimer.cpp">
       <Filter>ソース ファイル\object\gameTimer</Filter>
     </ClCompile>
     <ClCompile Include="EffectManager.cpp">
       <Filter>ソース ファイル\manager\effect</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseUI.cpp">
+      <Filter>ソース ファイル\Base\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI_coin.cpp">
+      <Filter>ソース ファイル\object\UI\coin</Filter>
+    </ClCompile>
+    <ClCompile Include="UIManager.cpp">
+      <Filter>ソース ファイル\manager\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -494,9 +509,6 @@
     <ClInclude Include="BlackOut.h">
       <Filter>ソース ファイル\scene\blackOut</Filter>
     </ClInclude>
-    <ClInclude Include="Effect.h">
-      <Filter>ソース ファイル\effect</Filter>
-    </ClInclude>
     <ClInclude Include="GameTimer.h">
       <Filter>ソース ファイル\object\gameTimer</Filter>
     </ClInclude>
@@ -505,6 +517,18 @@
     </ClInclude>
     <ClInclude Include="EffectData.h">
       <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Object_interface.h">
+      <Filter>ソース ファイル\Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseUI.h">
+      <Filter>ソース ファイル\Base\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_coin.h">
+      <Filter>ソース ファイル\object\UI\coin</Filter>
+    </ClInclude>
+    <ClInclude Include="UIManager.h">
+      <Filter>ソース ファイル\manager\UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -518,6 +542,12 @@
       <Filter>ヘッダー ファイル\Json</Filter>
     </None>
     <None Include="Json\effectData.Json">
+      <Filter>ヘッダー ファイル\Json</Filter>
+    </None>
+    <None Include="Json\field.Json">
+      <Filter>ヘッダー ファイル\Json</Filter>
+    </None>
+    <None Include="Json\UI.Json">
       <Filter>ヘッダー ファイル\Json</Filter>
     </None>
   </ItemGroup>

@@ -11,10 +11,13 @@ public:
 		jsonData = j;
 	}
 
+	std::string GetTag() { return tag; }
+
 protected:
 
 	nlohmann::json	jsonData;
 	VECTOR			pos_addObject;
+	std::string tag;
 
 };
 

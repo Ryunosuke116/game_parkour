@@ -22,32 +22,32 @@ public:
 	bool GetIsGoal() { return isGoal; }
 
 private:
-
-	std::vector<std::shared_ptr<BaseGameObjectManager>>	objectManager_ilst;
-
 	std::vector<std::shared_ptr<BaseObject>> fieldObjects;
+	std::vector<std::shared_ptr<BaseGameObjectManager>> managers;
 
 	std::shared_ptr<BaseObject>				map					= NULL;
 	std::shared_ptr<BaseObject>				field				= NULL;
 	std::shared_ptr<Camera>					camera				= NULL;
 	std::shared_ptr<BaseGameObjectManager>	playerManager		= NULL;
 	std::shared_ptr<BaseGameObjectManager>	coinManager			= NULL;
-	std::shared_ptr<BaseGameObjectManager>  floor_sky_Manager	= NULL;
+	std::shared_ptr<BaseGameObjectManager>  uiManager			= NULL;
+	std::shared_ptr<BaseGameObjectManager>  effectManager		= NULL;
 	std::shared_ptr<Layout>					layout				= NULL;
 	std::shared_ptr<JsonManager>			jsonManager			= NULL;
 	std::shared_ptr<Shadow>					shadow				= NULL;
 	std::shared_ptr<UI>						ui					= NULL;
 	std::shared_ptr<GoalArea>				goalArea			= NULL;
 	std::shared_ptr<GameTimer>				gameTimer			= NULL;
-	std::shared_ptr<BaseGameObjectManager>  effectManager		= NULL;
 
 	std::shared_ptr<Map>			map_actual			 = NULL;
 	std::shared_ptr<PlayerManager>	playerManager_actual = NULL;
 	std::shared_ptr<CoinManager>	coinManager_actual   = NULL;
 	std::shared_ptr<EffectManager>  effectManager_actual = NULL;
+	std::shared_ptr<UIManager>		uiManager_actual	 = NULL;
 
 	bool isCamera;
 	bool isPush;
 	bool isGoal;
+
 };
 

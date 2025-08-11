@@ -27,28 +27,31 @@ void GameObjectManager::Create()
 {
 	jsonManager		= std::make_shared<JsonManager>();
 	jsonManager->Initialize();
+	
+
+	managers.push_back(std::make_shared<PlayerManager>());
+	playerManager_actual = std::dynamic_pointer_cast<PlayerManager>(managers.back());
+	managers.push_back(std::make_shared<UIManager>());
+	uiManager_actual = std::dynamic_pointer_cast<UIManager>(managers.back());
+	managers.push_back(std::make_shared<CoinManager>());
+	coinManager_actual = std::dynamic_pointer_cast<CoinManager>(managers.back());
+	
 
 
+	//生成
 	map					= std::make_shared<Map>("material/skyDome/sunSet.mv1");
-	field				= std::make_shared<Field>("material/mv1/new_city/new_city_0731.mv1");
-	coinManager			= std::make_shared<CoinManager>();
-	playerManager		= std::make_shared<PlayerManager>();
-	effectManager		= std::make_shared<EffectManager>();
+	field				= std::make_shared<Field>();
 
 	camera				= std::make_shared<Camera>();
 	layout				= std::make_shared<Layout>();
 	shadow				= std::make_shared<Shadow>();
-	ui					= std::make_shared<UI>();
 	goalArea			= std::make_shared<GoalArea>();
 	gameTimer			= std::make_shared<GameTimer>();
 
 	map_actual			 = std::dynamic_pointer_cast<Map>(map);
-	playerManager_actual = std::dynamic_pointer_cast<PlayerManager>(playerManager);
-	coinManager_actual   = std::dynamic_pointer_cast<CoinManager>(coinManager);
-	effectManager_actual = std::dynamic_pointer_cast<EffectManager>(effectManager);
 
 	fieldObjects.push_back(std::make_shared<FieldMesh>("material/mv1/new_city/new_city_mesh_0731.mv1"));
-	fieldObjects.push_back(std::make_shared<Wall>(jsonManager->GetJsons("object")));
+
 	
 	//floor_skyを追加
 	nlohmann::json data_floor_sky = jsonManager->GetJsons("floor_sky");
@@ -67,13 +70,24 @@ void GameObjectManager::Create()
 		));
 	}
 
-	coinManager->HandOver(jsonManager->GetJsons("coin"));
-	playerManager->HandOver(jsonManager->GetJsons("player"));
+	//Jsonデータを取得
+	for (auto& manager : managers)
+	{
+		manager->HandOver(jsonManager->GetJsons(manager->GetTag()));
+		manager->Create();
+	}
 
-	playerManager->Create();
-	coinManager->Create();
+	managers.push_back(std::make_shared<EffectManager>());
+	effectManager_actual = std::dynamic_pointer_cast<EffectManager>(managers.back());
+
+	//コインオブザーバーを追加
 	coinManager_actual->AddObserver(playerManager_actual->GetPlayer());
-	coinManager_actual->AddObserver(ui);
+	coinManager_actual->AddObserver(uiManager_actual->GetUI_coin());
+
+	//ロード
+	field->Load(jsonManager->GetJsons("field"));
+
+
 }
 
 /// <summary>
@@ -87,18 +101,21 @@ void GameObjectManager::Initialize()
 		fieldObject->Initialize();
 	}
 
+	for (auto& manager : managers)
+	{
+		manager->Initialize();
+	}
+
 	map->Initialize();
 	field->Initialize();
-	coinManager->Initialize();
-	playerManager->Initialize();
 	camera->Initialize();
 	PadInput::Initialize();
-	ui->Initialize();
 	shadow->Initialize();
 	goalArea->Initialize();
 	gameTimer->Initialize();
 
 	//エフェクトデータを追加
+	//TODO::やり方が悪いので修正しなければ
 	nlohmann::json effectData = jsonManager->GetJsons("effectData");
 	for (auto& data : effectData["list"])
 	{
@@ -158,7 +175,8 @@ void GameObjectManager::Update()
 		camera->Update(playerManager_actual->GetPosition(),
 			playerManager_actual->GetAngle(), fieldObjects);
 
-		ui->Update();
+		//ui->Update();
+		uiManager_actual->Update();
 	}
 	else
 	{
@@ -193,16 +211,14 @@ void GameObjectManager::Draw()
 	// シャドウマップへの描画の準備
 	ShadowMap_DrawSetup(shadow->GetShadowMapHandle());
 
-	//field->Draw();
-	/*for (auto& fieldObject : fieldObjects)
+	for (auto& manager : managers)
 	{
-		if ("field" != fieldObject->GetTag())
+		if (std::dynamic_pointer_cast<PlayerManager>(manager) ||
+			std::dynamic_pointer_cast<CoinManager>(manager))
 		{
-			fieldObject->Draw();
+			manager->Draw();
 		}
-	}*/
-	playerManager->Draw();
-	coinManager->Draw();
+	}
 
 	//シャドウマップへの描画を終了
 	ShadowMap_DrawEnd();
@@ -216,9 +232,11 @@ void GameObjectManager::Draw()
 	{
 		fieldObject->Draw();
 	}
-	//floor_sky_Manager->Draw();
-	playerManager->Draw();
-	coinManager->Draw();
+
+	for (auto& manager : managers)
+	{
+		manager->Draw();
+	}
 
 
 	// 描画に使用するシャドウマップの設定を解除
@@ -229,8 +247,6 @@ void GameObjectManager::Draw()
 	{
 		layout->Draw();
 	}
-	ui->Draw();
-	effectManager->Draw();
 
 	DrawLine3D(VGet(0.0f, 15.0f, 0.0f), VGet(10.0f, 15.0f, 0.0f), GetColor(255, 0, 0));
 	DrawLine3D(VGet(0.0f, 15.0f, 0.0f), VGet(0.0f, 25.0f, 0.0f), GetColor(0, 255, 0));

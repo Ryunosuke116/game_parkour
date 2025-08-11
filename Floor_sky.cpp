@@ -85,8 +85,7 @@ void Floor_sky::Update()
 /// •`‰æ
 /// </summary>
 /// <returns></returns>
-bool Floor_sky::Draw()
+void Floor_sky::Draw()
 {
 	MV1DrawModel(modelHandle);
-	return false;
 }

@@ -1,6 +1,5 @@
 #pragma once
 #include "BaseGameObjectManager.h"
-#include "Effect.h"
 #include "EffectData.h"
 
 class EffectManager : public BaseGameObjectManager

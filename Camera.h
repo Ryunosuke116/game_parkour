@@ -38,7 +38,7 @@ public:
 	void Update(const VECTOR& playerPosition, const float& angle_player,
 		const std::vector<std::shared_ptr<BaseObject>>& fieldObjects);
 	void Update_layout();
-	bool Draw();
+	void Draw();
 	void RotateUpdate();
 	void AngleUpdate(const float& angle_player);
 	void DistanceUpdate();

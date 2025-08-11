@@ -9,7 +9,7 @@
 /// </summary>
 EffectManager::EffectManager()
 {
-
+	tag = "effectData";
 }
 
 /// <summary>

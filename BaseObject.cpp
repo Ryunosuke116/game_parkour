@@ -3,7 +3,11 @@
 /// <summary>
 /// インスタンス
 /// </summary>
-BaseObject::BaseObject()
+BaseObject::BaseObject():
+	modelHandle(-1),
+	position(VGet(-1.0f, -1.0f, -1.0f)),
+	pos_difference(VGet(-1.0f, -1.0f, -1.0f)),
+	tag("")
 {
 }
 
@@ -16,27 +20,10 @@ BaseObject::~BaseObject()
 }
 
 /// <summary>
-/// 初期化
-/// </summary>
-void BaseObject::Initialize()
-{
-
-}
-
-/// <summary>
-/// 更新
-/// </summary>
-void BaseObject::Update()
-{
-
-}
-
-/// <summary>
 /// 描画
 /// </summary>
-bool BaseObject::Draw()
+void BaseObject::Draw()
 {
 	//MV1SetWireFrameDrawFlag(modelHandle,TRUE);
 	MV1DrawModel(modelHandle);
-	return true;
 }
