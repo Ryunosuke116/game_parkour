@@ -5,5 +5,16 @@
       "crossPath": "material/png/number_font/x_32x64.png",
       "numberPath": "material/png/number_font/suuji32x64_07.png"
     }
+  ],
+
+  "controlManual": [
+    [ "material/png/manual/move_.png", "move" ],
+    [ "material/png/manual/move_camera_.png", "move_camera" ],
+    [ "material/png/manual/move_down_.png", "move_down" ],
+    [ "material/png/manual/move_up_.png", "move_up" ],
+    [ "material/png/manual/jump_.png", "jump" ],
+    [ "material/png/manual/reset_camera_.png", "reset_camera" ],
+    [ "material/png/manual/roll_.png", "roll" ]
   ]
+
 }

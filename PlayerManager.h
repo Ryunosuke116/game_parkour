@@ -1,6 +1,7 @@
 #pragma once
 #include "BaseGameObjectManager.h"
 #include "HitCheck.h"
+#include "PlayerStateObserver.h"
 
 class EffectManager;
 
@@ -9,10 +10,12 @@ class PlayerManager : public BaseGameObjectManager
 private:
 	std::vector<std::shared_ptr<BaseChara>> characters;
 	std::shared_ptr<CollisionManager> collisionManager;
+	std::vector<std::weak_ptr<PlayerStateObserver>> observers;
 
 	std::shared_ptr<BaseChara> player = NULL;
 	std::shared_ptr<Player> actualPlayer = NULL;
 	AABB playerAABB;
+	PlayerData now_playerData;
 public:
 
 	PlayerManager();
@@ -28,23 +31,19 @@ public:
 	void Draw()			override;
 	void Add()			override;
 
-	VECTOR GetPosition() { return player->GetPosition(); }
-	float GetAngle() { return player->GetAngle(); }
 	
 	VECTOR PositionCheck(const VECTOR& hangingPos, const VECTOR& playerPos);
+	void StateConfirmation();
 
+	//ゲッター
+	VECTOR GetPosition() { return player->GetPosition(); }
+	float GetAngle() { return player->GetAngle(); }
 	std::shared_ptr<Player> GetPlayer() { return actualPlayer; }
 	AABB GetPlayerAABB() { return playerAABB; }
 
-	/*std::shared_ptr<Player> GetPlayer() const {
-		for (auto& chara : characters)
-		{
-			if (auto player = std::dynamic_pointer_cast<Player>(chara))
-			{
-				return player;
-			}
-		}
-		return nullptr;
-	}*/
+	//オブサーバー関連
+	void AddObserver(std::shared_ptr<PlayerStateObserver> observer) { observers.push_back(observer); }
+	void RemoveObserver(std::shared_ptr<PlayerStateObserver> observer);
+	void NotifyStateChanged(const PlayerData& playerData);
 };
 

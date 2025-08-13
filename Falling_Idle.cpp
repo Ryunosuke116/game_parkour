@@ -61,17 +61,14 @@ std::pair<VECTOR, PlayerData> Falling_Idle::Update(const VECTOR& cameraDirection
 
     FlagReset_jump(playerData);
 
-    VECTOR head = MV1GetFramePosition(player.GetModelHandle(), 9);
-
-    DebugDrawer::Instance().InformationInput_sphere(head, cliff_radius, GetColor(255, 255, 255));
+    VECTOR head = player.GetPositionData().position_top_ray;
 
     //Œ©’¼‚µ
     //ŠR’Í‚İ”»’è
     if (playerData.isUse_Hanging)
     {
         auto result_cliff = HitCheck::CliffGrabbing(fieldObjects,
-            player.GetPositionData().position_top_ray,
-            player.GetMoveDirection_now(), cliff_radius);
+            head, player.GetMoveDirection_now(), cliff_radius);
         
         //’Í‚Ş‚Æ‚±‚ë‚ª•½s‚¾‚Á‚½ê‡
         //ŠR’Í‚İ‚Ìî•ñ‚ğ•Û‘¶
@@ -80,11 +77,13 @@ std::pair<VECTOR, PlayerData> Falling_Idle::Update(const VECTOR& cameraDirection
             //“·‘ÌÀ•W
             VECTOR centerPosition = MV1GetFramePosition(modelHandle, 2);
        
-            Calculation::NearestResult nearestResult = Calculation::SphereMeshOutsideTriangle_line(result_cliff.hangingPoly, centerPosition);
+            Calculation::NearestResult nearestResult = Calculation::SphereMeshOutsideTriangle_line(result_cliff.hangingPoly, head);
+            DebugDrawer::Instance().InformationInput_line(nearestResult.linePos_start, nearestResult.linePos_end, GetColor(255, 0, 0));
        
             float difference_y = nearestResult.linePos_start.y - nearestResult.linePos_end.y;
-       
-            if (difference_y == 0)
+            float abs_value = abs(difference_y);
+            
+            if (abs_value <= 1e-2)
             {
                 playerData.isHanging = result_cliff.isHitHanging;
                 isChangeState = true;

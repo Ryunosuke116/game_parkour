@@ -50,7 +50,7 @@ void GameObjectManager::Create()
 
 	map_actual			 = std::dynamic_pointer_cast<Map>(map);
 
-	fieldObjects.push_back(std::make_shared<FieldMesh>("material/mv1/new_city/new_city_mesh_0731.mv1"));
+	fieldObjects.push_back(std::make_shared<FieldMesh>("material/mv1/new_city/new_city_0731.mv1"));
 
 	
 	//floor_skyを追加
@@ -80,9 +80,12 @@ void GameObjectManager::Create()
 	managers.push_back(std::make_shared<EffectManager>());
 	effectManager_actual = std::dynamic_pointer_cast<EffectManager>(managers.back());
 
-	//コインオブザーバーを追加
+	//コインオブザーバーに追加
 	coinManager_actual->AddObserver(playerManager_actual->GetPlayer());
 	coinManager_actual->AddObserver(uiManager_actual->GetUI_coin());
+
+	//プレイヤーステートオブサーバーに追加
+	playerManager_actual->AddObserver(uiManager_actual->GetUI_controlManual());
 
 	//ロード
 	field->Load(jsonManager->GetJsons("field"));

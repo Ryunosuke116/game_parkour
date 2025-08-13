@@ -76,7 +76,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>Effekseer_h;include</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
@@ -94,7 +94,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>Effekseer_h;include</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
@@ -156,7 +156,6 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CoinManager.cpp" />
     <ClCompile Include="CoinObject.cpp" />
-    <ClCompile Include="CoinObserver.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="DebugDrawer.cpp" />
     <ClCompile Include="EffectManager.cpp" />
@@ -190,9 +189,9 @@
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="Shadow.cpp" />
     <ClCompile Include="Title.cpp" />
-    <ClCompile Include="UI.cpp" />
     <ClCompile Include="UIManager.cpp" />
     <ClCompile Include="UI_coin.cpp" />
+    <ClCompile Include="UI_controlManual.cpp" />
     <ClCompile Include="Wall.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -242,6 +241,7 @@
     <ClInclude Include="PlayerManager.h" />
     <ClInclude Include="playerState.h" />
     <ClInclude Include="PlayerStateActionBase.h" />
+    <ClInclude Include="PlayerStateObserver.h" />
     <ClInclude Include="Quick_Roll.h" />
     <ClInclude Include="Result.h" />
     <ClInclude Include="Run.h" />
@@ -251,9 +251,9 @@
     <ClInclude Include="common.h" />
     <ClInclude Include="Shadow.h" />
     <ClInclude Include="Title.h" />
-    <ClInclude Include="UI.h" />
     <ClInclude Include="UIManager.h" />
     <ClInclude Include="UI_coin.h" />
+    <ClInclude Include="UI_controlManual.h" />
     <ClInclude Include="Wall.h" />
   </ItemGroup>
   <ItemGroup>

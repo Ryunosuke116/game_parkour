@@ -196,6 +196,9 @@
     <Filter Include="ソース ファイル\manager\UI">
       <UniqueIdentifier>{0cd8d1ae-02d9-40ae-bcd4-85c71d8cc491}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Observer\playerState">
+      <UniqueIdentifier>{d6b58774-3bf9-4b89-aba4-0877ea9343aa}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -312,12 +315,6 @@
     <ClCompile Include="DebugDrawer.cpp">
       <Filter>ソース ファイル\static\Debug</Filter>
     </ClCompile>
-    <ClCompile Include="CoinObserver.cpp">
-      <Filter>ソース ファイル\Observer\coin</Filter>
-    </ClCompile>
-    <ClCompile Include="UI.cpp">
-      <Filter>ソース ファイル\object\UI</Filter>
-    </ClCompile>
     <ClCompile Include="Game.cpp">
       <Filter>ソース ファイル\scene\game</Filter>
     </ClCompile>
@@ -351,6 +348,9 @@
     <ClCompile Include="UIManager.cpp">
       <Filter>ソース ファイル\manager\UI</Filter>
     </ClCompile>
+    <ClCompile Include="UI_controlManual.cpp">
+      <Filter>ソース ファイル\object\UI\UI_controlManual</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
@@ -373,9 +373,6 @@
     </ClInclude>
     <ClInclude Include="Field.h">
       <Filter>ソース ファイル\object\field</Filter>
-    </ClInclude>
-    <ClInclude Include="CollisionManager.h">
-      <Filter>ソース ファイル\Collision</Filter>
     </ClInclude>
     <ClInclude Include="CoinObject.h">
       <Filter>ソース ファイル\object\coin</Filter>
@@ -488,9 +485,6 @@
     <ClInclude Include="CoinObserver.h">
       <Filter>ソース ファイル\Observer\coin</Filter>
     </ClInclude>
-    <ClInclude Include="UI.h">
-      <Filter>ソース ファイル\object\UI</Filter>
-    </ClInclude>
     <ClInclude Include="Game.h">
       <Filter>ソース ファイル\scene\game</Filter>
     </ClInclude>
@@ -529,6 +523,15 @@
     </ClInclude>
     <ClInclude Include="UIManager.h">
       <Filter>ソース ファイル\manager\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_controlManual.h">
+      <Filter>ソース ファイル\object\UI\UI_controlManual</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerStateObserver.h">
+      <Filter>ソース ファイル\Observer\playerState</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionManager.h">
+      <Filter>ソース ファイル\Collision</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

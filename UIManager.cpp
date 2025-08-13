@@ -14,7 +14,7 @@ UIManager::~UIManager(){}
 void UIManager::Create()
 {
 	Add(std::make_shared<UI_coin>());
-
+	Add(std::make_shared<UI_controlManual>());
 }
 
 void UIManager::Initialize()
@@ -44,5 +44,5 @@ void UIManager::Draw()
 void UIManager::Add(std::shared_ptr<BaseUI> ui)
 {
 	ui_list.push_back(ui);
-	ui_list.back()->Load(jsonData[ui_list.back()->GetJsonTag()][0]);
+	ui_list.back()->Load(jsonData[ui_list.back()->GetJsonTag()]);
 }

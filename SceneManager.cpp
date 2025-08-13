@@ -1,5 +1,6 @@
 #include "common.h"
 #include <cassert>
+
 #include "BaseScene.h"
 #include "SceneManager.h"
 

@@ -1,4 +1,5 @@
 #pragma once
+#include <compare> 
 struct PlayerData
 {
 	bool isGround;					//接地しているか
@@ -14,7 +15,7 @@ struct PlayerData
 	bool isUse_wallJump;			//壁ジャンプを使用できるか
 	bool isRoll;					//転がるか
 	bool isUse_Roll;				//ロールアクションを終えたか
-	bool isHitWall;					//壁に当たっているか
+	bool isPossible_wallRun;		//壁走りが可能か
 	bool isSprint;					//走り出しか
 	bool isStopRun;					//走り終わったか
 	bool isFalling;					//落下中か
@@ -23,4 +24,7 @@ struct PlayerData
 	bool isUse_Hanging;				//崖掴みが可能か
 	bool isHang_to_Crouch;			//上に上がる
 	bool isLanding;					//着地したか
+
+	auto operator<=>(const PlayerData&) const = default;
+
 };

@@ -6,7 +6,6 @@
 #include "Layout.h"
 #include "JsonManager.h"
 #include "BaseGameObjectManager.h"
-#include  "UI.h"
 
 class GameObjectManager : public BaseManager
 {
@@ -35,7 +34,6 @@ private:
 	std::shared_ptr<Layout>					layout				= NULL;
 	std::shared_ptr<JsonManager>			jsonManager			= NULL;
 	std::shared_ptr<Shadow>					shadow				= NULL;
-	std::shared_ptr<UI>						ui					= NULL;
 	std::shared_ptr<GoalArea>				goalArea			= NULL;
 	std::shared_ptr<GameTimer>				gameTimer			= NULL;
 

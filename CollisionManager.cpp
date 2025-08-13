@@ -75,7 +75,7 @@ CollisionResult CollisionManager::Check_all(const std::vector<std::shared_ptr<Ba
 	auto hitWall = WallCollisionCheck(fieldObjects, newPos, moveVec_new, positionData, radius);
 
 	//頭上衝突判定
-	HeadCollisionCheck(fieldObjects, newPos, moveVec_new, positionData, radius);
+	HeadCollisionCheck(fieldObjects, newPos, moveVec_new, positionData, 2.0f);
 
 	//床衝突判定
 	auto [isGround,tag] = GroundCollisionCheck(fieldObjects, oldPos, newPos, moveVec_new, positionData);
@@ -118,7 +118,11 @@ bool CollisionManager::HeadCollisionCheck(const std::vector<std::shared_ptr<Base
 	//fieldObjectの要素分確認
 	for (auto& fieldObject : fieldObjects)
 	{
-		bool isHitHead = HitCheck::SphereHitJudge(fieldObject->GetModelHandle(), -1, radius, position_top_new, hitPoly_head);
+		bool isHitHead = HitCheck::SphereHitJudge(fieldObject->GetModelHandle(), 
+			-1,
+			radius,
+			position_top_new,
+			hitPoly_head);
 
 		if (isHitHead)
 		{
@@ -292,6 +296,9 @@ std::pair<bool, VECTOR> CollisionManager::WallCollisionCheck(const std::vector<s
 
 	VECTOR position_top_new = VAdd(positionData.position_top_Capsule, moveVec);
 	VECTOR position_bottom_new = VAdd(positionData.position_bottom_Capsule, moveVec);
+	VECTOR capsule_axis_top = VAdd(positionData.position_top_ray, moveVec);					//カプセルの軸
+	VECTOR capsule_axis_bottom = VAdd(positionData.position_bottom_ray, moveVec);			//カプセルの軸
+
 	bool flag = false;
 	VECTOR hitPoly_normal = { 0.0f };
 
@@ -306,7 +313,6 @@ std::pair<bool, VECTOR> CollisionManager::WallCollisionCheck(const std::vector<s
 		{
 			float maxY = -FLT_MAX;
 			int groundIndex = -1;
-			VECTOR addPos = VGet(0.0f, 0.0f, 0.0f);
 
 			//ヒットした全ポリゴンを調べる
 			for (int i = 0; i < hitPoly_Wall.HitNum; i++)
@@ -322,59 +328,90 @@ std::pair<bool, VECTOR> CollisionManager::WallCollisionCheck(const std::vector<s
 					poly.Normal.x <= -0.7f || poly.Normal.z <= -0.7f) &&
 					poly.Normal.y <= 0.7f)
 				{
-					position_top_new = VGet(newPos.x, position_top_new.y, newPos.z);
-					position_bottom_new = VGet(newPos.x, position_bottom_new.y, newPos.z);
+					capsule_axis_top = VGet(newPos.x,
+						capsule_axis_top.y,
+						newPos.z);
+
+					capsule_axis_bottom = VGet(newPos.x,
+						capsule_axis_bottom.y,
+						newPos.z);
 
 					normal = poly.Normal;
 					normal.y = 0.0f;
 					normal = VNorm(normal);
 
-					//線分のどこに当たったか
-					auto result = HitCheck::SegmentTriangleDistance(position_top_new,
-						position_bottom_new, poly.Position[0], poly.Position[1],
-						poly.Position[2], poly.Normal);
+					//面の接触点と
+					// プレイヤーのy軸の線分の
+					// 面に対して一番近い点を調べる
+					auto result = HitCheck::SegmentTriangleDistance(capsule_axis_top,
+						capsule_axis_bottom,
+						poly.Position[0],
+						poly.Position[1],
+						poly.Position[2],
+						poly.Normal);
 
+					VECTOR line_segment_point_closestSurface = result.first;		//面と一番近い線分点
+					VECTOR hittingPoint_surface = result.second;					//面との接触点
+
+					DebugDrawer::Instance().InformationInput_sphere(line_segment_point_closestSurface, 2.0f, GetColor(255, 255, 255));
+					DebugDrawer::Instance().InformationInput_sphere(hittingPoint_surface, 2.0f, GetColor(0, 0, 0));
+
+
+					//カプセルの半径分
 					VECTOR addPos = VScale(poly.Normal, -3.5f);
 					addPos.y = 0.0f;
 
-					//当たったところから現在と次フレームの座標でraycast
-					VECTOR pos_now = VAdd(result.first, addPos);
+					//面と一番近い線分点からカプセルの半径分、
+					//壁に向かって線を伸ばす
+					VECTOR capsulePos = VAdd(line_segment_point_closestSurface, addPos);
 					MV1_COLL_RESULT_POLY poly_ray;
 
-					HitCheck::RayHitJudge(fieldObject->GetModelHandle(), -1, pos_now,
-						result.first, poly_ray);
+					//カプセルの外側から軸にむかってrayCastする
+					HitCheck::RayHitJudge(fieldObject->GetModelHandle(),
+						-1, 
+						capsulePos,
+						line_segment_point_closestSurface,
+						poly_ray);
 
 					//rayが当たっている場合当たった座標で衝突判定
 					if (poly_ray.HitFlag)
 					{
-						//球の接触している座標を求める
-							// そうするには？↓
-							//法線方向とは逆の方向にセンターポジションから加算する
-						VECTOR contact = VScale(poly.Normal, -3.5f);
+						//rayの衝突座標と面に対して一番近い線分点で
+						// 押し戻し量を求める
+						VECTOR velocity = VSub(poly_ray.HitPosition, capsulePos);
+						velocity.y = 0.0f;
+						hittingPoint_surface.y = 0.0f;
 
-						//面の接触点
-						//hitPos_wall = poly_ray.HitPosition;
-						hitPos_wall = result.second;
+						newPos = VAdd(newPos, velocity);
 
-						//球の接触している座標
-						//面に対して一番近い線分点から面に向かって球の半径を加算する
-						contact = VAdd(result.first, contact);
+						//-----------------------------------------//
+						// 以下、ウォールラン用
+						//-----------------------------------------//
 
-						//球の接触座標→面の接触座標を求める
-						VECTOR pos = VSub(result.second, contact);
-						pos.y = 0.0f;
-
-						newPos = VAdd(newPos, pos);
-						flag = true;
+						//衝突している壁の法線ベクトルを求める
 						hitPoly_normal = poly_ray.Normal;
+
+						//接触している三角形の縦の幅がplayerのY軸の幅より高ければtrueにする
+						float vertical_length_triangle = Calculation::Triangle_by_verticalLength(poly.Position[0],
+							poly.Position[1],
+							poly.Position[2]);
+							
+						float vertical_length_player = Calculation::GetVerticalLength(position_top_new, position_bottom_new);
+
+						if (vertical_length_player <= vertical_length_triangle)
+						{
+							flag = true;
+						}
+
 					}
 				}
 			}
 		}
+
+		// 検出したプレイヤーの周囲のポリゴン情報を開放する
+		MV1CollResultPolyDimTerminate(hitPoly_Wall);
 	}
 
-	// 検出したプレイヤーの周囲のポリゴン情報を開放する
-	MV1CollResultPolyDimTerminate(hitPoly_Wall);
 	return std::make_pair(flag, hitPoly_normal);
 
 }
@@ -498,8 +535,6 @@ bool CollisionManager::Draw()
 
 	printfDx("tiltAngle_degree %f\n", tiltAngle_degree);
 
-	DrawSphere3D(hitPos_wall, 2.0f, 30, GetColor(0, 0, 0),
-		GetColor(0, 255, 0), FALSE);
 	DrawSphere3D(hitPos_ground, 2.0f, 30, GetColor(0, 0, 0),
 		GetColor(255, 0, 0), FALSE);
 

@@ -57,12 +57,10 @@ private:
 	MV1_COLL_RESULT_POLY rayPoly_ground_now;
 
 	MV1_COLL_RESULT_POLY_DIM hitPoly_Wall;
-	MV1_COLL_RESULT_POLY_DIM hitPoly_Ground_sphere;
 
 	VECTOR hitPos_head;
 	VECTOR subPos;
 	VECTOR normal;
-	VECTOR hitPos_wall;
 	VECTOR hitPos_ground;
 	VECTOR playerCenterPos;
 	VECTOR pos_now;

@@ -18,13 +18,15 @@ HitCheck::~HitCheck()
 
 }
 
-/// @brief rayの当たり判定
-/// @param modelHandle 
-/// @param frameIndex 
-/// @param linePos_start 
-/// @param linePos_end 
-/// @param hitPoly 
-/// @return 
+/// <summary>
+///  rayの当たり判定
+/// </summary>
+/// <param name="modelHandle"></param>
+/// <param name="frameIndex"></param>
+/// <param name="linePos_start"></param>
+/// <param name="linePos_end"></param>
+/// <param name="hitPoly"></param>
+/// <returns></returns>
 bool HitCheck::RayHitJudge(const int& modelHandle, int frameIndex,
 	VECTOR linePos_start, VECTOR linePos_end, MV1_COLL_RESULT_POLY& hitPoly)
 {
@@ -33,12 +35,15 @@ bool HitCheck::RayHitJudge(const int& modelHandle, int frameIndex,
 	return hitPoly.HitFlag;
 }
 
-/// @brief 球の当たり判定
-/// @param modelHandle 
-/// @param frameIndex 
-/// @param linePos_end 
-/// @param hitPoly 
-/// @return 
+/// <summary>
+/// 球の当たり判定
+/// </summary>
+/// <param name="modelHandle"></param>
+/// <param name="frameIndex"></param>
+/// <param name="radius"></param>
+/// <param name="linePos_end"></param>
+/// <param name="hitPoly"></param>
+/// <returns></returns>
 bool HitCheck::SphereHitJudge(const int& modelHandle, 
 	int frameIndex, const float& radius,
 	VECTOR linePos_end, MV1_COLL_RESULT_POLY_DIM& hitPoly)
@@ -49,12 +54,15 @@ bool HitCheck::SphereHitJudge(const int& modelHandle,
 	return false;
 }
 
-/// @brief カプセルの当たり判定
-/// @param modelHandle 
-/// @param frameIndex 
-/// @param linePos_start 
-/// @param linePos_end 
-/// @param hitPoly 
+/// <summary>
+/// カプセルの当たり判定
+/// </summary>
+/// <param name="modelHandle"></param>
+/// <param name="frameIndex"></param>
+/// <param name="radius"></param>
+/// <param name="linePos_start"></param>
+/// <param name="linePos_end"></param>
+/// <param name="hitPoly"></param>
 void HitCheck::CapsuleHitWallJudge(const int& modelHandle, int frameIndex,float radius,
 	VECTOR linePos_start, VECTOR linePos_end, MV1_COLL_RESULT_POLY_DIM& hitPoly)
 {
@@ -91,12 +99,14 @@ float HitCheck::projectionCalc(const VECTOR& point, const VECTOR& P, const VECTO
 	return D;
 }
 
-/// @brief 面との接触座標の計算
-/// @param centerPos 
-/// @param a 
-/// @param b 
-/// @param c 
-/// @return 
+/// <summary>
+///  面との接触座標の計算
+/// </summary>
+/// <param name="centerPos"></param>
+/// <param name="a"></param>
+/// <param name="b"></param>
+/// <param name="c"></param>
+/// <returns></returns>
 VECTOR HitCheck::ClosestPtToPointTriangle(VECTOR centerPos, VECTOR a, VECTOR b, VECTOR c)
 {
 
@@ -250,8 +260,8 @@ std::pair<VECTOR, VECTOR> HitCheck::SegmentTriangleDistance(const VECTOR& p, con
 	//線分をx分割して一つずつ調べる
 	const int num = 100;
 	float minSize = 1000;
-	VECTOR returnPoint;		//面との接触点
-	VECTOR returnPT;		//面と一番近い線分点
+	VECTOR line_segment_point_closestSurface;		//面と一番近い線分点
+	VECTOR hittingPoint_surface;					//面との接触点
 
 	VECTOR point_P = ClosestPtToPointTriangle(p, a, b, c);
 	VECTOR point_Q = ClosestPtToPointTriangle(q, a, b, c);
@@ -296,8 +306,8 @@ std::pair<VECTOR, VECTOR> HitCheck::SegmentTriangleDistance(const VECTOR& p, con
 			if (minSize > VSize(size))
 			{
 				minSize = VSize(size);
-				returnPT = PT;
-				returnPoint = point;
+				line_segment_point_closestSurface = PT;
+				hittingPoint_surface = point;
 				flag = true;
 			}
 		}
@@ -308,17 +318,20 @@ std::pair<VECTOR, VECTOR> HitCheck::SegmentTriangleDistance(const VECTOR& p, con
 		return std::make_pair(q, point_Q);
 	}
 
-	//一番近い線分の点と面の衝突ポイントを返す
-	return std::make_pair(returnPT, returnPoint);
+	//一番近い線分の点と面の衝突座標を返す
+	return std::make_pair(line_segment_point_closestSurface,
+		hittingPoint_surface);
 	
 }
 
-/// @brief 三角形の内側に点があるか
-/// @param point 
-/// @param a 
-/// @param b 
-/// @param c 
-/// @return 
+/// <summary>
+/// 三角形の内側に点があるか
+/// </summary>
+/// <param name="point"></param>
+/// <param name="a"></param>
+/// <param name="b"></param>
+/// <param name="c"></param>
+/// <returns></returns>
 bool HitCheck::TriangleAreaCheck(const VECTOR& point, const VECTOR& a, const VECTOR& b, const VECTOR& c)
 {
 	//面積を求める
@@ -339,7 +352,7 @@ bool HitCheck::TriangleAreaCheck(const VECTOR& point, const VECTOR& a, const VEC
 
 /// <summary>
 /// 三角形の内側に点があるか
-///			高さは同じとする
+///		床用
 /// </summary>
 /// <param name="point"></param>
 /// <param name="a"></param>
@@ -384,17 +397,21 @@ HangingData HitCheck::CliffGrabbing(const std::vector<std::shared_ptr<BaseObject
 	const VECTOR& topPosition, const VECTOR& moveDirection,
 	const float& radius)
 {
-	VECTOR linePos_end = VAdd(topPosition, VScale(moveDirection, 2.0f));
+	const float max_velocity = 7.7f;			//移動量の最大値
+
+	VECTOR spherePos = VAdd(topPosition, VScale(moveDirection, 5.0f));
+
+	DebugDrawer::Instance().InformationInput_sphere(spherePos, radius, GetColor(255, 255, 255));
 
 	bool returnFlag = false;
 	HangingData hangingData = { false,VGet(0.0f,0.0f,0.0f),NULL };
 
-	//落下中にplayerの上部から出ているrayで判定を取る
+	//落下中にplayerの上部の球で判定を取る
 	for (const auto& fieldObject : fieldObjects)
 	{
 		MV1_COLL_RESULT_POLY_DIM poly_dim;
 
-		HitCheck::SphereHitJudge(fieldObject->GetModelHandle(), -1, radius, linePos_end, poly_dim);
+		HitCheck::SphereHitJudge(fieldObject->GetModelHandle(), -1, radius, spherePos, poly_dim);
 
 		if (poly_dim.HitNum >= 1)
 		{
@@ -412,10 +429,31 @@ HangingData HitCheck::CliffGrabbing(const std::vector<std::shared_ptr<BaseObject
 				//平面に当たっていればtrueに
 				if (poly.Normal.y >= 0.8f)
 				{
-					VECTOR neareast = Calculation::SphereMeshOutsideTriangle(poly, linePos_end);
+
+					float depth = Calculation::Check_depth_Triangle(moveDirection, poly.Position[0], poly.Position[1], poly.Position[2]);
+					MV1_COLL_RESULT_POLY ray_poly;
+
+					//奥行がない場合掴めない
+					if (max_velocity > depth) continue;
+
+
+					VECTOR neareast = Calculation::SphereMeshOutsideTriangle(poly, spherePos);
 					DebugDrawer::Instance().InformationInput_sphere(neareast, 2.0f, GetColor(255, 0, 255));
 
-					VECTOR sub = VSub(neareast, linePos_end);
+					VECTOR line_end = Calculation::Projection(poly.Normal, moveDirection);
+
+					line_end = VAdd(neareast, VScale(line_end, max_velocity));
+					
+
+
+					if (HitCheck::RayHitJudge(fieldObject->GetModelHandle(),
+						-1,
+						neareast,
+						line_end,
+						ray_poly
+					)) continue;
+
+					VECTOR sub = VSub(neareast, spherePos);
 					float sub_size = VSize(sub);
 
 					//一番差が小さい情報を取得
@@ -437,19 +475,7 @@ HangingData HitCheck::CliffGrabbing(const std::vector<std::shared_ptr<BaseObject
 			}
 		}
 
-		/*MV1_COLL_RESULT_POLY poly;
-		hangingData.isHitHanging = HitCheck::RayHitJudge(fieldObject->GetModelHandle(), -1, topPosition, linePos_end, poly);
-
-
-		if (hangingData.isHitHanging && poly.Normal.y >= 0.8f)
-		{
-			hangingData.hitHangingPos = poly.HitPosition;
-			hangingData.hangingPoly = poly;
-		}
-		else
-		{
-			hangingData.isHitHanging = false;
-		}*/
+		
 	}
 
 	return hangingData;

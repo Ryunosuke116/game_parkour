@@ -26,9 +26,9 @@ UI_coin::~UI_coin()
 
 void UI_coin::Load(const nlohmann::json& jsonData)
 {
-	std::string coinPath = jsonData["coinPath"];
-	std::string crossPath = jsonData["crossPath"];
-	std::string numberPath = jsonData["numberPath"];
+	std::string coinPath = jsonData[0]["coinPath"];
+	std::string crossPath = jsonData[0]["crossPath"];
+	std::string numberPath = jsonData[0]["numberPath"];
 
 	coinHandle = LoadGraph(coinPath.c_str());
 	crossHandle = LoadGraph(crossPath.c_str());

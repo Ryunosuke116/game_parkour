@@ -83,6 +83,7 @@ public:
 	VECTOR GetMoveDirection_now() { return moveDirection_now; }
 	bool GetIsGround() { return playerData.isGround; }
 	int GetModelHandle() { return modelHandle; }
+	int GetNowStateNumber() { return animationChanger->GetAnimNumber_now(); }
 	PlayerData GetData() { return playerData; }
 	float GetRadius()const override { return radius; }
 

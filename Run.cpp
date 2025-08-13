@@ -121,7 +121,7 @@ std::pair<VECTOR, PlayerData> Run::Update_wallRun(Player& player,
 	//—‚¿‚é
 	//•Ç‚ª‚È‚¢ê‡
 	if (-PadInput::GetJoyPad_old_y_left() <= -1000 ||
-		!playerData.isHitWall)
+		!playerData.isPossible_wallRun)
 	{
 		playerData.isRun_wall = false;
 		playerData.isUse_wallJump = false;

@@ -9,6 +9,7 @@
 #include <memory>
 #include "DxLib.h"
 #include "Calculation.h"
+#include "DebugDrawer.h"
 
 
 /// <summary>
@@ -66,6 +67,29 @@ VECTOR Calculation::NearestPoint(const VECTOR& position_1, const VECTOR& positio
 	}
 
 	return AX;
+}
+
+/// <summary>
+/// 三角形のdir方向の奥行を調べる
+/// </summary>
+/// <param name="dir"></param>
+/// <param name="a"></param>
+/// <param name="b"></param>
+/// <param name="c"></param>
+/// <returns></returns>
+float Calculation::Check_depth_Triangle(const VECTOR& dir, const VECTOR& a, const VECTOR& b, const VECTOR& c)
+{
+	float dot_1 = VDot(a, dir);
+	float dot_2 = VDot(b, dir);
+	float dot_3 = VDot(c, dir);
+
+	float max_projection = max(dot_1, dot_2);
+	max_projection = max(max_projection, dot_3);
+
+	float min_projection = min(dot_1, dot_2);
+	min_projection = min(min_projection, dot_3);
+
+	return max_projection - min_projection;
 }
 
 /// <summary>
@@ -129,7 +153,9 @@ Calculation::NearestResult Calculation::SphereMeshOutsideTriangle_line(const MV1
 	float d2 = VSize(VSub(nearPoint_2, pos));
 	float d3 = VSize(VSub(nearPoint_3, pos));
 
-
+	DebugDrawer::Instance().InformationInput_sphere(nearPoint_1, 2.0f, GetColor(255, 0, 0));
+	DebugDrawer::Instance().InformationInput_sphere(nearPoint_2, 2.0f, GetColor(0, 255, 0));
+	DebugDrawer::Instance().InformationInput_sphere(nearPoint_3, 2.0f, GetColor(0, 0, 255));
 	//一番近い座標を選択する
 	if (d1 <= d2 && d1 <= d3)
 	{
@@ -188,9 +214,9 @@ VECTOR Calculation::ProjectionDirection(const VECTOR& point, const VECTOR& a, co
 	//単位ベクトル(正規化)
 	VECTOR unitVector = VGet(0, 0, 0);
 	unitVector = VNorm(AB);
-	unitVector.x = AB.x / vectorLength;
+	/*unitVector.x = AB.x / vectorLength;
 	unitVector.y = AB.y / vectorLength;
-	unitVector.z = AB.z / vectorLength;
+	unitVector.z = AB.z / vectorLength;*/
 
 	//点の射影位置を計算(スカラー値)
 	float productionVector = (unitVector.x * AP.x) + (unitVector.y * AP.y) + (unitVector.z * AP.z);
@@ -202,6 +228,58 @@ VECTOR Calculation::ProjectionDirection(const VECTOR& point, const VECTOR& a, co
 	AX.z = a.z + (unitVector.z * productionVector);
 
 	return AX;
+}
+
+/// <summary>
+/// 縦の長さを求める
+/// </summary>
+/// <param name="a"></param>
+/// <param name="b"></param>
+/// <returns></returns>
+float Calculation::GetVerticalLength(const VECTOR& a, const VECTOR& b)
+{
+	VECTOR sub = VSub(a, b);
+	sub = VGet(0.0f, sub.y, 0.0f);
+
+	float vertical_length = VSize(sub);
+
+	return vertical_length;
+}
+
+/// <summary>
+/// 三角形のY軸の長さを求める
+/// </summary>
+/// <param name="a"></param>
+/// <param name="b"></param>
+/// <param name="c"></param>
+/// <returns></returns>
+float Calculation::Triangle_by_verticalLength(const VECTOR& a, const VECTOR& b, const VECTOR& c)
+{
+	VECTOR highestPosition = a;
+
+	if (highestPosition.y < b.y)
+	{
+		highestPosition = b;
+	}
+
+	if (highestPosition.y < c.y)
+	{
+		highestPosition = c;
+	}
+
+	VECTOR lowestPosition = a;
+
+	if (lowestPosition.y > b.y)
+	{
+		lowestPosition = b;
+	}
+
+	if (lowestPosition.y > c.y)
+	{
+		lowestPosition = c;
+	}
+
+	return GetVerticalLength(highestPosition,lowestPosition);
 }
 
 /// <summary>

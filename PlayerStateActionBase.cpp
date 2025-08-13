@@ -234,7 +234,7 @@ void PlayerStateActionBase::WallRunMove(PlayerData& playerData, Player& player)
 {
 
     //•Ç‚É“–‚½‚Á‚Ä‚¢‚éê‡‚Ì‚Ý
-    if (playerData.isHitWall && playerData.isUse_wallJump)
+    if (playerData.isPossible_wallRun && playerData.isUse_wallJump)
     {
         VECTOR hitWall_normal = player.playerCalculation->GetHitWall_normal();
         

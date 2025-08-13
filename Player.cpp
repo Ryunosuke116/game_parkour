@@ -292,7 +292,7 @@ void Player::Receive_CollisionResult()
     {
         playerData.isGround = collision_result.isHitGround;
         position = collision_result.position_new;
-        playerData.isHitWall = collision_result.isHitWall;
+        playerData.isPossible_wallRun = collision_result.isPossible_wallRun;
         if (VSize(collision_result.isHitWall_normal) != 0)
         {
             playerCalculation->SetHitWall_normal(collision_result.isHitWall_normal);
@@ -347,7 +347,7 @@ void Player::DebugUpdate()
     DebugDrawer::Instance().InformationInput_string_bool("isHanging %d\n", playerData.isHanging);
     DebugDrawer::Instance().InformationInput_string_bool("isHanging_now %d\n", playerData.isHanging_now);
     DebugDrawer::Instance().InformationInput_string_bool("isUse_Hanging %d\n", playerData.isUse_Hanging);
-    DebugDrawer::Instance().InformationInput_string_bool("isHitWall %d\n", playerData.isHitWall);
+    DebugDrawer::Instance().InformationInput_string_bool("isPossible_wallRun %d\n", playerData.isPossible_wallRun);
     DebugDrawer::Instance().InformationInput_string_bool("isHang_to_Crouch %d\n", playerData.isHang_to_Crouch);
 
 }

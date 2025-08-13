@@ -100,7 +100,7 @@ VECTOR Braced_Hang_To_Crouch::Hang_to_CrouchMove(const std::vector<std::shared_p
     //指定のフレームまでは手に合わせて座標を更新
     if (nowAnimState.PlayTime_anim <= 22.0f)
     {
-        VECTOR addPos =player.playerCalculation->HangingPosition();
+        VECTOR addPos = player.playerCalculation->HangingPosition();
 
         returnVec = addPos;
     }
@@ -114,7 +114,6 @@ VECTOR Braced_Hang_To_Crouch::Hang_to_CrouchMove(const std::vector<std::shared_p
         VECTOR chestPos = MV1GetFramePosition(modelHandle, 6);
 
         VECTOR nowPos = chestPos;
-        //nowPos.y = player.GetPosition().y;
 
         VECTOR newPos = VAdd(nowPos, returnVec);
 
@@ -149,6 +148,7 @@ VECTOR Braced_Hang_To_Crouch::Hang_to_CrouchMove(const std::vector<std::shared_p
 
 /// <summary>
 /// 床との衝突判定処理
+/// 登るとき専用
 /// </summary>
 /// <param name="modelHandle"></param>
 /// <param name="oldPos"></param>
@@ -166,6 +166,9 @@ std::pair<bool, VECTOR> Braced_Hang_To_Crouch::GroundCollisionCheck_Hang_to_Crou
     bool isHitGround = false;
 
     VECTOR bottomPos = VGet(topPos.x, foot.y, topPos.z);
+    //ごまかしで少し下にrayを伸ばす
+    bottomPos.y -= 5.0f;
+
     MV1_COLL_RESULT_POLY rayPoly_ground;
     VECTOR returnPos = newPos;
 

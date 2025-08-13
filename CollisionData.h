@@ -6,7 +6,7 @@ struct CollisionResult
 {
 	VECTOR position_new;
 	bool isHitGround;
-	bool isHitWall;
+	bool isPossible_wallRun;
 	VECTOR isHitWall_normal;
 	std::string objectTag;
 };

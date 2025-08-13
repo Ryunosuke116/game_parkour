@@ -1,4 +1,5 @@
 #include "common.h"
+#include <vector>
 #include "Player.h"
 #include "CollisionManager.h"
 #include "EffectManager.h"
@@ -10,9 +11,12 @@
 /// <summary>
 /// コンストラクタ
 /// </summary>
-PlayerManager::PlayerManager()
+PlayerManager::PlayerManager():
+	BaseGameObjectManager(),
+	now_playerData({false})
 {
 	tag = "player";
+	
 }
 
 /// <summary>
@@ -49,6 +53,8 @@ void PlayerManager::Initialize()
 	playerAABB.max = VGet(playerAABB.max.x + 3.5f, 
 		playerAABB.max.y + 20.0f,
 		playerAABB.max.z + 3.5f);
+
+	now_playerData = { false };
 	
 }
 
@@ -70,6 +76,8 @@ void PlayerManager::Update(const std::vector<std::shared_ptr<BaseObject>>& field
 
 	actualPlayer->PositionUpdate();
 
+	StateConfirmation();
+
 	playerAABB.min = actualPlayer->GetPosition();
 	playerAABB.min = VGet(playerAABB.min.x - 3.5f,
 		playerAABB.min.y,
@@ -90,12 +98,16 @@ void PlayerManager::Draw()
 {
 	actualPlayer->Draw();
 
-	/*for (auto& chara : characters)
+	collisionManager->Draw();
+}
+
+void PlayerManager::StateConfirmation()
+{
+	if (now_playerData != actualPlayer->GetData())
 	{
-		chara->Draw();
-	}*/
-	collisionManager->Draw();
-	collisionManager->Draw();
+		now_playerData = actualPlayer->GetData();
+		NotifyStateChanged(now_playerData);
+	}
 }
 
 VECTOR PlayerManager::PositionCheck(const VECTOR& hangingPos, const VECTOR& playerPos)
@@ -107,6 +119,56 @@ VECTOR PlayerManager::PositionCheck(const VECTOR& hangingPos, const VECTOR& play
 	Calculation::Leap(newPlayerPos, hanging, 0.1f);
 
 	return newPlayerPos;
+}
+
+/// <summary>
+/// 状態が変わったことを通知する
+/// </summary>
+/// <param name="amount"></param>
+void PlayerManager::NotifyStateChanged(const PlayerData& playerData)
+{
+	//リスト内の要素を一つずつ調査する
+	for (auto it = observers.begin(); it != observers.end(); )
+	{
+		//lockでweak_ptrからshared_ptrへ一時的に変換
+		if (auto obs = it->lock())
+		{
+			obs->OnChangeState(playerData);
+			++it;
+		}
+		else
+		{
+			// すでに破棄されている observer を削除
+			it = observers.erase(it);
+		}
+	}
+}
+
+/// <summary>
+/// オブザーバーの解除
+/// </summary>
+/// <param name="observer"></param>
+void PlayerManager::RemoveObserver(std::shared_ptr<PlayerStateObserver> observer)
+{
+	// 削除対象か判定するラムダ関数を用意
+	auto shouldRemove = [&](const std::weak_ptr<PlayerStateObserver>& weakObs) {
+		// weak_ptrからshared_ptrを取得
+		std::shared_ptr<PlayerStateObserver> locked = weakObs.lock();
+
+		// 生きていて、かつobserverと同じオブジェクトならtrue
+		if (locked) {
+			return locked == observer;
+		}
+
+		// 期限切れまたは違うオブジェクトならfalse
+		return false;
+		};
+
+	// remove_ifを呼んで削除対象の要素を末尾に移動させる
+	auto newEnd = std::remove_if(observers.begin(), observers.end(), shouldRemove);
+
+	// 実際にvectorの末尾の削除対象部分を削除する
+	observers.erase(newEnd, observers.end());
 }
 
 void PlayerManager::Update() {}
