@@ -7,7 +7,9 @@
 /// <summary>
 /// コンストラクタ
 /// </summary>
-GameObjectManager::GameObjectManager()
+GameObjectManager::GameObjectManager():
+	start_Timer(-1),
+	isStart(false)
 {
 	
 }
@@ -50,7 +52,7 @@ void GameObjectManager::Create()
 
 	map_actual			 = std::dynamic_pointer_cast<Map>(map);
 
-	fieldObjects.push_back(std::make_shared<FieldMesh>("material/mv1/new_city/new_city_0731.mv1"));
+	fieldObjects.push_back(std::make_shared<FieldMesh>("material/mv1/new_city/new_city_mesh_0816.mv1"));
 
 	
 	//floor_skyを追加
@@ -132,6 +134,8 @@ void GameObjectManager::Initialize()
 	isCamera = false;
 	isPush = false;
 	isGoal = false;
+	isStart = true;
+	start_Timer = 0.0f;
 }
 
 /// <summary>
@@ -140,70 +144,95 @@ void GameObjectManager::Initialize()
 void GameObjectManager::Update()
 {
 
+	if (isStart)
+	{
+		StartUpdate();
+	}
+
 	shadow->Update(playerManager_actual->GetPosition());
 
-	if (CheckHitKey(KEY_INPUT_0))
+	if (!isStart)
 	{
-		if (!isPush)
+		if (CheckHitKey(KEY_INPUT_0))
 		{
-			if (!isCamera)
+			if (!isPush)
 			{
-				isCamera = true;
-				layout->Initialize(coinManager_actual->GetModelHandle());
-			}
-			else
-			{
-				isCamera = false;
-			}
+				if (!isCamera)
+				{
+					isCamera = true;
+					layout->Initialize(coinManager_actual->GetModelHandle());
+				}
+				else
+				{
+					isCamera = false;
+				}
 
-			isPush = true;
+				isPush = true;
+			}
 		}
-	}
-	else
-	{
-		isPush = false;
-	}
-
-	if (!isCamera)
-	{
-		for (auto& fieldObject : fieldObjects)
+		else
 		{
-			fieldObject->Update();
+			isPush = false;
 		}
-		field->Update();
 
-		gameTimer->Update();
-		playerManager_actual->Update(fieldObjects,effectManager_actual, camera->GetCameraDirection());
-		map_actual->Update(playerManager_actual->GetPosition());
-		camera->Update(playerManager_actual->GetPosition(),
-			playerManager_actual->GetAngle(), fieldObjects);
+		if (!isCamera)
+		{
+			for (auto& fieldObject : fieldObjects)
+			{
+				fieldObject->Update();
+			}
+			field->Update();
 
-		//ui->Update();
-		uiManager_actual->Update();
+			gameTimer->Update();
+			playerManager_actual->Update(fieldObjects,effectManager_actual, camera->GetCameraDirection());
+			map_actual->Update(playerManager_actual->GetPosition());
+			camera->Update(playerManager_actual->GetPosition(),
+				playerManager_actual->GetAngle(), fieldObjects);
+
+			//ui->Update();
+			uiManager_actual->Update();
+		}
+		else
+		{
+			camera->Update_layout();
+			layout->Update(camera->GetSpherePosition(), *coinManager_actual);
+		}
+
+		coinManager_actual->Update(playerManager_actual->GetPlayer(),
+			effectManager_actual,
+			camera->GetSpherePosition());
+
+		effectManager_actual->PlayEffectUpdate();
+
+		if (HitCheck::AABBHitJudge(playerManager_actual->GetPlayerAABB(),
+			goalArea->GetGoalArea()
+		))
+		{
+			isGoal = true;
+		}
+		else
+		{
+			isGoal = false;
+		}
+		DebugDrawer::Instance().InformationInput_string_bool("isGoal %d\n", isGoal);
+
 	}
-	else
+
+}
+
+void GameObjectManager::StartUpdate()
+{
+	start_Timer++;
+
+	playerManager_actual->Update_start(start_Timer);
+	//map_actual->Update(playerManager_actual->GetPosition());
+	camera->Update(playerManager_actual->GetPosition(),
+		playerManager_actual->GetAngle(), fieldObjects);
+
+	if (start_Timer >= 50.0f)
 	{
-		camera->Update_layout();
-		layout->Update(camera->GetSpherePosition(), *coinManager_actual);
+		isStart = false;
 	}
-
-	coinManager_actual->Update(playerManager_actual->GetPlayer(),
-		effectManager_actual,
-		camera->GetSpherePosition());
-
-	effectManager_actual->PlayEffectUpdate();
-
-	if (HitCheck::AABBHitJudge(playerManager_actual->GetPlayerAABB(),
-		goalArea->GetGoalArea()
-	))
-	{
-		isGoal = true;
-	}
-	else
-	{
-		isGoal = false;
-	}
-	DebugDrawer::Instance().InformationInput_string_bool("isGoal %d\n", isGoal);
 }
 
 /// <summary>
@@ -251,7 +280,7 @@ void GameObjectManager::Draw()
 		layout->Draw();
 	}
 
-	DrawLine3D(VGet(0.0f, 15.0f, 0.0f), VGet(10.0f, 15.0f, 0.0f), GetColor(255, 0, 0));
-	DrawLine3D(VGet(0.0f, 15.0f, 0.0f), VGet(0.0f, 25.0f, 0.0f), GetColor(0, 255, 0));
-	DrawLine3D(VGet(0.0f, 15.0f, 0.0f), VGet(0.0f, 15.0f, 10.0f), GetColor(0, 0, 255));
+	//DrawLine3D(VGet(0.0f, 15.0f, 0.0f), VGet(10.0f, 15.0f, 0.0f), GetColor(255, 0, 0));
+	//DrawLine3D(VGet(0.0f, 15.0f, 0.0f), VGet(0.0f, 25.0f, 0.0f), GetColor(0, 255, 0));
+	//DrawLine3D(VGet(0.0f, 15.0f, 0.0f), VGet(0.0f, 15.0f, 10.0f), GetColor(0, 0, 255));
 }

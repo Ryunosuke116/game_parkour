@@ -12,8 +12,7 @@
 Title::Title(SceneManager& manager) : BaseScene{ manager },
 modelHandle(-1)
 {
-	modelHandle = LoadGraph("material/png/title.png");
-	blackOut = std::make_shared<BlackOut>();
+
 }
 
 /// <summary>
@@ -22,6 +21,12 @@ modelHandle(-1)
 Title::~Title()
 {
 
+}
+
+void Title::Create()
+{
+    modelHandle = LoadGraph("material/png/title.png");
+    blackOut = std::make_shared<BlackOut>();
 }
 
 /// <summary>
@@ -51,7 +56,7 @@ void Title::Update()
         blackOut->BlackOutUpdate(4.5f);
         if (blackOut->GetAlpha() >= 300)
         {
-            ChangeScene("Game");
+            ChangeScene("Game",0);
         }
     }
 }

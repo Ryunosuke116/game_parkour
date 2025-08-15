@@ -55,7 +55,7 @@ public:
 
 	void SetPlayAnimSpeed_now(const float set) { nowAnimState.PlayTime_anim = set; }
 	void SetAnimNumber_old(const int num) { animNumber_old = num; }
-
+	void SetIsChangeState(const bool set) { isChangeState = set; }
 	
 
 protected:

@@ -9,6 +9,7 @@ protected:
 
 	int modelHandle;
 	int nowFrameNumber;
+	int coinCount;		//コインの所持枚数
 
 	float angle;
 	float rotate_x;
@@ -40,6 +41,7 @@ public:
 	/////////////////////////////////////////////
 	// ゲッター
 	/////////////////////////////////////////////
+	int GetCoinCount()const { return coinCount; }
 	bool GetIsCollisionCheck()const { return isCollisionCheck; }
 	float GetAngle()const { return angle; }
 	VECTOR GetPosition()const { return position; }

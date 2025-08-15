@@ -13,9 +13,7 @@
 /// <param name="manager"></param>
 Game::Game(SceneManager& manager) : BaseScene{ manager }
 {
-	gameObjectManager = std::make_shared<GameObjectManager>();
-	gameObjectManager->Create();
-	gameObjectManager_actual = std::dynamic_pointer_cast<GameObjectManager>(gameObjectManager);
+	
 }
 
 /// <summary>
@@ -24,6 +22,14 @@ Game::Game(SceneManager& manager) : BaseScene{ manager }
 Game::~Game()
 {
 
+}
+
+void Game::Create()
+{
+	gameObjectManager = std::make_shared<GameObjectManager>();
+	gameObjectManager->Create();
+	gameObjectManager_actual = std::dynamic_pointer_cast<GameObjectManager>(gameObjectManager);
+	blackOut = std::make_shared<BlackOut>();
 }
 
 /// <summary>
@@ -40,12 +46,21 @@ void Game::Initialize()
 void Game::Update()
 {
 	PadInput::Update();
+
 	gameObjectManager->Update();
 
 	if (gameObjectManager_actual->GetIsGoal())
 	{
-
+		ChangeScene("Result", gameObjectManager_actual->GetCoinCount());
 	}
+
+}
+
+void Game::StartUpdate()
+{
+	blackOut->BlackOutUpdate(4.5f);
+
+	gameObjectManager_actual->StartUpdate();
 }
 
 void Game::Draw()

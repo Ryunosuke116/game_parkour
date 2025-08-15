@@ -7,6 +7,7 @@ class Field : public BaseObject
 private:
 	bool isPush;
 	bool isPoly;
+	int bullHandle;
 public:
 
 	Field();

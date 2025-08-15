@@ -17,7 +17,8 @@ enum animNum : int
 	run_To_Stop,				//~‚Ü‚é
 	running_Forward_Flip,		//‘–‚è‚È‚ª‚ç‰ñ“]ƒWƒƒƒ“ƒv
 	running_turn_left,			//‹}‰ñ“]
-	running_turn_right
+	running_turn_right,
+	walk
 };
 
 ////ã“ü—Í‚³‚ê‚½‚Æ‚«

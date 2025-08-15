@@ -15,6 +15,11 @@ BaseScene::~BaseScene()
 
 }
 
+void BaseScene::Create()
+{
+
+}
+
 /// <summary>
 /// ‰Šú‰»
 /// </summary>
@@ -39,7 +44,7 @@ void BaseScene::Draw()
 
 }
 
-void BaseScene::ChangeScene(const std::string_view name)
+void BaseScene::ChangeScene(const std::string_view name, const int coinCount)
 {
-    manager.ChangeScene(name);
+    manager.ChangeScene(name,coinCount);
 }

@@ -96,6 +96,7 @@ void CoinManager::Add()
 	coins.push_back(std::make_shared<CoinObject>());
 	coins.back()->Load(modelHandle,
 		pos_addObject);
+	coins.back()->Initialize();
 }
 
 /// <summary>

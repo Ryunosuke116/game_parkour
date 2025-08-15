@@ -17,6 +17,7 @@
 /// </summary>
 Player::Player() :
     BaseChara(),
+    start_walkTime(-1),
     centerPosition(VGet(0.0f, 0.0f, 0.0f)),
     moveDirection_now(VGet(0.0f, 0.0f, 0.0f)),
     isCalc_moveVec(false),
@@ -52,18 +53,25 @@ void Player::Load(const nlohmann::json& jsonData)
 /// </summary>
 void Player::Initialize()
 {
-    position = VGet(0.0f, 6.74f, 0.0f);
+    position = VGet(3.02443838, 9.00285912, -1215.93481);
+    targetMoveDirection = VGet(0.0f, 0.0f, 0.0f);
+    angle = 0.0f;
+    rotate_x = 0.0f;
+    start_walkTime = 0.0f;
 
     MV1SetRotationXYZ(modelHandle, VGet(0, 0, 0));
+
+    MV1SetPosition(modelHandle, position);
 
     isPush = false;
     isChange_falling = false;
 
-    playerData.isIdle = true;
+    playerData.isIdle = false;
     playerData.isGround = true;
     playerData.isJump = false;
     playerData.isJump_second = false;
     playerData.isMove = false;
+    playerData.isWalk = true;
     playerData.isRoll = false;
     playerData.isSprint = false;
     playerData.isStopRun = false;
@@ -86,7 +94,9 @@ void Player::Initialize()
     degree_pad_now = 0.0f;
     effectTimer = 0.0f;
     padInput_now = VGet(0.0f, 0.0f, 0.0f);
-    moveDirection_now = VGet(0.0f, 0.0f, 1.0f);
+    moveDirection_now = VGet(0.0f, 0.0f, 0.0f);
+
+    MV1SetRotationXYZ(modelHandle, VGet(rotate_x * DX_PI_F / 180.0f, angle + DX_PI_F, 0.0f));
 
     animationChanger->Initialize(-1, modelHandle, nowState, playerData, *this);
 
@@ -226,6 +236,26 @@ void Player::Update(const VECTOR& cameraDirection,
 
 }
 
+void Player::Update_start(const float& timer)
+{
+    moveVec = VGet(0.0f, 0.0f, 0.5f);
+
+    if (timer <= 40.0f)
+    {
+        position = VAdd(position, moveVec);
+    }
+    else
+    {
+        nowState->SetIsChangeState(true);
+        playerData.isIdle = true;
+        //ó‘Ô•ÏX
+        ChangeState();
+    }
+
+    nowState->MotionUpdate(playerData);
+
+}
+
 void Player::ChangeState()
 {
     if (nowState->GetIsChangeState())
@@ -246,8 +276,11 @@ void Player::CollisionUpdate()
     bool isReverse = false;
     //positionDataXV
     
-    playerCalculation->SetHandPos_left(MV1GetFramePosition(modelHandle, 65));
-    playerCalculation->SetHandPos_right(MV1GetFramePosition(modelHandle, 106));
+    int left = MV1SearchFrame(modelHandle, "mixamorig:LeftHandIndex4");
+    int right = MV1SearchFrame(modelHandle, "mixamorig:RightHandMiddle4_end");
+
+    playerCalculation->SetHandPos_left(MV1GetFramePosition(modelHandle, left));
+    playerCalculation->SetHandPos_right(MV1GetFramePosition(modelHandle, right));
     centerPosition = MV1GetFramePosition(modelHandle, 7);
 
     //ray

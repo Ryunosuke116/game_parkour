@@ -155,12 +155,12 @@ VECTOR HitCheck::ClosestPtToPointTriangle(VECTOR centerPos, VECTOR a, VECTOR b, 
 /// <returns></returns>
 bool HitCheck::AABBHitJudge(AABB a, AABB b)
 {
-	if (a.min.x <= a.max.x &&
+	if (a.min.x <= b.max.x &&
 		a.max.x >= b.min.x &&
 		a.min.y <= b.max.y &&
-		a.max.y >= a.min.y &&
-		a.min.z <= a.max.z &&
-		a.max.z >= a.min.z)
+		a.max.y >= b.min.y &&
+		a.min.z <= b.max.z &&
+		a.max.z >= b.min.z)
 	{
 		return true;
 	}

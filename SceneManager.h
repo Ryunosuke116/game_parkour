@@ -17,6 +17,7 @@ public:
         if (nowScene == nullptr)
         {
             nowScene = scenes[name];
+            nowScene->Create();
             nowScene->Initialize();
         }
     }
@@ -25,7 +26,7 @@ public:
     void Update();
     void Draw();
 
-    void ChangeScene(std::string_view name);
+    void ChangeScene(std::string_view name, const int coinCount);
 private:
 
     std::unordered_map<std::string_view, BaseScene*>scenes;

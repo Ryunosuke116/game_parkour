@@ -50,7 +50,7 @@ void Floor_sky::Update()
 {
 	VECTOR newPos = position;
 
-	if (moveAmount >= 15.0f)
+	if (moveAmount >= 140.0f)
 	{
 		isUp = false;
 	}

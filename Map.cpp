@@ -8,7 +8,7 @@
 Map::Map(const char* path)
 {
 	modelHandle = MV1LoadModel(path);
-	MV1SetScale(modelHandle, VGet(2.0f, 2.0f, 2.0f));
+	MV1SetScale(modelHandle, VGet(2.7f, 2.7f, 2.7f));
 }
 
 /// <summary>

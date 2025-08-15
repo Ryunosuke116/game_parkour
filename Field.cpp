@@ -22,10 +22,13 @@ Field::~Field()
 void Field::Load(const nlohmann::json& jsonData)
 {
 	std::string path = jsonData["path"];
+	std::string bullPath = jsonData["bullPath"];
 
 	tag = "field";
 	modelHandle = MV1LoadModel(path.c_str());
+	bullHandle = MV1LoadModel(bullPath.c_str());
 	MV1SetScale(modelHandle, VGet(0.9f, 0.9f, 0.9f));
+	MV1SetScale(bullHandle, VGet(0.9f, 0.9f, 0.9f));
 }
 
 /// <summary>
@@ -35,6 +38,7 @@ void Field::Initialize()
 {
 	position = VGet(0, 0, 0);
 	MV1SetPosition(modelHandle, position);
+	MV1SetPosition(bullHandle, position);
 
 	// モデルの０番目のフレームのコリジョン情報を構築
 	MV1SetupCollInfo(modelHandle, -1, 1, 1, 1);
@@ -92,5 +96,6 @@ void Field::Draw()
 	}
 
 	MV1DrawModel(modelHandle);
+	MV1DrawModel(bullHandle);
 
 }

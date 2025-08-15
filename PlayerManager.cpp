@@ -91,6 +91,14 @@ void PlayerManager::Update(const std::vector<std::shared_ptr<BaseObject>>& field
 	
 }
 
+void PlayerManager::Update_start(const float& timer)
+{
+	actualPlayer->Update_start(timer);
+
+	actualPlayer->PositionUpdate();
+
+}
+
 /// <summary>
 /// •`‰æ
 /// </summary>

@@ -9,12 +9,16 @@ public:
     BaseScene(SceneManager& manager);
     ~BaseScene();
 
+    virtual void Create();
     virtual void Initialize();
     virtual void Update();
     virtual void Draw();
 
+    void SetCoinCount(const int set) { coinCount = set; }
+
 protected:
-    void ChangeScene(std::string_view);
+    int coinCount;
+    void ChangeScene(std::string_view, const int coinCount);
 private:
     SceneManager& manager;
 };

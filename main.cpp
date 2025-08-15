@@ -3,6 +3,7 @@
 #include "SceneManager.h"
 #include "Title.h"
 #include "Game.h"
+#include "Result.h"
 #include "nlohmann/json.hpp"
 
 //Šî–{Ý’è
@@ -57,6 +58,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
 
     sceneManager->Add<Title>("Title");
     sceneManager->Add<Game>("Game");
+    sceneManager->Add<Result>("Result");
 
     while (!ProcessMessage() && !ClearDrawScreen() && !CheckHitKey(KEY_INPUT_ESCAPE))
     {

@@ -533,7 +533,7 @@ bool CollisionManager::Draw()
 	//printfDx("hitPos_ground.y %f\n", hitPos_ground.y);
 	//printfDx("hitPos_ground.z %f\n", hitPos_ground.z);
 
-	printfDx("tiltAngle_degree %f\n", tiltAngle_degree);
+	/*printfDx("tiltAngle_degree %f\n", tiltAngle_degree);*/
 
 	DrawSphere3D(hitPos_ground, 2.0f, 30, GetColor(0, 0, 0),
 		GetColor(255, 0, 0), FALSE);
@@ -549,10 +549,10 @@ bool CollisionManager::Draw()
 	DrawSphere3D(projection_ray_end, 2.0f, 30, GetColor(0, 0, 0),
 		GetColor(0, 255, 0), FALSE);*/
 
-	DrawLine3D(topPos_ray, bottomPos_ray, GetColor(255, 0, 0));
+	/*DrawLine3D(topPos_ray, bottomPos_ray, GetColor(255, 0, 0));
 	DrawLine3D(ray_start_hanging_log, ray_end_hanging_log, GetColor(0, 255, 0));
 
 	DrawLine3D(pos_now, pos_new, GetColor(0, 0, 255));
-	DrawLine3D(projection_ray_start, projection_ray_end, GetColor(255, 0, 255));
+	DrawLine3D(projection_ray_start, projection_ray_end, GetColor(255, 0, 255));*/
 	return true;
 }

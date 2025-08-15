@@ -8,6 +8,7 @@ public:
 	Title(SceneManager& manager);
 	~Title();
 
+	void Create();
 	void Initialize();
 	void Update();
 	void Draw();

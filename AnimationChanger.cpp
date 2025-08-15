@@ -21,11 +21,11 @@ void AnimationChanger::Initialize(const int& num, int& modelHandle,
 {
     animNumber_Now = num;
     //newStateを生成
-    nowState = std::make_shared<Idle>(modelHandle, oldAnimState,
-        nowAnimState, playerData);
+    nowState = std::make_shared<Walk>(modelHandle, oldAnimState,
+        nowAnimState);
 
     nowState->SetAnimNumber_old(animNumber_Now);
-    animNumber_Now = animNum::idle;
+    animNumber_Now = animNum::walk;
 
     nowState->Initialize(modelHandle, player);
     nowState->Enter(playerData);
@@ -53,6 +53,22 @@ std::shared_ptr<PlayerStateActionBase> AnimationChanger::ChangeState(int& modelH
 
         newState->SetAnimNumber_old(animNumber_Now);
         animNumber_Now = animNum::idle;
+    }
+
+    //歩く
+    if (playerData.isWalk &&
+        animNumber_Now != animNum::walk)
+    {
+        //nowState内のアニメーション情報を保存
+        SetNowAnimState(nowState->GetNowAnimState());
+        SetOldAnimState(nowState->GetOldAnimState());
+
+        //newStateを生成
+        newState = std::make_shared<Walk>(modelHandle, oldAnimState,
+            nowAnimState);
+
+        newState->SetAnimNumber_old(animNumber_Now);
+        animNumber_Now = animNum::walk;
     }
 
     //走る

@@ -15,11 +15,13 @@ SceneManager::~SceneManager()
 }
 
 
-void SceneManager::ChangeScene(const std::string_view name)
+void SceneManager::ChangeScene(const std::string_view name, const int coinCount)
 {
 	try
 	{
 		nowScene = scenes.at(name);
+		nowScene->Create();
+		nowScene->SetCoinCount(coinCount);
 		nowScene->Initialize();
 	}
 	catch (...)

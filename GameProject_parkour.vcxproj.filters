@@ -22,9 +22,6 @@
     <Filter Include="ソース ファイル\Collision">
       <UniqueIdentifier>{2330dc01-06b8-4627-a8c4-ec50186a5a27}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\manager\scene">
-      <UniqueIdentifier>{6ed27899-6b7f-44a8-b8d7-0648099a58a6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\manager\coin">
       <UniqueIdentifier>{c758f02e-15db-456a-bfba-6b68200967d1}</UniqueIdentifier>
     </Filter>
@@ -42,9 +39,6 @@
     </Filter>
     <Filter Include="ソース ファイル\Base\BaseObject">
       <UniqueIdentifier>{5ac518b0-1420-4c76-901c-f90170dca77b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\Base\BaseScene">
-      <UniqueIdentifier>{378eeac6-818c-493c-b8c7-d8a11c305dc3}</UniqueIdentifier>
     </Filter>
     <Filter Include="ソース ファイル\manager\json">
       <UniqueIdentifier>{c2fdffe0-4070-4057-9cf7-b8f503264f1b}</UniqueIdentifier>
@@ -114,9 +108,6 @@
     </Filter>
     <Filter Include="ソース ファイル\object\player\animation\quick_roll">
       <UniqueIdentifier>{86aa8a87-aaa1-45df-9575-21d005c28125}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\object\player\animationChanger">
-      <UniqueIdentifier>{abdff138-57d9-4360-b150-7469ae254d34}</UniqueIdentifier>
     </Filter>
     <Filter Include="ソース ファイル\object\player\moveCalclation">
       <UniqueIdentifier>{f9dc51d6-1cdb-4363-bbf5-2cf3ddbf8b9d}</UniqueIdentifier>
@@ -198,6 +189,18 @@
     </Filter>
     <Filter Include="ソース ファイル\Observer\playerState">
       <UniqueIdentifier>{d6b58774-3bf9-4b89-aba4-0877ea9343aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\manager\scene">
+      <UniqueIdentifier>{6ed27899-6b7f-44a8-b8d7-0648099a58a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Base\BaseScene">
+      <UniqueIdentifier>{378eeac6-818c-493c-b8c7-d8a11c305dc3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\object\player\animation\walk">
+      <UniqueIdentifier>{6c61ab9a-ef05-4631-8e89-4b59ea63d1e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\object\player\animationChanger">
+      <UniqueIdentifier>{abdff138-57d9-4360-b150-7469ae254d34}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -350,6 +353,9 @@
     </ClCompile>
     <ClCompile Include="UI_controlManual.cpp">
       <Filter>ソース ファイル\object\UI\UI_controlManual</Filter>
+    </ClCompile>
+    <ClCompile Include="Walk.cpp">
+      <Filter>ソース ファイル\object\player\animation\walk</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -532,6 +538,9 @@
     </ClInclude>
     <ClInclude Include="CollisionManager.h">
       <Filter>ソース ファイル\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Walk.h">
+      <Filter>ソース ファイル\object\player\animation\walk</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

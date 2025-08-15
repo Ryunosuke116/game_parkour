@@ -1,0 +1,160 @@
+#include "common.h"
+#include <memory>
+#include <vector>
+#include "PlayerStateActionBase.h"
+#include "PlayerData.h"
+#include "Walk.h"
+#include "AnimTime.h"
+#include "Player.h"
+#include "PadInput.h"
+#include "HitCheck.h"
+
+/// <summary>
+/// コンストラクタ
+/// </summary>
+/// <param name="modelHandle"></param>
+Walk::Walk(int& modelHandle,
+	AnimState& oldAnimState, AnimState& nowAnimState) :
+	PlayerStateActionBase(modelHandle, oldAnimState, nowAnimState),
+	degree_difference(0.0f),
+	stopTime(0.0f),
+	angle(-1),
+	playerMoveSpeed(-1),
+	playerMoveSpeed_max(-1),
+	degree_new(-1)
+{
+
+}
+
+/// <summary>
+/// デストラクタ
+/// </summary>
+Walk::~Walk()
+{
+	//	MV1DetachAnim(modelHandle, nowAnimState.AttachIndex);
+}
+
+/// <summary>
+/// 初期化
+/// </summary>
+void Walk::Initialize(int& modelHandle, Player& player)
+{
+
+	// ３Ｄモデルの０番目のアニメーションをアタッチする
+	this->nowAnimState.AttachIndex = MV1AttachAnim(modelHandle, animNum::walk);
+
+	this->nowAnimState.PlayTime_anim = 0.0f;
+	this->nowAnimState.PlayAnimSpeed = playAnimSpeed;
+}
+
+std::pair<VECTOR, PlayerData> Walk::Update(const VECTOR& cameraDirection,
+	const std::vector<std::shared_ptr<BaseObject>>& fieldObjects, Player& player)
+{
+	PlayerData playerData = player.GetData();
+
+	VECTOR moveDir = VGet(0.0f, 0.0f, 0.0f);
+
+	return std::make_pair(moveDir, playerData);
+}
+
+/// <summary>
+/// 行動入力
+/// 移動方向
+/// ジャンプ
+/// </summary>
+/// <param name="cameraDirection"></param>
+/// <param name="playerData"></param>
+/// <param name="player"></param>
+/// <returns></returns>
+VECTOR Walk::Command(const VECTOR& cameraDirection, PlayerData& playerData, Player& player)
+{
+	VECTOR moveDir = VGet(0.0f, 0.0f, 0.0f);
+	angle = player.GetAngle();
+	playerMoveSpeed = player.playerCalculation->GetMoveSpeed_now();
+	playerMoveSpeed_max = player.playerCalculation->GetMoveSpeed_max();
+
+	//moveDirを取得する
+	moveDir = Move(cameraDirection, playerData);
+	JumpMove(playerData, player);
+	RollMove(playerData);
+
+	//前フレームと現在のフレームで入力されてなければ動いてない
+	if (stopTime >= 3.0f)
+	{
+		playerData.isMove = false;
+	}
+	else
+	{
+		playerData.isMove = true;
+	}
+
+	//急転回せずに止まる場合
+	if (!playerData.isMove && !playerData.isRoll)
+	{
+		playerData.isStopRun = true;
+		isChangeState = true;
+	}
+
+	return moveDir;
+}
+/// <summary>
+/// 移動方向入力
+/// </summary>
+/// <param name="cameraDirection"></param>
+/// <param name="playerData"></param>
+/// <returns></returns>
+VECTOR Walk::Move(const VECTOR& cameraDirection, PlayerData& playerData)
+{
+	VECTOR moveDirection = VGet(0.0f, 0.0f, 0.0f);
+
+	playerData.isMove = false;
+	VECTOR rightMove = VCross(cameraDirection, VGet(0.0f, 1.0f, 0.0f));
+
+	//正規化
+	rightMove = VNorm(rightMove);
+	VECTOR upMove = VNorm(cameraDirection);
+
+	upMove.y = 0.0f;
+	rightMove.y = 0.0f;
+
+	//パッド or arrowキーの入力方向で計算
+	moveDirection = VAdd(VScale(rightMove, -PadInput::GetJoyPad_x_left()),
+		VScale(upMove, -PadInput::GetJoyPad_y_left()));
+
+	//0でなければ正規化
+	if (VSize(moveDirection) != 0)
+	{
+		moveDirection = VNorm(moveDirection);
+		stopTime = 0.0f;
+	}
+	else
+	{
+		stopTime++;
+	}
+
+	//3fの間入力されてなければ動いてない
+	if (stopTime >= 3.0f)
+	{
+		playerData.isMove = false;
+	}
+	else
+	{
+		playerData.isMove = true;
+	}
+
+
+	//必ず正規化されたものか0を返す
+	return moveDirection;
+
+}
+
+void Walk::Enter(PlayerData& playerData)
+{
+	playerData.isWalk = true;
+	
+}
+
+void Walk::Exit(PlayerData& playerData)
+{
+	playerData.isWalk = false;
+}

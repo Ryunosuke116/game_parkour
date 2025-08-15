@@ -35,13 +35,12 @@ private:
 	VECTOR moveDirection_now;		//現在向いている方向
 	VECTOR padInput_now;
 
-	int coinCount;		//コインの所持枚数
-
 	float radian_wall;
 	float degree_pad_now;
 	float degree_difference;
 	float degree_pad_wall_difference;
 	float effectTimer;
+	float start_walkTime;
 
 	bool isPush;					//ボタンを押したか
 	bool isChange_falling;				//アニメーションを変更するか
@@ -64,6 +63,8 @@ public:
 		std::shared_ptr<EffectManager>& effectManager,
 		const std::vector<std::shared_ptr<BaseObject>>& fieldObjects);
 	
+
+	void Update_start(const float& timer);
 	void DebugUpdate();
 	void Receive_CollisionResult();
 	void ChangeState();

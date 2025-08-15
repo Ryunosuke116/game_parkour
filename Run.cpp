@@ -17,7 +17,11 @@ Run::Run(int& modelHandle,
 	AnimState& oldAnimState, AnimState& nowAnimState) :
 	PlayerStateActionBase(modelHandle,  oldAnimState,nowAnimState),
 	degree_difference(0.0f),
-	stopTime(0.0f)
+	stopTime(0.0f),
+	angle(-1),
+	playerMoveSpeed(-1),
+	playerMoveSpeed_max(-1),
+	degree_new(-1)
 {
 
 }

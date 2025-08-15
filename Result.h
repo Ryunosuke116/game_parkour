@@ -8,11 +8,22 @@ public:
 	Result(SceneManager& manager);
 	~Result();
 
+	void Create();
 	void Initialize();
 	void Update();
 	void Draw();
 private:
 	int modelHandle;
+	int coinHandle;
+	int numberHandle[10];
+	int crossHandle;
+	int rankHandle;
+	int coin_x;
+	int coin_y;
+
+
+	std::string num;
+
 
 	bool isPush;
 

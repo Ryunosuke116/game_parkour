@@ -25,6 +25,8 @@ public:
 		std::shared_ptr<EffectManager>& effectManager,
 		const VECTOR& cameraDirection);
 
+	void Update_start(const float& timer);
+
 	void Create()		override;
 	void Initialize()	override;
 	void Update()		override;
@@ -40,6 +42,7 @@ public:
 	float GetAngle() { return player->GetAngle(); }
 	std::shared_ptr<Player> GetPlayer() { return actualPlayer; }
 	AABB GetPlayerAABB() { return playerAABB; }
+	int GetCoinCount()const { return player->GetCoinCount(); }
 
 	//オブサーバー関連
 	void AddObserver(std::shared_ptr<PlayerStateObserver> observer) { observers.push_back(observer); }

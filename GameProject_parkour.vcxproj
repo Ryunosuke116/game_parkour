@@ -192,6 +192,7 @@
     <ClCompile Include="UIManager.cpp" />
     <ClCompile Include="UI_coin.cpp" />
     <ClCompile Include="UI_controlManual.cpp" />
+    <ClCompile Include="Walk.cpp" />
     <ClCompile Include="Wall.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -254,6 +255,7 @@
     <ClInclude Include="UIManager.h" />
     <ClInclude Include="UI_coin.h" />
     <ClInclude Include="UI_controlManual.h" />
+    <ClInclude Include="Walk.h" />
     <ClInclude Include="Wall.h" />
   </ItemGroup>
   <ItemGroup>

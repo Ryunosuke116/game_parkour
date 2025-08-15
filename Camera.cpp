@@ -22,6 +22,8 @@ Camera::Camera():
 	//奥行0.1～1000までをカメラの描画範囲とする
 	SetCameraNearFar(3.5f, 5000.0f);
 
+	// DXライブラリのカメラとEffekseerのカメラを同期する。
+	Effekseer_Sync3DSetting();
 	
 }
 
@@ -38,16 +40,16 @@ Camera::~Camera()
 /// </summary>
 void Camera::Initialize()
 {
-	aimPosition = VGet(30.0f, 15, -10);
-	spherePosition = VGet(0.0f, 20.0f, 20.0f);
+
+	aimPosition = VGet(-0.169435501, 53.7492065, -1224.39844);
+	spherePosition = VGet(-1.28232884, 24.0028648, -1172.35425);
 	angle_now = -177.55f;
 	distance = 50.0f;
 	t = 0.7f;
 
 	SetCameraPositionAndTarget_UpVecY(aimPosition, spherePosition);
 
-	// DXライブラリのカメラとEffekseerのカメラを同期する。
-	Effekseer_Sync3DSetting();
+
 }
 
 /// <summary>
@@ -78,6 +80,26 @@ void Camera::Update(const VECTOR& playerPosition,
 
 	DebugDrawer::Instance().InformationInput_string_VECTOR("aimPos x.%f y.%f z.%f\n", aimPosition);
 	DebugDrawer::Instance().InformationInput_string_VECTOR("spherePos x.%f y.%f z.%f\n", spherePosition);
+}
+
+void Camera::Update_start(const float& timer,
+	const VECTOR& playerPosition,
+	const float& angle_player)
+{
+	centerPos = playerPosition;
+	centerPos.y += 15.0f;
+
+	DistanceUpdate();
+
+	AngleUpdate(angle_player);
+
+	RotateUpdate();
+
+
+	SetCameraPositionAndTarget_UpVecY(aimPosition, spherePosition);
+
+	cameraDirection = VSub(spherePosition, aimPosition);
+	cameraDirection = VNorm(cameraDirection);
 }
 
 /// <summary>

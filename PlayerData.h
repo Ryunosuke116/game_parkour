@@ -5,6 +5,7 @@ struct PlayerData
 	bool isGround;					//Ú’n‚µ‚Ä‚¢‚é‚©
 	bool isIdle;					//~‚Ü‚Á‚Ä‚¢‚é‚©
 	bool isMove;					//“®‚¢‚Ä‚¢‚é‚©
+	bool isWalk;
 	bool isRun;						//‘–‚Á‚Ä‚¢‚é‚©
 	bool isRun_wall;
 	bool isJump;					//ƒWƒƒƒ“ƒv‚µ‚½‚©

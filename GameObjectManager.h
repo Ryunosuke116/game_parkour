@@ -18,7 +18,10 @@ public:
 	void Update()override;
 	void Draw()override;
 
+	void StartUpdate();
+
 	bool GetIsGoal() { return isGoal; }
+	int GetCoinCount() { return playerManager_actual->GetCoinCount(); }
 
 private:
 	std::vector<std::shared_ptr<BaseObject>> fieldObjects;
@@ -46,6 +49,9 @@ private:
 	bool isCamera;
 	bool isPush;
 	bool isGoal;
+	bool isStart;
+
+	float start_Timer;			//スタート画面のタイマー
 
 };
 

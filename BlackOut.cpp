@@ -6,7 +6,7 @@
 /// </summary>
 BlackOut::BlackOut()
 {
-    alpha = 0;
+    alpha = 0.0f;
     isLightChange = false;
 }
 
@@ -23,7 +23,7 @@ BlackOut::~BlackOut()
 /// </summary>
 void BlackOut::Initialize()
 {
-    alpha = 0;
+    alpha = 0.0f;
     isLightChange = false;
 }
 
