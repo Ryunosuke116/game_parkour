@@ -3,6 +3,12 @@
 #include <filesystem>
 #include "JsonManager.h"
 
+JsonManager& JsonManager::Instance()
+{
+	static JsonManager instance;
+	return instance;
+}
+
 void JsonManager::Initialize()
 {
 	//Jsonディレクトリ内の全ファイルを読み込む
@@ -35,3 +41,5 @@ void JsonManager::Add(const std::string name ,const nlohmann::json file)
 
 void JsonManager::Create(){}
 void JsonManager::Add(){}
+
+std::unordered_map<std::string, nlohmann::json> JsonManager::jsons;

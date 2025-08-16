@@ -6,20 +6,26 @@
 class JsonManager : public BaseGameObjectManager
 {
 public:
+
+	static JsonManager& Instance();  // ƒVƒ“ƒOƒ‹ƒgƒ“Žæ“¾
+
+	JsonManager() = default;
+	~JsonManager() = default;
+
 	void Create()		override;
 	void Initialize()	override;
 	void Update()		override;
 	void Draw()			override;
 	void Add()			override;
 
-	void Add(const std::string name, const nlohmann::json file);
+	static void Add(const std::string name, const nlohmann::json file);
 
-	nlohmann::json GetJsons(std::string name) const { return jsons.at(name); }
+	static nlohmann::json GetJsons(std::string name) { return jsons.at(name); }
 
 private:
 	int handlePath;
 
-	std::unordered_map<std::string, nlohmann::json> jsons;
+	static std::unordered_map<std::string, nlohmann::json> jsons;
 };
 
 	

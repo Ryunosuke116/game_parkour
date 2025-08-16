@@ -267,6 +267,7 @@
     <None Include="Json\field.Json" />
     <None Include="Json\floor_sky.Json" />
     <None Include="Json\object.Json" />
+    <None Include="Json\objectManager.Json" />
     <None Include="Json\UI.Json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

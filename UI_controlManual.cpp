@@ -28,8 +28,8 @@ void UI_controlManual::Load(const nlohmann::json& jsonData)
 
 void UI_controlManual::Initialize()
 {
-	x = 1450;
-	y = 100;
+	x = 50;
+	y = 30;
 	stateNumber = -1;
 }
 

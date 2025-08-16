@@ -28,9 +28,6 @@
     <Filter Include="ソース ファイル\manager\player">
       <UniqueIdentifier>{2a33576b-268e-4832-9dee-8902d408c493}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\layout">
-      <UniqueIdentifier>{d5d9db3e-28bd-4cfe-902b-76f058d3efb3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\Base\BaseChara">
       <UniqueIdentifier>{664a45f2-e5e7-4051-97ee-a2ea2a076b72}</UniqueIdentifier>
     </Filter>
@@ -202,6 +199,9 @@
     <Filter Include="ソース ファイル\object\player\animationChanger">
       <UniqueIdentifier>{abdff138-57d9-4360-b150-7469ae254d34}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\manager\layout">
+      <UniqueIdentifier>{d5d9db3e-28bd-4cfe-902b-76f058d3efb3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -280,7 +280,7 @@
       <Filter>ソース ファイル\object\player\animation\braced_Hang_To_Crouch</Filter>
     </ClCompile>
     <ClCompile Include="Layout.cpp">
-      <Filter>ソース ファイル\layout</Filter>
+      <Filter>ソース ファイル\manager\layout</Filter>
     </ClCompile>
     <ClCompile Include="BaseChara.cpp">
       <Filter>ソース ファイル\Base\BaseChara</Filter>
@@ -444,7 +444,7 @@
       <Filter>ソース ファイル\object\player\animation\braced_Hang_To_Crouch</Filter>
     </ClInclude>
     <ClInclude Include="Layout.h">
-      <Filter>ソース ファイル\layout</Filter>
+      <Filter>ソース ファイル\manager\layout</Filter>
     </ClInclude>
     <ClInclude Include="BaseChara.h">
       <Filter>ソース ファイル\Base\BaseChara</Filter>
@@ -547,9 +547,6 @@
     <None Include="Json\coin.Json">
       <Filter>ヘッダー ファイル\Json</Filter>
     </None>
-    <None Include="Json\object.Json">
-      <Filter>ヘッダー ファイル\Json</Filter>
-    </None>
     <None Include="Json\floor_sky.Json">
       <Filter>ヘッダー ファイル\Json</Filter>
     </None>
@@ -560,6 +557,12 @@
       <Filter>ヘッダー ファイル\Json</Filter>
     </None>
     <None Include="Json\UI.Json">
+      <Filter>ヘッダー ファイル\Json</Filter>
+    </None>
+    <None Include="Json\objectManager.Json">
+      <Filter>ヘッダー ファイル\Json</Filter>
+    </None>
+    <None Include="Json\object.Json">
       <Filter>ヘッダー ファイル\Json</Filter>
     </None>
   </ItemGroup>

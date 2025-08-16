@@ -27,8 +27,11 @@ Game::~Game()
 void Game::Create()
 {
 	gameObjectManager = std::make_shared<GameObjectManager>();
-	gameObjectManager->Create();
 	gameObjectManager_actual = std::dynamic_pointer_cast<GameObjectManager>(gameObjectManager);
+	gameObjectManager_actual->HandOver(
+		JsonManager::Instance().GetJsons(
+			gameObjectManager_actual->GetTag()));
+	gameObjectManager->Create();
 	blackOut = std::make_shared<BlackOut>();
 }
 

@@ -8,10 +8,16 @@
 /// コンストラクタ
 /// </summary>
 GameObjectManager::GameObjectManager():
-	start_Timer(-1),
-	isStart(false)
+	stream_startPicture_Timer(-1),
+	x_tutorialGraph(-1),
+	y_tutorialGraph(-1),
+	x_startGraph(-1),
+	y_startGraph(-1),
+	startGraph_timer(-1),
+	isStream_startPicture(false),
+	isPush_start(false)
 {
-	
+	tag = "objectManager";
 }
 
 /// <summary>
@@ -27,9 +33,10 @@ GameObjectManager::~GameObjectManager()
 /// </summary>
 void GameObjectManager::Create()
 {
-	jsonManager		= std::make_shared<JsonManager>();
-	jsonManager->Initialize();
-	
+	std::string tutorialPath = jsonData["tutorialPath"];
+	std::string startPath = jsonData["startPath"];
+	tutorialHandle = LoadGraph(tutorialPath.c_str());
+	startHandle = LoadGraph(startPath.c_str());
 
 	managers.push_back(std::make_shared<PlayerManager>());
 	playerManager_actual = std::dynamic_pointer_cast<PlayerManager>(managers.back());
@@ -56,7 +63,7 @@ void GameObjectManager::Create()
 
 	
 	//floor_skyを追加
-	nlohmann::json data_floor_sky = jsonManager->GetJsons("floor_sky");
+	nlohmann::json data_floor_sky = JsonManager::Instance().GetJsons("floor_sky");
 	std::string path_floor_sky = data_floor_sky["modelPath"];
 	for (auto& data : data_floor_sky["list"])
 	{
@@ -75,7 +82,7 @@ void GameObjectManager::Create()
 	//Jsonデータを取得
 	for (auto& manager : managers)
 	{
-		manager->HandOver(jsonManager->GetJsons(manager->GetTag()));
+		manager->HandOver(JsonManager::Instance().GetJsons(manager->GetTag()));
 		manager->Create();
 	}
 
@@ -90,7 +97,7 @@ void GameObjectManager::Create()
 	playerManager_actual->AddObserver(uiManager_actual->GetUI_controlManual());
 
 	//ロード
-	field->Load(jsonManager->GetJsons("field"));
+	field->Load(JsonManager::Instance().GetJsons("field"));
 
 
 }
@@ -121,7 +128,7 @@ void GameObjectManager::Initialize()
 
 	//エフェクトデータを追加
 	//TODO::やり方が悪いので修正しなければ
-	nlohmann::json effectData = jsonManager->GetJsons("effectData");
+	nlohmann::json effectData = JsonManager::Instance().GetJsons("effectData");
 	for (auto& data : effectData["list"])
 	{
 		std::string tag = data[1];
@@ -134,8 +141,14 @@ void GameObjectManager::Initialize()
 	isCamera = false;
 	isPush = false;
 	isGoal = false;
-	isStart = true;
-	start_Timer = 0.0f;
+	isPush_start = false;
+	isStream_startPicture = true;
+	stream_startPicture_Timer = 0.0f;
+	startGraph_timer = 0.0f;
+	x_tutorialGraph = 200;
+	y_tutorialGraph = 112;
+	x_startGraph = 600;
+	y_startGraph = 350;
 }
 
 /// <summary>
@@ -144,14 +157,14 @@ void GameObjectManager::Initialize()
 void GameObjectManager::Update()
 {
 
-	if (isStart)
+	if (isStream_startPicture)
 	{
 		StartUpdate();
 	}
 
 	shadow->Update(playerManager_actual->GetPosition());
 
-	if (!isStart)
+	if (!isStream_startPicture)
 	{
 		if (CheckHitKey(KEY_INPUT_0))
 		{
@@ -222,16 +235,40 @@ void GameObjectManager::Update()
 
 void GameObjectManager::StartUpdate()
 {
-	start_Timer++;
+	if (stream_startPicture_Timer >= 50.0f)
+	{
+		TutorialUpdate();
+		stream_startPicture_Timer++;
+	}
+	else
+	{
+		stream_startPicture_Timer++;
+	}
 
-	playerManager_actual->Update_start(start_Timer);
+	playerManager_actual->Update_start(stream_startPicture_Timer);
 	//map_actual->Update(playerManager_actual->GetPosition());
 	camera->Update(playerManager_actual->GetPosition(),
 		playerManager_actual->GetAngle(), fieldObjects);
 
-	if (start_Timer >= 50.0f)
+
+}
+
+void GameObjectManager::TutorialUpdate()
+{
+	if (PadInput::IsPush_A() &&
+		!isPush_start)
 	{
-		isStart = false;
+		isPush_start = true;
+	}
+
+	if (isPush_start)
+	{
+		startGraph_timer++;
+		if (startGraph_timer >= 50.0f)
+		{
+			isStream_startPicture = false;
+		}
+		
 	}
 }
 
@@ -280,7 +317,26 @@ void GameObjectManager::Draw()
 		layout->Draw();
 	}
 
+	tutorialDraw();
+
 	//DrawLine3D(VGet(0.0f, 15.0f, 0.0f), VGet(10.0f, 15.0f, 0.0f), GetColor(255, 0, 0));
 	//DrawLine3D(VGet(0.0f, 15.0f, 0.0f), VGet(0.0f, 25.0f, 0.0f), GetColor(0, 255, 0));
 	//DrawLine3D(VGet(0.0f, 15.0f, 0.0f), VGet(0.0f, 15.0f, 10.0f), GetColor(0, 0, 255));
+}
+
+void GameObjectManager::tutorialDraw()
+{
+	if (isStream_startPicture)
+	{
+		if (stream_startPicture_Timer >= 50.0f &&
+			!isPush_start)
+		{
+			DrawGraph(x_tutorialGraph, y_tutorialGraph, tutorialHandle, TRUE);
+		}
+
+		if (isPush_start)
+		{
+			DrawGraph(x_startGraph, y_startGraph, startHandle, TRUE);
+		}
+	}
 }

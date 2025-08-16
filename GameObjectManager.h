@@ -19,9 +19,16 @@ public:
 	void Draw()override;
 
 	void StartUpdate();
+	void TutorialUpdate();
+	void tutorialDraw();
+	void HandOver(nlohmann::json j)
+	{
+		jsonData = j;
+	}
 
 	bool GetIsGoal() { return isGoal; }
 	int GetCoinCount() { return playerManager_actual->GetCoinCount(); }
+	std::string GetTag() const { return tag; }
 
 private:
 	std::vector<std::shared_ptr<BaseObject>> fieldObjects;
@@ -35,7 +42,6 @@ private:
 	std::shared_ptr<BaseGameObjectManager>  uiManager			= NULL;
 	std::shared_ptr<BaseGameObjectManager>  effectManager		= NULL;
 	std::shared_ptr<Layout>					layout				= NULL;
-	std::shared_ptr<JsonManager>			jsonManager			= NULL;
 	std::shared_ptr<Shadow>					shadow				= NULL;
 	std::shared_ptr<GoalArea>				goalArea			= NULL;
 	std::shared_ptr<GameTimer>				gameTimer			= NULL;
@@ -46,12 +52,24 @@ private:
 	std::shared_ptr<EffectManager>  effectManager_actual = NULL;
 	std::shared_ptr<UIManager>		uiManager_actual	 = NULL;
 
+	int tutorialHandle;
+	int startHandle;
+	int x_tutorialGraph;
+	int y_tutorialGraph;
+	int x_startGraph;
+	int y_startGraph;
+
 	bool isCamera;
 	bool isPush;
+	bool isPush_start;
 	bool isGoal;
-	bool isStart;
+	bool isStream_startPicture;		//スタート画面の映像を流すか
 
-	float start_Timer;			//スタート画面のタイマー
+	float stream_startPicture_Timer;	//スタート画面のタイマー
+	float startGraph_timer;				//スタート画像の挙動タイマー
+
+	std::string tag;
+	nlohmann::json	jsonData;
 
 };
 

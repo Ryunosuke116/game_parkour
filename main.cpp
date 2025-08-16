@@ -55,6 +55,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
     LONGLONG frameTime = 0;
 
     SceneManager* sceneManager = new SceneManager();
+    JsonManager::Instance().Initialize();
 
     sceneManager->Add<Title>("Title");
     sceneManager->Add<Game>("Game");
