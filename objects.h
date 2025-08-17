@@ -20,3 +20,5 @@
 #include "GameTimer.h"
 #include "EffectManager.h"
 #include "UIManager.h"
+#include "Tutorial.h"
+#include "FinishCut.h"

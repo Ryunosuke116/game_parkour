@@ -35,7 +35,6 @@ void Title::Create()
 void Title::Initialize()
 {
 	blackOut->Initialize();
-    PadInput::Initialize();
 	isPush = false;
 }
 

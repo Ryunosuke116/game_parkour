@@ -256,6 +256,16 @@ void Player::Update_start(const float& timer)
 
 }
 
+void Player::Update_finish(const float& timer)
+{
+    nowState->SetIsChangeState(true);
+    playerData.isIdle = true;
+    //ó‘Ô•ÏX
+    ChangeState();
+
+    nowState->MotionUpdate(playerData);
+}
+
 void Player::ChangeState()
 {
     if (nowState->GetIsChangeState())

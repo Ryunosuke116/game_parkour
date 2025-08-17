@@ -8,16 +8,16 @@
 /// コンストラクタ
 /// </summary>
 GameObjectManager::GameObjectManager():
-	stream_startPicture_Timer(-1),
+	stream_startPicture_timer(-1),
+	stream_finishPicture_timer(-1),
 	x_tutorialGraph(-1),
 	y_tutorialGraph(-1),
 	x_startGraph(-1),
 	y_startGraph(-1),
-	startGraph_timer(-1),
 	isStream_startPicture(false),
-	isPush_start(false)
+	isStream_finishPicture(false)
 {
-	tag = "objectManager";
+
 }
 
 /// <summary>
@@ -33,10 +33,8 @@ GameObjectManager::~GameObjectManager()
 /// </summary>
 void GameObjectManager::Create()
 {
-	std::string tutorialPath = jsonData["tutorialPath"];
-	std::string startPath = jsonData["startPath"];
-	tutorialHandle = LoadGraph(tutorialPath.c_str());
-	startHandle = LoadGraph(startPath.c_str());
+	
+	
 
 	managers.push_back(std::make_shared<PlayerManager>());
 	playerManager_actual = std::dynamic_pointer_cast<PlayerManager>(managers.back());
@@ -56,6 +54,8 @@ void GameObjectManager::Create()
 	shadow				= std::make_shared<Shadow>();
 	goalArea			= std::make_shared<GoalArea>();
 	gameTimer			= std::make_shared<GameTimer>();
+	tutorial			= std::make_shared<Tutorial>();
+	finishCut			= std::make_shared<FinishCut>();
 
 	map_actual			 = std::dynamic_pointer_cast<Map>(map);
 
@@ -98,7 +98,8 @@ void GameObjectManager::Create()
 
 	//ロード
 	field->Load(JsonManager::Instance().GetJsons("field"));
-
+	tutorial->Load(JsonManager::Instance().GetJsons(tutorial->GetTag()));
+	finishCut->Load(JsonManager::Instance().GetJsons(finishCut->GetTag()));
 
 }
 
@@ -125,6 +126,8 @@ void GameObjectManager::Initialize()
 	shadow->Initialize();
 	goalArea->Initialize();
 	gameTimer->Initialize();
+	tutorial->Initialize();
+	finishCut->Initialize();
 
 	//エフェクトデータを追加
 	//TODO::やり方が悪いので修正しなければ
@@ -141,10 +144,10 @@ void GameObjectManager::Initialize()
 	isCamera = false;
 	isPush = false;
 	isGoal = false;
-	isPush_start = false;
 	isStream_startPicture = true;
-	stream_startPicture_Timer = 0.0f;
-	startGraph_timer = 0.0f;
+	isStream_finishPicture = false;
+	stream_startPicture_timer = 0.0f;
+	stream_finishPicture_timer = 0.0f;
 	x_tutorialGraph = 200;
 	y_tutorialGraph = 112;
 	x_startGraph = 600;
@@ -162,9 +165,12 @@ void GameObjectManager::Update()
 		StartUpdate();
 	}
 
+	FinishUpdate();
+
 	shadow->Update(playerManager_actual->GetPosition());
 
-	if (!isStream_startPicture)
+	if (!isStream_startPicture && 
+		!isStream_finishPicture)
 	{
 		if (CheckHitKey(KEY_INPUT_0))
 		{
@@ -218,15 +224,14 @@ void GameObjectManager::Update()
 		effectManager_actual->PlayEffectUpdate();
 
 		if (HitCheck::AABBHitJudge(playerManager_actual->GetPlayerAABB(),
-			goalArea->GetGoalArea()
-		))
+			goalArea->GetGoalArea() ) &&
+			!isStream_finishPicture
+			)
 		{
-			isGoal = true;
+			isStream_finishPicture = true;
+			finishCut->SetIsDraw_finish(true);
 		}
-		else
-		{
-			isGoal = false;
-		}
+		
 		DebugDrawer::Instance().InformationInput_string_bool("isGoal %d\n", isGoal);
 
 	}
@@ -235,17 +240,18 @@ void GameObjectManager::Update()
 
 void GameObjectManager::StartUpdate()
 {
-	if (stream_startPicture_Timer >= 50.0f)
+	if (stream_startPicture_timer >= 50.0f)
 	{
-		TutorialUpdate();
-		stream_startPicture_Timer++;
+		isStream_startPicture = tutorial->Update();
+		//TutorialUpdate();
+		stream_startPicture_timer++;
 	}
 	else
 	{
-		stream_startPicture_Timer++;
+		stream_startPicture_timer++;
 	}
 
-	playerManager_actual->Update_start(stream_startPicture_Timer);
+	playerManager_actual->Update_start(stream_startPicture_timer);
 	//map_actual->Update(playerManager_actual->GetPosition());
 	camera->Update(playerManager_actual->GetPosition(),
 		playerManager_actual->GetAngle(), fieldObjects);
@@ -253,23 +259,16 @@ void GameObjectManager::StartUpdate()
 
 }
 
-void GameObjectManager::TutorialUpdate()
+void GameObjectManager::FinishUpdate()
 {
-	if (PadInput::IsPush_A() &&
-		!isPush_start)
+	if (isStream_finishPicture)
 	{
-		isPush_start = true;
+		isGoal = finishCut->Update();
+		playerManager_actual->Update_finish(stream_startPicture_timer);
+		camera->Update(playerManager_actual->GetPosition(),
+			playerManager_actual->GetAngle(), fieldObjects);
 	}
 
-	if (isPush_start)
-	{
-		startGraph_timer++;
-		if (startGraph_timer >= 50.0f)
-		{
-			isStream_startPicture = false;
-		}
-		
-	}
 }
 
 /// <summary>
@@ -318,6 +317,7 @@ void GameObjectManager::Draw()
 	}
 
 	tutorialDraw();
+	finishCut->Draw();
 
 	//DrawLine3D(VGet(0.0f, 15.0f, 0.0f), VGet(10.0f, 15.0f, 0.0f), GetColor(255, 0, 0));
 	//DrawLine3D(VGet(0.0f, 15.0f, 0.0f), VGet(0.0f, 25.0f, 0.0f), GetColor(0, 255, 0));
@@ -328,15 +328,6 @@ void GameObjectManager::tutorialDraw()
 {
 	if (isStream_startPicture)
 	{
-		if (stream_startPicture_Timer >= 50.0f &&
-			!isPush_start)
-		{
-			DrawGraph(x_tutorialGraph, y_tutorialGraph, tutorialHandle, TRUE);
-		}
-
-		if (isPush_start)
-		{
-			DrawGraph(x_startGraph, y_startGraph, startHandle, TRUE);
-		}
+		tutorial->Draw(stream_startPicture_timer);
 	}
 }

@@ -99,6 +99,12 @@ void PlayerManager::Update_start(const float& timer)
 
 }
 
+void PlayerManager::Update_finish(const float& timer)
+{
+	actualPlayer->Update_finish(timer);
+	actualPlayer->PositionUpdate();
+}
+
 /// <summary>
 /// •`‰æ
 /// </summary>

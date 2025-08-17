@@ -1,0 +1,40 @@
+
+
+{
+  "coin": [
+    [ "material/png/coin_2d.png", "coin" ],
+    [ "material/png/number_font/x_32x64.png", "cross" ],
+    [ "material/png/suuji32x64_07.png", "number" ]
+
+  ],
+
+  "controlManual": [
+    [ "material/png/manual/move_.png", "move" ],
+    [ "material/png/manual/move_camera_.png", "move_camera" ],
+    [ "material/png/manual/move_down_.png", "move_down" ],
+    [ "material/png/manual/move_up_.png", "move_up" ],
+    [ "material/png/manual/jump_.png", "jump" ],
+    [ "material/png/manual/reset_camera_.png", "reset_camera" ],
+    [ "material/png/manual/roll_.png", "roll" ]
+  ],
+
+  "rank": [
+    [ "material/png/rank_D.png", "D" ],
+    [ "material/png/rank_C.png", "C" ],
+    [ "material/png/rank_B.png", "B" ],
+    [ "material/png/rank_A.png", "A" ],
+    [ "material/png/rank_S.png", "S" ]
+  ],
+
+  "title": [
+    [ "material/png/title.png", "title" ]
+  ],
+
+  "result": [
+    [ "material/png/sky.png", "backGround" ]
+  ],
+
+  "finish": [
+    [ "material/png/finish.png", "finish" ]
+  ]
+}

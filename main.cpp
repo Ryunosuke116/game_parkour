@@ -56,6 +56,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
 
     SceneManager* sceneManager = new SceneManager();
     JsonManager::Instance().Initialize();
+     PadInput::Initialize();
 
     sceneManager->Add<Title>("Title");
     sceneManager->Add<Game>("Game");

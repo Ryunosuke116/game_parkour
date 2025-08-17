@@ -14,8 +14,13 @@ public:
 	void Draw()override;
 
 	void OnCoinPicked(int amount)override { coinCount += amount; }
+	void SetCoinPos(int set_x, int set_y) { x = set_x, y = set_y; }
 
 private:
+	int cross_x;
+	int cross_y;
+	int number_x;
+	int number_y;
 	int coinHandle;
 	int numberHandle[10];
 	int crossHandle;

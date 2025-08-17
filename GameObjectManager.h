@@ -19,16 +19,11 @@ public:
 	void Draw()override;
 
 	void StartUpdate();
-	void TutorialUpdate();
+	void FinishUpdate();
 	void tutorialDraw();
-	void HandOver(nlohmann::json j)
-	{
-		jsonData = j;
-	}
 
 	bool GetIsGoal() { return isGoal; }
 	int GetCoinCount() { return playerManager_actual->GetCoinCount(); }
-	std::string GetTag() const { return tag; }
 
 private:
 	std::vector<std::shared_ptr<BaseObject>> fieldObjects;
@@ -37,14 +32,12 @@ private:
 	std::shared_ptr<BaseObject>				map					= NULL;
 	std::shared_ptr<BaseObject>				field				= NULL;
 	std::shared_ptr<Camera>					camera				= NULL;
-	std::shared_ptr<BaseGameObjectManager>	playerManager		= NULL;
-	std::shared_ptr<BaseGameObjectManager>	coinManager			= NULL;
-	std::shared_ptr<BaseGameObjectManager>  uiManager			= NULL;
-	std::shared_ptr<BaseGameObjectManager>  effectManager		= NULL;
 	std::shared_ptr<Layout>					layout				= NULL;
 	std::shared_ptr<Shadow>					shadow				= NULL;
 	std::shared_ptr<GoalArea>				goalArea			= NULL;
 	std::shared_ptr<GameTimer>				gameTimer			= NULL;
+	std::shared_ptr<Tutorial>				tutorial			= NULL;
+	std::shared_ptr<FinishCut>				finishCut			= NULL;
 
 	std::shared_ptr<Map>			map_actual			 = NULL;
 	std::shared_ptr<PlayerManager>	playerManager_actual = NULL;
@@ -61,15 +54,12 @@ private:
 
 	bool isCamera;
 	bool isPush;
-	bool isPush_start;
 	bool isGoal;
-	bool isStream_startPicture;		//スタート画面の映像を流すか
+	bool isStream_startPicture;		//スタート演出を流すか
+	bool isStream_finishPicture;	//フィニッシュ演出を流すか
 
-	float stream_startPicture_Timer;	//スタート画面のタイマー
-	float startGraph_timer;				//スタート画像の挙動タイマー
-
-	std::string tag;
-	nlohmann::json	jsonData;
+	float stream_startPicture_timer;	//スタート画面のタイマー
+	float stream_finishPicture_timer;	//フィニッシュ画面のタイマー
 
 };
 

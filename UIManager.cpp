@@ -6,7 +6,7 @@
 UIManager::UIManager() :
 	BaseGameObjectManager()
 {
-	tag = "UI";
+	tag = "png";
 }
 
 UIManager::~UIManager(){}
@@ -19,8 +19,15 @@ void UIManager::Create()
 
 void UIManager::Initialize()
 {
+	const int coin_x = 30;
+	const int coin_y = 700;
+
 	for (auto& UI : ui_list)
 	{
+		if (auto ui_coin = std::dynamic_pointer_cast<UI_coin>(UI))
+		{
+			ui_coin->SetCoinPos(coin_x, coin_y);
+		}
 		UI->Initialize();
 	}
 }

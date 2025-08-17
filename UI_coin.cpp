@@ -26,20 +26,30 @@ UI_coin::~UI_coin()
 
 void UI_coin::Load(const nlohmann::json& jsonData)
 {
-	std::string coinPath = jsonData[0]["coinPath"];
-	std::string crossPath = jsonData[0]["crossPath"];
-	std::string numberPath = jsonData[0]["numberPath"];
+	std::unordered_map<std::string, std::string> uiPath;
 
-	coinHandle = LoadGraph(coinPath.c_str());
-	crossHandle = LoadGraph(crossPath.c_str());
-	LoadDivGraph(numberPath.c_str(),
+	for (auto& data : jsonData)
+	{
+		std::string path = data[0];
+		std::string name = data[1];
+
+		uiPath[name] = path;
+	}
+
+	coinHandle = LoadGraph(uiPath.at("coin").c_str());
+	crossHandle = LoadGraph(uiPath.at("cross").c_str());
+	LoadDivGraph(uiPath.at("number").c_str(),
 		10, 10, 1, 32, 64, numberHandle);
 }
 
 void UI_coin::Initialize()
 {
-	x = 30;
-	y = 700;
+
+	cross_x = x + 105;
+	cross_y = y + 30;
+	number_x = x + 140;
+	number_y = y + 30;
+
 	num = "00";
 	coinCount = 0;
 }
@@ -59,14 +69,15 @@ void UI_coin::Draw()
 {
 	DrawGraph(x, y, coinHandle, TRUE);
 
-	int num_x = 170;
+	int num_x = number_x;
+	const int addNumber_x = 32;
 
 	for (char c : num)
 	{
 		int digit = c - '0';
-		DrawGraph(num_x, 730, numberHandle[digit], TRUE);
-		num_x += 32;
+		DrawGraph(num_x, number_y, numberHandle[digit], TRUE);
+		num_x += addNumber_x;
 	}
 
-	DrawGraph(135, 730, crossHandle, TRUE);
+	DrawGraph(cross_x, cross_y, crossHandle, TRUE);
 }

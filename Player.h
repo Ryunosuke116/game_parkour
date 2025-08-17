@@ -65,6 +65,7 @@ public:
 	
 
 	void Update_start(const float& timer);
+	void Update_finish(const float& timer);
 	void DebugUpdate();
 	void Receive_CollisionResult();
 	void ChangeState();

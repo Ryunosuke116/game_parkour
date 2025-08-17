@@ -26,6 +26,7 @@ public:
 		const VECTOR& cameraDirection);
 
 	void Update_start(const float& timer);
+	void Update_finish(const float& timer);
 
 	void Create()		override;
 	void Initialize()	override;
