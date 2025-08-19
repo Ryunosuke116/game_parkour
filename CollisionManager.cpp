@@ -256,7 +256,6 @@ std::pair<bool, VECTOR> CollisionManager::GroundCollisionCheck_Hang_to_Crouch(co
 	VECTOR newBottomPosition = newPos;
 	VECTOR nowBottomPos = oldPos;
 	VECTOR nowTopPos = oldPos;
-	bool isHitSphere;
 
 	bool isHitGround = false;
 

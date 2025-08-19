@@ -33,9 +33,6 @@ GameObjectManager::~GameObjectManager()
 /// </summary>
 void GameObjectManager::Create()
 {
-	
-	
-
 	managers.push_back(std::make_shared<PlayerManager>());
 	playerManager_actual = std::dynamic_pointer_cast<PlayerManager>(managers.back());
 	managers.push_back(std::make_shared<UIManager>());
@@ -43,10 +40,8 @@ void GameObjectManager::Create()
 	managers.push_back(std::make_shared<CoinManager>());
 	coinManager_actual = std::dynamic_pointer_cast<CoinManager>(managers.back());
 	
-
-
 	//生成
-	map					= std::make_shared<Map>("material/skyDome/sunSet.mv1");
+	skyBox				= std::make_shared<SkyBox>();
 	field				= std::make_shared<Field>();
 
 	camera				= std::make_shared<Camera>();
@@ -57,10 +52,11 @@ void GameObjectManager::Create()
 	tutorial			= std::make_shared<Tutorial>();
 	finishCut			= std::make_shared<FinishCut>();
 
-	map_actual			 = std::dynamic_pointer_cast<Map>(map);
+	skyBox_actual			 = std::dynamic_pointer_cast<SkyBox>(skyBox);
 
-	fieldObjects.push_back(std::make_shared<FieldMesh>("material/mv1/new_city/new_city_mesh_0816.mv1"));
 
+	fieldObjects.push_back(std::make_shared<FieldMesh>());
+	fieldObjects.back()->Load(JsonManager::Instance().GetJsons(fieldObjects.back()->GetJsonTag()));
 	
 	//floor_skyを追加
 	nlohmann::json data_floor_sky = JsonManager::Instance().GetJsons("floor_sky");
@@ -97,7 +93,7 @@ void GameObjectManager::Create()
 	playerManager_actual->AddObserver(uiManager_actual->GetUI_controlManual());
 
 	//ロード
-	field->Load(JsonManager::Instance().GetJsons("field"));
+	field->Load(JsonManager::Instance().GetJsons(field->GetJsonTag()));
 	tutorial->Load(JsonManager::Instance().GetJsons(tutorial->GetTag()));
 	finishCut->Load(JsonManager::Instance().GetJsons(finishCut->GetTag()));
 
@@ -119,10 +115,9 @@ void GameObjectManager::Initialize()
 		manager->Initialize();
 	}
 
-	map->Initialize();
+	skyBox->Initialize();
 	field->Initialize();
 	camera->Initialize();
-	PadInput::Initialize();
 	shadow->Initialize();
 	goalArea->Initialize();
 	gameTimer->Initialize();
@@ -204,7 +199,7 @@ void GameObjectManager::Update()
 
 			gameTimer->Update();
 			playerManager_actual->Update(fieldObjects,effectManager_actual, camera->GetCameraDirection());
-			map_actual->Update(playerManager_actual->GetPosition());
+			skyBox_actual->Update(playerManager_actual->GetPosition());
 			camera->Update(playerManager_actual->GetPosition(),
 				playerManager_actual->GetAngle(), fieldObjects);
 
@@ -243,7 +238,6 @@ void GameObjectManager::StartUpdate()
 	if (stream_startPicture_timer >= 50.0f)
 	{
 		isStream_startPicture = tutorial->Update();
-		//TutorialUpdate();
 		stream_startPicture_timer++;
 	}
 	else
@@ -252,7 +246,7 @@ void GameObjectManager::StartUpdate()
 	}
 
 	playerManager_actual->Update_start(stream_startPicture_timer);
-	//map_actual->Update(playerManager_actual->GetPosition());
+	//skyBox_actual->Update(playerManager_actual->GetPosition());
 	camera->Update(playerManager_actual->GetPosition(),
 		playerManager_actual->GetAngle(), fieldObjects);
 
@@ -294,7 +288,7 @@ void GameObjectManager::Draw()
 	// 描画に使用するシャドウマップを設定
 	SetUseShadowMap(0, shadow->GetShadowMapHandle());
 
-	map->Draw();
+	skyBox->Draw();
 	field->Draw();
 	for (auto& fieldObject : fieldObjects)
 	{

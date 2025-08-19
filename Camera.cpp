@@ -13,8 +13,21 @@
 /// インストラクタ
 /// </summary>
 Camera::Camera():
+	max_t(0.0f),
+	min_t(0.0f),
 	distance(0.0f),
-	aimPosition_usual(VGet(0.0f, 0.0f, 0.0f))
+	angle_now(0.0f),
+	angle_new(0.0f),
+	angle_radian(0.0f),
+	t(0.0f),
+	cameraDirection(VGet(0.0f, 0.0f, 0.0f)),
+	aimPosition_usual(VGet(0.0f, 0.0f, 0.0f)),
+	aimPosition(VGet(0.0f, 0.0f, 0.0f)),
+	centerPos(VGet(0.0f, 0.0f, 0.0f)),
+	spherePosition(VGet(0.0f, 0.0f, 0.0f)),
+	direction(VGet(0.0f, 0.0f, 0.0f)),
+	lookPosition(VGet(0.0f, 0.0f, 0.0f))
+
 {
 	// グラフィックの描画先を裏画面にセット
 	SetDrawScreen(DX_SCREEN_BACK);
@@ -40,16 +53,13 @@ Camera::~Camera()
 /// </summary>
 void Camera::Initialize()
 {
-
-	aimPosition = VGet(-0.169435501, 53.7492065, -1224.39844);
-	spherePosition = VGet(-1.28232884, 24.0028648, -1172.35425);
-	angle_now = -177.55f;
-	distance = 50.0f;
-	t = 0.7f;
+	aimPosition = initialize_aimPos;
+	spherePosition = initialize_spherePos;
+	angle_now = initialize_angle;
+	distance = initialize_distance;
+	t = initialize_t;
 
 	SetCameraPositionAndTarget_UpVecY(aimPosition, spherePosition);
-
-
 }
 
 /// <summary>
@@ -215,14 +225,14 @@ void Camera::RotateUpdate()
 /// </summary>
 void Camera::DistanceUpdate()
 {
-	min = spherePosition.y;
-	max = spherePosition.y + 40.0f;
+	min_t = spherePosition.y;
+	max_t = spherePosition.y + 40.0f;
 	float min_distance = 15.0f;
 	float max_distance = 70.0f;
 
 	float easedT = Calculation::EaseOutQuad(t);
 
-	aimPosition_usual.y = min + (max - min) * easedT;
+	aimPosition_usual.y = min_t + (max_t - min_t) * easedT;
 	distance = min_distance + (max_distance - min_distance) * easedT;
 
 	if (PadInput::GetJoyPad_y_right() > 0.0f)

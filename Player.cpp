@@ -364,8 +364,10 @@ void Player::DebugUpdate()
     //string_VECTOR
     DebugDrawer::Instance().InformationInput_string_VECTOR("playerPosition.x %f\nplayerPosition.y %f\nplayerPosition.z %f\n", position);
     
+    //string_int
+    DebugDrawer::Instance().InformationInput_string_int("frameåªç›êî%d\n", nowFrameNumber);
+
     //string_flaot
-    DebugDrawer::Instance().InformationInput_string_float("frameåªç›êî%d\n", nowFrameNumber);
     DebugDrawer::Instance().InformationInput_string_float("coinCount %f\n", angle);
     DebugDrawer::Instance().InformationInput_string_float("JoyPad_x_left %f\n", -PadInput::GetJoyPad_x_left());
     DebugDrawer::Instance().InformationInput_string_float("JoyPad_y_left %f\n", -PadInput::GetJoyPad_y_left());

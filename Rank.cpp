@@ -3,7 +3,9 @@
 #include <string>
 #include "Rank.h"
 
-Rank::Rank()
+Rank::Rank():
+    rankHandle(-1),
+    coinCount(-1)
 {
     jsonTag = "rank";
 }
@@ -61,5 +63,6 @@ void Rank::Update()
 
 void Rank::Draw()
 {
-    DrawGraph(x, y, rankHandle, TRUE);
+   // DrawGraph(x, y, rankHandle, TRUE);
+    DrawExtendGraph(x, y, 700, 450, rankHandle, TRUE);
 }

@@ -161,7 +161,6 @@ VECTOR Braced_Hang_To_Crouch::Hang_to_CrouchMove(const std::vector<std::shared_p
 std::pair<bool, VECTOR> Braced_Hang_To_Crouch::GroundCollisionCheck_Hang_to_Crouch(const std::vector<std::shared_ptr<BaseObject>>& fieldObjects,
     const VECTOR& topPos, const VECTOR& foot, const VECTOR& newPos)
 {
-    bool isHitSphere;
 
     bool isHitGround = false;
 

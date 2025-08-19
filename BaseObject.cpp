@@ -7,7 +7,8 @@ BaseObject::BaseObject():
 	modelHandle(-1),
 	position(VGet(-1.0f, -1.0f, -1.0f)),
 	pos_difference(VGet(-1.0f, -1.0f, -1.0f)),
-	tag("")
+	tag(""),
+	jsonTag("")
 {
 }
 

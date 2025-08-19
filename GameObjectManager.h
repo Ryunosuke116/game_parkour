@@ -29,7 +29,7 @@ private:
 	std::vector<std::shared_ptr<BaseObject>> fieldObjects;
 	std::vector<std::shared_ptr<BaseGameObjectManager>> managers;
 
-	std::shared_ptr<BaseObject>				map					= NULL;
+	std::shared_ptr<BaseObject>				skyBox				= NULL;
 	std::shared_ptr<BaseObject>				field				= NULL;
 	std::shared_ptr<Camera>					camera				= NULL;
 	std::shared_ptr<Layout>					layout				= NULL;
@@ -39,7 +39,7 @@ private:
 	std::shared_ptr<Tutorial>				tutorial			= NULL;
 	std::shared_ptr<FinishCut>				finishCut			= NULL;
 
-	std::shared_ptr<Map>			map_actual			 = NULL;
+	std::shared_ptr<SkyBox>			skyBox_actual		 = NULL;
 	std::shared_ptr<PlayerManager>	playerManager_actual = NULL;
 	std::shared_ptr<CoinManager>	coinManager_actual   = NULL;
 	std::shared_ptr<EffectManager>  effectManager_actual = NULL;

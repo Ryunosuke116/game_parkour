@@ -4,11 +4,12 @@
 /// <summary>
 /// コンストラクタ
 /// </summary>
-Field::Field() : BaseObject(),
+Field::Field() : 
+	BaseObject(),
 	isPush(false),
 	isPoly(false)
 {
-
+	jsonTag = "field";
 }
 
 /// <summary>

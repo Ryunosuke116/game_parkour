@@ -1,18 +1,17 @@
 #pragma once
 #include "BaseObject.h"
 
-class Map : public BaseObject
+class SkyBox : public BaseObject
 {
 private:
 
 public:
-	Map();
-	Map(const char* path);
-	~Map();
+	SkyBox();
+	~SkyBox();
 	void Initialize()override;
 	void Update()override;
 	void Update(const VECTOR& playerPos);
-	void Load(const nlohmann::json& jsonData)override{}
+	void Load(const nlohmann::json& jsonData)override;
 
 };
 

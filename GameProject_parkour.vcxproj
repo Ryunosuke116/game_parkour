@@ -176,7 +176,7 @@
     <ClCompile Include="Jump.cpp" />
     <ClCompile Include="Layout.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Map.cpp" />
+    <ClCompile Include="SkyBox.cpp" />
     <ClCompile Include="PlayerCalculation.cpp" />
     <ClCompile Include="GameObjectManager.cpp" />
     <ClCompile Include="PadInput.cpp" />
@@ -235,7 +235,7 @@
     <ClInclude Include="JsonManager.h" />
     <ClInclude Include="Jump.h" />
     <ClInclude Include="Layout.h" />
-    <ClInclude Include="Map.h" />
+    <ClInclude Include="SkyBox.h" />
     <ClInclude Include="ObjectManager_interface.h" />
     <ClInclude Include="Object_interface.h" />
     <ClInclude Include="PlayerCalculation.h" />

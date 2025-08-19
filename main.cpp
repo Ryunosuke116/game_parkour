@@ -12,7 +12,6 @@ int WINAPI WinMain(HINSTANCE hInstance,
     LPSTR lpCmdLine,
     int nCmdShow)
 {
-
     // 画面モードのセット
     ChangeWindowMode(TRUE);
     SetGraphMode(1600, 900, 16);

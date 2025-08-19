@@ -31,9 +31,6 @@
     <Filter Include="ソース ファイル\Base\BaseChara">
       <UniqueIdentifier>{664a45f2-e5e7-4051-97ee-a2ea2a076b72}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\Base\BaseManager">
-      <UniqueIdentifier>{ef9054aa-afc2-4b68-8b2b-943aed8a8bc9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\Base\BaseObject">
       <UniqueIdentifier>{5ac518b0-1420-4c76-901c-f90170dca77b}</UniqueIdentifier>
     </Filter>
@@ -220,6 +217,9 @@
     <Filter Include="ソース ファイル\static\json">
       <UniqueIdentifier>{c2fdffe0-4070-4057-9cf7-b8f503264f1b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Base\BaseManager">
+      <UniqueIdentifier>{ef9054aa-afc2-4b68-8b2b-943aed8a8bc9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -231,7 +231,7 @@
     <ClCompile Include="Input.cpp">
       <Filter>ソース ファイル\static\input</Filter>
     </ClCompile>
-    <ClCompile Include="Map.cpp">
+    <ClCompile Include="SkyBox.cpp">
       <Filter>ソース ファイル\map</Filter>
     </ClCompile>
     <ClCompile Include="PlayerStateActionBase.cpp">
@@ -398,7 +398,7 @@
     <ClInclude Include="Player.h">
       <Filter>ソース ファイル\object\game\player</Filter>
     </ClInclude>
-    <ClInclude Include="Map.h">
+    <ClInclude Include="SkyBox.h">
       <Filter>ソース ファイル\map</Filter>
     </ClInclude>
     <ClInclude Include="PlayerStateActionBase.h">

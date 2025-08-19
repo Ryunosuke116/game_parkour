@@ -278,10 +278,7 @@ std::pair<VECTOR, VECTOR> HitCheck::SegmentTriangleDistance(const VECTOR& p, con
 			return std::make_pair(q, point_Q);
 		}
 	}
-	else
-	{
-		float a;
-	}
+	
 
 	bool flag = false;
 

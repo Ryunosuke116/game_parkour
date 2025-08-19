@@ -17,7 +17,10 @@
 PlayerStateActionBase::PlayerStateActionBase(int& modelHandle,
     AnimState& oldAnimState, AnimState& nowAnimState):
     modelHandle(-1),
+    animNumber_old(-1),
     animBlendRate(0.0f),
+    isPush(false),
+    moveDirection(VGet(0.0f, 0.0f, 0.0f)),
     nowAnimState({NULL}),
     oldAnimState({NULL}),
     isChangeState(false)
@@ -110,9 +113,10 @@ bool PlayerStateActionBase::MotionUpdate(PlayerData& playerData)
 
 bool PlayerStateActionBase::Draw()
 {
-    DebugDrawer::Instance().InformationInput_string_float("nowAttachIndex %d\n", nowAnimState.AttachIndex);
+    DebugDrawer::Instance().InformationInput_string_int("nowAttachIndex %d\n", nowAnimState.AttachIndex);
+    DebugDrawer::Instance().InformationInput_string_int("oldAttachIndex %d\n", oldAnimState.AttachIndex);
+
     DebugDrawer::Instance().InformationInput_string_float("nowPlayTime_anim %f\n", nowAnimState.PlayTime_anim);
-    DebugDrawer::Instance().InformationInput_string_float("oldAttachIndex %d\n", oldAnimState.AttachIndex);
     DebugDrawer::Instance().InformationInput_string_float("oldPlayTime_anim %f\n", oldAnimState.PlayTime_anim);
  
     return true;

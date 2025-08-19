@@ -33,7 +33,7 @@ void CoinManager::Create()
 	{
 		coins.push_back(std::make_shared<CoinObject>());
 		coins.back()->Load(modelHandle,
-			VGet(pos[0], pos[1], pos[2]));
+			VGet(pos[0].get<float>(), pos[1].get<float>(), pos[2].get<float>()));
 	}
 }
 

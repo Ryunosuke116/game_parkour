@@ -1,11 +1,11 @@
 #include "common.h"
-#include "Input.h"
 #include "BaseChara.h"
 #include "DebugDrawer.h"
 
 
 BaseChara::BaseChara() :
     modelHandle(-1),
+    coinCount(-1),
     nowFrameNumber(-1),
     angle(-1),
     rotate_x(-1.0f),
@@ -14,7 +14,8 @@ BaseChara::BaseChara() :
     framePosition(VGet(-1.0f, -1.0f, -1.0f)),
     moveVec(VGet(-1.0f, -1.0f, -1.0f)),
     targetMoveDirection(VGet(-1.0f, -1.0f, -1.0f)),
-    moveDirection(VGet(-1.0f, -1.0f, -1.0f))
+    moveDirection(VGet(-1.0f, -1.0f, -1.0f)),
+    positionData({ NULL })
 {
 
 }

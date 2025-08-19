@@ -6,7 +6,7 @@
 #include "BaseChara.h"
 #include "BaseScene.h"
 #include "Field.h"
-#include "Map.h"
+#include "SkyBox.h"
 #include "HitCheck.h"
 #include "CollisionManager.h"
 #include "Player.h"

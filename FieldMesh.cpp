@@ -6,16 +6,13 @@
 /// コンストラクタ
 /// </summary>
 /// <param name="path"></param>
-FieldMesh::FieldMesh(const char* path):
+FieldMesh::FieldMesh():
+	BaseObject(),
 	isPoly(true),
 	isPush(true)
 {
-	modelHandle = MV1LoadModel(path);
-	position = VGet(0, 0, 0);
-	MV1SetScale(modelHandle, VGet(0.9f, 0.9f, 0.9f));
-	MV1SetPosition(modelHandle, position);
 	tag = "field";
-	pos_difference = VGet(0.0f, 0.0f, 0.0f);
+	jsonTag = "field";
 }
 
 /// <summary>
@@ -24,6 +21,16 @@ FieldMesh::FieldMesh(const char* path):
 FieldMesh::~FieldMesh()
 {
 
+}
+
+void FieldMesh::Load(const nlohmann::json& jsonData)
+{
+	std::string path = jsonData["meshPath"];
+	modelHandle = MV1LoadModel(path.c_str());
+	position = VGet(0, 0, 0);
+	MV1SetScale(modelHandle, VGet(0.9f, 0.9f, 0.9f));
+	MV1SetPosition(modelHandle, position);
+	pos_difference = VGet(0.0f, 0.0f, 0.0f);
 }
 
 /// <summary>

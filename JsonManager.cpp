@@ -11,6 +11,9 @@ JsonManager& JsonManager::Instance()
 
 void JsonManager::Initialize()
 {
+	//要素が0の場合だけ生成
+	if (jsons.size() == 0)return;
+
 	//Jsonディレクトリ内の全ファイルを読み込む
 	for (const auto& entry : std::filesystem::directory_iterator("Json"))
 	{

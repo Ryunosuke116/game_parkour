@@ -4,13 +4,13 @@
 class FieldMesh : public BaseObject
 {
 public:
-	FieldMesh(const char* path);
+	FieldMesh();
 	~FieldMesh();
 
-	void Initialize()override;
-	void Update()override;
-	void Draw()override;
-	void Load(const nlohmann::json& jsonData)override{}
+	void Initialize()							override;
+	void Update()								override;
+	void Draw()									override;
+	void Load(const nlohmann::json& jsonData)	override;
 
 private:
 	bool isPoly;
