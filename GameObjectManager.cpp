@@ -94,6 +94,7 @@ void GameObjectManager::Create()
 
 	//ƒ[ƒh
 	field->Load(JsonManager::Instance().GetJsons(field->GetJsonTag()));
+	skyBox->Load(JsonManager::Instance().GetJsons(skyBox->GetJsonTag()));
 	tutorial->Load(JsonManager::Instance().GetJsons(tutorial->GetTag()));
 	finishCut->Load(JsonManager::Instance().GetJsons(finishCut->GetTag()));
 
@@ -205,6 +206,8 @@ void GameObjectManager::Update()
 
 			//ui->Update();
 			uiManager_actual->Update();
+			goalArea->Update();
+
 		}
 		else
 		{
@@ -218,6 +221,7 @@ void GameObjectManager::Update()
 
 		effectManager_actual->PlayEffectUpdate();
 
+		//ƒS[ƒ‹”»’è
 		if (HitCheck::AABBHitJudge(playerManager_actual->GetPlayerAABB(),
 			goalArea->GetGoalArea() ) &&
 			!isStream_finishPicture
@@ -227,7 +231,7 @@ void GameObjectManager::Update()
 			finishCut->SetIsDraw_finish(true);
 		}
 		
-		DebugDrawer::Instance().InformationInput_string_bool("isGoal %d\n", isGoal);
+		//DebugDrawer::Instance().InformationInput_string_bool("isGoal %d\n", isGoal);
 
 	}
 
@@ -246,7 +250,6 @@ void GameObjectManager::StartUpdate()
 	}
 
 	playerManager_actual->Update_start(stream_startPicture_timer);
-	//skyBox_actual->Update(playerManager_actual->GetPosition());
 	camera->Update(playerManager_actual->GetPosition(),
 		playerManager_actual->GetAngle(), fieldObjects);
 

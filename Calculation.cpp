@@ -153,9 +153,9 @@ Calculation::NearestResult Calculation::SphereMeshOutsideTriangle_line(const MV1
 	float d2 = VSize(VSub(nearPoint_2, pos));
 	float d3 = VSize(VSub(nearPoint_3, pos));
 
-	DebugDrawer::Instance().InformationInput_sphere(nearPoint_1, 2.0f, GetColor(255, 0, 0));
-	DebugDrawer::Instance().InformationInput_sphere(nearPoint_2, 2.0f, GetColor(0, 255, 0));
-	DebugDrawer::Instance().InformationInput_sphere(nearPoint_3, 2.0f, GetColor(0, 0, 255));
+	//DebugDrawer::Instance().InformationInput_sphere(nearPoint_1, 2.0f, GetColor(255, 0, 0));
+	//DebugDrawer::Instance().InformationInput_sphere(nearPoint_2, 2.0f, GetColor(0, 255, 0));
+	//DebugDrawer::Instance().InformationInput_sphere(nearPoint_3, 2.0f, GetColor(0, 0, 255));
 	//àÍî‘ãﬂÇ¢ç¿ïWÇëIëÇ∑ÇÈ
 	if (d1 <= d2 && d1 <= d3)
 	{

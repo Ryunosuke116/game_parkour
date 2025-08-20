@@ -88,8 +88,8 @@ void Camera::Update(const VECTOR& playerPosition,
 	cameraDirection = VSub(spherePosition, aimPosition);
 	cameraDirection = VNorm(cameraDirection);
 
-	DebugDrawer::Instance().InformationInput_string_VECTOR("aimPos x.%f y.%f z.%f\n", aimPosition);
-	DebugDrawer::Instance().InformationInput_string_VECTOR("spherePos x.%f y.%f z.%f\n", spherePosition);
+	////DebugDrawer::Instance().InformationInput_string_VECTOR("aimPos x.%f y.%f z.%f\n", aimPosition);
+	////DebugDrawer::Instance().InformationInput_string_VECTOR("spherePos x.%f y.%f z.%f\n", spherePosition);
 }
 
 void Camera::Update_start(const float& timer,
@@ -206,7 +206,7 @@ void Camera::RotateUpdate()
 	float angle_radian = angle_now * DX_PI_F / 360.0f;
 	this->angle_radian = angle_radian;
 
-	DebugDrawer::Instance().InformationInput_string_float("angle_camera %f\n", angle_radian);
+	////DebugDrawer::Instance().InformationInput_string_float("angle_camera %f\n", angle_radian);
 
 	aimPosition_usual.x = spherePosition.x + distance * cos(angle_radian);
 	aimPosition_usual.z = spherePosition.z + distance * sin(angle_radian);

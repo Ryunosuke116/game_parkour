@@ -70,12 +70,13 @@ void Player::Initialize()
     playerData.isGround = true;
     playerData.isJump = false;
     playerData.isJump_second = false;
+    playerData.isJumpAll = false;
+    playerData.isWalljump = false;
     playerData.isMove = false;
     playerData.isWalk = true;
     playerData.isRoll = false;
     playerData.isSprint = false;
     playerData.isStopRun = false;
-    playerData.isJumpAll = false;
     playerData.isUse_Roll = false;
     playerData.isJump_PlayAnim = false;
     playerData.isFalling = false;
@@ -98,7 +99,7 @@ void Player::Initialize()
 
     MV1SetRotationXYZ(modelHandle, VGet(rotate_x * DX_PI_F / 180.0f, angle + DX_PI_F, 0.0f));
 
-    animationChanger->Initialize(-1, modelHandle, nowState, playerData, *this);
+    animationChanger->Initialize(animNum::walk, modelHandle, nowState, playerData, *this);
 
 }
 
@@ -135,7 +136,7 @@ void Player::Update(const VECTOR& cameraDirection,
 
     playerData = data_new;
 
-    bool isFree = !playerData.isHanging
+    bool isAction = !playerData.isHanging
         && !playerData.isHang_to_Crouch &&
         !playerData.isFalling && 
         !playerData.isJump && 
@@ -150,12 +151,15 @@ void Player::Update(const VECTOR& cameraDirection,
     }
 
     //通常時は進行方向にすぐ向くように
-    if (isFree)
+    if (isAction)
     {
         moveDirection_now = Calculation::Leap(moveDirection_now, 
             targetMoveDirection, 0.15f);
     }
-    else if(!playerData.isHanging && !playerData.isHang_to_Crouch)
+    //特定のアクション時は移動方向を変えられないように
+    else if(!playerData.isHanging && 
+        !playerData.isHang_to_Crouch &&
+        !playerData.isWalljump)
     {
         const float speed = 0.03f;
 
@@ -221,7 +225,7 @@ void Player::Update(const VECTOR& cameraDirection,
     //度数計算
     degree_pad_now = Calculation::radToDeg(radian_pad);
 
-    DebugUpdate();
+    //DebugUpdate();
     
     nowState->Draw();
     //2胴体

@@ -87,7 +87,7 @@ void PlayerManager::Update(const std::vector<std::shared_ptr<BaseObject>>& field
 	playerAABB.max = VGet(playerAABB.max.x + 3.5f,
 		playerAABB.max.y + 20.0f,
 		playerAABB.max.z + 3.5f);
-	DebugDrawer::Instance().InformationInput_AABB(playerAABB.min, playerAABB.max, GetColor(255, 0, 0));
+	////DebugDrawer::Instance().InformationInput_AABB(playerAABB.min, playerAABB.max, GetColor(255, 0, 0));
 	
 }
 

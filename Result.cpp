@@ -40,65 +40,8 @@ void Result::Create()
     Add(std::make_shared<UI_coin>(), jsonData);
     Add(std::make_shared<Rank>(), jsonData);
 
-    ////UI
-    //std::unordered_map<std::string, std::string> uiPath;
-    ////ƒ‰ƒ“ƒN
-    //std::unordered_map<std::string, std::string> rankPath;
-    ////”wŒi
-    //std::unordered_map<std::string, std::string> resultPath;
+    blackOut = std::make_shared<BlackOut>();
 
-    //for (auto& data : jsonData["coin"])
-    //{
-    //    std::string path = data[0];     //HandlePath
-    //    std::string name = data[1];     //path‚Ì–¼‘O
-
-    //    uiPath[name] = path;
-    //}
-
-    //for (auto& data : jsonData["rank"])
-    //{
-    //    std::string path = data[0];     //HandlePath
-    //    std::string name = data[1];     //path‚Ì–¼‘O
-
-    //    rankPath[name] = path;
-    //}
-
-    //for (auto& data : jsonData["result"])
-    //{
-    //    std::string path = data[0];     //HandlePath
-    //    std::string name = data[1];     //path‚Ì–¼‘O
-
-    //    resultPath[name] = path;
-    //}
-
-    //coinHandle = LoadGraph(uiPath.at("coin").c_str());
-    //crossHandle = LoadGraph(uiPath.at("cross").c_str());
-    //LoadDivGraph(uiPath.at("number").c_str(),
-    //    10, 10, 1, 32, 64, numberHandle);
-
-    //backGroundHandle = LoadGraph(resultPath.at("backGround").c_str());
-    //blackOut = std::make_shared<BlackOut>();
-
-    //if (coinCount <= 20)
-    //{
-    //    rankHandle = LoadGraph(rankPath.at("D").c_str());
-    //}
-    //else if (coinCount <= 40)
-    //{
-    //    rankHandle = LoadGraph(rankPath.at("C").c_str());
-    //}
-    //else if (coinCount <= 60)
-    //{
-    //    rankHandle = LoadGraph(rankPath.at("B").c_str());
-    //}
-    //else if (coinCount <= 90)
-    //{
-    //    rankHandle = LoadGraph(rankPath.at("A").c_str());
-    //}
-    //else if (coinCount == 100)
-    //{
-    //    rankHandle = LoadGraph(rankPath.at("S").c_str());
-    //}
 }
 
 /// <summary>
@@ -106,15 +49,10 @@ void Result::Create()
 /// </summary>
 void Result::Initialize()
 {
-    //num = std::to_string(coinCount);
-
-    ////ˆê•¶Žš‚µ‚©“ü‚Á‚Ä‚È‚¢ê‡æ“ª‚É0‚ð‘}“ü‚·‚é
-    //if (num.length() == 1)
-    //{
-    //    num.insert(0, "0");
-    //}
     const int coin_x = 30;
     const int coin_y = 700;
+
+    blackOut->Initialize();
 
     for (auto& UI : ui_list)
     {
@@ -154,27 +92,11 @@ void Result::Update()
 /// </summary>
 void Result::Draw()
 {
-    //DrawGraph(0, 0, backGroundHandle, TRUE);
-    ////blackOut->Draw();
-
-    //DrawGraph(coin_x, coin_y, coinHandle, TRUE);
-
-    //int num_x = 170;
-
-    //for (char c : num)
-    //{
-    //    int digit = c - '0';
-    //    DrawGraph(num_x, 730, numberHandle[digit], TRUE);
-    //    num_x += 32;
-    //}
-    //DrawGraph(400, 150, rankHandle, TRUE);
-
-    //DrawGraph(135, 730, crossHandle, TRUE);
-
     for (auto& UI : ui_list)
     {
         UI->Draw();
     }
+    blackOut->Draw();
 }
 
 void Result::Add(std::shared_ptr<BaseUI> ui,

@@ -124,7 +124,7 @@ VECTOR PlayerCalculation::Move(const int& animNumber_Now,
 
     //重力だけ前フレームのモノを使用
     returnVec.y = moveVec_old.y;
-    DebugDrawer::Instance().InformationInput_string_VECTOR("moveVec_old %f %f %f\n", moveVec_old);
+    //DebugDrawer::Instance().InformationInput_string_VECTOR("moveVec_old %f %f %f\n", moveVec_old);
 
     //重力計算
     returnVec = Gravity(returnVec, playerData);
@@ -297,7 +297,7 @@ VECTOR PlayerCalculation::HangingPosition()
     centerPos = VScale(centerPos, 0.5f);
     
     VECTOR newPos = VSub(nearestResult.nearestPoint, centerPos);
-    DebugDrawer::Instance().InformationInput_sphere(nearestResult.nearestPoint, 2.0f, GetColor(0, 255, 255));
+    //DebugDrawer::Instance().InformationInput_sphere(nearestResult.nearestPoint, 2.0f, GetColor(0, 255, 255));
     return newPos;
 }
 
@@ -312,8 +312,8 @@ VECTOR PlayerCalculation::HangingDirection( const VECTOR& centerPos)
     //射影ベクトル
     VECTOR a = Calculation::ProjectionDirection(centerPos, nearestResult.linePos_start, nearestResult.linePos_end);
 
-    DebugDrawer::Instance().InformationInput_line(nearestResult.linePos_start, nearestResult.linePos_end, GetColor(255, 0, 0));
-    DebugDrawer::Instance().InformationInput_sphere(a, 2.0f, GetColor(0, 255, 0));
+    //DebugDrawer::Instance().InformationInput_line(nearestResult.linePos_start, nearestResult.linePos_end, GetColor(255, 0, 0));
+    //DebugDrawer::Instance().InformationInput_sphere(a, 2.0f, GetColor(0, 255, 0));
 
     VECTOR direction = VSub(a, centerPos);
     direction.y = 0.0f;

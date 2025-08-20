@@ -14,7 +14,7 @@ public:
 	void Load(const nlohmann::json& jsonData)override{}
 
 private:
-	static constexpr float velocity = 0.2f;
+	static constexpr float velocity = 0.5f;
 
 	bool isUp;
 	float moveAmount;

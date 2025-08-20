@@ -44,7 +44,6 @@ void BlackOut::BlackOutUpdate(float addAlpha)
 /// </summary>
 void BlackOut::LightChangeUpdate(float addAlpha)
 {
-
     if (!(alpha <= 0))
     {
         alpha -= addAlpha;

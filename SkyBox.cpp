@@ -7,7 +7,7 @@
 /// </summary>
 SkyBox::SkyBox()
 {
-	
+	jsonTag = "field";
 }
 
 /// <summary>

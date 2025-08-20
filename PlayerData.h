@@ -14,6 +14,7 @@ struct PlayerData
 	bool isJump_PlayAnim;			//ジャンプのアニメを再生するか
 	bool isJumpAll;					//全てのジャンプが完了したか
 	bool isUse_wallJump;			//壁ジャンプを使用できるか
+	bool isWalljump;				//壁ジャンプしているか
 	bool isRoll;					//転がるか
 	bool isUse_Roll;				//ロールアクションを終えたか
 	bool isPossible_wallRun;		//壁走りが可能か
