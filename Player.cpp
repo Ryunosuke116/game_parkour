@@ -225,7 +225,7 @@ void Player::Update(const VECTOR& cameraDirection,
     //“x”ŒvŽZ
     degree_pad_now = Calculation::radToDeg(radian_pad);
 
-    //DebugUpdate();
+    DebugUpdate();
     
     nowState->Draw();
     //2“·‘Ì
@@ -389,6 +389,7 @@ void Player::DebugUpdate()
     DebugDrawer::Instance().InformationInput_string_bool("isJump_first %d\n", playerData.isJump_first);
     DebugDrawer::Instance().InformationInput_string_bool("isJump_second %d\n", playerData.isJump_second);
     DebugDrawer::Instance().InformationInput_string_bool("isJumpAll %d\n", playerData.isJumpAll);
+    DebugDrawer::Instance().InformationInput_string_bool("isWalljump %d\n", playerData.isWalljump);
     DebugDrawer::Instance().InformationInput_string_bool("isUse_wallJump %d\n", playerData.isUse_wallJump);
     DebugDrawer::Instance().InformationInput_string_bool("isRoll %d\n", playerData.isRoll);
     DebugDrawer::Instance().InformationInput_string_bool("isUse_roll %d\n", playerData.isUse_Roll);

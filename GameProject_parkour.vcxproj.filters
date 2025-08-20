@@ -97,9 +97,6 @@
     <Filter Include="ソース ファイル\collisionObject\floor_sky">
       <UniqueIdentifier>{828f1d62-3c20-4137-8228-5f854e5c690e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\collisionObject\wall">
-      <UniqueIdentifier>{64a5a458-0152-4384-824c-1d742086213b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\manager\effect">
       <UniqueIdentifier>{5e5cd968-670e-44f1-a594-3cd0abd7bd68}</UniqueIdentifier>
     </Filter>
@@ -324,9 +321,6 @@
     <ClCompile Include="AnimationChanger.cpp">
       <Filter>ソース ファイル\object\game\player\animationChanger</Filter>
     </ClCompile>
-    <ClCompile Include="Wall.cpp">
-      <Filter>ソース ファイル\collisionObject\wall</Filter>
-    </ClCompile>
     <ClCompile Include="Player.cpp">
       <Filter>ソース ファイル\object\game\player</Filter>
     </ClCompile>
@@ -502,9 +496,6 @@
     </ClInclude>
     <ClInclude Include="AnimationChanger.h">
       <Filter>ソース ファイル\object\game\player\animationChanger</Filter>
-    </ClInclude>
-    <ClInclude Include="Wall.h">
-      <Filter>ソース ファイル\collisionObject\wall</Filter>
     </ClInclude>
     <ClInclude Include="PlayerData.h">
       <Filter>ヘッダー ファイル</Filter>

@@ -179,4 +179,5 @@ void Jump::Enter(PlayerData& playerData)
 void Jump::Exit(PlayerData& playerData)
 {
     playerData.isJump = false;
+    playerData.isWalljump = false;
 }

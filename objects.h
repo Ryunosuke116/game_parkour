@@ -14,7 +14,6 @@
 #include "CoinObject.h"
 #include "CoinManager.h"
 #include "Floor_sky.h"
-#include "Wall.h"
 #include "Shadow.h"
 #include "GoalArea.h"
 #include "GameTimer.h"

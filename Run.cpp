@@ -179,11 +179,12 @@ std::pair<VECTOR, PlayerData> Run::Update_wallRun(Player& player,
 
 	JumpMove(playerData, player);
 
-	//ジャンプする
+	//壁ジャンプする
 	if (playerData.isJump_second)
 	{
 		playerData.isRun_wall = false;
 		playerData.isUse_wallJump = true;
+		playerData.isWalljump = true;
 		//player.SetMoveDirection_now(moveDirection_new);
 		player.playerCalculation->Reset_run_wall();
 
@@ -324,26 +325,6 @@ VECTOR Run::Move(const VECTOR& cameraDirection, PlayerData& playerData)
 	//パッド or arrowキーの入力方向で計算
 	moveDirection = VAdd(VScale(rightMove, -PadInput::GetJoyPad_x_left()),
 		VScale(upMove, -PadInput::GetJoyPad_y_left()));
-
-	////スティックが即座に反対方向に向いた場合slipをtrue
-	//float radian_new = atan2f(moveDirection.x, moveDirection.z);
-
-	//float degree_now = Calculation::radToDeg(angle);
-	//degree_new = Calculation::radToDeg(radian_new);
-
-	//degree_difference = degree_new - degree_now;
-
-	////角度差を-180～180に正規化
-	//while (degree_difference > 180.0f) degree_difference -= 360.0f;
-	//while (degree_difference < -180.0f) degree_difference += 360.0f;
-
-	////絶対値で調べる
-	//if (abs(degree_difference) >= 170.0f &&
-	//	playerData.isGround && playerData.isRun && !playerData.isRoll &&
-	//	playerMoveSpeed >= (playerMoveSpeed_max - 0.4f))
-	//{
-	//	playerData.isSlip = true;
-	//}
 
 	//0でなければ正規化
 	if (VSize(moveDirection) != 0)

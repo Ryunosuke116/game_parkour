@@ -117,8 +117,36 @@ void Camera::Update_start(const float& timer,
 /// </summary>
 void Camera::Update_layout()
 {
+	cameraDirection = VSub(spherePosition, aimPosition);
+	cameraDirection = VNorm(cameraDirection);
+
+	VECTOR moveDirection = VGet(0.0f, 0.0f, 0.0f);
+
+	VECTOR rightMove = VCross(cameraDirection, VGet(0.0f, 1.0f, 0.0f));
+
+	//正規化
+	rightMove = VNorm(rightMove);
+	VECTOR upMove = VNorm(cameraDirection);
+
+	upMove.y = 0.0f;
+	rightMove.y = 0.0f;
+
+	//パッド or arrowキーの入力方向で計算
+	moveDirection = VAdd(VScale(rightMove, -PadInput::GetJoyPad_x_left()),
+		VScale(upMove, -PadInput::GetJoyPad_y_left()));
+
+	//0でなければ正規化
+	if (VSize(moveDirection) != 0)
+	{
+		moveDirection = VNorm(moveDirection);
+	}
+
+	aimPosition = VAdd(aimPosition, moveDirection);
+	spherePosition = VAdd(spherePosition, moveDirection);
+
 	//y軸↑移動
-	if (CheckHitKey(KEY_INPUT_UP) && CheckHitKey(KEY_INPUT_LCONTROL))
+	if (CheckHitKey(KEY_INPUT_UP) &&
+		CheckHitKey(KEY_INPUT_LCONTROL))
 	{
 		aimPosition.y += 1.0f;
 		spherePosition.y += 1.0f;
@@ -131,7 +159,8 @@ void Camera::Update_layout()
 	}
 
 	//y軸↓移動
-	if (CheckHitKey(KEY_INPUT_DOWN) && CheckHitKey(KEY_INPUT_LCONTROL))
+	if (CheckHitKey(KEY_INPUT_DOWN) &&
+		CheckHitKey(KEY_INPUT_LCONTROL))
 	{
 		aimPosition.y -= 1.0f;
 		spherePosition.y -= 1.0f;
@@ -143,38 +172,64 @@ void Camera::Update_layout()
 		spherePosition.z -= 1.0f;
 	}
 
-	//右回転
-	if (CheckHitKey(KEY_INPUT_RIGHT) &&
-		CheckHitKey(KEY_INPUT_LSHIFT))
-	{
-		angle_now += 2.0f;
-	}
-	//x軸右移動
-	else if (CheckHitKey(KEY_INPUT_RIGHT) ||
-		PadInput::GetJoyPad_x_right() < 0.0f)
-	{
-		aimPosition.x += 1.0f;
-		spherePosition.x += 1.0f;
-	}
+	////右回転
+	//if (CheckHitKey(KEY_INPUT_RIGHT) &&
+	//	CheckHitKey(KEY_INPUT_LSHIFT))
+	//{
+	//	angle_now += 2.0f;
+	//}
+	////x軸右移動
+	//else if (CheckHitKey(KEY_INPUT_RIGHT) ||
+	//	PadInput::GetJoyPad_x_right() < 0.0f)
+	//{
+	//	aimPosition.x += 1.0f;
+	//	spherePosition.x += 1.0f;
+	//}
 
-	//左回転
-	if (CheckHitKey(KEY_INPUT_LEFT) &&
-		CheckHitKey(KEY_INPUT_LSHIFT))
-	{
-		angle_now -= 2.0f;
-	}
-	//x軸左移動
-	else if (CheckHitKey(KEY_INPUT_LEFT) ||
-		PadInput::GetJoyPad_x_right() > 0.0f)
-	{
-		aimPosition.x -= 1.0f;
-		spherePosition.x -= 1.0f;
-	}
+	////左回転
+	//if (CheckHitKey(KEY_INPUT_LEFT) &&
+	//	CheckHitKey(KEY_INPUT_LSHIFT))
+	//{
+	//	angle_now -= 2.0f;
+	//}
+	////x軸左移動
+	//else if (CheckHitKey(KEY_INPUT_LEFT) ||
+	//	PadInput::GetJoyPad_x_right() > 0.0f)
+	//{
+	//	aimPosition.x -= 1.0f;
+	//	spherePosition.x -= 1.0f;
+	//}
 
 	if (CheckHitKey(KEY_INPUT_9))
 	{
 		angle_now = -177.55f;
 	}
+
+	//DistanceUpdate();
+
+	if (PadInput::GetJoyPad_y_right() > 0.0f)
+	{
+		aimPosition.y += 1.0f;
+		spherePosition.y += 1.0f;
+	}
+	if (PadInput::GetJoyPad_y_right() < 0.0f)
+	{
+		aimPosition.y -= 1.0f;
+		spherePosition.y -= 1.0f;
+	}
+
+	AngleUpdate(1.0f);
+
+	float angle_radian = angle_now * DX_PI_F / 360.0f;
+	this->angle_radian = angle_radian;
+
+	aimPosition.x = spherePosition.x + distance * cos(angle_radian);
+	aimPosition.z = spherePosition.z + distance * sin(angle_radian);
+
+	//aimPosition = aimPosition_usual;
+
+	float maxRange = 5.0f;
+	float maxRange_ = 10.0f;
 
 	//RotateUpdate();
 
@@ -242,7 +297,6 @@ void Camera::DistanceUpdate()
 		{
 			t = 0.0f;
 		}
-
 	}
 	if (PadInput::GetJoyPad_y_right() < 0.0f)
 	{
@@ -251,7 +305,6 @@ void Camera::DistanceUpdate()
 		{
 			t = 1.0f;
 		}
-
 	}
 }
 
@@ -261,19 +314,19 @@ void Camera::DistanceUpdate()
 void Camera::AngleUpdate(const float& angle_player)
 {
 
-	//カメラ移動処理
-	if ((CheckHitKey(KEY_INPUT_A) ||
-		PadInput::GetJoyPad_x_left() < 0.0f) &&
-		PadInput::GetJoyPad_x_right() == 0.0f)
-	{
-		angle_now += 2.0f;
-	}
-	if ((CheckHitKey(KEY_INPUT_D) ||
-		PadInput::GetJoyPad_x_left() > 0.0f) &&
-		PadInput::GetJoyPad_x_right() == 0.0f)
-	{
-		angle_now -= 2.0f;
-	}
+	////カメラ移動処理
+	//if ((CheckHitKey(KEY_INPUT_A) ||
+	//	PadInput::GetJoyPad_x_left() < 0.0f) &&
+	//	PadInput::GetJoyPad_x_right() == 0.0f)
+	//{
+	//	angle_now += 2.0f;
+	//}
+	//if ((CheckHitKey(KEY_INPUT_D) ||
+	//	PadInput::GetJoyPad_x_left() > 0.0f) &&
+	//	PadInput::GetJoyPad_x_right() == 0.0f)
+	//{
+	//	angle_now -= 2.0f;
+	//}
 
 	if (PadInput::GetJoyPad_x_right() < 0.0f)
 	{

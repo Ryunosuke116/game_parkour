@@ -1,5 +1,7 @@
 #include "common.h"
 #include "Layout.h"
+#include "DebugDrawer.h"
+#include "PadInput.h"
 
 Layout::Layout() :
 	isPush(false)
@@ -21,8 +23,11 @@ void Layout::Initialize(const int& modelHandle)
 void Layout::Update(const VECTOR& pos, CoinManager& manager)
 {
 	MV1SetPosition(modelHandle, pos);
+	DebugDrawer::Instance().InformationInput_string_VECTOR("position x %f  y %f  z %f\n", pos);
 
-	if (CheckHitKey(KEY_INPUT_SPACE))
+
+	if (CheckHitKey(KEY_INPUT_SPACE) ||
+		PadInput::IsPush_A())
 	{
 		if (!isPush)
 		{
