@@ -67,7 +67,7 @@ void Camera::Initialize()
 /// </summary>
 void Camera::Update(const VECTOR& playerPosition,
 	const float& angle_player,
-	const std::vector<std::shared_ptr<BaseObject>>& fieldObjects)
+	const std::vector<std::shared_ptr<BaseObject>>& collisionObjects)
 {
 	centerPos = playerPosition;
 	centerPos.y += 15.0f;
@@ -78,7 +78,7 @@ void Camera::Update(const VECTOR& playerPosition,
 
 	RotateUpdate();
 
-	for (const auto& fieldObject : fieldObjects)
+	for (const auto& fieldObject : collisionObjects)
 	{
 		CameraPosCalc(fieldObject->GetModelHandle());
 	}

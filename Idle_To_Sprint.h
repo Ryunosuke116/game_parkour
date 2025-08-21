@@ -11,7 +11,7 @@ public:
 	void Initialize(int& modelHandle, Player& player)override;
 
 	std::pair<VECTOR, PlayerData> Update(const VECTOR& cameraDirection,
-		const std::vector<std::shared_ptr<BaseObject>>& fieldObjects, Player& player)override;
+		const std::vector<std::shared_ptr<BaseObject>>& collisionObjects, Player& player)override;
 
 	VECTOR Command(const VECTOR& cameraDirection, PlayerData& playerData, Player& player)override;
 

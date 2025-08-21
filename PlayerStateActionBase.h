@@ -26,7 +26,7 @@ public:
 	//純粋仮想関数
 	virtual void Initialize(int& modelHandle, Player& player)abstract;
 	virtual std::pair<VECTOR, PlayerData> Update(const VECTOR& cameraDirection,
-		const std::vector<std::shared_ptr<BaseObject>>& fieldObjects, Player& player)abstract;
+		const std::vector<std::shared_ptr<BaseObject>>& collisionObjects, Player& player)abstract;
 	virtual VECTOR Command(const VECTOR& cameraDirection, PlayerData& playerData, Player& player)abstract;
 	virtual void Enter(PlayerData& playerData) abstract;		//状態に入ったとき
 	virtual void Exit(PlayerData& playerData) abstract;			//状態を抜けるとき
@@ -60,7 +60,6 @@ public:
 
 protected:
 	static constexpr float	AnimBlendSpeed = 0.1f;		// アニメーションのブレンド率変化速度
-	static constexpr float entryDegree_wallRun = 40.0f;
 	static constexpr float run_wall_rotate_x = 30.0f;
 	static constexpr float cliff_radius = 4.0f;
 

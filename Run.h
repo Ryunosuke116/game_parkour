@@ -13,7 +13,7 @@ public:
 	virtual void Initialize(int& modelHandle, Player& player)override;
 
 	std::pair<VECTOR, PlayerData> Update(const VECTOR& cameraDirection,
-		const std::vector<std::shared_ptr<BaseObject>>& fieldObjects, Player& player)override;
+		const std::vector<std::shared_ptr<BaseObject>>& collisionObjects, Player& player)override;
 
 	bool MotionUpdate(PlayerData& playerData)override;
 	
@@ -24,7 +24,7 @@ public:
 
 	std::pair<VECTOR, PlayerData> Update_normal(const VECTOR& cameraDirection, Player& player);
 	std::pair<VECTOR, PlayerData> Update_wallRun(Player& player,
-		const std::vector<std::shared_ptr<BaseObject>>& fieldObjects);
+		const std::vector<std::shared_ptr<BaseObject>>& collisionObjects);
 
 private:
 	static constexpr float playAnimSpeed = 0.5f;	    // ˆÚ“®‘¬“x

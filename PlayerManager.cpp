@@ -63,14 +63,14 @@ void PlayerManager::Initialize()
 /// </summary>
 /// <param name="mapHandle"></param>
 /// <param name="player"></param>
-void PlayerManager::Update(const std::vector<std::shared_ptr<BaseObject>>& fieldObjects ,
+void PlayerManager::Update(const std::vector<std::shared_ptr<BaseObject>>& collisionObjects ,
 	std::shared_ptr<EffectManager>& effectManager, 
 	const VECTOR& cameraDirection)
 {
 
-	actualPlayer->Update(cameraDirection,effectManager, fieldObjects);
+	actualPlayer->Update(cameraDirection,effectManager, collisionObjects);
 
-	collisionManager->Update(*player, fieldObjects, actualPlayer->GetData());
+	collisionManager->Update(*player, collisionObjects, actualPlayer->GetData());
 	
 	actualPlayer->Receive_CollisionResult();
 

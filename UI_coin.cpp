@@ -8,7 +8,7 @@ UI_coin::UI_coin() :
 	coinHandle(-1),
 	crossHandle(-1),
 	coinCount(-1),
-	num("")
+	countNumber("")
 {
 	std::fill(
 		std::begin(numberHandle),
@@ -44,24 +44,23 @@ void UI_coin::Load(const nlohmann::json& jsonData)
 
 void UI_coin::Initialize()
 {
-
 	cross_x = x + 105;
 	cross_y = y + 30;
 	number_x = x + 140;
 	number_y = y + 30;
 
-	num = "00";
+	countNumber = "00";
 	coinCount = 0;
 }
 
 void UI_coin::Update()
 {
-	num = std::to_string(coinCount);
+	countNumber = std::to_string(coinCount);
 
 	//ˆê•¶š‚µ‚©“ü‚Á‚Ä‚È‚¢ê‡æ“ª‚É0‚ğ‘}“ü‚·‚é
-	if (num.length() == 1)
+	if (countNumber.length() == 1)
 	{
-		num.insert(0, "0");
+		countNumber.insert(0, "0");
 	}
 }
 
@@ -72,7 +71,7 @@ void UI_coin::Draw()
 	int num_x = number_x;
 	const int addNumber_x = 32;
 
-	for (char c : num)
+	for (char c : countNumber)
 	{
 		int digit = c - '0';
 		DrawGraph(num_x, number_y, numberHandle[digit], TRUE);

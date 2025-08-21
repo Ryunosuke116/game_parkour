@@ -1,12 +1,17 @@
+#include "common.h"
+#include <string>
 #include "GameTimer.h"
 #include "DebugDrawer.h"
 
 /// <summary>
 /// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
 /// </summary>
-GameTimer::GameTimer()
+GameTimer::GameTimer():
+	BaseUI(),
+	isUpdateMin(false),
+	countNumberSec("")
 {
-
+	jsonTag = "png";
 }
 
 /// <summary>
@@ -17,6 +22,14 @@ GameTimer::~GameTimer()
 
 }
 
+void GameTimer::Load(const nlohmann::json& jsonData)
+{
+	std::string path = jsonData["coin"][2][0];
+
+	LoadDivGraph(path.c_str(),
+		10, 10, 1, 32, 64, numberHandle);
+}
+
 /// <summary>
 /// ‰Šú‰»
 /// </summary>
@@ -25,8 +38,12 @@ void GameTimer::Initialize()
 	time = 0;
 	setTime = GetNowCount();
 	sec = 0;
-	min = 0;
+	min = 3;
 	msec = 0;
+	positionX = 300;
+	positionY = 30;
+	isUpdateMin = false;
+	countNumberSec = "";
 }
 
 /// <summary>
@@ -34,19 +51,38 @@ void GameTimer::Initialize()
 /// </summary>
 void GameTimer::Update()
 {
+	const int subMin = 1;
+	const int maxSec = 60;
+
 	time = GetNowCount() - setTime;
 
-	//•b,•ªAƒ~ƒŠ•b‚ğŒvZ
-	sec = time / 1000;
-	min = sec / 60;
-	sec -= min * 60;
+	//•b,•ª‚ğŒvZ
+	int elapsedSec = time / 1000;
+	int elapsedMin = elapsedSec / 60;
+	elapsedSec -= elapsedMin * 60;
 
-	// ƒ~ƒŠ•bZo(‚P‚Oƒ~ƒŠ•b’PˆÊ‚Á‚Û‚¢)
-	msec = (time - sec * 1000 - min * 60000) / 10;
+	sec = maxSec - elapsedSec;
+	
+	//60•bŒo‰ß‚²‚Æ‚É•ªƒ^ƒCƒ}[‚ğXV
+	if (!isUpdateMin &&
+		sec == maxSec)
+	{
+		min = min - subMin;
+
+		isUpdateMin = true;
+	}
+
+	//60•b‚Í00•b•\¦‚Æ‚·‚é
+	if (sec == maxSec)
+	{
+		sec = 0;
+	}
+
+	countNumberSec = CreateCountNumber(sec);
+	countNumberMin = CreateCountNumber(min);
 
 	DebugDrawer::Instance().InformationInput_string_int("min %d\n", min);
 	DebugDrawer::Instance().InformationInput_string_int("sec %d\n", sec);
-	DebugDrawer::Instance().InformationInput_string_int("msec %d\n", msec);
 }
 
 /// <summary>
@@ -55,5 +91,40 @@ void GameTimer::Update()
 /// <returns></returns>
 void GameTimer::Draw()
 {
+	int num_x = positionX;
+	const int addNumber_x = 32;
 
+	for (char c : countNumberMin)
+	{
+		int digit = c - '0';
+		DrawGraph(num_x, positionY, numberHandle[digit], TRUE);
+		num_x += addNumber_x;
+	}
+
+	num_x += addNumber_x;
+
+	for (char c : countNumberSec)
+	{
+		int digit = c - '0';
+		DrawGraph(num_x, positionY, numberHandle[digit], TRUE);
+		num_x += addNumber_x;
+	}
+}
+
+std::string GameTimer::CreateCountNumber(const int time)
+{
+	std::string countNumber = "";
+	const int characterCount = 1;
+	const int firstCount = 0;
+
+	countNumber = std::to_string(time);
+
+	//ˆê•¶š‚µ‚©“ü‚Á‚Ä‚È‚¢ê‡æ“ª‚É0‚ğ‘}“ü‚·‚é
+	if (countNumber.length() == characterCount)
+	{
+		countNumber.insert(firstCount, "0");
+		return countNumber;
+	}
+
+	return countNumber;
 }

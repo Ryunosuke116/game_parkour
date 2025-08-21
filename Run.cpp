@@ -49,7 +49,7 @@ void Run::Initialize(int& modelHandle, Player& player)
 }
 
 std::pair<VECTOR, PlayerData> Run::Update(const VECTOR& cameraDirection,
-	const std::vector<std::shared_ptr<BaseObject>>& fieldObjects, Player& player)
+	const std::vector<std::shared_ptr<BaseObject>>& collisionObjects, Player& player)
 {
 	PlayerData playerData = player.GetData();
 
@@ -57,7 +57,7 @@ std::pair<VECTOR, PlayerData> Run::Update(const VECTOR& cameraDirection,
 
 	if (playerData.isRun_wall)
 	{
-		auto [moveDir_new,playerData_new] = Update_wallRun(player, fieldObjects);
+		auto [moveDir_new,playerData_new] = Update_wallRun(player, collisionObjects);
 	
 		moveDir = moveDir_new;
 		playerData = playerData_new;
@@ -110,10 +110,10 @@ std::pair<VECTOR,PlayerData> Run::Update_normal(const VECTOR& cameraDirection, P
 /// ï«ëñÇËéûÇÃçXêVèàóù
 /// </summary>
 /// <param name="player"></param>
-/// <param name="fieldObjects"></param>
+/// <param name="collisionObjects"></param>
 /// <returns></returns>
 std::pair<VECTOR, PlayerData> Run::Update_wallRun(Player& player, 
-	const std::vector<std::shared_ptr<BaseObject>>& fieldObjects)
+	const std::vector<std::shared_ptr<BaseObject>>& collisionObjects)
 {
 
 	PlayerData playerData = player.GetData();
@@ -152,7 +152,7 @@ std::pair<VECTOR, PlayerData> Run::Update_wallRun(Player& player,
    //äRíÕÇ›îªíË
 	if (playerData.isUse_Hanging)
 	{
-		auto result_cliff = HitCheck::CliffGrabbing(fieldObjects,
+		auto result_cliff = HitCheck::CliffGrabbing(collisionObjects,
 			player.GetPositionData().position_top_ray,
 			player.GetMoveDirection_now(), cliff_radius);
 

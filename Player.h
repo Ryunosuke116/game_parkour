@@ -21,7 +21,6 @@ private:
 	static constexpr float addJumpPower = 1.7f;		//ジャンプパワー
 	static constexpr float gravity = -0.06f;
 	static constexpr float run_wall_rotate_x = 30.0f;
-	static constexpr float entryDegree_wallRun = 30.0f;
 	static constexpr float radius = 3.5f;
 	static constexpr float height = 10.0f;
 
@@ -61,7 +60,7 @@ public:
 	void Update()override;
 	void Update(const VECTOR& cameraDirection,
 		std::shared_ptr<EffectManager>& effectManager,
-		const std::vector<std::shared_ptr<BaseObject>>& fieldObjects);
+		const std::vector<std::shared_ptr<BaseObject>>& collisionObjects);
 	
 
 	void Update_start(const float& timer);

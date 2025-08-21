@@ -390,7 +390,7 @@ bool HitCheck::TriangleAreaCheck_ground(const VECTOR& point, const VECTOR& a, co
 /// </summary>
 /// <param name="player"></param>
 /// <param name="modelHandle"></param>
-HangingData HitCheck::CliffGrabbing(const std::vector<std::shared_ptr<BaseObject>>& fieldObjects,
+HangingData HitCheck::CliffGrabbing(const std::vector<std::shared_ptr<BaseObject>>& collisionObjects,
 	const VECTOR& topPosition, const VECTOR& moveDirection,
 	const float& radius)
 {
@@ -404,7 +404,7 @@ HangingData HitCheck::CliffGrabbing(const std::vector<std::shared_ptr<BaseObject
 	HangingData hangingData = { false,VGet(0.0f,0.0f,0.0f),NULL };
 
 	//—Ž‰º’†‚Éplayer‚Ìã•”‚Ì‹…‚Å”»’è‚ðŽæ‚é
-	for (const auto& fieldObject : fieldObjects)
+	for (const auto& fieldObject : collisionObjects)
 	{
 		MV1_COLL_RESULT_POLY_DIM poly_dim;
 

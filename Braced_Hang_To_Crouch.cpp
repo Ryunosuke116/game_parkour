@@ -49,17 +49,17 @@ void Braced_Hang_To_Crouch::Initialize(int& modelHandle, Player& player)
 /// 更新
 /// </summary>
 /// <param name="cameraDirection"></param>
-/// <param name="fieldObjects"></param>
+/// <param name="collisionObjects"></param>
 /// <param name="player"></param>
 /// <returns></returns>
 std::pair<VECTOR, PlayerData> Braced_Hang_To_Crouch::Update(const VECTOR& cameraDirection,
-    const std::vector<std::shared_ptr<BaseObject>>& fieldObjects, Player& player)
+    const std::vector<std::shared_ptr<BaseObject>>& collisionObjects, Player& player)
 {
     VECTOR moveVec = player.GetMoveDirection_now();
 
     PlayerData playerData = player.GetData();
 
-    moveVec = Hang_to_CrouchMove(fieldObjects, player,playerData);
+    moveVec = Hang_to_CrouchMove(collisionObjects, player,playerData);
 
     return std::make_pair(moveVec, playerData);
 }
@@ -88,7 +88,7 @@ void Braced_Hang_To_Crouch::Exit(PlayerData& playerData)
 /// 登り
 /// </summary>
 /// <param name="mapHandle"></param>
-VECTOR Braced_Hang_To_Crouch::Hang_to_CrouchMove(const std::vector<std::shared_ptr<BaseObject>>& fieldObjects,
+VECTOR Braced_Hang_To_Crouch::Hang_to_CrouchMove(const std::vector<std::shared_ptr<BaseObject>>& collisionObjects,
     Player& player, PlayerData& playerData)
 {
     //////////////////////////////////
@@ -120,7 +120,7 @@ VECTOR Braced_Hang_To_Crouch::Hang_to_CrouchMove(const std::vector<std::shared_p
         //足のフレーム座標で衝突判定
         VECTOR foot = MV1GetFramePosition(modelHandle, 167);
 
-        auto result = GroundCollisionCheck_Hang_to_Crouch(fieldObjects, nowPos, foot, newPos);
+        auto result = GroundCollisionCheck_Hang_to_Crouch(collisionObjects, nowPos, foot, newPos);
 
         //playerの座標はフレーム座標を基準にしていないため縦だけずらす
         returnVec.y = result.second.y - nowPos.y;
@@ -158,7 +158,7 @@ VECTOR Braced_Hang_To_Crouch::Hang_to_CrouchMove(const std::vector<std::shared_p
 /// <param name="positionData.radius"></param>
 /// <param name="isJump"></param>
 /// <returns></returns>
-std::pair<bool, VECTOR> Braced_Hang_To_Crouch::GroundCollisionCheck_Hang_to_Crouch(const std::vector<std::shared_ptr<BaseObject>>& fieldObjects,
+std::pair<bool, VECTOR> Braced_Hang_To_Crouch::GroundCollisionCheck_Hang_to_Crouch(const std::vector<std::shared_ptr<BaseObject>>& collisionObjects,
     const VECTOR& topPos, const VECTOR& foot, const VECTOR& newPos)
 {
 
@@ -171,7 +171,7 @@ std::pair<bool, VECTOR> Braced_Hang_To_Crouch::GroundCollisionCheck_Hang_to_Crou
     MV1_COLL_RESULT_POLY rayPoly_ground;
     VECTOR returnPos = newPos;
 
-    for (const auto& fieldObject : fieldObjects)
+    for (const auto& fieldObject : collisionObjects)
     {
         //rayが当たっていれば
         isHitGround = HitCheck::RayHitJudge(fieldObject->GetModelHandle(), -1, topPos, bottomPos, rayPoly_ground);

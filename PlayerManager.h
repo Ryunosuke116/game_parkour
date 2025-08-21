@@ -21,7 +21,7 @@ public:
 	PlayerManager();
 	~PlayerManager();
 	
-	void Update(const std::vector<std::shared_ptr<BaseObject>>& fieldObjects,
+	void Update(const std::vector<std::shared_ptr<BaseObject>>& collisionObjects,
 		std::shared_ptr<EffectManager>& effectManager,
 		const VECTOR& cameraDirection);
 

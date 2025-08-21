@@ -42,6 +42,7 @@ public:
 		return nullptr;
 	}
 
+
 private:
 	std::vector<std::shared_ptr<BaseUI>> ui_list;
 };

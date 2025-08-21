@@ -26,7 +26,7 @@ public:
 	int GetCoinCount() { return playerManager_actual->GetCoinCount(); }
 
 private:
-	std::vector<std::shared_ptr<BaseObject>> fieldObjects;
+	std::vector<std::shared_ptr<BaseObject>> collisionObjects;
 	std::vector<std::shared_ptr<BaseGameObjectManager>> managers;
 
 	std::shared_ptr<BaseObject>				skyBox				= NULL;

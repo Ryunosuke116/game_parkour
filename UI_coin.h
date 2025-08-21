@@ -25,7 +25,7 @@ private:
 	int numberHandle[10];
 	int crossHandle;
 	int coinCount;
-	std::string num;
+	std::string countNumber;
 
 };
 

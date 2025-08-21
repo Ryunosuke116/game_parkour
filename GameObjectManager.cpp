@@ -55,8 +55,8 @@ void GameObjectManager::Create()
 	skyBox_actual			 = std::dynamic_pointer_cast<SkyBox>(skyBox);
 
 
-	fieldObjects.push_back(std::make_shared<FieldMesh>());
-	fieldObjects.back()->Load(JsonManager::Instance().GetJsons(fieldObjects.back()->GetJsonTag()));
+	collisionObjects.push_back(std::make_shared<FieldMesh>());
+	collisionObjects.back()->Load(JsonManager::Instance().GetJsons(collisionObjects.back()->GetJsonTag()));
 	
 	//floor_skyを追加
 	nlohmann::json data_floor_sky = JsonManager::Instance().GetJsons("floor_sky");
@@ -67,7 +67,7 @@ void GameObjectManager::Create()
 		float degree = data[3];
 		std::string tag = data[4].get<std::string>();
 
-		fieldObjects.push_back(std::make_shared<Floor_sky>(
+		collisionObjects.push_back(std::make_shared<Floor_sky>(
 			modelHandle,
 			VGet(data[0], data[1], data[2]),
 			degree,
@@ -97,6 +97,7 @@ void GameObjectManager::Create()
 	skyBox->Load(JsonManager::Instance().GetJsons(skyBox->GetJsonTag()));
 	tutorial->Load(JsonManager::Instance().GetJsons(tutorial->GetTag()));
 	finishCut->Load(JsonManager::Instance().GetJsons(finishCut->GetTag()));
+	gameTimer->Load(JsonManager::Instance().GetJsons(gameTimer->GetJsonTag()));
 
 }
 
@@ -106,7 +107,7 @@ void GameObjectManager::Create()
 void GameObjectManager::Initialize()
 {
 
-	for (auto& fieldObject : fieldObjects)
+	for (auto& fieldObject : collisionObjects)
 	{
 		fieldObject->Initialize();
 	}
@@ -192,17 +193,17 @@ void GameObjectManager::Update()
 
 		if (!isCamera)
 		{
-			for (auto& fieldObject : fieldObjects)
+			for (auto& fieldObject : collisionObjects)
 			{
 				fieldObject->Update();
 			}
 			field->Update();
 
 			gameTimer->Update();
-			playerManager_actual->Update(fieldObjects,effectManager_actual, camera->GetCameraDirection());
+			playerManager_actual->Update(collisionObjects,effectManager_actual, camera->GetCameraDirection());
 			skyBox_actual->Update(playerManager_actual->GetPosition());
 			camera->Update(playerManager_actual->GetPosition(),
-				playerManager_actual->GetAngle(), fieldObjects);
+				playerManager_actual->GetAngle(), collisionObjects);
 
 			//ui->Update();
 			uiManager_actual->Update();
@@ -243,15 +244,21 @@ void GameObjectManager::StartUpdate()
 	{
 		isStream_startPicture = tutorial->Update();
 		stream_startPicture_timer++;
+
+		if (!isStream_startPicture)
+		{
+			gameTimer->ResetSetTime();
+		}
+
 	}
 	else
 	{
 		stream_startPicture_timer++;
+		playerManager_actual->Update_start(stream_startPicture_timer);
+		camera->Update(playerManager_actual->GetPosition(),
+			playerManager_actual->GetAngle(), collisionObjects);
 	}
 
-	playerManager_actual->Update_start(stream_startPicture_timer);
-	camera->Update(playerManager_actual->GetPosition(),
-		playerManager_actual->GetAngle(), fieldObjects);
 
 
 }
@@ -263,7 +270,7 @@ void GameObjectManager::FinishUpdate()
 		isGoal = finishCut->Update();
 		playerManager_actual->Update_finish(stream_startPicture_timer);
 		camera->Update(playerManager_actual->GetPosition(),
-			playerManager_actual->GetAngle(), fieldObjects);
+			playerManager_actual->GetAngle(), collisionObjects);
 	}
 
 }
@@ -293,7 +300,7 @@ void GameObjectManager::Draw()
 
 	skyBox->Draw();
 	field->Draw();
-	for (auto& fieldObject : fieldObjects)
+	for (auto& fieldObject : collisionObjects)
 	{
 		fieldObject->Draw();
 	}
@@ -302,6 +309,8 @@ void GameObjectManager::Draw()
 	{
 		manager->Draw();
 	}
+
+	gameTimer->Draw();
 
 
 	// 描画に使用するシャドウマップの設定を解除

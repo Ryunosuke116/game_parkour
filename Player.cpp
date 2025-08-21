@@ -108,7 +108,7 @@ void Player::Initialize()
 /// </summary>
 void Player::Update(const VECTOR& cameraDirection, 
     std::shared_ptr<EffectManager>& effectManager,
-    const std::vector<std::shared_ptr<BaseObject>>& fieldObjects)
+    const std::vector<std::shared_ptr<BaseObject>>& collisionObjects)
 {
      //positionDataXV
     CollisionUpdate();
@@ -123,7 +123,7 @@ void Player::Update(const VECTOR& cameraDirection,
     }
 
     //state‚É‰ž‚¶‚½‹““®ˆ—
-    auto [moveDirection_new, data_new] = nowState->Update(cameraDirection, fieldObjects, *this);
+    auto [moveDirection_new, data_new] = nowState->Update(cameraDirection, collisionObjects, *this);
 
     if (playerData.isHang_to_Crouch)
     {

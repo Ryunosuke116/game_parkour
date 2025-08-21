@@ -48,7 +48,7 @@ void Walk::Initialize(int& modelHandle, Player& player)
 }
 
 std::pair<VECTOR, PlayerData> Walk::Update(const VECTOR& cameraDirection,
-	const std::vector<std::shared_ptr<BaseObject>>& fieldObjects, Player& player)
+	const std::vector<std::shared_ptr<BaseObject>>& collisionObjects, Player& player)
 {
 	PlayerData playerData = player.GetData();
 

@@ -236,6 +236,7 @@ void PlayerStateActionBase::JumpMove(PlayerData& playerData, Player& player)
 /// <param name="player"></param>
 void PlayerStateActionBase::WallRunMove(PlayerData& playerData, Player& player)
 {
+    const float entryDegree_wallRun = 50.0f;
 
     //•Ç‚É“–‚½‚Á‚Ä‚¢‚éê‡‚Ì‚İ
     if (playerData.isPossible_wallRun && playerData.isUse_wallJump)

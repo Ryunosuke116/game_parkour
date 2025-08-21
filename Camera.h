@@ -38,7 +38,7 @@ public:
 
 	void Initialize();
 	void Update(const VECTOR& playerPosition, const float& angle_player,
-		const std::vector<std::shared_ptr<BaseObject>>& fieldObjects);
+		const std::vector<std::shared_ptr<BaseObject>>& collisionObjects);
 	void Update_start(const float& timer,
 		const VECTOR& playerPosition,
 		const float& angle_player);
