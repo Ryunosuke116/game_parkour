@@ -223,10 +223,8 @@ void GameObjectManager::Update()
 		effectManager_actual->PlayEffectUpdate();
 
 		//ƒS[ƒ‹”»’è
-		if (HitCheck::AABBHitJudge(playerManager_actual->GetPlayerAABB(),
-			goalArea->GetGoalArea() ) &&
-			!isStream_finishPicture
-			)
+		if (gameTimer->IsFinish() &&
+			!isStream_finishPicture)
 		{
 			isStream_finishPicture = true;
 			finishCut->SetIsDraw_finish(true);

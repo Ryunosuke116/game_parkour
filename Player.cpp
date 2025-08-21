@@ -264,6 +264,7 @@ void Player::Update_finish(const float& timer)
 {
     nowState->SetIsChangeState(true);
     playerData.isIdle = true;
+
     //ó‘Ô•ÏX
     ChangeState();
 

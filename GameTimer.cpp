@@ -38,9 +38,9 @@ void GameTimer::Initialize()
 	time = 0;
 	setTime = GetNowCount();
 	sec = 0;
-	min = 3;
+	min = 1;
 	msec = 0;
-	positionX = 300;
+	positionX = 724;
 	positionY = 30;
 	isUpdateMin = false;
 	countNumberSec = "";
@@ -65,18 +65,19 @@ void GameTimer::Update()
 	
 	//60秒経過ごとに分タイマーを更新
 	if (!isUpdateMin &&
-		sec == maxSec)
+		sec == (maxSec - 1))
 	{
 		min = min - subMin;
 
 		isUpdateMin = true;
 	}
 
+
 	//60秒は00秒表示とする
-	if (sec == maxSec)
-	{
-		sec = 0;
-	}
+	sec = TimeForciblyZero(maxSec);
+	
+	///分タイマーを更新できるようにするか
+	isUpdateMin = IsUpdateMin();
 
 	countNumberSec = CreateCountNumber(sec);
 	countNumberMin = CreateCountNumber(min);
@@ -127,4 +128,30 @@ std::string GameTimer::CreateCountNumber(const int time)
 	}
 
 	return countNumber;
+}
+
+bool GameTimer::IsUpdateMin()
+{
+	const int count = 59;
+
+	return sec == count ? true : false;
+}
+
+int GameTimer::TimeForciblyZero(const int maxSec)
+{
+	int resetTime = 0;
+
+	int resultTime = sec == maxSec ? resetTime : sec;
+
+	return resultTime;
+}
+
+bool GameTimer::IsFinish()
+{
+	if (sec == 0 &&
+		min == 0)
+	{
+		return true;
+	}
+	return false;
 }

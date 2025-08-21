@@ -17,6 +17,12 @@ public:
 
 	void ResetSetTime(){ setTime = GetNowCount(); }
 
+	bool IsUpdateMin();
+
+	int TimeForciblyZero(const int maxSec);
+
+	bool IsFinish();
+
 private:
 	int time;
 	int setTime;
