@@ -33,13 +33,6 @@ GameObjectManager::~GameObjectManager()
 /// </summary>
 void GameObjectManager::Create()
 {
-	managers.push_back(std::make_shared<PlayerManager>());
-	playerManager_actual = std::dynamic_pointer_cast<PlayerManager>(managers.back());
-	managers.push_back(std::make_shared<UIManager>());
-	uiManager_actual = std::dynamic_pointer_cast<UIManager>(managers.back());
-	managers.push_back(std::make_shared<CoinManager>());
-	coinManager_actual = std::dynamic_pointer_cast<CoinManager>(managers.back());
-	
 	//生成
 	skyBox				= std::make_shared<SkyBox>();
 	field				= std::make_shared<Field>();
@@ -51,9 +44,18 @@ void GameObjectManager::Create()
 	gameTimer			= std::make_shared<GameTimer>();
 	tutorial			= std::make_shared<Tutorial>();
 	finishCut			= std::make_shared<FinishCut>();
+	soundManager		= std::make_shared<SoundManager>();
+
+	managers.push_back(std::make_shared<PlayerManager>(soundManager));
+	playerManager_actual = std::dynamic_pointer_cast<PlayerManager>(managers.back());
+	managers.push_back(std::make_shared<UIManager>());
+	uiManager_actual = std::dynamic_pointer_cast<UIManager>(managers.back());
+	managers.push_back(std::make_shared<CoinManager>());
+	coinManager_actual = std::dynamic_pointer_cast<CoinManager>(managers.back());
+	
 
 	skyBox_actual			 = std::dynamic_pointer_cast<SkyBox>(skyBox);
-
+	soundManager_actual		 = std::dynamic_pointer_cast<SoundManager>(soundManager);
 
 	collisionObjects.push_back(std::make_shared<FieldMesh>());
 	collisionObjects.back()->Load(JsonManager::Instance().GetJsons(collisionObjects.back()->GetJsonTag()));
@@ -81,6 +83,7 @@ void GameObjectManager::Create()
 		manager->HandOver(JsonManager::Instance().GetJsons(manager->GetTag()));
 		manager->Create();
 	}
+	soundManager_actual->HandOver(JsonManager::Instance().GetJsons(soundManager_actual->GetTag()));
 
 	managers.push_back(std::make_shared<EffectManager>());
 	effectManager_actual = std::dynamic_pointer_cast<EffectManager>(managers.back());
@@ -98,7 +101,10 @@ void GameObjectManager::Create()
 	tutorial->Load(JsonManager::Instance().GetJsons(tutorial->GetTag()));
 	finishCut->Load(JsonManager::Instance().GetJsons(finishCut->GetTag()));
 	gameTimer->Load(JsonManager::Instance().GetJsons(gameTimer->GetJsonTag()));
+	soundManager->Create();
 
+	soundHandle = LoadSoundMem("material/sound/gameBGM.mp3");
+	ChangeVolumeSoundMem(125, soundHandle);
 }
 
 /// <summary>
@@ -229,9 +235,6 @@ void GameObjectManager::Update()
 			isStream_finishPicture = true;
 			finishCut->SetIsDraw_finish(true);
 		}
-		
-		//DebugDrawer::Instance().InformationInput_string_bool("isGoal %d\n", isGoal);
-
 	}
 
 }
@@ -246,6 +249,7 @@ void GameObjectManager::StartUpdate()
 		if (!isStream_startPicture)
 		{
 			gameTimer->ResetSetTime();
+			PlaySoundMem(soundHandle, DX_PLAYTYPE_LOOP);
 		}
 
 	}
@@ -256,9 +260,6 @@ void GameObjectManager::StartUpdate()
 		camera->Update(playerManager_actual->GetPosition(),
 			playerManager_actual->GetAngle(), collisionObjects);
 	}
-
-
-
 }
 
 void GameObjectManager::FinishUpdate()
@@ -269,6 +270,10 @@ void GameObjectManager::FinishUpdate()
 		playerManager_actual->Update_finish(stream_startPicture_timer);
 		camera->Update(playerManager_actual->GetPosition(),
 			playerManager_actual->GetAngle(), collisionObjects);
+		if (isGoal)
+		{
+			StopSoundMem(soundHandle);
+		}
 	}
 
 }
@@ -305,11 +310,15 @@ void GameObjectManager::Draw()
 
 	for (auto& manager : managers)
 	{
+		if (auto uiManager = std::dynamic_pointer_cast<UIManager>(manager) &&
+			isStream_startPicture)
+		{
+			continue;
+		}
 		manager->Draw();
 	}
 
 	gameTimer->Draw();
-
 
 	// 描画に使用するシャドウマップの設定を解除
 	SetUseShadowMap(0, -1);

@@ -12,10 +12,6 @@ public:
 	void Initialize()override;
 	void Update()override;
 	void Draw()override;
-	
-	std::string CreateCountNumber(const int time);
-
-	void ResetSetTime(){ setTime = GetNowCount(); }
 
 	bool IsUpdateMin();
 
@@ -23,6 +19,9 @@ public:
 
 	bool IsFinish();
 
+	std::string CreateCountNumber(const int time);
+
+	void ResetSetTime() { setTime = GetNowCount(); }
 private:
 	int time;
 	int setTime;
@@ -32,7 +31,7 @@ private:
 	int positionX;
 	int positionY;
 
-	bool isUpdateMin;		//分タイマーを更新するか
+	bool isUpdateMin;	
 
 	int numberHandle[10];
 	std::string countNumberSec;

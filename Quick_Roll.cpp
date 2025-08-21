@@ -16,8 +16,8 @@
 /// <param name="oldAnimState"></param>
 /// <param name="nowAnimState"></param>
 Quick_Roll::Quick_Roll(int& modelHandle,
-    AnimState& oldAnimState, AnimState& nowAnimState) :
-	PlayerStateActionBase(modelHandle, oldAnimState, nowAnimState)
+    AnimState& oldAnimState, AnimState& nowAnimState, std::shared_ptr<ISoundPlayer> sound) :
+	PlayerStateActionBase(modelHandle, oldAnimState, nowAnimState, sound)
 {
 
 }
@@ -47,11 +47,11 @@ void Quick_Roll::Initialize(int& modelHandle, Player& player)
 /// çXêV
 /// </summary>
 /// <param name="cameraDirection"></param>
-/// <param name="collisionObjects"></param>
+/// <param name="fieldObjects"></param>
 /// <param name="player"></param>
 /// <returns></returns>
 std::pair<VECTOR, PlayerData> Quick_Roll::Update(const VECTOR& cameraDirection,
-    const std::vector<std::shared_ptr<BaseObject>>& collisionObjects, Player& player)
+    const std::vector<std::shared_ptr<BaseObject>>& fieldObjects, Player& player)
 {
     VECTOR moveDirection = VGet(0.0f, 0.0f, 0.0f);
 

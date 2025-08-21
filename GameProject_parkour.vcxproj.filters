@@ -100,9 +100,6 @@
     <Filter Include="ソース ファイル\manager\effect">
       <UniqueIdentifier>{5e5cd968-670e-44f1-a594-3cd0abd7bd68}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\manager\object">
-      <UniqueIdentifier>{733bd2bf-452d-40b4-a80b-71e93c23b571}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\Base\UI">
       <UniqueIdentifier>{d5b51631-8c3b-41df-8337-fa8a8aa08ccf}</UniqueIdentifier>
     </Filter>
@@ -216,6 +213,12 @@
     </Filter>
     <Filter Include="ソース ファイル\Base\BaseManager">
       <UniqueIdentifier>{ef9054aa-afc2-4b68-8b2b-943aed8a8bc9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\manager\sound">
+      <UniqueIdentifier>{341d67ca-21c1-418e-9b81-a681b704a6eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\manager\object">
+      <UniqueIdentifier>{733bd2bf-452d-40b4-a80b-71e93c23b571}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -380,6 +383,9 @@
     </ClCompile>
     <ClCompile Include="Rank.cpp">
       <Filter>ソース ファイル\object\result\rank</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundManager.cpp">
+      <Filter>ソース ファイル\manager\sound</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -578,6 +584,9 @@
     <ClInclude Include="Result_object.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="SoundManager.h">
+      <Filter>ソース ファイル\manager\sound</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Json\coin.Json">
@@ -599,6 +608,9 @@
       <Filter>ヘッダー ファイル\Json</Filter>
     </None>
     <None Include="Json\object.Json">
+      <Filter>ヘッダー ファイル\Json</Filter>
+    </None>
+    <None Include="Json\sound.Json">
       <Filter>ヘッダー ファイル\Json</Filter>
     </None>
   </ItemGroup>

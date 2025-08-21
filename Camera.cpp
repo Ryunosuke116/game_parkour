@@ -337,10 +337,10 @@ void Camera::AngleUpdate(const float& angle_player)
 		angle_now -= 3.0f;
 	}
 
-	if (PadInput::IsPush_R())
+	/*if (PadInput::IsPush_R())
 	{
 		angle_now = angle_player;
-	}
+	}*/
 
 }
 

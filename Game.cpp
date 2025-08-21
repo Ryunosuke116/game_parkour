@@ -52,7 +52,7 @@ void Game::Update()
 
 	if (gameObjectManager_actual->GetIsGoal())
 	{
-		ChangeScene("Result", gameObjectManager_actual->GetCoinCount());
+		ChangeScene("Title", gameObjectManager_actual->GetCoinCount());
 	}
 
 }

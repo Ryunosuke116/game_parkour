@@ -5,13 +5,13 @@ class Idle_To_Sprint : public PlayerStateActionBase
 {
 public:
 	Idle_To_Sprint(int& modelHandle,
-		AnimState& oldAnimState, AnimState& nowAnimState);
+		AnimState& oldAnimState, AnimState& nowAnimState, std::shared_ptr<ISoundPlayer> sound);
 	~Idle_To_Sprint();
 
 	void Initialize(int& modelHandle, Player& player)override;
 
 	std::pair<VECTOR, PlayerData> Update(const VECTOR& cameraDirection,
-		const std::vector<std::shared_ptr<BaseObject>>& collisionObjects, Player& player)override;
+		const std::vector<std::shared_ptr<BaseObject>>& fieldObjects, Player& player)override;
 
 	VECTOR Command(const VECTOR& cameraDirection, PlayerData& playerData, Player& player)override;
 

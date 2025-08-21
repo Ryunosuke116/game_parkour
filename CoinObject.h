@@ -30,8 +30,10 @@ private:
 	bool isHitPlayer;
 	bool hitFlag;
 	bool deleteFlag;
+	bool isSound;
 	float radian_Y;
 	float velocity_Y;
+	int soundHandle;
 
 	static constexpr float radius = 4.5f;
 	static constexpr float objectScale = 0.3f;

@@ -38,9 +38,8 @@ void GameTimer::Initialize()
 	time = 0;
 	setTime = GetNowCount();
 	sec = 0;
-	min = 1;
-	msec = 0;
-	positionX = 724;
+	min = 3;
+	positionX = 740;
 	positionY = 30;
 	isUpdateMin = false;
 	countNumberSec = "";
@@ -56,34 +55,37 @@ void GameTimer::Update()
 
 	time = GetNowCount() - setTime;
 
-	//秒,分を計算
 	int elapsedSec = time / 1000;
 	int elapsedMin = elapsedSec / 60;
 	elapsedSec -= elapsedMin * 60;
 
 	sec = maxSec - elapsedSec;
-	
-	//60秒経過ごとに分タイマーを更新
+
+	//60の時に分を減らす
 	if (!isUpdateMin &&
-		sec == (maxSec - 1))
+		sec == maxSec - 1)
 	{
 		min = min - subMin;
 
 		isUpdateMin = true;
 	}
 
-
-	//60秒は00秒表示とする
 	sec = TimeForciblyZero(maxSec);
-	
-	///分タイマーを更新できるようにするか
+
 	isUpdateMin = IsUpdateMin();
 
 	countNumberSec = CreateCountNumber(sec);
 	countNumberMin = CreateCountNumber(min);
 
+	if (CheckHitKey(KEY_INPUT_9))
+	{
+		sec = 0;
+		min = 0;
+	}
+
 	DebugDrawer::Instance().InformationInput_string_int("min %d\n", min);
 	DebugDrawer::Instance().InformationInput_string_int("sec %d\n", sec);
+	DebugDrawer::Instance().InformationInput_string_int("msec %d\n", msec);
 }
 
 /// <summary>
@@ -120,7 +122,6 @@ std::string GameTimer::CreateCountNumber(const int time)
 
 	countNumber = std::to_string(time);
 
-	//一文字しか入ってない場合先頭に0を挿入する
 	if (countNumber.length() == characterCount)
 	{
 		countNumber.insert(firstCount, "0");

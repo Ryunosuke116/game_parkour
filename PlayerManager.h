@@ -2,26 +2,18 @@
 #include "BaseGameObjectManager.h"
 #include "HitCheck.h"
 #include "PlayerStateObserver.h"
+#include "ISoundPlayer.h"
 
 class EffectManager;
 
 class PlayerManager : public BaseGameObjectManager
 {
-private:
-	std::vector<std::shared_ptr<BaseChara>> characters;
-	std::shared_ptr<CollisionManager> collisionManager;
-	std::vector<std::weak_ptr<PlayerStateObserver>> observers;
-
-	std::shared_ptr<BaseChara> player = NULL;
-	std::shared_ptr<Player> actualPlayer = NULL;
-	AABB playerAABB;
-	PlayerData now_playerData;
 public:
 
-	PlayerManager();
+	PlayerManager(std::shared_ptr<ISoundPlayer> sound);
 	~PlayerManager();
 	
-	void Update(const std::vector<std::shared_ptr<BaseObject>>& collisionObjects,
+	void Update(const std::vector<std::shared_ptr<BaseObject>>& fieldObjects,
 		std::shared_ptr<EffectManager>& effectManager,
 		const VECTOR& cameraDirection);
 
@@ -49,5 +41,16 @@ public:
 	void AddObserver(std::shared_ptr<PlayerStateObserver> observer) { observers.push_back(observer); }
 	void RemoveObserver(std::shared_ptr<PlayerStateObserver> observer);
 	void NotifyStateChanged(const PlayerData& playerData);
+
+private:
+	std::vector<std::shared_ptr<BaseChara>> characters;
+	std::shared_ptr<CollisionManager> collisionManager;
+	std::vector<std::weak_ptr<PlayerStateObserver>> observers;
+
+	std::shared_ptr<BaseChara> player = NULL;
+	std::shared_ptr<Player> actualPlayer = NULL;
+	AABB playerAABB;
+	PlayerData now_playerData;
+	std::shared_ptr<ISoundPlayer> soundPlayer;
 };
 

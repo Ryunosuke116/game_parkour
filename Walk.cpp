@@ -14,8 +14,8 @@
 /// </summary>
 /// <param name="modelHandle"></param>
 Walk::Walk(int& modelHandle,
-	AnimState& oldAnimState, AnimState& nowAnimState) :
-	PlayerStateActionBase(modelHandle, oldAnimState, nowAnimState),
+	AnimState& oldAnimState, AnimState& nowAnimState, std::shared_ptr<ISoundPlayer> sound) :
+	PlayerStateActionBase(modelHandle, oldAnimState, nowAnimState, sound),
 	degree_difference(0.0f),
 	stopTime(0.0f),
 	angle(-1),
@@ -48,7 +48,7 @@ void Walk::Initialize(int& modelHandle, Player& player)
 }
 
 std::pair<VECTOR, PlayerData> Walk::Update(const VECTOR& cameraDirection,
-	const std::vector<std::shared_ptr<BaseObject>>& collisionObjects, Player& player)
+	const std::vector<std::shared_ptr<BaseObject>>& fieldObjects, Player& player)
 {
 	PlayerData playerData = player.GetData();
 

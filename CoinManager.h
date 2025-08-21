@@ -12,6 +12,7 @@ private:
 	std::vector<std::shared_ptr<CoinObject>> coins;
 	std::vector<std::weak_ptr<CoinObserver>> observers;
 	int modelHandle;
+
 	static constexpr int coinValue = 1;		//ƒRƒCƒ“‚Ì‰¿’l
 
 public:

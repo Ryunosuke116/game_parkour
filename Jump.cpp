@@ -13,8 +13,8 @@
 /// </summary>
 /// <param name="modelHandle"></param>
 Jump::Jump(int& modelHandle, AnimState& oldAnimState,
-    AnimState& nowAnimState, PlayerData& playerData) :
-    PlayerStateActionBase(modelHandle, oldAnimState,nowAnimState),
+    AnimState& nowAnimState, std::shared_ptr<ISoundPlayer> sound, PlayerData& playerData) :
+    PlayerStateActionBase(modelHandle, oldAnimState, nowAnimState, sound),
     isJump_first(false),
     isJump_second(false)
 {
@@ -60,11 +60,11 @@ void Jump::Initialize(int& modelHandle, Player& player)
 /// çXêV
 /// </summary>
 /// <param name="cameraDirection"></param>
-/// <param name="collisionObjects"></param>
+/// <param name="fieldObjects"></param>
 /// <param name="player"></param>
 /// <returns></returns>
 std::pair<VECTOR, PlayerData> Jump::Update(const VECTOR& cameraDirection,
-    const std::vector<std::shared_ptr<BaseObject>>& collisionObjects, Player& player)
+    const std::vector<std::shared_ptr<BaseObject>>& fieldObjects, Player& player)
 {
     VECTOR moveDirection = VGet(0.0f, 0.0f, 0.0f);
 

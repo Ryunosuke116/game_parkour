@@ -33,6 +33,7 @@ void CoinObject::Load(const int& handle, const VECTOR& pos)
 	modelHandle = MV1DuplicateModel(handle);
 	position = pos;
 	MV1SetScale(modelHandle, VGet(objectScale, objectScale, objectScale));
+	soundHandle = LoadSoundMem("material/sound/coinGet.mp3");
 }
 
 /// <summary>
@@ -46,6 +47,7 @@ void CoinObject::Initialize()
 	isHitPlayer = false;
 	deleteFlag = false;
 	hitFlag = false;
+	isSound = false;
 }
 
 /// <summary>
@@ -65,6 +67,11 @@ bool CoinObject::Update(std::shared_ptr<EffectManager>& effectManager,
 	if (HitCheck::HitConfirmation(position, nearCapsulePos, 4.5f, radius))
 	{
 		hitFlag = true;
+		if (!isSound)
+		{
+			PlaySoundMem(soundHandle, DX_PLAYTYPE_BACK);
+			isSound = true;
+		}
 	}
 
 	Rotate();

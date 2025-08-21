@@ -191,6 +191,7 @@
     <ClCompile Include="Run_To_Stop.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="Shadow.cpp" />
+    <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="Title.cpp" />
     <ClCompile Include="Tutorial.cpp" />
     <ClCompile Include="UIManager.cpp" />
@@ -258,6 +259,7 @@
     <ClInclude Include="AnimTime.h" />
     <ClInclude Include="common.h" />
     <ClInclude Include="Shadow.h" />
+    <ClInclude Include="SoundManager.h" />
     <ClInclude Include="Title.h" />
     <ClInclude Include="Tutorial.h" />
     <ClInclude Include="UIManager.h" />
@@ -274,6 +276,7 @@
     <None Include="Json\field.Json" />
     <None Include="Json\floor_sky.Json" />
     <None Include="Json\object.Json" />
+    <None Include="Json\sound.Json" />
     <None Include="Json\tutorial.Json" />
     <None Include="Json\png.Json" />
   </ItemGroup>

@@ -74,6 +74,12 @@ void UI_controlManual::Update()
 
 void UI_controlManual::Draw()
 {
+	int alpha_Box = 100;
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha_Box);
+	DrawBox(30, 10, 220, 250, GetColor(0, 0, 0), true);
+
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+
 	int draw_y = y;
 
 	for (auto& draw_UI : draw_UIs)

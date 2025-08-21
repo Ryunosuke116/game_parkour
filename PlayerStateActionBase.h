@@ -3,6 +3,7 @@
 #include <vector>
 #include "BaseObject.h"
 #include "PlayerData.h"
+#include "ISoundPlayer.h"
 
 class Input;
 class Player;
@@ -20,13 +21,15 @@ public:
 	};
 
 	PlayerStateActionBase(int& modelHandle,
-		AnimState& oldAnimState, AnimState& nowAnimState);
+		AnimState& oldAnimState,
+		AnimState& nowAnimState,
+		std::shared_ptr<ISoundPlayer> sound);
 	~PlayerStateActionBase() {};
 
 	//ƒˆ‰¼‘zŠÖ”
 	virtual void Initialize(int& modelHandle, Player& player)abstract;
 	virtual std::pair<VECTOR, PlayerData> Update(const VECTOR& cameraDirection,
-		const std::vector<std::shared_ptr<BaseObject>>& collisionObjects, Player& player)abstract;
+		const std::vector<std::shared_ptr<BaseObject>>& fieldObjects, Player& player)abstract;
 	virtual VECTOR Command(const VECTOR& cameraDirection, PlayerData& playerData, Player& player)abstract;
 	virtual void Enter(PlayerData& playerData) abstract;		//ó‘Ô‚É“ü‚Á‚½‚Æ‚«
 	virtual void Exit(PlayerData& playerData) abstract;			//ó‘Ô‚ğ”²‚¯‚é‚Æ‚«
@@ -74,7 +77,7 @@ protected:
 
 	AnimState oldAnimState;
 	AnimState nowAnimState;
-
+	std::shared_ptr<ISoundPlayer> soundPlayer;
 
 	//ˆÚ“®
 	//VECTOR moveVec;

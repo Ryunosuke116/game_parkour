@@ -14,6 +14,9 @@ public:
 	void Draw();
 private:
 	int modelHandle;
+	int soundHandle;
+	int buttonSound;
+	int titleHandle;
 
 	bool isPush;
 

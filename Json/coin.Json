@@ -1,5 +1,6 @@
 {
   "modelPath": "material/mv1/coin/source/Coin.mv1",
+  "modeltype": "coin",
   "coin_list": [
     [ 0.0, 15.0, 15.0 ],
     [ 0.0, 15.0, 30.0 ],

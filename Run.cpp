@@ -14,8 +14,8 @@
 /// </summary>
 /// <param name="modelHandle"></param>
 Run::Run(int& modelHandle, 
-	AnimState& oldAnimState, AnimState& nowAnimState) :
-	PlayerStateActionBase(modelHandle,  oldAnimState,nowAnimState),
+	AnimState& oldAnimState, AnimState& nowAnimState, std::shared_ptr<ISoundPlayer> sound) :
+	PlayerStateActionBase(modelHandle,  oldAnimState, nowAnimState, sound),
 	degree_difference(0.0f),
 	stopTime(0.0f),
 	angle(-1),
@@ -23,7 +23,7 @@ Run::Run(int& modelHandle,
 	playerMoveSpeed_max(-1),
 	degree_new(-1)
 {
-
+	
 }
 
 /// <summary>
@@ -31,7 +31,6 @@ Run::Run(int& modelHandle,
 /// </summary>
 Run::~Run()
 {
-//	MV1DetachAnim(modelHandle, nowAnimState.AttachIndex);
 }
 
 /// <summary>
@@ -39,7 +38,6 @@ Run::~Run()
 /// </summary>
 void Run::Initialize(int& modelHandle, Player& player)
 {
-
 	// ÇRÇcÉÇÉfÉãÇÃÇOî‘ñ⁄ÇÃÉAÉjÉÅÅ[ÉVÉáÉìÇÉAÉ^ÉbÉ`Ç∑ÇÈ
 	this->nowAnimState.AttachIndex = MV1AttachAnim(modelHandle, animNum::run);
 
@@ -49,7 +47,7 @@ void Run::Initialize(int& modelHandle, Player& player)
 }
 
 std::pair<VECTOR, PlayerData> Run::Update(const VECTOR& cameraDirection,
-	const std::vector<std::shared_ptr<BaseObject>>& collisionObjects, Player& player)
+	const std::vector<std::shared_ptr<BaseObject>>& fieldObjects, Player& player)
 {
 	PlayerData playerData = player.GetData();
 
@@ -57,7 +55,7 @@ std::pair<VECTOR, PlayerData> Run::Update(const VECTOR& cameraDirection,
 
 	if (playerData.isRun_wall)
 	{
-		auto [moveDir_new,playerData_new] = Update_wallRun(player, collisionObjects);
+		auto [moveDir_new,playerData_new] = Update_wallRun(player, fieldObjects);
 	
 		moveDir = moveDir_new;
 		playerData = playerData_new;
@@ -69,8 +67,6 @@ std::pair<VECTOR, PlayerData> Run::Update(const VECTOR& cameraDirection,
 		moveDir = moveDir_new;
 		playerData = playerData_new;
 	}
-
-
 
 	/////////////////////////////////////////////////
 	// åªç›ÇÃãZèpìIÇ…åµÇµÇ¢ÇÃÇ≈àÍíUñ≥Ç≠Ç∑
@@ -110,12 +106,11 @@ std::pair<VECTOR,PlayerData> Run::Update_normal(const VECTOR& cameraDirection, P
 /// ï«ëñÇËéûÇÃçXêVèàóù
 /// </summary>
 /// <param name="player"></param>
-/// <param name="collisionObjects"></param>
+/// <param name="fieldObjects"></param>
 /// <returns></returns>
 std::pair<VECTOR, PlayerData> Run::Update_wallRun(Player& player, 
-	const std::vector<std::shared_ptr<BaseObject>>& collisionObjects)
+	const std::vector<std::shared_ptr<BaseObject>>& fieldObjects)
 {
-
 	PlayerData playerData = player.GetData();
 
 	VECTOR moveDir = VGet(0.0f, 0.0f, 0.0f);
@@ -152,7 +147,7 @@ std::pair<VECTOR, PlayerData> Run::Update_wallRun(Player& player,
    //äRíÕÇ›îªíË
 	if (playerData.isUse_Hanging)
 	{
-		auto result_cliff = HitCheck::CliffGrabbing(collisionObjects,
+		auto result_cliff = HitCheck::CliffGrabbing(fieldObjects,
 			player.GetPositionData().position_top_ray,
 			player.GetMoveDirection_now(), cliff_radius);
 

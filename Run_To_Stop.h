@@ -7,14 +7,14 @@ class Run_To_Stop : public PlayerStateActionBase
 {
 public:
 	Run_To_Stop(int& modelHandle,
-		AnimState& oldAnimState, AnimState& nowAnimState);
+		AnimState& oldAnimState, AnimState& nowAnimState, std::shared_ptr<ISoundPlayer> sound);
 	~Run_To_Stop();
 
 	void Initialize(int& modelHandle, Player& player)override;
 
 	bool MotionUpdate(PlayerData& playerData)override;
 	std::pair<VECTOR, PlayerData> Update(const VECTOR& cameraDirection,
-		const std::vector<std::shared_ptr<BaseObject>>& collisionObjects, Player& player)override;
+		const std::vector<std::shared_ptr<BaseObject>>& fieldObjects, Player& player)override;
 
 	VECTOR Command(const VECTOR& cameraDirection, PlayerData& playerData, Player& player)override;
 	void Enter(PlayerData& playerData) override;		//èÛë‘Ç…ì¸Ç¡ÇΩÇ∆Ç´

@@ -6,6 +6,10 @@
 class BaseGameObjectManager : public ObjectManager_interface
 {
 public:
+
+	BaseGameObjectManager() = default;
+	~BaseGameObjectManager() = default;
+
 	void HandOver(nlohmann::json j)
 	{
 		jsonData = j;

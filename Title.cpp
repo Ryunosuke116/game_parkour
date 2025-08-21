@@ -26,6 +26,9 @@ Title::~Title()
 void Title::Create()
 {
     modelHandle = LoadGraph("material/png/title.png");
+    soundHandle = LoadSoundMem("material/sound/titleBGM.mp3");
+    buttonSound = LoadSoundMem("material/sound/button.mp3");
+    titleHandle = LoadGraph("material/png/START_04.png");
     blackOut = std::make_shared<BlackOut>();
 }
 
@@ -36,6 +39,7 @@ void Title::Initialize()
 {
 	blackOut->Initialize();
 	isPush = false;
+    PlaySoundMem(soundHandle, DX_PLAYTYPE_LOOP);
 }
 
 /// <summary>
@@ -48,6 +52,7 @@ void Title::Update()
     if (PadInput::IsPush_A() && !isPush)
     {
         isPush = true;
+        PlaySoundMem(buttonSound, DX_PLAYTYPE_BACK);
     }
 
     if (isPush)
@@ -55,6 +60,7 @@ void Title::Update()
         blackOut->BlackOutUpdate(4.5f);
         if (blackOut->GetAlpha() >= 300)
         {
+            StopSoundMem(soundHandle);
             ChangeScene("Game",0);
         }
     }
@@ -63,5 +69,7 @@ void Title::Update()
 void Title::Draw()
 {
 	DrawGraph(0, 0, modelHandle, TRUE);
+
+    DrawGraph(300, 650, titleHandle, true);
     blackOut->Draw();
 }

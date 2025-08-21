@@ -14,8 +14,8 @@
 /// コンストラクタ
 /// </summary>
 Falling_Idle::Falling_Idle(int& modelHandle,
-	AnimState& oldAnimState, AnimState& nowAnimState) :
-	PlayerStateActionBase(modelHandle, oldAnimState,nowAnimState)
+	AnimState& oldAnimState, AnimState& nowAnimState, std::shared_ptr<ISoundPlayer> sound) :
+	PlayerStateActionBase(modelHandle, oldAnimState, nowAnimState, sound)
 {
 
 }
@@ -47,11 +47,11 @@ void Falling_Idle::Initialize(int& modelHandle, Player& player)
 /// 更新
 /// </summary>
 /// <param name="cameraDirection"></param>
-/// <param name="collisionObjects"></param>
+/// <param name="fieldObjects"></param>
 /// <param name="player"></param>
 /// <returns></returns>
 std::pair<VECTOR, PlayerData> Falling_Idle::Update(const VECTOR& cameraDirection,
-    const std::vector<std::shared_ptr<BaseObject>>& collisionObjects, Player& player)
+    const std::vector<std::shared_ptr<BaseObject>>& fieldObjects, Player& player)
 {
     VECTOR moveDirection = VGet(0.0f, 0.0f, 0.0f);
 
@@ -67,7 +67,7 @@ std::pair<VECTOR, PlayerData> Falling_Idle::Update(const VECTOR& cameraDirection
     //崖掴み判定
     if (playerData.isUse_Hanging)
     {
-        auto result_cliff = HitCheck::CliffGrabbing(collisionObjects,
+        auto result_cliff = HitCheck::CliffGrabbing(fieldObjects,
             head, player.GetMoveDirection_now(), cliff_radius);
         
         //掴むところが平行だった場合

@@ -7,12 +7,13 @@ class Jump : public PlayerStateActionBase
 {
 public:
 	Jump(int& modelHandle, AnimState& oldAnimState,
-		AnimState& nowAnimState, PlayerData& playerData);
+		AnimState& nowAnimState, 
+		std::shared_ptr<ISoundPlayer> sound, PlayerData& playerData);
 	~Jump();
 
 	void Initialize(int& modelHandle, Player& player)override;
 	std::pair<VECTOR, PlayerData> Update(const VECTOR& cameraDirection,
-		const std::vector<std::shared_ptr<BaseObject>>& collisionObjects, Player& player)override;
+		const std::vector<std::shared_ptr<BaseObject>>& fieldObjects, Player& player)override;
 
 	bool MotionUpdate(PlayerData& playerData)override;
 	VECTOR Command(const VECTOR& cameraDirection, PlayerData& playerData, Player& player)override;

@@ -7,6 +7,7 @@
 #include "AnimationChanger.h"
 #include  "nlohmann/json.hpp"
 #include "CoinObserver.h"
+#include "ISoundPlayer.h"
 
 class EffectManager;
 
@@ -15,12 +16,13 @@ class Player : public BaseChara, public CoinObserver
 private:
 
 	static constexpr float modelScale = 0.06f;
-	static constexpr float MaxMoveSpeed = 1.6f;	    // 移動速度
+	static constexpr float MaxMoveSpeed = 1.4f;	    // 移動速度
 	static constexpr float rollMoveSpeed_max = 2.5f;	//ロール速度
 	static constexpr float angleSpeed = 0.3f;
 	static constexpr float addJumpPower = 1.7f;		//ジャンプパワー
 	static constexpr float gravity = -0.06f;
 	static constexpr float run_wall_rotate_x = 30.0f;
+	static constexpr float entryDegree_wallRun = 30.0f;
 	static constexpr float radius = 3.5f;
 	static constexpr float height = 10.0f;
 
@@ -48,11 +50,12 @@ private:
 
 	//他クラス
 	PlayerData playerData;
-	std::shared_ptr<PlayerStateActionBase> nowState = NULL;
-	std::shared_ptr<AnimationChanger> animationChanger = NULL;
+	std::shared_ptr<ISoundPlayer> soundPlayer;
+	std::shared_ptr<PlayerStateActionBase>	nowState			= NULL;
+	std::shared_ptr<AnimationChanger>		animationChanger	= NULL;
 
 public:
-	Player();
+	Player(std::shared_ptr<ISoundPlayer> soundPlayer);
 	~Player();
 
 	void Load(const nlohmann::json& jsonData)override;
@@ -60,7 +63,7 @@ public:
 	void Update()override;
 	void Update(const VECTOR& cameraDirection,
 		std::shared_ptr<EffectManager>& effectManager,
-		const std::vector<std::shared_ptr<BaseObject>>& collisionObjects);
+		const std::vector<std::shared_ptr<BaseObject>>& fieldObjects);
 	
 
 	void Update_start(const float& timer);
@@ -75,17 +78,17 @@ public:
 	//　ゲッター
 	///////////////////////////////////
 
-	VECTOR GetCenterPos() { return centerPosition; }
-	VECTOR GetTopPos() { return positionData.position_top_Capsule; }
-	VECTOR GetBottomPos() { return positionData.position_bottom_Capsule; }
-	VECTOR GetMoveVec() { return moveVec; }
-	VECTOR GetlinePos_end() { return linePos_end; }
-	VECTOR GetHeadPos() { return headPos; }
-	VECTOR GetMoveDirection_now() { return moveDirection_now; }
-	bool GetIsGround() { return playerData.isGround; }
-	int GetModelHandle() { return modelHandle; }
-	int GetNowStateNumber() { return animationChanger->GetAnimNumber_now(); }
-	PlayerData GetData() { return playerData; }
+	VECTOR GetCenterPos() const { return centerPosition; }
+	VECTOR GetTopPos() const { return positionData.position_top_Capsule; }
+	VECTOR GetBottomPos() const { return positionData.position_bottom_Capsule; }
+	VECTOR GetMoveVec() const { return moveVec; }
+	VECTOR GetlinePos_end() const { return linePos_end; }
+	VECTOR GetHeadPos() const { return headPos; }
+	VECTOR GetMoveDirection_now() const { return moveDirection_now; }
+	bool GetIsGround() const { return playerData.isGround; }
+	int GetModelHandle() const { return modelHandle; }
+	int GetNowStateNumber() const { return animationChanger->GetAnimNumber_now(); }
+	PlayerData GetData() const { return playerData; }
 	float GetRadius()const override { return radius; }
 
 	//////////////////////////////////

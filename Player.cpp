@@ -15,15 +15,15 @@
 /// <summary>
 /// /インストラクタ
 /// </summary>
-Player::Player() :
+Player::Player(std::shared_ptr<ISoundPlayer> sound) :
     BaseChara(),
+    soundPlayer(sound),
     start_walkTime(-1),
     centerPosition(VGet(0.0f, 0.0f, 0.0f)),
     moveDirection_now(VGet(0.0f, 0.0f, 0.0f)),
     isCalc_moveVec(false),
     playerData({false})
 {
-   
 }
 
 /// <summary>
@@ -45,7 +45,7 @@ void Player::Load(const nlohmann::json& jsonData)
     modelHandle = MV1LoadModel(path.c_str());
     MV1SetScale(modelHandle, VGet(modelScale, modelScale, modelScale));
     playerCalculation = std::make_shared<PlayerCalculation>();
-    animationChanger = std::make_shared<AnimationChanger>();
+    animationChanger = std::make_shared<AnimationChanger>(soundPlayer);
 }
 
 /// <summary>
@@ -108,7 +108,7 @@ void Player::Initialize()
 /// </summary>
 void Player::Update(const VECTOR& cameraDirection, 
     std::shared_ptr<EffectManager>& effectManager,
-    const std::vector<std::shared_ptr<BaseObject>>& collisionObjects)
+    const std::vector<std::shared_ptr<BaseObject>>& fieldObjects)
 {
      //positionData更新
     CollisionUpdate();
@@ -123,7 +123,7 @@ void Player::Update(const VECTOR& cameraDirection,
     }
 
     //stateに応じた挙動処理
-    auto [moveDirection_new, data_new] = nowState->Update(cameraDirection, collisionObjects, *this);
+    auto [moveDirection_new, data_new] = nowState->Update(cameraDirection, fieldObjects, *this);
 
     if (playerData.isHang_to_Crouch)
     {
@@ -264,7 +264,6 @@ void Player::Update_finish(const float& timer)
 {
     nowState->SetIsChangeState(true);
     playerData.isIdle = true;
-
     //状態変更
     ChangeState();
 
