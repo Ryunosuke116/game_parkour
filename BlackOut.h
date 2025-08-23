@@ -18,7 +18,5 @@ private:
 
     float alpha;
     bool isLightChange;
-
-
 };
 

@@ -67,6 +67,7 @@ std::pair<VECTOR, PlayerData> Falling_Idle::Update(const VECTOR& cameraDirection
     //ŠR’Í‚Ý”»’è
     if (playerData.isUse_Hanging)
     {
+        //ŠR‚Â‚©‚Ý”»’è
         auto result_cliff = HitCheck::CliffGrabbing(fieldObjects,
             head, player.GetMoveDirection_now(), cliff_radius);
         

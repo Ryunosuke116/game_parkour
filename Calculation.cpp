@@ -48,9 +48,10 @@ VECTOR Calculation::NearestPoint(const VECTOR& position_1, const VECTOR& positio
 
 	//単位ベクトル
 	VECTOR unitVector = VGet(0, 0, 0);
-	unitVector.x = AB.x / vectorLength;
+	unitVector = VNorm(AB);
+	/*unitVector.x = AB.x / vectorLength;
 	unitVector.y = AB.y / vectorLength;
-	unitVector.z = AB.z / vectorLength;
+	unitVector.z = AB.z / vectorLength;*/
 	//内積
 	float productionVector = VDot(unitVector, AP);
 
@@ -111,7 +112,6 @@ VECTOR Calculation::SphereMeshOutsideTriangle(const MV1_COLL_RESULT_POLY& poly, 
 	float d1 = VSize(VSub(nearPoint_1, pos));
 	float d2 = VSize(VSub(nearPoint_2, pos));
 	float d3 = VSize(VSub(nearPoint_3, pos));
-
 
 	//一番近い座標を選択する
 	if (d1 <= d2 && d1 <= d3)

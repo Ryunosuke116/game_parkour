@@ -2,19 +2,19 @@
 #include <memory>
 #include <vector>
 #include <cassert>
-#include "SoundManager.h"
+#include "SoundPlayer.h"
 
-SoundManager::SoundManager()
+SoundPlayer::SoundPlayer()
 {
 	tag = "sound";
 }
 
-SoundManager::~SoundManager()
+SoundPlayer::~SoundPlayer()
 {
 	soundDatas.clear();
 }
 
-void SoundManager::Create()
+void SoundPlayer::Create()
 {
 	for (auto& data : jsonData["list"])
 	{
@@ -22,27 +22,32 @@ void SoundManager::Create()
 		std::string name = data[1];
 		bool isLoop		 = data[2].get<bool>();
 
+		int soundHandle = LoadSoundMem(path.c_str());
+
 		soundDatas[name] =
 		{
 			LoadSoundMem(path.c_str()),
 			isLoop
 		};
 	}
+
+	handle = LoadSoundMem("material/sound/gameBGM.mp3");
 }
 
-void SoundManager::Play(const std::string& name)
+void SoundPlayer::Play(const std::string& name)
 {
 	auto it = soundDatas.find(name);
 
 	if (it != soundDatas.end())
 	{
-		PlaySoundMem(it->second.handle,
-			it->second.iSLoop ? DX_PLAYTYPE_LOOP : DX_PLAYTYPE_BACK);
+		PlaySoundMem(it->second.handle, DX_PLAYTYPE_LOOP);
+		//	it->second.iSLoop ? DX_PLAYTYPE_LOOP : DX_PLAYTYPE_BACK);
 	}
 
+	PlaySoundMem(handle, DX_PLAYTYPE_LOOP);
 }
 
-void SoundManager::Stop(const std::string& name)
+void SoundPlayer::Stop(const std::string& name)
 {
 	StopSoundMem(soundDatas.at(name).handle);
 }

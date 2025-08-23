@@ -2,14 +2,14 @@
 #include "ISoundPlayer.h"
 #include "BaseGameObjectManager.h"
 
-class SoundManager : 
+class SoundPlayer : 
 	public ISoundPlayer,
 	public BaseGameObjectManager
 {
 public:
 
-	SoundManager();
-	~SoundManager();
+	SoundPlayer();
+	~SoundPlayer();
 
 	void Create()override;
 	void Initialize()override {}
@@ -31,6 +31,7 @@ private:
 		bool iSLoop;
 	};
 	std::unordered_map<std::string, SoundData> soundDatas;
+	int handle;
 
 };
 

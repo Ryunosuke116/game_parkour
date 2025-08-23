@@ -384,7 +384,7 @@
     <ClCompile Include="Rank.cpp">
       <Filter>ソース ファイル\object\result\rank</Filter>
     </ClCompile>
-    <ClCompile Include="SoundManager.cpp">
+    <ClCompile Include="SoundPlayer.cpp">
       <Filter>ソース ファイル\manager\sound</Filter>
     </ClCompile>
   </ItemGroup>
@@ -584,7 +584,7 @@
     <ClInclude Include="Result_object.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="SoundManager.h">
+    <ClInclude Include="SoundPlayer.h">
       <Filter>ソース ファイル\manager\sound</Filter>
     </ClInclude>
   </ItemGroup>

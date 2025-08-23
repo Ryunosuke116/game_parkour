@@ -398,8 +398,6 @@ HangingData HitCheck::CliffGrabbing(const std::vector<std::shared_ptr<BaseObject
 
 	VECTOR spherePos = VAdd(topPosition, VScale(moveDirection, 5.0f));
 
-	DebugDrawer::Instance().InformationInput_sphere(spherePos, radius, GetColor(255, 255, 255));
-
 	bool returnFlag = false;
 	HangingData hangingData = { false,VGet(0.0f,0.0f,0.0f),NULL };
 
@@ -426,13 +424,20 @@ HangingData HitCheck::CliffGrabbing(const std::vector<std::shared_ptr<BaseObject
 				//平面に当たっていればtrueに
 				if (poly.Normal.y >= 0.8f)
 				{
+					//三角形の一番近い辺から一番近い点を求める
+					VECTOR nearestOutSide = Calculation::SphereMeshOutsideTriangle(
+						poly,
+						spherePos);
+					
+					//奥行を調べるための座標
+					VECTOR depthDirection = VSub(nearestOutSide, spherePos);
+					depthDirection = VNorm(depthDirection);
 
-					float depth = Calculation::Check_depth_Triangle(moveDirection, poly.Position[0], poly.Position[1], poly.Position[2]);
+					float depth = Calculation::Check_depth_Triangle(depthDirection, poly.Position[0], poly.Position[1], poly.Position[2]);
 					MV1_COLL_RESULT_POLY ray_poly;
 
 					//奥行がない場合掴めない
 					if (max_velocity > depth) continue;
-
 
 					VECTOR neareast = Calculation::SphereMeshOutsideTriangle(poly, spherePos);
 					DebugDrawer::Instance().InformationInput_sphere(neareast, 2.0f, GetColor(255, 0, 255));
@@ -440,8 +445,6 @@ HangingData HitCheck::CliffGrabbing(const std::vector<std::shared_ptr<BaseObject
 					VECTOR line_end = Calculation::Projection(poly.Normal, moveDirection);
 
 					line_end = VAdd(neareast, VScale(line_end, max_velocity));
-					
-
 
 					if (HitCheck::RayHitJudge(fieldObject->GetModelHandle(),
 						-1,
@@ -471,9 +474,8 @@ HangingData HitCheck::CliffGrabbing(const std::vector<std::shared_ptr<BaseObject
 				hangingData.isHitHanging = false;
 			}
 		}
-
-		
 	}
+	DebugDrawer::Instance().InformationInput_sphere(spherePos, radius, GetColor(255, 255, 255));
 
 	return hangingData;
 

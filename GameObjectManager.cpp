@@ -44,18 +44,17 @@ void GameObjectManager::Create()
 	gameTimer			= std::make_shared<GameTimer>();
 	tutorial			= std::make_shared<Tutorial>();
 	finishCut			= std::make_shared<FinishCut>();
-	soundManager		= std::make_shared<SoundManager>();
+	soundPlayer			= std::make_shared<SoundPlayer>();
 
-	managers.push_back(std::make_shared<PlayerManager>(soundManager));
+	managers.push_back(std::make_shared<PlayerManager>(soundPlayer));
 	playerManager_actual = std::dynamic_pointer_cast<PlayerManager>(managers.back());
 	managers.push_back(std::make_shared<UIManager>());
 	uiManager_actual = std::dynamic_pointer_cast<UIManager>(managers.back());
 	managers.push_back(std::make_shared<CoinManager>());
 	coinManager_actual = std::dynamic_pointer_cast<CoinManager>(managers.back());
 	
-
 	skyBox_actual			 = std::dynamic_pointer_cast<SkyBox>(skyBox);
-	soundManager_actual		 = std::dynamic_pointer_cast<SoundManager>(soundManager);
+	soundPlayer_actual		 = std::dynamic_pointer_cast<SoundPlayer>(soundPlayer);
 
 	collisionObjects.push_back(std::make_shared<FieldMesh>());
 	collisionObjects.back()->Load(JsonManager::Instance().GetJsons(collisionObjects.back()->GetJsonTag()));
@@ -83,7 +82,7 @@ void GameObjectManager::Create()
 		manager->HandOver(JsonManager::Instance().GetJsons(manager->GetTag()));
 		manager->Create();
 	}
-	soundManager_actual->HandOver(JsonManager::Instance().GetJsons(soundManager_actual->GetTag()));
+	soundPlayer_actual->HandOver(JsonManager::Instance().GetJsons(soundPlayer_actual->GetTag()));
 
 	managers.push_back(std::make_shared<EffectManager>());
 	effectManager_actual = std::dynamic_pointer_cast<EffectManager>(managers.back());
@@ -101,7 +100,7 @@ void GameObjectManager::Create()
 	tutorial->Load(JsonManager::Instance().GetJsons(tutorial->GetTag()));
 	finishCut->Load(JsonManager::Instance().GetJsons(finishCut->GetTag()));
 	gameTimer->Load(JsonManager::Instance().GetJsons(gameTimer->GetJsonTag()));
-	soundManager->Create();
+	soundPlayer->Create();
 
 	soundHandle = LoadSoundMem("material/sound/gameBGM.mp3");
 	ChangeVolumeSoundMem(125, soundHandle);
@@ -162,7 +161,6 @@ void GameObjectManager::Initialize()
 /// </summary>
 void GameObjectManager::Update()
 {
-
 	if (isStream_startPicture)
 	{
 		StartUpdate();
@@ -236,7 +234,6 @@ void GameObjectManager::Update()
 			finishCut->SetIsDraw_finish(true);
 		}
 	}
-
 }
 
 void GameObjectManager::StartUpdate()
@@ -249,7 +246,7 @@ void GameObjectManager::StartUpdate()
 		if (!isStream_startPicture)
 		{
 			gameTimer->ResetSetTime();
-			PlaySoundMem(soundHandle, DX_PLAYTYPE_LOOP);
+			soundPlayer->Play("gameBGM");
 		}
 
 	}
@@ -275,7 +272,6 @@ void GameObjectManager::FinishUpdate()
 			StopSoundMem(soundHandle);
 		}
 	}
-
 }
 
 /// <summary>

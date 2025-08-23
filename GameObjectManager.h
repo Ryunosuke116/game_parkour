@@ -6,7 +6,7 @@
 #include "Layout.h"
 #include "JsonManager.h"
 #include "BaseGameObjectManager.h"
-#include "SoundManager.h"
+#include "SoundPlayer.h"
 
 class GameObjectManager : public BaseManager
 {
@@ -39,14 +39,14 @@ private:
 	std::shared_ptr<GameTimer>				gameTimer			= NULL;
 	std::shared_ptr<Tutorial>				tutorial			= NULL;
 	std::shared_ptr<FinishCut>				finishCut			= NULL;
-	std::shared_ptr<ISoundPlayer>			soundManager		= NULL;
+	std::shared_ptr<ISoundPlayer>			soundPlayer			= NULL;
 
 	std::shared_ptr<SkyBox>			skyBox_actual		 = NULL;
 	std::shared_ptr<PlayerManager>	playerManager_actual = NULL;
 	std::shared_ptr<CoinManager>	coinManager_actual   = NULL;
 	std::shared_ptr<EffectManager>  effectManager_actual = NULL;
 	std::shared_ptr<UIManager>		uiManager_actual	 = NULL;
-	std::shared_ptr<BaseGameObjectManager> soundManager_actual = NULL;
+	std::shared_ptr<BaseGameObjectManager> soundPlayer_actual = NULL;
 
 	int tutorialHandle;
 	int startHandle;
