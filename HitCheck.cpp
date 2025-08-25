@@ -433,27 +433,39 @@ HangingData HitCheck::CliffGrabbing(const std::vector<std::shared_ptr<BaseObject
 					VECTOR depthDirection = VSub(nearestOutSide, spherePos);
 					depthDirection = VNorm(depthDirection);
 
-					float depth = Calculation::Check_depth_Triangle(depthDirection, poly.Position[0], poly.Position[1], poly.Position[2]);
-					MV1_COLL_RESULT_POLY ray_poly;
+					depthDirection = Calculation::Projection(poly.Normal, depthDirection);
+
+					VECTOR depthDistance = VScale(depthDirection, max_velocity);
+
+					MV1_COLL_RESULT_POLY wallCheck;
+
+					for (const auto& collisionObject : collisionObjects)
+					{
+						HitCheck::RayHitJudge(collisionObject->GetModelHandle(), -1, nearestOutSide, depthDistance, wallCheck);
+					}
+
+					//float depth = Calculation::Check_depth_Triangle(depthDirection, poly.Position[0], poly.Position[1], poly.Position[2]);
+					//MV1_COLL_RESULT_POLY ray_poly;
 
 					//‰œs‚ª‚È‚¢ê‡’Í‚ß‚È‚¢
-					if (max_velocity > depth) continue;
+					if (wallCheck.HitFlag) continue;
+					//if (max_velocity > depth) continue;
 
-					VECTOR neareast = Calculation::SphereMeshOutsideTriangle(poly, spherePos);
-					DebugDrawer::Instance().InformationInput_sphere(neareast, 2.0f, GetColor(255, 0, 255));
+					//VECTOR neareast = Calculation::SphereMeshOutsideTriangle(poly, spherePos);
+					//DebugDrawer::Instance().InformationInput_sphere(neareast, 2.0f, GetColor(255, 0, 255));
 
-					VECTOR line_end = Calculation::Projection(poly.Normal, moveDirection);
+					//VECTOR line_end = Calculation::Projection(poly.Normal, moveDirection);
 
-					line_end = VAdd(neareast, VScale(line_end, max_velocity));
+					//line_end = VAdd(neareast, VScale(line_end, max_velocity));
 
-					if (HitCheck::RayHitJudge(fieldObject->GetModelHandle(),
-						-1,
-						neareast,
-						line_end,
-						ray_poly
-					)) continue;
+					//if (HitCheck::RayHitJudge(fieldObject->GetModelHandle(),
+					//	-1,
+					//	neareast,
+					//	line_end,
+					//	ray_poly
+					//)) continue;
 
-					VECTOR sub = VSub(neareast, spherePos);
+					VECTOR sub = VSub(nearestOutSide, spherePos);
 					float sub_size = VSize(sub);
 
 					//ˆê”Ô·‚ª¬‚³‚¢î•ñ‚ğæ“¾

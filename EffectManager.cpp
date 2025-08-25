@@ -20,6 +20,18 @@ EffectManager::~EffectManager()
 	effectDatas.clear();
 }
 
+void EffectManager::Create()
+{
+	for (auto& data : jsonData["list"])
+	{
+		std::string tag = data[1];
+		std::string  path = data[0].get<std::string>();
+		float scale = data[2];
+
+		Add(path.c_str(), tag, scale);
+	}
+}
+
 /// <summary>
 /// —v‘f‚Ì’Ç‰Á
 /// </summary>
@@ -29,7 +41,7 @@ EffectManager::~EffectManager()
 void EffectManager::Add(const char* path, std::string& setTag,
 	const float& scale)
 {
-
+	
 	std::shared_ptr<EffectData> data = std::make_shared<EffectData>();
 
 	data->resourceHandle = LoadEffekseerEffect(path, scale);

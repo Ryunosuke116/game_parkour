@@ -10,11 +10,11 @@ class PlayerManager : public BaseGameObjectManager
 {
 public:
 
-	PlayerManager(std::shared_ptr<ISoundPlayer> sound);
+	PlayerManager(std::shared_ptr<ISoundPlayer> sound,
+		std::shared_ptr<IEffectManager> effect);
 	~PlayerManager();
 	
 	void Update(const std::vector<std::shared_ptr<BaseObject>>& fieldObjects,
-		std::shared_ptr<EffectManager>& effectManager,
 		const VECTOR& cameraDirection);
 
 	void Update_start(const float& timer);
@@ -51,6 +51,7 @@ private:
 	std::shared_ptr<Player> actualPlayer = NULL;
 	AABB playerAABB;
 	PlayerData now_playerData;
-	std::shared_ptr<ISoundPlayer> soundPlayer;
+	std::shared_ptr<ISoundPlayer>			soundPlayer	  = NULL;
+	std::shared_ptr<IEffectManager>			effectManager = NULL;
 };
 

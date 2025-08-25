@@ -1,10 +1,9 @@
 #pragma once
 
-class ObjectManager_interface
+class IObjectManager
 {
 public:
-
-	virtual ~ObjectManager_interface(){}
+	virtual ~IObjectManager(){}
 
 	//ƒˆ‰¼‘zŠÖ”	
 	virtual void Create()		abstract;
@@ -12,6 +11,5 @@ public:
 	virtual void Update()		abstract;
 	virtual void Draw()			abstract;
 	virtual void Add()			abstract;
-
 };
 

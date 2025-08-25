@@ -15,9 +15,11 @@
 /// <summary>
 /// /インストラクタ
 /// </summary>
-Player::Player(std::shared_ptr<ISoundPlayer> sound) :
+Player::Player(std::shared_ptr<ISoundPlayer> sound,
+    std::shared_ptr<IEffectManager> effect) :
     BaseChara(),
     soundPlayer(sound),
+    effectManager(effect),
     start_walkTime(-1),
     centerPosition(VGet(0.0f, 0.0f, 0.0f)),
     moveDirection_now(VGet(0.0f, 0.0f, 0.0f)),
@@ -107,7 +109,6 @@ void Player::Initialize()
 /// 更新
 /// </summary>
 void Player::Update(const VECTOR& cameraDirection, 
-    std::shared_ptr<EffectManager>& effectManager,
     const std::vector<std::shared_ptr<BaseObject>>& fieldObjects)
 {
      //positionData更新
@@ -196,8 +197,8 @@ void Player::Update(const VECTOR& cameraDirection,
         effectTimer++;
         if (effectTimer >= 10.0f)
         {
-            effectManager->PlayEffect("foot_smoke");
-            effectManager->SetPosition(position,"foot_smoke");
+            this->effectManager->PlayEffect("foot_smoke");
+            this->effectManager->SetPosition(position,"foot_smoke");
             effectTimer = 0.0f;
         }
     }

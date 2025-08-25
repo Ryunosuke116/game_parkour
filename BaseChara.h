@@ -1,9 +1,9 @@
 #pragma once
 
 #include "CollisionData.h"
-#include "Object_interface.h"
+#include "IObject.h"
 
-class BaseChara : public Object_interface
+class BaseChara : public IObject
 {
 protected:
 

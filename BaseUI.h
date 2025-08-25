@@ -1,7 +1,7 @@
 #pragma once
-#include "Object_interface.h"
+#include "IObject.h"
 
-class BaseUI : public Object_interface
+class BaseUI : public IObject
 {
 public:
 	BaseUI();

@@ -11,9 +11,11 @@
 /// <summary>
 /// コンストラクタ
 /// </summary>
-PlayerManager::PlayerManager(std::shared_ptr<ISoundPlayer> sound):
+PlayerManager::PlayerManager(std::shared_ptr<ISoundPlayer> sound,
+	std::shared_ptr<IEffectManager> effect):
 	BaseGameObjectManager(),
 	soundPlayer(sound),
+	effectManager(effect),
 	now_playerData({false})
 {
 	tag = "player";
@@ -31,7 +33,7 @@ void PlayerManager::Create()
 {
 	collisionManager = std::make_shared<CollisionManager>();
 
-	player = std::make_shared<Player>(soundPlayer);
+	player = std::make_shared<Player>(soundPlayer, effectManager);
 	actualPlayer = std::dynamic_pointer_cast<Player>(player);
 	player->Load(jsonData);
 }
@@ -63,12 +65,11 @@ void PlayerManager::Initialize()
 /// </summary>
 /// <param name="mapHandle"></param>
 /// <param name="player"></param>
-void PlayerManager::Update(const std::vector<std::shared_ptr<BaseObject>>& fieldObjects ,
-	std::shared_ptr<EffectManager>& effectManager, 
+void PlayerManager::Update(const std::vector<std::shared_ptr<BaseObject>>& fieldObjects, 
 	const VECTOR& cameraDirection)
 {
 
-	actualPlayer->Update(cameraDirection,effectManager, fieldObjects);
+	actualPlayer->Update(cameraDirection, fieldObjects);
 
 	collisionManager->Update(*player, fieldObjects, actualPlayer->GetData());
 	

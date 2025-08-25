@@ -33,6 +33,9 @@ GameObjectManager::~GameObjectManager()
 /// </summary>
 void GameObjectManager::Create()
 {
+	//vector型.atを使うとき用
+	const int effectManagerNumber = 0;
+
 	//生成
 	skyBox				= std::make_shared<SkyBox>();
 	field				= std::make_shared<Field>();
@@ -46,7 +49,11 @@ void GameObjectManager::Create()
 	finishCut			= std::make_shared<FinishCut>();
 	soundPlayer			= std::make_shared<SoundPlayer>();
 
-	managers.push_back(std::make_shared<PlayerManager>(soundPlayer));
+	managers.push_back(std::make_shared<EffectManager>());
+	effectManager_actual = std::dynamic_pointer_cast<EffectManager>(managers.back());
+	effectManager			 = std::dynamic_pointer_cast<EffectManager>(managers.at(effectManagerNumber));
+	
+	managers.push_back(std::make_shared<PlayerManager>(soundPlayer, effectManager));
 	playerManager_actual = std::dynamic_pointer_cast<PlayerManager>(managers.back());
 	managers.push_back(std::make_shared<UIManager>());
 	uiManager_actual = std::dynamic_pointer_cast<UIManager>(managers.back());
@@ -84,8 +91,6 @@ void GameObjectManager::Create()
 	}
 	soundPlayer_actual->HandOver(JsonManager::Instance().GetJsons(soundPlayer_actual->GetTag()));
 
-	managers.push_back(std::make_shared<EffectManager>());
-	effectManager_actual = std::dynamic_pointer_cast<EffectManager>(managers.back());
 
 	//コインオブザーバーに追加
 	coinManager_actual->AddObserver(playerManager_actual->GetPlayer());
@@ -131,17 +136,7 @@ void GameObjectManager::Initialize()
 	tutorial->Initialize();
 	finishCut->Initialize();
 
-	//エフェクトデータを追加
-	//TODO::やり方が悪いので修正しなければ
-	nlohmann::json effectData = JsonManager::Instance().GetJsons("effectData");
-	for (auto& data : effectData["list"])
-	{
-		std::string tag = data[1];
-		std::string  path = data[0].get<std::string>();
-		float scale = data[2];
 
-		effectManager_actual->Add(path.c_str(), tag, scale);
-	}
 
 	isCamera = false;
 	isPush = false;
@@ -204,7 +199,7 @@ void GameObjectManager::Update()
 			field->Update();
 
 			gameTimer->Update();
-			playerManager_actual->Update(collisionObjects,effectManager_actual, camera->GetCameraDirection());
+			playerManager_actual->Update(collisionObjects, camera->GetCameraDirection());
 			skyBox_actual->Update(playerManager_actual->GetPosition());
 			camera->Update(playerManager_actual->GetPosition(),
 				playerManager_actual->GetAngle(), collisionObjects);
@@ -224,7 +219,7 @@ void GameObjectManager::Update()
 			effectManager_actual,
 			camera->GetSpherePosition());
 
-		effectManager_actual->PlayEffectUpdate();
+		effectManager->PlayEffectUpdate();
 
 		//ゴール判定
 		if (gameTimer->IsFinish() &&

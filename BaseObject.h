@@ -2,9 +2,9 @@
 #include "common.h"
 #include <string>
 #include <nlohmann/json.hpp>
-#include "Object_interface.h"
+#include "IObject.h"
 
-class BaseObject : public Object_interface
+class BaseObject : public IObject
 {
 protected:
 	int modelHandle;

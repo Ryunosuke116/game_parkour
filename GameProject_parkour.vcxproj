@@ -231,13 +231,15 @@
     <ClInclude Include="HitCheck.h" />
     <ClInclude Include="Idle.h" />
     <ClInclude Include="Idle_To_Sprint.h" />
+    <ClInclude Include="IEffectManager.h" />
     <ClInclude Include="Input.h" />
+    <ClInclude Include="ISoundPlayer.h" />
     <ClInclude Include="JsonManager.h" />
     <ClInclude Include="Jump.h" />
     <ClInclude Include="Layout.h" />
     <ClInclude Include="SkyBox.h" />
-    <ClInclude Include="ObjectManager_interface.h" />
-    <ClInclude Include="Object_interface.h" />
+    <ClInclude Include="IObjectManager.h" />
+    <ClInclude Include="IObject.h" />
     <ClInclude Include="PlayerCalculation.h" />
     <ClInclude Include="GameObjectManager.h" />
     <ClInclude Include="objects.h" />

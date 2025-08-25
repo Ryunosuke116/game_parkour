@@ -8,6 +8,7 @@
 #include  "nlohmann/json.hpp"
 #include "CoinObserver.h"
 #include "ISoundPlayer.h"
+#include "IEffectManager.h"
 
 class EffectManager;
 
@@ -50,19 +51,20 @@ private:
 
 	//‘¼ƒNƒ‰ƒX
 	PlayerData playerData;
-	std::shared_ptr<ISoundPlayer> soundPlayer;
-	std::shared_ptr<PlayerStateBase>	nowState			= NULL;
+	std::shared_ptr<IEffectManager>			effectManager		= NULL;
+	std::shared_ptr<ISoundPlayer>			soundPlayer			= NULL;	
+	std::shared_ptr<PlayerStateBase>		nowState			= NULL;
 	std::shared_ptr<AnimationChanger>		animationChanger	= NULL;
 
 public:
-	Player(std::shared_ptr<ISoundPlayer> soundPlayer);
+	Player(std::shared_ptr<ISoundPlayer> sound,
+		std::shared_ptr<IEffectManager> effect);
 	~Player();
 
 	void Load(const nlohmann::json& jsonData)override;
 	void Initialize()override;
 	void Update()override;
 	void Update(const VECTOR& cameraDirection,
-		std::shared_ptr<EffectManager>& effectManager,
 		const std::vector<std::shared_ptr<BaseObject>>& fieldObjects);
 	
 

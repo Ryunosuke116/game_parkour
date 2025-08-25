@@ -8,23 +8,15 @@ class EffectManager;
 
 class CoinManager : public BaseGameObjectManager
 {
-private:
-	std::vector<std::shared_ptr<CoinObject>> coins;
-	std::vector<std::weak_ptr<CoinObserver>> observers;
-	int modelHandle;
-
-	static constexpr int coinValue = 1;		//コインの価値
-
 public:
 	void AddObserver(std::shared_ptr<CoinObserver> observer) { observers.push_back(observer); }
 	void RemoveObserver(std::shared_ptr<CoinObserver> observer);
 	void NotifyCoinPicked(int amount);
 
-	CoinManager();
+	CoinManager(std::shared_ptr<IEffectManager> effect);
 	~CoinManager();
 
 	void Update(const std::shared_ptr<Player>& player,
-		std::shared_ptr<EffectManager>& effectManager, 
 		const VECTOR& cameraLookPos);
 
 	void Create()override;
@@ -34,5 +26,13 @@ public:
 	void Add()override;
 
 	int GetModelHandle()const { return modelHandle; }
+private:
+	std::vector<std::shared_ptr<CoinObject>> coins;
+	std::vector<std::weak_ptr<CoinObserver>> observers;
+	std::shared_ptr<IEffectManager>			effectManager = NULL;
+	int modelHandle;
+
+	static constexpr int coinValue = 1;		//コインの価値
+
 };
 

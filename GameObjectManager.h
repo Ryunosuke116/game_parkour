@@ -44,9 +44,10 @@ private:
 	std::shared_ptr<SkyBox>			skyBox_actual		 = NULL;
 	std::shared_ptr<PlayerManager>	playerManager_actual = NULL;
 	std::shared_ptr<CoinManager>	coinManager_actual   = NULL;
-	std::shared_ptr<EffectManager>  effectManager_actual = NULL;
+	std::shared_ptr<IEffectManager>  effectManager_actual = NULL;
 	std::shared_ptr<UIManager>		uiManager_actual	 = NULL;
 	std::shared_ptr<BaseGameObjectManager> soundPlayer_actual = NULL;
+	std::shared_ptr<IEffectManager>  effectManager = NULL;
 
 	int tutorialHandle;
 	int startHandle;

@@ -4,8 +4,9 @@
 /// <summary>
 /// コンストラクタ
 /// </summary>
-CoinObject::CoinObject():
+CoinObject::CoinObject(std::shared_ptr<IEffectManager> effect):
 	BaseObject(),
+	effectManager(effect),
 	radian_Y(0.0f),
 	velocity_Y(0.0f),
 	isHitPlayer(false),
@@ -58,8 +59,7 @@ void CoinObject::Initialize()
 /// <param name="playerPos_bottom"></param>
 /// <param name="radius"></param>
 /// <returns></returns>
-bool CoinObject::Update(std::shared_ptr<EffectManager>& effectManager,
-	const VECTOR& playerpos_top,
+bool CoinObject::Update(const VECTOR& playerpos_top,
 	const VECTOR& playerPos_bottom,const float radius)
 {
 	VECTOR nearCapsulePos = HitCheck::CapsuleHitConfirmation(playerpos_top, playerPos_bottom, position, radius, 4.5f);

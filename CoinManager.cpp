@@ -10,7 +10,8 @@
 /// <summary>
 /// コンストラクタ
 /// </summary>
-CoinManager::CoinManager()
+CoinManager::CoinManager(std::shared_ptr<IEffectManager> effect):
+	effectManager(effect)
 {
 	tag = "coin";
 }
@@ -57,7 +58,6 @@ void CoinManager::Initialize()
 /// <param name="player"></param>
 /// <param name="cameraLookPos"></param>
 void CoinManager::Update(const std::shared_ptr<Player>& player,
-	std::shared_ptr<EffectManager>& effectManager, 
 	const VECTOR& cameraLookPos)
 {
 	//vector型内の現在位置

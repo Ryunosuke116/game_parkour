@@ -1,10 +1,10 @@
 #pragma once
 #include <nlohmann/json.hpp>
 
-class Object_interface
+class IObject
 {
 public:
-	virtual ~Object_interface() {}
+	virtual ~IObject() {}
 
 	//ƒˆ‰¼‘zŠÖ”	
 	virtual void Initialize()							abstract;

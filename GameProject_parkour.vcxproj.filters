@@ -491,7 +491,7 @@
     <ClInclude Include="JsonManager.h">
       <Filter>ソース ファイル\static\json</Filter>
     </ClInclude>
-    <ClInclude Include="ObjectManager_interface.h">
+    <ClInclude Include="IObjectManager.h">
       <Filter>ソース ファイル\Interface</Filter>
     </ClInclude>
     <ClInclude Include="BaseGameObjectManager.h">
@@ -545,7 +545,7 @@
     <ClInclude Include="EffectData.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Object_interface.h">
+    <ClInclude Include="IObject.h">
       <Filter>ソース ファイル\Interface</Filter>
     </ClInclude>
     <ClInclude Include="BaseUI.h">
@@ -586,6 +586,12 @@
     </ClInclude>
     <ClInclude Include="SoundPlayer.h">
       <Filter>ソース ファイル\manager\sound</Filter>
+    </ClInclude>
+    <ClInclude Include="ISoundPlayer.h">
+      <Filter>ソース ファイル\Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="IEffectManager.h">
+      <Filter>ソース ファイル\Interface</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
