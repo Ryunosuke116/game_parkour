@@ -182,7 +182,7 @@
     <ClCompile Include="PadInput.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerManager.cpp" />
-    <ClCompile Include="PlayerStateActionBase.cpp" />
+    <ClCompile Include="PlayerStateBase.cpp" />
     <ClCompile Include="Quick_Roll.cpp" />
     <ClCompile Include="Rank.cpp" />
     <ClCompile Include="Result.cpp" />
@@ -246,7 +246,7 @@
     <ClInclude Include="PlayerData.h" />
     <ClInclude Include="PlayerManager.h" />
     <ClInclude Include="playerState.h" />
-    <ClInclude Include="PlayerStateActionBase.h" />
+    <ClInclude Include="PlayerStateBase.h" />
     <ClInclude Include="PlayerStateObserver.h" />
     <ClInclude Include="Quick_Roll.h" />
     <ClInclude Include="Rank.h" />

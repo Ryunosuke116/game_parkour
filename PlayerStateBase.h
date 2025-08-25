@@ -8,7 +8,7 @@
 class Input;
 class Player;
 
-class PlayerStateActionBase
+class PlayerStateBase
 {
 public:
 
@@ -20,14 +20,14 @@ public:
 		float PlayAnimSpeed;		//アニメーションスピード
 	};
 
-	PlayerStateActionBase(int& modelHandle,
+	PlayerStateBase(int& modelHandle,
 		AnimState& oldAnimState,
 		AnimState& nowAnimState,
 		std::shared_ptr<ISoundPlayer> sound);
-	~PlayerStateActionBase() {};
+	~PlayerStateBase() {};
 
 	//純粋仮想関数
-	virtual void Initialize(int& modelHandle, Player& player)abstract;
+	virtual void Initialize(int& modelHandle,const int changeNum, Player& player);
 	virtual std::pair<VECTOR, PlayerData> Update(const VECTOR& cameraDirection,
 		const std::vector<std::shared_ptr<BaseObject>>& fieldObjects, Player& player)abstract;
 	virtual VECTOR Command(const VECTOR& cameraDirection, PlayerData& playerData, Player& player)abstract;

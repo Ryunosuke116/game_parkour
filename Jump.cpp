@@ -1,7 +1,7 @@
 #include "common.h"
 #include <memory>
 #include <vector>
-#include "PlayerStateActionBase.h"
+#include "PlayerStateBase.h"
 #include "PadInput.h"
 #include "PlayerData.h"
 #include "Jump.h"
@@ -14,7 +14,7 @@
 /// <param name="modelHandle"></param>
 Jump::Jump(int& modelHandle, AnimState& oldAnimState,
     AnimState& nowAnimState, std::shared_ptr<ISoundPlayer> sound, PlayerData& playerData) :
-    PlayerStateActionBase(modelHandle, oldAnimState, nowAnimState, sound),
+    PlayerStateBase(modelHandle, oldAnimState, nowAnimState, sound),
     isJump_first(false),
     isJump_second(false)
 {
@@ -33,27 +33,18 @@ Jump::~Jump()
 /// 初期化
 /// </summary>
 /// <param name="modelHandle"></param>
-void Jump::Initialize(int& modelHandle, Player& player)
+void Jump::Initialize(int& modelHandle,const int changeNum, Player& player)
 {
     // ３Ｄモデルの０番目のアニメーションをアタッチする
     //ランジャンプ
-    if (player.GetData().isMove)
-    {
-        this->nowAnimState.AttachIndex = MV1AttachAnim(modelHandle, animNum::run_Jump);
-        this->nowAnimState.PlayAnimSpeed = playAnimSpeed;
-    }
+    player.GetData().isMove ?
+        PlayerStateBase::Initialize(modelHandle, animNum::run_Jump, player) :
+        PlayerStateBase::Initialize(modelHandle, animNum::jump, player);
 
-    //通常ジャンプ
-    if (!player.GetData().isMove)
-    {
-        this->nowAnimState.AttachIndex = MV1AttachAnim(modelHandle, animNum::jump);
-        this->nowAnimState.PlayAnimSpeed = playAnimSpeed;
-    }
+    this->nowAnimState.PlayAnimSpeed = playAnimSpeed;
 
     isJump_first = player.GetData().isJump;
     isJump_second = player.GetData().isJump_second;
-
-    this->nowAnimState.PlayTime_anim = 0.0f;
 }
 
 /// <summary>

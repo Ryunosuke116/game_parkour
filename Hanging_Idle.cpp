@@ -3,7 +3,7 @@
 #include <vector>
 #include "PadInput.h"
 #include "PlayerData.h"
-#include "PlayerStateActionBase.h"
+#include "PlayerStateBase.h"
 #include "Hanging_Idle.h"
 #include "AnimTime.h"
 #include "Player.h"
@@ -17,9 +17,9 @@
 /// <param name="playerData"></param>
 Hanging_Idle::Hanging_Idle(int& modelHandle,
     AnimState& oldAnimState, AnimState& nowAnimState, std::shared_ptr<ISoundPlayer> sound) :
-    PlayerStateActionBase(modelHandle, oldAnimState, nowAnimState, sound)
+    PlayerStateBase(modelHandle, oldAnimState, nowAnimState, sound)
 {
-
+    this->nowAnimState.PlayAnimSpeed = playAnimSpeed;
 }
 
 /// <summary>
@@ -34,14 +34,9 @@ Hanging_Idle::~Hanging_Idle()
 /// 初期化
 /// </summary>
 /// <param name="modelHandle"></param>
-void Hanging_Idle::Initialize(int& modelHandle, Player& player)
+void Hanging_Idle::Initialize(int& modelHandle,const int changeNum, Player& player)
 {
-    // ３Ｄモデルの０番目のアニメーションをアタッチする
-    this->nowAnimState.AttachIndex = MV1AttachAnim(modelHandle, animNum::hanging_Idle);
-
-    this->nowAnimState.PlayTime_anim = 0.0f;
-    this->nowAnimState.PlayAnimSpeed = playAnimSpeed;
-    this->nowAnimState.TotalPlayTime_anim = MV1GetAttachAnimTotalTime(modelHandle, this->nowAnimState.AttachIndex);
+    PlayerStateBase::Initialize(modelHandle, changeNum, player);
     animBlendRate = 1.0f;
 
     // 再生時間をセットする

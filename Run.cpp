@@ -1,7 +1,7 @@
 #include "common.h"
 #include <memory>
 #include <vector>
-#include "PlayerStateActionBase.h"
+#include "PlayerStateBase.h"
 #include "PlayerData.h"
 #include "Run.h"
 #include "AnimTime.h"
@@ -15,7 +15,7 @@
 /// <param name="modelHandle"></param>
 Run::Run(int& modelHandle, 
 	AnimState& oldAnimState, AnimState& nowAnimState, std::shared_ptr<ISoundPlayer> sound) :
-	PlayerStateActionBase(modelHandle,  oldAnimState, nowAnimState, sound),
+	PlayerStateBase(modelHandle,  oldAnimState, nowAnimState, sound),
 	degree_difference(0.0f),
 	stopTime(0.0f),
 	angle(-1),
@@ -23,7 +23,8 @@ Run::Run(int& modelHandle,
 	playerMoveSpeed_max(-1),
 	degree_new(-1)
 {
-	
+	animationNum_now = animNum::run;
+	this->nowAnimState.PlayAnimSpeed = playAnimSpeed;
 }
 
 /// <summary>
@@ -31,19 +32,6 @@ Run::Run(int& modelHandle,
 /// </summary>
 Run::~Run()
 {
-}
-
-/// <summary>
-/// 初期化
-/// </summary>
-void Run::Initialize(int& modelHandle, Player& player)
-{
-	// ３Ｄモデルの０番目のアニメーションをアタッチする
-	this->nowAnimState.AttachIndex = MV1AttachAnim(modelHandle, animNum::run);
-
-	this->nowAnimState.PlayTime_anim = 0.0f;
-	this->nowAnimState.PlayAnimSpeed = playAnimSpeed;
-	animationNum_now = animNum::run;
 }
 
 std::pair<VECTOR, PlayerData> Run::Update(const VECTOR& cameraDirection,

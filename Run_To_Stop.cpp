@@ -1,7 +1,7 @@
 #include "common.h"
 #include <memory>
 #include <vector>
-#include "PlayerStateActionBase.h"
+#include "PlayerStateBase.h"
 #include "PlayerData.h"
 #include "Run_To_Stop.h"
 #include "AnimTime.h"
@@ -14,9 +14,9 @@
 /// <param name="modelHandle"></param>
 Run_To_Stop::Run_To_Stop(int& modelHandle,
     AnimState& oldAnimState, AnimState& nowAnimState, std::shared_ptr<ISoundPlayer> sound) :
-    PlayerStateActionBase(modelHandle, oldAnimState, nowAnimState, sound)
+    PlayerStateBase(modelHandle, oldAnimState, nowAnimState, sound)
 {
-  
+    this->nowAnimState.PlayAnimSpeed = playAnimSpeed;
 }
 
 /// <summary>
@@ -25,20 +25,6 @@ Run_To_Stop::Run_To_Stop(int& modelHandle,
 Run_To_Stop::~Run_To_Stop()
 {
     //  MV1DetachAnim(modelHandle, this->nowAnimState.AttachIndex);
-}
-
-/// <summary>
-/// 初期化
-/// </summary>
-/// <param name="modelHandle"></param>
-void Run_To_Stop::Initialize(int& modelHandle, Player& player)
-{
-    // ３Ｄモデルの０番目のアニメーションをアタッチする
-    this->nowAnimState.AttachIndex = MV1AttachAnim(modelHandle, animNum::run_To_Stop);
-
-    this->nowAnimState.PlayTime_anim = 0.0f;
-    this->nowAnimState.PlayAnimSpeed = playAnimSpeed;
-
 }
 
 /// <summary>

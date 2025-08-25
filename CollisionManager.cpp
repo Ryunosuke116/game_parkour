@@ -3,7 +3,7 @@
 #include <vector>
 #include "HitCheck.h"
 #include "Calculation.h"
-#include "PlayerStateActionBase.h"
+#include "PlayerStateBase.h"
 #include "CollisionManager.h"
 #include "BaseChara.h"
 #include "DebugDrawer.h"

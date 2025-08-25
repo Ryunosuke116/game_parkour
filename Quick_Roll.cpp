@@ -1,7 +1,7 @@
 #include "common.h"
 #include <memory>
 #include <vector>
-#include "PlayerStateActionBase.h"
+#include "PlayerStateBase.h"
 #include "PadInput.h"
 #include "PlayerData.h"
 #include "Quick_Roll.h"
@@ -17,7 +17,7 @@
 /// <param name="nowAnimState"></param>
 Quick_Roll::Quick_Roll(int& modelHandle,
     AnimState& oldAnimState, AnimState& nowAnimState, std::shared_ptr<ISoundPlayer> sound) :
-	PlayerStateActionBase(modelHandle, oldAnimState, nowAnimState, sound)
+	PlayerStateBase(modelHandle, oldAnimState, nowAnimState, sound)
 {
 
 }
@@ -28,19 +28,6 @@ Quick_Roll::Quick_Roll(int& modelHandle,
 Quick_Roll::~Quick_Roll()
 {
 
-}
-
-/// <summary>
-/// 初期化
-/// </summary>
-/// <param name="modelHandle"></param>
-void Quick_Roll::Initialize(int& modelHandle, Player& player)
-{
-    // ３Ｄモデルの０番目のアニメーションをアタッチする
-    this->nowAnimState.AttachIndex = MV1AttachAnim(modelHandle, animNum::jump_Over);
-
-    this->nowAnimState.PlayTime_anim = 0.0f;
-    this->nowAnimState.PlayAnimSpeed = playAnimSpeed;
 }
 
 /// <summary>

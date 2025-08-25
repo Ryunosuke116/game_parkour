@@ -1,5 +1,5 @@
 #pragma once
-#include "PlayerStateActionBase.h"
+#include "PlayerStateBase.h"
 #include "PlayerCalculation.h"
 #include "BaseChara.h"
 #include "CollisionManager.h"
@@ -51,7 +51,7 @@ private:
 	//‘¼ƒNƒ‰ƒX
 	PlayerData playerData;
 	std::shared_ptr<ISoundPlayer> soundPlayer;
-	std::shared_ptr<PlayerStateActionBase>	nowState			= NULL;
+	std::shared_ptr<PlayerStateBase>	nowState			= NULL;
 	std::shared_ptr<AnimationChanger>		animationChanger	= NULL;
 
 public:

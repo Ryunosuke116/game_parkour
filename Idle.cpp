@@ -1,7 +1,7 @@
 #include "common.h"
 #include <memory>
 #include <vector>
-#include "PlayerStateActionBase.h"
+#include "PlayerStateBase.h"
 #include "PlayerData.h"
 #include "Idle.h"
 #include "AnimTime.h"
@@ -14,7 +14,7 @@
 /// <param name="modelHandle"></param>
 Idle::Idle(int& modelHandle,
     AnimState& oldAnimState, AnimState& nowAnimState, std::shared_ptr<ISoundPlayer> sound, PlayerData& playerData) :
-    PlayerStateActionBase(modelHandle, oldAnimState, nowAnimState, sound)
+    PlayerStateBase(modelHandle, oldAnimState, nowAnimState, sound)
 {
 
 }
@@ -25,19 +25,6 @@ Idle::Idle(int& modelHandle,
 Idle::~Idle()
 {
   //  MV1DetachAnim(modelHandle, this->nowAnimState.AttachIndex);
-}
-
-/// <summary>
-/// 初期化
-/// </summary>
-/// <param name="modelHandle"></param>
-void Idle::Initialize(int& modelHandle, Player& player)
-{
-    // ３Ｄモデルの０番目のアニメーションをアタッチする
-    this->nowAnimState.AttachIndex = MV1AttachAnim(modelHandle, animNum::idle);
-
-    this->nowAnimState.PlayTime_anim = 0.0f;
-    this->nowAnimState.PlayAnimSpeed = playAnimSpeed;
 }
 
 /// <summary>

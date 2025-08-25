@@ -2,7 +2,7 @@
 #include <memory>
 #include <vector>
 #include "PadInput.h"
-#include "PlayerStateActionBase.h"
+#include "PlayerStateBase.h"
 #include "Braced_Hang_To_Crouch.h"
 #include "AnimTime.h"
 #include "Player.h"
@@ -17,9 +17,9 @@
 /// <param name="playerData"></param>
 Braced_Hang_To_Crouch::Braced_Hang_To_Crouch(int& modelHandle,
     AnimState& oldAnimState, AnimState& nowAnimState, std::shared_ptr<ISoundPlayer> sound) :
-    PlayerStateActionBase(modelHandle, oldAnimState, nowAnimState, sound)
+    PlayerStateBase(modelHandle, oldAnimState, nowAnimState, sound)
 {
-   
+    this->nowAnimState.PlayAnimSpeed = playAnimSpeed;
 }
 
 /// <summary>
@@ -28,21 +28,6 @@ Braced_Hang_To_Crouch::Braced_Hang_To_Crouch(int& modelHandle,
 Braced_Hang_To_Crouch::~Braced_Hang_To_Crouch()
 {
 
-}
-
-
-/// <summary>
-/// 初期化
-/// </summary>
-/// <param name="modelHandle"></param>
-void Braced_Hang_To_Crouch::Initialize(int& modelHandle, Player& player)
-{
-    // ３Ｄモデルの０番目のアニメーションをアタッチする
-    this->nowAnimState.AttachIndex = MV1AttachAnim(modelHandle, animNum::braced_Hang_To_Crouch);
-
-    this->nowAnimState.PlayTime_anim = 0.0f;
-    this->nowAnimState.PlayAnimSpeed = playAnimSpeed;
-    this->nowAnimState.TotalPlayTime_anim = MV1GetAttachAnimTotalTime(modelHandle, this->nowAnimState.AttachIndex);
 }
 
 /// <summary>

@@ -1,16 +1,14 @@
 #pragma once
-#include "PlayerStateActionBase.h"
+#include "PlayerStateBase.h"
 
 class Player;
 
-class Run_To_Stop : public PlayerStateActionBase
+class Run_To_Stop : public PlayerStateBase
 {
 public:
 	Run_To_Stop(int& modelHandle,
 		AnimState& oldAnimState, AnimState& nowAnimState, std::shared_ptr<ISoundPlayer> sound);
 	~Run_To_Stop();
-
-	void Initialize(int& modelHandle, Player& player)override;
 
 	bool MotionUpdate(PlayerData& playerData)override;
 	std::pair<VECTOR, PlayerData> Update(const VECTOR& cameraDirection,

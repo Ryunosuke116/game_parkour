@@ -234,7 +234,7 @@
     <ClCompile Include="SkyBox.cpp">
       <Filter>ソース ファイル\map</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerStateActionBase.cpp">
+    <ClCompile Include="PlayerStateBase.cpp">
       <Filter>ソース ファイル\object\game\player\animation\Base</Filter>
     </ClCompile>
     <ClCompile Include="Field.cpp">
@@ -401,7 +401,7 @@
     <ClInclude Include="SkyBox.h">
       <Filter>ソース ファイル\map</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerStateActionBase.h">
+    <ClInclude Include="PlayerStateBase.h">
       <Filter>ソース ファイル\object\game\player\animation\Base</Filter>
     </ClInclude>
     <ClInclude Include="playerState.h">

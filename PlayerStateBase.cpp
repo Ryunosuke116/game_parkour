@@ -3,7 +3,7 @@
 #include <vector>
 #include "PadInput.h"
 #include "PlayerData.h"
-#include "PlayerStateActionBase.h"
+#include "PlayerStateBase.h"
 #include "Player.h"
 #include "DebugDrawer.h"
 
@@ -14,7 +14,7 @@
 /// <param name="prevAttachIndex"></param>
 /// <param name="oldAnimState"></param>
 /// <param name="nowAnimState"></param>
-PlayerStateActionBase::PlayerStateActionBase(int& modelHandle,
+PlayerStateBase::PlayerStateBase(int& modelHandle,
     AnimState& oldAnimState, AnimState& nowAnimState, std::shared_ptr<ISoundPlayer> sound):
     modelHandle(-1),
     animNumber_old(-1),
@@ -46,11 +46,20 @@ PlayerStateActionBase::PlayerStateActionBase(int& modelHandle,
     animBlendRate = this->oldAnimState.AttachIndex == -1 ? 1.0f : 0.0f;
 }
 
+void PlayerStateBase::Initialize(int& modelHandle,const int changeNum, Player& player)
+{
+    // ３Ｄモデルの０番目のアニメーションをアタッチする
+    this->nowAnimState.AttachIndex = MV1AttachAnim(modelHandle, changeNum);
+
+    this->nowAnimState.PlayTime_anim = 0.0f;
+    this->nowAnimState.TotalPlayTime_anim = MV1GetAttachAnimTotalTime(modelHandle, this->nowAnimState.AttachIndex);
+}
+
 /// <summary>
 /// アニメーション更新
 /// </summary>
 /// <returns></returns>
-bool PlayerStateActionBase::MotionUpdate(PlayerData& playerData)
+bool PlayerStateBase::MotionUpdate(PlayerData& playerData)
 {
     float totalTime_anim;
 
@@ -112,7 +121,7 @@ bool PlayerStateActionBase::MotionUpdate(PlayerData& playerData)
 }
 
 
-bool PlayerStateActionBase::Draw()
+bool PlayerStateBase::Draw()
 {
     DebugDrawer::Instance().InformationInput_string_int("nowAttachIndex %d\n", nowAnimState.AttachIndex);
     DebugDrawer::Instance().InformationInput_string_int("oldAttachIndex %d\n", oldAnimState.AttachIndex);
@@ -128,7 +137,7 @@ bool PlayerStateActionBase::Draw()
 /// </summary>
 /// <param name="input"></param>
 /// <param name="moveVec"></param>
-VECTOR PlayerStateActionBase::Move(const VECTOR& cameraDirection, PlayerData& playerData)
+VECTOR PlayerStateBase::Move(const VECTOR& cameraDirection, PlayerData& playerData)
 {
     moveDirection = VGet(0.0f, 0.0f, 0.0f);
     VECTOR moveDirection_old = VGet(0.0f, 0.0f, 0.0f);
@@ -178,7 +187,7 @@ VECTOR PlayerStateActionBase::Move(const VECTOR& cameraDirection, PlayerData& pl
 /// <summary>
 /// ロールアクション入力
 /// </summary>
-void PlayerStateActionBase::RollMove(PlayerData& playerData)
+void PlayerStateBase::RollMove(PlayerData& playerData)
 {
     if (PadInput::isRoll() && !playerData.isRoll && !playerData.isUse_Roll)
     {
@@ -191,7 +200,7 @@ void PlayerStateActionBase::RollMove(PlayerData& playerData)
 /// <summary>
 /// ジャンプ
 /// </summary>
-void PlayerStateActionBase::JumpMove(PlayerData& playerData, Player& player)
+void PlayerStateBase::JumpMove(PlayerData& playerData, Player& player)
 {
     if (PadInput::isJump() && !playerData.isJumpAll)
     {
@@ -238,7 +247,7 @@ void PlayerStateActionBase::JumpMove(PlayerData& playerData, Player& player)
 /// </summary>
 /// <param name="playerData"></param>
 /// <param name="player"></param>
-void PlayerStateActionBase::WallRunMove(PlayerData& playerData, Player& player)
+void PlayerStateBase::WallRunMove(PlayerData& playerData, Player& player)
 {
     const float entryDegree_wallRun = 50.0f;
 
@@ -282,7 +291,7 @@ void PlayerStateActionBase::WallRunMove(PlayerData& playerData, Player& player)
 /// <summary>
 /// ジャンプ状況リセット
 /// </summary>
-void PlayerStateActionBase::FlagReset_jump(PlayerData& playerData)
+void PlayerStateBase::FlagReset_jump(PlayerData& playerData)
 {
     if (playerData.isGround)
     {
@@ -292,7 +301,7 @@ void PlayerStateActionBase::FlagReset_jump(PlayerData& playerData)
     }
 }
 
-void PlayerStateActionBase::SwitchingAnimation(const int& animNum)
+void PlayerStateBase::SwitchingAnimation(const int& animNum)
 {
     //古い情報を削除
     if (this->oldAnimState.AttachIndex != -1)
@@ -312,7 +321,7 @@ void PlayerStateActionBase::SwitchingAnimation(const int& animNum)
 
 }
 
-void PlayerStateActionBase::SetOldAnimState()
+void PlayerStateBase::SetOldAnimState()
 {
     oldAnimState.AttachIndex = nowAnimState.AttachIndex;
     oldAnimState.PlayAnimSpeed = nowAnimState.PlayAnimSpeed;
@@ -320,7 +329,7 @@ void PlayerStateActionBase::SetOldAnimState()
     oldAnimState.TotalPlayTime_anim = nowAnimState.TotalPlayTime_anim;
 }
 
-void PlayerStateActionBase::ResetOldAnimState()
+void PlayerStateBase::ResetOldAnimState()
 {
     oldAnimState.AttachIndex = -1;
     oldAnimState.PlayAnimSpeed = 0.0f;
@@ -329,7 +338,7 @@ void PlayerStateActionBase::ResetOldAnimState()
 
 }
 
-void PlayerStateActionBase::ResetNowAnimState()
+void PlayerStateBase::ResetNowAnimState()
 {
     nowAnimState.AttachIndex = -1;
     nowAnimState.PlayAnimSpeed = 0.0f;

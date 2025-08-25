@@ -1,16 +1,14 @@
 #pragma once
-#include "PlayerStateActionBase.h"
+#include "PlayerStateBase.h"
 
 class Player;
 
-class Quick_Roll : public PlayerStateActionBase
+class Quick_Roll : public PlayerStateBase
 {
 public:
 	Quick_Roll(int& modelHandle,
 		AnimState& oldAnimState, AnimState& nowAnimState, std::shared_ptr<ISoundPlayer> sound);
 	~Quick_Roll();
-
-	void Initialize(int& modelHandle, Player& player)override;
 
 	std::pair<VECTOR, PlayerData> Update(const VECTOR& cameraDirection,
 		const std::vector<std::shared_ptr<BaseObject>>& fieldObjects, Player& player)override;

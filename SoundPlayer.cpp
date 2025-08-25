@@ -40,11 +40,13 @@ void SoundPlayer::Play(const std::string& name)
 
 	if (it != soundDatas.end())
 	{
-		PlaySoundMem(it->second.handle, DX_PLAYTYPE_LOOP);
+		 PlaySoundMem(it->second.handle, DX_PLAYTYPE_LOOP, TRUE);
+		 CheckSoundMem(it->second.handle);
 		//	it->second.iSLoop ? DX_PLAYTYPE_LOOP : DX_PLAYTYPE_BACK);
 	}
 
 	PlaySoundMem(handle, DX_PLAYTYPE_LOOP);
+
 }
 
 void SoundPlayer::Stop(const std::string& name)

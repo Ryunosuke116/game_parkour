@@ -1,10 +1,10 @@
 #pragma once
-#include "PlayerStateActionBase.h"
+#include "PlayerStateBase.h"
 #include "PlayerData.h"
 
 class Player;
 
-class Braced_Hang_To_Crouch : public PlayerStateActionBase
+class Braced_Hang_To_Crouch : public PlayerStateBase
 {
 public:
 	Braced_Hang_To_Crouch(int& modelHandle,
@@ -16,7 +16,6 @@ public:
 
 	std::pair<bool, VECTOR>GroundCollisionCheck_Hang_to_Crouch(const std::vector<std::shared_ptr<BaseObject>>& fieldObjects,
 		const VECTOR& topPos, const VECTOR& foot, const VECTOR& newPos);
-	void Initialize(int& modelHandle, Player& player)override;
 	std::pair<VECTOR, PlayerData> Update(const VECTOR& cameraDirection,
 		const std::vector<std::shared_ptr<BaseObject>>& fieldObjects, Player& player)override;
 	VECTOR Command(const VECTOR& cameraDirection, PlayerData& playerData, Player& player)override;

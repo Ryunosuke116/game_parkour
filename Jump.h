@@ -1,9 +1,9 @@
 #pragma once
-#include "PlayerStateActionBase.h"
+#include "PlayerStateBase.h"
 
 class Player;
 
-class Jump : public PlayerStateActionBase
+class Jump : public PlayerStateBase
 {
 public:
 	Jump(int& modelHandle, AnimState& oldAnimState,
@@ -11,7 +11,7 @@ public:
 		std::shared_ptr<ISoundPlayer> sound, PlayerData& playerData);
 	~Jump();
 
-	void Initialize(int& modelHandle, Player& player)override;
+	void Initialize(int& modelHandle,const int changeNum, Player& player)override;
 	std::pair<VECTOR, PlayerData> Update(const VECTOR& cameraDirection,
 		const std::vector<std::shared_ptr<BaseObject>>& fieldObjects, Player& player)override;
 

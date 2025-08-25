@@ -1,5 +1,5 @@
 #pragma once
-#include "PlayerStateActionBase.h"
+#include "PlayerStateBase.h"
 
 class Player;
 
@@ -10,14 +10,14 @@ public:
 	AnimationChanger(std::shared_ptr<ISoundPlayer> sound);
 	~AnimationChanger();
 
-	std::shared_ptr<PlayerStateActionBase> ChangeState(int& modelHandle,
+	std::shared_ptr<PlayerStateBase> ChangeState(int& modelHandle,
 		Player& player, PlayerData& playerData,
-		std::shared_ptr<PlayerStateActionBase>& nowState);
+		std::shared_ptr<PlayerStateBase>& nowState);
 
-	void SetOldAnimState(PlayerStateActionBase::AnimState animState);
-	void SetNowAnimState(PlayerStateActionBase::AnimState animState);
+	void SetOldAnimState(PlayerStateBase::AnimState animState);
+	void SetNowAnimState(PlayerStateBase::AnimState animState);
 	void Initialize(const int& num, int& modelHandle,
-		std::shared_ptr<PlayerStateActionBase>& nowState,
+		std::shared_ptr<PlayerStateBase>& nowState,
 		PlayerData& playerData, Player& player);
 	int GetAnimNumber_now() { return animNumber_Now; }
 
@@ -27,8 +27,8 @@ private:
 	int animNumber_Now;
 	int soundHandle;
 
-	PlayerStateActionBase::AnimState oldAnimState;
-	PlayerStateActionBase::AnimState nowAnimState;
+	PlayerStateBase::AnimState oldAnimState;
+	PlayerStateBase::AnimState nowAnimState;
 	std::shared_ptr<ISoundPlayer> soundPlayer;
 };
 

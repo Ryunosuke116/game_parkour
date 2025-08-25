@@ -1,7 +1,7 @@
 #include "common.h"
 #include <memory>
 #include <vector>
-#include "PlayerStateActionBase.h"
+#include "PlayerStateBase.h"
 #include "PlayerData.h"
 #include "Walk.h"
 #include "AnimTime.h"
@@ -15,7 +15,7 @@
 /// <param name="modelHandle"></param>
 Walk::Walk(int& modelHandle,
 	AnimState& oldAnimState, AnimState& nowAnimState, std::shared_ptr<ISoundPlayer> sound) :
-	PlayerStateActionBase(modelHandle, oldAnimState, nowAnimState, sound),
+	PlayerStateBase(modelHandle, oldAnimState, nowAnimState, sound),
 	degree_difference(0.0f),
 	stopTime(0.0f),
 	angle(-1),
@@ -23,7 +23,7 @@ Walk::Walk(int& modelHandle,
 	playerMoveSpeed_max(-1),
 	degree_new(-1)
 {
-
+	this->nowAnimState.PlayAnimSpeed = playAnimSpeed;
 }
 
 /// <summary>
@@ -32,19 +32,6 @@ Walk::Walk(int& modelHandle,
 Walk::~Walk()
 {
 	//	MV1DetachAnim(modelHandle, nowAnimState.AttachIndex);
-}
-
-/// <summary>
-/// 初期化
-/// </summary>
-void Walk::Initialize(int& modelHandle, Player& player)
-{
-
-	// ３Ｄモデルの０番目のアニメーションをアタッチする
-	this->nowAnimState.AttachIndex = MV1AttachAnim(modelHandle, animNum::walk);
-
-	this->nowAnimState.PlayTime_anim = 0.0f;
-	this->nowAnimState.PlayAnimSpeed = playAnimSpeed;
 }
 
 std::pair<VECTOR, PlayerData> Walk::Update(const VECTOR& cameraDirection,

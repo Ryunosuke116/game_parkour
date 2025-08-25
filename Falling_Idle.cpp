@@ -1,7 +1,7 @@
 #include "common.h"
 #include <memory>
 #include <vector>
-#include "PlayerStateActionBase.h"
+#include "PlayerStateBase.h"
 #include "PlayerData.h"
 #include "PadInput.h"
 #include "Falling_Idle.h"
@@ -15,9 +15,9 @@
 /// </summary>
 Falling_Idle::Falling_Idle(int& modelHandle,
 	AnimState& oldAnimState, AnimState& nowAnimState, std::shared_ptr<ISoundPlayer> sound) :
-	PlayerStateActionBase(modelHandle, oldAnimState, nowAnimState, sound)
+	PlayerStateBase(modelHandle, oldAnimState, nowAnimState, sound)
 {
-
+    this->nowAnimState.PlayAnimSpeed = playAnimSpeed;
 }
 
 /// <summary>
@@ -26,21 +26,6 @@ Falling_Idle::Falling_Idle(int& modelHandle,
 Falling_Idle::~Falling_Idle()
 {
 	//MV1DetachAnim(modelHandle, nowAnimState.AttachIndex);
-}
-
-/// <summary>
-/// 初期化
-/// </summary>
-/// <param name="modelHandle"></param>
-void Falling_Idle::Initialize(int& modelHandle, Player& player)
-{
-    this->nowAnimState.PlayAnimSpeed = playAnimSpeed;
-
-    // ３Ｄモデルの０番目のアニメーションをアタッチする
-    this->nowAnimState.AttachIndex = MV1AttachAnim(this->modelHandle, animNum::falling_Idle);
-
-    this->nowAnimState.PlayTime_anim = 0.0f;
-    this->nowAnimState.PlayAnimSpeed = playAnimSpeed;
 }
 
 /// <summary>

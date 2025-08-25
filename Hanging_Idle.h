@@ -1,9 +1,9 @@
 #pragma once
-#include "PlayerStateActionBase.h"
+#include "PlayerStateBase.h"
 
 class Player;
 
-class Hanging_Idle : public PlayerStateActionBase
+class Hanging_Idle : public PlayerStateBase
 {
 public:
 	Hanging_Idle(int& modelHandle,
@@ -13,7 +13,7 @@ public:
 
 	~Hanging_Idle();
 
-	void Initialize(int& modelHandle, Player& player)override;
+	void Initialize(int& modelHandle,const int changeNum, Player& player)override;
 	std::pair<VECTOR, PlayerData> Update(const VECTOR& cameraDirection,
 		const std::vector<std::shared_ptr<BaseObject>>& fieldObjects, Player& player)override;
 	VECTOR Command(const VECTOR& cameraDirection, PlayerData& playerData, Player& player)override;

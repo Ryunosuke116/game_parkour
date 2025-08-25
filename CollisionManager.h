@@ -1,5 +1,5 @@
 #pragma once
-#include "PlayerStateActionBase.h"
+#include "PlayerStateBase.h"
 #include "BaseObject.h"
 #include "BaseChara.h"
 #include "CollisionData.h"

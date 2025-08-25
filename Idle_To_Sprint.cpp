@@ -1,7 +1,7 @@
 #include "common.h"
 #include <memory>
 #include <vector>
-#include "PlayerStateActionBase.h"
+#include "PlayerStateBase.h"
 #include "PadInput.h"
 #include "PlayerData.h"
 #include "Idle_To_Sprint.h"
@@ -14,7 +14,7 @@
 /// <param name="modelHandle"></param>
 Idle_To_Sprint::Idle_To_Sprint(int& modelHandle,
     AnimState& oldAnimState, AnimState& nowAnimState, std::shared_ptr<ISoundPlayer> sound) :
-    PlayerStateActionBase(modelHandle, oldAnimState, nowAnimState, sound)
+    PlayerStateBase(modelHandle, oldAnimState, nowAnimState, sound)
 {
    
 }
@@ -31,13 +31,9 @@ Idle_To_Sprint::~Idle_To_Sprint()
 /// 初期化
 /// </summary>
 /// <param name="modelHandle"></param>
-void Idle_To_Sprint::Initialize(int& modelHandle, Player& player)
+void Idle_To_Sprint::Initialize(int& modelHandle,const int changeNum, Player& player)
 {
-    // ３Ｄモデルの０番目のアニメーションをアタッチする
-    this->nowAnimState.AttachIndex = MV1AttachAnim(modelHandle, animNum::idle_To_Sprint);
-
-    this->nowAnimState.PlayTime_anim = 0.0f;
-    this->nowAnimState.PlayAnimSpeed = playAnimSpeed;
+    PlayerStateBase::Initialize(modelHandle, changeNum, player);
     animBlendRate = 1.0f;
 }
 

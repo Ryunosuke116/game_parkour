@@ -1,16 +1,15 @@
 #pragma once
-#include "PlayerStateActionBase.h"
+#include "PlayerStateBase.h"
 
 class Player;
 
-class Falling_Idle : public PlayerStateActionBase
+class Falling_Idle : public PlayerStateBase
 {
 public:
 	Falling_Idle(int& modelHandle,
 		AnimState& oldAnimState, AnimState& nowAnimState, std::shared_ptr<ISoundPlayer> sound);
 	~Falling_Idle();
 
-	void Initialize(int& modelHandle, Player& player)override;
 	std::pair<VECTOR, PlayerData> Update(const VECTOR& cameraDirection,
 		const std::vector<std::shared_ptr<BaseObject>>& fieldObjects, Player& player)override;
 	VECTOR Command(const VECTOR& cameraDirection, PlayerData& playerData, Player& player)override;

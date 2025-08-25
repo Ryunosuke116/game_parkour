@@ -1,14 +1,14 @@
 #pragma once
-#include "PlayerStateActionBase.h"
+#include "PlayerStateBase.h"
 
-class Idle_To_Sprint : public PlayerStateActionBase
+class Idle_To_Sprint : public PlayerStateBase
 {
 public:
 	Idle_To_Sprint(int& modelHandle,
 		AnimState& oldAnimState, AnimState& nowAnimState, std::shared_ptr<ISoundPlayer> sound);
 	~Idle_To_Sprint();
 
-	void Initialize(int& modelHandle, Player& player)override;
+	void Initialize(int& modelHandle,const int changeNum, Player& player)override;
 
 	std::pair<VECTOR, PlayerData> Update(const VECTOR& cameraDirection,
 		const std::vector<std::shared_ptr<BaseObject>>& fieldObjects, Player& player)override;

@@ -18,7 +18,7 @@ AnimationChanger::~AnimationChanger()
 }
 
 void AnimationChanger::Initialize(const int& num, int& modelHandle,
-    std::shared_ptr<PlayerStateActionBase>& nowState,
+    std::shared_ptr<PlayerStateBase>& nowState,
     PlayerData& playerData, Player& player)
 {
     animNumber_Now = num;
@@ -31,18 +31,18 @@ void AnimationChanger::Initialize(const int& num, int& modelHandle,
     nowState->SetAnimNumber_old(animNumber_Now);
     animNumber_Now = animNum::walk;
 
-    nowState->Initialize(modelHandle, player);
+    nowState->Initialize(modelHandle, animNumber_Now,player);
     nowState->Enter(playerData);
 }
 
 /// <summary>
 /// アニメーション変更
 /// </summary>
-std::shared_ptr<PlayerStateActionBase> AnimationChanger::ChangeState(int& modelHandle,
+std::shared_ptr<PlayerStateBase> AnimationChanger::ChangeState(int& modelHandle,
     Player& player, PlayerData& playerData,
-    std::shared_ptr<PlayerStateActionBase>& nowState)
+    std::shared_ptr<PlayerStateBase>& nowState)
 {
-    std::shared_ptr<PlayerStateActionBase> newState = nullptr;
+    std::shared_ptr<PlayerStateBase> newState = nullptr;
 
     //立ち
     if (playerData.isIdle && 
@@ -151,7 +151,7 @@ std::shared_ptr<PlayerStateActionBase> AnimationChanger::ChangeState(int& modelH
             soundPlayer);
 
         newState->SetAnimNumber_old(animNumber_Now);
-        animNumber_Now = animNum::quick_Roll;
+        animNumber_Now = animNum::roll;
     }
 
     //走り出し
@@ -225,7 +225,7 @@ std::shared_ptr<PlayerStateActionBase> AnimationChanger::ChangeState(int& modelH
 
     if (newState)
     {
-        newState->Initialize(modelHandle, player);
+        newState->Initialize(modelHandle, animNumber_Now, player);
         newState->Enter(playerData);
         if (!playerData.isRun)
         {
@@ -241,7 +241,7 @@ std::shared_ptr<PlayerStateActionBase> AnimationChanger::ChangeState(int& modelH
 /// アニメーション情報をセット
 /// </summary>
 /// <param name="AnimState"></param>
-void AnimationChanger::SetOldAnimState(PlayerStateActionBase::AnimState animState)
+void AnimationChanger::SetOldAnimState(PlayerStateBase::AnimState animState)
 {
     oldAnimState.AttachIndex = animState.AttachIndex;
     oldAnimState.PlayAnimSpeed = animState.PlayAnimSpeed;
@@ -249,7 +249,7 @@ void AnimationChanger::SetOldAnimState(PlayerStateActionBase::AnimState animStat
     oldAnimState.TotalPlayTime_anim = animState.TotalPlayTime_anim;
 }
 
-void AnimationChanger::SetNowAnimState(PlayerStateActionBase::AnimState animState)
+void AnimationChanger::SetNowAnimState(PlayerStateBase::AnimState animState)
 {
     nowAnimState.AttachIndex = animState.AttachIndex;
     nowAnimState.PlayAnimSpeed = animState.PlayAnimSpeed;
