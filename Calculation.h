@@ -20,6 +20,7 @@ public:
 
 	static void UnInitialize();
 	static float radToDeg(float radian);
+	static float DegToRad(float degree);
 
 	static float area(const VECTOR& a, const VECTOR& b, const VECTOR& c);
 	static float EaseOutQuad(float t);

@@ -135,9 +135,12 @@ std::pair<VECTOR, PlayerData> Run::Update_wallRun(Player& player,
    //ŠR’Í‚İ”»’è
 	if (playerData.isUse_Hanging)
 	{
-		auto result_cliff = HitCheck::CliffGrabbing(fieldObjects,
+		auto result_cliff = HitCheck::CliffGrabbing(
+			fieldObjects,
+			player.GetPosition(),
 			player.GetPositionData().position_top_ray,
-			player.GetMoveDirection_now(), cliff_radius);
+			player.GetMoveDirection_now(),
+			cliff_radius);
 
 		//’Í‚Ş‚Æ‚±‚ë‚ª•½s‚¾‚Á‚½ê‡
 		//ŠR’Í‚İ‚Ìî•ñ‚ğ•Û‘¶

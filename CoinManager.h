@@ -13,7 +13,8 @@ public:
 	void RemoveObserver(std::shared_ptr<CoinObserver> observer);
 	void NotifyCoinPicked(int amount);
 
-	CoinManager(std::shared_ptr<IEffectManager> effect);
+	CoinManager(std::shared_ptr<ISoundPlayer> sound,
+		std::shared_ptr<IEffectManager> effect);
 	~CoinManager();
 
 	void Update(const std::shared_ptr<Player>& player,
@@ -30,6 +31,7 @@ private:
 	std::vector<std::shared_ptr<CoinObject>> coins;
 	std::vector<std::weak_ptr<CoinObserver>> observers;
 	std::shared_ptr<IEffectManager>			effectManager = NULL;
+	std::shared_ptr<ISoundPlayer>			soundPlayer	  = NULL;
 	int modelHandle;
 
 	static constexpr int coinValue = 1;		//ƒRƒCƒ“‚Ì‰¿’l

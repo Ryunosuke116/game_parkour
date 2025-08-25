@@ -10,8 +10,10 @@
 /// <summary>
 /// コンストラクタ
 /// </summary>
-CoinManager::CoinManager(std::shared_ptr<IEffectManager> effect):
-	effectManager(effect)
+CoinManager::CoinManager(std::shared_ptr<ISoundPlayer> sound,
+	std::shared_ptr<IEffectManager> effect):
+	effectManager(effect),
+	soundPlayer(sound)
 {
 	tag = "coin";
 }
@@ -32,7 +34,9 @@ void CoinManager::Create()
 
 	for (auto& pos : jsonData["coin_list"])
 	{
-		coins.push_back(std::make_shared<CoinObject>());
+		coins.push_back(std::make_shared<CoinObject>(
+			soundPlayer,
+			effectManager));
 		coins.back()->Load(modelHandle,
 			VGet(pos[0].get<float>(), pos[1].get<float>(), pos[2].get<float>()));
 	}
@@ -66,8 +70,7 @@ void CoinManager::Update(const std::shared_ptr<Player>& player,
 	for ( it = coins.begin(); it != coins.end();)
 	{
 		//playerと当たっていたら削除する
-		if ((*it)->Update(effectManager,
-			player->GetTopPos(), 
+		if ((*it)->Update(player->GetTopPos(), 
 			player->GetBottomPos(),
 			player->GetRadius()))
 		{
@@ -93,7 +96,9 @@ void CoinManager::Draw()
 
 void CoinManager::Add()
 {
-	coins.push_back(std::make_shared<CoinObject>());
+	coins.push_back(std::make_shared<CoinObject>(
+		soundPlayer,
+		effectManager));
 	coins.back()->Load(modelHandle,
 		pos_addObject);
 	coins.back()->Initialize();

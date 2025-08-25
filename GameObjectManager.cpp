@@ -57,7 +57,7 @@ void GameObjectManager::Create()
 	playerManager_actual = std::dynamic_pointer_cast<PlayerManager>(managers.back());
 	managers.push_back(std::make_shared<UIManager>());
 	uiManager_actual = std::dynamic_pointer_cast<UIManager>(managers.back());
-	managers.push_back(std::make_shared<CoinManager>());
+	managers.push_back(std::make_shared<CoinManager>(soundPlayer, effectManager));
 	coinManager_actual = std::dynamic_pointer_cast<CoinManager>(managers.back());
 	
 	skyBox_actual			 = std::dynamic_pointer_cast<SkyBox>(skyBox);
@@ -216,7 +216,6 @@ void GameObjectManager::Update()
 		}
 
 		coinManager_actual->Update(playerManager_actual->GetPlayer(),
-			effectManager_actual,
 			camera->GetSpherePosition());
 
 		effectManager->PlayEffectUpdate();

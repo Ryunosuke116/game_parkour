@@ -19,7 +19,7 @@ Quick_Roll::Quick_Roll(int& modelHandle,
     AnimState& oldAnimState, AnimState& nowAnimState, std::shared_ptr<ISoundPlayer> sound) :
 	PlayerStateBase(modelHandle, oldAnimState, nowAnimState, sound)
 {
-
+    this->nowAnimState.PlayAnimSpeed = playAnimSpeed;
 }
 
 /// <summary>
@@ -68,7 +68,6 @@ VECTOR Quick_Roll::Command(const VECTOR& cameraDirection, PlayerData& playerData
     {
         isRun = false;
         isIdle = true;
-
     }
 
     return moveDirection;

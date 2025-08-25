@@ -339,6 +339,11 @@ float Calculation::radToDeg(float radian)
 	return radian * 180.0f / DX_PI_F;
 }
 
+float Calculation::DegToRad(float degree)
+{
+	return degree * DX_PI_F / 180.0f;
+}
+
 /// <summary>
 /// イースアウト
 /// </summary>

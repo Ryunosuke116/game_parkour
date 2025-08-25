@@ -391,22 +391,41 @@ bool HitCheck::TriangleAreaCheck_ground(const VECTOR& point, const VECTOR& a, co
 /// <param name="player"></param>
 /// <param name="modelHandle"></param>
 HangingData HitCheck::CliffGrabbing(const std::vector<std::shared_ptr<BaseObject>>& collisionObjects,
-	const VECTOR& topPosition, const VECTOR& moveDirection,
+	const VECTOR& position,
+	const VECTOR& topPosition,
+	const VECTOR& moveDirection,
 	const float& radius)
 {
-	const float max_velocity = 7.7f;			//移動量の最大値
+	const float max_velocity = 11.2f;			//移動量の最大値
 
 	VECTOR spherePos = VAdd(topPosition, VScale(moveDirection, 5.0f));
 
+	VECTOR startUpperCheckPos = VAdd(topPosition, VGet(0.0f, 5.0f, 0.0f));
+	VECTOR endUpperCheckPos = VAdd(startUpperCheckPos, VScale(moveDirection, 10.0f));
+	endUpperCheckPos.y = startUpperCheckPos.y - 5.0f;
+
 	bool returnFlag = false;
 	HangingData hangingData = { false,VGet(0.0f,0.0f,0.0f),NULL };
+
+	DebugDrawer::Instance().InformationInput_line(startUpperCheckPos, endUpperCheckPos, GetColor(255, 0, 255));
+
+	//TODO::崖を掴む条件を厳しくする
+	// 1、プレイヤーの肩幅より少し大きめに横幅を計算
+	// 2、横幅の両端から下にrayを飛ばして床があるか確認
+	// 3、奥行計算
+
 
 	//落下中にplayerの上部の球で判定を取る
 	for (const auto& fieldObject : collisionObjects)
 	{
 		MV1_COLL_RESULT_POLY_DIM poly_dim;
+		MV1_COLL_RESULT_POLY polyRayCheck;
 
-		HitCheck::SphereHitJudge(fieldObject->GetModelHandle(), -1, radius, spherePos, poly_dim);
+		HitCheck::SphereHitJudge(fieldObject->GetModelHandle(),
+			-1,
+			radius,
+			spherePos, 
+			poly_dim);
 
 		if (poly_dim.HitNum >= 1)
 		{
@@ -427,21 +446,31 @@ HangingData HitCheck::CliffGrabbing(const std::vector<std::shared_ptr<BaseObject
 					//三角形の一番近い辺から一番近い点を求める
 					VECTOR nearestOutSide = Calculation::SphereMeshOutsideTriangle(
 						poly,
-						spherePos);
+						position);
 					
 					//奥行を調べるための座標
-					VECTOR depthDirection = VSub(nearestOutSide, spherePos);
+					VECTOR depthDirection = VSub(nearestOutSide, position);
 					depthDirection = VNorm(depthDirection);
 
 					depthDirection = Calculation::Projection(poly.Normal, depthDirection);
 
 					VECTOR depthDistance = VScale(depthDirection, max_velocity);
+					depthDistance = VAdd(nearestOutSide, depthDistance);
 
-					MV1_COLL_RESULT_POLY wallCheck;
+					//少し浮かせる
+					VECTOR startWallCheckLine = VAdd(nearestOutSide, VScale(poly.Normal, 0.2f));
+					VECTOR endWallCheckLine = VAdd(depthDistance, VScale(poly.Normal, 0.2f));
 
+
+					DebugDrawer::Instance().InformationInput_capsule(startWallCheckLine, endWallCheckLine,1.0f, GetColor(255, 0, 255));
+
+					MV1_COLL_RESULT_POLY wallCheck = {};
+
+					//壁に当たっていたら崖掴みができない
 					for (const auto& collisionObject : collisionObjects)
 					{
-						HitCheck::RayHitJudge(collisionObject->GetModelHandle(), -1, nearestOutSide, depthDistance, wallCheck);
+						HitCheck::RayHitJudge(collisionObject->GetModelHandle(), -1, startWallCheckLine, endWallCheckLine, wallCheck);
+						if (wallCheck.HitFlag)break;
 					}
 
 					//float depth = Calculation::Check_depth_Triangle(depthDirection, poly.Position[0], poly.Position[1], poly.Position[2]);

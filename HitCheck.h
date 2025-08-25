@@ -43,7 +43,9 @@ public:
 	
 	static std::pair<VECTOR,VECTOR> SegmentTriangleDistance(const VECTOR& p, const VECTOR& q, const VECTOR& a, const VECTOR& b, const VECTOR& c, const VECTOR& normal);
 	static HangingData CliffGrabbing(const std::vector<std::shared_ptr<BaseObject>>& collisionObjects,
-		const VECTOR& topPosition, const VECTOR& moveDirection,
+		const VECTOR& position,
+		const VECTOR& topPosition,
+		const VECTOR& moveDirection,
 		const float& radius);
 
 private:

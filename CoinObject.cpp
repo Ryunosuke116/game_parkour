@@ -4,9 +4,11 @@
 /// <summary>
 /// コンストラクタ
 /// </summary>
-CoinObject::CoinObject(std::shared_ptr<IEffectManager> effect):
+CoinObject::CoinObject(std::shared_ptr<ISoundPlayer> sound,
+	std::shared_ptr<IEffectManager> effect):
 	BaseObject(),
 	effectManager(effect),
+	soundPlayer(sound),
 	radian_Y(0.0f),
 	velocity_Y(0.0f),
 	isHitPlayer(false),
@@ -70,6 +72,7 @@ bool CoinObject::Update(const VECTOR& playerpos_top,
 		if (!isSound)
 		{
 			PlaySoundMem(soundHandle, DX_PLAYTYPE_BACK);
+			soundPlayer->Play("coinGet");
 			isSound = true;
 		}
 	}

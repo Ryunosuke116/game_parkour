@@ -324,9 +324,6 @@
     <ClCompile Include="AnimationChanger.cpp">
       <Filter>ソース ファイル\object\game\player\animationChanger</Filter>
     </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>ソース ファイル\object\game\player</Filter>
-    </ClCompile>
     <ClCompile Include="Shadow.cpp">
       <Filter>ソース ファイル\object\game\shadow</Filter>
     </ClCompile>
@@ -386,6 +383,9 @@
     </ClCompile>
     <ClCompile Include="SoundPlayer.cpp">
       <Filter>ソース ファイル\manager\sound</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>ソース ファイル\object\game\player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

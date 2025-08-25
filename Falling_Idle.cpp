@@ -53,8 +53,12 @@ std::pair<VECTOR, PlayerData> Falling_Idle::Update(const VECTOR& cameraDirection
     if (playerData.isUse_Hanging)
     {
         //ŠR‚Â‚©‚İ”»’è
-        auto result_cliff = HitCheck::CliffGrabbing(fieldObjects,
-            head, player.GetMoveDirection_now(), cliff_radius);
+        auto result_cliff = HitCheck::CliffGrabbing(
+            fieldObjects,
+            player.GetPosition(),
+            head,
+            player.GetMoveDirection_now(),
+            cliff_radius);
         
         //’Í‚Ş‚Æ‚±‚ë‚ª•½s‚¾‚Á‚½ê‡
         //ŠR’Í‚İ‚Ìî•ñ‚ğ•Û‘¶
@@ -69,11 +73,11 @@ std::pair<VECTOR, PlayerData> Falling_Idle::Update(const VECTOR& cameraDirection
             float difference_y = nearestResult.linePos_start.y - nearestResult.linePos_end.y;
             float abs_value = abs(difference_y);
             
+            if (abs_value <= 1e-2)
+            {
                 playerData.isHanging = result_cliff.isHitHanging;
                 isChangeState = true;
                 player.playerCalculation->SetNearestResult(nearestResult);
-            if (abs_value <= 10.0f)
-            {
             }
         }
     }
