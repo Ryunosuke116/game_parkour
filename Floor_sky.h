@@ -12,6 +12,8 @@ public:
 	void Update()override;
 	void Draw()override;
 	void Load(const nlohmann::json& jsonData)override{}
+	void Create()override{}
+
 
 private:
 	static constexpr float velocity = 0.5f;

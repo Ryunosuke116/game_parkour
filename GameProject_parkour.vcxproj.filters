@@ -133,9 +133,6 @@
     <Filter Include="ソース ファイル\object\game\gameTimer">
       <UniqueIdentifier>{4366f260-6c87-43af-b722-fcca0dfe2fc4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\object\game\goalArea">
-      <UniqueIdentifier>{6e771206-8e53-4239-8d25-f080ab3d7487}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\object\game\finishCut">
       <UniqueIdentifier>{b38ff83a-cf0d-471a-852e-9aa8dbc57bc4}</UniqueIdentifier>
     </Filter>
@@ -219,6 +216,9 @@
     </Filter>
     <Filter Include="ソース ファイル\manager\object">
       <UniqueIdentifier>{733bd2bf-452d-40b4-a80b-71e93c23b571}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\objectMediator">
+      <UniqueIdentifier>{4da078b0-38ec-4e99-ac86-d433027f5ae1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -339,9 +339,6 @@
     <ClCompile Include="HitCheck.cpp">
       <Filter>ソース ファイル\static\hitCheck</Filter>
     </ClCompile>
-    <ClCompile Include="GoalArea.cpp">
-      <Filter>ソース ファイル\object\game\goalArea</Filter>
-    </ClCompile>
     <ClCompile Include="Result.cpp">
       <Filter>ソース ファイル\scene\result</Filter>
     </ClCompile>
@@ -386,6 +383,9 @@
     </ClCompile>
     <ClCompile Include="Player.cpp">
       <Filter>ソース ファイル\object\game\player</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectMediator.cpp">
+      <Filter>ソース ファイル\objectMediator</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -527,9 +527,6 @@
     <ClInclude Include="HitCheck.h">
       <Filter>ソース ファイル\static\hitCheck</Filter>
     </ClInclude>
-    <ClInclude Include="GoalArea.h">
-      <Filter>ソース ファイル\object\game\goalArea</Filter>
-    </ClInclude>
     <ClInclude Include="Result.h">
       <Filter>ソース ファイル\scene\result</Filter>
     </ClInclude>
@@ -592,6 +589,9 @@
     </ClInclude>
     <ClInclude Include="IEffectManager.h">
       <Filter>ソース ファイル\Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectMediator.h">
+      <Filter>ソース ファイル\objectMediator</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

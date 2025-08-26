@@ -166,7 +166,6 @@
     <ClCompile Include="Floor_sky.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameTimer.cpp" />
-    <ClCompile Include="GoalArea.cpp" />
     <ClCompile Include="Hanging_Idle.cpp" />
     <ClCompile Include="HitCheck.cpp" />
     <ClCompile Include="Idle.cpp" />
@@ -176,6 +175,7 @@
     <ClCompile Include="Jump.cpp" />
     <ClCompile Include="Layout.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="ObjectMediator.cpp" />
     <ClCompile Include="SkyBox.cpp" />
     <ClCompile Include="PlayerCalculation.cpp" />
     <ClCompile Include="GameObjectManager.cpp" />
@@ -226,7 +226,6 @@
     <ClInclude Include="Floor_sky.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameTimer.h" />
-    <ClInclude Include="GoalArea.h" />
     <ClInclude Include="Hanging_Idle.h" />
     <ClInclude Include="HitCheck.h" />
     <ClInclude Include="Idle.h" />
@@ -237,6 +236,7 @@
     <ClInclude Include="JsonManager.h" />
     <ClInclude Include="Jump.h" />
     <ClInclude Include="Layout.h" />
+    <ClInclude Include="ObjectMediator.h" />
     <ClInclude Include="SkyBox.h" />
     <ClInclude Include="IObjectManager.h" />
     <ClInclude Include="IObject.h" />

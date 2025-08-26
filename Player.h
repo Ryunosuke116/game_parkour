@@ -14,53 +14,12 @@ class EffectManager;
 
 class Player : public BaseChara, public CoinObserver
 {
-private:
-
-	static constexpr float modelScale = 0.06f;
-	static constexpr float MaxMoveSpeed = 1.4f;	    // 移動速度
-	static constexpr float rollMoveSpeed_max = 2.5f;	//ロール速度
-	static constexpr float angleSpeed = 0.3f;
-	static constexpr float addJumpPower = 1.7f;		//ジャンプパワー
-	static constexpr float gravity = -0.06f;
-	static constexpr float run_wall_rotate_x = 30.0f;
-	static constexpr float entryDegree_wallRun = 30.0f;
-	static constexpr float radius = 3.5f;
-	static constexpr float height = 10.0f;
-
-	VECTOR linePos_end;
-	VECTOR centerPosition;
-	VECTOR topPosition;
-	VECTOR bottomPosition;
-	VECTOR moveVec_normal;
-	VECTOR headPos;
-	VECTOR handCenterPos;
-	VECTOR moveDirection_now;		//現在向いている方向
-	VECTOR padInput_now;
-
-	float radian_wall;
-	float degree_pad_now;
-	float degree_difference;
-	float degree_pad_wall_difference;
-	float effectTimer;
-	float start_walkTime;
-
-	bool isPush;					//ボタンを押したか
-	bool isChange_falling;				//アニメーションを変更するか
-	bool isCalc;
-	bool isCalc_moveVec;
-
-	//他クラス
-	PlayerData playerData;
-	std::shared_ptr<IEffectManager>			effectManager		= NULL;
-	std::shared_ptr<ISoundPlayer>			soundPlayer			= NULL;	
-	std::shared_ptr<PlayerStateBase>		nowState			= NULL;
-	std::shared_ptr<AnimationChanger>		animationChanger	= NULL;
-
 public:
 	Player(std::shared_ptr<ISoundPlayer> sound,
 		std::shared_ptr<IEffectManager> effect);
 	~Player();
 
+	void Create()override {}
 	void Load(const nlohmann::json& jsonData)override;
 	void Initialize()override;
 	void Update()override;
@@ -100,5 +59,47 @@ public:
 	void SetPos(VECTOR newPos) { position = newPos; }
 	void SetMoveDirection_now(const VECTOR& set) { moveDirection_now = set; }
 	std::shared_ptr<PlayerCalculation> playerCalculation = NULL;
+private:
+
+	static constexpr float modelScale = 0.06f;
+	static constexpr float MaxMoveSpeed = 1.4f;	    // 移動速度
+	static constexpr float rollMoveSpeed_max = 2.5f;	//ロール速度
+	static constexpr float angleSpeed = 0.3f;
+	static constexpr float addJumpPower = 1.7f;		//ジャンプパワー
+	static constexpr float gravity = -0.06f;
+	static constexpr float run_wall_rotate_x = 30.0f;
+	static constexpr float entryDegree_wallRun = 30.0f;
+	static constexpr float radius = 3.5f;
+	static constexpr float height = 10.0f;
+
+	VECTOR linePos_end;
+	VECTOR centerPosition;
+	VECTOR topPosition;
+	VECTOR bottomPosition;
+	VECTOR moveVec_normal;
+	VECTOR headPos;
+	VECTOR handCenterPos;
+	VECTOR moveDirection_now;		//現在向いている方向
+	VECTOR padInput_now;
+
+	float radian_wall;
+	float degree_pad_now;
+	float degree_difference;
+	float degree_pad_wall_difference;
+	float effectTimer;
+	float start_walkTime;
+
+	bool isPush;					//ボタンを押したか
+	bool isChange_falling;				//アニメーションを変更するか
+	bool isCalc;
+	bool isCalc_moveVec;
+
+	//他クラス
+	PlayerData playerData;
+	std::shared_ptr<IEffectManager>			effectManager = NULL;
+	std::shared_ptr<ISoundPlayer>			soundPlayer = NULL;
+	std::shared_ptr<PlayerStateBase>		nowState = NULL;
+	std::shared_ptr<AnimationChanger>		animationChanger = NULL;
+
 };
 

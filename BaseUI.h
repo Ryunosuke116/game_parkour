@@ -8,6 +8,11 @@ public:
 	~BaseUI(){}
 
 	std::string GetJsonTag() { return jsonTag; }
+	void Add()override{}
+	void CreateMediator(ISoundPlayer& sound,
+		IEffectManager& effect,
+		Player& player,
+		Camera& camera)override{ }
 
 protected:
 	int x;

@@ -15,7 +15,6 @@
 #include "CoinManager.h"
 #include "Floor_sky.h"
 #include "Shadow.h"
-#include "GoalArea.h"
 #include "GameTimer.h"
 #include "EffectManager.h"
 #include "UIManager.h"

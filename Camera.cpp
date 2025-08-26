@@ -12,7 +12,8 @@
 /// <summary>
 /// インストラクタ
 /// </summary>
-Camera::Camera():
+Camera::Camera(std::vector<std::shared_ptr<BaseObject>> collision):
+	collisionObjects(collision),
 	max_t(0.0f),
 	min_t(0.0f),
 	distance(0.0f),
@@ -66,8 +67,7 @@ void Camera::Initialize()
 /// 更新
 /// </summary>
 void Camera::Update(const VECTOR& playerPosition,
-	const float& angle_player,
-	const std::vector<std::shared_ptr<BaseObject>>& collisionObjects)
+	const float& angle_player)
 {
 	centerPos = playerPosition;
 	centerPos.y += 15.0f;

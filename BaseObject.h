@@ -3,16 +3,10 @@
 #include <string>
 #include <nlohmann/json.hpp>
 #include "IObject.h"
+#include "ObjectMediator.h"
 
 class BaseObject : public IObject
 {
-protected:
-	int modelHandle;
-	VECTOR position;
-	std::string tag;
-	std::string jsonTag;
-	VECTOR pos_difference;
-
 public:
 	BaseObject();
 	~BaseObject();
@@ -23,5 +17,24 @@ public:
 	const std::string GetTag() { return tag; }
 	std::string GetJsonTag() { return jsonTag; }
 	const VECTOR GetPos_difference() { return pos_difference; }
+
+	void CreateMediator(ISoundPlayer& sound,
+		IEffectManager& effect,
+		Player& player,
+		Camera& camera)override
+	{
+		objectMediator = new ObjectMediator(sound, effect, player, camera);
+	}
+
+	void Add()override{}
+
+protected:
+	int modelHandle;
+	VECTOR position;
+	std::string tag;
+	std::string jsonTag;
+	VECTOR pos_difference;
+
+	ObjectMediator* objectMediator;
 };
 

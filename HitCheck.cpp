@@ -397,6 +397,7 @@ HangingData HitCheck::CliffGrabbing(const std::vector<std::shared_ptr<BaseObject
 	const float& radius)
 {
 	const float max_velocity = 11.2f;			//ˆÚ“®—Ê‚ÌÅ‘å’l
+	const float checkWidth = 3.5f;
 
 	VECTOR spherePos = VAdd(topPosition, VScale(moveDirection, 5.0f));
 

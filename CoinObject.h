@@ -19,6 +19,7 @@ public:
 		const VECTOR& playerPos_bottom, const float radius);
 	void Draw()override;
 	void Load(const nlohmann::json& jsonData)override{}
+	void Create()override{}
 
 	void HitPlayerAction();
 	void Rotate();

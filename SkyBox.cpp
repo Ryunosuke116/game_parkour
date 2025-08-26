@@ -33,13 +33,5 @@ void SkyBox::Initialize()
 
 }
 
-/// <summary>
-/// çXêV
-/// </summary>
-void SkyBox::Update(const VECTOR& playerPos)
-{
-	MV1SetPosition(modelHandle, playerPos);
-}
-
 void SkyBox::Update() {};
 

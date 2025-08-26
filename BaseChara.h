@@ -5,42 +5,24 @@
 
 class BaseChara : public IObject
 {
-protected:
-
-	int modelHandle;
-	int nowFrameNumber;
-	int coinCount;		//コインの所持枚数
-
-	float angle;
-	float rotate_x;
-
-	bool isCollisionCheck;
-
-	VECTOR position;
-	VECTOR framePosition;
-	VECTOR moveVec;
-	VECTOR targetMoveDirection;
-	VECTOR moveDirection;
-
-	PositionData positionData;
-	CollisionResult collision_result;
-
-	static constexpr float	MoveSpeed = 0.4f;	    // 移動速度
-	static constexpr float angleSpeed = 0.2f;
-
-
-	const VECTOR Initialize_aimPos = VGet(-0.169435501f, 53.7492065f, -1224.39844f);
-	const VECTOR Initialize_spherePos = VGet(-1.28232884f, 24.0028648f, -1172.35425f);
-
 public:
 
 	BaseChara();
 	~BaseChara();
 
 	void Draw()override;
+	void Add()override{}
 
 	void UpdateAngle(const VECTOR& direction);
 	void PositionUpdate();
+
+	void CreateMediator(ISoundPlayer& sound,
+		IEffectManager& effect,
+		Player& player,
+		Camera& camera)override
+	{
+		objectMediator = new ObjectMediator(sound, effect, player, camera);
+	}
 
 	/////////////////////////////////////////////
 	// ゲッター
@@ -60,5 +42,33 @@ public:
 	void SetIsCollisionCheck(const bool& set) { isCollisionCheck = set; }
 	void SetRotate_y(const float& set) { angle = set; }
 	void SetTargetMoveDirection(const VECTOR& set) { targetMoveDirection = set; }
+protected:
+
+	int modelHandle;
+	int nowFrameNumber;
+	int coinCount;		//コインの所持枚数
+
+	float angle;
+	float rotate_x;
+
+	bool isCollisionCheck;
+
+	VECTOR position;
+	VECTOR framePosition;
+	VECTOR moveVec;
+	VECTOR targetMoveDirection;
+	VECTOR moveDirection;
+
+	PositionData positionData;
+	CollisionResult collision_result;
+	ObjectMediator* objectMediator;
+
+	static constexpr float	MoveSpeed = 0.4f;	    // 移動速度
+	static constexpr float angleSpeed = 0.2f;
+
+
+	const VECTOR Initialize_aimPos = VGet(-0.169435501f, 53.7492065f, -1224.39844f);
+	const VECTOR Initialize_spherePos = VGet(-1.28232884f, 24.0028648f, -1172.35425f);
+
 };
 

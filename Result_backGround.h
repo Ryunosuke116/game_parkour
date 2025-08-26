@@ -6,6 +6,7 @@ public:
 	Result_backGround();
 	~Result_backGround();
 
+	void Create()override {}
 	void Load(const nlohmann::json& jsonData)override;
 	void Initialize()override;
 	void Update()override;

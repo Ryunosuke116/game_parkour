@@ -9,10 +9,10 @@ private:
 	bool isPoly;
 	int bullHandle;
 public:
-
 	Field();
 	~Field();
 
+	void Create()override{}
 	void Load(const nlohmann::json& jsonData)override;
 	void Initialize()override;
 	void Update()override;

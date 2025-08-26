@@ -7,6 +7,7 @@
 #include "JsonManager.h"
 #include "BaseGameObjectManager.h"
 #include "SoundPlayer.h"
+#include "ObjectMediator.h"
 
 class GameObjectManager : public BaseManager
 {
@@ -27,15 +28,15 @@ public:
 	int GetCoinCount() { return playerManager_actual->GetCoinCount(); }
 
 private:
-	std::vector<std::shared_ptr<BaseObject>> collisionObjects;
+	std::vector<std::shared_ptr<BaseObject>>			collisionObjects;
 	std::vector<std::shared_ptr<BaseGameObjectManager>> managers;
+	std::vector <std::shared_ptr<IObject>>				objects;
 
 	std::shared_ptr<BaseObject>				skyBox				= NULL;
 	std::shared_ptr<BaseObject>				field				= NULL;
 	std::shared_ptr<Camera>					camera				= NULL;
 	std::shared_ptr<Layout>					layout				= NULL;
 	std::shared_ptr<Shadow>					shadow				= NULL;
-	std::shared_ptr<GoalArea>				goalArea			= NULL;
 	std::shared_ptr<GameTimer>				gameTimer			= NULL;
 	std::shared_ptr<Tutorial>				tutorial			= NULL;
 	std::shared_ptr<FinishCut>				finishCut			= NULL;
@@ -48,6 +49,7 @@ private:
 	std::shared_ptr<UIManager>		uiManager_actual	 = NULL;
 	std::shared_ptr<BaseGameObjectManager> soundPlayer_actual = NULL;
 	std::shared_ptr<IEffectManager>  effectManager = NULL;
+	std::shared_ptr<ObjectMediator> objectMediator;
 
 	int tutorialHandle;
 	int startHandle;

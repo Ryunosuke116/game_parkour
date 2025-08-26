@@ -11,6 +11,7 @@ public:
 	void Update()								override;
 	void Draw()									override;
 	void Load(const nlohmann::json& jsonData)	override;
+	void Create()								override {}
 
 private:
 	bool isPoly;

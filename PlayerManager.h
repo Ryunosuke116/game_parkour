@@ -33,7 +33,7 @@ public:
 	//ƒQƒbƒ^[
 	VECTOR GetPosition() { return player->GetPosition(); }
 	float GetAngle() { return player->GetAngle(); }
-	std::shared_ptr<Player> GetPlayer() { return actualPlayer; }
+	std::shared_ptr<Player> GetPlayer()const { return actualPlayer; }
 	AABB GetPlayerAABB() { return playerAABB; }
 	int GetCoinCount()const { return player->GetCoinCount(); }
 

@@ -2,9 +2,36 @@
 #include <vector>
 #include <memory>
 #include "BaseObject.h"
+#include "IObjectManager.h"
 
 class Camera 
 {
+public:
+	Camera(std::vector<std::shared_ptr<BaseObject>> collisionObjects);
+	~Camera();
+
+	void Initialize();
+	void Update(const VECTOR& playerPosition, const float& angle_player);
+	void Update_start(const float& timer,
+		const VECTOR& playerPosition,
+		const float& angle_player);
+	void Update_layout();
+	void Draw();
+	void RotateUpdate();
+	void AngleUpdate(const float& angle_player);
+	void DistanceUpdate();
+	void PosCalc();
+	void Leap(VECTOR& changePosition, const VECTOR& playerPosition, const float& speed);
+
+
+	void CameraPosCalc(const int& mapHandle);
+
+	///////////////////////////////////////////////////////
+	// ゲッター
+	///////////////////////////////////////////////////////
+	VECTOR GetCameraDirection() { return cameraDirection; }
+	VECTOR GetSpherePosition() { return spherePosition; }
+
 private:
 	VECTOR aimPosition;
 	VECTOR aimPosition_usual;
@@ -32,32 +59,7 @@ private:
 	const VECTOR initialize_aimPos = VGet(-0.169435501f, 53.7492065f, -1224.39844f);
 	const VECTOR initialize_spherePos = VGet(-1.28232884f, 24.0028648f, -1172.35425f);
 
-public:
-	Camera();
-	~Camera();
-
-	void Initialize();
-	void Update(const VECTOR& playerPosition, const float& angle_player,
-		const std::vector<std::shared_ptr<BaseObject>>& collisionObjects);
-	void Update_start(const float& timer,
-		const VECTOR& playerPosition,
-		const float& angle_player);
-	void Update_layout();
-	void Draw();
-	void RotateUpdate();
-	void AngleUpdate(const float& angle_player);
-	void DistanceUpdate();
-	void PosCalc();
-	void Leap(VECTOR& changePosition, const VECTOR& playerPosition, const float& speed);
-
-
-	void CameraPosCalc(const int& mapHandle);
-
-	///////////////////////////////////////////////////////
-	// ゲッター
-	///////////////////////////////////////////////////////
-	VECTOR GetCameraDirection() { return cameraDirection; }
-	VECTOR GetSpherePosition() { return spherePosition; }
+	std::vector<std::shared_ptr<BaseObject>> collisionObjects;
 
 };
 
