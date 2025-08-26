@@ -29,7 +29,7 @@ public:
 	//ƒˆ‰¼‘zŠÖ”
 	virtual void Initialize(int& modelHandle,const int changeNum, Player& player);
 	virtual std::pair<VECTOR, PlayerData> Update(const VECTOR& cameraDirection,
-		const std::vector<std::shared_ptr<BaseObject>>& fieldObjects, Player& player)abstract;
+		const std::vector<std::weak_ptr<BaseObject>>& fieldObjects, Player& player)abstract;
 	virtual VECTOR Command(const VECTOR& cameraDirection, PlayerData& playerData, Player& player)abstract;
 	virtual void Enter(PlayerData& playerData) abstract;		//ó‘Ô‚É“ü‚Á‚½‚Æ‚«
 	virtual void Exit(PlayerData& playerData) abstract;			//ó‘Ô‚ğ”²‚¯‚é‚Æ‚«

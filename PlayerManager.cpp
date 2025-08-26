@@ -68,7 +68,6 @@ void PlayerManager::Initialize()
 void PlayerManager::Update(const std::vector<std::shared_ptr<BaseObject>>& fieldObjects, 
 	const VECTOR& cameraDirection)
 {
-
 	actualPlayer->Update(cameraDirection, fieldObjects);
 
 	collisionManager->Update(*player, fieldObjects, actualPlayer->GetData());

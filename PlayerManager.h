@@ -5,6 +5,7 @@
 #include "ISoundPlayer.h"
 
 class EffectManager;
+class BaseObject;
 
 class PlayerManager : public BaseGameObjectManager
 {
@@ -25,6 +26,17 @@ public:
 	void Update()		override;
 	void Draw()			override;
 	void Add()			override;
+	void CreateMediator(ISoundPlayer& sound,
+		IEffectManager& effect,
+		Player& player,
+		Camera& camera,
+		std::vector<std::shared_ptr<BaseObject>>& collision)override
+	{
+		for (auto& object : objects)
+		{
+		}
+			this->player->CreateMediator(sound, effect, player, camera,collision);
+	}
 
 	
 	VECTOR PositionCheck(const VECTOR& hangingPos, const VECTOR& playerPos);

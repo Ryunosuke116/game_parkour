@@ -17,5 +17,6 @@ public:
 	virtual void CreateMediator(ISoundPlayer& sound,
 		IEffectManager& effect,
 		Player& player,
-		Camera& camera)									abstract;
+		Camera& camera,
+		std::vector<std::shared_ptr<BaseObject>>& collision)			abstract;
 };

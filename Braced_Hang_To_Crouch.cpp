@@ -38,7 +38,7 @@ Braced_Hang_To_Crouch::~Braced_Hang_To_Crouch()
 /// <param name="player"></param>
 /// <returns></returns>
 std::pair<VECTOR, PlayerData> Braced_Hang_To_Crouch::Update(const VECTOR& cameraDirection,
-    const std::vector<std::shared_ptr<BaseObject>>& fieldObjects, Player& player)
+    const std::vector<std::weak_ptr<BaseObject>>& fieldObjects, Player& player)
 {
     VECTOR moveVec = player.GetMoveDirection_now();
 
@@ -73,7 +73,7 @@ void Braced_Hang_To_Crouch::Exit(PlayerData& playerData)
 /// “o‚è
 /// </summary>
 /// <param name="mapHandle"></param>
-VECTOR Braced_Hang_To_Crouch::Hang_to_CrouchMove(const std::vector<std::shared_ptr<BaseObject>>& fieldObjects,
+VECTOR Braced_Hang_To_Crouch::Hang_to_CrouchMove(const std::vector<std::weak_ptr<BaseObject>>& fieldObjects,
     Player& player, PlayerData& playerData)
 {
     //////////////////////////////////
@@ -143,7 +143,8 @@ VECTOR Braced_Hang_To_Crouch::Hang_to_CrouchMove(const std::vector<std::shared_p
 /// <param name="positionData.radius"></param>
 /// <param name="isJump"></param>
 /// <returns></returns>
-std::pair<bool, VECTOR> Braced_Hang_To_Crouch::GroundCollisionCheck_Hang_to_Crouch(const std::vector<std::shared_ptr<BaseObject>>& fieldObjects,
+std::pair<bool, VECTOR> Braced_Hang_To_Crouch::GroundCollisionCheck_Hang_to_Crouch(
+    const std::vector<std::weak_ptr<BaseObject>>& fieldObjects,
     const VECTOR& topPos, const VECTOR& foot, const VECTOR& newPos)
 {
 
@@ -158,8 +159,10 @@ std::pair<bool, VECTOR> Braced_Hang_To_Crouch::GroundCollisionCheck_Hang_to_Crou
 
     for (const auto& fieldObject : fieldObjects)
     {
+        auto collisionObject = fieldObject.lock();
+
         //ray‚ª“–‚½‚Á‚Ä‚¢‚ê‚Î
-        isHitGround = HitCheck::RayHitJudge(fieldObject->GetModelHandle(), -1, topPos, bottomPos, rayPoly_ground);
+        isHitGround = HitCheck::RayHitJudge(collisionObject->GetModelHandle(), -1, topPos, bottomPos, rayPoly_ground);
 
         if (isHitGround)
         {

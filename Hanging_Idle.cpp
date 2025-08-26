@@ -60,7 +60,7 @@ void Hanging_Idle::Initialize(int& modelHandle,const int changeNum, Player& play
 /// <param name="player"></param>
 /// <returns></returns>
 std::pair<VECTOR, PlayerData> Hanging_Idle::Update(const VECTOR& cameraDirection,
-    const std::vector<std::shared_ptr<BaseObject>>& fieldObjects, Player& player)
+    const std::vector<std::weak_ptr<BaseObject>>& fieldObjects, Player& player)
 {
     
     VECTOR moveDirection = player.GetMoveDirection_now();

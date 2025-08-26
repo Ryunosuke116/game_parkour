@@ -12,7 +12,8 @@ public:
 	void CreateMediator(ISoundPlayer& sound,
 		IEffectManager& effect,
 		Player& player,
-		Camera& camera)override{ }
+		Camera& camera,
+		std::vector<std::shared_ptr<BaseObject>>& collision)override{ }
 
 protected:
 	int x;

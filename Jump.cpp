@@ -55,7 +55,7 @@ void Jump::Initialize(int& modelHandle,const int changeNum, Player& player)
 /// <param name="player"></param>
 /// <returns></returns>
 std::pair<VECTOR, PlayerData> Jump::Update(const VECTOR& cameraDirection,
-    const std::vector<std::shared_ptr<BaseObject>>& fieldObjects, Player& player)
+    const std::vector<std::weak_ptr<BaseObject>>& fieldObjects, Player& player)
 {
     VECTOR moveDirection = VGet(0.0f, 0.0f, 0.0f);
 

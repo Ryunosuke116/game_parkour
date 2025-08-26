@@ -11,7 +11,7 @@ public:
 	~Run();
 
 	std::pair<VECTOR, PlayerData> Update(const VECTOR& cameraDirection,
-		const std::vector<std::shared_ptr<BaseObject>>& fieldObjects, Player& player)override;
+		const std::vector<std::weak_ptr<BaseObject>>& fieldObjects, Player& player)override;
 
 	bool MotionUpdate(PlayerData& playerData)override;
 	
@@ -22,7 +22,7 @@ public:
 
 	std::pair<VECTOR, PlayerData> Update_normal(const VECTOR& cameraDirection, Player& player);
 	std::pair<VECTOR, PlayerData> Update_wallRun(Player& player,
-		const std::vector<std::shared_ptr<BaseObject>>& fieldObjects);
+		const std::vector<std::weak_ptr<BaseObject>>& fieldObjects);
 
 private:
 	static constexpr float playAnimSpeed = 0.45f;	    // ˆÚ“®‘¬“x

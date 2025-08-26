@@ -11,13 +11,13 @@ public:
 		AnimState& oldAnimState, AnimState& nowAnimState, std::shared_ptr<ISoundPlayer> sound);
 	~Braced_Hang_To_Crouch();
 
-	VECTOR Hang_to_CrouchMove(const std::vector<std::shared_ptr<BaseObject>>& fieldObjects,
+	VECTOR Hang_to_CrouchMove(const std::vector<std::weak_ptr<BaseObject>>& fieldObjects,
 		Player& player, PlayerData& playerData);
 
-	std::pair<bool, VECTOR>GroundCollisionCheck_Hang_to_Crouch(const std::vector<std::shared_ptr<BaseObject>>& fieldObjects,
+	std::pair<bool, VECTOR>GroundCollisionCheck_Hang_to_Crouch(const std::vector<std::weak_ptr<BaseObject>>& fieldObjects,
 		const VECTOR& topPos, const VECTOR& foot, const VECTOR& newPos);
 	std::pair<VECTOR, PlayerData> Update(const VECTOR& cameraDirection,
-		const std::vector<std::shared_ptr<BaseObject>>& fieldObjects, Player& player)override;
+		const std::vector<std::weak_ptr<BaseObject>>& fieldObjects, Player& player)override;
 	VECTOR Command(const VECTOR& cameraDirection, PlayerData& playerData, Player& player)override;
 	void Enter(PlayerData& playerData) override;		//èÛë‘Ç…ì¸Ç¡ÇΩÇ∆Ç´
 	void Exit(PlayerData& playerData) override;			//èÛë‘Çî≤ÇØÇÈÇ∆Ç´

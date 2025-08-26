@@ -390,7 +390,8 @@ bool HitCheck::TriangleAreaCheck_ground(const VECTOR& point, const VECTOR& a, co
 /// </summary>
 /// <param name="player"></param>
 /// <param name="modelHandle"></param>
-HangingData HitCheck::CliffGrabbing(const std::vector<std::shared_ptr<BaseObject>>& collisionObjects,
+HangingData HitCheck::CliffGrabbing(
+	const std::vector<std::weak_ptr<BaseObject>>& collisionObjects,
 	const VECTOR& position,
 	const VECTOR& topPosition,
 	const VECTOR& moveDirection,
@@ -419,10 +420,12 @@ HangingData HitCheck::CliffGrabbing(const std::vector<std::shared_ptr<BaseObject
 	//—Ž‰º’†‚Éplayer‚Ìã•”‚Ì‹…‚Å”»’è‚ðŽæ‚é
 	for (const auto& fieldObject : collisionObjects)
 	{
+		auto SharedCollisionObject = fieldObject.lock();
+
 		MV1_COLL_RESULT_POLY_DIM poly_dim;
 		MV1_COLL_RESULT_POLY polyRayCheck;
 
-		HitCheck::SphereHitJudge(fieldObject->GetModelHandle(),
+		HitCheck::SphereHitJudge(SharedCollisionObject->GetModelHandle(),
 			-1,
 			radius,
 			spherePos, 
@@ -430,7 +433,7 @@ HangingData HitCheck::CliffGrabbing(const std::vector<std::shared_ptr<BaseObject
 
 		if (poly_dim.HitNum >= 1)
 		{
-			if (fieldObject->GetTag() != "field")
+			if (SharedCollisionObject->GetTag() != "field")
 			{
 				continue;
 			}
@@ -470,7 +473,15 @@ HangingData HitCheck::CliffGrabbing(const std::vector<std::shared_ptr<BaseObject
 					//•Ç‚É“–‚½‚Á‚Ä‚¢‚½‚çŠR’Í‚Ý‚ª‚Å‚«‚È‚¢
 					for (const auto& collisionObject : collisionObjects)
 					{
-						HitCheck::RayHitJudge(collisionObject->GetModelHandle(), -1, startWallCheckLine, endWallCheckLine, wallCheck);
+						auto SharedCollisionObject = fieldObject.lock();
+						
+						HitCheck::RayHitJudge(
+							SharedCollisionObject->GetModelHandle(), 
+							-1,
+							startWallCheckLine,
+							endWallCheckLine,
+							wallCheck);
+
 						if (wallCheck.HitFlag)break;
 					}
 

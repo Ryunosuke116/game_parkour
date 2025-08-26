@@ -35,7 +35,7 @@ Run::~Run()
 }
 
 std::pair<VECTOR, PlayerData> Run::Update(const VECTOR& cameraDirection,
-	const std::vector<std::shared_ptr<BaseObject>>& fieldObjects, Player& player)
+	const std::vector<std::weak_ptr<BaseObject>>& fieldObjects, Player& player)
 {
 	PlayerData playerData = player.GetData();
 
@@ -97,7 +97,7 @@ std::pair<VECTOR,PlayerData> Run::Update_normal(const VECTOR& cameraDirection, P
 /// <param name="fieldObjects"></param>
 /// <returns></returns>
 std::pair<VECTOR, PlayerData> Run::Update_wallRun(Player& player, 
-	const std::vector<std::shared_ptr<BaseObject>>& fieldObjects)
+	const std::vector<std::weak_ptr<BaseObject>>& fieldObjects)
 {
 	PlayerData playerData = player.GetData();
 

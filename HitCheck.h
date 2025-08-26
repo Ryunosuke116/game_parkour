@@ -42,7 +42,8 @@ public:
 	static bool AABBHitJudge(AABB a, AABB b);
 	
 	static std::pair<VECTOR,VECTOR> SegmentTriangleDistance(const VECTOR& p, const VECTOR& q, const VECTOR& a, const VECTOR& b, const VECTOR& c, const VECTOR& normal);
-	static HangingData CliffGrabbing(const std::vector<std::shared_ptr<BaseObject>>& collisionObjects,
+	static HangingData CliffGrabbing(
+		const std::vector<std::weak_ptr<BaseObject>>& collisionObjects,
 		const VECTOR& position,
 		const VECTOR& topPosition,
 		const VECTOR& moveDirection,

@@ -113,7 +113,11 @@ void GameObjectManager::Create()
 
 	for (auto& manager : managers)
 	{
-		manager->CreateMediator(*soundPlayer, *effectManager, *playerManager_actual->GetPlayer(), *camera);
+		manager->CreateMediator(*soundPlayer, 
+			*effectManager,
+			*playerManager_actual->GetPlayer(),
+			*camera,
+			collisionObjects);
 	}
 }
 

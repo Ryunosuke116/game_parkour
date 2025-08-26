@@ -35,7 +35,7 @@ Walk::~Walk()
 }
 
 std::pair<VECTOR, PlayerData> Walk::Update(const VECTOR& cameraDirection,
-	const std::vector<std::shared_ptr<BaseObject>>& fieldObjects, Player& player)
+	const std::vector<std::weak_ptr<BaseObject>>& fieldObjects, Player& player)
 {
 	PlayerData playerData = player.GetData();
 
