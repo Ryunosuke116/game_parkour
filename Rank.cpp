@@ -56,7 +56,7 @@ void Rank::Initialize()
     y = 150;
 }
 
-void Rank::Update()
+void Rank::Update(ObjectMediator& objectMediator)
 {
 
 }

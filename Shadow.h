@@ -1,13 +1,19 @@
 #pragma once
+#include "BaseObject.h"
 
-class Shadow
+class ObjectMediator;
+
+class Shadow : public BaseObject
 {
 public:
 	Shadow();
 	~Shadow();
 	
-	void Initialize();
-	void Update(const VECTOR& pos);
+	void Create()override {}
+	void Load(const nlohmann::json& jsonData)override {}
+	void Initialize()override;
+	void Update(ObjectMediator& objectMediator)override;
+	void Draw()override {}
 	int GetShadowMapHandle()const { return shadowMapHandle; }
 
 private:

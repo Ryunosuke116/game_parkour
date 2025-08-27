@@ -18,15 +18,6 @@ public:
 	std::string GetJsonTag() { return jsonTag; }
 	const VECTOR GetPos_difference() { return pos_difference; }
 
-	void CreateMediator(ISoundPlayer& sound,
-		IEffectManager& effect,
-		Player& player,
-		Camera& camera,
-		std::vector<std::shared_ptr<BaseObject>>& collision)override
-	{
-		objectMediator = new ObjectMediator(sound, effect, player, camera, collision);
-	}
-
 	void Add()override{}
 
 protected:
@@ -35,7 +26,5 @@ protected:
 	std::string tag;
 	std::string jsonTag;
 	VECTOR pos_difference;
-
-	ObjectMediator* objectMediator;
 };
 

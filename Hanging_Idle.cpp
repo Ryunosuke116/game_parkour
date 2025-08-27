@@ -16,8 +16,8 @@
 /// <param name="nowAnimState"></param>
 /// <param name="playerData"></param>
 Hanging_Idle::Hanging_Idle(int& modelHandle,
-    AnimState& oldAnimState, AnimState& nowAnimState, std::shared_ptr<ISoundPlayer> sound) :
-    PlayerStateBase(modelHandle, oldAnimState, nowAnimState, sound)
+    AnimState& oldAnimState, AnimState& nowAnimState) :
+    PlayerStateBase(modelHandle, oldAnimState, nowAnimState)
 {
     this->nowAnimState.PlayAnimSpeed = playAnimSpeed;
 }

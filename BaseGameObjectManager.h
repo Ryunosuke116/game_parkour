@@ -17,18 +17,6 @@ public:
 
 	void Load(const nlohmann::json& jsonData)override {}
 
-	void CreateMediator(ISoundPlayer& sound,
-		IEffectManager& effect,
-		Player& player,
-		Camera& camera,
-		std::vector<std::shared_ptr<BaseObject>>& collision)override
-	{
-		for (auto& object : objects)
-		{
-			object->CreateMediator(sound, effect, player, camera, collision);
-		}
-	}
-
 	std::string GetTag() { return tag; }
 
 protected:

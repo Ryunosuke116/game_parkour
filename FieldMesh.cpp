@@ -55,7 +55,7 @@ void FieldMesh::Initialize()
 /// <summary>
 /// çXêV
 /// </summary>
-void FieldMesh::Update()
+void FieldMesh::Update(ObjectMediator& objectMediator)
 {
 	if (CheckHitKey(KEY_INPUT_1))
 	{

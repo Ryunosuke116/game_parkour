@@ -53,7 +53,7 @@ void Field::Initialize()
 /// <summary>
 /// çXêV
 /// </summary>
-void Field::Update()
+void Field::Update(ObjectMediator& objectMediator)
 {
 	/*if (CheckHitKey(KEY_INPUT_1))
 	{

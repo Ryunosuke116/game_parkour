@@ -15,11 +15,8 @@
 /// <summary>
 /// /インストラクタ
 /// </summary>
-Player::Player(std::shared_ptr<ISoundPlayer> sound,
-    std::shared_ptr<IEffectManager> effect) :
+Player::Player() :
     BaseChara(),
-    soundPlayer(sound),
-    effectManager(effect),
     start_walkTime(-1),
     centerPosition(VGet(0.0f, 0.0f, 0.0f)),
     moveDirection_now(VGet(0.0f, 0.0f, 0.0f)),
@@ -47,7 +44,7 @@ void Player::Load(const nlohmann::json& jsonData)
     modelHandle = MV1LoadModel(path.c_str());
     MV1SetScale(modelHandle, VGet(modelScale, modelScale, modelScale));
     playerCalculation = std::make_shared<PlayerCalculation>();
-    animationChanger = std::make_shared<AnimationChanger>(soundPlayer);
+    animationChanger = std::make_shared<AnimationChanger>();
 }
 
 /// <summary>
@@ -108,8 +105,7 @@ void Player::Initialize()
 /// <summary>
 /// 更新
 /// </summary>
-void Player::Update(const VECTOR& cameraDirection, 
-    const std::vector<std::shared_ptr<BaseObject>>& fieldObjects)
+void Player::Update(ObjectMediator& objectMediator)
 {
      //positionData更新
     CollisionUpdate();
@@ -125,8 +121,8 @@ void Player::Update(const VECTOR& cameraDirection,
 
     //stateに応じた挙動処理
     auto [moveDirection_new, data_new] = nowState->Update(
-        objectMediator->camera->GetCameraDirection(), 
-        objectMediator->collisionObjects, 
+        objectMediator.camera->GetCameraDirection(), 
+        objectMediator.collisionObjects, 
         *this);
 
     if (playerData.isHang_to_Crouch)
@@ -200,8 +196,8 @@ void Player::Update(const VECTOR& cameraDirection,
         effectTimer++;
         if (effectTimer >= 10.0f)
         {
-            this->effectManager->PlayEffect("foot_smoke");
-            this->effectManager->SetPosition(position,"foot_smoke");
+            objectMediator.effectManager->PlayEffect("foot_smoke");
+            objectMediator.effectManager->SetPosition(position,"foot_smoke");
             effectTimer = 0.0f;
         }
     }
@@ -405,6 +401,3 @@ void Player::DebugUpdate()
     DebugDrawer::Instance().InformationInput_string_bool("isHang_to_Crouch %d\n", playerData.isHang_to_Crouch);
 
 }
-
-
-void Player::Update() {};

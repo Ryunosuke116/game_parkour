@@ -7,7 +7,7 @@ class AnimationChanger
 {
 public:
 
-	AnimationChanger(std::shared_ptr<ISoundPlayer> sound);
+	AnimationChanger();
 	~AnimationChanger();
 
 	std::shared_ptr<PlayerStateBase> ChangeState(int& modelHandle,
@@ -29,6 +29,5 @@ private:
 
 	PlayerStateBase::AnimState oldAnimState;
 	PlayerStateBase::AnimState nowAnimState;
-	std::shared_ptr<ISoundPlayer> soundPlayer;
 };
 

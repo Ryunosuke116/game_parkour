@@ -9,14 +9,9 @@ public:
 
 	//ƒˆ‰¼‘zŠÖ”	
 	virtual void Initialize()							abstract;
-	virtual void Update()								abstract;
+	virtual void Update(ObjectMediator& objectMediator)	abstract;
 	virtual void Draw()									abstract;
 	virtual void Load(const nlohmann::json& jsonData)	abstract;
 	virtual void Create()								abstract;
 	virtual void Add()									abstract;
-	virtual void CreateMediator(ISoundPlayer& sound,
-		IEffectManager& effect,
-		Player& player,
-		Camera& camera,
-		std::vector<std::shared_ptr<BaseObject>>& collision)			abstract;
 };

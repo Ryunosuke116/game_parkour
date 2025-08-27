@@ -15,7 +15,7 @@
 /// <param name="oldAnimState"></param>
 /// <param name="nowAnimState"></param>
 PlayerStateBase::PlayerStateBase(int& modelHandle,
-    AnimState& oldAnimState, AnimState& nowAnimState, std::shared_ptr<ISoundPlayer> sound):
+    AnimState& oldAnimState, AnimState& nowAnimState):
     modelHandle(-1),
     animNumber_old(-1),
     animBlendRate(0.0f),
@@ -23,8 +23,7 @@ PlayerStateBase::PlayerStateBase(int& modelHandle,
     moveDirection(VGet(0.0f, 0.0f, 0.0f)),
     nowAnimState({NULL}),
     oldAnimState({NULL}),
-    isChangeState(false),
-    soundPlayer(sound)
+    isChangeState(false)
 {
     this->modelHandle = modelHandle;
 
@@ -214,8 +213,6 @@ void PlayerStateBase::JumpMove(PlayerData& playerData, Player& player)
             isPush = true;
             player.playerCalculation->ChangeIsJumpPower_add_ture();
             player.playerCalculation->SetJumpPower();
-
-            soundPlayer->Play("jump");
         }
         //“ñ’iƒWƒƒƒ“ƒv
         else if (playerData.isJump_first && !isPush &&
@@ -233,7 +230,6 @@ void PlayerStateBase::JumpMove(PlayerData& playerData, Player& player)
             player.playerCalculation->SetJumpPower_second();
 
             nowAnimState.PlayTime_anim = 5.0f;
-            soundPlayer->Play("jump");
         }
     }
     else

@@ -13,7 +13,7 @@ public:
 
 	void Create()override;
 	void Initialize()override{}
-	void Update()override{}
+	void Update(ObjectMediator& objectMediator)override{}
 	void Draw()override;
 	void Add()override{}
 

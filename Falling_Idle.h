@@ -7,7 +7,7 @@ class Falling_Idle : public PlayerStateBase
 {
 public:
 	Falling_Idle(int& modelHandle,
-		AnimState& oldAnimState, AnimState& nowAnimState, std::shared_ptr<ISoundPlayer> sound);
+		AnimState& oldAnimState, AnimState& nowAnimState);
 	~Falling_Idle();
 
 	std::pair<VECTOR, PlayerData> Update(const VECTOR& cameraDirection,

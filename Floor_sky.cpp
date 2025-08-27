@@ -46,7 +46,7 @@ void Floor_sky::Initialize()
 /// <summary>
 /// çXêV
 /// </summary>
-void Floor_sky::Update()
+void Floor_sky::Update(ObjectMediator& objectMediator)
 {
 	VECTOR newPos = position;
 

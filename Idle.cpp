@@ -13,8 +13,8 @@
 /// </summary>
 /// <param name="modelHandle"></param>
 Idle::Idle(int& modelHandle,
-    AnimState& oldAnimState, AnimState& nowAnimState, std::shared_ptr<ISoundPlayer> sound, PlayerData& playerData) :
-    PlayerStateBase(modelHandle, oldAnimState, nowAnimState, sound)
+    AnimState& oldAnimState, AnimState& nowAnimState, PlayerData& playerData) :
+    PlayerStateBase(modelHandle, oldAnimState, nowAnimState)
 {
 
 }

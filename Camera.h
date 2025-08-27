@@ -4,26 +4,28 @@
 #include "BaseObject.h"
 #include "IObjectManager.h"
 
-class Camera 
+class Camera : public BaseObject
 {
 public:
-	Camera(std::vector<std::shared_ptr<BaseObject>> collisionObjects);
+	Camera();
 	~Camera();
 
-	void Initialize();
-	void Update(const VECTOR& playerPosition, const float& angle_player);
-	void Update_start(const float& timer,
-		const VECTOR& playerPosition,
-		const float& angle_player);
-	void Update_layout();
-	void Draw();
+	void Create()override {}
+	void Load(const nlohmann::json& jsonData)override{}
+	void Initialize()override;
+	void Update(ObjectMediator& objectMediator)override;
+	void Draw()override;
+
 	void RotateUpdate();
 	void AngleUpdate(const float& angle_player);
 	void DistanceUpdate();
 	void PosCalc();
 	void Leap(VECTOR& changePosition, const VECTOR& playerPosition, const float& speed);
 
-
+	void Update_start(const float& timer,
+		const VECTOR& playerPosition,
+		const float& angle_player);
+	void Update_layout();
 	void CameraPosCalc(const int& mapHandle);
 
 	///////////////////////////////////////////////////////
@@ -58,8 +60,6 @@ private:
 	
 	const VECTOR initialize_aimPos = VGet(-0.169435501f, 53.7492065f, -1224.39844f);
 	const VECTOR initialize_spherePos = VGet(-1.28232884f, 24.0028648f, -1172.35425f);
-
-	std::vector<std::shared_ptr<BaseObject>> collisionObjects;
 
 };
 

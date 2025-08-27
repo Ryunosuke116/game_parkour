@@ -16,15 +16,6 @@ public:
 	void UpdateAngle(const VECTOR& direction);
 	void PositionUpdate();
 
-	void CreateMediator(ISoundPlayer& sound,
-		IEffectManager& effect,
-		Player& player,
-		Camera& camera,
-		std::vector<std::shared_ptr<BaseObject>>& collision)override
-	{
-		objectMediator = new ObjectMediator(sound, effect, player, camera,collision);
-	}
-
 	/////////////////////////////////////////////
 	// ゲッター
 	/////////////////////////////////////////////
@@ -66,7 +57,6 @@ protected:
 
 	static constexpr float	MoveSpeed = 0.4f;	    // 移動速度
 	static constexpr float angleSpeed = 0.2f;
-
 
 	const VECTOR Initialize_aimPos = VGet(-0.169435501f, 53.7492065f, -1224.39844f);
 	const VECTOR Initialize_spherePos = VGet(-1.28232884f, 24.0028648f, -1172.35425f);

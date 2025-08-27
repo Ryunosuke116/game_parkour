@@ -33,7 +33,7 @@ void UI_controlManual::Initialize()
 	stateNumber = -1;
 }
 
-void UI_controlManual::Update()
+void UI_controlManual::Update(ObjectMediator& objectMediator)
 {
 	draw_UIs.clear();
 

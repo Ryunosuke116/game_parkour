@@ -5,7 +5,7 @@ class Idle_To_Sprint : public PlayerStateBase
 {
 public:
 	Idle_To_Sprint(int& modelHandle,
-		AnimState& oldAnimState, AnimState& nowAnimState, std::shared_ptr<ISoundPlayer> sound);
+		AnimState& oldAnimState, AnimState& nowAnimState);
 	~Idle_To_Sprint();
 
 	void Initialize(int& modelHandle,const int changeNum, Player& player)override;

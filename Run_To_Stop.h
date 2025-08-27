@@ -7,7 +7,7 @@ class Run_To_Stop : public PlayerStateBase
 {
 public:
 	Run_To_Stop(int& modelHandle,
-		AnimState& oldAnimState, AnimState& nowAnimState, std::shared_ptr<ISoundPlayer> sound);
+		AnimState& oldAnimState, AnimState& nowAnimState);
 	~Run_To_Stop();
 
 	bool MotionUpdate(PlayerData& playerData)override;

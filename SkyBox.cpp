@@ -33,5 +33,5 @@ void SkyBox::Initialize()
 
 }
 
-void SkyBox::Update() {};
+void SkyBox::Update(ObjectMediator& objectMediator) {};
 

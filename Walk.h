@@ -9,8 +9,7 @@ public:
 
 	Walk(int& modelHandle,
 		AnimState& oldAnimState,
-		AnimState& nowAnimState, 
-		std::shared_ptr<ISoundPlayer> sound);
+		AnimState& nowAnimState);
 	~Walk();
 
 	std::pair<VECTOR, PlayerData> Update(const VECTOR& cameraDirection,

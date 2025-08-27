@@ -10,7 +10,7 @@ public:
 
 	void Load(const nlohmann::json& jsonData)override;
 	void Initialize()override;
-	void Update()override;
+	void Update(ObjectMediator& objectMediator)override;
 	void Draw()override;
 	void Create()override {}
 

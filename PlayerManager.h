@@ -10,34 +10,17 @@ class BaseObject;
 class PlayerManager : public BaseGameObjectManager
 {
 public:
-
-	PlayerManager(std::shared_ptr<ISoundPlayer> sound,
-		std::shared_ptr<IEffectManager> effect);
+	PlayerManager();
 	~PlayerManager();
 	
-	void Update(const std::vector<std::shared_ptr<BaseObject>>& fieldObjects,
-		const VECTOR& cameraDirection);
-
 	void Update_start(const float& timer);
 	void Update_finish(const float& timer);
 
 	void Create()		override;
 	void Initialize()	override;
-	void Update()		override;
+	void Update(ObjectMediator& objectMediator)		override;
 	void Draw()			override;
 	void Add()			override;
-	void CreateMediator(ISoundPlayer& sound,
-		IEffectManager& effect,
-		Player& player,
-		Camera& camera,
-		std::vector<std::shared_ptr<BaseObject>>& collision)override
-	{
-		for (auto& object : objects)
-		{
-		}
-			this->player->CreateMediator(sound, effect, player, camera,collision);
-	}
-
 	
 	VECTOR PositionCheck(const VECTOR& hangingPos, const VECTOR& playerPos);
 	void StateConfirmation();
@@ -63,7 +46,5 @@ private:
 	std::shared_ptr<Player> actualPlayer = NULL;
 	AABB playerAABB;
 	PlayerData now_playerData;
-	std::shared_ptr<ISoundPlayer>			soundPlayer	  = NULL;
-	std::shared_ptr<IEffectManager>			effectManager = NULL;
 };
 

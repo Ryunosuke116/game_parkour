@@ -8,7 +8,6 @@ class Idle : public PlayerStateBase
 public:
 	Idle(int& modelHandle, AnimState& oldAnimState,
 		AnimState& nowAnimState,
-		std::shared_ptr<ISoundPlayer> sound,
 		PlayerData& playerData);
 	~Idle();
 

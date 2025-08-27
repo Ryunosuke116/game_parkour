@@ -35,7 +35,7 @@ void Result_backGround::Initialize()
     y = 0;
 }
 
-void Result_backGround::Update()
+void Result_backGround::Update(ObjectMediator& objectMediator)
 {
 
 }

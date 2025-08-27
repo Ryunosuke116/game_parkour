@@ -1,14 +1,12 @@
 #include "EffectManager.h"
 #include "CoinObject.h"
+#include "MediatorInclude.h"
 
 /// <summary>
 /// コンストラクタ
 /// </summary>
-CoinObject::CoinObject(std::shared_ptr<ISoundPlayer> sound,
-	std::shared_ptr<IEffectManager> effect):
+CoinObject::CoinObject():
 	BaseObject(),
-	effectManager(effect),
-	soundPlayer(sound),
 	radian_Y(0.0f),
 	velocity_Y(0.0f),
 	isHitPlayer(false),
@@ -53,6 +51,7 @@ void CoinObject::Initialize()
 	isSound = false;
 }
 
+
 /// <summary>
 /// 更新
 /// </summary>
@@ -62,7 +61,9 @@ void CoinObject::Initialize()
 /// <param name="radius"></param>
 /// <returns></returns>
 bool CoinObject::Update(const VECTOR& playerpos_top,
-	const VECTOR& playerPos_bottom,const float radius)
+	const VECTOR& playerPos_bottom,
+	const float radius,
+	ISoundPlayer& soundPlayer)
 {
 	VECTOR nearCapsulePos = HitCheck::CapsuleHitConfirmation(playerpos_top, playerPos_bottom, position, radius, 4.5f);
 
@@ -72,7 +73,7 @@ bool CoinObject::Update(const VECTOR& playerpos_top,
 		if (!isSound)
 		{
 			PlaySoundMem(soundHandle, DX_PLAYTYPE_BACK);
-			soundPlayer->Play("coinGet");
+			soundPlayer.Play("coinGet");
 			isSound = true;
 		}
 	}

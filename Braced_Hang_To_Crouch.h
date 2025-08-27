@@ -8,7 +8,7 @@ class Braced_Hang_To_Crouch : public PlayerStateBase
 {
 public:
 	Braced_Hang_To_Crouch(int& modelHandle,
-		AnimState& oldAnimState, AnimState& nowAnimState, std::shared_ptr<ISoundPlayer> sound);
+		AnimState& oldAnimState, AnimState& nowAnimState);
 	~Braced_Hang_To_Crouch();
 
 	VECTOR Hang_to_CrouchMove(const std::vector<std::weak_ptr<BaseObject>>& fieldObjects,

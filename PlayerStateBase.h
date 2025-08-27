@@ -3,7 +3,6 @@
 #include <vector>
 #include "BaseObject.h"
 #include "PlayerData.h"
-#include "ISoundPlayer.h"
 
 class Input;
 class Player;
@@ -22,8 +21,7 @@ public:
 
 	PlayerStateBase(int& modelHandle,
 		AnimState& oldAnimState,
-		AnimState& nowAnimState,
-		std::shared_ptr<ISoundPlayer> sound);
+		AnimState& nowAnimState);
 	~PlayerStateBase() {};
 
 	//ƒˆ‰¼‘zŠÖ”
@@ -77,12 +75,9 @@ protected:
 
 	AnimState oldAnimState;
 	AnimState nowAnimState;
-	std::shared_ptr<ISoundPlayer> soundPlayer;
 
 	//ˆÚ“®
 	//VECTOR moveVec;
-
-	std::shared_ptr<Input> input = NULL;
 
 };
 

@@ -236,6 +236,7 @@
     <ClInclude Include="JsonManager.h" />
     <ClInclude Include="Jump.h" />
     <ClInclude Include="Layout.h" />
+    <ClInclude Include="MediatorInclude.h" />
     <ClInclude Include="ObjectMediator.h" />
     <ClInclude Include="SkyBox.h" />
     <ClInclude Include="IObjectManager.h" />

@@ -7,7 +7,7 @@ class Quick_Roll : public PlayerStateBase
 {
 public:
 	Quick_Roll(int& modelHandle,
-		AnimState& oldAnimState, AnimState& nowAnimState, std::shared_ptr<ISoundPlayer> sound);
+		AnimState& oldAnimState, AnimState& nowAnimState);
 	~Quick_Roll();
 
 	std::pair<VECTOR, PlayerData> Update(const VECTOR& cameraDirection,

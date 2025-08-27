@@ -1,5 +1,4 @@
 #include "common.h"
-
 #include "EffekseerForDXLib.h"
 #include "HitCheck.h"
 #include "PadInput.h"
@@ -7,13 +6,12 @@
 #include "Camera.h"
 #include "Calculation.h"
 #include "DebugDrawer.h"
-
+#include "MediatorInclude.h"
 
 /// <summary>
 /// インストラクタ
 /// </summary>
-Camera::Camera(std::vector<std::shared_ptr<BaseObject>> collision):
-	collisionObjects(collision),
+Camera::Camera():
 	max_t(0.0f),
 	min_t(0.0f),
 	distance(0.0f),
@@ -38,7 +36,6 @@ Camera::Camera(std::vector<std::shared_ptr<BaseObject>> collision):
 
 	// DXライブラリのカメラとEffekseerのカメラを同期する。
 	Effekseer_Sync3DSetting();
-	
 }
 
 /// <summary>
@@ -66,30 +63,27 @@ void Camera::Initialize()
 /// <summary>
 /// 更新
 /// </summary>
-void Camera::Update(const VECTOR& playerPosition,
-	const float& angle_player)
+void Camera::Update(ObjectMediator& objectMediator)
 {
-	centerPos = playerPosition;
+	centerPos = objectMediator.player->GetPosition();
 	centerPos.y += 15.0f;
 
 	DistanceUpdate();
 
-	AngleUpdate(angle_player);
+	AngleUpdate(objectMediator.player->GetAngle());
 
 	RotateUpdate();
 
-	for (const auto& fieldObject : collisionObjects)
+	for (const auto& fieldObject : objectMediator.collisionObjects)
 	{
-		CameraPosCalc(fieldObject->GetModelHandle());
+		auto collisionObject = fieldObject.lock();
+		CameraPosCalc(collisionObject->GetModelHandle());
 	}
 
 	SetCameraPositionAndTarget_UpVecY(aimPosition, spherePosition);
 
 	cameraDirection = VSub(spherePosition, aimPosition);
 	cameraDirection = VNorm(cameraDirection);
-
-	////DebugDrawer::Instance().InformationInput_string_VECTOR("aimPos x.%f y.%f z.%f\n", aimPosition);
-	////DebugDrawer::Instance().InformationInput_string_VECTOR("spherePos x.%f y.%f z.%f\n", spherePosition);
 }
 
 void Camera::Update_start(const float& timer,
@@ -104,7 +98,6 @@ void Camera::Update_start(const float& timer,
 	AngleUpdate(angle_player);
 
 	RotateUpdate();
-
 
 	SetCameraPositionAndTarget_UpVecY(aimPosition, spherePosition);
 
@@ -313,7 +306,6 @@ void Camera::DistanceUpdate()
 /// </summary>
 void Camera::AngleUpdate(const float& angle_player)
 {
-
 	////カメラ移動処理
 	//if ((CheckHitKey(KEY_INPUT_A) ||
 	//	PadInput::GetJoyPad_x_left() < 0.0f) &&

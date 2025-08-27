@@ -30,33 +30,24 @@ public:
 private:
 	std::vector<std::shared_ptr<BaseObject>>			collisionObjects;
 	std::vector<std::shared_ptr<BaseGameObjectManager>> managers;
-	std::vector <std::shared_ptr<IObject>>				objects;
+	std::vector <std::shared_ptr<BaseObject>>				objects;
 
-	std::shared_ptr<BaseObject>				skyBox				= NULL;
-	std::shared_ptr<BaseObject>				field				= NULL;
-	std::shared_ptr<Camera>					camera				= NULL;
 	std::shared_ptr<Layout>					layout				= NULL;
-	std::shared_ptr<Shadow>					shadow				= NULL;
-	std::shared_ptr<GameTimer>				gameTimer			= NULL;
 	std::shared_ptr<Tutorial>				tutorial			= NULL;
 	std::shared_ptr<FinishCut>				finishCut			= NULL;
 	std::shared_ptr<ISoundPlayer>			soundPlayer			= NULL;
 
-	std::shared_ptr<SkyBox>			skyBox_actual		 = NULL;
-	std::shared_ptr<PlayerManager>	playerManager_actual = NULL;
-	std::shared_ptr<CoinManager>	coinManager_actual   = NULL;
-	std::shared_ptr<IEffectManager>  effectManager_actual = NULL;
-	std::shared_ptr<UIManager>		uiManager_actual	 = NULL;
-	std::shared_ptr<BaseGameObjectManager> soundPlayer_actual = NULL;
-	std::shared_ptr<IEffectManager>  effectManager = NULL;
-	std::shared_ptr<ObjectMediator> objectMediator;
+	std::shared_ptr<PlayerManager>	playerManager_actual		= NULL;
+	std::shared_ptr<CoinManager>	coinManager_actual			= NULL;
+	std::shared_ptr<UIManager>		uiManager_actual			= NULL;
+	std::shared_ptr<GameTimer>		gameTimer_actual			= NULL;
+	std::shared_ptr<Shadow>			 shadow_actual				= NULL;
+	std::shared_ptr<Camera>			camera_actual				= NULL;
+	std::shared_ptr<IEffectManager>  effectManager				= NULL;
+	std::shared_ptr<ObjectMediator> objectMediator				= NULL;
 
 	int tutorialHandle;
 	int startHandle;
-	int x_tutorialGraph;
-	int y_tutorialGraph;
-	int x_startGraph;
-	int y_startGraph;
 	int soundHandle;
 
 	bool isCamera;

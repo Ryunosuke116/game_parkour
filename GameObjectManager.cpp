@@ -10,10 +10,6 @@
 GameObjectManager::GameObjectManager():
 	stream_startPicture_timer(-1),
 	stream_finishPicture_timer(-1),
-	x_tutorialGraph(-1),
-	y_tutorialGraph(-1),
-	x_startGraph(-1),
-	y_startGraph(-1),
 	isStream_startPicture(false),
 	isStream_finishPicture(false)
 {
@@ -35,8 +31,14 @@ void GameObjectManager::Create()
 {
 	//vector型.atを使うとき用
 	const int effectManagerNumber = 0;
+	const int playerManagerNumber = 1;
+	const int uiManagerNumber = 2;
+	const int coinManagerNumber = 3;
+	const int cameraObjectNumber = 2;
+	const int shadowObjectNumber = 3;
 
 	//生成
+	//collisionObjectの生成
 	collisionObjects.push_back(std::make_shared<FieldMesh>());
 	collisionObjects.back()->Load(JsonManager::Instance().GetJsons(collisionObjects.back()->GetJsonTag()));
 	
@@ -57,33 +59,31 @@ void GameObjectManager::Create()
 		));
 	}
 
-	/*objects.push_back(std::make_shared<Camera>(collisionObjects));
-	objects.push_back(std::make_shared<SkyBox>());*/
-	skyBox				= std::make_shared<SkyBox>();
-	field				= std::make_shared<Field>();
-	camera				= std::make_shared<Camera>(collisionObjects);
+	//object生成
+	objects.push_back(std::make_shared<SkyBox>());
+	objects.push_back(std::make_shared<Field>());
+	objects.push_back(std::make_shared<Camera>());
+	objects.push_back(std::make_shared<Shadow>());
 
 	layout				= std::make_shared<Layout>();
-	shadow				= std::make_shared<Shadow>();
-	gameTimer			= std::make_shared<GameTimer>();
 	tutorial			= std::make_shared<Tutorial>();
 	finishCut			= std::make_shared<FinishCut>();
 	soundPlayer			= std::make_shared<SoundPlayer>();
 
+	//managerの生成
 	managers.push_back(std::make_shared<EffectManager>());
-	effectManager_actual = std::dynamic_pointer_cast<EffectManager>(managers.back());
-	effectManager			 = std::dynamic_pointer_cast<EffectManager>(managers.at(effectManagerNumber));
-	
-	managers.push_back(std::make_shared<PlayerManager>(soundPlayer, effectManager));
-	playerManager_actual = std::dynamic_pointer_cast<PlayerManager>(managers.back());
+	managers.push_back(std::make_shared<PlayerManager>());
 	managers.push_back(std::make_shared<UIManager>());
-	uiManager_actual = std::dynamic_pointer_cast<UIManager>(managers.back());
-	managers.push_back(std::make_shared<CoinManager>(soundPlayer, effectManager));
-	coinManager_actual = std::dynamic_pointer_cast<CoinManager>(managers.back());
+	managers.push_back(std::make_shared<CoinManager>());
 	
-	skyBox_actual			 = std::dynamic_pointer_cast<SkyBox>(skyBox);
-	soundPlayer_actual		 = std::dynamic_pointer_cast<SoundPlayer>(soundPlayer);
 	
+	//アップキャスト
+	std::shared_ptr<BaseGameObjectManager> soundPlayer_actual = std::dynamic_pointer_cast<SoundPlayer>(soundPlayer);
+	effectManager			 = std::dynamic_pointer_cast<EffectManager>(managers.at(effectManagerNumber));
+	playerManager_actual = std::dynamic_pointer_cast<PlayerManager>(managers.at(playerManagerNumber));
+	uiManager_actual = std::dynamic_pointer_cast<UIManager>(managers.at(uiManagerNumber));
+	coinManager_actual = std::dynamic_pointer_cast<CoinManager>(managers.at(coinManagerNumber));
+	shadow_actual			= std::dynamic_pointer_cast<Shadow>(objects.at(shadowObjectNumber));
 
 	//Jsonデータを取得
 	for (auto& manager : managers)
@@ -100,25 +100,28 @@ void GameObjectManager::Create()
 	//プレイヤーステートオブサーバーに追加
 	playerManager_actual->AddObserver(uiManager_actual->GetUI_controlManual());
 
+	camera_actual = std::dynamic_pointer_cast<Camera>(objects.at(cameraObjectNumber));
+
+	objectMediator = std::make_shared<ObjectMediator>(
+		*soundPlayer,
+		*effectManager,
+		*playerManager_actual->GetPlayer(),
+		*camera_actual,
+		collisionObjects);
+
 	//ロード
-	field->Load(JsonManager::Instance().GetJsons(field->GetJsonTag()));
-	skyBox->Load(JsonManager::Instance().GetJsons(skyBox->GetJsonTag()));
+	for (auto& object : objects)
+	{
+		if (object->GetJsonTag() == "")continue;
+		object->Load(JsonManager::Instance().GetJsons(object->GetJsonTag()));
+	}
+
 	tutorial->Load(JsonManager::Instance().GetJsons(tutorial->GetTag()));
 	finishCut->Load(JsonManager::Instance().GetJsons(finishCut->GetTag()));
-	gameTimer->Load(JsonManager::Instance().GetJsons(gameTimer->GetJsonTag()));
 	soundPlayer->Create();
 
 	soundHandle = LoadSoundMem("material/sound/gameBGM.mp3");
 	ChangeVolumeSoundMem(125, soundHandle);
-
-	for (auto& manager : managers)
-	{
-		manager->CreateMediator(*soundPlayer, 
-			*effectManager,
-			*playerManager_actual->GetPlayer(),
-			*camera,
-			collisionObjects);
-	}
 }
 
 /// <summary>
@@ -126,7 +129,6 @@ void GameObjectManager::Create()
 /// </summary>
 void GameObjectManager::Initialize()
 {
-
 	for (auto& fieldObject : collisionObjects)
 	{
 		fieldObject->Initialize();
@@ -137,15 +139,13 @@ void GameObjectManager::Initialize()
 		manager->Initialize();
 	}
 
-	skyBox->Initialize();
-	field->Initialize();
-	camera->Initialize();
-	shadow->Initialize();
-	gameTimer->Initialize();
+	for (auto& object : objects)
+	{
+		object->Initialize();
+	}
+
 	tutorial->Initialize();
 	finishCut->Initialize();
-
-
 
 	isCamera = false;
 	isPush = false;
@@ -154,10 +154,6 @@ void GameObjectManager::Initialize()
 	isStream_finishPicture = false;
 	stream_startPicture_timer = 0.0f;
 	stream_finishPicture_timer = 0.0f;
-	x_tutorialGraph = 200;
-	y_tutorialGraph = 112;
-	x_startGraph = 600;
-	y_startGraph = 350;
 }
 
 /// <summary>
@@ -172,8 +168,6 @@ void GameObjectManager::Update()
 
 	FinishUpdate();
 
-	shadow->Update(playerManager_actual->GetPosition());
-
 	if (!isStream_startPicture && 
 		!isStream_finishPicture)
 	{
@@ -184,7 +178,7 @@ void GameObjectManager::Update()
 				if (!isCamera)
 				{
 					isCamera = true;
-					layout->Initialize(coinManager_actual->GetModelHandle());
+					//layout->Initialize(coinManager_actual->GetModelHandle());
 				}
 				else
 				{
@@ -203,34 +197,30 @@ void GameObjectManager::Update()
 		{
 			for (auto& collisionObject : collisionObjects)
 			{
-				collisionObject->Update();
+				collisionObject->Update(*objectMediator);
 			}
-			field->Update();
 
-			gameTimer->Update();
-			playerManager_actual->Update(collisionObjects,
-				camera->GetCameraDirection());
+			for (auto& object : objects)
+			{
+				object->Update(*objectMediator);
+			}
 
-			camera->Update(playerManager_actual->GetPosition(),
-				playerManager_actual->GetAngle());
-
-			//ui->Update();
-			uiManager_actual->Update();
+			for (auto& manager : managers)
+			{
+				manager->Update(*objectMediator);
+			}
 
 		}
 		else
 		{
-			camera->Update_layout();
-			layout->Update(camera->GetSpherePosition(), *coinManager_actual);
+			camera_actual->Update_layout();
+			//layout->Update(camera_actual->GetSpherePosition(), *coinManager_actual);
 		}
-
-		coinManager_actual->Update(playerManager_actual->GetPlayer(),
-			camera->GetSpherePosition());
 
 		effectManager->PlayEffectUpdate();
 
 		//ゴール判定
-		if (gameTimer->IsFinish() &&
+		if (uiManager_actual->GetGameTimer()->IsFinish() &&
 			!isStream_finishPicture)
 		{
 			isStream_finishPicture = true;
@@ -248,17 +238,15 @@ void GameObjectManager::StartUpdate()
 
 		if (!isStream_startPicture)
 		{
-			gameTimer->ResetSetTime();
+			uiManager_actual->GetGameTimer()->ResetSetTime();
 			soundPlayer->Play("gameBGM");
 		}
-
 	}
 	else
 	{
 		stream_startPicture_timer++;
 		playerManager_actual->Update_start(stream_startPicture_timer);
-		camera->Update(playerManager_actual->GetPosition(),
-			playerManager_actual->GetAngle());
+		camera_actual->Update(*objectMediator);
 	}
 }
 
@@ -268,8 +256,7 @@ void GameObjectManager::FinishUpdate()
 	{
 		isGoal = finishCut->Update();
 		playerManager_actual->Update_finish(stream_startPicture_timer);
-		camera->Update(playerManager_actual->GetPosition(),
-			playerManager_actual->GetAngle());
+		camera_actual->Update(*objectMediator);
 		if (isGoal)
 		{
 			StopSoundMem(soundHandle);
@@ -283,7 +270,7 @@ void GameObjectManager::FinishUpdate()
 void GameObjectManager::Draw()
 {
 	// シャドウマップへの描画の準備
-	ShadowMap_DrawSetup(shadow->GetShadowMapHandle());
+	ShadowMap_DrawSetup(shadow_actual->GetShadowMapHandle());
 
 	for (auto& manager : managers)
 	{
@@ -298,10 +285,13 @@ void GameObjectManager::Draw()
 	ShadowMap_DrawEnd();
 
 	// 描画に使用するシャドウマップを設定
-	SetUseShadowMap(0, shadow->GetShadowMapHandle());
+	SetUseShadowMap(0, shadow_actual->GetShadowMapHandle());
 
-	skyBox->Draw();
-	field->Draw();
+	for (auto& object : objects)
+	{
+		object->Draw();
+	}
+
 	for (auto& fieldObject : collisionObjects)
 	{
 		fieldObject->Draw();
@@ -317,18 +307,16 @@ void GameObjectManager::Draw()
 		manager->Draw();
 	}
 
-	gameTimer->Draw();
-
 	// 描画に使用するシャドウマップの設定を解除
 	SetUseShadowMap(0, -1);
 
-	camera->Draw();
 	if (isCamera)
 	{
 		layout->Draw();
 	}
 
 	tutorialDraw();
+
 	finishCut->Draw();
 
 	//DrawLine3D(VGet(0.0f, 15.0f, 0.0f), VGet(10.0f, 15.0f, 0.0f), GetColor(255, 0, 0));

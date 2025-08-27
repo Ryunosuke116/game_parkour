@@ -11,11 +11,8 @@
 /// <summary>
 /// コンストラクタ
 /// </summary>
-PlayerManager::PlayerManager(std::shared_ptr<ISoundPlayer> sound,
-	std::shared_ptr<IEffectManager> effect):
+PlayerManager::PlayerManager():
 	BaseGameObjectManager(),
-	soundPlayer(sound),
-	effectManager(effect),
 	now_playerData({false})
 {
 	tag = "player";
@@ -33,7 +30,7 @@ void PlayerManager::Create()
 {
 	collisionManager = std::make_shared<CollisionManager>();
 
-	player = std::make_shared<Player>(soundPlayer, effectManager);
+	player = std::make_shared<Player>();
 	actualPlayer = std::dynamic_pointer_cast<Player>(player);
 	player->Load(jsonData);
 }
@@ -65,12 +62,11 @@ void PlayerManager::Initialize()
 /// </summary>
 /// <param name="mapHandle"></param>
 /// <param name="player"></param>
-void PlayerManager::Update(const std::vector<std::shared_ptr<BaseObject>>& fieldObjects, 
-	const VECTOR& cameraDirection)
+void PlayerManager::Update(ObjectMediator& objectMediator)
 {
-	actualPlayer->Update(cameraDirection, fieldObjects);
+	actualPlayer->Update(objectMediator);
 
-	collisionManager->Update(*player, fieldObjects, actualPlayer->GetData());
+	collisionManager->Update(*player, objectMediator.collisionObjects, actualPlayer->GetData());
 	
 	actualPlayer->Receive_CollisionResult();
 
@@ -166,6 +162,7 @@ void PlayerManager::RemoveObserver(std::shared_ptr<PlayerStateObserver> observer
 {
 	// 削除対象か判定するラムダ関数を用意
 	auto shouldRemove = [&](const std::weak_ptr<PlayerStateObserver>& weakObs) {
+		
 		// weak_ptrからshared_ptrを取得
 		std::shared_ptr<PlayerStateObserver> locked = weakObs.lock();
 
@@ -185,5 +182,4 @@ void PlayerManager::RemoveObserver(std::shared_ptr<PlayerStateObserver> observer
 	observers.erase(newEnd, observers.end());
 }
 
-void PlayerManager::Update() {}
 void PlayerManager::Add()	 {}

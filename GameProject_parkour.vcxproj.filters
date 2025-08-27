@@ -593,6 +593,9 @@
     <ClInclude Include="ObjectMediator.h">
       <Filter>ソース ファイル\objectMediator</Filter>
     </ClInclude>
+    <ClInclude Include="MediatorInclude.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Json\coin.Json">

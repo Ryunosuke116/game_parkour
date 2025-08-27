@@ -9,14 +9,15 @@ class EffectManager;
 class CoinObject : public BaseObject
 {
 public:
-	CoinObject(std::shared_ptr<ISoundPlayer> sound,
-		std::shared_ptr<IEffectManager> effect);
+	CoinObject();
 	~CoinObject();
 
 	void Initialize()override;
-	void Update()override{}
+	void Update(ObjectMediator& objectMediator)override {}
 	bool Update(const VECTOR& playerPos,
-		const VECTOR& playerPos_bottom, const float radius);
+		const VECTOR& playerPos_bottom,
+		const float radius,
+		ISoundPlayer& soundPlayer);
 	void Draw()override;
 	void Load(const nlohmann::json& jsonData)override{}
 	void Create()override{}
@@ -37,9 +38,6 @@ private:
 	float radian_Y;
 	float velocity_Y;
 	int soundHandle;
-
-	std::shared_ptr<IEffectManager> effectManager;
-	std::shared_ptr<ISoundPlayer>	soundPlayer;
 
 	static constexpr float radius = 4.5f;
 	static constexpr float objectScale = 0.3f;

@@ -7,7 +7,7 @@ class Run : public PlayerStateBase
 {
 public:
 	Run(int& modelHandle,
-		AnimState& oldAnimState, AnimState& nowAnimState, std::shared_ptr<ISoundPlayer> sound);
+		AnimState& oldAnimState, AnimState& nowAnimState);
 	~Run();
 
 	std::pair<VECTOR, PlayerData> Update(const VECTOR& cameraDirection,

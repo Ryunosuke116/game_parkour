@@ -8,7 +8,7 @@ class Jump : public PlayerStateBase
 public:
 	Jump(int& modelHandle, AnimState& oldAnimState,
 		AnimState& nowAnimState, 
-		std::shared_ptr<ISoundPlayer> sound, PlayerData& playerData);
+		PlayerData& playerData);
 	~Jump();
 
 	void Initialize(int& modelHandle,const int changeNum, Player& player)override;

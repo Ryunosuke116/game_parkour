@@ -15,6 +15,7 @@ void UIManager::Create()
 {
 	Add(std::make_shared<UI_coin>());
 	Add(std::make_shared<UI_controlManual>());
+	Add(std::make_shared<GameTimer>());
 }
 
 void UIManager::Initialize()
@@ -32,11 +33,11 @@ void UIManager::Initialize()
 	}
 }
 
-void UIManager::Update()
+void UIManager::Update(ObjectMediator& objectMediator)
 {
 	for (auto& UI : ui_list)
 	{
-		UI->Update();
+		UI->Update(objectMediator);
 	}
 }
 

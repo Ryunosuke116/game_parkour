@@ -15,17 +15,13 @@ class EffectManager;
 class Player : public BaseChara, public CoinObserver
 {
 public:
-	Player(std::shared_ptr<ISoundPlayer> sound,
-		std::shared_ptr<IEffectManager> effect);
+	Player();
 	~Player();
 
 	void Create()override {}
 	void Load(const nlohmann::json& jsonData)override;
 	void Initialize()override;
-	void Update()override;
-	void Update(const VECTOR& cameraDirection,
-		const std::vector<std::shared_ptr<BaseObject>>& fieldObjects);
-	
+	void Update(ObjectMediator& objectMediator)override;
 
 	void Update_start(const float& timer);
 	void Update_finish(const float& timer);
@@ -96,8 +92,6 @@ private:
 
 	//‘¼ƒNƒ‰ƒX
 	PlayerData playerData;
-	std::shared_ptr<IEffectManager>			effectManager = NULL;
-	std::shared_ptr<ISoundPlayer>			soundPlayer = NULL;
 	std::shared_ptr<PlayerStateBase>		nowState = NULL;
 	std::shared_ptr<AnimationChanger>		animationChanger = NULL;
 

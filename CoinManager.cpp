@@ -2,18 +2,15 @@
 #include <vector>
 #include <fstream>
 #include <string>
-#include "Player.h"
 #include "EffectManager.h"
 #include "CoinManager.h"
 #include "nlohmann/json.hpp"
+#include "MediatorInclude.h"
 
 /// <summary>
 /// コンストラクタ
 /// </summary>
-CoinManager::CoinManager(std::shared_ptr<ISoundPlayer> sound,
-	std::shared_ptr<IEffectManager> effect):
-	effectManager(effect),
-	soundPlayer(sound)
+CoinManager::CoinManager()
 {
 	tag = "coin";
 }
@@ -34,9 +31,7 @@ void CoinManager::Create()
 
 	for (auto& pos : jsonData["coin_list"])
 	{
-		coins.push_back(std::make_shared<CoinObject>(
-			soundPlayer,
-			effectManager));
+		coins.push_back(std::make_shared<CoinObject>());
 		coins.back()->Load(modelHandle,
 			VGet(pos[0].get<float>(), pos[1].get<float>(), pos[2].get<float>()));
 	}
@@ -56,23 +51,20 @@ void CoinManager::Initialize()
 
 }
 
-/// <summary>
-/// 更新処理
-/// </summary>
-/// <param name="player"></param>
-/// <param name="cameraLookPos"></param>
-void CoinManager::Update(const std::shared_ptr<Player>& player,
-	const VECTOR& cameraLookPos)
+
+void CoinManager::Update(ObjectMediator& objectMediator)
 {
 	//vector型内の現在位置
 	std::vector<std::shared_ptr<CoinObject>>::iterator it;
 
-	for ( it = coins.begin(); it != coins.end();)
+	for (it = coins.begin(); it != coins.end();)
 	{
 		//playerと当たっていたら削除する
-		if ((*it)->Update(player->GetTopPos(), 
-			player->GetBottomPos(),
-			player->GetRadius()))
+		if ((*it)->Update(
+			objectMediator.player->GetTopPos(),
+			objectMediator.player->GetBottomPos(),
+			objectMediator.player->GetRadius(),
+			*objectMediator.soundPlayer))
 		{
 			NotifyCoinPicked(coinValue);
 
@@ -82,8 +74,8 @@ void CoinManager::Update(const std::shared_ptr<Player>& player,
 		}
 		it++;
 	}
-	pos_addObject = cameraLookPos;
 
+	pos_addObject = objectMediator.camera->GetSpherePosition();
 }
 
 void CoinManager::Draw()
@@ -96,9 +88,7 @@ void CoinManager::Draw()
 
 void CoinManager::Add()
 {
-	coins.push_back(std::make_shared<CoinObject>(
-		soundPlayer,
-		effectManager));
+	coins.push_back(std::make_shared<CoinObject>());
 	coins.back()->Load(modelHandle,
 		pos_addObject);
 	coins.back()->Initialize();
@@ -154,4 +144,3 @@ void CoinManager::RemoveObserver(std::shared_ptr<CoinObserver> observer)
 	observers.erase(newEnd, observers.end());
 }
 
-void CoinManager::Update(){}

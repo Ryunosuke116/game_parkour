@@ -8,8 +8,7 @@ class Hanging_Idle : public PlayerStateBase
 public:
 	Hanging_Idle(int& modelHandle,
 		AnimState& oldAnimState, 
-		AnimState& nowAnimStatel, 
-		std::shared_ptr<ISoundPlayer> sound);
+		AnimState& nowAnimStatel);
 
 	~Hanging_Idle();
 

@@ -11,7 +11,7 @@ GameTimer::GameTimer():
 	isUpdateMin(false),
 	countNumberSec("")
 {
-	jsonTag = "png";
+	jsonTag = "coin";
 }
 
 /// <summary>
@@ -24,7 +24,7 @@ GameTimer::~GameTimer()
 
 void GameTimer::Load(const nlohmann::json& jsonData)
 {
-	std::string path = jsonData["coin"][2][0];
+	std::string path = jsonData[2][0];
 
 	LoadDivGraph(path.c_str(),
 		10, 10, 1, 32, 64, numberHandle);
@@ -48,7 +48,7 @@ void GameTimer::Initialize()
 /// <summary>
 /// çXêVèàóù
 /// </summary>
-void GameTimer::Update()
+void GameTimer::Update(ObjectMediator& objectMediator)
 {
 	const int subMin = 1;
 	const int maxSec = 60;

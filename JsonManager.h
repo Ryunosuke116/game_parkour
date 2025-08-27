@@ -6,7 +6,6 @@
 class JsonManager : public BaseGameObjectManager
 {
 public:
-
 	static JsonManager& Instance();  // ƒVƒ“ƒOƒ‹ƒgƒ“Žæ“¾
 
 	JsonManager() = default;
@@ -14,7 +13,7 @@ public:
 
 	void Create()		override;
 	void Initialize()	override;
-	void Update()		override;
+	void Update(ObjectMediator& objectMediator)		override;
 	void Draw()			override;
 	void Add()			override;
 

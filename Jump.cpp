@@ -13,8 +13,8 @@
 /// </summary>
 /// <param name="modelHandle"></param>
 Jump::Jump(int& modelHandle, AnimState& oldAnimState,
-    AnimState& nowAnimState, std::shared_ptr<ISoundPlayer> sound, PlayerData& playerData) :
-    PlayerStateBase(modelHandle, oldAnimState, nowAnimState, sound),
+    AnimState& nowAnimState, PlayerData& playerData) :
+    PlayerStateBase(modelHandle, oldAnimState, nowAnimState),
     isJump_first(false),
     isJump_second(false)
 {

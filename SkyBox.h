@@ -9,7 +9,7 @@ public:
 	SkyBox();
 	~SkyBox();
 	void Initialize()override;
-	void Update()override;
+	void Update(ObjectMediator& objectMediator)override;
 	//void Update(const VECTOR& playerPos);
 	void Load(const nlohmann::json& jsonData)override;
 	void Create()override {}

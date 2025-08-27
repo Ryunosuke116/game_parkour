@@ -13,7 +13,7 @@
 /// @param modelHandle 
 /// @return 
 void CollisionManager::Update(BaseChara& chara,
-	const std::vector<std::shared_ptr<BaseObject>>& collisionObjects,
+	const std::vector<std::weak_ptr<BaseObject>>& collisionObjects,
 	const PlayerData& playerData)
 {
 	if (chara.GetIsCollisionCheck())
@@ -34,7 +34,8 @@ void CollisionManager::Update(BaseChara& chara,
 /// <param name="radius"></param>
 /// <param name="positionData"></param>
 /// <returns></returns>
-CollisionResult CollisionManager::Check_all(const std::vector<std::shared_ptr<BaseObject>>& collisionObjects,
+CollisionResult CollisionManager::Check_all(
+	const std::vector<std::weak_ptr<BaseObject>>& collisionObjects,
 	const VECTOR& playerPos, const VECTOR& moveVec, const float& radius,
 	const PositionData& positionData,const PlayerData& playerData)
 {
@@ -83,9 +84,11 @@ CollisionResult CollisionManager::Check_all(const std::vector<std::shared_ptr<Ba
 	//対象のオブジェクトの移動量を加算
 	for (const auto& fieldObject : collisionObjects)
 	{
-		if (tag == fieldObject->GetTag())
+		auto collisionObject = fieldObject.lock();
+
+		if (tag == collisionObject->GetTag())
 		{
-			newPos = VAdd(newPos, fieldObject->GetPos_difference());
+			newPos = VAdd(newPos, collisionObject->GetPos_difference());
 		}
 	}
 
@@ -108,7 +111,7 @@ CollisionResult CollisionManager::Check_all(const std::vector<std::shared_ptr<Ba
 /// <param name="positionData.radius"></param>
 /// <param name="positionData.addBottomPos"></param>
 /// <returns></returns>
-bool CollisionManager::HeadCollisionCheck(const std::vector<std::shared_ptr<BaseObject>>& collisionObjects,
+bool CollisionManager::HeadCollisionCheck(const std::vector<std::weak_ptr<BaseObject>>& collisionObjects,
 	VECTOR& newPos, const VECTOR& moveVec, const PositionData& positionData, const float& radius)
 {
 	MV1_COLL_RESULT_POLY_DIM hitPoly_head;
@@ -118,7 +121,9 @@ bool CollisionManager::HeadCollisionCheck(const std::vector<std::shared_ptr<Base
 	//fieldObjectの要素分確認
 	for (auto& fieldObject : collisionObjects)
 	{
-		bool isHitHead = HitCheck::SphereHitJudge(fieldObject->GetModelHandle(), 
+		auto collisionObject = fieldObject.lock();
+
+		bool isHitHead = HitCheck::SphereHitJudge(collisionObject->GetModelHandle(),
 			-1,
 			radius,
 			position_top_new,
@@ -176,7 +181,7 @@ bool CollisionManager::HeadCollisionCheck(const std::vector<std::shared_ptr<Base
 /// <param name="positionData.radius"></param>
 /// <param name="isJump"></param>
 /// <returns></returns>
-std::pair<bool, std::string> CollisionManager::GroundCollisionCheck(const std::vector<std::shared_ptr<BaseObject>>& collisionObjects,
+std::pair<bool, std::string> CollisionManager::GroundCollisionCheck(const std::vector<std::weak_ptr<BaseObject>>& collisionObjects,
 	const VECTOR& oldPos, VECTOR& newPos, const VECTOR& moveVec,
 	const PositionData& positionData)
 {
@@ -193,9 +198,10 @@ std::pair<bool, std::string> CollisionManager::GroundCollisionCheck(const std::v
 
 	for (const auto& fieldObject : collisionObjects)
 	{
+		auto collisionObject = fieldObject.lock();
 
 		//rayが当たっていれば
-		isHitGround = HitCheck::RayHitJudge(fieldObject->GetModelHandle(), -1, position_top_new,
+		isHitGround = HitCheck::RayHitJudge(collisionObject->GetModelHandle(), -1, position_top_new,
 			position_bottom_new, rayPoly_ground);
 
 		if (isHitGround)
@@ -219,7 +225,7 @@ std::pair<bool, std::string> CollisionManager::GroundCollisionCheck(const std::v
 			newPos.y = newPos.y + newPlayerPos.y;
 			
 			returnFlag = true;
-			returnTag = fieldObject->GetTag();
+			returnTag = collisionObject->GetTag();
 		}
 
 	}
@@ -246,7 +252,7 @@ std::pair<bool, std::string> CollisionManager::GroundCollisionCheck(const std::v
 /// <param name="positionData.radius"></param>
 /// <param name="isJump"></param>
 /// <returns></returns>
-std::pair<bool, VECTOR> CollisionManager::GroundCollisionCheck_Hang_to_Crouch(const std::vector<std::shared_ptr<BaseObject>>& collisionObjects,
+std::pair<bool, VECTOR> CollisionManager::GroundCollisionCheck_Hang_to_Crouch(const std::vector<std::weak_ptr<BaseObject>>& collisionObjects,
 	const VECTOR& oldPos, const VECTOR& newPos, const VECTOR& foot,
 	const PositionData& positionData)
 {
@@ -264,8 +270,10 @@ std::pair<bool, VECTOR> CollisionManager::GroundCollisionCheck_Hang_to_Crouch(co
 
 	for (const auto& fieldObject : collisionObjects)
 	{
+		auto collisionObject = fieldObject.lock();
+
 		//rayが当たっていれば
-		isHitGround = HitCheck::RayHitJudge(fieldObject->GetModelHandle(), -1, nowTopPos, nowBottomPos, rayPoly_ground);
+		isHitGround = HitCheck::RayHitJudge(collisionObject->GetModelHandle(), -1, nowTopPos, nowBottomPos, rayPoly_ground);
 
 		if (isHitGround)
 		{
@@ -288,7 +296,7 @@ std::pair<bool, VECTOR> CollisionManager::GroundCollisionCheck_Hang_to_Crouch(co
 /// <param name="player"></param>
 /// <param name="modelHandle"></param>
 /// <returns></returns>
-std::pair<bool, VECTOR> CollisionManager::WallCollisionCheck(const std::vector<std::shared_ptr<BaseObject>>& collisionObjects,
+std::pair<bool, VECTOR> CollisionManager::WallCollisionCheck(const std::vector<std::weak_ptr<BaseObject>>& collisionObjects,
 	VECTOR& newPos, const VECTOR& moveVec, const PositionData& positionData,
 	const float& radius)
 {
@@ -303,8 +311,10 @@ std::pair<bool, VECTOR> CollisionManager::WallCollisionCheck(const std::vector<s
 
 	for (auto& fieldObject : collisionObjects)
 	{
+		auto collisionObject = fieldObject.lock();
+
 		//壁と衝突しているか
-		HitCheck::CapsuleHitWallJudge(fieldObject->GetModelHandle(), -1, radius, position_top_new,
+		HitCheck::CapsuleHitWallJudge(collisionObject->GetModelHandle(), -1, radius, position_top_new,
 			VAdd(position_bottom_new, VGet(0.0f, 1.0f, 0.0f)), hitPoly_Wall);
 
 		//衝突しているとこを全部調べて押し戻し量を計算する
@@ -366,7 +376,7 @@ std::pair<bool, VECTOR> CollisionManager::WallCollisionCheck(const std::vector<s
 					MV1_COLL_RESULT_POLY poly_ray;
 
 					//カプセルの外側から軸にむかってrayCastする
-					HitCheck::RayHitJudge(fieldObject->GetModelHandle(),
+					HitCheck::RayHitJudge(collisionObject->GetModelHandle(),
 						-1, 
 						capsulePos,
 						line_segment_point_closestSurface,
@@ -420,7 +430,7 @@ std::pair<bool, VECTOR> CollisionManager::WallCollisionCheck(const std::vector<s
 /// </summary>
 /// <param name="player"></param>
 /// <param name="modelHandle"></param>
-std::pair<bool, VECTOR> CollisionManager::CliffGrabbing(const std::vector<std::shared_ptr<BaseObject>>& collisionObjects,
+std::pair<bool, VECTOR> CollisionManager::CliffGrabbing(const std::vector<std::weak_ptr<BaseObject>>& collisionObjects,
 	const VECTOR& topPosition, const VECTOR& moveDirection, const bool isFalling)
 {
 	VECTOR linePos_end = VAdd(topPosition, VScale(moveDirection, 6.0f));
@@ -438,8 +448,10 @@ std::pair<bool, VECTOR> CollisionManager::CliffGrabbing(const std::vector<std::s
 	{
 		for (const auto& fieldObject : collisionObjects)
 		{
+			auto collisionObject = fieldObject.lock();
+
 			MV1_COLL_RESULT_POLY poly;
-			isHitHanging = HitCheck::RayHitJudge(fieldObject->GetModelHandle(), -1, topPosition, linePos_end, poly);
+			isHitHanging = HitCheck::RayHitJudge(collisionObject->GetModelHandle(), -1, topPosition, linePos_end, poly);
 		
 			if (isHitHanging && poly.Normal.y >= 0.8f)
 			{

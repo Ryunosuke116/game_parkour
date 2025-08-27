@@ -5,8 +5,7 @@
 #include "AnimationChanger.h"
 #include "Player.h"
 
-AnimationChanger::AnimationChanger(std::shared_ptr<ISoundPlayer> soundPlayer):
-    soundPlayer(soundPlayer)
+AnimationChanger::AnimationChanger()
 {
     soundHandle = LoadSoundMem("material/sound/dash.mp3");
     ChangeVolumeSoundMem(155, soundHandle);
@@ -25,8 +24,7 @@ void AnimationChanger::Initialize(const int& num, int& modelHandle,
     //newState‚ğ¶¬
     nowState = std::make_shared<Walk>(modelHandle,
         oldAnimState,
-        nowAnimState,
-        soundPlayer);
+        nowAnimState);
 
     nowState->SetAnimNumber_old(animNumber_Now);
     animNumber_Now = animNum::walk;
@@ -56,7 +54,7 @@ std::shared_ptr<PlayerStateBase> AnimationChanger::ChangeState(int& modelHandle,
         newState = std::make_shared<Idle>(modelHandle,
             oldAnimState,
             nowAnimState,
-            soundPlayer,
+           
             playerData);
 
         newState->SetAnimNumber_old(animNumber_Now);
@@ -74,8 +72,7 @@ std::shared_ptr<PlayerStateBase> AnimationChanger::ChangeState(int& modelHandle,
         //newState‚ğ¶¬
         newState = std::make_shared<Walk>(modelHandle,
             oldAnimState,
-            nowAnimState,
-            soundPlayer);
+            nowAnimState);
 
         newState->SetAnimNumber_old(animNumber_Now);
         animNumber_Now = animNum::walk;
@@ -91,8 +88,7 @@ std::shared_ptr<PlayerStateBase> AnimationChanger::ChangeState(int& modelHandle,
         //newState‚ğ¶¬
         newState = std::make_shared<Run>(modelHandle,
             oldAnimState,
-            nowAnimState,
-            soundPlayer);
+            nowAnimState);
 
         newState->SetAnimNumber_old(animNumber_Now);
         animNumber_Now = animNum::run;
@@ -112,7 +108,6 @@ std::shared_ptr<PlayerStateBase> AnimationChanger::ChangeState(int& modelHandle,
         newState = std::make_shared<Jump>(modelHandle,
             oldAnimState,
             nowAnimState,
-            soundPlayer,
             playerData);
 
         newState->SetAnimNumber_old(animNumber_Now);
@@ -130,8 +125,7 @@ std::shared_ptr<PlayerStateBase> AnimationChanger::ChangeState(int& modelHandle,
         //newState‚ğ¶¬
         newState = std::make_shared<Falling_Idle>(modelHandle,
             oldAnimState,
-            nowAnimState,
-            soundPlayer);
+            nowAnimState);
 
         newState->SetAnimNumber_old(animNumber_Now);
         animNumber_Now = animNum::falling_Idle;
@@ -147,8 +141,7 @@ std::shared_ptr<PlayerStateBase> AnimationChanger::ChangeState(int& modelHandle,
         //newState‚ğ¶¬
         newState = std::make_shared<Quick_Roll>(modelHandle,
             oldAnimState,
-            nowAnimState,
-            soundPlayer);
+            nowAnimState);
 
         newState->SetAnimNumber_old(animNumber_Now);
         animNumber_Now = animNum::roll;
@@ -164,8 +157,7 @@ std::shared_ptr<PlayerStateBase> AnimationChanger::ChangeState(int& modelHandle,
         //newState‚ğ¶¬
         newState = std::make_shared<Idle_To_Sprint>(modelHandle,
             oldAnimState,
-            nowAnimState,
-            soundPlayer);
+            nowAnimState);
 
         newState->SetAnimNumber_old(animNumber_Now);
         animNumber_Now = animNum::idle_To_Sprint;
@@ -181,8 +173,7 @@ std::shared_ptr<PlayerStateBase> AnimationChanger::ChangeState(int& modelHandle,
         //newState‚ğ¶¬
         newState = std::make_shared<Run_To_Stop>(modelHandle,
             oldAnimState,
-            nowAnimState,
-            soundPlayer);
+            nowAnimState);
 
         newState->SetAnimNumber_old(animNumber_Now);
         animNumber_Now = animNum::run_To_Stop;
@@ -198,8 +189,7 @@ std::shared_ptr<PlayerStateBase> AnimationChanger::ChangeState(int& modelHandle,
         //newState‚ğ¶¬
         newState = std::make_shared<Hanging_Idle>(modelHandle,
             oldAnimState,
-            nowAnimState,
-            soundPlayer);
+            nowAnimState);
 
         newState->SetAnimNumber_old(animNumber_Now);
         animNumber_Now = animNum::hanging_Idle;
@@ -216,8 +206,7 @@ std::shared_ptr<PlayerStateBase> AnimationChanger::ChangeState(int& modelHandle,
         //newState‚ğ¶¬
         newState = std::make_shared<Braced_Hang_To_Crouch>(modelHandle,
             oldAnimState,
-            nowAnimState,
-            soundPlayer);
+            nowAnimState);
 
         newState->SetAnimNumber_old(animNumber_Now);
         animNumber_Now = animNum::braced_Hang_To_Crouch;

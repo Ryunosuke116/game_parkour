@@ -30,10 +30,7 @@ void JsonManager::Initialize()
 	}
 }
 
-void JsonManager::Update()
-{
-
-}
+void JsonManager::Update(ObjectMediator& objectMediator){}
 
 void JsonManager::Draw(){}
 
