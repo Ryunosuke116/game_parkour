@@ -39,6 +39,8 @@ CollisionResult CollisionManager::Check_all(
 	const VECTOR& playerPos, const VECTOR& moveVec, const float& radius,
 	const PositionData& positionData,const PlayerData& playerData)
 {
+	
+
 	VECTOR oldPos = playerPos;
 	VECTOR newPos = VAdd(oldPos, moveVec);
 	VECTOR moveVec_new = VGet(0.0f, 0.0f, 0.0f);
@@ -68,7 +70,6 @@ CollisionResult CollisionManager::Check_all(
 		moveVec_new = moveVec;
 	}
 	DebugDrawer::Instance().InformationInput_line(projection_ray_start, projection_ray_end, GetColor(255, 0, 255));
-
 
 	CollisionResult result;
 
@@ -423,113 +424,6 @@ std::pair<bool, VECTOR> CollisionManager::WallCollisionCheck(const std::vector<s
 
 	return std::make_pair(flag, hitPoly_normal);
 
-}
-
-/// <summary>
-/// 崖つかみ判定
-/// </summary>
-/// <param name="player"></param>
-/// <param name="modelHandle"></param>
-std::pair<bool, VECTOR> CollisionManager::CliffGrabbing(const std::vector<std::weak_ptr<BaseObject>>& collisionObjects,
-	const VECTOR& topPosition, const VECTOR& moveDirection, const bool isFalling)
-{
-	VECTOR linePos_end = VAdd(topPosition, VScale(moveDirection, 6.0f));
-	linePos_end.y = topPosition.y - 7.0f;
-
-	//log用
-	ray_start_hanging_log = topPosition;
-	ray_end_hanging_log = linePos_end;
-
-	bool isHitHanging = false;
-	bool returnFlag = false;
-
-	//落下中にplayerの上部から出ているrayで判定を取る
-	if (isFalling)
-	{
-		for (const auto& fieldObject : collisionObjects)
-		{
-			auto collisionObject = fieldObject.lock();
-
-			MV1_COLL_RESULT_POLY poly;
-			isHitHanging = HitCheck::RayHitJudge(collisionObject->GetModelHandle(), -1, topPosition, linePos_end, poly);
-		
-			if (isHitHanging && poly.Normal.y >= 0.8f)
-			{
-				hitHangingPos = poly.HitPosition;
-				returnFlag = isHitHanging;
-				HangingPoly = poly;
-			}
-			else
-			{
-				isHitHanging = false;
-			}
-		}
-	}
-
-	return std::make_pair(returnFlag, hitHangingPos);
-	
-	//trueの場合に崖をつかむようにする
-}
-
-
-/// <summary>
-/// 球sが三角形ABCと交差している場合はtrueを返し、そうでなければfalseを返す
-/// 球の中心に対するabc上の最近接点である点pも返す
-/// </summary>
-/// <returns></returns>
-bool CollisionManager::TestSphereTriangle(VECTOR centerPos, VECTOR a, VECTOR b, VECTOR c,VECTOR& q, const float radius)
-{
-	//球の中心対する最近接点である三角形ABC上にある点pを見つける
-	q = HitCheck::ClosestPtToPointTriangle(centerPos, a, b, c);
-
-	//球と三角形が交差するのは、球の中心から点qまでの(平方した)距離が(平方した)球の半径よりも小さい場合
-	VECTOR v = VSub(q, centerPos);
-
-	return VDot(v, v) <= radius * radius;
-}
-
-VECTOR CollisionManager::PushBackCalculation_sphere_mesh(const MV1_COLL_RESULT_POLY& poly, const VECTOR& bottomPos, const VECTOR& newPlayerPos, const float& radius)
-{
-	//球と面の接触しているは球の最下部と面の接触座標と同じなのでリセット
-	hitSphere = VGet(0.0f, 0.0f, 0.0f);
-
-	////平面であればそのまま足元で計算
-	//if (poly.Normal.y >= 1.0f)
-	//{
-	//	VECTOR footPos = VGet(0.0f, bottomPos.y - positionData.radius, 0.0f);
-
-	//	newPlayerPos.y = hitPos_ground.y - footPos.y;
-
-	//	//押し戻し量が一番大きいものを加算する
-	//	if (addPos.y < newPlayerPos.y)
-	//	{
-	//		addPos = newPlayerPos;
-	//	}
-	//}
-	return hitSphere;
-}
-
-
-VECTOR CollisionManager::CalcPushBack_SphereMeshOutsideTriangle(const MV1_COLL_RESULT_POLY& poly, const VECTOR& HitPos_ground, const VECTOR& bottomPos, const float& radius)
-{
-
-	nearestPoint = Calculation::SphereMeshOutsideTriangle(poly, HitPos_ground);
-
-	//球と面の接触点を求める
-	//方向計算
-	hitSphere = VSub(nearestPoint, bottomPos);
-	hitSphere = VNorm(hitSphere);
-
-	//接触点の方向に半径を加算
-	hitSphere = VScale(hitSphere, radius);
-
-	//球の中心点から接触点の方向に半径分のベクトルを加算して球の接触点を計算
-	hitSphere = VAdd(bottomPos, hitSphere);
-
-	//面の接触座標と球の接触点で押し戻し量を計算
-	VECTOR addPos = VGet(0.0f, 0.0f, 0.0f);
-	addPos.y = nearestPoint.y - hitSphere.y;
-	return addPos;
 }
 
 /// <summary>

@@ -9,7 +9,7 @@ private:
 
 
 public:
-	static struct NearestResult
+	struct NearestResult
 	{
 		VECTOR linePos_start;
 		VECTOR linePos_end;

@@ -220,6 +220,9 @@
     <Filter Include="ソース ファイル\objectMediator">
       <UniqueIdentifier>{4da078b0-38ec-4e99-ac86-d433027f5ae1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\subSystem">
+      <UniqueIdentifier>{ecf80b3d-c4fe-462c-bda4-7c14e40b8026}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -386,6 +389,9 @@
     </ClCompile>
     <ClCompile Include="ObjectMediator.cpp">
       <Filter>ソース ファイル\objectMediator</Filter>
+    </ClCompile>
+    <ClCompile Include="SubSystem.cpp">
+      <Filter>ソース ファイル\subSystem</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -595,6 +601,12 @@
     </ClInclude>
     <ClInclude Include="MediatorInclude.h">
       <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="SubSystem.h">
+      <Filter>ソース ファイル\subSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="ISubSystem.h">
+      <Filter>ソース ファイル\Interface</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

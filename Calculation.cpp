@@ -19,7 +19,7 @@
 /// <param name="b"></param>
 /// <param name="c"></param>
 /// <returns></returns>
-float Calculation::area(const VECTOR& a, const VECTOR& b, const VECTOR& c)
+float Calculation::area(const VECTOR& a, const VECTOR& b, const VECTOR& c) 
 {
 	VECTOR AB = VSub(b, a);
 	VECTOR AC = VSub(c, a);

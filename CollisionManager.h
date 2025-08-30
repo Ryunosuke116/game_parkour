@@ -12,8 +12,6 @@ class HitCheck;
 class CollisionManager
 {
 public:
-
-
 	//////////////////////////////////////////
 	//è’ìÀîªíË
 	/////////////////////////////////////////
@@ -35,13 +33,6 @@ public:
 	void Update(BaseChara& chara,
 		const std::vector<std::weak_ptr<BaseObject>>& collisionObjects,
 		const PlayerData& playerData);
-
-	bool TestSphereTriangle(VECTOR centerPos, VECTOR a, VECTOR b, VECTOR c, VECTOR& q, const float radius);
-
-	std::pair<bool, VECTOR> CliffGrabbing(const std::vector<std::weak_ptr<BaseObject>>& collisionObjects,
-		const VECTOR& topPosition, const VECTOR& moveDirection, const bool isFalling);
-	VECTOR PushBackCalculation_sphere_mesh(const MV1_COLL_RESULT_POLY& poly, const VECTOR& bottomPos, const VECTOR& newPlayerPos, const float& radius);
-	VECTOR CalcPushBack_SphereMeshOutsideTriangle(const MV1_COLL_RESULT_POLY& poly, const VECTOR& HitPos_ground, const VECTOR& bottomPos, const float& radius);
 
 	std::pair<bool, VECTOR>GroundCollisionCheck_Hang_to_Crouch(const std::vector<std::weak_ptr<BaseObject>>& collisionObjects,
 		const VECTOR& oldPos, const VECTOR& newPos, const VECTOR& foot, const PositionData& positionData);
