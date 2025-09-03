@@ -6,6 +6,9 @@
 #include "CoinManager.h"
 #include "nlohmann/json.hpp"
 #include "MediatorInclude.h"
+#include "WorldSubSystem.h"
+#include "JsonManager.h"
+#include "PlayerManager.h"
 
 /// <summary>
 /// コンストラクタ
@@ -25,16 +28,18 @@ CoinManager::~CoinManager()
 
 void CoinManager::Create()
 {
-	std::string modelPath = jsonData["modelPath"];
+	nlohmann::json data = JsonManager::GetInstance().GetJsons("coin");
+	std::string modelPath = data["modelPath"];
 
 	modelHandle = MV1LoadModel(modelPath.c_str());
 
-	for (auto& pos : jsonData["coin_list"])
+	for (auto& pos : data["coin_list"])
 	{
 		coins.push_back(std::make_shared<CoinObject>());
 		coins.back()->Load(modelHandle,
 			VGet(pos[0].get<float>(), pos[1].get<float>(), pos[2].get<float>()));
 	}
+
 }
 
 /// <summary>
@@ -52,7 +57,7 @@ void CoinManager::Initialize()
 }
 
 
-void CoinManager::Update(ObjectMediator& objectMediator)
+void CoinManager::Update()
 {
 	//vector型内の現在位置
 	std::vector<std::shared_ptr<CoinObject>>::iterator it;
@@ -61,10 +66,10 @@ void CoinManager::Update(ObjectMediator& objectMediator)
 	{
 		//playerと当たっていたら削除する
 		if ((*it)->Update(
-			objectMediator.player->GetTopPos(),
-			objectMediator.player->GetBottomPos(),
-			objectMediator.player->GetRadius(),
-			*objectMediator.soundPlayer))
+			WorldSubSystem::Instance().GetSubSystem<PlayerManager>()->GetPlayer()->GetTopPos(),
+			WorldSubSystem::Instance().GetSubSystem<PlayerManager>()->GetPlayer()->GetBottomPos(),
+			WorldSubSystem::Instance().GetSubSystem<PlayerManager>()->GetPlayer()->GetRadius()
+			))
 		{
 			NotifyCoinPicked(coinValue);
 
@@ -75,7 +80,7 @@ void CoinManager::Update(ObjectMediator& objectMediator)
 		it++;
 	}
 
-	pos_addObject = objectMediator.camera->GetSpherePosition();
+	pos_addObject = WorldSubSystem::Instance().GetSubSystem<Camera>()->GetSpherePosition();
 }
 
 void CoinManager::Draw()

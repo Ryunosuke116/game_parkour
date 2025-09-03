@@ -9,14 +9,12 @@
 /// <param name="handle"></param>
 /// <param name="pos"></param>
 /// <param name="objectTag"></param>
-Floor_sky::Floor_sky(const int& handle, const VECTOR& pos,
-	const float& degree, const std::string& objectTag):
+Floor_sky::Floor_sky(const int modelHandle, 
+	const nlohmann::json& jsonData):
 	moveAmount(0.0f)
 {
-	modelHandle = MV1DuplicateModel(handle);
-	position_Init = pos;
-	moveDirection = Calculation::GetDirectionFromDegree(degree);
-	tag = objectTag;
+	this->modelHandle = MV1DuplicateModel(modelHandle);
+	stateData = jsonData;
 }
 
 /// <summary>
@@ -25,6 +23,25 @@ Floor_sky::Floor_sky(const int& handle, const VECTOR& pos,
 Floor_sky::~Floor_sky()
 {
 
+}
+
+void Floor_sky::Create()
+{
+	Load(stateData);
+
+}
+
+void Floor_sky::Load(const nlohmann::json& jsonData)
+{
+	const float degree = jsonData[3];
+	const std::string tag = jsonData[4].get<std::string>();
+	const VECTOR position = VGet(jsonData[0].get<float>(), 
+		jsonData[1].get<float>(),
+		jsonData[2].get<float>());
+
+	position_Init = position;
+	moveDirection = Calculation::GetDirectionFromDegree(degree);
+	this->tag = tag;
 }
 
 /// <summary>
@@ -46,7 +63,7 @@ void Floor_sky::Initialize()
 /// <summary>
 /// çXêV
 /// </summary>
-void Floor_sky::Update(ObjectMediator& objectMediator)
+void Floor_sky::Update()
 {
 	VECTOR newPos = position;
 

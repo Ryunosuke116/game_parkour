@@ -3,35 +3,38 @@
 #include <vector>
 #include <cassert>
 #include "SoundPlayer.h"
+#include "JsonManager.h"
 
 SoundPlayer::SoundPlayer()
 {
-	tag = "sound";
+
 }
 
 SoundPlayer::~SoundPlayer()
 {
+	for (auto& soundData : soundDatas)
+	{
+		DeleteSoundMem(soundData.second.handle);
+	}
 	soundDatas.clear();
 }
 
-void SoundPlayer::Create()
+void SoundPlayer::Create(const std::string& sceneName)
 {
-	for (auto& data : jsonData["list"])
+	const nlohmann::json soundData = JsonManager::GetInstance().GetJsons("sound");
+	for (auto& data : soundData["list"])
 	{
-		std::string path = data[0];
-		std::string name = data[1];
+		std::string path = data[0].get<std::string>();
+		std::string name = data[1].get<std::string>();
 		bool isLoop		 = data[2].get<bool>();
 
 		int soundHandle = LoadSoundMem(path.c_str());
-
 		soundDatas[name] =
 		{
 			LoadSoundMem(path.c_str()),
 			isLoop
 		};
 	}
-
-	handle = LoadSoundMem("material/sound/gameBGM.mp3");
 }
 
 void SoundPlayer::Play(const std::string& name)
@@ -40,13 +43,9 @@ void SoundPlayer::Play(const std::string& name)
 
 	if (it != soundDatas.end())
 	{
-		 PlaySoundMem(it->second.handle, DX_PLAYTYPE_LOOP, TRUE);
-		 CheckSoundMem(it->second.handle);
-		//	it->second.iSLoop ? DX_PLAYTYPE_LOOP : DX_PLAYTYPE_BACK);
+		 int a = PlaySoundMem(it->second.handle,
+			 it->second.iSLoop ? DX_PLAYTYPE_LOOP : DX_PLAYTYPE_BACK);
 	}
-
-	PlaySoundMem(handle, DX_PLAYTYPE_LOOP);
-
 }
 
 void SoundPlayer::Stop(const std::string& name)

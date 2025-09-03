@@ -1,6 +1,9 @@
 #include "EffectManager.h"
 #include "CoinObject.h"
 #include "MediatorInclude.h"
+#include "SoundPlayer.h"
+#include "SubSystemManager.h"
+#include <cassert>
 
 /// <summary>
 /// コンストラクタ
@@ -26,6 +29,7 @@ CoinObject::~CoinObject()
 
 /// <summary>
 /// 情報読み込み
+/// コインをマネージャーで量産する前提
 /// </summary>
 /// <param name="handle"></param>
 /// <param name="pos"></param>
@@ -34,7 +38,6 @@ void CoinObject::Load(const int& handle, const VECTOR& pos)
 	modelHandle = MV1DuplicateModel(handle);
 	position = pos;
 	MV1SetScale(modelHandle, VGet(objectScale, objectScale, objectScale));
-	soundHandle = LoadSoundMem("material/sound/coinGet.mp3");
 }
 
 /// <summary>
@@ -62,8 +65,7 @@ void CoinObject::Initialize()
 /// <returns></returns>
 bool CoinObject::Update(const VECTOR& playerpos_top,
 	const VECTOR& playerPos_bottom,
-	const float radius,
-	ISoundPlayer& soundPlayer)
+	const float radius)
 {
 	VECTOR nearCapsulePos = HitCheck::CapsuleHitConfirmation(playerpos_top, playerPos_bottom, position, radius, 4.5f);
 
@@ -72,8 +74,8 @@ bool CoinObject::Update(const VECTOR& playerpos_top,
 		hitFlag = true;
 		if (!isSound)
 		{
-			PlaySoundMem(soundHandle, DX_PLAYTYPE_BACK);
-			soundPlayer.Play("coinGet");
+			const auto& soundPlayer = SubSystemManager::GetInstance().GetSubSystem<SoundPlayer>().lock();
+			soundPlayer->Play("coinGet");
 			isSound = true;
 		}
 	}

@@ -2,18 +2,19 @@
 #include <vector>
 #include <memory>
 #include "BaseObject.h"
-#include "IObjectManager.h"
 
-class Camera : public BaseObject
+class Camera :
+	public BaseObject,
+	public std::enable_shared_from_this<Camera>
 {
 public:
 	Camera();
 	~Camera();
 
-	void Create()override {}
+	void Create()override;
 	void Load(const nlohmann::json& jsonData)override{}
 	void Initialize()override;
-	void Update(ObjectMediator& objectMediator)override;
+	void Update()override;
 	void Draw()override;
 
 	void RotateUpdate();

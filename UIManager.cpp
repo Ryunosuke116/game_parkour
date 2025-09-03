@@ -2,6 +2,7 @@
 #include <vector>
 #include <memory>
 #include "UIManager.h"
+#include "JsonManager.h"
 
 UIManager::UIManager() :
 	BaseGameObjectManager()
@@ -33,11 +34,11 @@ void UIManager::Initialize()
 	}
 }
 
-void UIManager::Update(ObjectMediator& objectMediator)
+void UIManager::Update()
 {
 	for (auto& UI : ui_list)
 	{
-		UI->Update(objectMediator);
+		UI->Update();
 	}
 }
 
@@ -51,6 +52,7 @@ void UIManager::Draw()
 
 void UIManager::Add(std::shared_ptr<BaseUI> ui)
 {
+	nlohmann::json data = JsonManager::GetInstance().GetJsons("png");
 	ui_list.push_back(ui);
-	ui_list.back()->Load(jsonData[ui_list.back()->GetJsonTag()]);
+	ui_list.back()->Load(data[ui_list.back()->GetJsonTag()]);
 }

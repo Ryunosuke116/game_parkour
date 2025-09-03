@@ -7,6 +7,8 @@
 #include "Calculation.h"
 #include "BaseObject.h"
 #include "DebugDrawer.h"
+#include "SubSystemManager.h"
+#include "WorldSubSystem.h"
 
 /// <summary>
 /// コンストラクタ
@@ -28,11 +30,16 @@ PlayerManager::~PlayerManager()
 
 void PlayerManager::Create() 
 {
+	auto self = shared_from_this();
+
 	collisionManager = std::make_shared<CollisionManager>();
 
 	player = std::make_shared<Player>();
 	actualPlayer = std::dynamic_pointer_cast<Player>(player);
-	player->Load(jsonData);
+	player->Create();
+
+	//サブシステムに追加
+	WorldSubSystem::Instance().AddSubSystem<PlayerManager>(self);
 }
 
 /// <summary>
@@ -42,19 +49,7 @@ void PlayerManager::Initialize()
 {
 	actualPlayer->Initialize();
 
-	//AABB設定
-	playerAABB.min = actualPlayer->GetPosition();
-	playerAABB.min = VGet(playerAABB.min.x - 3.5f, 
-		playerAABB.min.y,
-		playerAABB.min.z - 3.5f);
-	
-	playerAABB.max = actualPlayer->GetPosition();
-	playerAABB.max = VGet(playerAABB.max.x + 3.5f, 
-		playerAABB.max.y + 20.0f,
-		playerAABB.max.z + 3.5f);
-
 	now_playerData = { false };
-	
 }
 
 /// <summary>
@@ -62,11 +57,11 @@ void PlayerManager::Initialize()
 /// </summary>
 /// <param name="mapHandle"></param>
 /// <param name="player"></param>
-void PlayerManager::Update(ObjectMediator& objectMediator)
+void PlayerManager::Update()
 {
-	actualPlayer->Update(objectMediator);
+	actualPlayer->Update();
 
-	collisionManager->Update(*player, objectMediator.collisionObjects, actualPlayer->GetData());
+	collisionManager->Update(*player, actualPlayer->GetData());
 	
 	actualPlayer->Receive_CollisionResult();
 
@@ -74,17 +69,6 @@ void PlayerManager::Update(ObjectMediator& objectMediator)
 
 	StateConfirmation();
 
-	playerAABB.min = actualPlayer->GetPosition();
-	playerAABB.min = VGet(playerAABB.min.x - 3.5f,
-		playerAABB.min.y,
-		playerAABB.min.z - 3.5f);
-
-	playerAABB.max = actualPlayer->GetPosition();
-	playerAABB.max = VGet(playerAABB.max.x + 3.5f,
-		playerAABB.max.y + 20.0f,
-		playerAABB.max.z + 3.5f);
-	////DebugDrawer::Instance().InformationInput_AABB(playerAABB.min, playerAABB.max, GetColor(255, 0, 0));
-	
 }
 
 void PlayerManager::Update_start(const float& timer)

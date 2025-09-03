@@ -4,15 +4,15 @@
 class Floor_sky : public BaseObject
 {
 public:
-	Floor_sky(const int& handle, const VECTOR& pos,
-		const float& degree, const std::string& objectTag);
+	Floor_sky(const int modelHandle, 
+		const nlohmann::json& jsonData);
 	~Floor_sky();
 
+	void Load(const nlohmann::json& jsonData)override;
+	void Create()override;
 	void Initialize()override;
-	void Update(ObjectMediator& objectMediator)override;
+	void Update()override;
 	void Draw()override;
-	void Load(const nlohmann::json& jsonData)override{}
-	void Create()override{}
 
 
 private:
@@ -22,5 +22,6 @@ private:
 	float moveAmount;
 	VECTOR moveDirection;
 	VECTOR position_Init;
+	nlohmann::json stateData;
 };
 

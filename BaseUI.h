@@ -8,7 +8,8 @@ public:
 	~BaseUI(){}
 
 	std::string GetJsonTag() { return jsonTag; }
-	void Add()override{}
+	virtual void Add()									abstract;
+	virtual void Load(const nlohmann::json& jsonData)	abstract;
 
 protected:
 	int x;

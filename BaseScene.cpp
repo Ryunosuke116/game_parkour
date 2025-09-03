@@ -1,6 +1,9 @@
 #include "common.h"
+#include <string_view>
 #include "SceneManager.h"
 #include "BaseScene.h"
+#include "JsonManager.h"
+#include "SubSystemManager.h"
 
 /// <summary>
 /// インスタンス化
@@ -42,6 +45,12 @@ void BaseScene::Update()
 void BaseScene::Draw()
 {
 
+}
+
+void BaseScene::Shutdown()
+{
+    JsonManager::GetInstance().Shutdown();
+    SubSystemManager::GetInstance().ShutdownAll();
 }
 
 void BaseScene::ChangeScene(const std::string_view name, const int coinCount)

@@ -1,6 +1,10 @@
 #pragma once
 #include "BaseManager.h"
 #include "BlackOut.h"
+#include <memory>
+#include <vector>
+
+class TitleObjectManager;
 
 class Title : public BaseScene
 {
@@ -19,7 +23,6 @@ private:
 	int titleHandle;
 
 	bool isPush;
-
-	std::shared_ptr<BlackOut> blackOut = NULL;
+	std::shared_ptr<TitleObjectManager>	objectManager;
 };
 

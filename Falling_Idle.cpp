@@ -67,7 +67,8 @@ std::pair<VECTOR, PlayerData> Falling_Idle::Update(const VECTOR& cameraDirection
             //ì∑ëÃç¿ïW
             VECTOR centerPosition = MV1GetFramePosition(modelHandle, 2);
        
-            Calculation::NearestResult nearestResult = Calculation::SphereMeshOutsideTriangle_line(result_cliff.hangingPoly, head);
+            Calculation::NearestResult nearestResult =
+                Calculation::SphereMeshOutsideTriangle_line(result_cliff.hangingPoly, head);
             DebugDrawer::Instance().InformationInput_line(nearestResult.linePos_start, nearestResult.linePos_end, GetColor(255, 0, 0));
        
             float difference_y = nearestResult.linePos_start.y - nearestResult.linePos_end.y;

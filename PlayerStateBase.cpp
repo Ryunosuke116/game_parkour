@@ -6,6 +6,8 @@
 #include "PlayerStateBase.h"
 #include "Player.h"
 #include "DebugDrawer.h"
+#include "SubSystemManager.h"
+#include "EffectManager.h"
 
 /// <summary>
 /// コンストラクタ
@@ -100,15 +102,6 @@ bool PlayerStateBase::MotionUpdate(PlayerData& playerData)
         // アニメーションの総時間を取得
         totalTime_anim = MV1GetAttachAnimTotalTime(modelHandle, oldAnimState.AttachIndex);
 
-        // 再生時間を進める
-       // oldAnimState.PlayTime_anim += oldAnimState.PlayAnimSpeed;
-
-        // 再生時間が総時間に到達していたら再生時間をループさせる
-        if (oldAnimState.PlayTime_anim > totalTime_anim)
-        {
-            //oldAnimState.PlayTime_anim = static_cast<float>(fmod(oldAnimState.PlayTime_anim, totalTime_anim));
-        }
-
         // 変更した再生時間をモデルに反映させる
         MV1SetAttachAnimTime(modelHandle, oldAnimState.AttachIndex, oldAnimState.PlayTime_anim);
 
@@ -165,7 +158,6 @@ VECTOR PlayerStateBase::Move(const VECTOR& cameraDirection, PlayerData& playerDa
         moveDirection = VNorm(moveDirection);
         
     }
-    
 
     //前フレームと現在のフレームで入力されてなければ動いてない
     if (VSize(moveDirection_old) == 0 &&
@@ -218,6 +210,9 @@ void PlayerStateBase::JumpMove(PlayerData& playerData, Player& player)
         else if (playerData.isJump_first && !isPush &&
             !playerData.isJump_second)
         {
+            const auto effectManager = SubSystemManager::GetInstance().GetSubSystem<EffectManager>().lock();
+            effectManager->PlayEffect("jump");
+            effectManager->SetPosition(player.GetPosition(), "jump");
             if (!playerData.isJump)
             {
                 isChangeState = true;

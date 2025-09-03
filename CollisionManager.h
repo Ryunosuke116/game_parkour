@@ -31,43 +31,26 @@ public:
 		const PositionData& positionData, const PlayerData& playerData);
 
 	void Update(BaseChara& chara,
-		const std::vector<std::weak_ptr<BaseObject>>& collisionObjects,
 		const PlayerData& playerData);
 
 	std::pair<bool, VECTOR>GroundCollisionCheck_Hang_to_Crouch(const std::vector<std::weak_ptr<BaseObject>>& collisionObjects,
 		const VECTOR& oldPos, const VECTOR& newPos, const VECTOR& foot, const PositionData& positionData);
 
 	float GetTiltAngle_degree()const { return tiltAngle_degree; }
-	MV1_COLL_RESULT_POLY GetHangingPoly() const { return HangingPoly; }
 
 	bool Draw();
 private:
 	MV1_COLL_RESULT_POLY hitPoly_Ground;
-	MV1_COLL_RESULT_POLY oldPoly;
-	MV1_COLL_RESULT_POLY HangingPoly;
 	MV1_COLL_RESULT_POLY rayPoly_ground_now;
 
 	MV1_COLL_RESULT_POLY_DIM hitPoly_Wall;
 
 	VECTOR hitPos_head;
-	VECTOR subPos;
-	VECTOR normal;
 	VECTOR hitPos_ground;
-	VECTOR playerCenterPos;
-	VECTOR pos_now;
-	VECTOR pos_new;
-	VECTOR nearestPoint;
-	VECTOR hitSphere;
-	VECTOR topPos_ray;
-	VECTOR bottomPos_ray;
-	VECTOR hitHangingPos;
-	VECTOR projection_ray_start;
-	VECTOR projection_ray_end;
 
 	VECTOR ray_start_hanging_log;
 	VECTOR ray_end_hanging_log;
 	float tiltAngle_degree;
-
 
 	PositionData positionData;
 

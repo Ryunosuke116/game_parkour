@@ -48,7 +48,7 @@ void GameTimer::Initialize()
 /// <summary>
 /// XVˆ—
 /// </summary>
-void GameTimer::Update(ObjectMediator& objectMediator)
+void GameTimer::Update()
 {
 	const int subMin = 1;
 	const int maxSec = 60;

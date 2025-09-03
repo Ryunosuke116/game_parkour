@@ -21,7 +21,6 @@ public:
 	std::string GetJsonTag() { return jsonTag; }
 
 private:
-
 	std::vector<std::shared_ptr<BaseUI>> ui_list;
 
 	int modelHandle;
@@ -33,11 +32,8 @@ private:
 	int coin_x;
 	int coin_y;
 
-
 	std::string num;
 	std::string jsonTag;
 
 	bool isPush;
-
-	std::shared_ptr<BlackOut> blackOut = NULL;
 };

@@ -53,7 +53,7 @@ void UI_coin::Initialize()
 	coinCount = 0;
 }
 
-void UI_coin::Update(ObjectMediator& objectMediator)
+void UI_coin::Update()
 {
 	countNumber = std::to_string(coinCount);
 

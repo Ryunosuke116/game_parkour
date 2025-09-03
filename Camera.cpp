@@ -6,7 +6,8 @@
 #include "Camera.h"
 #include "Calculation.h"
 #include "DebugDrawer.h"
-#include "MediatorInclude.h"
+#include "WorldSubSystem.h"
+#include "PlayerManager.h"
 
 /// <summary>
 /// インストラクタ
@@ -33,9 +34,6 @@ Camera::Camera():
 
 	//奥行0.1～1000までをカメラの描画範囲とする
 	SetCameraNearFar(3.5f, 5000.0f);
-
-	// DXライブラリのカメラとEffekseerのカメラを同期する。
-	Effekseer_Sync3DSetting();
 }
 
 /// <summary>
@@ -44,6 +42,13 @@ Camera::Camera():
 Camera::~Camera()
 {
 
+}
+
+void Camera::Create()
+{
+	const auto self = shared_from_this();
+	//サブシステムに追加
+	WorldSubSystem::Instance().AddSubSystem<Camera>(self);
 }
 
 /// <summary>
@@ -63,18 +68,18 @@ void Camera::Initialize()
 /// <summary>
 /// 更新
 /// </summary>
-void Camera::Update(ObjectMediator& objectMediator)
+void Camera::Update()
 {
-	centerPos = objectMediator.player->GetPosition();
+	centerPos = WorldSubSystem::Instance().GetSubSystem<PlayerManager>()->GetPosition();
 	centerPos.y += 15.0f;
 
 	DistanceUpdate();
 
-	AngleUpdate(objectMediator.player->GetAngle());
+	AngleUpdate(WorldSubSystem::Instance().GetSubSystem<PlayerManager>()->GetAngle());
 
 	RotateUpdate();
 
-	for (const auto& fieldObject : objectMediator.collisionObjects)
+	for (const auto& fieldObject : WorldSubSystem::Instance().GetSubSystem<CollisionObjectManager>()->GetCollisionObjects())
 	{
 		auto collisionObject = fieldObject.lock();
 		CameraPosCalc(collisionObject->GetModelHandle());

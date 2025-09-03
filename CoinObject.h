@@ -13,11 +13,10 @@ public:
 	~CoinObject();
 
 	void Initialize()override;
-	void Update(ObjectMediator& objectMediator)override {}
+	void Update()override {}
 	bool Update(const VECTOR& playerPos,
 		const VECTOR& playerPos_bottom,
-		const float radius,
-		ISoundPlayer& soundPlayer);
+		const float radius);
 	void Draw()override;
 	void Load(const nlohmann::json& jsonData)override{}
 	void Create()override{}
@@ -37,7 +36,6 @@ private:
 	bool isSound;
 	float radian_Y;
 	float velocity_Y;
-	int soundHandle;
 
 	static constexpr float radius = 4.5f;
 	static constexpr float objectScale = 0.3f;

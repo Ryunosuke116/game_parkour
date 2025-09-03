@@ -10,8 +10,8 @@ public:
 	BaseChara();
 	~BaseChara();
 
+	virtual void Load(const nlohmann::json& jsonData)abstract;
 	void Draw()override;
-	void Add()override{}
 
 	void UpdateAngle(const VECTOR& direction);
 	void PositionUpdate();

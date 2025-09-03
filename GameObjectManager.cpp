@@ -3,6 +3,9 @@
 #include <memory>
 #include "GameObjectManager.h"
 #include "DebugDrawer.h"
+#include "CollisionObjectManager.h"
+#include "SubSystemManager.h"
+#include "BlackOut.h"
 
 /// <summary>
 /// コンストラクタ
@@ -30,7 +33,6 @@ GameObjectManager::~GameObjectManager()
 void GameObjectManager::Create()
 {
 	//vector型.atを使うとき用
-	const int effectManagerNumber = 0;
 	const int playerManagerNumber = 1;
 	const int uiManagerNumber = 2;
 	const int coinManagerNumber = 3;
@@ -38,27 +40,6 @@ void GameObjectManager::Create()
 	const int shadowObjectNumber = 3;
 
 	//生成
-	//collisionObjectの生成
-	collisionObjects.push_back(std::make_shared<FieldMesh>());
-	collisionObjects.back()->Load(JsonManager::Instance().GetJsons(collisionObjects.back()->GetJsonTag()));
-	
-	//floor_skyを追加
-	nlohmann::json data_floor_sky = JsonManager::Instance().GetJsons("floor_sky");
-	std::string path_floor_sky = data_floor_sky["modelPath"];
-	for (auto& data : data_floor_sky["list"])
-	{
-		int modelHandle = MV1LoadModel(path_floor_sky.c_str());
-		float degree = data[3];
-		std::string tag = data[4].get<std::string>();
-
-		collisionObjects.push_back(std::make_shared<Floor_sky>(
-			modelHandle,
-			VGet(data[0], data[1], data[2]),
-			degree,
-			tag
-		));
-	}
-
 	//object生成
 	objects.push_back(std::make_shared<SkyBox>());
 	objects.push_back(std::make_shared<Field>());
@@ -68,18 +49,14 @@ void GameObjectManager::Create()
 	layout				= std::make_shared<Layout>();
 	tutorial			= std::make_shared<Tutorial>();
 	finishCut			= std::make_shared<FinishCut>();
-	soundPlayer			= std::make_shared<SoundPlayer>();
 
 	//managerの生成
-	managers.push_back(std::make_shared<EffectManager>());
+	managers.push_back(std::make_shared<CollisionObjectManager>());
 	managers.push_back(std::make_shared<PlayerManager>());
 	managers.push_back(std::make_shared<UIManager>());
 	managers.push_back(std::make_shared<CoinManager>());
 	
-	
 	//アップキャスト
-	std::shared_ptr<BaseGameObjectManager> soundPlayer_actual = std::dynamic_pointer_cast<SoundPlayer>(soundPlayer);
-	effectManager			 = std::dynamic_pointer_cast<EffectManager>(managers.at(effectManagerNumber));
 	playerManager_actual = std::dynamic_pointer_cast<PlayerManager>(managers.at(playerManagerNumber));
 	uiManager_actual = std::dynamic_pointer_cast<UIManager>(managers.at(uiManagerNumber));
 	coinManager_actual = std::dynamic_pointer_cast<CoinManager>(managers.at(coinManagerNumber));
@@ -88,11 +65,9 @@ void GameObjectManager::Create()
 	//Jsonデータを取得
 	for (auto& manager : managers)
 	{
-		manager->HandOver(JsonManager::Instance().GetJsons(manager->GetTag()));
 		manager->Create();
 	}
-	soundPlayer_actual->HandOver(JsonManager::Instance().GetJsons(soundPlayer_actual->GetTag()));
-
+	
 	//コインオブザーバーに追加
 	coinManager_actual->AddObserver(playerManager_actual->GetPlayer());
 	coinManager_actual->AddObserver(uiManager_actual->GetUI_coin());
@@ -102,26 +77,14 @@ void GameObjectManager::Create()
 
 	camera_actual = std::dynamic_pointer_cast<Camera>(objects.at(cameraObjectNumber));
 
-	objectMediator = std::make_shared<ObjectMediator>(
-		*soundPlayer,
-		*effectManager,
-		*playerManager_actual->GetPlayer(),
-		*camera_actual,
-		collisionObjects);
-
 	//ロード
 	for (auto& object : objects)
 	{
-		if (object->GetJsonTag() == "")continue;
-		object->Load(JsonManager::Instance().GetJsons(object->GetJsonTag()));
+		object->Create();
 	}
 
-	tutorial->Load(JsonManager::Instance().GetJsons(tutorial->GetTag()));
-	finishCut->Load(JsonManager::Instance().GetJsons(finishCut->GetTag()));
-	soundPlayer->Create();
-
-	soundHandle = LoadSoundMem("material/sound/gameBGM.mp3");
-	ChangeVolumeSoundMem(125, soundHandle);
+	tutorial->Load(JsonManager::GetInstance().GetJsons(tutorial->GetTag()));
+	finishCut->Load(JsonManager::GetInstance().GetJsons(finishCut->GetTag()));
 }
 
 /// <summary>
@@ -129,11 +92,6 @@ void GameObjectManager::Create()
 /// </summary>
 void GameObjectManager::Initialize()
 {
-	for (auto& fieldObject : collisionObjects)
-	{
-		fieldObject->Initialize();
-	}
-
 	for (auto& manager : managers)
 	{
 		manager->Initialize();
@@ -195,19 +153,14 @@ void GameObjectManager::Update()
 
 		if (!isCamera)
 		{
-			for (auto& collisionObject : collisionObjects)
-			{
-				collisionObject->Update(*objectMediator);
-			}
-
 			for (auto& object : objects)
 			{
-				object->Update(*objectMediator);
+				object->Update();
 			}
 
 			for (auto& manager : managers)
 			{
-				manager->Update(*objectMediator);
+				manager->Update();
 			}
 
 		}
@@ -216,9 +169,7 @@ void GameObjectManager::Update()
 			camera_actual->Update_layout();
 			//layout->Update(camera_actual->GetSpherePosition(), *coinManager_actual);
 		}
-
-		effectManager->PlayEffectUpdate();
-
+		
 		//ゴール判定
 		if (uiManager_actual->GetGameTimer()->IsFinish() &&
 			!isStream_finishPicture)
@@ -231,13 +182,27 @@ void GameObjectManager::Update()
 
 void GameObjectManager::StartUpdate()
 {
-	if (stream_startPicture_timer >= 50.0f)
+	const int minAlpha = 0;
+	const int addAlpha = 5;
+	const float maxTimer = 50.0f;
+
+	if (BlackOut::GetInstance().GetIsLightChange())
+	{
+		BlackOut::GetInstance().LightChangeUpdate(addAlpha);
+
+		BlackOut::GetInstance().GetAlpha() <= minAlpha ?
+			BlackOut::GetInstance().SetIsLightChange(false) :
+			BlackOut::GetInstance().SetIsLightChange(true);
+	}
+
+	if (stream_startPicture_timer >= maxTimer)
 	{
 		isStream_startPicture = tutorial->Update();
 		stream_startPicture_timer++;
 
 		if (!isStream_startPicture)
 		{
+			const auto soundPlayer = SubSystemManager::GetInstance().GetSubSystem<SoundPlayer>().lock();
 			uiManager_actual->GetGameTimer()->ResetSetTime();
 			soundPlayer->Play("gameBGM");
 		}
@@ -246,7 +211,7 @@ void GameObjectManager::StartUpdate()
 	{
 		stream_startPicture_timer++;
 		playerManager_actual->Update_start(stream_startPicture_timer);
-		camera_actual->Update(*objectMediator);
+		camera_actual->Update();
 	}
 }
 
@@ -254,12 +219,25 @@ void GameObjectManager::FinishUpdate()
 {
 	if (isStream_finishPicture)
 	{
-		isGoal = finishCut->Update();
+		BlackOut::GetInstance().SetIsLightChange(finishCut->Update());
+
+		if (BlackOut::GetInstance().GetIsLightChange())
+		{
+			const int maxAlpha = 0;
+			const int addAlpha = 5;
+			BlackOut::GetInstance().BlackOutUpdate(addAlpha);
+
+			BlackOut::GetInstance().GetAlpha() <= maxAlpha ?
+				isGoal = true :
+				isGoal = false;
+		}
+
 		playerManager_actual->Update_finish(stream_startPicture_timer);
-		camera_actual->Update(*objectMediator);
+		camera_actual->Update();
 		if (isGoal)
 		{
-			StopSoundMem(soundHandle);
+			auto soundPlayer = SubSystemManager::GetInstance().GetSubSystem<SoundPlayer>().lock();
+			soundPlayer->Stop("gameBGM");
 		}
 	}
 }
@@ -292,11 +270,6 @@ void GameObjectManager::Draw()
 		object->Draw();
 	}
 
-	for (auto& fieldObject : collisionObjects)
-	{
-		fieldObject->Draw();
-	}
-
 	for (auto& manager : managers)
 	{
 		if (auto uiManager = std::dynamic_pointer_cast<UIManager>(manager) &&
@@ -318,6 +291,8 @@ void GameObjectManager::Draw()
 	tutorialDraw();
 
 	finishCut->Draw();
+
+	BlackOut::GetInstance().Draw();
 
 	//DrawLine3D(VGet(0.0f, 15.0f, 0.0f), VGet(10.0f, 15.0f, 0.0f), GetColor(255, 0, 0));
 	//DrawLine3D(VGet(0.0f, 15.0f, 0.0f), VGet(0.0f, 25.0f, 0.0f), GetColor(0, 255, 0));

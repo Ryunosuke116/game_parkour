@@ -18,7 +18,7 @@ public:
 
 	void Create()override;
 	void Initialize()override;
-	void Update(ObjectMediator& objectMediator)override;
+	void Update()override;
 	void Draw()override;
 	void Add()override;
 

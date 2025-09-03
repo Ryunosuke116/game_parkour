@@ -9,9 +9,10 @@ public:
 	~UI_controlManual();
 
 	void Create()override {}
+	void Add()override{}
 	void Load(const nlohmann::json& jsonData)override;
 	void Initialize()override;
-	void Update(ObjectMediator& objectMediator)override;
+	void Update()override;
 	void Draw()override;
 
 	void OnChangeState(const PlayerData& playerData)override;

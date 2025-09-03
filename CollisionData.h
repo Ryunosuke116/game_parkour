@@ -17,6 +17,7 @@ struct PositionData
 	VECTOR position_bottom_Capsule;
 	VECTOR position_top_ray;
 	VECTOR position_bottom_ray;
+	VECTOR oldPosition;
 };
 
 struct HangingData

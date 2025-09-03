@@ -6,7 +6,6 @@ class Player;
 class AnimationChanger
 {
 public:
-
 	AnimationChanger();
 	~AnimationChanger();
 
@@ -21,11 +20,8 @@ public:
 		PlayerData& playerData, Player& player);
 	int GetAnimNumber_now() { return animNumber_Now; }
 
-
 private:
-
 	int animNumber_Now;
-	int soundHandle;
 
 	PlayerStateBase::AnimState oldAnimState;
 	PlayerStateBase::AnimState nowAnimState;

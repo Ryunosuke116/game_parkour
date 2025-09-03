@@ -28,14 +28,12 @@ public:
 	int GetCoinCount() { return playerManager_actual->GetCoinCount(); }
 
 private:
-	std::vector<std::shared_ptr<BaseObject>>			collisionObjects;
 	std::vector<std::shared_ptr<BaseGameObjectManager>> managers;
 	std::vector <std::shared_ptr<BaseObject>>				objects;
 
 	std::shared_ptr<Layout>					layout				= NULL;
 	std::shared_ptr<Tutorial>				tutorial			= NULL;
 	std::shared_ptr<FinishCut>				finishCut			= NULL;
-	std::shared_ptr<ISoundPlayer>			soundPlayer			= NULL;
 
 	std::shared_ptr<PlayerManager>	playerManager_actual		= NULL;
 	std::shared_ptr<CoinManager>	coinManager_actual			= NULL;
@@ -44,11 +42,9 @@ private:
 	std::shared_ptr<Shadow>			 shadow_actual				= NULL;
 	std::shared_ptr<Camera>			camera_actual				= NULL;
 	std::shared_ptr<IEffectManager>  effectManager				= NULL;
-	std::shared_ptr<ObjectMediator> objectMediator				= NULL;
 
 	int tutorialHandle;
 	int startHandle;
-	int soundHandle;
 
 	bool isCamera;
 	bool isPush;

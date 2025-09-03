@@ -22,7 +22,6 @@ FinishCut::~FinishCut()
 
 void FinishCut::Load(const nlohmann::json& jsonData)
 {
-
 	std::unordered_map<std::string, std::string> finishPath;
 
 	for (auto& data : jsonData["finish"])
@@ -33,10 +32,7 @@ void FinishCut::Load(const nlohmann::json& jsonData)
 		finishPath[name] = path;
 	}
 
-
 	finishHandle = LoadGraph(finishPath.at("finish").c_str());
-
-
 }
 
 void FinishCut::Initialize()

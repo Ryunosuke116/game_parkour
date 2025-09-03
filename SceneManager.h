@@ -28,7 +28,6 @@ public:
 
     void ChangeScene(std::string_view name, const int coinCount);
 private:
-
     std::unordered_map<std::string_view, BaseScene*>scenes;
 
     BaseScene* nowScene;

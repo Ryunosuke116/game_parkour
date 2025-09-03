@@ -1,0 +1,6 @@
+{
+  "list": [
+    [ "material/sound/button.mp3", "button", false ],
+    [ "material/sound/titleBGM.mp3", "titleBGM", true ]
+  ]
+}

@@ -1,8 +1,8 @@
 #include "common.h"
 #include <cassert>
-
 #include "BaseScene.h"
 #include "SceneManager.h"
+#include "SubSystemManager.h"
 
 SceneManager::SceneManager() :nowScene{ nullptr } {}
 
@@ -12,6 +12,7 @@ SceneManager::~SceneManager()
 	{
 		delete pair.second;
 	}
+	SubSystemManager::GetInstance().ShutdownAll();
 }
 
 
@@ -19,6 +20,7 @@ void SceneManager::ChangeScene(const std::string_view name, const int coinCount)
 {
 	try
 	{
+		nowScene->Shutdown();
 		nowScene = scenes.at(name);
 		nowScene->SetCoinCount(coinCount);
 		nowScene->Create();
@@ -38,10 +40,12 @@ void SceneManager::Initialize()
 void SceneManager::Update()
 {
 	nowScene->Update();
+	SubSystemManager::GetInstance().Update();
 }
 
 void SceneManager::Draw()
 {
 	nowScene->Draw();
+	SubSystemManager::GetInstance().Draw();
 }
 

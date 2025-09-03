@@ -144,6 +144,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AnimationChanger.cpp" />
+    <ClCompile Include="BackGround.cpp" />
     <ClCompile Include="BaseChara.cpp" />
     <ClCompile Include="BaseGameObjectManager.cpp" />
     <ClCompile Include="BaseManager.cpp" />
@@ -157,6 +158,7 @@
     <ClCompile Include="CoinManager.cpp" />
     <ClCompile Include="CoinObject.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
+    <ClCompile Include="CollisionObjectManager.cpp" />
     <ClCompile Include="DebugDrawer.cpp" />
     <ClCompile Include="EffectManager.cpp" />
     <ClCompile Include="Falling_Idle.cpp" />
@@ -192,16 +194,19 @@
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="Shadow.cpp" />
     <ClCompile Include="SoundPlayer.cpp" />
-    <ClCompile Include="SubSystem.cpp" />
+    <ClCompile Include="SubSystemManager.cpp" />
     <ClCompile Include="Title.cpp" />
+    <ClCompile Include="TitleObjectManager.cpp" />
     <ClCompile Include="Tutorial.cpp" />
     <ClCompile Include="UIManager.cpp" />
     <ClCompile Include="UI_coin.cpp" />
     <ClCompile Include="UI_controlManual.cpp" />
     <ClCompile Include="Walk.cpp" />
+    <ClCompile Include="WorldSubSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnimationChanger.h" />
+    <ClInclude Include="BackGround.h" />
     <ClInclude Include="BaseChara.h" />
     <ClInclude Include="BaseGameObjectManager.h" />
     <ClInclude Include="BaseManager.h" />
@@ -217,6 +222,7 @@
     <ClInclude Include="CoinObserver.h" />
     <ClInclude Include="CollisionData.h" />
     <ClInclude Include="CollisionManager.h" />
+    <ClInclude Include="CollisionObjectManager.h" />
     <ClInclude Include="DebugDrawer.h" />
     <ClInclude Include="EffectData.h" />
     <ClInclude Include="EffectManager.h" />
@@ -265,26 +271,28 @@
     <ClInclude Include="common.h" />
     <ClInclude Include="Shadow.h" />
     <ClInclude Include="SoundPlayer.h" />
-    <ClInclude Include="SubSystem.h" />
+    <ClInclude Include="SubSystemManager.h" />
     <ClInclude Include="Title.h" />
+    <ClInclude Include="TitleObjectManager.h" />
     <ClInclude Include="Tutorial.h" />
     <ClInclude Include="UIManager.h" />
     <ClInclude Include="UI_coin.h" />
     <ClInclude Include="UI_controlManual.h" />
     <ClInclude Include="Walk.h" />
+    <ClInclude Include="WorldSubSystem.h" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="Json\player.Json" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Json\coin.Json" />
-    <None Include="Json\effectData.Json" />
-    <None Include="Json\field.Json" />
-    <None Include="Json\floor_sky.Json" />
-    <None Include="Json\object.Json" />
-    <None Include="Json\sound.Json" />
-    <None Include="Json\tutorial.Json" />
-    <None Include="Json\png.Json" />
+    <None Include="JsonGame\coin.Json" />
+    <None Include="JsonGame\effectData.Json" />
+    <None Include="JsonGame\field.Json" />
+    <None Include="JsonGame\floor_sky.Json" />
+    <None Include="JsonGame\object.Json" />
+    <None Include="JsonGame\player.Json" />
+    <None Include="JsonGame\png.Json" />
+    <None Include="JsonGame\sound.Json" />
+    <None Include="JsonGame\tutorial.Json" />
+    <None Include="JsonTitle\png.Json" />
+    <None Include="JsonTitle\sound.Json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

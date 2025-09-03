@@ -1,32 +1,27 @@
 #pragma once
 #include "ISoundPlayer.h"
 #include "BaseGameObjectManager.h"
+#include "ISubSystem.h"
 
 class SoundPlayer : 
-	public ISoundPlayer,
-	public BaseGameObjectManager
+	public ISubSystem
 {
 public:
 
 	SoundPlayer();
 	~SoundPlayer();
 
-	void Create()override;
-	void Initialize()override {}
-	void Update(ObjectMediator& objectMediator)override {}
+	void Create(const std::string& sceneName)override;
+	void Shutdown()override {}
+	void Update()override {}
 	void Draw()override{}
-	void Add()override {}
-	void Play(const std::string& name)override;
-	void Stop(const std::string& name)override;
+	void Play(const std::string& name);
+	void Stop(const std::string& name);
 
 private:
 
 	struct SoundData
 	{
-		~SoundData()
-		{
-			DeleteSoundMem(handle);
-		}
 		int handle;
 		bool iSLoop;
 	};

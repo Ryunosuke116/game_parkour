@@ -18,7 +18,7 @@ public:
 	std::string GetJsonTag() { return jsonTag; }
 	const VECTOR GetPos_difference() { return pos_difference; }
 
-	void Add()override{}
+	virtual void Load(const nlohmann::json& jsonData)	abstract;
 
 protected:
 	int modelHandle;

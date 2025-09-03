@@ -7,19 +7,23 @@
 #include "CollisionManager.h"
 #include "BaseChara.h"
 #include "DebugDrawer.h"
+#include "WorldSubSystem.h"
 
 /// @brief 更新
 /// @param player 
 /// @param modelHandle 
 /// @return 
-void CollisionManager::Update(BaseChara& chara,
-	const std::vector<std::weak_ptr<BaseObject>>& collisionObjects,
+void CollisionManager::Update(
+	BaseChara& chara,
 	const PlayerData& playerData)
 {
 	if (chara.GetIsCollisionCheck())
 	{
-		chara.SetCollision_result(Check_all(collisionObjects,
-			chara.GetPosition(), chara.GetMoveVec(), chara.GetRadius(),
+		chara.SetCollision_result(
+			Check_all(WorldSubSystem::Instance().GetSubSystem<CollisionObjectManager>()->GetCollisionObjects(),
+				chara.GetPosition(),
+				chara.GetMoveVec(),
+				chara.GetRadius(),
 			chara.GetPositionData(),playerData));
 	}
 
@@ -39,8 +43,6 @@ CollisionResult CollisionManager::Check_all(
 	const VECTOR& playerPos, const VECTOR& moveVec, const float& radius,
 	const PositionData& positionData,const PlayerData& playerData)
 {
-	
-
 	VECTOR oldPos = playerPos;
 	VECTOR newPos = VAdd(oldPos, moveVec);
 	VECTOR moveVec_new = VGet(0.0f, 0.0f, 0.0f);
@@ -61,14 +63,14 @@ CollisionResult CollisionManager::Check_all(
 		moveVec_new = VScale(moveVec_new, size);
 
 		newPos = VAdd(oldPos, moveVec_new);
-
-		projection_ray_start = newPos;
-		projection_ray_end = VAdd(newPos, VScale(VNorm(moveVec_new),20.0f));
 	}
 	else
 	{
 		moveVec_new = moveVec;
 	}
+	VECTOR projection_ray_start = newPos;
+	VECTOR projection_ray_end = VAdd(newPos, VScale(VNorm(moveVec_new), 20.0f));
+
 	DebugDrawer::Instance().InformationInput_line(projection_ray_start, projection_ray_end, GetColor(255, 0, 255));
 
 	CollisionResult result;
@@ -153,7 +155,6 @@ bool CollisionManager::HeadCollisionCheck(const std::vector<std::weak_ptr<BaseOb
 
 					VECTOR hitPos_sphere = VAdd(position_top_new, hitDirection);
 
-
 					newAddPos.y = hitPos_head.y - hitPos_sphere.y;
 				}
 
@@ -193,8 +194,6 @@ std::pair<bool, std::string> CollisionManager::GroundCollisionCheck(const std::v
 	VECTOR position_top_new = VAdd(positionData.position_top_ray, moveVec);
 	VECTOR position_bottom_new = VAdd(positionData.position_bottom_ray, moveVec);
 
-	topPos_ray = position_top_new;
-	bottomPos_ray = position_bottom_new;
 	MV1_COLL_RESULT_POLY rayPoly_ground;
 
 	for (const auto& fieldObject : collisionObjects)
@@ -301,7 +300,6 @@ std::pair<bool, VECTOR> CollisionManager::WallCollisionCheck(const std::vector<s
 	VECTOR& newPos, const VECTOR& moveVec, const PositionData& positionData,
 	const float& radius)
 {
-
 	VECTOR position_top_new = VAdd(positionData.position_top_Capsule, moveVec);
 	VECTOR position_bottom_new = VAdd(positionData.position_bottom_Capsule, moveVec);
 	VECTOR capsule_axis_top = VAdd(positionData.position_top_ray, moveVec);					//カプセルの軸
@@ -315,7 +313,10 @@ std::pair<bool, VECTOR> CollisionManager::WallCollisionCheck(const std::vector<s
 		auto collisionObject = fieldObject.lock();
 
 		//壁と衝突しているか
-		HitCheck::CapsuleHitWallJudge(collisionObject->GetModelHandle(), -1, radius, position_top_new,
+		HitCheck::CapsuleHitWallJudge(collisionObject->GetModelHandle(),
+			-1, 
+			radius, 
+			position_top_new,
 			VAdd(position_bottom_new, VGet(0.0f, 1.0f, 0.0f)), hitPoly_Wall);
 
 		//衝突しているとこを全部調べて押し戻し量を計算する
@@ -332,6 +333,8 @@ std::pair<bool, VECTOR> CollisionManager::WallCollisionCheck(const std::vector<s
 				float degree_x = Calculation::radToDeg(poly.Normal.x);
 				float degree_z = Calculation::radToDeg(poly.Normal.z);
 
+				capsule_axis_top = VGet(newPos.x, capsule_axis_top.y, newPos.z);
+				capsule_axis_bottom = VGet(newPos.x, capsule_axis_bottom.y, newPos.z);
 
 				//壁かどうかを調べる
 				if ((poly.Normal.x >= 0.7f || poly.Normal.z >= 0.7f ||
@@ -346,41 +349,39 @@ std::pair<bool, VECTOR> CollisionManager::WallCollisionCheck(const std::vector<s
 						capsule_axis_bottom.y,
 						newPos.z);
 
-					normal = poly.Normal;
-					normal.y = 0.0f;
-					normal = VNorm(normal);
-
 					//面の接触点と
 					// プレイヤーのy軸の線分の
 					// 面に対して一番近い点を調べる
-					auto result = HitCheck::SegmentTriangleDistance(capsule_axis_top,
+					auto result = HitCheck::SegmentTriangleDistance(
+						capsule_axis_top,
 						capsule_axis_bottom,
 						poly.Position[0],
 						poly.Position[1],
 						poly.Position[2],
 						poly.Normal);
 
-					VECTOR line_segment_point_closestSurface = result.first;		//面と一番近い線分点
-					VECTOR hittingPoint_surface = result.second;					//面との接触点
+					VECTOR lineSegmentPointClosestSurface = result.first;		//面と一番近い線分点
+					VECTOR hittingPointSurface = result.second;					//面との接触点
 
-					DebugDrawer::Instance().InformationInput_sphere(line_segment_point_closestSurface, 2.0f, GetColor(255, 255, 255));
-					DebugDrawer::Instance().InformationInput_sphere(hittingPoint_surface, 2.0f, GetColor(0, 0, 0));
-
+					DebugDrawer::Instance().InformationInput_sphere(lineSegmentPointClosestSurface, 2.0f, GetColor(255, 255, 255));
+					DebugDrawer::Instance().InformationInput_sphere(hittingPointSurface, 2.0f, GetColor(0, 0, 0));
 
 					//カプセルの半径分
 					VECTOR addPos = VScale(poly.Normal, -3.5f);
 					addPos.y = 0.0f;
 
-					//面と一番近い線分点からカプセルの半径分、
+					//面と一番近い線分の点からカプセルの半径分、
 					//壁に向かって線を伸ばす
-					VECTOR capsulePos = VAdd(line_segment_point_closestSurface, addPos);
+					VECTOR newCapsulePos = VAdd(lineSegmentPointClosestSurface, addPos);
+					VECTOR oldCapsulePos = positionData.oldPosition;
+					oldCapsulePos.y = lineSegmentPointClosestSurface.y;
 					MV1_COLL_RESULT_POLY poly_ray;
 
 					//カプセルの外側から軸にむかってrayCastする
 					HitCheck::RayHitJudge(collisionObject->GetModelHandle(),
 						-1, 
-						capsulePos,
-						line_segment_point_closestSurface,
+						oldCapsulePos,
+						newCapsulePos,
 						poly_ray);
 
 					//rayが当たっている場合当たった座標で衝突判定
@@ -388,9 +389,9 @@ std::pair<bool, VECTOR> CollisionManager::WallCollisionCheck(const std::vector<s
 					{
 						//rayの衝突座標と面に対して一番近い線分点で
 						// 押し戻し量を求める
-						VECTOR velocity = VSub(poly_ray.HitPosition, capsulePos);
+						VECTOR velocity = VSub(poly_ray.HitPosition, newCapsulePos);
 						velocity.y = 0.0f;
-						hittingPoint_surface.y = 0.0f;
+						hittingPointSurface.y = 0.0f;
 
 						newPos = VAdd(newPos, velocity);
 
@@ -440,13 +441,13 @@ bool CollisionManager::Draw()
 
 	/*printfDx("tiltAngle_degree %f\n", tiltAngle_degree);*/
 
-	DrawSphere3D(hitPos_ground, 2.0f, 30, GetColor(0, 0, 0),
+	/*DrawSphere3D(hitPos_ground, 2.0f, 30, GetColor(0, 0, 0),
 		GetColor(255, 0, 0), FALSE);
 
 	DrawSphere3D(hitPos_head, 2.0f, 30, GetColor(0, 0, 0),
 		GetColor(0, 0, 255), FALSE);
 	DrawSphere3D(hitHangingPos, 2.0f, 30, GetColor(0, 0, 0),
-		GetColor(0, 255, 0), FALSE);
+		GetColor(0, 255, 0), FALSE);*/
 
 	/*DrawSphere3D(projection_ray_start, 2.0f, 30, GetColor(0, 0, 0),
 		GetColor(0, 255, 0), FALSE);

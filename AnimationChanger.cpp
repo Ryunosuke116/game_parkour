@@ -4,11 +4,11 @@
 #include "PadInput.h"
 #include "AnimationChanger.h"
 #include "Player.h"
+#include "SubSystemManager.h"
+#include "SoundPlayer.h"
 
 AnimationChanger::AnimationChanger()
 {
-    soundHandle = LoadSoundMem("material/sound/dash.mp3");
-    ChangeVolumeSoundMem(155, soundHandle);
 }
 
 AnimationChanger::~AnimationChanger()
@@ -41,6 +41,8 @@ std::shared_ptr<PlayerStateBase> AnimationChanger::ChangeState(int& modelHandle,
     std::shared_ptr<PlayerStateBase>& nowState)
 {
     std::shared_ptr<PlayerStateBase> newState = nullptr;
+    const auto soundPlayer = 
+        SubSystemManager::GetInstance().GetSubSystem<SoundPlayer>().lock();
 
     //—§‚¿
     if (playerData.isIdle && 
@@ -92,7 +94,7 @@ std::shared_ptr<PlayerStateBase> AnimationChanger::ChangeState(int& modelHandle,
 
         newState->SetAnimNumber_old(animNumber_Now);
         animNumber_Now = animNum::run;
-        PlaySoundMem(soundHandle, DX_PLAYTYPE_LOOP);
+        soundPlayer->Play("dash");
     }
 
     //ƒWƒƒƒ“ƒv
@@ -218,7 +220,7 @@ std::shared_ptr<PlayerStateBase> AnimationChanger::ChangeState(int& modelHandle,
         newState->Enter(playerData);
         if (!playerData.isRun)
         {
-            StopSoundMem(soundHandle);
+            soundPlayer->Stop("dash");
         }
         return newState;
     }

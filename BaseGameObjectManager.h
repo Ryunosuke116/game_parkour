@@ -15,7 +15,7 @@ public:
 		jsonData = j;
 	}
 
-	void Load(const nlohmann::json& jsonData)override {}
+	virtual void Add()abstract;
 
 	std::string GetTag() { return tag; }
 

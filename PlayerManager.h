@@ -3,11 +3,15 @@
 #include "HitCheck.h"
 #include "PlayerStateObserver.h"
 #include "ISoundPlayer.h"
+#include "BaseChara.h"
 
+class CollisionManager;
 class EffectManager;
 class BaseObject;
 
-class PlayerManager : public BaseGameObjectManager
+class PlayerManager :
+	public BaseGameObjectManager,
+	public std::enable_shared_from_this<PlayerManager>
 {
 public:
 	PlayerManager();
@@ -18,7 +22,7 @@ public:
 
 	void Create()		override;
 	void Initialize()	override;
-	void Update(ObjectMediator& objectMediator)		override;
+	void Update()		override;
 	void Draw()			override;
 	void Add()			override;
 	
@@ -29,7 +33,6 @@ public:
 	VECTOR GetPosition() { return player->GetPosition(); }
 	float GetAngle() { return player->GetAngle(); }
 	std::shared_ptr<Player> GetPlayer()const { return actualPlayer; }
-	AABB GetPlayerAABB() { return playerAABB; }
 	int GetCoinCount()const { return player->GetCoinCount(); }
 
 	//オブサーバー関連
@@ -44,7 +47,6 @@ private:
 
 	std::shared_ptr<BaseChara> player = NULL;
 	std::shared_ptr<Player> actualPlayer = NULL;
-	AABB playerAABB;
 	PlayerData now_playerData;
 };
 

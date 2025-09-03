@@ -13,6 +13,7 @@ public:
     virtual void Initialize();
     virtual void Update();
     virtual void Draw();
+    virtual void Shutdown();
 
     void SetCoinCount(const int set) { coinCount = set; }
 

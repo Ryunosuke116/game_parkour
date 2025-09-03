@@ -3,13 +3,14 @@
 #include <memory>
 #include "EffekseerForDXLib.h"
 #include "EffectManager.h"
+#include "JsonManager.h"
+#include "SubSystemManager.h"
 
 /// <summary>
 /// コンストラクタ
 /// </summary>
 EffectManager::EffectManager()
 {
-	tag = "effectData";
 }
 
 /// <summary>
@@ -20,13 +21,15 @@ EffectManager::~EffectManager()
 	effectDatas.clear();
 }
 
-void EffectManager::Create()
+void EffectManager::Create(const std::string& sceneName)
 {
-	for (auto& data : jsonData["list"])
+	const nlohmann::json effectData = JsonManager::GetInstance().GetJsons("effectData");
+
+	for (auto& data : effectData["list"])
 	{
-		std::string tag = data[1];
+		std::string tag = data[1].get<std::string>();
 		std::string  path = data[0].get<std::string>();
-		float scale = data[2];
+		float scale = data[2].get<float>();
 
 		Add(path.c_str(), tag, scale);
 	}
@@ -41,7 +44,6 @@ void EffectManager::Create()
 void EffectManager::Add(const char* path, std::string& setTag,
 	const float& scale)
 {
-	
 	std::shared_ptr<EffectData> data = std::make_shared<EffectData>();
 
 	data->resourceHandle = LoadEffekseerEffect(path, scale);
@@ -49,6 +51,11 @@ void EffectManager::Add(const char* path, std::string& setTag,
 
 	effectDatas.push_back(data);
 
+}
+
+void EffectManager::Update()
+{
+	UpdateEffekseer3D();
 }
 
 /// <summary>

@@ -46,9 +46,6 @@
     <Filter Include="ソース ファイル\map">
       <UniqueIdentifier>{0564d51b-3b2a-45a6-905c-a0ad4e3256b2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ヘッダー ファイル\Json">
-      <UniqueIdentifier>{925fd99b-a8db-4041-a1b9-111051243620}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\Observer">
       <UniqueIdentifier>{459a351b-37b9-47ad-bac3-326a179a787f}</UniqueIdentifier>
     </Filter>
@@ -78,9 +75,6 @@
     </Filter>
     <Filter Include="ソース ファイル\static\Pad">
       <UniqueIdentifier>{d2f54360-56d9-43c7-a511-49726d43ccd9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\static\input">
-      <UniqueIdentifier>{2d3ddfd7-2f25-4c9a-89cd-db3c1b1aa889}</UniqueIdentifier>
     </Filter>
     <Filter Include="ソース ファイル\scene\result">
       <UniqueIdentifier>{c1f0c082-192f-467c-81eb-b67f7ef24bda}</UniqueIdentifier>
@@ -214,14 +208,35 @@
     <Filter Include="ソース ファイル\manager\sound">
       <UniqueIdentifier>{341d67ca-21c1-418e-9b81-a681b704a6eb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\manager\object">
-      <UniqueIdentifier>{733bd2bf-452d-40b4-a80b-71e93c23b571}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\objectMediator">
       <UniqueIdentifier>{4da078b0-38ec-4e99-ac86-d433027f5ae1}</UniqueIdentifier>
     </Filter>
     <Filter Include="ソース ファイル\subSystem">
       <UniqueIdentifier>{ecf80b3d-c4fe-462c-bda4-7c14e40b8026}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\static\input">
+      <UniqueIdentifier>{2d3ddfd7-2f25-4c9a-89cd-db3c1b1aa889}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\manager\CollisionObjectManager">
+      <UniqueIdentifier>{7de00fb0-6208-4a32-afb8-a970b4dd8b91}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\JsonGame">
+      <UniqueIdentifier>{925fd99b-a8db-4041-a1b9-111051243620}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\JsonTitle">
+      <UniqueIdentifier>{21497d60-3de9-4607-aa16-2e4e9b53e57b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\object\title">
+      <UniqueIdentifier>{eafa151f-6c0c-49da-86c7-21684ba99c08}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\manager\gameObject">
+      <UniqueIdentifier>{733bd2bf-452d-40b4-a80b-71e93c23b571}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\manager\titleObject">
+      <UniqueIdentifier>{86db2449-6857-4868-bb9c-85341c620c2c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\object\title\BackGround">
+      <UniqueIdentifier>{a1095ea5-ed9a-4e84-a18c-e10cf39144f8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -250,7 +265,7 @@
       <Filter>ソース ファイル\object\game\coin</Filter>
     </ClCompile>
     <ClCompile Include="GameObjectManager.cpp">
-      <Filter>ソース ファイル\manager\object</Filter>
+      <Filter>ソース ファイル\manager\gameObject</Filter>
     </ClCompile>
     <ClCompile Include="PlayerManager.cpp">
       <Filter>ソース ファイル\manager\player</Filter>
@@ -390,8 +405,20 @@
     <ClCompile Include="ObjectMediator.cpp">
       <Filter>ソース ファイル\objectMediator</Filter>
     </ClCompile>
-    <ClCompile Include="SubSystem.cpp">
+    <ClCompile Include="SubSystemManager.cpp">
       <Filter>ソース ファイル\subSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="WorldSubSystem.cpp">
+      <Filter>ソース ファイル\subSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionObjectManager.cpp">
+      <Filter>ソース ファイル\manager\CollisionObjectManager</Filter>
+    </ClCompile>
+    <ClCompile Include="TitleObjectManager.cpp">
+      <Filter>ソース ファイル\manager\titleObject</Filter>
+    </ClCompile>
+    <ClCompile Include="BackGround.cpp">
+      <Filter>ソース ファイル\object\title\BackGround</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -420,7 +447,7 @@
       <Filter>ソース ファイル\object\game\coin</Filter>
     </ClInclude>
     <ClInclude Include="GameObjectManager.h">
-      <Filter>ソース ファイル\manager\object</Filter>
+      <Filter>ソース ファイル\manager\gameObject</Filter>
     </ClInclude>
     <ClInclude Include="PlayerManager.h">
       <Filter>ソース ファイル\manager\player</Filter>
@@ -602,42 +629,58 @@
     <ClInclude Include="MediatorInclude.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="SubSystem.h">
-      <Filter>ソース ファイル\subSystem</Filter>
-    </ClInclude>
     <ClInclude Include="ISubSystem.h">
       <Filter>ソース ファイル\Interface</Filter>
     </ClInclude>
+    <ClInclude Include="SubSystemManager.h">
+      <Filter>ソース ファイル\subSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldSubSystem.h">
+      <Filter>ソース ファイル\subSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionObjectManager.h">
+      <Filter>ソース ファイル\manager\CollisionObjectManager</Filter>
+    </ClInclude>
+    <ClInclude Include="TitleObjectManager.h">
+      <Filter>ソース ファイル\manager\titleObject</Filter>
+    </ClInclude>
+    <ClInclude Include="BackGround.h">
+      <Filter>ソース ファイル\object\title\BackGround</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Json\coin.Json">
-      <Filter>ヘッダー ファイル\Json</Filter>
+    <None Include="JsonGame\coin.Json">
+      <Filter>ヘッダー ファイル\JsonGame</Filter>
     </None>
-    <None Include="Json\floor_sky.Json">
-      <Filter>ヘッダー ファイル\Json</Filter>
+    <None Include="JsonGame\effectData.Json">
+      <Filter>ヘッダー ファイル\JsonGame</Filter>
     </None>
-    <None Include="Json\effectData.Json">
-      <Filter>ヘッダー ファイル\Json</Filter>
+    <None Include="JsonGame\field.Json">
+      <Filter>ヘッダー ファイル\JsonGame</Filter>
     </None>
-    <None Include="Json\field.Json">
-      <Filter>ヘッダー ファイル\Json</Filter>
+    <None Include="JsonGame\floor_sky.Json">
+      <Filter>ヘッダー ファイル\JsonGame</Filter>
     </None>
-    <None Include="Json\png.Json">
-      <Filter>ヘッダー ファイル\Json</Filter>
+    <None Include="JsonGame\object.Json">
+      <Filter>ヘッダー ファイル\JsonGame</Filter>
     </None>
-    <None Include="Json\tutorial.Json">
-      <Filter>ヘッダー ファイル\Json</Filter>
+    <None Include="JsonGame\player.Json">
+      <Filter>ヘッダー ファイル\JsonGame</Filter>
     </None>
-    <None Include="Json\object.Json">
-      <Filter>ヘッダー ファイル\Json</Filter>
+    <None Include="JsonGame\png.Json">
+      <Filter>ヘッダー ファイル\JsonGame</Filter>
     </None>
-    <None Include="Json\sound.Json">
-      <Filter>ヘッダー ファイル\Json</Filter>
+    <None Include="JsonGame\sound.Json">
+      <Filter>ヘッダー ファイル\JsonGame</Filter>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="Json\player.Json">
-      <Filter>ヘッダー ファイル\Json</Filter>
-    </Text>
+    <None Include="JsonGame\tutorial.Json">
+      <Filter>ヘッダー ファイル\JsonGame</Filter>
+    </None>
+    <None Include="JsonTitle\sound.Json">
+      <Filter>ヘッダー ファイル\JsonTitle</Filter>
+    </None>
+    <None Include="JsonTitle\png.Json">
+      <Filter>ヘッダー ファイル\JsonTitle</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -1,6 +1,7 @@
 #include "common.h"
 #include "BaseObject.h"
 #include "FieldMesh.h"
+#include "JsonManager.h"
 
 /// <summary>
 /// コンストラクタ
@@ -33,6 +34,11 @@ void FieldMesh::Load(const nlohmann::json& jsonData)
 	pos_difference = VGet(0.0f, 0.0f, 0.0f);
 }
 
+void FieldMesh::Create()
+{
+	Load(JsonManager::GetInstance().GetJsons(jsonTag));
+}
+
 /// <summary>
 /// 初期化
 /// </summary>
@@ -55,7 +61,7 @@ void FieldMesh::Initialize()
 /// <summary>
 /// 更新
 /// </summary>
-void FieldMesh::Update(ObjectMediator& objectMediator)
+void FieldMesh::Update()
 {
 	if (CheckHitKey(KEY_INPUT_1))
 	{

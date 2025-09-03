@@ -1,22 +1,25 @@
 #pragma once
 
-class BlackOut
+class BlackOut 
 {
 public:
-    BlackOut();
-    ~BlackOut();
+    static BlackOut& GetInstance();
+
 
     void Initialize();
-    void BlackOutUpdate(float addAlpha);
-    void LightChangeUpdate(float addAlpha);
+    void BlackOutUpdate(int addAlpha);
+    void LightChangeUpdate(int addAlpha);
     void Draw();
 
-    void SetAlpha(float setAlpha) { alpha = setAlpha; }
+    void SetAlpha(int setAlpha) { alpha = setAlpha; }
+    void SetIsLightChange(const bool flag) { isLightChange = flag; }
 
-    float GetAlpha() { return alpha; }
+    int GetAlpha() { return alpha; }
+    bool GetIsLightChange() { return isLightChange; }
 private:
 
-    float alpha;
+    int alpha;
     bool isLightChange;
+    BlackOut() = default;
+    ~BlackOut() = default;
 };
-

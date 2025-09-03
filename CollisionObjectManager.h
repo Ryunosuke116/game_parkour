@@ -1,0 +1,35 @@
+#pragma once
+#include "BaseGameObjectManager.h"
+#include "BaseObject.h"
+
+class CollisionObjectManager : 
+	public BaseGameObjectManager,
+	public std::enable_shared_from_this<CollisionObjectManager>
+{
+public:
+	CollisionObjectManager();
+	~CollisionObjectManager();
+
+	void Create()		override;
+	void Initialize()	override;
+	void Update()		override;
+	void Draw()			override;
+	void Add()			override{}
+
+	std::vector<std::weak_ptr<BaseObject>> GetCollisionObjects()
+	{
+		std::vector<std::weak_ptr<BaseObject>> weakCollisionObjects;
+		weakCollisionObjects.reserve(collisionObjects.size());
+		for (auto& collisionObject : collisionObjects)
+		{
+			weakCollisionObjects.emplace_back(collisionObject);
+		}
+
+		return weakCollisionObjects;
+	}
+
+private:
+
+	std::vector<std::shared_ptr<BaseObject>> collisionObjects;
+};
+

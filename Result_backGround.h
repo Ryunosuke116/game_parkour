@@ -6,10 +6,11 @@ public:
 	Result_backGround();
 	~Result_backGround();
 
+	void Add()override{}
 	void Create()override {}
 	void Load(const nlohmann::json& jsonData)override;
 	void Initialize()override;
-	void Update(ObjectMediator& objectMediator)override;
+	void Update()override;
 	void Draw()override;
 
 private:

@@ -10,7 +10,10 @@
 #include "BaseObject.h"
 #include "DebugDrawer.h"
 #include "Camera.h"
-
+#include "JsonManager.h"
+#include "WorldSubSystem.h"
+#include "CollisionObjectManager.h"
+#include "SubSystemManager.h"
 
 /// <summary>
 /// /インストラクタ
@@ -20,6 +23,7 @@ Player::Player() :
     start_walkTime(-1),
     centerPosition(VGet(0.0f, 0.0f, 0.0f)),
     moveDirection_now(VGet(0.0f, 0.0f, 0.0f)),
+    moveVec_normal(VGet(0.0f,0.0f,0.0f)),
     isCalc_moveVec(false),
     playerData({false})
 {
@@ -33,6 +37,15 @@ Player::~Player()
 
 }
 
+void Player::Create()
+{
+    const std::string jsonName = "player";
+    Load(JsonManager::GetInstance().GetJsons(jsonName));
+    playerCalculation = std::make_shared<PlayerCalculation>();
+    animationChanger = std::make_shared<AnimationChanger>();
+    MV1SetScale(modelHandle, VGet(modelScale, modelScale, modelScale));
+}
+
 /// <summary>
 /// 読み込み
 /// </summary>
@@ -40,11 +53,7 @@ Player::~Player()
 void Player::Load(const nlohmann::json& jsonData)
 {
     std::string path = jsonData["playerPath"];
-
     modelHandle = MV1LoadModel(path.c_str());
-    MV1SetScale(modelHandle, VGet(modelScale, modelScale, modelScale));
-    playerCalculation = std::make_shared<PlayerCalculation>();
-    animationChanger = std::make_shared<AnimationChanger>();
 }
 
 /// <summary>
@@ -52,7 +61,7 @@ void Player::Load(const nlohmann::json& jsonData)
 /// </summary>
 void Player::Initialize()
 {
-    position = VGet(3.02443838, 9.00285912, -1215.93481);
+    position = VGet(3.02443838f, 9.00285912f, -1215.93481f);
     targetMoveDirection = VGet(0.0f, 0.0f, 0.0f);
     angle = 0.0f;
     rotate_x = 0.0f;
@@ -105,10 +114,12 @@ void Player::Initialize()
 /// <summary>
 /// 更新
 /// </summary>
-void Player::Update(ObjectMediator& objectMediator)
+void Player::Update()
 {
      //positionData更新
     CollisionUpdate();
+
+    std::shared_ptr<EffectManager> effectManager = SubSystemManager::GetInstance().GetSubSystem<EffectManager>().lock();
 
     //リセット
     moveDirection = VGet(0.0f, 0.0f, 0.0f);
@@ -121,8 +132,8 @@ void Player::Update(ObjectMediator& objectMediator)
 
     //stateに応じた挙動処理
     auto [moveDirection_new, data_new] = nowState->Update(
-        objectMediator.camera->GetCameraDirection(), 
-        objectMediator.collisionObjects, 
+        WorldSubSystem::Instance().GetSubSystem<Camera>()->GetCameraDirection(),
+        WorldSubSystem::Instance().GetSubSystem<CollisionObjectManager>()->GetCollisionObjects(),
         *this);
 
     if (playerData.isHang_to_Crouch)
@@ -163,7 +174,6 @@ void Player::Update(ObjectMediator& objectMediator)
     {
         const float speed = 0.03f;
 
-        //todo::
         //ゆっくり最新の方向に向く
         moveDirection_now = Calculation::Leap(moveDirection_now,
             targetMoveDirection, speed);
@@ -175,7 +185,6 @@ void Player::Update(ObjectMediator& objectMediator)
     ChangeState();
 
     isChange_falling = nowState->MotionUpdate(playerData);
-
 
     //move計算
     if (!playerData.isHang_to_Crouch)
@@ -196,8 +205,8 @@ void Player::Update(ObjectMediator& objectMediator)
         effectTimer++;
         if (effectTimer >= 10.0f)
         {
-            objectMediator.effectManager->PlayEffect("foot_smoke");
-            objectMediator.effectManager->SetPosition(position,"foot_smoke");
+            effectManager->PlayEffect("foot_smoke");
+            effectManager->SetPosition(position,"foot_smoke");
             effectTimer = 0.0f;
         }
     }
@@ -279,7 +288,6 @@ void Player::ChangeState()
 
         nowState = std::move(animationChanger->ChangeState(modelHandle, *this, playerData, nowState));
     }
-
 }
 
 /// <summary>
@@ -296,6 +304,7 @@ void Player::CollisionUpdate()
     playerCalculation->SetHandPos_left(MV1GetFramePosition(modelHandle, left));
     playerCalculation->SetHandPos_right(MV1GetFramePosition(modelHandle, right));
     centerPosition = MV1GetFramePosition(modelHandle, 7);
+    positionData.oldPosition = position;
 
     //ray
     VECTOR position_center = VScale(VAdd(MV1GetFramePosition(modelHandle, 7), position), 0.5f);
@@ -354,11 +363,10 @@ void Player::DebugUpdate()
         positionData.position_bottom_Capsule, radius,
         GetColor(255, 0, 0));
 
-
     //AABB
     VECTOR min = VGet(153.0f, 8.0f, 750.0f);
     VECTOR max = VGet(245.0f, 80.0f, 815.0f);
-    DebugDrawer::Instance().InformationInput_AABB(min, max, GetColor(255, 0, 0));
+    //DebugDrawer::Instance().InformationInput_AABB(min, max, GetColor(255, 0, 0));
    
 
     //球体

@@ -1,5 +1,6 @@
 #include "common.h"
 #include "Field.h"
+#include "JsonManager.h"
 
 /// <summary>
 /// コンストラクタ
@@ -28,8 +29,15 @@ void Field::Load(const nlohmann::json& jsonData)
 	tag = "field";
 	modelHandle = MV1LoadModel(path.c_str());
 	bullHandle = MV1LoadModel(bullPath.c_str());
-	MV1SetScale(modelHandle, VGet(0.9f, 0.9f, 0.9f));
-	MV1SetScale(bullHandle, VGet(0.9f, 0.9f, 0.9f));
+}
+
+void Field::Create()
+{
+	const VECTOR modelScale = VGet(0.9f, 0.9f, 0.9f);
+	Load(JsonManager::GetInstance().GetJsons("field"));
+
+	MV1SetScale(modelHandle, modelScale);
+	MV1SetScale(bullHandle, modelScale);
 }
 
 /// <summary>
@@ -53,7 +61,7 @@ void Field::Initialize()
 /// <summary>
 /// 更新
 /// </summary>
-void Field::Update(ObjectMediator& objectMediator)
+void Field::Update()
 {
 	/*if (CheckHitKey(KEY_INPUT_1))
 	{

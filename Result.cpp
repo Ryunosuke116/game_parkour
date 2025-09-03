@@ -6,6 +6,7 @@
 #include "PadInput.h"
 #include "JsonManager.h"
 #include "Result_object.h"
+#include "BlackOut.h"
 
 /// <summary>
 /// コンストラクタ
@@ -39,9 +40,6 @@ void Result::Create()
     Add(std::make_shared<Result_backGround>(), jsonData);
     Add(std::make_shared<UI_coin>(), jsonData);
     Add(std::make_shared<Rank>(), jsonData);
-
-    blackOut = std::make_shared<BlackOut>();
-
 }
 
 /// <summary>
@@ -52,7 +50,7 @@ void Result::Initialize()
     const int coin_x = 30;
     const int coin_y = 700;
 
-    blackOut->Initialize();
+    BlackOut::GetInstance().Initialize();
 
     for (auto& UI : ui_list)
     {
@@ -79,8 +77,8 @@ void Result::Update()
 
     if (isPush)
     {
-        blackOut->BlackOutUpdate(4.5f);
-        if (blackOut->GetAlpha() >= 300)
+        BlackOut::GetInstance().BlackOutUpdate(4.5f);
+        if (BlackOut::GetInstance().GetAlpha() >= 300)
         {
             ChangeScene("Title", 0);
         }
@@ -96,7 +94,7 @@ void Result::Draw()
     {
         UI->Draw();
     }
-    blackOut->Draw();
+    BlackOut::GetInstance().Draw();
 }
 
 void Result::Add(std::shared_ptr<BaseUI> ui,

@@ -2,31 +2,30 @@
 #include "BaseGameObjectManager.h"
 #include "EffectData.h"
 #include "IEffectManager.h"
+#include "ISubSystem.h"
 
 class EffectManager :
-	public BaseGameObjectManager,
-	public IEffectManager
+	public ISubSystem
 {
 public:
 	EffectManager();
 	~EffectManager();
 
-	void Create()override;
-	void Initialize()override{}
-	void Update(ObjectMediator& objectMediator)override{}
+	void Create(const std::string& sceneName)override;
+	void Update()override;
 	void Draw()override;
-	void Add()override{}
+	void Shutdown()override{}
 
 	void Add(const char* path, std::string& setTag,
-		const float& scale)override;
-	void PlayEffectUpdate()override;
+		const float& scale);
+	void PlayEffectUpdate();
 	void SetPosition(const VECTOR setPosition,
-		const std::string& tag)override;
-	void SetRotation(const VECTOR& setPosition, const std::string& tag)override;
-	void SetScale(const VECTOR& scale, const std::string& tag)override;
-	void SetSpeed(const float& speed, const std::string& tag)override;
-	void PlayEffect(const std::string& tag)override;
-	void StopEffect(const std::string& tag)override;
+		const std::string& tag);
+	void SetRotation(const VECTOR& setPosition, const std::string& tag);
+	void SetScale(const VECTOR& scale, const std::string& tag);
+	void SetSpeed(const float& speed, const std::string& tag);
+	void PlayEffect(const std::string& tag);
+	void StopEffect(const std::string& tag);
 
 private:
 	std::vector<std::shared_ptr<EffectData>> effectDatas;

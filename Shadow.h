@@ -12,7 +12,7 @@ public:
 	void Create()override {}
 	void Load(const nlohmann::json& jsonData)override {}
 	void Initialize()override;
-	void Update(ObjectMediator& objectMediator)override;
+	void Update()override;
 	void Draw()override {}
 	int GetShadowMapHandle()const { return shadowMapHandle; }
 

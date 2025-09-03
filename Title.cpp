@@ -1,9 +1,12 @@
 #include "common.h"
-#include <memory>
 #include "SceneManager.h"
 #include "BaseScene.h"
+#include "TitleObjectManager.h"
 #include "Title.h"
 #include "PadInput.h"
+#include "JsonManager.h"
+#include "SubSystemManager.h"
+#include "SoundPlayer.h"
 
 /// <summary>
 /// インスタンス化
@@ -20,16 +23,25 @@ modelHandle(-1)
 /// </summary>
 Title::~Title()
 {
-
+ 
 }
 
 void Title::Create()
 {
-    modelHandle = LoadGraph("material/png/title.png");
-    soundHandle = LoadSoundMem("material/sound/titleBGM.mp3");
-    buttonSound = LoadSoundMem("material/sound/button.mp3");
-    titleHandle = LoadGraph("material/png/START_04.png");
-    blackOut = std::make_shared<BlackOut>();
+    // 1,Jsonファイル読み込み
+    // 2,サブシステムを追加
+    // 3,各objectを生成
+    // 4,各objectをcreate処理をする
+
+    const std::string jsonFileName = "JsonTitle";
+
+    SubSystemManager::GetInstance().AddSubSystem<SoundPlayer>();
+    objectManager = std::make_shared<TitleObjectManager>();
+
+    JsonManager::GetInstance().Create(jsonFileName);
+    SubSystemManager::GetInstance().Create(jsonFileName);
+
+    objectManager->Create();
 }
 
 /// <summary>
@@ -37,9 +49,11 @@ void Title::Create()
 /// </summary>
 void Title::Initialize()
 {
-	blackOut->Initialize();
+    const auto soundPlayer = SubSystemManager::GetInstance().GetSubSystem<SoundPlayer>().lock();
+	BlackOut::GetInstance().Initialize();
 	isPush = false;
-    PlaySoundMem(soundHandle, DX_PLAYTYPE_LOOP);
+    soundPlayer->Play("titleBGM");
+    objectManager->Initialize();
 }
 
 /// <summary>
@@ -47,20 +61,27 @@ void Title::Initialize()
 /// </summary>
 void Title::Update()
 {
+    const int addAlpha = 5;
+    const int maxAlpha = 300;
+    const auto soundPlayer = SubSystemManager::GetInstance().GetSubSystem<SoundPlayer>().lock();
+
     PadInput::Update();
+
+    objectManager->Update();
 
     if (PadInput::IsPush_A() && !isPush)
     {
         isPush = true;
-        PlaySoundMem(buttonSound, DX_PLAYTYPE_BACK);
+        soundPlayer->Play("button");
     }
 
     if (isPush)
     {
-        blackOut->BlackOutUpdate(4.5f);
-        if (blackOut->GetAlpha() >= 300)
+        BlackOut::GetInstance().BlackOutUpdate(addAlpha);
+        if (BlackOut::GetInstance().GetAlpha() >= maxAlpha)
         {
-            StopSoundMem(soundHandle);
+            BlackOut::GetInstance().SetIsLightChange(true);
+            soundPlayer->Stop("titleBGM");
             ChangeScene("Game",0);
         }
     }
@@ -68,8 +89,6 @@ void Title::Update()
 
 void Title::Draw()
 {
-	DrawGraph(0, 0, modelHandle, TRUE);
-
-    DrawGraph(300, 650, titleHandle, true);
-    blackOut->Draw();
+    objectManager->Draw();
+    BlackOut::GetInstance().Draw();
 }

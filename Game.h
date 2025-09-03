@@ -19,6 +19,5 @@ public:
 private:
 	std::shared_ptr<BaseManager>		gameObjectManager			= NULL;
 	std::shared_ptr<GameObjectManager>	gameObjectManager_actual	= NULL;
-	std::shared_ptr<BlackOut>			blackOut					= NULL;
 };
 

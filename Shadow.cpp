@@ -1,6 +1,8 @@
 #include "common.h"
 #include "Shadow.h"
 #include "MediatorInclude.h"
+#include "WorldSubSystem.h"
+#include "PlayerManager.h"
 
 /// <summary>
 /// コンストラクタ
@@ -24,8 +26,10 @@ Shadow::~Shadow()
 /// </summary>
 void Shadow::Initialize()
 {
+	const VECTOR initLightDirection = VGet(0.5f, -1.0f, 0.5f);
+
 	shadowMapHandle = MakeShadowMap(Shadow_Quality, Shadow_Quality);
-	lightDirection = VGet(0.5f, -1.0f, 0.5f);
+	lightDirection = initLightDirection;
 
 	//ライトの方向を設定
 	SetLightDirection(lightDirection);
@@ -38,11 +42,14 @@ void Shadow::Initialize()
 /// 更新処理
 /// </summary>
 /// <param name="pos"></param>
-void Shadow::Update(ObjectMediator& objectMediator)
+void Shadow::Update()
 {
+	const VECTOR drawRange = VGet(100.0f, 50.0f, 100.0f);
+	const std::shared_ptr<PlayerManager> playerManager = WorldSubSystem::Instance().GetSubSystem<PlayerManager>();
+
 	//シャドウを描画する範囲を指定
-	VECTOR minPos = VSub(objectMediator.player->GetPosition(), VGet(100.0f, 50.0f, 100.0f));
-	VECTOR maxPos = VAdd(objectMediator.player->GetPosition(), VGet(100.0f, 25.0f, 100.0f));
+	VECTOR minPos = VSub(playerManager->GetPosition(), drawRange);
+	VECTOR maxPos = VAdd(playerManager->GetPosition(), drawRange);
 
 	SetShadowMapDrawArea(shadowMapHandle, minPos, maxPos);
 }

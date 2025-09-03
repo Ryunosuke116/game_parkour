@@ -8,10 +8,9 @@ public:
 	virtual ~IObject() {}
 
 	//ƒˆ‰¼‘zŠÖ”	
-	virtual void Initialize()							abstract;
-	virtual void Update(ObjectMediator& objectMediator)	abstract;
-	virtual void Draw()									abstract;
-	virtual void Load(const nlohmann::json& jsonData)	abstract;
 	virtual void Create()								abstract;
-	virtual void Add()									abstract;
+	virtual void Initialize()							abstract;
+	virtual void Update()								abstract;
+	virtual void Draw()									abstract;
+
 };

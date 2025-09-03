@@ -1,21 +1,11 @@
 #include "Dxlib.h"
 #include "BlackOut.h"
 
-/// <summary>
-/// インストラクタ
-/// </summary>
-BlackOut::BlackOut()
-{
-    alpha = 0.0f;
-    isLightChange = false;
-}
 
-/// <summary>
-/// デストラクタ
-/// </summary>
-BlackOut::~BlackOut()
+BlackOut& BlackOut::GetInstance()
 {
-
+    static BlackOut instance;
+    return instance;
 }
 
 /// <summary>
@@ -23,16 +13,15 @@ BlackOut::~BlackOut()
 /// </summary>
 void BlackOut::Initialize()
 {
-    alpha = 0.0f;
+    alpha = 0;
     isLightChange = false;
 }
 
 /// <summary>
 /// 暗転
 /// </summary>
-void BlackOut::BlackOutUpdate(float addAlpha)
+void BlackOut::BlackOutUpdate(int addAlpha)
 {
-
     if (!(alpha >= 300))
     {
         alpha += addAlpha;
@@ -42,7 +31,7 @@ void BlackOut::BlackOutUpdate(float addAlpha)
 /// <summary>
 /// 明転
 /// </summary>
-void BlackOut::LightChangeUpdate(float addAlpha)
+void BlackOut::LightChangeUpdate(int addAlpha)
 {
     if (!(alpha <= 0))
     {
