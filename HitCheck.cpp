@@ -564,6 +564,7 @@ HangingData HitCheck::CliffGrabbing(
 			for (int i = 0; i < poly_dim.HitNum; i++)
 			{
 				MV1_COLL_RESULT_POLY poly = poly_dim.Dim[i];
+				MV1_COLL_RESULT_POLY rayCheckWall;
 
 				//平面に当たっていればtrueに
 				if (poly.Normal.y >= 0.8f)
@@ -572,6 +573,15 @@ HangingData HitCheck::CliffGrabbing(
 					VECTOR nearestOutSide = Calculation::SphereMeshOutsideTriangle(
 						poly,
 						position);
+
+					//playerの座標から三角形のnearestOurSideとの間に壁があったら飛ばす
+					HitCheck::RayHitJudge(sharedCollisionObject->GetModelHandle(),
+						-1,
+						position,
+						nearestOutSide,
+						rayCheckWall);
+
+					if (rayCheckWall.HitFlag)continue;
 
 					Calculation::NearestResult nearestResult = 
 						Calculation::SphereMeshOutsideTriangle_line(
@@ -598,12 +608,17 @@ HangingData HitCheck::CliffGrabbing(
 
 				VECTOR endRightRayPoint = VAdd(rightRayPoint, VGet(0.0f, -1.0f, 0.0f));
 				VECTOR endLeftRayPoint = VAdd(leftRayPoint, VGet(0.0f, -1.0f, 0.0f));
+				rightRayPoint = VAdd(rightRayPoint, VGet(0.0f, 1.0f, 0.0f));
+				leftRayPoint = VAdd(leftRayPoint, VGet(0.0f, 1.0f, 0.0f));
+				
 				MV1_COLL_RESULT_POLY leftRayCheck;
 				MV1_COLL_RESULT_POLY rightRayCheck;
 
 				DebugDrawer::Instance().InformationInput_line(leftRayPoint, endLeftRayPoint, GetColor(255, 255, 255));
 				DebugDrawer::Instance().InformationInput_line(rightRayPoint, endRightRayPoint, GetColor(255, 255, 255));
 				DebugDrawer::Instance().InformationInput_sphere(nearestOutSide, 2.5f, GetColor(255, 0, 255));
+				
+				//精度悪いから要調整！！！
 				for (const auto& fieldObject : collisionObjects)
 				{
 					//掴む所の幅を確認して、一定の幅がないと掴めないようにする

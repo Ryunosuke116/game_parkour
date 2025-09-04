@@ -36,12 +36,29 @@ float Calculation::area(const VECTOR& a, const VECTOR& b, const VECTOR& c)
 /// <param name="position_2"></param>
 /// <param name="point"></param>
 /// <returns></returns>
-VECTOR Calculation::NearestPoint(const VECTOR& position_1, const VECTOR& position_2,
+VECTOR Calculation::NearestPoint(
+	const VECTOR& position_1, 
+	const VECTOR& position_2,
 	const VECTOR& point)
 {
 	//線分と点の最近点
-	VECTOR AB = VSub(position_1, position_2);
+	VECTOR AB = VSub(position_2, position_1);
 	VECTOR AP = VSub(point, position_1);
+
+	VECTOR lineDirection = VNorm(AB);
+	VECTOR APDirection = VNorm(AP);
+
+	if (VDot(lineDirection, APDirection) < 0)
+	{
+		return position_1;
+	}
+
+	VECTOR BPDirection = VNorm(VSub(point, position_2));
+
+	if (VDot(lineDirection, BPDirection) > 0)
+	{
+		return position_2;
+	}
 
 	//ベクトルの長さ
 	float vectorLength = pow(VSquareSize(AB), 0.5f);
@@ -49,23 +66,12 @@ VECTOR Calculation::NearestPoint(const VECTOR& position_1, const VECTOR& positio
 	//単位ベクトル
 	VECTOR unitVector = VGet(0, 0, 0);
 	unitVector = VNorm(AB);
-	/*unitVector.x = AB.x / vectorLength;
-	unitVector.y = AB.y / vectorLength;
-	unitVector.z = AB.z / vectorLength;*/
+	
 	//内積
 	float productionVector = VDot(unitVector, AP);
 
 	VECTOR AX;
 	AX = VAdd(position_1, VScale(unitVector, productionVector));
-
-	if (AX.y <= position_2.y)
-	{
-		AX.y = position_2.y;
-	}
-	if (AX.y >= position_1.y)
-	{
-		AX.y = position_1.y;
-	}
 
 	return AX;
 }
@@ -137,7 +143,9 @@ VECTOR Calculation::SphereMeshOutsideTriangle(const MV1_COLL_RESULT_POLY& poly, 
 /// <param name="poly"></param>
 /// <param name="HitPos_ground"></param>
 /// <returns></returns>
-Calculation::NearestResult Calculation::SphereMeshOutsideTriangle_line(const MV1_COLL_RESULT_POLY& poly, const VECTOR& pos)
+Calculation::NearestResult Calculation::SphereMeshOutsideTriangle_line(
+	const MV1_COLL_RESULT_POLY& poly,
+	const VECTOR& pos)
 {
 	VECTOR nearestPoint;
 

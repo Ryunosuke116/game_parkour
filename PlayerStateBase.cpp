@@ -243,19 +243,20 @@ void PlayerStateBase::WallRunMove(PlayerData& playerData, Player& player)
     const float entryDegree_wallRun = 50.0f;
 
     //壁に当たっている場合のみ
-    if (playerData.isPossible_wallRun && playerData.isUse_wallJump)
+    if (playerData.isPossible_wallRun &&
+        playerData.isUse_wallJump &&
+        playerData.isMove)
     {
         VECTOR hitWall_normal = player.playerCalculation->GetHitWall_normal();
         
         //スティックが即座に反対方向に向いた場合slipをtrue
         //radian計算
-        DebugDrawer::Instance().InformationInput_string_VECTOR("moveDir %f %f %f\n", moveDirection);
         float radian_wall = atan2f(-hitWall_normal.x, -hitWall_normal.z);
         float radian_pad = atan2f(moveDirection.x, moveDirection.z);
 
         //度数計算
-        float degree_pad_now = Calculation::radToDeg(radian_pad);
         float degree_wall = Calculation::radToDeg(radian_wall);
+        float degree_pad_now = Calculation::radToDeg(radian_pad);
 
         //スティック入力と壁の角度の差を求める
         float degree_pad_wall_difference = degree_pad_now - degree_wall;

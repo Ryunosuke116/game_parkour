@@ -144,6 +144,10 @@ void Player::Update()
     {
         moveDirection = moveDirection_new;
     }
+    float radian_pad_ = atan2f(moveDirection.x, moveDirection.z);
+    float degree_pad_now = Calculation::radToDeg(radian_pad_);
+    DebugDrawer::Instance().InformationInput_string_float("degree %f", degree_pad_now);
+    DebugDrawer::Instance().InformationInput_string_VECTOR("moveDir %f %f %f\n", moveDirection);
 
     playerData = data_new;
 
