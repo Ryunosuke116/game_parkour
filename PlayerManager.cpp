@@ -165,5 +165,3 @@ void PlayerManager::RemoveObserver(std::shared_ptr<PlayerStateObserver> observer
 	// ÀÛ‚Évector‚Ì––”ö‚Ìíœ‘ÎÛ•”•ª‚ğíœ‚·‚é
 	observers.erase(newEnd, observers.end());
 }
-
-void PlayerManager::Add()	 {}

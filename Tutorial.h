@@ -9,7 +9,7 @@ public:
 
 	void Initialize();
 	bool Update();
-	void Draw(const float& stream_startPicture_timer);
+	void Draw(const float& streamStartPictureTimer);
 	void Load(const nlohmann::json& jsonData);
 
 	std::string GetTag() { return tag; }

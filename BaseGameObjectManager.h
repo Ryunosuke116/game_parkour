@@ -1,5 +1,4 @@
 #pragma once
-#include "common.h"
 #include <nlohmann/json.hpp>
 #include "IObject.h"
 #include "ObjectMediator.h"
@@ -15,17 +14,19 @@ public:
 		jsonData = j;
 	}
 
+	template<typename T>
+	void Add(const int modelHandle, 
+		const VECTOR& position,
+		std::vector<BaseObject>& objects);
+
 	virtual void Add()abstract;
 
 	std::string GetTag() { return tag; }
 
 protected:
-
 	nlohmann::json	jsonData;
-	VECTOR pos_addObject;
+	VECTOR posAddObject;
 	std::string tag;
-
-	std::vector<std::shared_ptr<IObject>> objects;
 
 };
 

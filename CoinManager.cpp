@@ -48,7 +48,6 @@ void CoinManager::Create()
 /// <param name="path"></param>
 void CoinManager::Initialize()
 {
-
 	for (auto& coin : coins)
 	{
 		coin->Initialize();
@@ -80,7 +79,7 @@ void CoinManager::Update()
 		it++;
 	}
 
-	pos_addObject = WorldSubSystem::Instance().GetSubSystem<Camera>()->GetSpherePosition();
+	posAddObject = WorldSubSystem::Instance().GetSubSystem<Camera>()->GetSpherePosition();
 }
 
 void CoinManager::Draw()
@@ -95,7 +94,7 @@ void CoinManager::Add()
 {
 	coins.push_back(std::make_shared<CoinObject>());
 	coins.back()->Load(modelHandle,
-		pos_addObject);
+		posAddObject);
 	coins.back()->Initialize();
 }
 

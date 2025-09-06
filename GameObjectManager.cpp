@@ -11,9 +11,9 @@
 /// コンストラクタ
 /// </summary>
 GameObjectManager::GameObjectManager():
-	stream_startPicture_timer(-1),
+	streamStartPictureTimer(-1),
 	stream_finishPicture_timer(-1),
-	isStream_startPicture(false),
+	isStreamStartPicture(false),
 	isStream_finishPicture(false)
 {
 
@@ -108,9 +108,9 @@ void GameObjectManager::Initialize()
 	isCamera = false;
 	isPush = false;
 	isGoal = false;
-	isStream_startPicture = true;
+	isStreamStartPicture = true;
 	isStream_finishPicture = false;
-	stream_startPicture_timer = 0.0f;
+	streamStartPictureTimer = 0.0f;
 	stream_finishPicture_timer = 0.0f;
 }
 
@@ -119,14 +119,14 @@ void GameObjectManager::Initialize()
 /// </summary>
 void GameObjectManager::Update()
 {
-	if (isStream_startPicture)
+	if (isStreamStartPicture)
 	{
 		StartUpdate();
 	}
 
 	FinishUpdate();
 
-	if (!isStream_startPicture && 
+	if (!isStreamStartPicture && 
 		!isStream_finishPicture)
 	{
 		if (CheckHitKey(KEY_INPUT_0))
@@ -136,7 +136,7 @@ void GameObjectManager::Update()
 				if (!isCamera)
 				{
 					isCamera = true;
-					//layout->Initialize(coinManager_actual->GetModelHandle());
+					layout->Initialize(SubSystemManager::GetInstance().GetSubSystem<CoinManager>().lock()->GetModelHandle());
 				}
 				else
 				{
@@ -167,7 +167,9 @@ void GameObjectManager::Update()
 		else
 		{
 			camera_actual->Update_layout();
-			//layout->Update(camera_actual->GetSpherePosition(), *coinManager_actual);
+			layout->Update(
+				SubSystemManager::GetInstance().GetSubSystem<Camera>().lock()->GetSpherePosition(),
+				*coinManager_actual);
 		}
 		
 		//ゴール判定
@@ -195,12 +197,12 @@ void GameObjectManager::StartUpdate()
 			BlackOut::GetInstance().SetIsLightChange(true);
 	}
 
-	if (stream_startPicture_timer >= maxTimer)
+	if (streamStartPictureTimer >= maxTimer)
 	{
-		isStream_startPicture = tutorial->Update();
-		stream_startPicture_timer++;
+		isStreamStartPicture = tutorial->Update();
+		streamStartPictureTimer++;
 
-		if (!isStream_startPicture)
+		if (!isStreamStartPicture)
 		{
 			const auto soundPlayer = SubSystemManager::GetInstance().GetSubSystem<SoundPlayer>().lock();
 			uiManager_actual->GetGameTimer()->ResetSetTime();
@@ -209,8 +211,8 @@ void GameObjectManager::StartUpdate()
 	}
 	else
 	{
-		stream_startPicture_timer++;
-		playerManager_actual->Update_start(stream_startPicture_timer);
+		streamStartPictureTimer++;
+		playerManager_actual->Update_start(streamStartPictureTimer);
 		camera_actual->Update();
 	}
 }
@@ -232,7 +234,7 @@ void GameObjectManager::FinishUpdate()
 				isGoal = false;
 		}
 
-		playerManager_actual->Update_finish(stream_startPicture_timer);
+		playerManager_actual->Update_finish(streamStartPictureTimer);
 		camera_actual->Update();
 		if (isGoal)
 		{
@@ -273,7 +275,7 @@ void GameObjectManager::Draw()
 	for (auto& manager : managers)
 	{
 		if (auto uiManager = std::dynamic_pointer_cast<UIManager>(manager) &&
-			isStream_startPicture)
+			isStreamStartPicture)
 		{
 			continue;
 		}
@@ -301,8 +303,8 @@ void GameObjectManager::Draw()
 
 void GameObjectManager::tutorialDraw()
 {
-	if (isStream_startPicture)
+	if (isStreamStartPicture)
 	{
-		tutorial->Draw(stream_startPicture_timer);
+		tutorial->Draw(streamStartPictureTimer);
 	}
 }

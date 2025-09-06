@@ -24,7 +24,7 @@ public:
 	void Initialize()	override;
 	void Update()		override;
 	void Draw()			override;
-	void Add()			override;
+	void Add()			override{}
 	
 	VECTOR PositionCheck(const VECTOR& hangingPos, const VECTOR& playerPos);
 	void StateConfirmation();

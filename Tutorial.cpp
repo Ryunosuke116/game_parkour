@@ -60,9 +60,9 @@ bool Tutorial::Update()
 	return true;
 }
 
-void Tutorial::Draw(const float& stream_startPicture_timer)
+void Tutorial::Draw(const float& streamStartPictureTimer)
 {
-	if (stream_startPicture_timer >= 50.0f &&
+	if (streamStartPictureTimer >= 50.0f &&
 		!isPush_start)
 	{
 		DrawGraph(x_tutorialGraph, y_tutorialGraph, tutorialHandle, TRUE);

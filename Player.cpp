@@ -61,7 +61,9 @@ void Player::Load(const nlohmann::json& jsonData)
 /// </summary>
 void Player::Initialize()
 {
-    position = VGet(3.02443838f, 9.00285912f, -1215.93481f);
+    const VECTOR initPosition = VGet(3.02443838f, 9.00285912f, -1215.93481f);
+
+    position = initPosition;
     targetMoveDirection = VGet(0.0f, 0.0f, 0.0f);
     angle = 0.0f;
     rotate_x = 0.0f;
@@ -119,6 +121,7 @@ void Player::Update()
      //positionData更新
     CollisionUpdate();
 
+    //エフェクトマネージャーのポインタを参照
     std::shared_ptr<EffectManager> effectManager = SubSystemManager::GetInstance().GetSubSystem<EffectManager>().lock();
 
     //リセット
@@ -145,14 +148,14 @@ void Player::Update()
         moveDirection = moveDirection_new;
     }
     float radian_pad_ = atan2f(moveDirection.x, moveDirection.z);
-    float degree_pad_now = Calculation::radToDeg(radian_pad_);
+    float degree_pad_now = abs(Calculation::radToDeg(radian_pad_));
     DebugDrawer::Instance().InformationInput_string_float("degree %f", degree_pad_now);
     DebugDrawer::Instance().InformationInput_string_VECTOR("moveDir %f %f %f\n", moveDirection);
 
     playerData = data_new;
 
-    bool isAction = !playerData.isHanging
-        && !playerData.isHang_to_Crouch &&
+    bool isAction = !playerData.isHanging && 
+        !playerData.isHang_to_Crouch &&
         !playerData.isFalling && 
         !playerData.isJump && 
         !playerData.isRoll;

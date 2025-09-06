@@ -14,7 +14,9 @@ public:
 	~Layout();
 
 	void Initialize(const int& modelHandle);
-	void Update(const VECTOR& pos, CoinManager& manager);
+
+	void Update(const VECTOR& pos, BaseGameObjectManager& manager);
+	void InputFile();
 
 	void Draw();
 

@@ -240,29 +240,29 @@ void PlayerStateBase::JumpMove(PlayerData& playerData, Player& player)
 /// <param name="player"></param>
 void PlayerStateBase::WallRunMove(PlayerData& playerData, Player& player)
 {
-    const float entryDegree_wallRun = 50.0f;
+    const float entryDegreeWallRun = 50.0f;
 
     //壁に当たっている場合のみ
     if (playerData.isPossibleWallRun &&
         playerData.isUse_wallJump &&
         playerData.isMove)
     {
-        VECTOR hitWall_normal = player.playerCalculation->GetHitWall_normal();
+        VECTOR hitWallNormal = player.playerCalculation->GetHitWall_normal();
         
         //スティックが即座に反対方向に向いた場合slipをtrue
         //radian計算
-        float radian_wall = atan2f(-hitWall_normal.x, -hitWall_normal.z);
-        float radian_pad = atan2f(moveDirection.x, moveDirection.z);
+        float radianWall = atan2f(-hitWallNormal.x, -hitWallNormal.z);
+        float radianPad = atan2f(moveDirection.x, moveDirection.z);
 
         //度数計算
-        float degree_wall = Calculation::radToDeg(radian_wall);
-        float degree_pad_now = Calculation::radToDeg(radian_pad);
+        float degreeWall = abs(Calculation::radToDeg(radianWall));
+        float degreePadNow = abs(Calculation::radToDeg(radianPad));
 
         //スティック入力と壁の角度の差を求める
-        float degree_pad_wall_difference = degree_pad_now - degree_wall;
+        float degreePadWallDifference = degreePadNow - degreeWall;
 
         //壁の法線ベクトルを利用して壁走りするかどうか
-        if (abs(degree_pad_wall_difference) <= entryDegree_wallRun)
+        if (abs(degreePadWallDifference) <= entryDegreeWallRun)
         {
             //ロールアクションとジャンプをできないように
             playerData.isRun_wall = true;
@@ -274,7 +274,7 @@ void PlayerStateBase::WallRunMove(PlayerData& playerData, Player& player)
 
             player.playerCalculation->ChangeIsJumpPower_add_ture();
             player.playerCalculation->SetJumpPower();
-            player.SetMoveDirection_now(VScale(hitWall_normal, -1.0f));
+            player.SetMoveDirection_now(VScale(hitWallNormal, -1.0f));
             player.SetRotata_x(run_wall_rotate_x);
         }
     }

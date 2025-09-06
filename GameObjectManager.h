@@ -49,10 +49,10 @@ private:
 	bool isCamera;
 	bool isPush;
 	bool isGoal;
-	bool isStream_startPicture;		//スタート演出を流すか
+	bool isStreamStartPicture;		//スタート演出を流すか
 	bool isStream_finishPicture;	//フィニッシュ演出を流すか
 
-	float stream_startPicture_timer;	//スタート画面のタイマー
+	float streamStartPictureTimer;	//スタート画面のタイマー
 	float stream_finishPicture_timer;	//フィニッシュ画面のタイマー
 
 };

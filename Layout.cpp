@@ -1,4 +1,5 @@
 #include "common.h"
+#include <fstream>
 #include "Layout.h"
 #include "DebugDrawer.h"
 #include "PadInput.h"
@@ -20,7 +21,8 @@ void Layout::Initialize(const int& modelHandle)
 	MV1SetScale(this->modelHandle, VGet(0.3f, 0.3f, 0.3f));
 }
 
-void Layout::Update(const VECTOR& pos, CoinManager& manager)
+void Layout::Update(const VECTOR& pos,
+	BaseGameObjectManager& manager)
 {
 	MV1SetPosition(modelHandle, pos);
 	DebugDrawer::Instance().InformationInput_string_VECTOR("position x %f  y %f  z %f\n", pos);
@@ -34,6 +36,8 @@ void Layout::Update(const VECTOR& pos, CoinManager& manager)
 			manager.Add();
 			isPush = true;
 		}
+
+		InputFile();
 	}
 	else
 	{
@@ -47,4 +51,12 @@ void Layout::Draw()
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);
 	MV1DrawModel(modelHandle);
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA,0);
+}
+
+void Layout::InputFile()
+{
+	std::ofstream file("coinArrangement/input.txt");
+
+	file << "a";
+	file.close();
 }
