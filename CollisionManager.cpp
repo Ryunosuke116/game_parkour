@@ -296,8 +296,11 @@ std::pair<bool, VECTOR> CollisionManager::GroundCollisionCheck_Hang_to_Crouch(co
 /// <param name="player"></param>
 /// <param name="modelHandle"></param>
 /// <returns></returns>
-std::pair<bool, VECTOR> CollisionManager::WallCollisionCheck(const std::vector<std::weak_ptr<BaseObject>>& collisionObjects,
-	VECTOR& newPos, const VECTOR& moveVec, const PositionData& positionData,
+std::pair<bool, VECTOR> CollisionManager::WallCollisionCheck(
+	const std::vector<std::weak_ptr<BaseObject>>& collisionObjects,
+	VECTOR& newPos,
+	const VECTOR& moveVec,
+	const PositionData& positionData,
 	const float& radius)
 {
 	VECTOR position_top_new = VAdd(positionData.position_top_Capsule, moveVec);
@@ -305,7 +308,7 @@ std::pair<bool, VECTOR> CollisionManager::WallCollisionCheck(const std::vector<s
 	VECTOR capsule_axis_top = VAdd(positionData.position_top_ray, moveVec);					//カプセルの軸
 	VECTOR capsule_axis_bottom = VAdd(positionData.position_bottom_ray, moveVec);			//カプセルの軸
 
-	bool flag = false;
+	bool isPossibleWallRun = false;
 	VECTOR hitPoly_normal = { 0.0f };
 
 	for (auto& fieldObject : collisionObjects)
@@ -403,7 +406,8 @@ std::pair<bool, VECTOR> CollisionManager::WallCollisionCheck(const std::vector<s
 						hitPoly_normal = poly_ray.Normal;
 
 						//接触している三角形の縦の幅がplayerのY軸の幅より高ければtrueにする
-						float vertical_length_triangle = Calculation::Triangle_by_verticalLength(poly.Position[0],
+						float vertical_length_triangle = Calculation::Triangle_by_verticalLength(
+							poly.Position[0],
 							poly.Position[1],
 							poly.Position[2]);
 							
@@ -411,7 +415,7 @@ std::pair<bool, VECTOR> CollisionManager::WallCollisionCheck(const std::vector<s
 
 						if (vertical_length_player <= vertical_length_triangle)
 						{
-							flag = true;
+							isPossibleWallRun = true;
 						}
 
 					}
@@ -423,7 +427,7 @@ std::pair<bool, VECTOR> CollisionManager::WallCollisionCheck(const std::vector<s
 		MV1CollResultPolyDimTerminate(hitPoly_Wall);
 	}
 
-	return std::make_pair(flag, hitPoly_normal);
+	return std::make_pair(isPossibleWallRun, hitPoly_normal);
 
 }
 

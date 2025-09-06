@@ -67,8 +67,6 @@ void Player::Initialize()
     rotate_x = 0.0f;
     start_walkTime = 0.0f;
 
-    MV1SetRotationXYZ(modelHandle, VGet(0, 0, 0));
-
     MV1SetPosition(modelHandle, position);
 
     isPush = false;
@@ -302,16 +300,17 @@ void Player::CollisionUpdate()
     bool isReverse = false;
     //positionDataXV
     
-    int left = MV1SearchFrame(modelHandle, "mixamorig:LeftHandIndex4");
-    int right = MV1SearchFrame(modelHandle, "mixamorig:RightHandMiddle4_end");
+    const int left = MV1SearchFrame(modelHandle, "mixamorig:LeftHandIndex4");
+    const int right = MV1SearchFrame(modelHandle, "mixamorig:RightHandMiddle4_end");
+    const int head = 7;
 
     playerCalculation->SetHandPos_left(MV1GetFramePosition(modelHandle, left));
     playerCalculation->SetHandPos_right(MV1GetFramePosition(modelHandle, right));
-    centerPosition = MV1GetFramePosition(modelHandle, 7);
+    centerPosition = MV1GetFramePosition(modelHandle, head);
     positionData.oldPosition = position;
 
     //ray
-    VECTOR position_center = VScale(VAdd(MV1GetFramePosition(modelHandle, 7), position), 0.5f);
+    VECTOR position_center = VScale(VAdd(MV1GetFramePosition(modelHandle, head), position), 0.5f);
     position_center = VGet(position.x, position_center.y, position.z);
     positionData.position_top_ray = VGet(position.x, position_center.y + height, position.z);
     positionData.position_bottom_ray = position;
@@ -352,7 +351,7 @@ void Player::Receive_CollisionResult()
     {
         playerData.isGround = collision_result.isHitGround;
         position = collision_result.position_new;
-        playerData.isPossible_wallRun = collision_result.isPossible_wallRun;
+        playerData.isPossibleWallRun = collision_result.isPossibleWallRun;
         if (VSize(collision_result.isHitWall_normal) != 0)
         {
             playerCalculation->SetHitWall_normal(collision_result.isHitWall_normal);
@@ -409,7 +408,7 @@ void Player::DebugUpdate()
     DebugDrawer::Instance().InformationInput_string_bool("isHanging %d\n", playerData.isHanging);
     DebugDrawer::Instance().InformationInput_string_bool("isHanging_now %d\n", playerData.isHanging_now);
     DebugDrawer::Instance().InformationInput_string_bool("isUse_Hanging %d\n", playerData.isUse_Hanging);
-    DebugDrawer::Instance().InformationInput_string_bool("isPossible_wallRun %d\n", playerData.isPossible_wallRun);
+    DebugDrawer::Instance().InformationInput_string_bool("isPossibleWallRun %d\n", playerData.isPossibleWallRun);
     DebugDrawer::Instance().InformationInput_string_bool("isHang_to_Crouch %d\n", playerData.isHang_to_Crouch);
 
 }

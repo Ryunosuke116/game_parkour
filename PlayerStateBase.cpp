@@ -243,7 +243,7 @@ void PlayerStateBase::WallRunMove(PlayerData& playerData, Player& player)
     const float entryDegree_wallRun = 50.0f;
 
     //•Ç‚É“–‚½‚Á‚Ä‚¢‚éê‡‚Ì‚İ
-    if (playerData.isPossible_wallRun &&
+    if (playerData.isPossibleWallRun &&
         playerData.isUse_wallJump &&
         playerData.isMove)
     {

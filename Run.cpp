@@ -56,16 +56,6 @@ std::pair<VECTOR, PlayerData> Run::Update(const VECTOR& cameraDirection,
 		playerData = playerData_new;
 	}
 
-	/////////////////////////////////////////////////
-	// Œ»İ‚Ì‹Zp“I‚ÉŒµ‚µ‚¢‚Ì‚Åˆê’U–³‚­‚·
-	////////////////////////////////////////////////// 
-	
-	//if (playerData.isSlip)
-	//{
-	//	player.SetRotate_y(degree_new);
-	//	MV1SetRotationXYZ(modelHandle, VGet(0.0f, degree_new + DX_PI_F, 0.0f));
-	//}
-
 	return std::make_pair(moveDir, playerData);
 }
 
@@ -108,7 +98,7 @@ std::pair<VECTOR, PlayerData> Run::Update_wallRun(Player& player,
 	//—‚¿‚é
 	//•Ç‚ª‚È‚¢ê‡
 	if (-PadInput::GetJoyPad_old_y_left() <= -1000 ||
-		!playerData.isPossible_wallRun)
+		!playerData.isPossibleWallRun)
 	{
 		playerData.isRun_wall = false;
 		playerData.isUse_wallJump = false;
@@ -119,7 +109,6 @@ std::pair<VECTOR, PlayerData> Run::Update_wallRun(Player& player,
 		player.SetRotata_x(0.0f);
 
 		return std::make_pair(moveDir, playerData);
-
 	}
 
 	//~‚Ü‚Á‚Äˆê’èŠÔ‰ß‚¬‚½‚ç—‰º‚·‚é
