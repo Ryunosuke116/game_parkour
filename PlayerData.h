@@ -8,6 +8,7 @@ struct PlayerData
 	bool isWalk;
 	bool isRun;						//走っているか
 	bool isRun_wall;
+	bool isDash;
 	bool isJump;					//ジャンプしたか
 	bool isJump_first;				//一回目のジャンプをしたか
 	bool isJump_second;				//二段ジャンプしたか
@@ -26,6 +27,7 @@ struct PlayerData
 	bool isUse_Hanging;				//崖掴みが可能か
 	bool isHang_to_Crouch;			//上に上がる
 	bool isLanding;					//着地したか
+	bool isWallClimb;
 
 	auto operator<=>(const PlayerData&) const = default;
 

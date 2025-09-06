@@ -93,6 +93,8 @@ void Player::Initialize()
     playerData.isRun = false;
     playerData.isRun_wall = false;
     playerData.isUse_wallJump = true;
+    playerData.isDash = false;
+    playerData.isWallClimb = false;
     isCalc = false;
     isCalc_moveVec = false;
     isCollisionCheck = true;

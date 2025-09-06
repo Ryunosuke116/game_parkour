@@ -16,9 +16,11 @@ public:
 	bool MotionUpdate(PlayerData& playerData)override;
 	
 	VECTOR Command(const VECTOR& cameraDirection, PlayerData& playerData, Player& player)override;
+	VECTOR Move(const VECTOR& cameraDirection, PlayerData& playerData)override;
 	void Enter(PlayerData& playerData) override;		//ó‘Ô‚É“ü‚Á‚½‚Æ‚«
 	void Exit(PlayerData& playerData) override;			//ó‘Ô‚ğ”²‚¯‚é‚Æ‚«
-	VECTOR Move(const VECTOR& cameraDirection, PlayerData& playerData)override;
+
+	void DashMove(PlayerData& playerData);
 
 	std::pair<VECTOR, PlayerData> Update_normal(const VECTOR& cameraDirection, Player& player);
 	std::pair<VECTOR, PlayerData> Update_wallRun(Player& player,
@@ -26,6 +28,7 @@ public:
 
 private:
 	static constexpr float playAnimSpeed = 0.45f;	    // ˆÚ“®‘¬“x
+	static constexpr float DashAnimSpeed = 0.9f;
 	float degree_difference;
 	float stopTime;				//‰½f~‚Ü‚Á‚Ä‚¢‚é‚©
 	float angle;

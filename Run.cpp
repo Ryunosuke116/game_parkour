@@ -8,6 +8,8 @@
 #include "Player.h"
 #include "PadInput.h"
 #include "HitCheck.h"
+#include "SubSystemManager.h"
+#include "EffectManager.h"
 
 /// <summary>
 /// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
@@ -54,6 +56,19 @@ std::pair<VECTOR, PlayerData> Run::Update(const VECTOR& cameraDirection,
 	
 		moveDir = moveDir_new;
 		playerData = playerData_new;
+	}
+
+
+	if (playerData.isDash)
+	{
+		const VECTOR scale = VGet(5.0f, 5.0f, 5.0f);
+		const auto effectManager = SubSystemManager::GetInstance().GetSubSystem<EffectManager>().lock();
+		effectManager->SetScale(scale, "foot_smoke");
+		this->nowAnimState.PlayAnimSpeed = DashAnimSpeed;
+	}
+	else
+	{
+		this->nowAnimState.PlayAnimSpeed = playAnimSpeed;
 	}
 
 	return std::make_pair(moveDir, playerData);
@@ -179,7 +194,6 @@ std::pair<VECTOR, PlayerData> Run::Update_wallRun(Player& player,
 /// <returns></returns>
 bool Run::MotionUpdate(PlayerData& playerData)
 {
-
 	float totalTime_anim;
 
 	// ƒuƒŒƒ“ƒh—¦‚ª‚PˆÈ‰º‚Ìê‡‚Í‚P‚É‹ß‚Ã‚¯‚é
@@ -255,6 +269,7 @@ VECTOR Run::Command(const VECTOR& cameraDirection, PlayerData& playerData, Playe
 
 	//moveDir‚ğæ“¾‚·‚é
 	moveDir = Move(cameraDirection, playerData);
+	DashMove(playerData);
 	JumpMove(playerData, player);
 	RollMove(playerData);
 
@@ -269,7 +284,8 @@ VECTOR Run::Command(const VECTOR& cameraDirection, PlayerData& playerData, Playe
 	}
 
 	//‹}“]‰ñ‚¹‚¸‚É~‚Ü‚éê‡
-	if (!playerData.isMove && !playerData.isRoll)
+	if (!playerData.isMove &&
+		!playerData.isRoll)
 	{
 		playerData.isStopRun = true;
 		isChangeState = true;
@@ -326,6 +342,13 @@ VECTOR Run::Move(const VECTOR& cameraDirection, PlayerData& playerData)
 	//•K‚¸³‹K‰»‚³‚ê‚½‚à‚Ì‚©0‚ğ•Ô‚·
 	return moveDirection;
 
+}
+
+void Run::DashMove(PlayerData& playerData)
+{
+	PadInput::IsPushLT() ? 
+		playerData.isDash = true :
+		playerData.isDash = false;
 }
 
 void Run::Enter(PlayerData& playerData)

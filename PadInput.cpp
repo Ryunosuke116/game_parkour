@@ -110,6 +110,16 @@ bool PadInput::isRoll()
     return false;
 }
 
+bool PadInput::IsPushLT()
+{
+    if (CheckHitKey(KEY_INPUT_L) ||
+        input->GetNowFrameInput_direct_Z() > 0)
+    {
+        return true;
+    }
+    return false;
+}
+
 bool PadInput::IsPush_A()
 {
     if ((input->GetNowFrameNewInput() & PAD_INPUT_A ||

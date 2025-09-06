@@ -58,7 +58,6 @@ VECTOR PlayerCalculation::Move(const int& animNumber_Now,
     const VECTOR& moveDirection, const VECTOR& moveVec, 
     const PlayerData& playerData)
 {
-
     if (playerData.isHanging) return moveVec;
 
     VECTOR returnVec = moveVec;
@@ -78,9 +77,19 @@ VECTOR PlayerCalculation::Move(const int& animNumber_Now,
             moveSpeed_now += 0.05f;
 
             //max‚É’B‚µ‚½‚ç‚»‚±‚ÅŽ~‚ß‚é
-            if (moveSpeed_now >= MaxMoveSpeed)
+            if (playerData.isDash)
             {
-                moveSpeed_now = MaxMoveSpeed;
+                if (moveSpeed_now >= MaxDashSpeed)
+                {
+                    moveSpeed_now = MaxDashSpeed;
+                }
+            }
+            else
+            {
+                if (moveSpeed_now >= MaxRunSpeed)
+                {
+                    moveSpeed_now = MaxRunSpeed;
+                }
             }
         }
         else
@@ -118,7 +127,6 @@ VECTOR PlayerCalculation::Move(const int& animNumber_Now,
         }
 
         returnVec = VScale(moveDirection, moveSpeed_now);
-
     }
 
 
@@ -223,7 +231,7 @@ VECTOR PlayerCalculation::Roll(const int& animNumber_Now,
             animNumber_Now != animNum::quick_Roll)
         {
             move = VScale(moveVec, rollMoveSpeed_max);
-            moveSpeed_now = MaxMoveSpeed;
+            moveSpeed_now = MaxRunSpeed;
         }
     }
 

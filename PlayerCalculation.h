@@ -41,7 +41,7 @@ public:
 	bool GetIsJumpPower_add()const { return isJumpPower_add; }
 	float GetjumpSpeed_now() const { return jumpPower_now; }
 	float GetMoveSpeed_now() const { return moveSpeed_now; }
-	float GetMoveSpeed_max() const { return MaxMoveSpeed; }
+	float GetMoveSpeed_max() const { return MaxRunSpeed; }
 	float GetWallRun_stopTime()const { return wallRun_stopTime; }
 	float GetWallRun_stopTime_max()const { return wallRun_stopTime_max; }
 	VECTOR GetHangingPoint()const { return hangingPoint; }
@@ -61,7 +61,8 @@ public:
 	void SetNearestResult(const Calculation::NearestResult& set) { nearestResult = set; }
 
 private:
-	static constexpr float MaxMoveSpeed = 1.6f;	    // 移動速度
+	static constexpr float MaxRunSpeed = 1.6f;	    // 移動速度
+	static constexpr  float MaxDashSpeed = 2.6f;	//ダッシュ速度
 	static constexpr float rollMoveSpeed_max = 2.5f;	//ロール速度
 	static constexpr float addJumpPower = 2.0f;		//ジャンプパワー
 	static constexpr float addJumpPowe_second = 1.5f;		//二段目ジャンプパワー

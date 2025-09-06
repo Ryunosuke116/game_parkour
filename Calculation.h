@@ -37,6 +37,7 @@ public:
 	static VECTOR GetDirectionFromDegree(float degree);
 	static VECTOR SphereMeshOutsideTriangle(const MV1_COLL_RESULT_POLY& poly, const VECTOR& pos);
 	static NearestResult SphereMeshOutsideTriangle_line(const MV1_COLL_RESULT_POLY& poly, const VECTOR& pos);
+	static VECTOR AxisRotationX(const VECTOR& rotation, const float angle);
 };
 
 
