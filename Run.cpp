@@ -43,7 +43,7 @@ std::pair<VECTOR, PlayerData> Run::Update(const VECTOR& cameraDirection,
 
 	VECTOR moveDir = VGet(0.0f, 0.0f, 0.0f);
 
-	if (playerData.isRun_wall)
+	if (playerData.isRunWall)
 	{
 		auto [moveDir_new,playerData_new] = Update_wallRun(player, fieldObjects);
 	
@@ -101,7 +101,8 @@ std::pair<VECTOR,PlayerData> Run::Update_normal(const VECTOR& cameraDirection, P
 /// <param name="player"></param>
 /// <param name="fieldObjects"></param>
 /// <returns></returns>
-std::pair<VECTOR, PlayerData> Run::Update_wallRun(Player& player, 
+std::pair<VECTOR, PlayerData> Run::Update_wallRun(
+	Player& player, 
 	const std::vector<std::weak_ptr<BaseObject>>& fieldObjects)
 {
 	PlayerData playerData = player.GetData();
@@ -115,7 +116,7 @@ std::pair<VECTOR, PlayerData> Run::Update_wallRun(Player& player,
 	if (-PadInput::GetJoyPad_old_y_left() <= -1000 ||
 		!playerData.isPossibleWallRun)
 	{
-		playerData.isRun_wall = false;
+		playerData.isRunWall = false;
 		playerData.isUse_wallJump = false;
 		playerData.isFalling = true;
 		isChangeState = true;
@@ -142,8 +143,8 @@ std::pair<VECTOR, PlayerData> Run::Update_wallRun(Player& player,
 		auto result_cliff = HitCheck::CliffGrabbing(
 			fieldObjects,
 			player.GetPosition(),
-			player.GetPositionData().position_top_ray,
-			player.GetMoveDirection_now(),
+			player.GetPositionData().rayTopPosition,
+			player.GetNowMoveDirection(),
 			cliff_radius);
 
 		//íÕÇﬁÇ∆Ç±ÇÎÇ™ïΩçsÇæÇ¡ÇΩèÍçá
@@ -172,15 +173,15 @@ std::pair<VECTOR, PlayerData> Run::Update_wallRun(Player& player,
 	//ï«ÉWÉÉÉìÉvÇ∑ÇÈ
 	if (playerData.isJump_second)
 	{
-		playerData.isRun_wall = false;
+		playerData.isRunWall = false;
 		playerData.isUse_wallJump = true;
 		playerData.isWalljump = true;
-		//player.SetMoveDirection_now(moveDirection_new);
+		//player.SetnowMoveDirection(moveDirection_new);
 		player.playerCalculation->Reset_run_wall();
 
 		VECTOR hitWall_normal = player.playerCalculation->GetHitWall_normal();
 		moveDir = VScale(hitWall_normal, 1.0f);
-		player.SetMoveDirection_now(moveDir);
+		player.SetnowMoveDirection(moveDir);
 		player.SetRotata_x(0.0f);
 	}
 
@@ -260,7 +261,10 @@ bool Run::MotionUpdate(PlayerData& playerData)
 /// <param name="playerData"></param>
 /// <param name="player"></param>
 /// <returns></returns>
-VECTOR Run::Command(const VECTOR& cameraDirection, PlayerData& playerData, Player& player)
+VECTOR Run::Command(
+	const VECTOR& cameraDirection,
+	PlayerData& playerData,
+	Player& player)
 {
 	VECTOR moveDir = VGet(0.0f, 0.0f, 0.0f);
 	angle = player.GetAngle();
@@ -299,7 +303,9 @@ VECTOR Run::Command(const VECTOR& cameraDirection, PlayerData& playerData, Playe
 /// <param name="cameraDirection"></param>
 /// <param name="playerData"></param>
 /// <returns></returns>
-VECTOR Run::Move(const VECTOR& cameraDirection, PlayerData& playerData)
+VECTOR Run::Move(
+	const VECTOR& cameraDirection,
+	PlayerData& playerData)
 {
 	VECTOR moveDirection = VGet(0.0f, 0.0f, 0.0f);
 
@@ -351,10 +357,25 @@ void Run::DashMove(PlayerData& playerData)
 		playerData.isDash = false;
 }
 
+void Run::ObstacleCheck(
+	const std::vector<std::weak_ptr<BaseObject>>& fieldObjects,
+	const VECTOR& moveDirection,
+	const VECTOR& playerPosition,
+	const float radius)
+{
+	const float reverseScale = -1.0f;
+	const VECTOR reverseMoveDirection = VScale(moveDirection, reverseScale);
+
+	for (const auto& fieldObject : fieldObjects)
+	{
+
+	}
+}
+
 void Run::Enter(PlayerData& playerData)
 {
 	playerData.isRun = true;
-	if (playerData.isRun_wall)
+	if (playerData.isRunWall)
 	{
 		playerData.isJumpAll = false;
 		playerData.isJump_second = false;
@@ -364,5 +385,5 @@ void Run::Enter(PlayerData& playerData)
 void Run::Exit(PlayerData& playerData)
 {
 	playerData.isRun = false;
-	playerData.isRun_wall = false;
+	playerData.isRunWall = false;
 }

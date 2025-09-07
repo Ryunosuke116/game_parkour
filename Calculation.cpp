@@ -385,6 +385,35 @@ VECTOR Calculation::GetDirectionFromDegree(float degree)
 
 }
 
+/// <summary>
+/// ƒƒhƒŠƒQƒX‚Ì‰ñ“]
+/// </summary>
+/// <param name="center"></param>
+/// <param name="rotatePos"></param>
+/// <param name="dir"></param>
+/// <param name="radian"></param>
+/// <returns></returns>
+VECTOR Calculation::RotateLineSegment(
+	const VECTOR& center,
+	const VECTOR& rotatePos,		//‰ñ“]ˆÚ“®‚³‚¹‚½‚¢À•W
+	const VECTOR& dir,				//‰ñ“]²•ûŒü
+	const float& degree)			//‰ñ“]‹
+{
+
+	const float radian = DegToRad(degree);
+	VECTOR sub = VSub(rotatePos, center);
+	float cos = cosf(radian);
+	float sin = sinf(radian);
+
+	VECTOR term_1 = VScale(sub, cos);
+	VECTOR term_2 = VScale(VCross(dir, sub), sin);
+	VECTOR term_3 = VScale(dir, ((1 - cos) * VDot(sub, dir)));
+
+	VECTOR rotated = VAdd(term_1, VAdd(term_2, term_3));
+
+	return VAdd(center, rotated);
+}
+
 void Calculation::Initialize()
 {
 	/*if (instance != nullptr)

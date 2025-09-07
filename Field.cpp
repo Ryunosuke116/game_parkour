@@ -49,11 +49,6 @@ void Field::Initialize()
 	MV1SetPosition(modelHandle, position);
 	MV1SetPosition(bullHandle, position);
 
-	// モデルの０番目のフレームのコリジョン情報を構築
-	MV1SetupCollInfo(modelHandle, -1, 1, 1, 1);
-	// モデルの０番目のフレームのコリジョン情報を構築
-	//MV1SetupCollInfo(meshHandle, -1, 1, 1, 1);
-
 	isPoly = false;
 
 }
@@ -93,17 +88,6 @@ void Field::Update()
 /// </summary>
 void Field::Draw()
 {
-	if (isPoly)
-	{
-		MV1SetWireFrameDrawFlag(modelHandle, TRUE);
-		//MV1SetWireFrameDrawFlag(meshHandle, TRUE);
-	}
-	else
-	{
-		MV1SetWireFrameDrawFlag(modelHandle, FALSE);
-		//MV1SetWireFrameDrawFlag(meshHandle, FALSE);
-	}
-
 	MV1DrawModel(modelHandle);
 	MV1DrawModel(bullHandle);
 

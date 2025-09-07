@@ -6,6 +6,11 @@
 #include "AnimTime.h"
 #include "HitCheck.h"
 #include "DebugDrawer.h"
+#include "WorldSubSystem.h"
+#include "CollisionObjectManager.h"
+#include "Player.h"
+#include "PlayerManager.h"
+
 
 
 
@@ -17,22 +22,27 @@ PlayerCalculation::PlayerCalculation() :
     wallRun_stopTime(0.0f),
     isCalc_deceleration(false),
     isSlip_after(false),
-    isRun_Wall_Stop(false),
+    isRunWall_Stop(false),
     isJumpPower_add(false)
 {
 
 }
 
-VECTOR PlayerCalculation::Update(const VECTOR& moveDirection, 
-    const float playTime_anim, const int& animNumber_Now, 
+VECTOR PlayerCalculation::Update(
+    const VECTOR& moveDirection, 
+    const float playTime_anim,
+    const int animNumber_Now, 
     const PlayerData& playerData)
 {
     VECTOR moveVec = moveDirection;
 
     //進むスピードを乗算
       //ロールアクション中はそれに応じた速度
-    moveVec = Roll(animNumber_Now, moveVec, moveDirection,
-        playTime_anim, playerData);
+    moveVec = Roll(animNumber_Now,
+        moveVec,
+        moveDirection,
+        playTime_anim,
+        playerData);
    
     //通常時
     moveVec = Move(animNumber_Now, moveDirection, moveVec, playerData);
@@ -43,6 +53,16 @@ VECTOR PlayerCalculation::Update(const VECTOR& moveDirection,
         moveVec = HangingPosition();
     }
 
+    if (playerData.isHangToCrouch)
+    {
+        moveVec = HangToCrouchMove(
+            WorldSubSystem::GetInstance().GetSubSystem<CollisionObjectManager>()->GetCollisionObjects(),
+            WorldSubSystem::GetInstance().GetSubSystem<PlayerManager>()->GetPlayer());
+    }
+    else
+    {
+        isWhenClimbingHitGround = false;
+    }
 
     return moveVec;
 }
@@ -60,7 +80,7 @@ VECTOR PlayerCalculation::Move(const int& animNumber_Now,
 {
     if (playerData.isHanging) return moveVec;
 
-    VECTOR returnVec = moveVec;
+    VECTOR velocity = moveVec;
 
     if (!playerData.isRoll)
     {
@@ -126,31 +146,31 @@ VECTOR PlayerCalculation::Move(const int& animNumber_Now,
             }
         }
 
-        returnVec = VScale(moveDirection, moveSpeed_now);
+        velocity = VScale(moveDirection, moveSpeed_now);
     }
 
 
     //重力だけ前フレームのモノを使用
-    returnVec.y = moveVec_old.y;
+    velocity.y = moveVec_old.y;
     //DebugDrawer::Instance().InformationInput_string_VECTOR("moveVec_old %f %f %f\n", moveVec_old);
 
     //重力計算
-    returnVec = Gravity(returnVec, playerData);
+    velocity = Gravity(velocity, playerData);
 
     //ジャンプ計算
-    if (playerData.isRun_wall)
+    if (playerData.isRunWall)
     {
-        returnVec = Run_Wall(returnVec, playerData);
+        velocity = Run_Wall(velocity, playerData);
     }
     else
     {
-        returnVec = Jump(returnVec, animNumber_Now, playerData);
+        velocity = Jump(velocity, animNumber_Now, playerData);
     }
 
     //moveVecを保存
-    moveVec_old = returnVec;
+    moveVec_old = velocity;
 
-    return returnVec;
+    return velocity;
 }
 
 /// <summary>
@@ -238,7 +258,8 @@ VECTOR PlayerCalculation::Roll(const int& animNumber_Now,
     return move;
 }
 
-VECTOR PlayerCalculation::Run_Wall(const VECTOR& moveVec,
+VECTOR PlayerCalculation::Run_Wall(
+    const VECTOR& moveVec,
     const PlayerData& playerData)
 {
     VECTOR move = moveVec;
@@ -246,7 +267,7 @@ VECTOR PlayerCalculation::Run_Wall(const VECTOR& moveVec,
     //一度だけジャンプ力を付与
     if (isJumpPower_add)
     {
-        isRun_Wall_Stop = false;
+        isRunWall_Stop = false;
         wallRun_stopTime = 0.0f;
         move.y = 0.0f;
         move.y += jumpPower_now;
@@ -254,14 +275,14 @@ VECTOR PlayerCalculation::Run_Wall(const VECTOR& moveVec,
     }
     
     //ジャンプ力が0になったら少し留まる
-    if (move.y <= 0.0f && !isRun_Wall_Stop)
+    if (move.y <= 0.0f && !isRunWall_Stop)
     {
-        isRun_Wall_Stop = true;
+        isRunWall_Stop = true;
         move.y = 0.0f;
     }
 
     //少しの間留まる
-    if (isRun_Wall_Stop)
+    if (isRunWall_Stop)
     {
         if (wallRun_stopTime <= wallRun_stopTime_max)
         {
@@ -272,7 +293,22 @@ VECTOR PlayerCalculation::Run_Wall(const VECTOR& moveVec,
     }
 
     return move;
+}
 
+void PlayerCalculation::ObstacleCheck(
+    const VECTOR& moveDirection,
+    const VECTOR& playerPosition,
+    const float radius)
+{
+    const float reverseScale = -1.0f;
+    const VECTOR reverseMoveDirection = VScale(moveDirection, reverseScale);
+    const auto collisionObjects = WorldSubSystem::GetInstance().GetSubSystem<CollisionObjectManager>()->GetCollisionObjects();
+    const VECTOR wallContactPlayerPosition = VAdd(playerPosition, VScale(moveDirection, radius));
+
+    for (const auto& collisionObject : collisionObjects)
+    {
+        
+    }
 }
 
 /// <summary>
@@ -331,6 +367,97 @@ VECTOR PlayerCalculation::HangingDirection( const VECTOR& centerPos)
     return direction;
 }
 
+/// <summary>
+/// 登り
+/// </summary>
+/// <param name="mapHandle"></param>
+VECTOR PlayerCalculation::HangToCrouchMove(
+    const std::vector<std::weak_ptr<BaseObject>>& fieldObjects,
+    const std::weak_ptr<Player> player)
+{
+    //////////////////////////////////
+    //  コード整理しろ！
+    /////////////////////////////////
+
+    const auto& actualPlayer = player.lock();
+
+    VECTOR velocity = VGet(0.0f, 0.0f, 0.0f);
+
+    //指定のフレームまでは手に合わせて座標を更新
+    if (actualPlayer->GetNowAnimState().PlayTime_anim <= 22.0f)
+    {
+        VECTOR addPos = HangingPosition();
+
+        velocity = addPos;
+    }
+    //
+    else
+    {
+        //上り終わった後に少しずつ前進する
+        velocity = VScale(actualPlayer->GetNowMoveDirection(), 0.35f);
+
+        //胸の位置が床の位置をすぎたら足もとを基準に床との衝突判定をする
+        VECTOR chestPos = MV1GetFramePosition(actualPlayer->GetModelHandle(), 6);
+
+        VECTOR nowPos = chestPos;
+
+        VECTOR newPos = VAdd(nowPos, velocity);
+
+        //足のフレーム座標で衝突判定
+        VECTOR foot = MV1GetFramePosition(actualPlayer->GetModelHandle(), 167);
+
+        auto result = GroundCollisionCheckHangToCrouch(fieldObjects, nowPos, foot, newPos);
+
+        //playerの座標はフレーム座標を基準にしていないため縦だけずらす
+        velocity.y = result.second.y - nowPos.y;
+    }
+
+    return velocity;
+}
+
+/// <summary>
+/// 床との衝突判定処理
+/// 登るとき専用
+/// </summary>
+/// <param name="fieldObjects"></param>
+/// <param name="topPos"></param>
+/// <param name="foot"></param>
+/// <param name="position"></param>
+/// <returns></returns>
+std::pair<bool, VECTOR> PlayerCalculation::GroundCollisionCheckHangToCrouch(
+    const std::vector<std::weak_ptr<BaseObject>>& fieldObjects,
+    const VECTOR& topPos,
+    const VECTOR& foot,
+    const VECTOR& position)
+{
+    VECTOR bottomPos = VGet(topPos.x, foot.y, topPos.z);
+    //ごまかしで少し下にrayを伸ばす
+    bottomPos.y -= 5.0f;
+
+    MV1_COLL_RESULT_POLY rayPoly_ground;
+    VECTOR newPosition = position;
+
+    for (const auto& fieldObject : fieldObjects)
+    {
+        auto collisionObject = fieldObject.lock();
+
+        //rayが当たっていれば
+        isWhenClimbingHitGround = HitCheck::RayHitJudge(collisionObject->GetModelHandle(), -1, topPos, bottomPos, rayPoly_ground);
+
+        if (isWhenClimbingHitGround)
+        {
+            VECTOR newPlayerPos = VGet(0.0f, 0.0f, 0.0f);
+
+            //床 - プレイヤーの足元で押し戻し量を計算
+            newPlayerPos.y = rayPoly_ground.HitPosition.y - foot.y;
+            newPosition.y = newPosition.y + newPlayerPos.y;
+        }
+    }
+
+    //接地しているか
+    return std::make_pair(isWhenClimbingHitGround, newPosition);
+}
+
 
 void PlayerCalculation::Reset_move()
 {
@@ -341,7 +468,7 @@ void PlayerCalculation::Reset_move()
 void PlayerCalculation::Reset_run_wall()
 {
     wallRun_stopTime = 0.0f;
-    isRun_Wall_Stop = false;
+    isRunWall_Stop = false;
 }
 
 

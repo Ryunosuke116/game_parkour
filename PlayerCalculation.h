@@ -11,7 +11,7 @@ public:
 	~PlayerCalculation(){}
 
 	VECTOR Update(const VECTOR& moveDirection, const float playTime_anim,
-		const int& animNumber_Now, const PlayerData& playerData);
+		const int animNumber_Now, const PlayerData& playerData);
 
 	VECTOR Move(const int& animNumber_Now, const VECTOR& moveDirection,
 		const VECTOR& moveVec, const PlayerData& playerData);
@@ -34,11 +34,27 @@ public:
 	VECTOR Run_Wall(const VECTOR& moveVec,
 		const PlayerData& playerData);
 
+	VECTOR HangToCrouchMove(
+		const std::vector<std::weak_ptr<BaseObject>>& fieldObjects,
+		const std::weak_ptr<Player> player);
+
+	std::pair<bool, VECTOR> GroundCollisionCheckHangToCrouch(
+		const std::vector<std::weak_ptr<BaseObject>>& fieldObjects,
+		const VECTOR& topPos,
+		const VECTOR& foot,
+		const VECTOR& position);
+
+	void ObstacleCheck(
+		const VECTOR& moveDirection,
+		const VECTOR& playerPosition,
+		const float radius);
+
 	void Reset_move();
 	void Reset_run_wall();
 	void ResetMoveVec_old() { moveVec_old = VGet(0.0f, 0.0f, 0.0f); }
 
 	bool GetIsJumpPower_add()const { return isJumpPower_add; }
+	bool GetIsWhenClimbingHitGround()const { return isWhenClimbingHitGround; }
 	float GetjumpSpeed_now() const { return jumpPower_now; }
 	float GetMoveSpeed_now() const { return moveSpeed_now; }
 	float GetMoveSpeed_max() const { return MaxRunSpeed; }
@@ -79,8 +95,9 @@ private:
 
 	bool isCalc_deceleration;		//é~Ç‹ÇÈÇ∆Ç´Ç…àÍìxÇæÇØå∏ë¨ÉXÉsÅ[ÉhÇåvéZ
 	bool isSlip_after;				//slipÇµÇΩå„Ç©
-	bool isRun_Wall_Stop;
+	bool isRunWall_Stop;
 	bool isJumpPower_add;
+	bool isWhenClimbingHitGround;	//ìoÇ¡ÇƒÇ¢ÇÈÇ∆Ç´Ç…è∞Ç∆ê⁄êGÇµÇƒÇ¢ÇÈÇ©
 
 	VECTOR moveVec_old;
 	VECTOR hangingPoint;

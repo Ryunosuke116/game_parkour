@@ -12,7 +12,7 @@ BaseChara::BaseChara() :
     isCollisionCheck(false),
     position(VGet(-1.0f, -1.0f, -1.0f)),
     framePosition(VGet(-1.0f, -1.0f, -1.0f)),
-    moveVec(VGet(-1.0f, -1.0f, -1.0f)),
+    velocity(VGet(-1.0f, -1.0f, -1.0f)),
     targetMoveDirection(VGet(-1.0f, -1.0f, -1.0f)),
     moveDirection(VGet(-1.0f, -1.0f, -1.0f)),
     positionData({ NULL })
@@ -83,6 +83,7 @@ void BaseChara::UpdateAngle(const VECTOR& direction)
     // モデルの角度を更新
     angle = targetAngle - difference;
     DebugDrawer::Instance().InformationInput_string_float("angle %f\n", angle);
+    DebugDrawer::Instance().InformationInput_string_float("rotate_x %f\n", rotate_x);
     MV1SetRotationXYZ(modelHandle, VGet(rotate_x * DX_PI_F / 180.0f, angle + DX_PI_F, 0.0f));
 }
 

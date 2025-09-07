@@ -48,7 +48,7 @@ void Camera::Create()
 {
 	const auto self = shared_from_this();
 	//サブシステムに追加
-	WorldSubSystem::Instance().AddSubSystem<Camera>(self);
+	WorldSubSystem::GetInstance().AddSubSystem<Camera>(self);
 }
 
 /// <summary>
@@ -70,16 +70,16 @@ void Camera::Initialize()
 /// </summary>
 void Camera::Update()
 {
-	centerPos = WorldSubSystem::Instance().GetSubSystem<PlayerManager>()->GetPosition();
+	centerPos = WorldSubSystem::GetInstance().GetSubSystem<PlayerManager>()->GetPosition();
 	centerPos.y += 15.0f;
 
 	DistanceUpdate();
 
-	AngleUpdate(WorldSubSystem::Instance().GetSubSystem<PlayerManager>()->GetAngle());
+	AngleUpdate(WorldSubSystem::GetInstance().GetSubSystem<PlayerManager>()->GetAngle());
 
 	RotateUpdate();
 
-	for (const auto& fieldObject : WorldSubSystem::Instance().GetSubSystem<CollisionObjectManager>()->GetCollisionObjects())
+	for (const auto& fieldObject : WorldSubSystem::GetInstance().GetSubSystem<CollisionObjectManager>()->GetCollisionObjects())
 	{
 		auto collisionObject = fieldObject.lock();
 		CameraPosCalc(collisionObject->GetModelHandle());

@@ -20,7 +20,7 @@ void CollisionManager::Update(
 	if (chara.GetIsCollisionCheck())
 	{
 		chara.SetCollision_result(
-			Check_all(WorldSubSystem::Instance().GetSubSystem<CollisionObjectManager>()->GetCollisionObjects(),
+			Check_all(WorldSubSystem::GetInstance().GetSubSystem<CollisionObjectManager>()->GetCollisionObjects(),
 				chara.GetPosition(),
 				chara.GetMoveVec(),
 				chara.GetRadius(),
@@ -40,8 +40,11 @@ void CollisionManager::Update(
 /// <returns></returns>
 CollisionResult CollisionManager::Check_all(
 	const std::vector<std::weak_ptr<BaseObject>>& collisionObjects,
-	const VECTOR& playerPos, const VECTOR& moveVec, const float& radius,
-	const PositionData& positionData,const PlayerData& playerData)
+	const VECTOR& playerPos,
+	const VECTOR& moveVec,
+	const float& radius,
+	const PositionData& positionData,
+	const PlayerData& playerData)
 {
 	VECTOR oldPos = playerPos;
 	VECTOR newPos = VAdd(oldPos, moveVec);
@@ -114,22 +117,26 @@ CollisionResult CollisionManager::Check_all(
 /// <param name="positionData.radius"></param>
 /// <param name="positionData.addBottomPos"></param>
 /// <returns></returns>
-bool CollisionManager::HeadCollisionCheck(const std::vector<std::weak_ptr<BaseObject>>& collisionObjects,
-	VECTOR& newPos, const VECTOR& moveVec, const PositionData& positionData, const float& radius)
+bool CollisionManager::HeadCollisionCheck(
+	const std::vector<std::weak_ptr<BaseObject>>& collisionObjects,
+	VECTOR& newPos,
+	const VECTOR& moveVec, 
+	const PositionData& positionData,
+	const float& radius)
 {
 	MV1_COLL_RESULT_POLY_DIM hitPoly_head;
-	VECTOR position_top_new = VAdd(positionData.position_top_ray, moveVec);
-	VECTOR position_bottom_new = VAdd(positionData.position_bottom_ray, moveVec);
+	VECTOR newTopPosition = VAdd(positionData.capsuleTopPosition, moveVec);
 
 	//fieldObjectの要素分確認
 	for (auto& fieldObject : collisionObjects)
 	{
 		auto collisionObject = fieldObject.lock();
 
-		bool isHitHead = HitCheck::SphereHitJudge(collisionObject->GetModelHandle(),
+		bool isHitHead = HitCheck::SphereHitJudge(
+			collisionObject->GetModelHandle(),
 			-1,
 			radius,
-			position_top_new,
+			newTopPosition,
 			hitPoly_head);
 
 		if (isHitHead)
@@ -147,13 +154,17 @@ bool CollisionManager::HeadCollisionCheck(const std::vector<std::weak_ptr<BaseOb
 				/////////////////////////////////////////
 				if (poly.Normal.y <= -0.7f || poly.Normal.y >= 0.7f)
 				{
-					hitPos_head = HitCheck::ClosestPtToPointTriangle(position_top_new, poly.Position[0], poly.Position[1], poly.Position[2]);
+					hitPos_head = HitCheck::ClosestPtToPointTriangle(
+						newTopPosition,
+						poly.Position[0],
+						poly.Position[1], 
+						poly.Position[2]);
 
-					VECTOR hitDirection = VSub(hitPos_head, position_top_new);
+					VECTOR hitDirection = VSub(hitPos_head, newTopPosition);
 					hitDirection = VNorm(hitDirection);
 					hitDirection = VScale(hitDirection, radius);
 
-					VECTOR hitPos_sphere = VAdd(position_top_new, hitDirection);
+					VECTOR hitPos_sphere = VAdd(newTopPosition, hitDirection);
 
 					newAddPos.y = hitPos_head.y - hitPos_sphere.y;
 				}
@@ -191,8 +202,8 @@ std::pair<bool, std::string> CollisionManager::GroundCollisionCheck(const std::v
 	bool returnFlag = false;
 	std::string returnTag = "";
 
-	VECTOR position_top_new = VAdd(positionData.position_top_ray, moveVec);
-	VECTOR position_bottom_new = VAdd(positionData.position_bottom_ray, moveVec);
+	VECTOR position_top_new = VAdd(positionData.centerPosition, moveVec);
+	VECTOR position_bottom_new = VAdd(positionData.rayBottomPosition, moveVec);
 
 	MV1_COLL_RESULT_POLY rayPoly_ground;
 
@@ -252,7 +263,7 @@ std::pair<bool, std::string> CollisionManager::GroundCollisionCheck(const std::v
 /// <param name="positionData.radius"></param>
 /// <param name="isJump"></param>
 /// <returns></returns>
-std::pair<bool, VECTOR> CollisionManager::GroundCollisionCheck_Hang_to_Crouch(const std::vector<std::weak_ptr<BaseObject>>& collisionObjects,
+std::pair<bool, VECTOR> CollisionManager::GroundCollisionCheckHangToCrouch(const std::vector<std::weak_ptr<BaseObject>>& collisionObjects,
 	const VECTOR& oldPos, const VECTOR& newPos, const VECTOR& foot,
 	const PositionData& positionData)
 {
@@ -303,10 +314,10 @@ std::pair<bool, VECTOR> CollisionManager::WallCollisionCheck(
 	const PositionData& positionData,
 	const float& radius)
 {
-	VECTOR position_top_new = VAdd(positionData.position_top_Capsule, moveVec);
-	VECTOR position_bottom_new = VAdd(positionData.position_bottom_Capsule, moveVec);
-	VECTOR capsule_axis_top = VAdd(positionData.position_top_ray, moveVec);					//カプセルの軸
-	VECTOR capsule_axis_bottom = VAdd(positionData.position_bottom_ray, moveVec);			//カプセルの軸
+	VECTOR position_top_new = VAdd(positionData.capsuleTopPosition, moveVec);
+	VECTOR position_bottom_new = VAdd(positionData.capsuleBottomPosition, moveVec);
+	VECTOR capsule_axis_top = VAdd(positionData.rayTopPosition, moveVec);					//カプセルの軸
+	VECTOR capsule_axis_bottom = VAdd(positionData.rayBottomPosition, moveVec);			//カプセルの軸
 
 	bool isPossibleWallRun = false;
 	VECTOR hitPoly_normal = { 0.0f };

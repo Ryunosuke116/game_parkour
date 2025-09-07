@@ -45,7 +45,7 @@ void Shadow::Initialize()
 void Shadow::Update()
 {
 	const VECTOR drawRange = VGet(100.0f, 50.0f, 100.0f);
-	const std::shared_ptr<PlayerManager> playerManager = WorldSubSystem::Instance().GetSubSystem<PlayerManager>();
+	const std::shared_ptr<PlayerManager> playerManager = WorldSubSystem::GetInstance().GetSubSystem<PlayerManager>();
 
 	//シャドウを描画する範囲を指定
 	VECTOR minPos = VSub(playerManager->GetPosition(), drawRange);

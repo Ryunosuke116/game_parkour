@@ -39,7 +39,7 @@ void PlayerManager::Create()
 	player->Create();
 
 	//サブシステムに追加
-	WorldSubSystem::Instance().AddSubSystem<PlayerManager>(self);
+	WorldSubSystem::GetInstance().AddSubSystem<PlayerManager>(self);
 }
 
 /// <summary>

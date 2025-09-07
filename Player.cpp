@@ -21,10 +21,10 @@
 Player::Player() :
     BaseChara(),
     start_walkTime(-1),
-    centerPosition(VGet(0.0f, 0.0f, 0.0f)),
-    moveDirection_now(VGet(0.0f, 0.0f, 0.0f)),
+    nowMoveDirection(VGet(0.0f, 0.0f, 0.0f)),
     moveVec_normal(VGet(0.0f,0.0f,0.0f)),
-    isCalc_moveVec(false),
+    faceDirection(VGet(0.0f,0.0f,0.0f)),
+    isCalcMoveVec(false),
     playerData({false})
 {
 }
@@ -91,21 +91,21 @@ void Player::Initialize()
     playerData.isHanging = false;
     playerData.isHanging_now = false;
     playerData.isUse_Hanging = true;
-    playerData.isHang_to_Crouch = false;
+    playerData.isHangToCrouch = false;
     playerData.isRun = false;
-    playerData.isRun_wall = false;
+    playerData.isRunWall = false;
     playerData.isUse_wallJump = true;
     playerData.isDash = false;
     playerData.isWallClimb = false;
     isCalc = false;
-    isCalc_moveVec = false;
+    isCalcMoveVec = false;
     isCollisionCheck = true;
    
     coinCount = 0;
     degree_pad_now = 0.0f;
     effectTimer = 0.0f;
     padInput_now = VGet(0.0f, 0.0f, 0.0f);
-    moveDirection_now = VGet(0.0f, 0.0f, 0.0f);
+    nowMoveDirection = VGet(0.0f, 0.0f, 0.0f);
 
     MV1SetRotationXYZ(modelHandle, VGet(rotate_x * DX_PI_F / 180.0f, angle + DX_PI_F, 0.0f));
 
@@ -134,59 +134,18 @@ void Player::Update()
     }
 
     //stateに応じた挙動処理
-    auto [moveDirection_new, data_new] = nowState->Update(
-        WorldSubSystem::Instance().GetSubSystem<Camera>()->GetCameraDirection(),
-        WorldSubSystem::Instance().GetSubSystem<CollisionObjectManager>()->GetCollisionObjects(),
+    auto [moveDirection_new, newData] = nowState->Update(
+        WorldSubSystem::GetInstance().GetSubSystem<Camera>()->GetCameraDirection(),
+        WorldSubSystem::GetInstance().GetSubSystem<CollisionObjectManager>()->GetCollisionObjects(),
         *this);
 
-    if (playerData.isHang_to_Crouch)
-    {
-        position = VAdd(position, moveDirection_new);
-    }
-    else
-    {
-        moveDirection = moveDirection_new;
-    }
-    float radian_pad_ = atan2f(moveDirection.x, moveDirection.z);
-    float degree_pad_now = abs(Calculation::radToDeg(radian_pad_));
-    DebugDrawer::Instance().InformationInput_string_float("degree %f", degree_pad_now);
-    DebugDrawer::Instance().InformationInput_string_VECTOR("moveDir %f %f %f\n", moveDirection);
+    moveDirection = moveDirection_new;
 
-    playerData = data_new;
+    playerData = newData;
 
-    bool isAction = !playerData.isHanging && 
-        !playerData.isHang_to_Crouch &&
-        !playerData.isFalling && 
-        !playerData.isJump && 
-        !playerData.isRoll;
+    MoveDirectionUpdate();
 
-    isCalc_moveVec = VSize(moveDirection) != 0;
-
-    //移動方向ベクトルが0でない場合コピー
-    if (isCalc_moveVec)
-    {
-        targetMoveDirection = moveDirection;
-    }
-
-    //通常時は進行方向にすぐ向くように
-    if (isAction)
-    {
-        moveDirection_now = Calculation::Leap(moveDirection_now, 
-            targetMoveDirection, 0.15f);
-    }
-    //特定のアクション時は移動方向を変えられないように
-    else if(!playerData.isHanging && 
-        !playerData.isHang_to_Crouch &&
-        !playerData.isWalljump)
-    {
-        const float speed = 0.03f;
-
-        //ゆっくり最新の方向に向く
-        moveDirection_now = Calculation::Leap(moveDirection_now,
-            targetMoveDirection, speed);
-    }
-
-    UpdateAngle(moveDirection_now);
+    UpdateAngle(faceDirection);
    
     //状態変更
     ChangeState();
@@ -194,18 +153,11 @@ void Player::Update()
     isChange_falling = nowState->MotionUpdate(playerData);
 
     //move計算
-    if (!playerData.isHang_to_Crouch)
-    {
-        moveVec = playerCalculation->Update(moveDirection_now,
-            nowState->GetNowAnimState().PlayTime_anim,
-            animationChanger->GetAnimNumber_now(), playerData);
-    }
-
-    if (!playerData.isRun)
-    {
-        positionData.position_bottom_ray = position;
-        positionData.position_bottom_ray.y -= 0.1f;
-    }
+    velocity = playerCalculation->Update(
+        nowMoveDirection,
+        nowState->GetNowAnimState().PlayTime_anim,
+        animationChanger->GetAnimNumber_now(),
+        playerData);
 
     if (playerData.isRun)
     {
@@ -216,6 +168,11 @@ void Player::Update()
             effectManager->SetPosition(position,"foot_smoke");
             effectTimer = 0.0f;
         }
+    }
+    else
+    {
+        positionData.rayBottomPosition = position;
+        positionData.rayBottomPosition.y -= 0.1f;
     }
 
     ///////////////////////////////////////
@@ -258,11 +215,11 @@ void Player::Update()
 
 void Player::Update_start(const float& timer)
 {
-    moveVec = VGet(0.0f, 0.0f, 0.5f);
+    velocity = VGet(0.0f, 0.0f, 0.5f);
 
     if (timer <= 40.0f)
     {
-        position = VAdd(position, moveVec);
+        position = VAdd(position, velocity);
     }
     else
     {
@@ -284,6 +241,52 @@ void Player::Update_finish(const float& timer)
     ChangeState();
 
     nowState->MotionUpdate(playerData);
+}
+
+void Player::MoveDirectionUpdate()
+{
+    const bool isAction = !playerData.isHanging &&
+        !playerData.isHangToCrouch &&
+        !playerData.isFalling &&
+        !playerData.isJump &&
+        !playerData.isRoll;
+
+    isCalcMoveVec = VSize(moveDirection) != 0;
+
+    //移動方向ベクトルが0でない場合代入
+    if (isCalcMoveVec)
+    {
+        targetMoveDirection = moveDirection;
+    }
+
+    //通常時は進行方向にすぐ向くように
+    if (isAction)
+    {
+        const float leapSpeed = 0.15f;
+        nowMoveDirection = Calculation::Leap(
+            nowMoveDirection,
+            targetMoveDirection,
+            leapSpeed);
+    }
+
+    //特定のアクション時は移動方向を変えられないように
+    else if (!playerData.isHanging &&
+        !playerData.isHangToCrouch &&
+        !playerData.isWalljump)
+    {
+        const float speed = 0.03f;
+
+        //ゆっくり最新の方向に向く
+        nowMoveDirection = Calculation::Leap(
+            nowMoveDirection,
+            targetMoveDirection, 
+            speed);
+    }
+
+    if (!playerData.isRunWall)
+    {
+        faceDirection = nowMoveDirection;
+    }
 }
 
 void Player::ChangeState()
@@ -308,45 +311,68 @@ void Player::CollisionUpdate()
     const int left = MV1SearchFrame(modelHandle, "mixamorig:LeftHandIndex4");
     const int right = MV1SearchFrame(modelHandle, "mixamorig:RightHandMiddle4_end");
     const int head = 7;
+    const VECTOR verticalShaft = VGet(0.0f, 1.0f, 0.0f);
+    const float rightAngle = 90.0f;
 
     playerCalculation->SetHandPos_left(MV1GetFramePosition(modelHandle, left));
     playerCalculation->SetHandPos_right(MV1GetFramePosition(modelHandle, right));
-    centerPosition = MV1GetFramePosition(modelHandle, head);
+    positionData.centerPosition = MV1GetFramePosition(modelHandle, head);
     positionData.oldPosition = position;
 
     //ray
-    VECTOR position_center = VScale(VAdd(MV1GetFramePosition(modelHandle, head), position), 0.5f);
-    position_center = VGet(position.x, position_center.y, position.z);
-    positionData.position_top_ray = VGet(position.x, position_center.y + height, position.z);
-    positionData.position_bottom_ray = position;
+    positionData.centerPosition = VScale(VAdd(MV1GetFramePosition(modelHandle, head), position), 0.5f);
+ 
+    positionData.centerPosition = VGet(position.x, positionData.centerPosition.y, position.z);
+    positionData.rayTopPosition = VGet(position.x, positionData.centerPosition.y + height, position.z);
+    positionData.rayBottomPosition = position;
     
-    positionData.position_top_ray.x = positionData.position_bottom_ray.x;
-    positionData.position_top_ray.z = positionData.position_bottom_ray.z;
-    positionData.position_bottom_ray.y -= 0.1f;
+    positionData.rayTopPosition.x = positionData.rayBottomPosition.x;
+    positionData.rayTopPosition.z = positionData.rayBottomPosition.z;
+    positionData.rayBottomPosition.y -= 0.1f;
      
     //投影で歩くためのごまかし
     if (playerData.isRun && !playerData.isJump)
     {
-        positionData.position_bottom_ray.y -= playerCalculation->GetMoveSpeed_now();
+        positionData.rayBottomPosition.y -= playerCalculation->GetMoveSpeed_now();
     }
 
+    VECTOR rotatePosition = VAdd(position, faceDirection);
+    positionData.sideShaft = Calculation::RotateLineSegment(
+        position,
+        rotatePosition,
+        verticalShaft,
+        rightAngle);
+
     //カプセル
-    positionData.position_top_Capsule = VGet(position_center.x, position_center.y + height, centerPosition.z);
-    positionData.position_bottom_Capsule = position;
+    positionData.capsuleTopPosition = VGet(positionData.centerPosition.x, positionData.centerPosition.y + height, positionData.centerPosition.z);
+    positionData.capsuleBottomPosition = position;
     
     //調整
     //カプセル
-    positionData.position_top_Capsule.x = positionData.position_bottom_Capsule.x;
-    positionData.position_top_Capsule.z = positionData.position_bottom_Capsule.z;
-    positionData.position_bottom_Capsule.y += radius;
-    positionData.position_top_Capsule.y -= radius;
+    positionData.capsuleTopPosition.x = positionData.capsuleBottomPosition.x;
+    positionData.capsuleTopPosition.z = positionData.capsuleBottomPosition.z;
+    positionData.capsuleBottomPosition.y += radius;
+    positionData.capsuleTopPosition.y -= radius;
 
     //bottomPosよりも下にいかないように
     //capsule
-    if (positionData.position_top_Capsule.y <= positionData.position_bottom_Capsule.y)
+    if (positionData.capsuleTopPosition.y <= positionData.capsuleBottomPosition.y)
     {
-        positionData.position_top_Capsule.y = positionData.position_bottom_Capsule.y;
+        positionData.capsuleTopPosition.y = positionData.capsuleBottomPosition.y;
     }
+
+    const VECTOR sideDirection = VNorm(VSub(position, positionData.sideShaft));
+
+    if (playerData.isRunWall)
+    {
+        positionData.capsuleTopPosition = Calculation::RotateLineSegment(
+            positionData.capsuleBottomPosition,
+            positionData.capsuleTopPosition,
+            sideDirection,
+            rotate_x);
+    }
+
+    DebugDrawer::Instance().InformationInput_string_VECTOR("faceDirection %f %f %f\n", faceDirection);
 
 }
 
@@ -362,13 +388,19 @@ void Player::Receive_CollisionResult()
             playerCalculation->SetHitWall_normal(collision_result.isHitWall_normal);
         }
     }
+    else
+    {
+        position = VAdd(position, velocity);
+    }
 }
 
 void Player::DebugUpdate()
 {
     //カプセル
-    DebugDrawer::Instance().InformationInput_capsule(positionData.position_top_Capsule,
-        positionData.position_bottom_Capsule, radius,
+    DebugDrawer::Instance().InformationInput_capsule(
+        positionData.capsuleTopPosition,
+        positionData.capsuleBottomPosition,
+        radius,
         GetColor(255, 0, 0));
 
     //AABB
@@ -398,7 +430,7 @@ void Player::DebugUpdate()
     DebugDrawer::Instance().InformationInput_string_bool("isIdle %d\n", playerData.isIdle);
     DebugDrawer::Instance().InformationInput_string_bool("isMove %d\n", playerData.isMove);
     DebugDrawer::Instance().InformationInput_string_bool("isRun %d\n", playerData.isRun);
-    DebugDrawer::Instance().InformationInput_string_bool("isRun_wall %d\n", playerData.isRun_wall);
+    DebugDrawer::Instance().InformationInput_string_bool("isRunWall %d\n", playerData.isRunWall);
     DebugDrawer::Instance().InformationInput_string_bool("isUse_wallJump %d\n", playerData.isUse_wallJump);
     DebugDrawer::Instance().InformationInput_string_bool("isStopRun %d\n", playerData.isStopRun);
     DebugDrawer::Instance().InformationInput_string_bool("isJump %d\n", playerData.isJump);
@@ -414,6 +446,6 @@ void Player::DebugUpdate()
     DebugDrawer::Instance().InformationInput_string_bool("isHanging_now %d\n", playerData.isHanging_now);
     DebugDrawer::Instance().InformationInput_string_bool("isUse_Hanging %d\n", playerData.isUse_Hanging);
     DebugDrawer::Instance().InformationInput_string_bool("isPossibleWallRun %d\n", playerData.isPossibleWallRun);
-    DebugDrawer::Instance().InformationInput_string_bool("isHang_to_Crouch %d\n", playerData.isHang_to_Crouch);
+    DebugDrawer::Instance().InformationInput_string_bool("isHangToCrouch %d\n", playerData.isHangToCrouch);
 
 }

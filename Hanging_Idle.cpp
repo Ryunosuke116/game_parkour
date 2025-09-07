@@ -48,7 +48,7 @@ void Hanging_Idle::Initialize(int& modelHandle,const int changeNum, Player& play
     VECTOR centerPosition = MV1GetFramePosition(modelHandle, 2);
 
     player.playerCalculation->Reset_move();
-    player.SetMoveDirection_now(player.playerCalculation->HangingDirection(centerPosition));
+    player.SetnowMoveDirection(player.playerCalculation->HangingDirection(centerPosition));
     player.SetRotata_x(0.0f);
 }
 
@@ -63,7 +63,7 @@ std::pair<VECTOR, PlayerData> Hanging_Idle::Update(const VECTOR& cameraDirection
     const std::vector<std::weak_ptr<BaseObject>>& fieldObjects, Player& player)
 {
     
-    VECTOR moveDirection = player.GetMoveDirection_now();
+    VECTOR moveDirection = player.GetNowMoveDirection();
 
     PlayerData playerData = player.GetData();
     playerData.isHanging_now = true;
@@ -72,7 +72,7 @@ std::pair<VECTOR, PlayerData> Hanging_Idle::Update(const VECTOR& cameraDirection
     //ã‚É“o‚é
     if (PadInput::isUp())
     {
-        playerData.isHang_to_Crouch = true;
+        playerData.isHangToCrouch = true;
         player.SetIsCollisionCheck(false);
         player.playerCalculation->ResetMoveVec_old();
         isChangeState = true;

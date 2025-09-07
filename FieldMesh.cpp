@@ -107,6 +107,7 @@ void FieldMesh::Update()
 /// </summary>
 void FieldMesh::Draw()
 {
+	//MV1SetWireFrameDrawFlag(modelHandle, FALSE);
 	if (isPoly)
 	{
 		MV1SetWireFrameDrawFlag(modelHandle, TRUE);

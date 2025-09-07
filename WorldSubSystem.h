@@ -10,7 +10,7 @@ class IObject;
 class WorldSubSystem
 {
 public:
-	static WorldSubSystem& Instance();
+	static WorldSubSystem& GetInstance();
 
 	template <typename T>
 	void AddSubSystem(const std::shared_ptr<T>& system)

@@ -26,6 +26,7 @@ public:
 	void Update_start(const float& timer);
 	void Update_finish(const float& timer);
 	void DebugUpdate();
+	void MoveDirectionUpdate();
 	void Receive_CollisionResult();
 	void ChangeState();
 	void CollisionUpdate();
@@ -35,17 +36,17 @@ public:
 	//　ゲッター
 	///////////////////////////////////
 
-	VECTOR GetCenterPos() const { return centerPosition; }
-	VECTOR GetTopPos() const { return positionData.position_top_Capsule; }
-	VECTOR GetBottomPos() const { return positionData.position_bottom_Capsule; }
-	VECTOR GetMoveVec() const { return moveVec; }
+	VECTOR GetTopPos() const { return positionData.capsuleTopPosition; }
+	VECTOR GetBottomPos() const { return positionData.capsuleBottomPosition; }
+	VECTOR GetMoveVec() const { return velocity; }
 	VECTOR GetlinePos_end() const { return linePos_end; }
 	VECTOR GetHeadPos() const { return headPos; }
-	VECTOR GetMoveDirection_now() const { return moveDirection_now; }
+	VECTOR GetNowMoveDirection() const { return nowMoveDirection; }
 	bool GetIsGround() const { return playerData.isGround; }
 	int GetModelHandle() const { return modelHandle; }
 	int GetNowStateNumber() const { return animationChanger->GetAnimNumber_now(); }
 	PlayerData GetData() const { return playerData; }
+	PlayerStateBase::AnimState GetNowAnimState() const { return nowState->GetNowAnimState(); }
 	float GetRadius()const override { return radius; }
 
 	//////////////////////////////////
@@ -53,7 +54,7 @@ public:
 	/////////////////////////////////
 	void SetIsGround(bool flag) { playerData.isGround = flag; }
 	void SetPos(VECTOR newPos) { position = newPos; }
-	void SetMoveDirection_now(const VECTOR& set) { moveDirection_now = set; }
+	void SetnowMoveDirection(const VECTOR& set) { nowMoveDirection = set; }
 	std::shared_ptr<PlayerCalculation> playerCalculation = NULL;
 private:
 
@@ -69,13 +70,13 @@ private:
 	static constexpr float height = 10.0f;
 
 	VECTOR linePos_end;
-	VECTOR centerPosition;
 	VECTOR topPosition;
 	VECTOR bottomPosition;
 	VECTOR moveVec_normal;
 	VECTOR headPos;
 	VECTOR handCenterPos;
-	VECTOR moveDirection_now;		//現在向いている方向
+	VECTOR nowMoveDirection;		//現在向いている方向
+	VECTOR faceDirection;
 	VECTOR padInput_now;
 
 	float radian_wall;
@@ -88,7 +89,7 @@ private:
 	bool isPush;					//ボタンを押したか
 	bool isChange_falling;				//アニメーションを変更するか
 	bool isCalc;
-	bool isCalc_moveVec;
+	bool isCalcMoveVec;
 
 	//他クラス
 	PlayerData playerData;

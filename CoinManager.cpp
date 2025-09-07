@@ -65,9 +65,9 @@ void CoinManager::Update()
 	{
 		//player‚Æ“–‚½‚Á‚Ä‚¢‚½‚çíœ‚·‚é
 		if ((*it)->Update(
-			WorldSubSystem::Instance().GetSubSystem<PlayerManager>()->GetPlayer()->GetTopPos(),
-			WorldSubSystem::Instance().GetSubSystem<PlayerManager>()->GetPlayer()->GetBottomPos(),
-			WorldSubSystem::Instance().GetSubSystem<PlayerManager>()->GetPlayer()->GetRadius()
+			WorldSubSystem::GetInstance().GetSubSystem<PlayerManager>()->GetPlayer()->GetTopPos(),
+			WorldSubSystem::GetInstance().GetSubSystem<PlayerManager>()->GetPlayer()->GetBottomPos(),
+			WorldSubSystem::GetInstance().GetSubSystem<PlayerManager>()->GetPlayer()->GetRadius()
 			))
 		{
 			NotifyCoinPicked(coinValue);
@@ -79,7 +79,7 @@ void CoinManager::Update()
 		it++;
 	}
 
-	posAddObject = WorldSubSystem::Instance().GetSubSystem<Camera>()->GetSpherePosition();
+	posAddObject = WorldSubSystem::GetInstance().GetSubSystem<Camera>()->GetSpherePosition();
 }
 
 void CoinManager::Draw()

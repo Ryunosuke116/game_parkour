@@ -13,11 +13,13 @@ struct CollisionResult
 
 struct PositionData
 {
-	VECTOR position_top_Capsule;
-	VECTOR position_bottom_Capsule;
-	VECTOR position_top_ray;
-	VECTOR position_bottom_ray;
+	VECTOR capsuleTopPosition;
+	VECTOR capsuleBottomPosition;
+	VECTOR rayTopPosition;
+	VECTOR rayBottomPosition;
+	VECTOR centerPosition;
 	VECTOR oldPosition;
+	VECTOR sideShaft;				//‰¡Ž²
 };
 
 struct HangingData

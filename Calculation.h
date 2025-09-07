@@ -36,6 +36,12 @@ public:
 	static VECTOR Leap(const VECTOR& changePosition, const VECTOR& latestPosition, const float& speed);
 	static VECTOR GetDirectionFromDegree(float degree);
 	static VECTOR SphereMeshOutsideTriangle(const MV1_COLL_RESULT_POLY& poly, const VECTOR& pos);
+	static VECTOR RotateLineSegment(
+		const VECTOR& center,
+		const VECTOR& rotatePos,
+		const VECTOR& dir,
+		const float& degree);
+
 	static NearestResult SphereMeshOutsideTriangle_line(const MV1_COLL_RESULT_POLY& poly, const VECTOR& pos);
 	static VECTOR AxisRotationX(const VECTOR& rotation, const float angle);
 };

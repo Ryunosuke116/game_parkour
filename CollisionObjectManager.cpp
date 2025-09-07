@@ -41,7 +41,7 @@ void CollisionObjectManager::Create()
 	}
 
 	//サブシステムに追加
-	WorldSubSystem::Instance().AddSubSystem<CollisionObjectManager>(self);
+	WorldSubSystem::GetInstance().AddSubSystem<CollisionObjectManager>(self);
 }
 
 void CollisionObjectManager::Initialize()

@@ -2,7 +2,7 @@
 #include "WorldSubSystem.h"
 #include "IObject.h"
 
-WorldSubSystem& WorldSubSystem::Instance()
+WorldSubSystem& WorldSubSystem::GetInstance()
 {
 	static WorldSubSystem instance;
 	return instance;

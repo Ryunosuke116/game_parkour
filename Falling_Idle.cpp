@@ -46,7 +46,7 @@ std::pair<VECTOR, PlayerData> Falling_Idle::Update(const VECTOR& cameraDirection
 
     FlagReset_jump(playerData);
 
-    VECTOR head = player.GetPositionData().position_top_ray;
+    VECTOR head = player.GetPositionData().rayTopPosition;
 
     //å©íºÇµ
     //äRíÕÇ›îªíË
@@ -57,7 +57,7 @@ std::pair<VECTOR, PlayerData> Falling_Idle::Update(const VECTOR& cameraDirection
             fieldObjects,
             player.GetPosition(),
             head,
-            player.GetMoveDirection_now(),
+            player.GetNowMoveDirection(),
             cliff_radius);
         
         //íÕÇﬁÇ∆Ç±ÇÎÇ™ïΩçsÇæÇ¡ÇΩèÍçá
@@ -115,7 +115,7 @@ VECTOR Falling_Idle::Command(const VECTOR& cameraDirection, PlayerData& playerDa
     RollMove(playerData);
     WallRunMove(playerData, player);
 
-    if (playerData.isRun_wall)
+    if (playerData.isRunWall)
     {
         moveDirection = VGet(0.0f, 1.0f, 0.0f);
     }

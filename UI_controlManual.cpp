@@ -41,7 +41,7 @@ void UI_controlManual::Update()
 	draw_UIs.push_back(uiHandles.at("reset_camera"));
 
 	if ((!data.isHanging_now ||
-		!data.isRun_wall) &&
+		!data.isRunWall) &&
 		!data.isHanging_now)
 	{
 		draw_UIs.push_back(uiHandles.at("move"));
@@ -65,7 +65,7 @@ void UI_controlManual::Update()
 		draw_UIs.push_back(uiHandles.at("move_down"));
 	}
 
-	if (data.isRun_wall)
+	if (data.isRunWall)
 	{
 		draw_UIs.push_back(uiHandles.at("move_down"));
 	}

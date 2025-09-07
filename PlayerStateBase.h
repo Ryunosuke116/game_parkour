@@ -10,7 +10,6 @@ class Player;
 class PlayerStateBase
 {
 public:
-
 	struct AnimState
 	{
 		int AttachIndex;			//アニメーション情報

@@ -265,7 +265,7 @@ void PlayerStateBase::WallRunMove(PlayerData& playerData, Player& player)
         if (abs(degreePadWallDifference) <= entryDegreeWallRun)
         {
             //ロールアクションとジャンプをできないように
-            playerData.isRun_wall = true;
+            playerData.isRunWall = true;
             playerData.isRun = true;
             playerData.isUse_wallJump = false;
             playerData.isJump_second = false;
@@ -274,7 +274,7 @@ void PlayerStateBase::WallRunMove(PlayerData& playerData, Player& player)
 
             player.playerCalculation->ChangeIsJumpPower_add_ture();
             player.playerCalculation->SetJumpPower();
-            player.SetMoveDirection_now(VScale(hitWallNormal, -1.0f));
+            player.SetnowMoveDirection(VScale(hitWallNormal, -1.0f));
             player.SetRotata_x(run_wall_rotate_x);
         }
     }

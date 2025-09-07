@@ -24,7 +24,7 @@ public:
 	float GetAngle()const { return angle; }
 	VECTOR GetPosition()const { return position; }
 	VECTOR GetFramePosition()const { return framePosition; }
-	VECTOR GetMoveVec()const { return moveVec; }
+	VECTOR GetMoveVec()const { return velocity; }
 	PositionData GetPositionData() const { return positionData; }
 	CollisionResult GetCollisionResult()const { return collision_result; }
 	virtual float GetRadius()const abstract;
@@ -32,8 +32,6 @@ public:
 	void SetCollision_result(const CollisionResult& newResult) { collision_result = newResult; }
 	void SetRotata_x(const float& set) { rotate_x = set; }
 	void SetIsCollisionCheck(const bool& set) { isCollisionCheck = set; }
-	void SetRotate_y(const float& set) { angle = set; }
-	void SetTargetMoveDirection(const VECTOR& set) { targetMoveDirection = set; }
 protected:
 
 	int modelHandle;
@@ -47,13 +45,12 @@ protected:
 
 	VECTOR position;
 	VECTOR framePosition;
-	VECTOR moveVec;
+	VECTOR velocity;
 	VECTOR targetMoveDirection;
 	VECTOR moveDirection;
 
 	PositionData positionData;
 	CollisionResult collision_result;
-	ObjectMediator* objectMediator;
 
 	static constexpr float	MoveSpeed = 0.4f;	    // ˆÚ“®‘¬“x
 	static constexpr float angleSpeed = 0.2f;

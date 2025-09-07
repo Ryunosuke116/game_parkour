@@ -21,6 +21,11 @@ public:
 	void Exit(PlayerData& playerData) override;			//ó‘Ô‚ğ”²‚¯‚é‚Æ‚«
 
 	void DashMove(PlayerData& playerData);
+	void ObstacleCheck(
+		const std::vector<std::weak_ptr<BaseObject>>& fieldObjects,
+		const VECTOR& moveDirection,
+		const VECTOR& playerPosition,
+		const float radius);
 
 	std::pair<VECTOR, PlayerData> Update_normal(const VECTOR& cameraDirection, Player& player);
 	std::pair<VECTOR, PlayerData> Update_wallRun(Player& player,

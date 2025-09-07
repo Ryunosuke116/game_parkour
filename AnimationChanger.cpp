@@ -198,7 +198,7 @@ std::shared_ptr<PlayerStateBase> AnimationChanger::ChangeState(int& modelHandle,
     }
 
     //崖のぼり
-    if (playerData.isHang_to_Crouch &&
+    if (playerData.isHangToCrouch &&
         animNumber_Now != animNum::braced_Hang_To_Crouch)
     {
         //nowState内のアニメーション情報を保存
