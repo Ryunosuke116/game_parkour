@@ -18,6 +18,10 @@ EffectManager::EffectManager()
 /// </summary>
 EffectManager::~EffectManager()
 {
+	for (auto& effectData : effectDatas)
+	{
+		DeleteEffekseerEffect(effectData->resourceHandle);
+	}
 	effectDatas.clear();
 }
 

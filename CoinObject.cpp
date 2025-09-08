@@ -1,6 +1,6 @@
 #include "EffectManager.h"
 #include "CoinObject.h"
-#include "MediatorInclude.h"
+
 #include "SoundPlayer.h"
 #include "SubSystemManager.h"
 #include <cassert>

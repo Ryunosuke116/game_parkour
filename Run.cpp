@@ -117,7 +117,7 @@ std::pair<VECTOR, PlayerData> Run::Update_wallRun(
 		!playerData.isPossibleWallRun)
 	{
 		playerData.isRunWall = false;
-		playerData.isUse_wallJump = false;
+		playerData.isUseWallJump = false;
 		playerData.isFalling = true;
 		isChangeState = true;
 		player.playerCalculation->Reset_run_wall();
@@ -132,13 +132,13 @@ std::pair<VECTOR, PlayerData> Run::Update_wallRun(
 	{
 		isChangeState = true;
 		playerData.isFalling = true;
-		playerData.isUse_wallJump = false;
+		playerData.isUseWallJump = false;
 		player.SetRotata_x(0.0f);
 	}
 
 	//Œ©’¼‚µ
    //ŠR’Í‚Ý”»’è
-	if (playerData.isUse_Hanging)
+	if (playerData.isUseHanging)
 	{
 		auto result_cliff = HitCheck::CliffGrabbing(
 			fieldObjects,
@@ -171,10 +171,10 @@ std::pair<VECTOR, PlayerData> Run::Update_wallRun(
 	JumpMove(playerData, player);
 
 	//•ÇƒWƒƒƒ“ƒv‚·‚é
-	if (playerData.isJump_second)
+	if (playerData.isJumpSecond)
 	{
 		playerData.isRunWall = false;
-		playerData.isUse_wallJump = true;
+		playerData.isUseWallJump = true;
 		playerData.isWalljump = true;
 		//player.SetNowMoveDirection(moveDirection_new);
 		player.playerCalculation->Reset_run_wall();
@@ -378,7 +378,7 @@ void Run::Enter(PlayerData& playerData)
 	if (playerData.isRunWall)
 	{
 		playerData.isJumpAll = false;
-		playerData.isJump_second = false;
+		playerData.isJumpSecond = false;
 	}
 }
 

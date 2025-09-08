@@ -4,6 +4,7 @@
 #include "BaseScene.h"
 #include "JsonManager.h"
 #include "SubSystemManager.h"
+#include "WorldSubSystem.h"
 
 /// <summary>
 /// インスタンス化
@@ -51,6 +52,7 @@ void BaseScene::Shutdown()
 {
     JsonManager::GetInstance().Shutdown();
     SubSystemManager::GetInstance().ShutdownAll();
+    WorldSubSystem::GetInstance().ShutdownAll();
 }
 
 void BaseScene::ChangeScene(const std::string_view name, const int coinCount)

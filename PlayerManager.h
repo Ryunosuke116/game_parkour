@@ -8,6 +8,7 @@
 class CollisionManager;
 class EffectManager;
 class BaseObject;
+class Player;
 
 class PlayerManager :
 	public BaseGameObjectManager,
@@ -41,7 +42,6 @@ public:
 	void NotifyStateChanged(const PlayerData& playerData);
 
 private:
-	std::vector<std::shared_ptr<BaseChara>> characters;
 	std::shared_ptr<CollisionManager> collisionManager;
 	std::vector<std::weak_ptr<PlayerStateObserver>> observers;
 

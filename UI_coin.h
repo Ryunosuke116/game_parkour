@@ -2,7 +2,9 @@
 #include "BaseUI.h"
 #include "CoinObserver.h"
 
-class UI_coin : public BaseUI, public CoinObserver
+class UI_coin :
+	public BaseUI,
+	public CoinObserver
 {
 public:
 	UI_coin();

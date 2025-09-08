@@ -180,10 +180,10 @@ VECTOR PlayerStateBase::Move(const VECTOR& cameraDirection, PlayerData& playerDa
 /// </summary>
 void PlayerStateBase::RollMove(PlayerData& playerData)
 {
-    if (PadInput::isRoll() && !playerData.isRoll && !playerData.isUse_Roll)
+    if (PadInput::isRoll() && !playerData.isRoll && !playerData.isUseRoll)
     {
         playerData.isRoll = true;
-        playerData.isUse_Roll = true;
+        playerData.isUseRoll = true;
         isChangeState = true;
     }
 }
@@ -197,18 +197,18 @@ void PlayerStateBase::JumpMove(PlayerData& playerData, Player& player)
     {
         //ジャンプ
         if (!player.playerCalculation->GetIsJumpPower_add() &&
-            !isPush && !playerData.isJump_first)
+            !isPush && !playerData.isJumpFirst)
         {
             isChangeState = true;
             playerData.isJump = true;
-            playerData.isJump_first = true;
+            playerData.isJumpFirst = true;
             isPush = true;
             player.playerCalculation->ChangeIsJumpPower_add_ture();
             player.playerCalculation->SetJumpPower();
         }
         //二段ジャンプ
-        else if (playerData.isJump_first && !isPush &&
-            !playerData.isJump_second)
+        else if (playerData.isJumpFirst && !isPush &&
+            !playerData.isJumpSecond)
         {
             const auto effectManager = SubSystemManager::GetInstance().GetSubSystem<EffectManager>().lock();
             effectManager->PlayEffect("jump");
@@ -219,7 +219,7 @@ void PlayerStateBase::JumpMove(PlayerData& playerData, Player& player)
                 playerData.isJump = true;
             }
             isPush = true;
-            playerData.isJump_second = true;
+            playerData.isJumpSecond = true;
             playerData.isJumpAll = true;
             player.playerCalculation->ChangeIsJumpPower_add_ture();
             player.playerCalculation->SetJumpPower_second();
@@ -244,7 +244,7 @@ void PlayerStateBase::WallRunMove(PlayerData& playerData, Player& player)
 
     //壁に当たっている場合のみ
     if (playerData.isPossibleWallRun &&
-        playerData.isUse_wallJump &&
+        playerData.isUseWallJump &&
         playerData.isMove)
     {
         VECTOR hitWallNormal = player.playerCalculation->GethitWallNormal();
@@ -267,8 +267,8 @@ void PlayerStateBase::WallRunMove(PlayerData& playerData, Player& player)
             //ロールアクションとジャンプをできないように
             playerData.isRunWall = true;
             playerData.isRun = true;
-            playerData.isUse_wallJump = false;
-            playerData.isJump_second = false;
+            playerData.isUseWallJump = false;
+            playerData.isJumpSecond = false;
             playerData.isJumpAll = false;
             isChangeState = true;
 
@@ -288,8 +288,8 @@ void PlayerStateBase::FlagReset_jump(PlayerData& playerData)
 {
     if (playerData.isGround)
     {
-        playerData.isJump_first = false;
-        playerData.isJump_second = false;
+        playerData.isJumpFirst = false;
+        playerData.isJumpSecond = false;
         playerData.isJumpAll = false;
     }
 }

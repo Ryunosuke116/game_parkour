@@ -15,8 +15,8 @@
 Jump::Jump(int& modelHandle, AnimState& oldAnimState,
     AnimState& nowAnimState, PlayerData& playerData) :
     PlayerStateBase(modelHandle, oldAnimState, nowAnimState),
-    isJump_first(false),
-    isJump_second(false)
+    isJumpFirst(false),
+    isJumpSecond(false)
 {
     
 }
@@ -38,13 +38,13 @@ void Jump::Initialize(int& modelHandle,const int changeNum, Player& player)
     // ３Ｄモデルの０番目のアニメーションをアタッチする
     //ランジャンプ
     player.GetData().isMove ?
-        PlayerStateBase::Initialize(modelHandle, animNum::run_Jump, player) :
+        PlayerStateBase::Initialize(modelHandle, animNum::runJump, player) :
         PlayerStateBase::Initialize(modelHandle, animNum::jump, player);
 
     this->nowAnimState.PlayAnimSpeed = playAnimSpeed;
 
-    isJump_first = player.GetData().isJump;
-    isJump_second = player.GetData().isJump_second;
+    isJumpFirst = player.GetData().isJump;
+    isJumpSecond = player.GetData().isJumpSecond;
 }
 
 /// <summary>

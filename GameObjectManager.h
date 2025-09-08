@@ -7,7 +7,7 @@
 #include "JsonManager.h"
 #include "BaseGameObjectManager.h"
 #include "SoundPlayer.h"
-#include "ObjectMediator.h"
+
 
 class GameObjectManager : public BaseManager
 {
@@ -43,14 +43,11 @@ private:
 	std::shared_ptr<Camera>			camera_actual				= NULL;
 	std::shared_ptr<IEffectManager>  effectManager				= NULL;
 
-	int tutorialHandle;
-	int startHandle;
-
 	bool isCamera;
 	bool isPush;
 	bool isGoal;
 	bool isStreamStartPicture;		//スタート演出を流すか
-	bool isStream_finishPicture;	//フィニッシュ演出を流すか
+	bool isStreamFinishPicture;	//フィニッシュ演出を流すか
 
 	float streamStartPictureTimer;	//スタート画面のタイマー
 	float stream_finishPicture_timer;	//フィニッシュ画面のタイマー

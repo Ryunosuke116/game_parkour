@@ -4,7 +4,7 @@
 #include "PlayerStateBase.h"
 #include "PlayerData.h"
 #include "PadInput.h"
-#include "Falling_Idle.h"
+#include "FallingIdle.h"
 #include "AnimTime.h"
 #include "Player.h"
 #include "HitCheck.h"
@@ -13,7 +13,7 @@
 /// <summary>
 /// コンストラクタ
 /// </summary>
-Falling_Idle::Falling_Idle(int& modelHandle,
+FallingIdle::FallingIdle(int& modelHandle,
 	AnimState& oldAnimState, AnimState& nowAnimState) :
 	PlayerStateBase(modelHandle, oldAnimState, nowAnimState)
 {
@@ -23,7 +23,7 @@ Falling_Idle::Falling_Idle(int& modelHandle,
 /// <summary>
 /// デストラクタ
 /// </summary>
-Falling_Idle::~Falling_Idle()
+FallingIdle::~FallingIdle()
 {
 	//MV1DetachAnim(modelHandle, nowAnimState.AttachIndex);
 }
@@ -35,7 +35,7 @@ Falling_Idle::~Falling_Idle()
 /// <param name="fieldObjects"></param>
 /// <param name="player"></param>
 /// <returns></returns>
-std::pair<VECTOR, PlayerData> Falling_Idle::Update(const VECTOR& cameraDirection,
+std::pair<VECTOR, PlayerData> FallingIdle::Update(const VECTOR& cameraDirection,
     const std::vector<std::weak_ptr<BaseObject>>& fieldObjects, Player& player)
 {
     VECTOR moveDirection = VGet(0.0f, 0.0f, 0.0f);
@@ -50,7 +50,7 @@ std::pair<VECTOR, PlayerData> Falling_Idle::Update(const VECTOR& cameraDirection
 
     //見直し
     //崖掴み判定
-    if (playerData.isUse_Hanging)
+    if (playerData.isUseHanging)
     {
         //崖つかみ判定
         auto result_cliff = HitCheck::CliffGrabbing(
@@ -75,12 +75,9 @@ std::pair<VECTOR, PlayerData> Falling_Idle::Update(const VECTOR& cameraDirection
             float difference_y = nearestResult.linePos_start.y - nearestResult.linePos_end.y;
             float abs_value = abs(difference_y);
             
-            if (abs_value <= 1e-2)
-            {
                 playerData.isHanging = result_cliff.isHitHanging;
                 isChangeState = true;
                 player.playerCalculation->SetNearestResult(nearestResult);
-            }
         }
     }
 
@@ -97,15 +94,15 @@ std::pair<VECTOR, PlayerData> Falling_Idle::Update(const VECTOR& cameraDirection
             playerData.isIdle = true;
         }
 
-        playerData.isUse_wallJump = true;
-        playerData.isUse_Hanging = true;
+        playerData.isUseWallJump = true;
+        playerData.isUseHanging = true;
         isChangeState = true;
     }
 
     return std::make_pair(moveDirection, playerData);
 }
 
-VECTOR Falling_Idle::Command(const VECTOR& cameraDirection, PlayerData& playerData, Player& player)
+VECTOR FallingIdle::Command(const VECTOR& cameraDirection, PlayerData& playerData, Player& player)
 {
     VECTOR moveDirection = VGet(0.0f, 0.0f, 0.0f);
 
@@ -123,12 +120,12 @@ VECTOR Falling_Idle::Command(const VECTOR& cameraDirection, PlayerData& playerDa
     return moveDirection;
 }
 
-void Falling_Idle::Enter(PlayerData& playerData)
+void FallingIdle::Enter(PlayerData& playerData)
 {
     playerData.isFalling = true;
 }
 
-void Falling_Idle::Exit(PlayerData& playerData)
+void FallingIdle::Exit(PlayerData& playerData)
 {
     playerData.isFalling = false;
 }

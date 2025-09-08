@@ -1,15 +1,14 @@
 #pragma once
 #include "PlayerStateBase.h"
-#include "PlayerData.h"
 
 class Player;
 
-class Braced_Hang_To_Crouch : public PlayerStateBase
+class FallingIdle : public PlayerStateBase
 {
 public:
-	Braced_Hang_To_Crouch(int& modelHandle,
+	FallingIdle(int& modelHandle,
 		AnimState& oldAnimState, AnimState& nowAnimState);
-	~Braced_Hang_To_Crouch();
+	~FallingIdle();
 
 	std::pair<VECTOR, PlayerData> Update(const VECTOR& cameraDirection,
 		const std::vector<std::weak_ptr<BaseObject>>& fieldObjects, Player& player)override;
@@ -17,7 +16,7 @@ public:
 	void Enter(PlayerData& playerData) override;		//状態に入ったとき
 	void Exit(PlayerData& playerData) override;			//状態を抜けるとき
 private:
-	static constexpr float playAnimSpeed = 0.4f;	    // アニメーション速度
-
+	static constexpr float playAnimSpeed = 0.4f;	    // 移動速度
+	static constexpr float cliff_radius = 4.0f;
 };
 

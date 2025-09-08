@@ -18,7 +18,7 @@ Field::Field() :
 /// </summary>
 Field::~Field()
 {
-
+	MV1DeleteModel(bullHandle);
 }
 
 void Field::Load(const nlohmann::json& jsonData)

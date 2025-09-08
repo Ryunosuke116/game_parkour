@@ -12,7 +12,7 @@ Layout::Layout() :
 
 Layout::~Layout()
 {
-	
+	MV1DeleteModel(modelHandle);
 }
 
 void Layout::Initialize(const int& modelHandle)

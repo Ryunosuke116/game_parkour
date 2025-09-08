@@ -16,9 +16,9 @@ Camera::Camera():
 	max_t(0.0f),
 	min_t(0.0f),
 	distance(0.0f),
-	angle_now(0.0f),
-	angle_new(0.0f),
-	angle_radian(0.0f),
+	nowAngle(0.0f),
+	newAngle(0.0f),
+	angleRadian(0.0f),
 	t(0.0f),
 	cameraDirection(VGet(0.0f, 0.0f, 0.0f)),
 	aimPosition_usual(VGet(0.0f, 0.0f, 0.0f)),
@@ -56,11 +56,11 @@ void Camera::Create()
 /// </summary>
 void Camera::Initialize()
 {
-	aimPosition = initialize_aimPos;
-	spherePosition = initialize_spherePos;
-	angle_now = initialize_angle;
-	distance = initialize_distance;
-	t = initialize_t;
+	aimPosition = initializeAimPos;
+	spherePosition = initializeSpherePos;
+	nowAngle = initializeAngle;
+	distance = initializeDistance;
+	t = initializeT;
 
 	SetCameraPositionAndTarget_UpVecY(aimPosition, spherePosition);
 }
@@ -174,7 +174,7 @@ void Camera::Update_layout()
 	//if (CheckHitKey(KEY_INPUT_RIGHT) &&
 	//	CheckHitKey(KEY_INPUT_LSHIFT))
 	//{
-	//	angle_now += 2.0f;
+	//	nowAngle += 2.0f;
 	//}
 	////xŽ²‰EˆÚ“®
 	//else if (CheckHitKey(KEY_INPUT_RIGHT) ||
@@ -188,7 +188,7 @@ void Camera::Update_layout()
 	//if (CheckHitKey(KEY_INPUT_LEFT) &&
 	//	CheckHitKey(KEY_INPUT_LSHIFT))
 	//{
-	//	angle_now -= 2.0f;
+	//	nowAngle -= 2.0f;
 	//}
 	////xŽ²¶ˆÚ“®
 	//else if (CheckHitKey(KEY_INPUT_LEFT) ||
@@ -200,7 +200,7 @@ void Camera::Update_layout()
 
 	if (CheckHitKey(KEY_INPUT_9))
 	{
-		angle_now = -177.55f;
+		nowAngle = -177.55f;
 	}
 
 	//DistanceUpdate();
@@ -218,11 +218,11 @@ void Camera::Update_layout()
 
 	AngleUpdate(1.0f);
 
-	float angle_radian = angle_now * DX_PI_F / 360.0f;
-	this->angle_radian = angle_radian;
+	float angleRadian = nowAngle * DX_PI_F / 360.0f;
+	this->angleRadian = angleRadian;
 
-	aimPosition.x = spherePosition.x + distance * cos(angle_radian);
-	aimPosition.z = spherePosition.z + distance * sin(angle_radian);
+	aimPosition.x = spherePosition.x + distance * cos(angleRadian);
+	aimPosition.z = spherePosition.z + distance * sin(angleRadian);
 
 	//aimPosition = aimPosition_usual;
 
@@ -256,13 +256,13 @@ void Camera::Draw()
 /// </summary>
 void Camera::RotateUpdate()
 {
-	float angle_radian = angle_now * DX_PI_F / 360.0f;
-	this->angle_radian = angle_radian;
+	float angleRadian = nowAngle * DX_PI_F / 360.0f;
+	this->angleRadian = angleRadian;
 
-	////DebugDrawer::Instance().InformationInput_string_float("angle_camera %f\n", angle_radian);
+	////DebugDrawer::Instance().InformationInput_string_float("angle_camera %f\n", angleRadian);
 
-	aimPosition_usual.x = spherePosition.x + distance * cos(angle_radian);
-	aimPosition_usual.z = spherePosition.z + distance * sin(angle_radian);
+	aimPosition_usual.x = spherePosition.x + distance * cos(angleRadian);
+	aimPosition_usual.z = spherePosition.z + distance * sin(angleRadian);
 
 	aimPosition = aimPosition_usual;
 
@@ -316,27 +316,27 @@ void Camera::AngleUpdate(const float& angle_player)
 	//	PadInput::GetJoyPad_x_left() < 0.0f) &&
 	//	PadInput::GetJoyPad_x_right() == 0.0f)
 	//{
-	//	angle_now += 2.0f;
+	//	nowAngle += 2.0f;
 	//}
 	//if ((CheckHitKey(KEY_INPUT_D) ||
 	//	PadInput::GetJoyPad_x_left() > 0.0f) &&
 	//	PadInput::GetJoyPad_x_right() == 0.0f)
 	//{
-	//	angle_now -= 2.0f;
+	//	nowAngle -= 2.0f;
 	//}
 
 	if (PadInput::GetJoyPad_x_right() < 0.0f)
 	{
-		angle_now += 3.0f;
+		nowAngle += 3.0f;
 	}
 	else if (PadInput::GetJoyPad_x_right() > 0.0f)
 	{
-		angle_now -= 3.0f;
+		nowAngle -= 3.0f;
 	}
 
 	/*if (PadInput::IsPush_R())
 	{
-		angle_now = angle_player;
+		nowAngle = angle_player;
 	}*/
 
 }

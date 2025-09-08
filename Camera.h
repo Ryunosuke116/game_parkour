@@ -43,10 +43,10 @@ private:
 	VECTOR spherePosition;
 	VECTOR centerPos;
 	VECTOR direction;
-	float angle_radian;
+	float angleRadian;
 	float distance;
-	float angle_now;
-	float angle_new;
+	float nowAngle;
+	float newAngle;
 	float min_t;
 	float max_t;
 	float t;
@@ -54,13 +54,13 @@ private:
 	static constexpr float cameraSpeed = 0.02f;
 	static constexpr float cameraSpeed_ = 0.01f;
 	static constexpr float radius = 1.0f;
-	static constexpr float distance_max = 60.0f;
-	static constexpr float initialize_angle = -177.55f;
-	static constexpr float initialize_distance = 50.0f;
-	static constexpr float initialize_t = 0.7f;
+	static constexpr float maxDistance = 60.0f;
+	static constexpr float initializeAngle = -177.55f;
+	static constexpr float initializeDistance = 50.0f;
+	static constexpr float initializeT = 0.7f;
 	
-	const VECTOR initialize_aimPos = VGet(-0.169435501f, 53.7492065f, -1224.39844f);
-	const VECTOR initialize_spherePos = VGet(-1.28232884f, 24.0028648f, -1172.35425f);
+	const VECTOR initializeAimPos = VGet(-0.169435501f, 53.7492065f, -1224.39844f);
+	const VECTOR initializeSpherePos = VGet(-1.28232884f, 24.0028648f, -1172.35425f);
 
 };
 

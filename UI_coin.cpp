@@ -21,7 +21,12 @@ UI_coin::UI_coin() :
 
 UI_coin::~UI_coin()
 {
-
+	for (auto& numberHandle : numberHandle)
+	{
+		DeleteGraph(numberHandle);
+	}
+	DeleteGraph(coinHandle);
+	DeleteGraph(crossHandle);
 }
 
 void UI_coin::Load(const nlohmann::json& jsonData)

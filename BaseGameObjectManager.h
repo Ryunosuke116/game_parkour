@@ -3,7 +3,7 @@
 #include <vector>
 #include <nlohmann/json.hpp>
 #include "IObject.h"
-#include "ObjectMediator.h"
+
 
 class BaseGameObjectManager : public IObject
 {

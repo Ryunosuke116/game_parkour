@@ -3,12 +3,12 @@
 
 class Player;
 
-class Quick_Roll : public PlayerStateBase
+class QuickRoll : public PlayerStateBase
 {
 public:
-	Quick_Roll(int& modelHandle,
+	QuickRoll(int& modelHandle,
 		AnimState& oldAnimState, AnimState& nowAnimState);
-	~Quick_Roll();
+	~QuickRoll();
 
 	std::pair<VECTOR, PlayerData> Update(const VECTOR& cameraDirection,
 		const std::vector<std::weak_ptr<BaseObject>>& fieldObjects, Player& player)override;

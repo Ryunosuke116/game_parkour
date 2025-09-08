@@ -145,7 +145,7 @@ bool CollisionManager::HeadCollisionCheck(
 
 			for (int i = 0; i < hitPoly_head.HitNum; i++)
 			{
-				MV1_COLL_RESULT_POLY poly = hitPoly_head.Dim[i];
+				MV1_COLL_RESULT_POLY poly = MV1CollCheck_GetResultPoly(hitPoly_head,i);
 				VECTOR newAddPos = VGet(0.0f, 0.0f, 0.0f);
 
 				////////////////////////////////////////
@@ -177,8 +177,10 @@ bool CollisionManager::HeadCollisionCheck(
 
 			newPos.y = newPos.y + addPos.y;
 		}
-	}
 
+		// 検出したプレイヤーの周囲のポリゴン情報を開放する
+		MV1CollResultPolyDimTerminate(hitPoly_head);
+	}
 
 	return false;
 }
@@ -215,7 +217,10 @@ std::pair<bool, std::string> CollisionManager::GroundCollisionCheck(
 		auto collisionObject = fieldObject.lock();
 
 		//rayが当たっていれば
-		isHitGround = HitCheck::RayHitJudge(collisionObject->GetModelHandle(), -1, newTopPosition,
+		isHitGround = HitCheck::RayHitJudge(
+			collisionObject->GetModelHandle(), 
+			-1, 
+			newTopPosition,
 			newBottomPosition, rayPoly_ground);
 
 		if (isHitGround)
@@ -256,54 +261,6 @@ std::pair<bool, std::string> CollisionManager::GroundCollisionCheck(
 }
 
 /// <summary>
-/// 床との衝突判定処理
-/// </summary>
-/// <param name="modelHandle"></param>
-/// <param name="oldPos"></param>
-/// <param name="newPos"></param>
-/// <param name="positionData.addTopPos"></param>
-/// <param name="positionData.addBottomPos"></param>
-/// <param name="positionData.radius"></param>
-/// <param name="isJump"></param>
-/// <returns></returns>
-std::pair<bool, VECTOR> CollisionManager::GroundCollisionCheckHangToCrouch(const std::vector<std::weak_ptr<BaseObject>>& collisionObjects,
-	const VECTOR& oldPos, const VECTOR& newPos, const VECTOR& foot,
-	const PositionData& positionData)
-{
-	//prevとnewのposを作る
-	VECTOR newTopPosition = newPos;
-	VECTOR newBottomPosition = newPos;
-	VECTOR nowBottomPos = oldPos;
-	VECTOR nowTopPos = oldPos;
-
-	bool isHitGround = false;
-
-	MV1_COLL_RESULT_POLY rayPoly_ground;
-	VECTOR returnPos = newPos;
-
-	for (const auto& fieldObject : collisionObjects)
-	{
-		auto collisionObject = fieldObject.lock();
-
-		//rayが当たっていれば
-		isHitGround = HitCheck::RayHitJudge(collisionObject->GetModelHandle(), -1, nowTopPos, nowBottomPos, rayPoly_ground);
-
-		if (isHitGround)
-		{
-			VECTOR newPlayerPos = VGet(0.0f, 0.0f, 0.0f);
-
-			//床 - プレイヤーの足元で押し戻し量を計算
-			newPlayerPos.y = rayPoly_ground.HitPosition.y - foot.y;
-			returnPos.y = returnPos.y + newPlayerPos.y;
-		}
-	}
-
-	//接地しているか
-	return std::make_pair(isHitGround, returnPos);
-
-}
-
-/// <summary>
 /// 壁との当たり判定
 /// </summary>
 /// <param name="player"></param>
@@ -334,7 +291,8 @@ std::pair<bool, VECTOR> CollisionManager::WallCollisionCheck(
 			-1, 
 			radius, 
 			newTopPosition,
-			VAdd(newBottomPosition, VGet(0.0f, 1.0f, 0.0f)), hitPoly_Wall);
+			VAdd(newBottomPosition, VGet(0.0f, 1.0f, 0.0f)), 
+			hitPoly_Wall);
 
 		//衝突しているとこを全部調べて押し戻し量を計算する
 		if (hitPoly_Wall.HitNum >= 1)
@@ -466,13 +424,17 @@ VECTOR CollisionManager::WallGroundCollisionCheck(
 {
 	bool isHitGround = false;
 	bool returnFlag = false;
-	const float reverseScale = -1.0f;
-	const float extendRayScale = 5.0f;
+	const float reverseScale = -1.0f;		//方向ベクトル反転用
+	const float extendRayScale = 15.0f;		//rayの大きさ
+	const VECTOR gravityForWallRun = VScale(hitWallNormal, reverseScale);
 	std::string returnTag = "";
 
+	//ray開始を少しずらさないと壁に埋まって反応しないためずらす
+	VECTOR rayStartPosition = VGet(
+		positionData.centerPosition.x,
+		positionData.capsuleBottomPosition.y,
+		positionData.centerPosition.z);
 
-	const VECTOR gravityForWallRun = VScale(hitWallNormal, reverseScale);
-	VECTOR rayStartPosition = VAdd(positionData.centerPosition, moveVec);
 	VECTOR rayEndPosition = VAdd(rayStartPosition, VScale(gravityForWallRun, extendRayScale));
 
 	VECTOR returnNewPos = newPos;

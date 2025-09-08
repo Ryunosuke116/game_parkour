@@ -8,6 +8,8 @@
 #include "SubSystemManager.h"
 #include "SoundPlayer.h"
 
+class Game;
+
 /// <summary>
 /// インスタンス化
 /// </summary>

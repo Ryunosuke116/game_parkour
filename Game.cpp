@@ -7,6 +7,8 @@
 #include "HitCheck.h"
 #include "SubSystemManager.h"
 
+class Title;
+
 /// <summary>
 /// インスタンス化
 /// </summary>
@@ -21,8 +23,6 @@ Game::Game(SceneManager& manager) : BaseScene{ manager }
 /// </summary>
 Game::~Game()
 {
-	JsonManager::GetInstance().Shutdown();
-	SubSystemManager::GetInstance().ShutdownAll();
 }
 
 void Game::Create()

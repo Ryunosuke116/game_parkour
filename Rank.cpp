@@ -12,7 +12,7 @@ Rank::Rank():
 
 Rank::~Rank()
 {
-
+    DeleteGraph(rankHandle);
 }
 
 void Rank::Load(const nlohmann::json& jsonData)

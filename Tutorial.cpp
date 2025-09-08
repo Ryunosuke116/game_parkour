@@ -18,7 +18,8 @@ Tutorial::Tutorial():
 
 Tutorial::~Tutorial()
 {
-
+	DeleteGraph(tutorialHandle);
+	DeleteGraph(startHandle);
 }
 
 void Tutorial::Load(const nlohmann::json& jsonData)
@@ -27,8 +28,6 @@ void Tutorial::Load(const nlohmann::json& jsonData)
 	std::string startPath = jsonData["startPath"];
 	tutorialHandle = LoadGraph(tutorialPath.c_str());
 	startHandle = LoadGraph(startPath.c_str());
-
-
 }
 
 void Tutorial::Initialize()

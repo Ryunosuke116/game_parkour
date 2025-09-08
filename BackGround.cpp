@@ -9,7 +9,8 @@ BackGround::BackGround()
 
 BackGround::~BackGround()
 {
-
+	DeleteGraph(backGroundHandle);
+	DeleteGraph(startButtonHandle);
 }
 
 void BackGround::Load(const nlohmann::json& jsonData)

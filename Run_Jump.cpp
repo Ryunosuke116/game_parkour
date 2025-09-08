@@ -3,7 +3,7 @@
 #include "DxLib.h"
 #include "PlayerStateActionBase.h"
 #include "Input.h"
-#include "Run_Jump.h"
+#include "runJump.h"
 #include "AnimTime.h"
 
 /// <summary>
@@ -12,7 +12,7 @@
 /// <param name="modelHandle"></param>
 /// <param name="oldAnimState"></param>
 /// <param name="nowAnimState"></param>
-Run_Jump::Run_Jump(int& modelHandle,
+runJump::runJump(int& modelHandle,
 	AnimState& oldAnimState, AnimState& nowAnimState) :
 	PlayerStateActionBase(modelHandle, oldAnimState, nowAnimState)
 {
@@ -21,7 +21,7 @@ Run_Jump::Run_Jump(int& modelHandle,
 	//MV1DetachAnim(this->modelHandle, this->nowAnimState.AttachIndex);
 
 	// ３Ｄモデルの０番目のアニメーションをアタッチする
-	this->nowAnimState.AttachIndex = MV1AttachAnim(modelHandle, animNum::run_Jump);
+	this->nowAnimState.AttachIndex = MV1AttachAnim(modelHandle, animNum::runJump);
 
 	this->nowAnimState.PlayTime_anim = 0.0f;
 	this->nowAnimState.PlayAnimSpeed = playAnimSpeed;
@@ -35,20 +35,20 @@ Run_Jump::Run_Jump(int& modelHandle,
 /// <summary>
 /// デストラクタ
 /// </summary>
-Run_Jump::~Run_Jump()
+runJump::~runJump()
 {
 
 }
 
 
-bool Run_Jump::MotionUpdate(PlayerData& playerData)
+bool runJump::MotionUpdate(PlayerData& playerData)
 {
 	bool flag = false;
 
 	if (!isPush)
 	{
 		//二段ジャンプしたらプレイタイムリセット
- 		if (playerData.isJump_second)
+ 		if (playerData.isJumpSecond)
 		{
 			nowAnimState.PlayTime_anim = 0.0f;
 			isPush = true;

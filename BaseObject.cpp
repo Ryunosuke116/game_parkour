@@ -17,7 +17,7 @@ BaseObject::BaseObject():
 /// </summary>
 BaseObject::~BaseObject()
 {
-
+	MV1DeleteModel(modelHandle);
 }
 
 /// <summary>

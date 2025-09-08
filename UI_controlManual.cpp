@@ -12,7 +12,13 @@ UI_controlManual::UI_controlManual():
 }
 
 
-UI_controlManual::~UI_controlManual(){}
+UI_controlManual::~UI_controlManual()
+{
+	for (auto& uiHandle : uiHandles)
+	{
+		DeleteGraph(uiHandle.second);
+	}
+}
 
 
 void UI_controlManual::Load(const nlohmann::json& jsonData)
@@ -53,7 +59,7 @@ void UI_controlManual::Update()
 		draw_UIs.push_back(uiHandles.at("jump"));
 	}
 
-	if (!data.isUse_Roll &&
+	if (!data.isUseRoll &&
 		!data.isHanging_now)
 	{
 		draw_UIs.push_back(uiHandles.at("roll"));

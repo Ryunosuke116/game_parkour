@@ -25,7 +25,7 @@ PlayerManager::PlayerManager():
 /// </summary>
 PlayerManager::~PlayerManager()
 {
-
+	observers.clear();
 }
 
 void PlayerManager::Create() 
@@ -66,6 +66,7 @@ void PlayerManager::Update()
 	{
 		VECTOR oldPos = player->GetPosition();
 		VECTOR newPos = VAdd(oldPos, player->GetVelocity());
+
 		VECTOR newPositon = collisionManager->WallGroundCollisionCheck(
 			WorldSubSystem::GetInstance().GetSubSystem<CollisionObjectManager>()->GetCollisionObjects(),
 			oldPos,

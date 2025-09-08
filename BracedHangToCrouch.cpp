@@ -3,7 +3,7 @@
 #include <vector>
 #include "PadInput.h"
 #include "PlayerStateBase.h"
-#include "Braced_Hang_To_Crouch.h"
+#include "BracedHangToCrouch.h"
 #include "AnimTime.h"
 #include "Player.h"
 #include "HitCheck.h"
@@ -15,7 +15,7 @@
 /// <param name="oldAnimState"></param>
 /// <param name="nowAnimState"></param>
 /// <param name="playerData"></param>
-Braced_Hang_To_Crouch::Braced_Hang_To_Crouch(int& modelHandle,
+BracedHangToCrouch::BracedHangToCrouch(int& modelHandle,
     AnimState& oldAnimState, AnimState& nowAnimState) :
     PlayerStateBase(modelHandle, oldAnimState, nowAnimState)
 {
@@ -25,7 +25,7 @@ Braced_Hang_To_Crouch::Braced_Hang_To_Crouch(int& modelHandle,
 /// <summary>
 /// デストラクタ
 /// </summary>
-Braced_Hang_To_Crouch::~Braced_Hang_To_Crouch()
+BracedHangToCrouch::~BracedHangToCrouch()
 {
 
 }
@@ -37,7 +37,7 @@ Braced_Hang_To_Crouch::~Braced_Hang_To_Crouch()
 /// <param name="fieldObjects"></param>
 /// <param name="player"></param>
 /// <returns></returns>
-std::pair<VECTOR, PlayerData> Braced_Hang_To_Crouch::Update(
+std::pair<VECTOR, PlayerData> BracedHangToCrouch::Update(
     const VECTOR& cameraDirection,
     const std::vector<std::weak_ptr<BaseObject>>& fieldObjects,
     Player& player)
@@ -66,7 +66,7 @@ std::pair<VECTOR, PlayerData> Braced_Hang_To_Crouch::Update(
     return std::make_pair(moveDirection, playerData);
 }
 
-VECTOR Braced_Hang_To_Crouch::Command(const VECTOR& cameraDirection, PlayerData& playerData, Player& player)
+VECTOR BracedHangToCrouch::Command(const VECTOR& cameraDirection, PlayerData& playerData, Player& player)
 {
     VECTOR moveDirection = VGet(0.0f, 0.0f, 0.0f);
 
@@ -76,12 +76,12 @@ VECTOR Braced_Hang_To_Crouch::Command(const VECTOR& cameraDirection, PlayerData&
     return moveDirection;
 }
 
-void Braced_Hang_To_Crouch::Enter(PlayerData& playerData)
+void BracedHangToCrouch::Enter(PlayerData& playerData)
 {
     playerData.isHangToCrouch = true;
 }
 
-void Braced_Hang_To_Crouch::Exit(PlayerData& playerData)
+void BracedHangToCrouch::Exit(PlayerData& playerData)
 {
     playerData.isHangToCrouch = false;
 }

@@ -22,6 +22,7 @@ BaseChara::BaseChara() :
 
 BaseChara::~BaseChara()
 {
+    MV1DeleteModel(modelHandle);
 }
 
 /// <summary>

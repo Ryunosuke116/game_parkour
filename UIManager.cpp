@@ -10,7 +10,10 @@ UIManager::UIManager() :
 	tag = "png";
 }
 
-UIManager::~UIManager(){}
+UIManager::~UIManager()
+{
+	ui_list.clear();
+}
 
 void UIManager::Create()
 {

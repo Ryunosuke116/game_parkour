@@ -1,12 +1,12 @@
 #pragma once
 #include "PlayerStateActionBase.h"
 
-class Run_Jump : public PlayerStateActionBase
+class runJump : public PlayerStateActionBase
 {
 public:
-	Run_Jump(int& modelHandle,
+	runJump(int& modelHandle,
 		AnimState& oldAnimState, AnimState& nowAnimState);
-	~Run_Jump();
+	~runJump();
 	bool MotionUpdate(PlayerData& playerData)override;
 
 private:

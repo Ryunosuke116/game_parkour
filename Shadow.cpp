@@ -1,6 +1,6 @@
 #include "common.h"
 #include "Shadow.h"
-#include "MediatorInclude.h"
+
 #include "WorldSubSystem.h"
 #include "PlayerManager.h"
 
@@ -18,7 +18,7 @@ Shadow::Shadow() :
 /// </summary>
 Shadow::~Shadow()
 {
-
+	DeleteShadowMap(shadowMapHandle);
 }
 
 /// <summary>

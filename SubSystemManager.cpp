@@ -37,9 +37,5 @@ void SubSystemManager::Draw()
 
 void SubSystemManager::ShutdownAll()
 {
-	for (auto& pair : subSystems)
-	{
-		pair.second->Shutdown();
-	}
 	subSystems.clear();
 }

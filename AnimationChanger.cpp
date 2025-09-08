@@ -1,4 +1,5 @@
 #include "common.h"
+#include <memory>
 #include "AnimTime.h"
 #include "playerState.h"
 #include "PadInput.h"
@@ -100,7 +101,7 @@ std::shared_ptr<PlayerStateBase> AnimationChanger::ChangeState(int& modelHandle,
     //ジャンプ
     if (playerData.isJump &&
         animNumber_Now != animNum::jump &&
-        animNumber_Now != animNum::run_Jump)
+        animNumber_Now != animNum::runJump)
     {
         //nowState内のアニメーション情報を保存
         SetNowAnimState(nowState->GetNowAnimState());
@@ -118,30 +119,30 @@ std::shared_ptr<PlayerStateBase> AnimationChanger::ChangeState(int& modelHandle,
 
     //落下中
     if (playerData.isFalling &&
-        animNumber_Now != animNum::falling_Idle)
+        animNumber_Now != animNum::fallingIdle)
     {
         //nowState内のアニメーション情報を保存
         SetNowAnimState(nowState->GetNowAnimState());
         SetOldAnimState(nowState->GetOldAnimState());
 
         //newStateを生成
-        newState = std::make_shared<Falling_Idle>(modelHandle,
+        newState = std::make_shared<FallingIdle>(modelHandle,
             oldAnimState,
             nowAnimState);
 
         newState->SetAnimNumber_old(animNumber_Now);
-        animNumber_Now = animNum::falling_Idle;
+        animNumber_Now = animNum::fallingIdle;
     }
 
     //転がる
-    if (playerData.isRoll && animNumber_Now != animNum::quick_Roll)
+    if (playerData.isRoll && animNumber_Now != animNum::quickRoll)
     {
         //nowState内のアニメーション情報を保存
         SetNowAnimState(nowState->GetNowAnimState());
         SetOldAnimState(nowState->GetOldAnimState());
 
         //newStateを生成
-        newState = std::make_shared<Quick_Roll>(modelHandle,
+        newState = std::make_shared<QuickRoll>(modelHandle,
             oldAnimState,
             nowAnimState);
 
@@ -150,68 +151,68 @@ std::shared_ptr<PlayerStateBase> AnimationChanger::ChangeState(int& modelHandle,
     }
 
     //走り出し
-    if (playerData.isSprint && animNumber_Now != animNum::idle_To_Sprint)
+    if (playerData.isSprint && animNumber_Now != animNum::idleToSprint)
     {
         //nowState内のアニメーション情報を保存
         SetNowAnimState(nowState->GetNowAnimState());
         SetOldAnimState(nowState->GetOldAnimState());
 
         //newStateを生成
-        newState = std::make_shared<Idle_To_Sprint>(modelHandle,
+        newState = std::make_shared<IdleToSprint>(modelHandle,
             oldAnimState,
             nowAnimState);
 
         newState->SetAnimNumber_old(animNumber_Now);
-        animNumber_Now = animNum::idle_To_Sprint;
+        animNumber_Now = animNum::idleToSprint;
     }
 
     //走り終わり
-    if (playerData.isStopRun && animNumber_Now != animNum::run_To_Stop)
+    if (playerData.isStopRun && animNumber_Now != animNum::runToStop)
     {
         //nowState内のアニメーション情報を保存
         SetNowAnimState(nowState->GetNowAnimState());
         SetOldAnimState(nowState->GetOldAnimState());
 
         //newStateを生成
-        newState = std::make_shared<Run_To_Stop>(modelHandle,
+        newState = std::make_shared<RunToStop>(modelHandle,
             oldAnimState,
             nowAnimState);
 
         newState->SetAnimNumber_old(animNumber_Now);
-        animNumber_Now = animNum::run_To_Stop;
+        animNumber_Now = animNum::runToStop;
     }
 
     //崖つかみ
-    if (playerData.isHanging && animNumber_Now != animNum::hanging_Idle)
+    if (playerData.isHanging && animNumber_Now != animNum::hangingIdle)
     {
         //nowState内のアニメーション情報を保存
         SetNowAnimState(nowState->GetNowAnimState());
         SetOldAnimState(nowState->GetOldAnimState());
 
         //newStateを生成
-        newState = std::make_shared<Hanging_Idle>(modelHandle,
+        newState = std::make_shared<HangingIdle>(modelHandle,
             oldAnimState,
             nowAnimState);
 
         newState->SetAnimNumber_old(animNumber_Now);
-        animNumber_Now = animNum::hanging_Idle;
+        animNumber_Now = animNum::hangingIdle;
     }
 
     //崖のぼり
     if (playerData.isHangToCrouch &&
-        animNumber_Now != animNum::braced_Hang_To_Crouch)
+        animNumber_Now != animNum::bracedHangToCrouch)
     {
         //nowState内のアニメーション情報を保存
         SetNowAnimState(nowState->GetNowAnimState());
         SetOldAnimState(nowState->GetOldAnimState());
 
         //newStateを生成
-        newState = std::make_shared<Braced_Hang_To_Crouch>(modelHandle,
+        newState = std::make_shared<BracedHangToCrouch>(modelHandle,
             oldAnimState,
             nowAnimState);
 
         newState->SetAnimNumber_old(animNumber_Now);
-        animNumber_Now = animNum::braced_Hang_To_Crouch;
+        animNumber_Now = animNum::bracedHangToCrouch;
     }
 
     if (newState)

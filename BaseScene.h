@@ -20,6 +20,7 @@ public:
 protected:
     int coinCount;
     void ChangeScene(std::string_view, const int coinCount);
+
 private:
     SceneManager& manager;
 };

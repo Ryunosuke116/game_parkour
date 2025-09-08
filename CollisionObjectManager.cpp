@@ -14,7 +14,7 @@ CollisionObjectManager::CollisionObjectManager()
 
 CollisionObjectManager::~CollisionObjectManager()
 {
-
+	collisionObjects.clear();
 }
 
 void CollisionObjectManager::Create()

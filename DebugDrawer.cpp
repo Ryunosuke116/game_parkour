@@ -71,7 +71,7 @@ void DebugDrawer::Draw()
 
     for (const auto& capsule : capsules)
     {
-        DrawCapsule3D(capsule.top, capsule.bottom, capsule.radius, 16, GetColor(0.0f, 0.0f, 0.0f), capsule.color,FALSE);
+        DrawCapsule3D(capsule.top, capsule.bottom, capsule.radius, 16, GetColor(0, 0, 0), capsule.color,FALSE);
     }
 
     for (const auto& aabb : aabbs)

@@ -5,7 +5,6 @@
 #include "EffectManager.h"
 #include "CoinManager.h"
 #include "nlohmann/json.hpp"
-#include "MediatorInclude.h"
 #include "WorldSubSystem.h"
 #include "JsonManager.h"
 #include "PlayerManager.h"
@@ -24,6 +23,8 @@ CoinManager::CoinManager()
 CoinManager::~CoinManager()
 {
 	coins.clear();
+	int a = MV1DeleteModel(modelHandle);
+	observers.clear();
 }
 
 void CoinManager::Create()
@@ -43,7 +44,6 @@ void CoinManager::Create()
 	}
 
 	WorldSubSystem::GetInstance().AddSubSystem<CoinManager>(self);
-
 }
 
 /// <summary>

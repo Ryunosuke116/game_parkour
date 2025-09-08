@@ -77,7 +77,7 @@ void Result::Update()
 
     if (isPush)
     {
-        BlackOut::GetInstance().BlackOutUpdate(4.5f);
+        BlackOut::GetInstance().BlackOutUpdate(5);
         if (BlackOut::GetInstance().GetAlpha() >= 300)
         {
             ChangeScene("Title", 0);

@@ -2,9 +2,8 @@
 #include <memory>
 #include <vector>
 #include "PlayerStateBase.h"
-#include "PadInput.h"
 #include "PlayerData.h"
-#include "Quick_Roll.h"
+#include "RunToStop.h"
 #include "AnimTime.h"
 #include "Player.h"
 
@@ -13,11 +12,9 @@
 /// コンストラクタ
 /// </summary>
 /// <param name="modelHandle"></param>
-/// <param name="oldAnimState"></param>
-/// <param name="nowAnimState"></param>
-Quick_Roll::Quick_Roll(int& modelHandle,
+RunToStop::RunToStop(int& modelHandle,
     AnimState& oldAnimState, AnimState& nowAnimState) :
-	PlayerStateBase(modelHandle, oldAnimState, nowAnimState)
+    PlayerStateBase(modelHandle, oldAnimState, nowAnimState)
 {
     this->nowAnimState.PlayAnimSpeed = playAnimSpeed;
 }
@@ -25,9 +22,9 @@ Quick_Roll::Quick_Roll(int& modelHandle,
 /// <summary>
 /// デストラクタ
 /// </summary>
-Quick_Roll::~Quick_Roll()
+RunToStop::~RunToStop()
 {
-
+    //  MV1DetachAnim(modelHandle, this->nowAnimState.AttachIndex);
 }
 
 /// <summary>
@@ -37,7 +34,7 @@ Quick_Roll::~Quick_Roll()
 /// <param name="fieldObjects"></param>
 /// <param name="player"></param>
 /// <returns></returns>
-std::pair<VECTOR, PlayerData> Quick_Roll::Update(const VECTOR& cameraDirection,
+std::pair<VECTOR, PlayerData> RunToStop::Update(const VECTOR& cameraDirection,
     const std::vector<std::weak_ptr<BaseObject>>& fieldObjects, Player& player)
 {
     VECTOR moveDirection = VGet(0.0f, 0.0f, 0.0f);
@@ -49,25 +46,20 @@ std::pair<VECTOR, PlayerData> Quick_Roll::Update(const VECTOR& cameraDirection,
     return std::make_pair(moveDirection, playerData);
 }
 
-VECTOR Quick_Roll::Command(const VECTOR& cameraDirection, PlayerData& playerData, Player& player)
+VECTOR RunToStop::Command(const VECTOR& cameraDirection, PlayerData& playerData, Player& player)
 {
     VECTOR moveDirection = VGet(0.0f, 0.0f, 0.0f);
-
-    FlagReset_jump(playerData);
 
     //moveDirを取得する
     moveDirection = Move(cameraDirection, playerData);
     JumpMove(playerData, player);
+    RollMove(playerData);
 
-    if (VSize(moveDirection) != 0.0f)
+    if (VSize(moveDirection) != 0.0f && !playerData.isRoll)
     {
-        isRun = true;
-        isIdle = false;
-    }
-    else
-    {
-        isRun = false;
-        isIdle = true;
+        playerData.isRun = true;
+        playerData.isStopRun = false;
+        isChangeState = true;
     }
 
     return moveDirection;
@@ -77,12 +69,10 @@ VECTOR Quick_Roll::Command(const VECTOR& cameraDirection, PlayerData& playerData
 /// <summary>
 /// アニメーション更新
 /// </summary>
-/// <param name="playerData"></param>
 /// <returns></returns>
-bool Quick_Roll::MotionUpdate(PlayerData& playerData)
+bool RunToStop::MotionUpdate(PlayerData& playerData)
 {
     float totalTime_anim;
-    float flag = false;
 
     // ブレンド率が１以下の場合は１に近づける
     if (animBlendRate < 1.0f)
@@ -102,23 +92,12 @@ bool Quick_Roll::MotionUpdate(PlayerData& playerData)
         //再生時間更新
         nowAnimState.PlayTime_anim += nowAnimState.PlayAnimSpeed;
 
-        if (nowAnimState.PlayTime_anim >= 40.0f)
-        {
-            if (!playerData.isGround)
-            {
-                isChangeState = true;
-                playerData.isFalling = true;
-            }
-        }
-
         //総再生時間を超えたらリセット
         if (nowAnimState.PlayTime_anim >= totalTime_anim)
         {
-            playerData.isRun = isRun;
-            playerData.isIdle = isIdle;
+            playerData.isIdle = true;
             isChangeState = true;
         }
-
 
         // 再生時間をセットする
         MV1SetAttachAnimTime(modelHandle, nowAnimState.AttachIndex, nowAnimState.PlayTime_anim);
@@ -134,15 +113,6 @@ bool Quick_Roll::MotionUpdate(PlayerData& playerData)
         // アニメーションの総時間を取得
         totalTime_anim = MV1GetAttachAnimTotalTime(modelHandle, oldAnimState.AttachIndex);
 
-        // 再生時間を進める
-        oldAnimState.PlayTime_anim += oldAnimState.PlayAnimSpeed;
-
-        // 再生時間が総時間に到達していたら再生時間をループさせる
-        if (oldAnimState.PlayTime_anim > totalTime_anim)
-        {
-            oldAnimState.PlayTime_anim = static_cast<float>(fmod(oldAnimState.PlayTime_anim, totalTime_anim));
-        }
-
         // 変更した再生時間をモデルに反映させる
         MV1SetAttachAnimTime(modelHandle, oldAnimState.AttachIndex, oldAnimState.PlayTime_anim);
 
@@ -150,16 +120,20 @@ bool Quick_Roll::MotionUpdate(PlayerData& playerData)
         MV1SetAttachAnimBlendRate(modelHandle, oldAnimState.AttachIndex, 1.0f - animBlendRate);
     }
 
-    return flag;
+    if (!playerData.isGround)
+    {
+        return true;
+    }
+
+    return false;
 }
 
-void Quick_Roll::Enter(PlayerData& playerData)
+void RunToStop::Enter(PlayerData& playerData)
 {
-    playerData.isJumpAll = false;
-    playerData.isJump_second = false;
+    playerData.isStopRun = true;
 }
 
-void Quick_Roll::Exit(PlayerData& playerData)
+void RunToStop::Exit(PlayerData& playerData)
 {
-    playerData.isRoll = false;
+    playerData.isStopRun = false;
 }

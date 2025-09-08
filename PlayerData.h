@@ -10,21 +10,21 @@ struct PlayerData
 	bool isRunWall;
 	bool isDash;
 	bool isJump;					//ジャンプしたか
-	bool isJump_first;				//一回目のジャンプをしたか
-	bool isJump_second;				//二段ジャンプしたか
-	bool isJump_PlayAnim;			//ジャンプのアニメを再生するか
+	bool isJumpFirst;				//一回目のジャンプをしたか
+	bool isJumpSecond;				//二段ジャンプしたか
+	bool isJumpPlayAnim;			//ジャンプのアニメを再生するか
 	bool isJumpAll;					//全てのジャンプが完了したか
-	bool isUse_wallJump;			//壁ジャンプを使用できるか
+	bool isUseWallJump;			//壁ジャンプを使用できるか
 	bool isWalljump;				//壁ジャンプしているか
 	bool isRoll;					//転がるか
-	bool isUse_Roll;				//ロールアクションを終えたか
+	bool isUseRoll;				//ロールアクションを終えたか
 	bool isPossibleWallRun;		//壁走りが可能か
 	bool isSprint;					//走り出しか
 	bool isStopRun;					//走り終わったか
 	bool isFalling;					//落下中か
 	bool isHanging;					//崖をつかむか
 	bool isHanging_now;				//崖つかみ中か
-	bool isUse_Hanging;				//崖掴みが可能か
+	bool isUseHanging;				//崖掴みが可能か
 	bool isHangToCrouch;			//上に上がる
 	bool isLanding;					//着地したか
 	bool isWallClimb;

@@ -9,7 +9,7 @@ TitleObjectManager::TitleObjectManager()
 
 TitleObjectManager::~TitleObjectManager()
 {
-
+	objects.clear();
 }
 
 void TitleObjectManager::Create()

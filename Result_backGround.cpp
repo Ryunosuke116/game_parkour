@@ -10,7 +10,7 @@ Result_backGround::Result_backGround()
 
 Result_backGround::~Result_backGround()
 {
-
+    DeleteGraph(backGroundHandle);
 }
 
 void Result_backGround::Load(const nlohmann::json& jsonData)

@@ -4,7 +4,7 @@
 #include "PadInput.h"
 #include "PlayerData.h"
 #include "PlayerStateBase.h"
-#include "Hanging_Idle.h"
+#include "HangingIdle.h"
 #include "AnimTime.h"
 #include "Player.h"
 
@@ -15,7 +15,7 @@
 /// <param name="oldAnimState"></param>
 /// <param name="nowAnimState"></param>
 /// <param name="playerData"></param>
-Hanging_Idle::Hanging_Idle(int& modelHandle,
+HangingIdle::HangingIdle(int& modelHandle,
     AnimState& oldAnimState, AnimState& nowAnimState) :
     PlayerStateBase(modelHandle, oldAnimState, nowAnimState)
 {
@@ -25,7 +25,7 @@ Hanging_Idle::Hanging_Idle(int& modelHandle,
 /// <summary>
 /// デストラクタ
 /// </summary>
-Hanging_Idle::~Hanging_Idle()
+HangingIdle::~HangingIdle()
 {
 
 }
@@ -34,7 +34,7 @@ Hanging_Idle::~Hanging_Idle()
 /// 初期化
 /// </summary>
 /// <param name="modelHandle"></param>
-void Hanging_Idle::Initialize(int& modelHandle,const int changeNum, Player& player)
+void HangingIdle::Initialize(int& modelHandle,const int changeNum, Player& player)
 {
     PlayerStateBase::Initialize(modelHandle, changeNum, player);
     animBlendRate = 1.0f;
@@ -59,7 +59,7 @@ void Hanging_Idle::Initialize(int& modelHandle,const int changeNum, Player& play
 /// <param name="fieldObjects"></param>
 /// <param name="player"></param>
 /// <returns></returns>
-std::pair<VECTOR, PlayerData> Hanging_Idle::Update(const VECTOR& cameraDirection,
+std::pair<VECTOR, PlayerData> HangingIdle::Update(const VECTOR& cameraDirection,
     const std::vector<std::weak_ptr<BaseObject>>& fieldObjects, Player& player)
 {
     
@@ -76,8 +76,8 @@ std::pair<VECTOR, PlayerData> Hanging_Idle::Update(const VECTOR& cameraDirection
         player.SetIsCollisionCheck(false);
         player.playerCalculation->ResetMoveVec_old();
         isChangeState = true;
-        playerData.isJump_first = false;
-        playerData.isJump_second = false;
+        playerData.isJumpFirst = false;
+        playerData.isJumpSecond = false;
         playerData.isJumpAll = false;
         playerData.isHanging_now = false;
     }
@@ -88,13 +88,13 @@ std::pair<VECTOR, PlayerData> Hanging_Idle::Update(const VECTOR& cameraDirection
         isChangeState = true;
         playerData.isFalling = true;
         playerData.isHanging_now = false;
-        playerData.isUse_Hanging = false;
+        playerData.isUseHanging = false;
     }
 
     return std::make_pair(moveDirection, playerData);
 }
 
-VECTOR Hanging_Idle::Command(const VECTOR& cameraDirection, PlayerData& playerData, Player& player)
+VECTOR HangingIdle::Command(const VECTOR& cameraDirection, PlayerData& playerData, Player& player)
 {
     VECTOR moveDirection = VGet(0.0f, 0.0f, 0.0f);
 
@@ -106,12 +106,12 @@ VECTOR Hanging_Idle::Command(const VECTOR& cameraDirection, PlayerData& playerDa
     return moveDirection;
 }
 
-void Hanging_Idle::Enter(PlayerData& playerData)
+void HangingIdle::Enter(PlayerData& playerData)
 {
     playerData.isHanging = true;
 }
 
-void Hanging_Idle::Exit(PlayerData& playerData)
+void HangingIdle::Exit(PlayerData& playerData)
 {
     playerData.isHanging = false;
 }

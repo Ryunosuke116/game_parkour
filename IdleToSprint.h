@@ -1,12 +1,12 @@
 #pragma once
 #include "PlayerStateBase.h"
 
-class Idle_To_Sprint : public PlayerStateBase
+class IdleToSprint : public PlayerStateBase
 {
 public:
-	Idle_To_Sprint(int& modelHandle,
+	IdleToSprint(int& modelHandle,
 		AnimState& oldAnimState, AnimState& nowAnimState);
-	~Idle_To_Sprint();
+	~IdleToSprint();
 
 	void Initialize(int& modelHandle,const int changeNum, Player& player)override;
 

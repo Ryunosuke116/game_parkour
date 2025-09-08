@@ -77,7 +77,7 @@ void Player::Initialize()
     playerData.isIdle = false;
     playerData.isGround = true;
     playerData.isJump = false;
-    playerData.isJump_second = false;
+    playerData.isJumpSecond = false;
     playerData.isJumpAll = false;
     playerData.isWalljump = false;
     playerData.isMove = false;
@@ -85,16 +85,16 @@ void Player::Initialize()
     playerData.isRoll = false;
     playerData.isSprint = false;
     playerData.isStopRun = false;
-    playerData.isUse_Roll = false;
-    playerData.isJump_PlayAnim = false;
+    playerData.isUseRoll = false;
+    playerData.isJumpPlayAnim = false;
     playerData.isFalling = false;
     playerData.isHanging = false;
     playerData.isHanging_now = false;
-    playerData.isUse_Hanging = true;
+    playerData.isUseHanging = true;
     playerData.isHangToCrouch = false;
     playerData.isRun = false;
     playerData.isRunWall = false;
-    playerData.isUse_wallJump = true;
+    playerData.isUseWallJump = true;
     playerData.isDash = false;
     playerData.isWallClimb = false;
     isCalc = false;
@@ -130,7 +130,7 @@ void Player::Update()
     //接地中であればロールアクションを使えるように
     if (playerData.isGround && !playerData.isRoll)
     {
-        playerData.isUse_Roll = false;
+        playerData.isUseRoll = false;
     }
 
     //stateに応じた挙動処理
@@ -314,16 +314,14 @@ void Player::CollisionUpdate()
     const float rightAngle = 90.0f;
     const VECTOR verticalShaft = VGet(0.0f, 1.0f, 0.0f);
     const VECTOR rotatePosition = VAdd(position, faceDirection);
+    const VECTOR addCenterPosition = VGet(0.0f, 10.0f, 0.0f);       //キャラの足もとから中心までの差
 
     playerCalculation->SetHandPos_left(MV1GetFramePosition(modelHandle, left));
     playerCalculation->SetHandPos_right(MV1GetFramePosition(modelHandle, right));
-    positionData.centerPosition = MV1GetFramePosition(modelHandle, head);
+    positionData.centerPosition = VAdd(position, addCenterPosition);
     positionData.oldPosition = position;
 
     //ray
-    positionData.centerPosition = VScale(VAdd(MV1GetFramePosition(modelHandle, head), position), 0.5f);
- 
-    positionData.centerPosition = VGet(position.x, positionData.centerPosition.y, position.z);
     positionData.rayTopPosition = VGet(position.x, positionData.centerPosition.y + height, position.z);
     positionData.rayBottomPosition = position;
     
@@ -449,20 +447,20 @@ void Player::DebugUpdate()
     DebugDrawer::Instance().InformationInput_string_bool("isMove %d\n", playerData.isMove);
     DebugDrawer::Instance().InformationInput_string_bool("isRun %d\n", playerData.isRun);
     DebugDrawer::Instance().InformationInput_string_bool("isRunWall %d\n", playerData.isRunWall);
-    DebugDrawer::Instance().InformationInput_string_bool("isUse_wallJump %d\n", playerData.isUse_wallJump);
+    DebugDrawer::Instance().InformationInput_string_bool("isUseWallJump %d\n", playerData.isUseWallJump);
     DebugDrawer::Instance().InformationInput_string_bool("isStopRun %d\n", playerData.isStopRun);
     DebugDrawer::Instance().InformationInput_string_bool("isJump %d\n", playerData.isJump);
-    DebugDrawer::Instance().InformationInput_string_bool("isJump_first %d\n", playerData.isJump_first);
-    DebugDrawer::Instance().InformationInput_string_bool("isJump_second %d\n", playerData.isJump_second);
+    DebugDrawer::Instance().InformationInput_string_bool("isJumpFirst %d\n", playerData.isJumpFirst);
+    DebugDrawer::Instance().InformationInput_string_bool("isJumpSecond %d\n", playerData.isJumpSecond);
     DebugDrawer::Instance().InformationInput_string_bool("isJumpAll %d\n", playerData.isJumpAll);
     DebugDrawer::Instance().InformationInput_string_bool("isWalljump %d\n", playerData.isWalljump);
-    DebugDrawer::Instance().InformationInput_string_bool("isUse_wallJump %d\n", playerData.isUse_wallJump);
+    DebugDrawer::Instance().InformationInput_string_bool("isUseWallJump %d\n", playerData.isUseWallJump);
     DebugDrawer::Instance().InformationInput_string_bool("isRoll %d\n", playerData.isRoll);
-    DebugDrawer::Instance().InformationInput_string_bool("isUse_roll %d\n", playerData.isUse_Roll);
+    DebugDrawer::Instance().InformationInput_string_bool("isUseRoll %d\n", playerData.isUseRoll);
     DebugDrawer::Instance().InformationInput_string_bool("isFalling %d\n", playerData.isFalling);
     DebugDrawer::Instance().InformationInput_string_bool("isHanging %d\n", playerData.isHanging);
     DebugDrawer::Instance().InformationInput_string_bool("isHanging_now %d\n", playerData.isHanging_now);
-    DebugDrawer::Instance().InformationInput_string_bool("isUse_Hanging %d\n", playerData.isUse_Hanging);
+    DebugDrawer::Instance().InformationInput_string_bool("isUseHanging %d\n", playerData.isUseHanging);
     DebugDrawer::Instance().InformationInput_string_bool("isPossibleWallRun %d\n", playerData.isPossibleWallRun);
     DebugDrawer::Instance().InformationInput_string_bool("isHangToCrouch %d\n", playerData.isHangToCrouch);
 

@@ -3,21 +3,24 @@
 
 class Player;
 
-class Run_To_Stop : public PlayerStateBase
+class HangingIdle : public PlayerStateBase
 {
 public:
-	Run_To_Stop(int& modelHandle,
-		AnimState& oldAnimState, AnimState& nowAnimState);
-	~Run_To_Stop();
+	HangingIdle(int& modelHandle,
+		AnimState& oldAnimState, 
+		AnimState& nowAnimStatel);
 
-	bool MotionUpdate(PlayerData& playerData)override;
+	~HangingIdle();
+
+	void Initialize(int& modelHandle,const int changeNum, Player& player)override;
 	std::pair<VECTOR, PlayerData> Update(const VECTOR& cameraDirection,
 		const std::vector<std::weak_ptr<BaseObject>>& fieldObjects, Player& player)override;
-
 	VECTOR Command(const VECTOR& cameraDirection, PlayerData& playerData, Player& player)override;
 	void Enter(PlayerData& playerData) override;		//状態に入ったとき
 	void Exit(PlayerData& playerData) override;			//状態を抜けるとき
+
+
 private:
-	static constexpr float playAnimSpeed = 0.7f;	    // 移動速度
+	static constexpr float playAnimSpeed = 0.4f;	    // アニメーション速度
 };
 

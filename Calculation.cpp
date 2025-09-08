@@ -147,8 +147,6 @@ Calculation::NearestResult Calculation::SphereMeshOutsideTriangle_line(
 	const MV1_COLL_RESULT_POLY& poly,
 	const VECTOR& pos)
 {
-	VECTOR nearestPoint;
-
 	NearestResult result;
 
 	//ü•ªã‚Ì“_‚Æ‚ÌÅ‹ß“_

@@ -187,7 +187,7 @@ VECTOR PlayerCalculation::Jump(const VECTOR& moveVec,const int& animNumber_Now,
 
     if (isJumpPower_add)
     {
-        if (playerData.isJump_second)
+        if (playerData.isJumpSecond)
         {
             move.y = 0.0f;
         }
@@ -248,7 +248,7 @@ VECTOR PlayerCalculation::Roll(const int& animNumber_Now,
         }
 
         if (playTime_anim >= 10.0f ||
-            animNumber_Now != animNum::quick_Roll)
+            animNumber_Now != animNum::quickRoll)
         {
             move = VScale(moveVec, rollMoveSpeed_max);
             moveSpeed_now = MaxRunSpeed;

@@ -33,9 +33,6 @@ public:
 	void Update(BaseChara& chara,
 		const PlayerData& playerData);
 
-	std::pair<bool, VECTOR>GroundCollisionCheckHangToCrouch(const std::vector<std::weak_ptr<BaseObject>>& collisionObjects,
-		const VECTOR& oldPos, const VECTOR& newPos, const VECTOR& foot, const PositionData& positionData);
-
 	VECTOR WallGroundCollisionCheck(
 		const std::vector<std::weak_ptr<BaseObject>>& collisionObjects,
 		const VECTOR& oldPos,

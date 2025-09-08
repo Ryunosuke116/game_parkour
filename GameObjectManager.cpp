@@ -15,7 +15,7 @@ GameObjectManager::GameObjectManager():
 	streamStartPictureTimer(-1),
 	stream_finishPicture_timer(-1),
 	isStreamStartPicture(false),
-	isStream_finishPicture(false)
+	isStreamFinishPicture(false)
 {
 
 }
@@ -25,7 +25,8 @@ GameObjectManager::GameObjectManager():
 /// </summary>
 GameObjectManager::~GameObjectManager()
 {
-
+	managers.clear();
+	objects.clear();
 }
 
 /// <summary>
@@ -110,7 +111,7 @@ void GameObjectManager::Initialize()
 	isPush = false;
 	isGoal = false;
 	isStreamStartPicture = true;
-	isStream_finishPicture = false;
+	isStreamFinishPicture = false;
 	streamStartPictureTimer = 0.0f;
 	stream_finishPicture_timer = 0.0f;
 }
@@ -128,7 +129,7 @@ void GameObjectManager::Update()
 	FinishUpdate();
 
 	if (!isStreamStartPicture && 
-		!isStream_finishPicture)
+		!isStreamFinishPicture)
 	{
 		if (CheckHitKey(KEY_INPUT_0))
 		{
@@ -176,9 +177,9 @@ void GameObjectManager::Update()
 		
 		//ƒS[ƒ‹”»’è
 		if (uiManager_actual->GetGameTimer()->IsFinish() &&
-			!isStream_finishPicture)
+			!isStreamFinishPicture)
 		{
-			isStream_finishPicture = true;
+			isStreamFinishPicture = true;
 			finishCut->SetIsDraw_finish(true);
 		}
 	}
@@ -221,17 +222,17 @@ void GameObjectManager::StartUpdate()
 
 void GameObjectManager::FinishUpdate()
 {
-	if (isStream_finishPicture)
+	if (isStreamFinishPicture)
 	{
 		BlackOut::GetInstance().SetIsLightChange(finishCut->Update());
 
 		if (BlackOut::GetInstance().GetIsLightChange())
 		{
-			const int maxAlpha = 0;
+			const int maxAlpha = 300;
 			const int addAlpha = 5;
 			BlackOut::GetInstance().BlackOutUpdate(addAlpha);
 
-			BlackOut::GetInstance().GetAlpha() <= maxAlpha ?
+			BlackOut::GetInstance().GetAlpha() >= maxAlpha ?
 				isGoal = true :
 				isGoal = false;
 		}

@@ -19,7 +19,10 @@ GameTimer::GameTimer():
 /// </summary>
 GameTimer::~GameTimer()
 {
-
+	for (auto& numberHandle : numberHandle)
+	{
+		DeleteGraph(numberHandle);
+	}	
 }
 
 void GameTimer::Load(const nlohmann::json& jsonData)

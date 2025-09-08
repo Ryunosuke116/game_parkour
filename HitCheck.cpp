@@ -44,9 +44,12 @@ bool HitCheck::RayHitJudge(const int& modelHandle, int frameIndex,
 /// <param name="linePos_end"></param>
 /// <param name="hitPoly"></param>
 /// <returns></returns>
-bool HitCheck::SphereHitJudge(const int& modelHandle, 
-	int frameIndex, const float& radius,
-	VECTOR linePos_end, MV1_COLL_RESULT_POLY_DIM& hitPoly)
+bool HitCheck::SphereHitJudge(
+	const int& modelHandle, 
+	int frameIndex,
+	const float& radius,
+	VECTOR linePos_end,
+	MV1_COLL_RESULT_POLY_DIM& hitPoly)
 {
 	hitPoly = MV1CollCheck_Sphere(modelHandle, frameIndex, linePos_end, radius);
 
@@ -63,8 +66,13 @@ bool HitCheck::SphereHitJudge(const int& modelHandle,
 /// <param name="linePos_start"></param>
 /// <param name="linePos_end"></param>
 /// <param name="hitPoly"></param>
-void HitCheck::CapsuleHitWallJudge(const int& modelHandle, int frameIndex,float radius,
-	VECTOR linePos_start, VECTOR linePos_end, MV1_COLL_RESULT_POLY_DIM& hitPoly)
+void HitCheck::CapsuleHitWallJudge(
+	const int& modelHandle, 
+	int frameIndex,
+	float radius,
+	VECTOR linePos_start,
+	VECTOR linePos_end, 
+	MV1_COLL_RESULT_POLY_DIM& hitPoly)
 {
 	hitPoly = MV1CollCheck_Capsule(modelHandle, frameIndex, linePos_start, linePos_end, radius);
 }
@@ -421,136 +429,13 @@ HangingData HitCheck::CliffGrabbing(
 		auto sharedCollisionObject = fieldObject.lock();
 
 		MV1_COLL_RESULT_POLY_DIM poly_dim;
-		MV1_COLL_RESULT_POLY polyRayCheck;
 
-		HitCheck::SphereHitJudge(sharedCollisionObject->GetModelHandle(),
+		HitCheck::SphereHitJudge(
+			sharedCollisionObject->GetModelHandle(),
 			-1,
 			radius,
 			spherePos, 
 			poly_dim);
-
-	/*	HitCheck::RayHitJudge(sharedCollisionObject->GetModelHandle(),
-			-1,
-			startUpperCheckPos,
-			endUpperCheckPos,
-			polyRayCheck);*/
-
-		//if (polyRayCheck.HitFlag)
-		//{
-		//	if (sharedCollisionObject->GetTag() != "field")
-		//	{
-		//		continue;
-		//	}
-
-		//	float minSize = NULL;
-		//	//平面に当たっていればtrueに
-		//	if (polyRayCheck.Normal.y >= 0.8f)
-		//	{
-		//		//三角形の一番近い辺から一番近い点を求める
-		//		VECTOR nearestOutSide = Calculation::SphereMeshOutsideTriangle(
-		//			polyRayCheck,
-		//			position);
-
-		//		//一番近い点の元の辺を求める
-		//		Calculation::NearestResult nearestResult =
-		//			Calculation::SphereMeshOutsideTriangle_line(
-		//				polyRayCheck,
-		//				position);
-
-		//		//奥行を調べるための座標
-		//		VECTOR depthDirection = VSub(nearestOutSide, position);
-		//		depthDirection = VNorm(depthDirection);
-
-		//		depthDirection = Calculation::Projection(polyRayCheck.Normal, depthDirection);
-
-		//		VECTOR rightRayPoint = VNorm(VSub(nearestResult.linePos_end, nearestOutSide));
-		//		VECTOR leftRayPoint = VNorm(VSub(nearestResult.linePos_start, nearestOutSide));
-
-		//		rightRayPoint = VScale(rightRayPoint, checkWidth);
-		//		leftRayPoint = VScale(leftRayPoint, checkWidth);
-
-		//		rightRayPoint = VAdd(nearestOutSide, rightRayPoint);
-		//		leftRayPoint = VAdd(nearestOutSide, leftRayPoint);
-
-		//		rightRayPoint = VAdd(rightRayPoint, VScale(depthDirection, 0.5f));
-		//		leftRayPoint = VAdd(leftRayPoint, VScale(depthDirection, 0.5f));
-
-		//		VECTOR endRightRayPoint = VAdd(rightRayPoint, VGet(0.0f, -1.0f, 0.0f));
-		//		VECTOR endLeftRayPoint = VAdd(leftRayPoint, VGet(0.0f, -1.0f, 0.0f));
-		//		MV1_COLL_RESULT_POLY leftRayCheck;
-		//		MV1_COLL_RESULT_POLY rightRayCheck;
-
-		//		DebugDrawer::Instance().InformationInput_line(leftRayPoint, endLeftRayPoint, GetColor(255, 255, 255));
-		//		DebugDrawer::Instance().InformationInput_line(rightRayPoint, endRightRayPoint, GetColor(255, 255, 255));
-		//		DebugDrawer::Instance().InformationInput_sphere(nearestOutSide, 2.5f, GetColor(255, 0, 255));
-		//		for (const auto& fieldObject : collisionObjects)
-		//		{
-		//			//掴む所の幅を確認して、一定の幅がないと掴めないようにする
-		//			auto sharedCollisionObject = fieldObject.lock();
-		//			HitCheck::RayHitJudge(
-		//				sharedCollisionObject->GetModelHandle(),
-		//				-1,
-		//				leftRayPoint,
-		//				endLeftRayPoint,
-		//				leftRayCheck);
-
-		//			HitCheck::RayHitJudge(
-		//				sharedCollisionObject->GetModelHandle(),
-		//				-1,
-		//				rightRayPoint,
-		//				endRightRayPoint,
-		//				rightRayCheck);
-
-		//			if (leftRayCheck.HitFlag && 
-		//				rightRayCheck.HitFlag)break;
-		//		}
-
-		//		if (!leftRayCheck.HitFlag || 
-		//			!rightRayCheck.HitFlag)continue;
-
-		//		VECTOR depthDistance = VScale(depthDirection, max_velocity);
-		//		depthDistance = VAdd(nearestOutSide, depthDistance);
-
-		//		//少し浮かせる
-		//		VECTOR startWallCheckLine = VAdd(nearestOutSide, VScale(polyRayCheck.Normal, 0.2f));
-		//		VECTOR endWallCheckLine = VAdd(depthDistance, VScale(polyRayCheck.Normal, 0.2f));
-
-		//		DebugDrawer::Instance().InformationInput_capsule(startWallCheckLine, endWallCheckLine, 1.0f, GetColor(255, 0, 255));
-
-		//		MV1_COLL_RESULT_POLY wallCheck = {};
-
-		//		//壁に当たっていたら崖掴みができない
-		//		for (const auto& collisionObject : collisionObjects)
-		//		{
-		//			auto sharedCollisionObject = fieldObject.lock();
-
-		//			HitCheck::RayHitJudge(
-		//				sharedCollisionObject->GetModelHandle(),
-		//				-1,
-		//				startWallCheckLine,
-		//				endWallCheckLine,
-		//				wallCheck);
-
-		//			if (wallCheck.HitFlag)break;
-		//		}
-
-		//		//奥行がない場合掴めない
-		//		if (wallCheck.HitFlag) continue;
-
-
-		//		VECTOR sub = VSub(nearestOutSide, spherePos);
-		//		float sub_size = VSize(sub);
-
-		//		//一番差が小さい情報を取得
-		//		if (minSize == NULL || minSize >= sub_size)
-		//		{
-		//			minSize = sub_size;
-		//			hangingData.hangingPoly = polyRayCheck;
-		//		}
-
-		//		hangingData.isHitHanging = true;
-		//	}
-		//}
 
 		if (poly_dim.HitNum >= 1)
 		{
@@ -669,22 +554,6 @@ HangingData HitCheck::CliffGrabbing(
 
 					//奥行がない場合掴めない
 					if (wallCheck.HitFlag) continue;
-
-					//if (max_velocity > depth) continue;
-
-					//VECTOR neareast = Calculation::SphereMeshOutsideTriangle(poly, spherePos);
-					//DebugDrawer::Instance().InformationInput_sphere(neareast, 2.0f, GetColor(255, 0, 255));
-
-					//VECTOR line_end = Calculation::Projection(poly.Normal, moveDirection);
-
-					//line_end = VAdd(neareast, VScale(line_end, max_velocity));
-
-					//if (HitCheck::RayHitJudge(fieldObject->GetModelHandle(),
-					//	-1,
-					//	neareast,
-					//	line_end,
-					//	ray_poly
-					//)) continue;
 
 					VECTOR sub = VSub(nearestOutSide, topPosition);
 					float sub_size = VSize(sub);

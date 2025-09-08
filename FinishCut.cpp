@@ -17,7 +17,7 @@ FinishCut::FinishCut() :
 
 FinishCut::~FinishCut()
 {
-
+	DeleteGraph(finishHandle);
 }
 
 void FinishCut::Load(const nlohmann::json& jsonData)
@@ -51,10 +51,10 @@ bool FinishCut::Update()
 		if (finishGraph_timer >= 50.0f)
 		{
 			isDraw_finish = false;
-			return true;
+			return false;
 		}
 	}
-	return false;
+	return true;
 }
 
 void FinishCut::Draw()

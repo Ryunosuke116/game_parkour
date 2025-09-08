@@ -15,8 +15,9 @@ SceneManager::~SceneManager()
 	SubSystemManager::GetInstance().ShutdownAll();
 }
 
-
-void SceneManager::ChangeScene(const std::string_view name, const int coinCount)
+void SceneManager::ChangeScene(
+	const std::string_view name,
+	const int coinCount)
 {
 	try
 	{

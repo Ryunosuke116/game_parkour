@@ -4,7 +4,7 @@
 #include "PlayerStateBase.h"
 #include "PadInput.h"
 #include "PlayerData.h"
-#include "Idle_To_Sprint.h"
+#include "IdleToSprint.h"
 #include "AnimTime.h"
 #include "Player.h"
 
@@ -12,7 +12,7 @@
 /// コンストラクタ
 /// </summary>
 /// <param name="modelHandle"></param>
-Idle_To_Sprint::Idle_To_Sprint(int& modelHandle,
+IdleToSprint::IdleToSprint(int& modelHandle,
     AnimState& oldAnimState, AnimState& nowAnimState) :
     PlayerStateBase(modelHandle, oldAnimState, nowAnimState)
 {
@@ -22,7 +22,7 @@ Idle_To_Sprint::Idle_To_Sprint(int& modelHandle,
 /// <summary>
 /// デストラクタ
 /// </summary>
-Idle_To_Sprint::~Idle_To_Sprint()
+IdleToSprint::~IdleToSprint()
 {
     //  MV1DetachAnim(modelHandle, this->nowAnimState.AttachIndex);
 }
@@ -31,7 +31,7 @@ Idle_To_Sprint::~Idle_To_Sprint()
 /// 初期化
 /// </summary>
 /// <param name="modelHandle"></param>
-void Idle_To_Sprint::Initialize(int& modelHandle,const int changeNum, Player& player)
+void IdleToSprint::Initialize(int& modelHandle,const int changeNum, Player& player)
 {
     PlayerStateBase::Initialize(modelHandle, changeNum, player);
     animBlendRate = 1.0f;
@@ -44,7 +44,7 @@ void Idle_To_Sprint::Initialize(int& modelHandle,const int changeNum, Player& pl
 /// <param name="fieldObjects"></param>
 /// <param name="player"></param>
 /// <returns></returns>
-std::pair<VECTOR, PlayerData> Idle_To_Sprint::Update(const VECTOR& cameraDirection,
+std::pair<VECTOR, PlayerData> IdleToSprint::Update(const VECTOR& cameraDirection,
     const std::vector<std::weak_ptr<BaseObject>>& fieldObjects, Player& player)
 {
     VECTOR moveDirection = VGet(0.0f, 0.0f, 0.0f);
@@ -56,7 +56,7 @@ std::pair<VECTOR, PlayerData> Idle_To_Sprint::Update(const VECTOR& cameraDirecti
     return std::make_pair(moveDirection, playerData);
 }
 
-VECTOR Idle_To_Sprint::Command(const VECTOR& cameraDirection, PlayerData& playerData, Player& player)
+VECTOR IdleToSprint::Command(const VECTOR& cameraDirection, PlayerData& playerData, Player& player)
 {
     VECTOR moveDirection = VGet(0.0f, 0.0f, 0.0f);
 
@@ -74,7 +74,7 @@ VECTOR Idle_To_Sprint::Command(const VECTOR& cameraDirection, PlayerData& player
     return moveDirection;
 }
 
-bool Idle_To_Sprint::MotionUpdate(PlayerData& playerData)
+bool IdleToSprint::MotionUpdate(PlayerData& playerData)
 {
     float totalTime_anim;
 
@@ -135,12 +135,12 @@ bool Idle_To_Sprint::MotionUpdate(PlayerData& playerData)
     return false;
 }
 
-void Idle_To_Sprint::Enter(PlayerData& playerData)
+void IdleToSprint::Enter(PlayerData& playerData)
 {
     playerData.isSprint = true;
 }
 
-void Idle_To_Sprint::Exit(PlayerData& playerData)
+void IdleToSprint::Exit(PlayerData& playerData)
 {
     playerData.isSprint = false;
 }
