@@ -61,7 +61,7 @@ public:
 	float GetWallRun_stopTime()const { return wallRun_stopTime; }
 	float GetWallRun_stopTime_max()const { return wallRun_stopTime_max; }
 	VECTOR GetHangingPoint()const { return hangingPoint; }
-	VECTOR GetHitWall_normal() const { return hitWall_normal; }
+	VECTOR GethitWallNormal() const { return hitWallNormal; }
 	MV1_COLL_RESULT_POLY GetHangingPoly() { return hangingPoly; }
 	Calculation::NearestResult GetNearestResult() { return nearestResult; }
 
@@ -73,7 +73,7 @@ public:
 	void SetHangingPoint(const VECTOR& set) { hangingPoint = set; }
 	void SetHandPos_right(const VECTOR& set) { handPos_right = set; }
 	void SetHandPos_left(const VECTOR& set) { handPos_left = set; }
-	void SetHitWall_normal(const VECTOR& set) { hitWall_normal = set; }
+	void SethitWallNormal(const VECTOR& set) { hitWallNormal = set; }
 	void SetNearestResult(const Calculation::NearestResult& set) { nearestResult = set; }
 
 private:
@@ -103,7 +103,7 @@ private:
 	VECTOR hangingPoint;
 	VECTOR handPos_right;
 	VECTOR handPos_left;
-	VECTOR hitWall_normal;
+	VECTOR hitWallNormal;
 
 	Calculation::NearestResult nearestResult;
 	MV1_COLL_RESULT_POLY hangingPoly;

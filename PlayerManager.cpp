@@ -61,9 +61,33 @@ void PlayerManager::Update()
 {
 	actualPlayer->Update();
 
-	collisionManager->Update(*player, actualPlayer->GetData());
-	
-	actualPlayer->Receive_CollisionResult();
+
+	if (actualPlayer->GetData().isRunWall)
+	{
+		VECTOR oldPos = player->GetPosition();
+		VECTOR newPos = VAdd(oldPos, player->GetVelocity());
+		VECTOR newPositon = collisionManager->WallGroundCollisionCheck(
+			WorldSubSystem::GetInstance().GetSubSystem<CollisionObjectManager>()->GetCollisionObjects(),
+			oldPos,
+			newPos,
+			player->GetVelocity(),
+			player->GetRadius(),
+			player->GetPositionData());
+
+		collisionManager->HeadCollisionCheck(
+			WorldSubSystem::GetInstance().GetSubSystem<CollisionObjectManager>()->GetCollisionObjects(),
+			newPositon,
+			player->GetVelocity(),
+			player->GetPositionData(),
+			player->GetRadius());
+
+		actualPlayer->SetPos(newPositon);
+	}
+	else
+	{
+		collisionManager->Update(*player, actualPlayer->GetData());
+		actualPlayer->Receive_CollisionResult();
+	}
 
 	actualPlayer->PositionUpdate();
 

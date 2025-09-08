@@ -36,6 +36,14 @@ public:
 	std::pair<bool, VECTOR>GroundCollisionCheckHangToCrouch(const std::vector<std::weak_ptr<BaseObject>>& collisionObjects,
 		const VECTOR& oldPos, const VECTOR& newPos, const VECTOR& foot, const PositionData& positionData);
 
+	VECTOR WallGroundCollisionCheck(
+		const std::vector<std::weak_ptr<BaseObject>>& collisionObjects,
+		const VECTOR& oldPos,
+		const VECTOR& newPos,
+		const VECTOR& moveVec,
+		const float radius,
+		const PositionData& positionData);
+
 	float GetTiltAngle_degree()const { return tiltAngle_degree; }
 
 	bool Draw();
@@ -47,6 +55,7 @@ private:
 
 	VECTOR hitPos_head;
 	VECTOR hitPos_ground;
+	VECTOR hitWallNormal;
 
 	VECTOR ray_start_hanging_log;
 	VECTOR ray_end_hanging_log;

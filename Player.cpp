@@ -311,8 +311,9 @@ void Player::CollisionUpdate()
     const int left = MV1SearchFrame(modelHandle, "mixamorig:LeftHandIndex4");
     const int right = MV1SearchFrame(modelHandle, "mixamorig:RightHandMiddle4_end");
     const int head = 7;
-    const VECTOR verticalShaft = VGet(0.0f, 1.0f, 0.0f);
     const float rightAngle = 90.0f;
+    const VECTOR verticalShaft = VGet(0.0f, 1.0f, 0.0f);
+    const VECTOR rotatePosition = VAdd(position, faceDirection);
 
     playerCalculation->SetHandPos_left(MV1GetFramePosition(modelHandle, left));
     playerCalculation->SetHandPos_right(MV1GetFramePosition(modelHandle, right));
@@ -336,7 +337,7 @@ void Player::CollisionUpdate()
         positionData.rayBottomPosition.y -= playerCalculation->GetMoveSpeed_now();
     }
 
-    VECTOR rotatePosition = VAdd(position, faceDirection);
+    //ƒLƒƒƒ‰‚Ì‰¡Ž²‚ð‹‚ß‚é
     positionData.sideShaft = Calculation::RotateLineSegment(
         position,
         rotatePosition,
@@ -344,7 +345,11 @@ void Player::CollisionUpdate()
         rightAngle);
 
     //ƒJƒvƒZƒ‹
-    positionData.capsuleTopPosition = VGet(positionData.centerPosition.x, positionData.centerPosition.y + height, positionData.centerPosition.z);
+    positionData.capsuleTopPosition = VGet(
+        positionData.centerPosition.x, 
+        positionData.centerPosition.y + height,
+        positionData.centerPosition.z);
+
     positionData.capsuleBottomPosition = position;
     
     //’²®
@@ -362,12 +367,25 @@ void Player::CollisionUpdate()
     }
 
     const VECTOR sideDirection = VNorm(VSub(position, positionData.sideShaft));
-
+    
+    //c‚ÌŽ²‚Ìü•ª‚ð‰ñ“]‚³‚¹‚é
     if (playerData.isRunWall)
     {
         positionData.capsuleTopPosition = Calculation::RotateLineSegment(
             positionData.capsuleBottomPosition,
             positionData.capsuleTopPosition,
+            sideDirection,
+            rotate_x);
+
+        positionData.centerPosition = Calculation::RotateLineSegment(
+            positionData.capsuleBottomPosition,
+            positionData.centerPosition,
+            sideDirection,
+            rotate_x);
+
+        positionData.rayTopPosition = Calculation::RotateLineSegment(
+            positionData.capsuleBottomPosition,
+            positionData.rayTopPosition,
             sideDirection,
             rotate_x);
     }
@@ -383,9 +401,9 @@ void Player::Receive_CollisionResult()
         playerData.isGround = collision_result.isHitGround;
         position = collision_result.position_new;
         playerData.isPossibleWallRun = collision_result.isPossibleWallRun;
-        if (VSize(collision_result.isHitWall_normal) != 0)
+        if (VSize(collision_result.ishitWallNormal) != 0)
         {
-            playerCalculation->SetHitWall_normal(collision_result.isHitWall_normal);
+            playerCalculation->SethitWallNormal(collision_result.ishitWallNormal);
         }
     }
     else

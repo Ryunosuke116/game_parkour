@@ -22,7 +22,7 @@ void CollisionManager::Update(
 		chara.SetCollision_result(
 			Check_all(WorldSubSystem::GetInstance().GetSubSystem<CollisionObjectManager>()->GetCollisionObjects(),
 				chara.GetPosition(),
-				chara.GetMoveVec(),
+				chara.GetVelocity(),
 				chara.GetRadius(),
 			chara.GetPositionData(),playerData));
 	}
@@ -194,16 +194,19 @@ bool CollisionManager::HeadCollisionCheck(
 /// <param name="positionData.radius"></param>
 /// <param name="isJump"></param>
 /// <returns></returns>
-std::pair<bool, std::string> CollisionManager::GroundCollisionCheck(const std::vector<std::weak_ptr<BaseObject>>& collisionObjects,
-	const VECTOR& oldPos, VECTOR& newPos, const VECTOR& moveVec,
+std::pair<bool, std::string> CollisionManager::GroundCollisionCheck(
+	const std::vector<std::weak_ptr<BaseObject>>& collisionObjects,
+	const VECTOR& oldPos, 
+	VECTOR& newPos, 
+	const VECTOR& moveVec,
 	const PositionData& positionData)
 {
 	bool isHitGround = false;
 	bool returnFlag = false;
 	std::string returnTag = "";
 
-	VECTOR position_top_new = VAdd(positionData.centerPosition, moveVec);
-	VECTOR position_bottom_new = VAdd(positionData.rayBottomPosition, moveVec);
+	VECTOR newTopPosition = VAdd(positionData.centerPosition, moveVec);
+	VECTOR newBottomPosition = VAdd(positionData.rayBottomPosition, moveVec);
 
 	MV1_COLL_RESULT_POLY rayPoly_ground;
 
@@ -212,15 +215,15 @@ std::pair<bool, std::string> CollisionManager::GroundCollisionCheck(const std::v
 		auto collisionObject = fieldObject.lock();
 
 		//rayが当たっていれば
-		isHitGround = HitCheck::RayHitJudge(collisionObject->GetModelHandle(), -1, position_top_new,
-			position_bottom_new, rayPoly_ground);
+		isHitGround = HitCheck::RayHitJudge(collisionObject->GetModelHandle(), -1, newTopPosition,
+			newBottomPosition, rayPoly_ground);
 
 		if (isHitGround)
 		{
 			rayPoly_ground_now = rayPoly_ground;
 
-			VECTOR playerNormal = VSub(position_top_new,
-				position_bottom_new);
+			VECTOR playerNormal = VSub(newTopPosition,
+				newBottomPosition);
 
 			playerNormal = VNorm(playerNormal);
 
@@ -267,7 +270,6 @@ std::pair<bool, VECTOR> CollisionManager::GroundCollisionCheckHangToCrouch(const
 	const VECTOR& oldPos, const VECTOR& newPos, const VECTOR& foot,
 	const PositionData& positionData)
 {
-
 	//prevとnewのposを作る
 	VECTOR newTopPosition = newPos;
 	VECTOR newBottomPosition = newPos;
@@ -314,8 +316,8 @@ std::pair<bool, VECTOR> CollisionManager::WallCollisionCheck(
 	const PositionData& positionData,
 	const float& radius)
 {
-	VECTOR position_top_new = VAdd(positionData.capsuleTopPosition, moveVec);
-	VECTOR position_bottom_new = VAdd(positionData.capsuleBottomPosition, moveVec);
+	VECTOR newTopPosition = VAdd(positionData.capsuleTopPosition, moveVec);
+	VECTOR newBottomPosition = VAdd(positionData.capsuleBottomPosition, moveVec);
 	VECTOR capsule_axis_top = VAdd(positionData.rayTopPosition, moveVec);					//カプセルの軸
 	VECTOR capsule_axis_bottom = VAdd(positionData.rayBottomPosition, moveVec);			//カプセルの軸
 
@@ -327,11 +329,12 @@ std::pair<bool, VECTOR> CollisionManager::WallCollisionCheck(
 		auto collisionObject = fieldObject.lock();
 
 		//壁と衝突しているか
-		HitCheck::CapsuleHitWallJudge(collisionObject->GetModelHandle(),
+		HitCheck::CapsuleHitWallJudge(
+			collisionObject->GetModelHandle(),
 			-1, 
 			radius, 
-			position_top_new,
-			VAdd(position_bottom_new, VGet(0.0f, 1.0f, 0.0f)), hitPoly_Wall);
+			newTopPosition,
+			VAdd(newBottomPosition, VGet(0.0f, 1.0f, 0.0f)), hitPoly_Wall);
 
 		//衝突しているとこを全部調べて押し戻し量を計算する
 		if (hitPoly_Wall.HitNum >= 1)
@@ -415,16 +418,17 @@ std::pair<bool, VECTOR> CollisionManager::WallCollisionCheck(
 
 						//衝突している壁の法線ベクトルを求める
 						hitPoly_normal = poly_ray.Normal;
+						hitWallNormal = poly_ray.Normal;
 
 						//接触している三角形の縦の幅がplayerのY軸の幅より高ければtrueにする
-						float vertical_length_triangle = Calculation::Triangle_by_verticalLength(
+						float verticalLengthTriangle = Calculation::Triangle_by_verticalLength(
 							poly.Position[0],
 							poly.Position[1],
 							poly.Position[2]);
 							
-						float vertical_length_player = Calculation::GetVerticalLength(position_top_new, position_bottom_new);
+						float verticalLengthPlayer = Calculation::GetVerticalLength(newTopPosition, newBottomPosition);
 
-						if (vertical_length_player <= vertical_length_triangle)
+						if (verticalLengthPlayer <= verticalLengthTriangle)
 						{
 							isPossibleWallRun = true;
 						}
@@ -440,6 +444,80 @@ std::pair<bool, VECTOR> CollisionManager::WallCollisionCheck(
 
 	return std::make_pair(isPossibleWallRun, hitPoly_normal);
 
+}
+
+/// <summary>
+/// 壁を床に見立てて
+/// 床との当たり判定をする
+/// </summary>
+/// <param name="collisionObjects"></param>
+/// <param name="oldPos"></param>
+/// <param name="newPos"></param>
+/// <param name="moveVec"></param>
+/// <param name="positionData"></param>
+/// <returns></returns>
+VECTOR CollisionManager::WallGroundCollisionCheck(
+	const std::vector<std::weak_ptr<BaseObject>>& collisionObjects,
+	const VECTOR& oldPos,
+	const VECTOR& newPos,
+	const VECTOR& moveVec,
+	const float radius,
+	const PositionData& positionData)
+{
+	bool isHitGround = false;
+	bool returnFlag = false;
+	const float reverseScale = -1.0f;
+	const float extendRayScale = 5.0f;
+	std::string returnTag = "";
+
+
+	const VECTOR gravityForWallRun = VScale(hitWallNormal, reverseScale);
+	VECTOR rayStartPosition = VAdd(positionData.centerPosition, moveVec);
+	VECTOR rayEndPosition = VAdd(rayStartPosition, VScale(gravityForWallRun, extendRayScale));
+
+	VECTOR returnNewPos = newPos;
+	VECTOR HitWallPlayerPosition = VAdd(newPos, VScale(gravityForWallRun, radius));
+
+	DebugDrawer::Instance().InformationInput_line(rayStartPosition, rayEndPosition, GetColor(255, 0, 255));
+
+	MV1_COLL_RESULT_POLY rayPoly_ground;
+
+	for (const auto& fieldObject : collisionObjects)
+	{
+		auto collisionObject = fieldObject.lock();
+
+		//rayが当たっていれば
+		isHitGround = HitCheck::RayHitJudge(
+			collisionObject->GetModelHandle(),
+			-1,
+			rayStartPosition,
+			rayEndPosition,
+			rayPoly_ground);
+
+		if (isHitGround)
+		{
+			rayPoly_ground_now = rayPoly_ground;
+
+			VECTOR newPlayerPos = VGet(0.0f, 0.0f, 0.0f);
+
+			//横の座標だけ壁に沿って押し戻す
+			newPlayerPos = VSub(rayPoly_ground.HitPosition, HitWallPlayerPosition);
+			newPlayerPos.y = 0.0f;
+			returnNewPos = VAdd(returnNewPos, newPlayerPos);
+
+			returnFlag = true;
+			returnTag = collisionObject->GetTag();
+		}
+	}
+
+	//どこにもあたっていない場合nullにする
+	if (returnTag == "")
+	{
+		rayPoly_ground_now = { NULL };
+	}
+
+	//接地しているか
+	return returnNewPos;
 }
 
 /// <summary>

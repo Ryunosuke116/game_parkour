@@ -247,7 +247,7 @@ void PlayerStateBase::WallRunMove(PlayerData& playerData, Player& player)
         playerData.isUse_wallJump &&
         playerData.isMove)
     {
-        VECTOR hitWallNormal = player.playerCalculation->GetHitWall_normal();
+        VECTOR hitWallNormal = player.playerCalculation->GethitWallNormal();
         
         //スティックが即座に反対方向に向いた場合slipをtrue
         //radian計算
@@ -274,8 +274,9 @@ void PlayerStateBase::WallRunMove(PlayerData& playerData, Player& player)
 
             player.playerCalculation->ChangeIsJumpPower_add_ture();
             player.playerCalculation->SetJumpPower();
-            player.SetnowMoveDirection(VScale(hitWallNormal, -1.0f));
-            player.SetRotata_x(run_wall_rotate_x);
+            player.SetNowMoveDirection(VScale(hitWallNormal, -1.0f));
+            player.SetFaceDirection(VScale(hitWallNormal, -1.0f));
+            player.SetRotata_x(runWallRotateX);
         }
     }
 }

@@ -28,6 +28,8 @@ CoinManager::~CoinManager()
 
 void CoinManager::Create()
 {
+	auto self = shared_from_this();
+
 	nlohmann::json data = JsonManager::GetInstance().GetJsons("coin");
 	std::string modelPath = data["modelPath"];
 
@@ -39,6 +41,8 @@ void CoinManager::Create()
 		coins.back()->Load(modelHandle,
 			VGet(pos[0].get<float>(), pos[1].get<float>(), pos[2].get<float>()));
 	}
+
+	WorldSubSystem::GetInstance().AddSubSystem<CoinManager>(self);
 
 }
 

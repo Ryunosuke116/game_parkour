@@ -24,7 +24,7 @@ public:
 	float GetAngle()const { return angle; }
 	VECTOR GetPosition()const { return position; }
 	VECTOR GetFramePosition()const { return framePosition; }
-	VECTOR GetMoveVec()const { return velocity; }
+	VECTOR GetVelocity()const { return velocity; }
 	PositionData GetPositionData() const { return positionData; }
 	CollisionResult GetCollisionResult()const { return collision_result; }
 	virtual float GetRadius()const abstract;

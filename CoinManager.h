@@ -6,7 +6,9 @@
 
 class EffectManager;
 
-class CoinManager : public BaseGameObjectManager
+class CoinManager :
+	public BaseGameObjectManager,
+	public std::enable_shared_from_this<CoinManager>
 {
 public:
 	void AddObserver(std::shared_ptr<CoinObserver> observer) { observers.push_back(observer); }

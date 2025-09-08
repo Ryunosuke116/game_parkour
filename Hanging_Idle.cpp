@@ -48,7 +48,7 @@ void Hanging_Idle::Initialize(int& modelHandle,const int changeNum, Player& play
     VECTOR centerPosition = MV1GetFramePosition(modelHandle, 2);
 
     player.playerCalculation->Reset_move();
-    player.SetnowMoveDirection(player.playerCalculation->HangingDirection(centerPosition));
+    player.SetNowMoveDirection(player.playerCalculation->HangingDirection(centerPosition));
     player.SetRotata_x(0.0f);
 }
 

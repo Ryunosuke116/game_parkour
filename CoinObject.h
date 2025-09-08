@@ -37,7 +37,7 @@ private:
 	float radian_Y;
 	float velocity_Y;
 
-	static constexpr float radius = 4.5f;
+	static constexpr float radius = 6.0f;
 	static constexpr float objectScale = 0.3f;
 	static constexpr float addVelocity = 0.4f;
 };

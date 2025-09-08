@@ -7,7 +7,7 @@ struct CollisionResult
 	VECTOR position_new = VGet(0.0f, 0.0f, 0.0f);
 	bool isHitGround = false;
 	bool isPossibleWallRun = false;
-	VECTOR isHitWall_normal = VGet(0.0f, 0.0f, 0.0f);
+	VECTOR ishitWallNormal = VGet(0.0f, 0.0f, 0.0f);
 	std::string objectTag = "";
 };
 
@@ -19,7 +19,7 @@ struct PositionData
 	VECTOR rayBottomPosition;
 	VECTOR centerPosition;
 	VECTOR oldPosition;
-	VECTOR sideShaft;				//横軸
+	VECTOR sideShaft;				//キャラクターの横軸
 };
 
 struct HangingData

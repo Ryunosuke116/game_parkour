@@ -38,7 +38,7 @@ public:
 
 	VECTOR GetTopPos() const { return positionData.capsuleTopPosition; }
 	VECTOR GetBottomPos() const { return positionData.capsuleBottomPosition; }
-	VECTOR GetMoveVec() const { return velocity; }
+	VECTOR GetVelocity() const { return velocity; }
 	VECTOR GetlinePos_end() const { return linePos_end; }
 	VECTOR GetHeadPos() const { return headPos; }
 	VECTOR GetNowMoveDirection() const { return nowMoveDirection; }
@@ -54,7 +54,8 @@ public:
 	/////////////////////////////////
 	void SetIsGround(bool flag) { playerData.isGround = flag; }
 	void SetPos(VECTOR newPos) { position = newPos; }
-	void SetnowMoveDirection(const VECTOR& set) { nowMoveDirection = set; }
+	void SetNowMoveDirection(const VECTOR& set) { nowMoveDirection = set; }
+	void SetFaceDirection(const VECTOR& set) { faceDirection = set; }
 	std::shared_ptr<PlayerCalculation> playerCalculation = NULL;
 private:
 
@@ -64,7 +65,7 @@ private:
 	static constexpr float angleSpeed = 0.3f;
 	static constexpr float addJumpPower = 1.7f;		//ジャンプパワー
 	static constexpr float gravity = -0.06f;
-	static constexpr float run_wall_rotate_x = 30.0f;
+	static constexpr float runWallRotateX = 30.0f;
 	static constexpr float entryDegree_wallRun = 30.0f;
 	static constexpr float radius = 3.5f;
 	static constexpr float height = 10.0f;

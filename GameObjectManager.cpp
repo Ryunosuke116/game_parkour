@@ -6,6 +6,7 @@
 #include "CollisionObjectManager.h"
 #include "SubSystemManager.h"
 #include "BlackOut.h"
+#include "WorldSubSystem.h"
 
 /// <summary>
 /// コンストラクタ
@@ -136,7 +137,7 @@ void GameObjectManager::Update()
 				if (!isCamera)
 				{
 					isCamera = true;
-					layout->Initialize(SubSystemManager::GetInstance().GetSubSystem<CoinManager>().lock()->GetModelHandle());
+					layout->Initialize(WorldSubSystem::GetInstance().GetSubSystem<CoinManager>()->GetModelHandle());
 				}
 				else
 				{
@@ -166,9 +167,10 @@ void GameObjectManager::Update()
 		}
 		else
 		{
+			coinManager_actual->Update();
 			camera_actual->Update_layout();
 			layout->Update(
-				SubSystemManager::GetInstance().GetSubSystem<Camera>().lock()->GetSpherePosition(),
+				WorldSubSystem::GetInstance().GetSubSystem<Camera>()->GetSpherePosition(),
 				*coinManager_actual);
 		}
 		

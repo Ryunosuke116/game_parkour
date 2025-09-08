@@ -176,12 +176,12 @@ std::pair<VECTOR, PlayerData> Run::Update_wallRun(
 		playerData.isRunWall = false;
 		playerData.isUse_wallJump = true;
 		playerData.isWalljump = true;
-		//player.SetnowMoveDirection(moveDirection_new);
+		//player.SetNowMoveDirection(moveDirection_new);
 		player.playerCalculation->Reset_run_wall();
 
-		VECTOR hitWall_normal = player.playerCalculation->GetHitWall_normal();
-		moveDir = VScale(hitWall_normal, 1.0f);
-		player.SetnowMoveDirection(moveDir);
+		VECTOR hitWallNormal = player.playerCalculation->GethitWallNormal();
+		moveDir = VScale(hitWallNormal, 1.0f);
+		player.SetNowMoveDirection(moveDir);
 		player.SetRotata_x(0.0f);
 	}
 
