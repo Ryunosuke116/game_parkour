@@ -65,7 +65,7 @@ void Player::Initialize()
 
     position = initPosition;
     targetMoveDirection = VGet(0.0f, 0.0f, 0.0f);
-    angle = 0.0f;
+    radian = 0.0f;
     rotate_x = 0.0f;
     start_walkTime = 0.0f;
 
@@ -107,10 +107,9 @@ void Player::Initialize()
     padInput_now = VGet(0.0f, 0.0f, 0.0f);
     nowMoveDirection = VGet(0.0f, 0.0f, 0.0f);
 
-    MV1SetRotationXYZ(modelHandle, VGet(rotate_x * DX_PI_F / 180.0f, angle + DX_PI_F, 0.0f));
+    MV1SetRotationXYZ(modelHandle, VGet(rotate_x * DX_PI_F / 180.0f, radian + DX_PI_F, 0.0f));
 
     animationChanger->Initialize(animNum::walk, modelHandle, nowState, playerData, *this);
-
 }
 
 /// <summary>
@@ -145,6 +144,7 @@ void Player::Update()
 
     MoveDirectionUpdate();
 
+    //キャラクターの向く方向を更新
     UpdateAngle(faceDirection);
    
     //状態変更
@@ -436,10 +436,11 @@ void Player::DebugUpdate()
     DebugDrawer::Instance().InformationInput_string_int("frame現在数%d\n", nowFrameNumber);
 
     //string_flaot
-    DebugDrawer::Instance().InformationInput_string_float("coinCount %f\n", angle);
+    DebugDrawer::Instance().InformationInput_string_float("coinCount %f\n", coinCount);
     DebugDrawer::Instance().InformationInput_string_float("JoyPad_x_left %f\n", -PadInput::GetJoyPad_x_left());
     DebugDrawer::Instance().InformationInput_string_float("JoyPad_y_left %f\n", -PadInput::GetJoyPad_y_left());
     DebugDrawer::Instance().InformationInput_string_float("degree_pad_now %f\n", degree_pad_now);
+    DebugDrawer::Instance().InformationInput_string_float("playerDegree %f\n", GetDegree());
 
     //string_bool
     DebugDrawer::Instance().InformationInput_string_bool("isGround %d\n", playerData.isGround);

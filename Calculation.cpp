@@ -310,13 +310,56 @@ VECTOR Calculation::Leap(const VECTOR& changePosition, const VECTOR& latestPosit
 /// <param name="latest"></param>
 /// <param name="speed"></param>
 /// <returns></returns>
-float Calculation::Leap_float(const float& change, const float& latest, const float& speed)
+float Calculation::LeapFloat(
+	const float& change,
+	const float& latest, 
+	const float& speed)
 {
 	float sub = latest - change;
 	float scale = 0;
 	scale = sub * speed;
 
 	return change + scale;
+}
+
+float Calculation::RotationAngleDegree(
+	const float targetDegree,
+	const float nowDegree,
+	const float rotationSpeed)
+{
+	float differenceAngle = targetDegree - nowDegree;
+
+	// ‚ ‚é•ûŒü‚©‚ç‚ ‚é•ûŒü‚Ì·‚ª‚P‚W‚O“xˆÈã‚É‚È‚é‚±‚Æ‚Í–³‚¢‚Ì‚Å
+	// ·‚Ì’l‚ª‚P‚W‚O“xˆÈã‚É‚È‚Á‚Ä‚¢‚½‚çC³‚·‚é
+	if (differenceAngle < -180.0f)
+	{
+		differenceAngle += 360.0f;
+	}
+	else if (differenceAngle > 180.0f)
+	{
+		differenceAngle -= 360.0f;
+	}
+
+	// Šp“x‚Ì·‚ª‚O‚É‹ß‚Ã‚¯‚é
+	if (differenceAngle > 0.0f)
+	{
+		// ·‚ªƒvƒ‰ƒX‚Ìê‡‚Íˆø‚­
+		differenceAngle -= rotationSpeed;
+		if (differenceAngle < 0.0f)
+		{
+			differenceAngle = 0.0f;
+		}
+	}
+	else
+	{
+		// ·‚ªƒ}ƒCƒiƒX‚Ìê‡‚Í‘«‚·
+		differenceAngle += rotationSpeed;
+		if (differenceAngle > 0.0f)
+		{
+			differenceAngle = 0.0f;
+		}
+	}
+	return targetDegree - differenceAngle;
 }
 
 MATRIX Calculation::Rotate(const VECTOR& wall_normal)

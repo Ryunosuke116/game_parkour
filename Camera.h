@@ -19,6 +19,7 @@ public:
 
 	void RotateUpdate();
 	void AngleUpdate(const float& angle_player);
+	void ResetAngle(const float& angle_player);
 	void DistanceUpdate();
 	void PosCalc();
 	void Leap(VECTOR& changePosition, const VECTOR& playerPosition, const float& speed);
@@ -45,11 +46,13 @@ private:
 	VECTOR direction;
 	float angleRadian;
 	float distance;
-	float nowAngle;
-	float newAngle;
+	float nowDegree;
+	float newDegree;
 	float min_t;
 	float max_t;
 	float t;
+
+	bool isResetAngle;
 
 	static constexpr float cameraSpeed = 0.02f;
 	static constexpr float cameraSpeed_ = 0.01f;

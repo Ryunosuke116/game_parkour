@@ -31,8 +31,9 @@ public:
 	void StateConfirmation();
 
 	//ƒQƒbƒ^[
-	VECTOR GetPosition() { return player->GetPosition(); }
-	float GetAngle() { return player->GetAngle(); }
+	VECTOR GetPosition()const { return player->GetPosition(); }
+	float GetRadian()const { return player->GetRadian(); }
+	float GetDegree()const { return player->GetDegree(); }
 	std::shared_ptr<Player> GetPlayer()const { return actualPlayer; }
 	int GetCoinCount()const { return player->GetCoinCount(); }
 

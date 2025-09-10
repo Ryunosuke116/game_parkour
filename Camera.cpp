@@ -16,10 +16,11 @@ Camera::Camera():
 	max_t(0.0f),
 	min_t(0.0f),
 	distance(0.0f),
-	nowAngle(0.0f),
-	newAngle(0.0f),
+	nowDegree(0.0f),
+	newDegree(0.0f),
 	angleRadian(0.0f),
 	t(0.0f),
+	isResetAngle(false),
 	cameraDirection(VGet(0.0f, 0.0f, 0.0f)),
 	aimPosition_usual(VGet(0.0f, 0.0f, 0.0f)),
 	aimPosition(VGet(0.0f, 0.0f, 0.0f)),
@@ -58,9 +59,10 @@ void Camera::Initialize()
 {
 	aimPosition = initializeAimPos;
 	spherePosition = initializeSpherePos;
-	nowAngle = initializeAngle;
+	nowDegree = initializeAngle;
 	distance = initializeDistance;
 	t = initializeT;
+	isResetAngle = false;
 
 	SetCameraPositionAndTarget_UpVecY(aimPosition, spherePosition);
 }
@@ -75,7 +77,7 @@ void Camera::Update()
 
 	DistanceUpdate();
 
-	AngleUpdate(WorldSubSystem::GetInstance().GetSubSystem<PlayerManager>()->GetAngle());
+	AngleUpdate(WorldSubSystem::GetInstance().GetSubSystem<PlayerManager>()->GetDegree());
 
 	RotateUpdate();
 
@@ -174,7 +176,7 @@ void Camera::Update_layout()
 	//if (CheckHitKey(KEY_INPUT_RIGHT) &&
 	//	CheckHitKey(KEY_INPUT_LSHIFT))
 	//{
-	//	nowAngle += 2.0f;
+	//	nowDegree += 2.0f;
 	//}
 	////xé≤âEà⁄ìÆ
 	//else if (CheckHitKey(KEY_INPUT_RIGHT) ||
@@ -188,7 +190,7 @@ void Camera::Update_layout()
 	//if (CheckHitKey(KEY_INPUT_LEFT) &&
 	//	CheckHitKey(KEY_INPUT_LSHIFT))
 	//{
-	//	nowAngle -= 2.0f;
+	//	nowDegree -= 2.0f;
 	//}
 	////xé≤ç∂à⁄ìÆ
 	//else if (CheckHitKey(KEY_INPUT_LEFT) ||
@@ -200,7 +202,7 @@ void Camera::Update_layout()
 
 	if (CheckHitKey(KEY_INPUT_9))
 	{
-		nowAngle = -177.55f;
+		nowDegree = -177.55f;
 	}
 
 	//DistanceUpdate();
@@ -218,7 +220,7 @@ void Camera::Update_layout()
 
 	AngleUpdate(1.0f);
 
-	float angleRadian = nowAngle * DX_PI_F / 360.0f;
+	float angleRadian = nowDegree * DX_PI_F / 360.0f;
 	this->angleRadian = angleRadian;
 
 	aimPosition.x = spherePosition.x + distance * cos(angleRadian);
@@ -256,12 +258,19 @@ void Camera::Draw()
 /// </summary>
 void Camera::RotateUpdate()
 {
-	float angleRadian = nowAngle * DX_PI_F / 360.0f;
-	this->angleRadian = angleRadian;
+	float degreesForRdianConversion = nowDegree;
+	degreesForRdianConversion -= 90.0f;
+	
+	if (degreesForRdianConversion >= 180.0f)
+	{
+		degreesForRdianConversion -= 360.0f;
+	}
 
-	////DebugDrawer::Instance().InformationInput_string_float("angle_camera %f\n", angleRadian);
+	this->angleRadian = Calculation::DegToRad(degreesForRdianConversion);
 
-	aimPosition_usual.x = spherePosition.x + distance * cos(angleRadian);
+	DebugDrawer::Instance().InformationInput_string_float("nowDegree %f\n", degreesForRdianConversion);
+
+	aimPosition_usual.x = spherePosition.x + distance * -cos(angleRadian);
 	aimPosition_usual.z = spherePosition.z + distance * sin(angleRadian);
 
 	aimPosition = aimPosition_usual;
@@ -311,34 +320,52 @@ void Camera::DistanceUpdate()
 /// </summary>
 void Camera::AngleUpdate(const float& angle_player)
 {
-	////ÉJÉÅÉâà⁄ìÆèàóù
-	//if ((CheckHitKey(KEY_INPUT_A) ||
-	//	PadInput::GetJoyPad_x_left() < 0.0f) &&
-	//	PadInput::GetJoyPad_x_right() == 0.0f)
-	//{
-	//	nowAngle += 2.0f;
-	//}
-	//if ((CheckHitKey(KEY_INPUT_D) ||
-	//	PadInput::GetJoyPad_x_left() > 0.0f) &&
-	//	PadInput::GetJoyPad_x_right() == 0.0f)
-	//{
-	//	nowAngle -= 2.0f;
-	//}
-
 	if (PadInput::GetJoyPad_x_right() < 0.0f)
 	{
-		nowAngle += 3.0f;
+		nowDegree -= 3.0f;
 	}
 	else if (PadInput::GetJoyPad_x_right() > 0.0f)
 	{
-		nowAngle -= 3.0f;
+		nowDegree += 3.0f;
 	}
 
-	/*if (PadInput::IsPush_R())
+	//0ÅãÅ`360ÅãÇ…ÇµÇ©Ç»ÇÁÇ»Ç¢ÇÊÇ§Ç…í≤êÆ
+	if (nowDegree >= 360.0f)
 	{
-		nowAngle = angle_player;
-	}*/
+		nowDegree -= 360.0f;
+	}
+	else if (nowDegree <= 0.0f)
+	{
+		nowDegree += 360.0f;
+	}
 
+	ResetAngle(angle_player);
+}
+
+void Camera::ResetAngle(const float& angle_player)
+{
+	const float rotationSpeed = 6.0f;
+
+	if (PadInput::IsPush_R())
+	{
+		newDegree = angle_player;
+		if (newDegree <= 0.0f)
+		{
+			newDegree += 360.0f;
+		}
+		isResetAngle = true;
+	}
+
+	if (isResetAngle &&
+		PadInput::GetJoyPad_x_right() == 0.0f)
+	{
+		nowDegree = Calculation::RotationAngleDegree(newDegree, nowDegree, rotationSpeed);
+
+		if (nowDegree == newDegree)
+		{
+			isResetAngle = false;
+		}
+	}
 }
 
 /// <summary>
@@ -387,5 +414,4 @@ void Camera::PosCalc()
 	{
 		Leap(spherePosition, centerPos, 0.05f);
 	}
-	
 }

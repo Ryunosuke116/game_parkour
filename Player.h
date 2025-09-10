@@ -62,7 +62,7 @@ private:
 	static constexpr float modelScale = 0.06f;
 	static constexpr float MaxMoveSpeed = 1.4f;	    // 移動速度
 	static constexpr float rollMoveSpeed_max = 2.5f;	//ロール速度
-	static constexpr float angleSpeed = 0.3f;
+	static constexpr float rotationSpeedDegree = 0.3f;
 	static constexpr float addJumpPower = 1.7f;		//ジャンプパワー
 	static constexpr float gravity = -0.06f;
 	static constexpr float runWallRotateX = 30.0f;

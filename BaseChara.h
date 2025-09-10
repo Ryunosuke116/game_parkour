@@ -2,6 +2,7 @@
 
 #include "CollisionData.h"
 #include "IObject.h"
+#include "Calculation.h"
 
 class BaseChara : public IObject
 {
@@ -21,7 +22,8 @@ public:
 	/////////////////////////////////////////////
 	int GetCoinCount()const { return coinCount; }
 	bool GetIsCollisionCheck()const { return isCollisionCheck; }
-	float GetAngle()const { return angle; }
+	float GetRadian()const { return radian; }
+	float GetDegree()const { return Calculation::radToDeg(radian); }
 	VECTOR GetPosition()const { return position; }
 	VECTOR GetFramePosition()const { return framePosition; }
 	VECTOR GetVelocity()const { return velocity; }
@@ -38,7 +40,7 @@ protected:
 	int nowFrameNumber;
 	int coinCount;		//ÉRÉCÉìÇÃèäéùñáêî
 
-	float angle;
+	float radian;
 	float rotate_x;
 
 	bool isCollisionCheck;
@@ -53,7 +55,7 @@ protected:
 	CollisionResult collision_result;
 
 	static constexpr float	MoveSpeed = 0.4f;	    // à⁄ìÆë¨ìx
-	static constexpr float angleSpeed = 0.2f;
+	static constexpr float rotationSpeedDegree = 11.0f;
 
 	const VECTOR initializeAimPos = VGet(-0.169435501f, 53.7492065f, -1224.39844f);
 	const VECTOR initializeSpherePos = VGet(-1.28232884f, 24.0028648f, -1172.35425f);

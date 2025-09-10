@@ -56,7 +56,7 @@ std::pair<VECTOR, PlayerData> Walk::Update(const VECTOR& cameraDirection,
 VECTOR Walk::Command(const VECTOR& cameraDirection, PlayerData& playerData, Player& player)
 {
 	VECTOR moveDir = VGet(0.0f, 0.0f, 0.0f);
-	angle = player.GetAngle();
+	angle = player.GetRadian();
 	playerMoveSpeed = player.playerCalculation->GetMoveSpeed_now();
 	playerMoveSpeed_max = player.playerCalculation->GetMoveSpeed_max();
 

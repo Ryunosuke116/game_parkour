@@ -26,7 +26,7 @@ public:
 	static float EaseOutQuad(float t);
 	static float Triangle_by_verticalLength(const VECTOR& a, const VECTOR& b, const VECTOR& c);
 	static float GetVerticalLength(const VECTOR& a, const VECTOR& b);
-	static float Leap_float(const float& change, const float& latest, const float& speed);
+	static float LeapFloat(const float& change, const float& latest, const float& speed);
 	static float Check_depth_Triangle(const VECTOR& dir, const VECTOR& a, const VECTOR& b, const VECTOR& c);
 	static VECTOR NearestPoint(const VECTOR& position_1, const VECTOR& position_2,
 		 const VECTOR& point);
@@ -41,6 +41,11 @@ public:
 		const VECTOR& rotatePos,
 		const VECTOR& dir,
 		const float& degree);
+
+	static float RotationAngleDegree(
+		const float targetDegree,
+		const float nowDegree,
+		const float rotationSpeed);
 
 	static NearestResult SphereMeshOutsideTriangle_line(const MV1_COLL_RESULT_POLY& poly, const VECTOR& pos);
 	static VECTOR AxisRotationX(const VECTOR& rotation, const float angle);
