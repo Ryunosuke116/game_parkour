@@ -83,7 +83,7 @@ void CoinManager::Update()
 		it++;
 	}
 
-	posAddObject = WorldSubSystem::GetInstance().GetSubSystem<Camera>()->GetSpherePosition();
+	posAddObject = WorldSubSystem::GetInstance().GetSubSystem<Camera>()->GetLookPosition();
 }
 
 void CoinManager::Draw()

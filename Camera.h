@@ -21,6 +21,7 @@ public:
 	void AngleUpdate(const float& angle_player);
 	void ResetAngle(const float& angle_player);
 	void DistanceUpdate();
+	void AdjustCameraPosition();
 	void PosCalc();
 	void Leap(VECTOR& changePosition, const VECTOR& playerPosition, const float& speed);
 
@@ -28,36 +29,51 @@ public:
 		const VECTOR& playerPosition,
 		const float& angle_player);
 	void Update_layout();
-	void CameraPosCalc(const int& mapHandle);
+	bool CameraPosCalc(const std::vector<std::weak_ptr<BaseObject>>& collisionObjects);
+	void LookPosCalc();
+
+	float CalculateBackEaseValue(float maxValue, float minValue, float nowValue);
+
+	float InterpolationCalc(float easedValue, float maxValue, float minValue);
+	float EaseOutQuad(float normalDistanceProgress);
+	float CalculateBackEaseOutValue(float nowValue);
 
 	///////////////////////////////////////////////////////
 	// ゲッター
 	///////////////////////////////////////////////////////
 	VECTOR GetCameraDirection() { return cameraDirection; }
-	VECTOR GetSpherePosition() { return spherePosition; }
+	VECTOR GetLookPosition() { return lookPosition; }
 
 private:
-	VECTOR aimPosition;
-	VECTOR aimPosition_usual;
+	VECTOR cameraPosition;
+	VECTOR newCameraPosition;
+	VECTOR tentativeCameraPosition;
 	VECTOR lookPosition;
 	VECTOR cameraDirection;
-	VECTOR spherePosition;
 	VECTOR centerPos;
-	VECTOR direction;
 	float angleRadian;
-	float distance;
+	float cameraDistanceWhenHittingObject;	//オブジェクトに当たっているときのカメラの距離
+	float normalCameraDistance;				//通常時のカメラ距離
+	float cameraDistance;					//カメラの距離
 	float nowDegree;
 	float newDegree;
 	float min_t;
 	float max_t;
-	float t;
+	float normalDistanceProgress;			//カメラの距離の最小値から最大値までの進行度(0～1)
+	float nowDistanceProgress;
+	float easedCameraPosition;
+	float normaleasedCameraPosition;
 
 	bool isResetAngle;
+	bool isHitObject;
+	bool isPutBackDistance;					//通常時のカメラ距離に戻すか
 
 	static constexpr float cameraSpeed = 0.02f;
 	static constexpr float cameraSpeed_ = 0.01f;
-	static constexpr float radius = 1.0f;
-	static constexpr float maxDistance = 60.0f;
+	static constexpr float lookRadius = 1.0f;
+	static constexpr float cameraRadius = 4.0f;
+	static constexpr float maxDistance = 70.0f;
+	static constexpr float minDistance = 10.0f;
 	static constexpr float initializeAngle = -177.55f;
 	static constexpr float initializeDistance = 50.0f;
 	static constexpr float initializeT = 0.7f;

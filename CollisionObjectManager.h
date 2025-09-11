@@ -16,7 +16,7 @@ public:
 	void Draw()			override;
 	void Add()			override{}
 
-	std::vector<std::weak_ptr<BaseObject>> GetCollisionObjects()
+	std::vector<std::weak_ptr<BaseObject>> const GetCollisionObjects()
 	{
 		std::vector<std::weak_ptr<BaseObject>> weakCollisionObjects;
 		weakCollisionObjects.reserve(collisionObjects.size());

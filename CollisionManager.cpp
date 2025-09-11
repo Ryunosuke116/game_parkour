@@ -132,14 +132,12 @@ bool CollisionManager::HeadCollisionCheck(
 	{
 		auto collisionObject = fieldObject.lock();
 
-		bool isHitHead = HitCheck::SphereHitJudge(
+		if (HitCheck::SphereHitJudge(
 			collisionObject->GetModelHandle(),
 			-1,
 			radius,
 			newTopPosition,
-			hitPoly_head);
-
-		if (isHitHead)
+			hitPoly_head))
 		{
 			VECTOR addPos = VGet(0.0f, 0.0f, 0.0f);
 
@@ -160,10 +158,13 @@ bool CollisionManager::HeadCollisionCheck(
 						poly.Position[1], 
 						poly.Position[2]);
 
+					//球の中心から三角形の接触座標までの方向
 					VECTOR hitDirection = VSub(hitPos_head, newTopPosition);
 					hitDirection = VNorm(hitDirection);
 					hitDirection = VScale(hitDirection, radius);
 
+					//接触座標までの方向に球の中心から半径分を加算して
+					// 球の表面の座標を求める
 					VECTOR hitPos_sphere = VAdd(newTopPosition, hitDirection);
 
 					newAddPos.y = hitPos_head.y - hitPos_sphere.y;

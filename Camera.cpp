@@ -1,4 +1,6 @@
 #include "common.h"
+#include <cmath>
+#include "math.h"
 #include "EffekseerForDXLib.h"
 #include "HitCheck.h"
 #include "PadInput.h"
@@ -15,20 +17,19 @@
 Camera::Camera():
 	max_t(0.0f),
 	min_t(0.0f),
-	distance(0.0f),
+	cameraDistance(0.0f),
 	nowDegree(0.0f),
 	newDegree(0.0f),
 	angleRadian(0.0f),
-	t(0.0f),
+	normalDistanceProgress(0.0f),
 	isResetAngle(false),
+	isHitObject(false),
+	isPutBackDistance(false),
 	cameraDirection(VGet(0.0f, 0.0f, 0.0f)),
-	aimPosition_usual(VGet(0.0f, 0.0f, 0.0f)),
-	aimPosition(VGet(0.0f, 0.0f, 0.0f)),
+	newCameraPosition(VGet(0.0f, 0.0f, 0.0f)),
+	cameraPosition(VGet(0.0f, 0.0f, 0.0f)),
 	centerPos(VGet(0.0f, 0.0f, 0.0f)),
-	spherePosition(VGet(0.0f, 0.0f, 0.0f)),
-	direction(VGet(0.0f, 0.0f, 0.0f)),
 	lookPosition(VGet(0.0f, 0.0f, 0.0f))
-
 {
 	// グラフィックの描画先を裏画面にセット
 	SetDrawScreen(DX_SCREEN_BACK);
@@ -57,14 +58,15 @@ void Camera::Create()
 /// </summary>
 void Camera::Initialize()
 {
-	aimPosition = initializeAimPos;
-	spherePosition = initializeSpherePos;
+	cameraPosition = initializeAimPos;
+	lookPosition = initializeSpherePos;
 	nowDegree = initializeAngle;
-	distance = initializeDistance;
-	t = initializeT;
+	cameraDistance = initializeDistance;
+	normalDistanceProgress = initializeT;
 	isResetAngle = false;
+	isHitObject = false;
 
-	SetCameraPositionAndTarget_UpVecY(aimPosition, spherePosition);
+	SetCameraPositionAndTarget_UpVecY(cameraPosition, lookPosition);
 }
 
 /// <summary>
@@ -72,27 +74,41 @@ void Camera::Initialize()
 /// </summary>
 void Camera::Update()
 {
+	const float addCenterPos = 15.0f;		//playerPosのY軸に加算してカメラと注視点の間の座標を求める
 	centerPos = WorldSubSystem::GetInstance().GetSubSystem<PlayerManager>()->GetPosition();
-	centerPos.y += 15.0f;
-
+	centerPos.y += addCenterPos;
+	
+	//カメラの中心からの距離を更新
 	DistanceUpdate();
 
+	//カメラの回転値を更新する
 	AngleUpdate(WorldSubSystem::GetInstance().GetSubSystem<PlayerManager>()->GetDegree());
 
+	//カメラを回転させる
 	RotateUpdate();
 
-	for (const auto& fieldObject : WorldSubSystem::GetInstance().GetSubSystem<CollisionObjectManager>()->GetCollisionObjects())
-	{
-		auto collisionObject = fieldObject.lock();
-		CameraPosCalc(collisionObject->GetModelHandle());
-	}
+	//カメラがオブジェクトに埋まらないようにする
+	isHitObject = CameraPosCalc(
+		WorldSubSystem::GetInstance().GetSubSystem<CollisionObjectManager>()->GetCollisionObjects());
+	
+	AdjustCameraPosition();
 
-	SetCameraPositionAndTarget_UpVecY(aimPosition, spherePosition);
+	//注視する座標からplayerがずれたら修正する
+	PosCalc();
 
-	cameraDirection = VSub(spherePosition, aimPosition);
+	//座標更新
+	SetCameraPositionAndTarget_UpVecY(cameraPosition, lookPosition);
+
+	cameraDirection = VSub(lookPosition, cameraPosition);
 	cameraDirection = VNorm(cameraDirection);
 }
 
+/// <summary>
+/// スタート時用の更新処理
+/// </summary>
+/// <param name="timer"></param>
+/// <param name="playerPosition"></param>
+/// <param name="angle_player"></param>
 void Camera::Update_start(const float& timer,
 	const VECTOR& playerPosition,
 	const float& angle_player)
@@ -106,9 +122,10 @@ void Camera::Update_start(const float& timer,
 
 	RotateUpdate();
 
-	SetCameraPositionAndTarget_UpVecY(aimPosition, spherePosition);
+	SetCameraPositionAndTarget_UpVecY(cameraPosition, lookPosition);
 
-	cameraDirection = VSub(spherePosition, aimPosition);
+	cameraDirection = VSub(lookPosition, cameraPosition);
+
 	cameraDirection = VNorm(cameraDirection);
 }
 
@@ -117,7 +134,7 @@ void Camera::Update_start(const float& timer,
 /// </summary>
 void Camera::Update_layout()
 {
-	cameraDirection = VSub(spherePosition, aimPosition);
+	cameraDirection = VSub(lookPosition, cameraPosition);
 	cameraDirection = VNorm(cameraDirection);
 
 	VECTOR moveDirection = VGet(0.0f, 0.0f, 0.0f);
@@ -141,35 +158,35 @@ void Camera::Update_layout()
 		moveDirection = VNorm(moveDirection);
 	}
 
-	aimPosition = VAdd(aimPosition, moveDirection);
-	spherePosition = VAdd(spherePosition, moveDirection);
+	cameraPosition = VAdd(cameraPosition, moveDirection);
+	lookPosition = VAdd(lookPosition, moveDirection);
 
 	//y軸↑移動
 	if (CheckHitKey(KEY_INPUT_UP) &&
 		CheckHitKey(KEY_INPUT_LCONTROL))
 	{
-		aimPosition.y += 1.0f;
-		spherePosition.y += 1.0f;
+		cameraPosition.y += 1.0f;
+		lookPosition.y += 1.0f;
 	}
 	//z軸↑移動
 	else if (CheckHitKey(KEY_INPUT_UP))
 	{
-		aimPosition.z += 1.0f;
-		spherePosition.z += 1.0f;
+		cameraPosition.z += 1.0f;
+		lookPosition.z += 1.0f;
 	}
 
 	//y軸↓移動
 	if (CheckHitKey(KEY_INPUT_DOWN) &&
 		CheckHitKey(KEY_INPUT_LCONTROL))
 	{
-		aimPosition.y -= 1.0f;
-		spherePosition.y -= 1.0f;
+		cameraPosition.y -= 1.0f;
+		lookPosition.y -= 1.0f;
 	}
 	//z軸↓移動
 	else if (CheckHitKey(KEY_INPUT_DOWN))
 	{
-		aimPosition.z -= 1.0f;
-		spherePosition.z -= 1.0f;
+		cameraPosition.z -= 1.0f;
+		lookPosition.z -= 1.0f;
 	}
 
 	////右回転
@@ -182,8 +199,8 @@ void Camera::Update_layout()
 	//else if (CheckHitKey(KEY_INPUT_RIGHT) ||
 	//	PadInput::GetJoyPad_x_right() < 0.0f)
 	//{
-	//	aimPosition.x += 1.0f;
-	//	spherePosition.x += 1.0f;
+	//	cameraPosition.x += 1.0f;
+	//	lookPosition.x += 1.0f;
 	//}
 
 	////左回転
@@ -196,8 +213,8 @@ void Camera::Update_layout()
 	//else if (CheckHitKey(KEY_INPUT_LEFT) ||
 	//	PadInput::GetJoyPad_x_right() > 0.0f)
 	//{
-	//	aimPosition.x -= 1.0f;
-	//	spherePosition.x -= 1.0f;
+	//	cameraPosition.x -= 1.0f;
+	//	lookPosition.x -= 1.0f;
 	//}
 
 	if (CheckHitKey(KEY_INPUT_9))
@@ -209,13 +226,13 @@ void Camera::Update_layout()
 
 	if (PadInput::GetJoyPad_y_right() > 0.0f)
 	{
-		aimPosition.y += 1.0f;
-		spherePosition.y += 1.0f;
+		cameraPosition.y += 1.0f;
+		lookPosition.y += 1.0f;
 	}
 	if (PadInput::GetJoyPad_y_right() < 0.0f)
 	{
-		aimPosition.y -= 1.0f;
-		spherePosition.y -= 1.0f;
+		cameraPosition.y -= 1.0f;
+		lookPosition.y -= 1.0f;
 	}
 
 	AngleUpdate(1.0f);
@@ -223,17 +240,15 @@ void Camera::Update_layout()
 	float angleRadian = nowDegree * DX_PI_F / 360.0f;
 	this->angleRadian = angleRadian;
 
-	aimPosition.x = spherePosition.x + distance * cos(angleRadian);
-	aimPosition.z = spherePosition.z + distance * sin(angleRadian);
-
-	//aimPosition = aimPosition_usual;
+	cameraPosition.x = lookPosition.x + cameraDistance * cos(angleRadian);
+	cameraPosition.z = lookPosition.z + cameraDistance * sin(angleRadian);
 
 	float maxRange = 5.0f;
 	float maxRange_ = 10.0f;
 
 	//RotateUpdate();
 
-	SetCameraPositionAndTarget_UpVecY(aimPosition, spherePosition);
+	SetCameraPositionAndTarget_UpVecY(cameraPosition, centerPos);
 }
 
 /// <summary>
@@ -242,44 +257,15 @@ void Camera::Update_layout()
 void Camera::Draw()
 {
 
-	/*DrawSphere3D(spherePosition, radius, 30, GetColor(0, 0, 0),
+	/*DrawSphere3D(lookPosition, radius, 30, GetColor(0, 0, 0),
 		    GetColor(255, 0, 0), FALSE);*/
 
 	//printfDx("lookPosition.x %f\n", lookPosition.x);
 	//printfDx("lookPosition.y %f\n", lookPosition.y);
 	//printfDx("lookPosition.z %f\n", lookPosition.z);
-	//printfDx("aimPosition.x %f\n", aimPosition.x);
-	//printfDx("aimPosition.y %f\n", aimPosition.y);
-	//printfDx("aimPosition.z %f\n", aimPosition.z);
-}
-
-/// <summary>
-/// カメラの回転更新
-/// </summary>
-void Camera::RotateUpdate()
-{
-	float degreesForRdianConversion = nowDegree;
-	degreesForRdianConversion -= 90.0f;
-	
-	if (degreesForRdianConversion >= 180.0f)
-	{
-		degreesForRdianConversion -= 360.0f;
-	}
-
-	this->angleRadian = Calculation::DegToRad(degreesForRdianConversion);
-
-	DebugDrawer::Instance().InformationInput_string_float("nowDegree %f\n", degreesForRdianConversion);
-
-	aimPosition_usual.x = spherePosition.x + distance * -cos(angleRadian);
-	aimPosition_usual.z = spherePosition.z + distance * sin(angleRadian);
-
-	aimPosition = aimPosition_usual;
-
-	float maxRange = 5.0f;
-	float maxRange_ = 10.0f;
-
-	//注視する座標からplayerがずれたら修正する
-	PosCalc();
+	//printfDx("cameraPosition.x %f\n", cameraPosition.x);
+	//printfDx("cameraPosition.y %f\n", cameraPosition.y);
+	//printfDx("cameraPosition.z %f\n", cameraPosition.z);
 }
 
 /// <summary>
@@ -287,32 +273,37 @@ void Camera::RotateUpdate()
 /// </summary>
 void Camera::DistanceUpdate()
 {
-	min_t = spherePosition.y;
-	max_t = spherePosition.y + 40.0f;
-	float min_distance = 15.0f;
-	float max_distance = 70.0f;
+	const float addCenterPos = 40.0f;		//カメラが中心からどれだけ離れられるか
+	min_t = lookPosition.y;
+	max_t = lookPosition.y + addCenterPos;
 
-	float easedT = Calculation::EaseOutQuad(t);
-
-	aimPosition_usual.y = min_t + (max_t - min_t) * easedT;
-	distance = min_distance + (max_distance - min_distance) * easedT;
+	const float addNormalizedTime = 0.02f;
+	const float minNormalizedTime = 0.0f;
+	const float maxNormalizedTime = 1.0f;
 
 	if (PadInput::GetJoyPad_y_right() > 0.0f)
 	{
-		t -= 0.02f;
-		if (t <= 0.0f)
+		normalDistanceProgress -= addNormalizedTime;
+		if (normalDistanceProgress <= minNormalizedTime)
 		{
-			t = 0.0f;
+			normalDistanceProgress = minNormalizedTime;
 		}
 	}
 	if (PadInput::GetJoyPad_y_right() < 0.0f)
 	{
-		t += 0.02f;
-		if (t >= 1.0f)
+		normalDistanceProgress += addNormalizedTime;
+		if (normalDistanceProgress >= maxNormalizedTime)
 		{
-			t = 1.0f;
+			normalDistanceProgress = maxNormalizedTime;
 		}
 	}
+
+	normaleasedCameraPosition = EaseOutQuad(normalDistanceProgress);
+
+	normalCameraDistance = InterpolationCalc(normaleasedCameraPosition, maxDistance, minDistance);
+
+	//イージング値から座標を求める
+	newCameraPosition.y = InterpolationCalc(normaleasedCameraPosition, max_t, min_t);
 }
 
 /// <summary>
@@ -342,6 +333,155 @@ void Camera::AngleUpdate(const float& angle_player)
 	ResetAngle(angle_player);
 }
 
+/// <summary>
+/// カメラの回転更新
+/// </summary>
+void Camera::RotateUpdate()
+{
+	//キャラとカメラの正面方向が違うためplayerの正面方向に合わせる
+	float degreesForRdianConversion = nowDegree;
+	degreesForRdianConversion -= 90.0f;
+	
+	//180度以上はマイナス角度として扱う
+	if (degreesForRdianConversion >= 180.0f)
+	{
+		degreesForRdianConversion -= 360.0f;
+	}
+
+	this->angleRadian = Calculation::DegToRad(degreesForRdianConversion);
+
+	//仮のカメラ座標
+	newCameraPosition.x = lookPosition.x + normalCameraDistance * -cos(angleRadian);
+	newCameraPosition.z = lookPosition.z + normalCameraDistance * sin(angleRadian);
+
+	float maxRange = 5.0f;
+	float maxRange_ = 10.0f;
+}
+
+
+/// <summary>
+/// カメラの位置調整
+/// </summary>
+/// <param name="mapHandle"></param>
+bool Camera::CameraPosCalc(const std::vector<std::weak_ptr<BaseObject>>& collisionObjects)
+{
+	tagMV1_COLL_RESULT_POLY_DIM hitPolySphere;
+	MV1_COLL_RESULT_POLY hitPoly;
+	VECTOR cameraVelocity;
+	VECTOR subPosition;
+	const float velocityScale = 2.0f;
+
+	for (const auto& fieldObject : collisionObjects)
+	{
+		const auto collisionObject = fieldObject.lock();
+	
+		//rayが当たっている場合カメラの位置をいじる
+		if (HitCheck::RayHitJudge(
+			collisionObject->GetModelHandle(),
+			-1,
+			lookPosition,
+			newCameraPosition, 
+			hitPoly))
+		{
+			cameraVelocity = VSub(hitPoly.HitPosition, newCameraPosition);
+			VECTOR cameraDirection = VNorm(cameraVelocity);
+
+			//このままだと壁との接触座標に移動するので壁から少し離す
+			const VECTOR addVelocity = VScale(cameraDirection, velocityScale);
+			cameraVelocity = VAdd(cameraVelocity, addVelocity);
+
+			cameraPosition = VAdd(newCameraPosition, cameraVelocity);
+
+			subPosition = VGet(cameraPosition.x, centerPos.y, cameraPosition.z);
+
+			VECTOR distanceCenterAndCamera = VSub(centerPos, subPosition);
+
+			//オブジェクトに当たっているときのカメラの距離を求める
+			cameraDistanceWhenHittingObject = VSize(distanceCenterAndCamera);
+			cameraDistance = cameraDistanceWhenHittingObject;
+
+			//当たっているので抜け出す
+			return hitPoly.HitFlag;
+		}
+
+		//if (HitCheck::SphereHitJudge(collisionObject->GetModelHandle(),
+		//	-1,
+		//	cameraRadius,
+		//	newCameraPosition,
+		//	hitPolySphere))
+		//{
+		//	VECTOR addPos;
+
+		//	for (int i = 0; i < hitPolySphere.HitNum; i++)
+		//	{
+		//		MV1_COLL_RESULT_POLY poly = MV1CollCheck_GetResultPoly(hitPolySphere, i);
+		//		
+		//		//面の交差座標の計算
+		//		VECTOR hitPos = HitCheck::ClosestPtToPointTriangle(
+		//			newCameraPosition,
+		//			poly.Position[0],
+		//			poly.Position[1],
+		//			poly.Position[2]);
+
+		//		//球の中心から三角形の接触座標までの方向
+		//		VECTOR hitDirection = VSub(newCameraPosition, hitPos);
+		//		hitDirection = VNorm(hitDirection);
+		//		VECTOR addSphereHitPos = VScale(hitDirection, cameraRadius);
+
+		//		//接触座標までの方向に球の中心から半径分を加算して
+		//		// 球の表面の座標を求める
+		//		VECTOR sphereHitPos = VAdd(newCameraPosition, addSphereHitPos);
+
+		//		//押し戻し量を計算
+		//		VECTOR addPos = VSub(hitPos, sphereHitPos);
+
+		//		cameraPosition = VAdd(newCameraPosition, addPos);
+		//	}
+		//	// 検出したプレイヤーの周囲のポリゴン情報を開放する
+		//	MV1CollResultPolyDimTerminate(hitPolySphere);
+
+		//	return true;
+		//}
+	}
+
+	return hitPoly.HitFlag;
+}
+
+void Camera::AdjustCameraPosition()
+{
+	if (!isHitObject)
+	{
+		if (PadInput::GetJoyPad_y_right() != 0.0f)
+		{
+			cameraDistance = Calculation::LeapFloat(cameraDistance, normalCameraDistance, 0.2f);
+		}
+		else if (PadInput::GetJoyPad_x_left() != 0.0f ||
+			PadInput::GetJoyPad_y_left() != 0.0f ||
+			PadInput::GetJoyPad_x_right() != 0.0f)
+		{
+			cameraDistance = Calculation::LeapFloat(cameraDistance, normalCameraDistance, 0.02f);
+		}
+	}
+
+	easedCameraPosition = CalculateBackEaseValue(maxDistance, minDistance, cameraDistance);
+
+	//カメラ座標
+	cameraPosition.x = lookPosition.x + cameraDistance * -cos(angleRadian);
+	cameraPosition.z = lookPosition.z + cameraDistance * sin(angleRadian);
+	cameraPosition.y = InterpolationCalc(easedCameraPosition, max_t, min_t);
+
+
+	DebugDrawer::Instance().InformationInput_string_float("cameraDistance %f\n", cameraDistance);
+	DebugDrawer::Instance().InformationInput_string_float("normalCameraDistance %f\n", normalCameraDistance);
+	DebugDrawer::Instance().InformationInput_string_VECTOR("cameraPosition %f %f %f\n", cameraPosition);
+	DebugDrawer::Instance().InformationInput_string_VECTOR("newCameraPosition %f %f %f\n", newCameraPosition);
+	DebugDrawer::Instance().InformationInput_string_VECTOR("lookPosition %f %f %f\n", lookPosition);
+}
+
+/// <summary>
+/// カメラの角度をプレイヤーの向いている方向に合わせる
+/// </summary>
+/// <param name="angle_player"></param>
 void Camera::ResetAngle(const float& angle_player)
 {
 	const float rotationSpeed = 6.0f;
@@ -368,50 +508,79 @@ void Camera::ResetAngle(const float& angle_player)
 	}
 }
 
-/// <summary>
-/// カメラの位置調整
-/// </summary>
-/// <param name="mapHandle"></param>
-void Camera::CameraPosCalc(const int& mapHandle)
+void Camera::LookPosCalc()
 {
-	MV1_COLL_RESULT_POLY hitPoly;
-	VECTOR addPos;
-	
-	//rayが当たっている場合カメラの位置をいじる
-	if (HitCheck::RayHitJudge(mapHandle, -1, spherePosition, aimPosition, hitPoly))
-	{		
-		addPos = VSub(hitPoly.HitPosition, aimPosition_usual);
-		direction = VNorm(addPos);
-		
-		aimPosition = VAdd(aimPosition_usual, addPos);
-	}
-
+	//視点座標を求める
+	VECTOR dir = VSub(centerPos, cameraPosition);
+	dir = VNorm(dir);
+	VECTOR scale = VScale(dir, 40.0f);
+	lookPosition = VAdd(centerPos, scale);
 }
-
-/// <summary>
-/// ラープ
-/// </summary>
-/// <param name="AimPosition"></param>
-void Camera::Leap(VECTOR& changePosition, const VECTOR& playerPosition, const float& speed)
-{
-	VECTOR SubPosition = VSub(playerPosition, changePosition);
-	VECTOR scalePosition = VGet(0, 0, 0);
-
-	scalePosition = VScale(SubPosition, speed);
-	changePosition = VAdd(changePosition, scalePosition);
-}
-
-
 
 void Camera::PosCalc()
 {
 	//lookPosが球の外側にいった場合球の中心座標をずらす
-	if (!HitCheck::HitConfirmation(spherePosition, centerPos, radius, 0.5f))
+	if (!HitCheck::HitConfirmation(lookPosition, centerPos, lookRadius, 0.5f))
 	{
-		Leap(spherePosition, centerPos, 0.1f);
+		lookPosition = Calculation::Leap(lookPosition, centerPos, 0.1f);
 	}
 	else
 	{
-		Leap(spherePosition, centerPos, 0.05f);
+		lookPosition = Calculation::Leap(lookPosition, centerPos, 0.05f);
 	}
+}
+
+/// <summary>
+/// イージング値に基づいて結果を計算
+/// </summary>
+/// <param name="easedValue"></param>
+/// <param name="maxValue"></param>
+/// <param name="minValue"></param>
+/// <returns></returns>
+float Camera::InterpolationCalc(
+	float easedValue,
+	float maxValue, 
+	float minValue)
+{
+	return minValue + (maxValue - minValue) * easedValue;
+}
+
+/// <summary>
+/// イージング値を現在の値から求める
+/// </summary>
+/// <param name="maxValue"></param>
+/// <param name="minValue"></param>
+/// <param name="nowValue"></param>
+/// <returns></returns>
+float Camera::CalculateBackEaseValue(
+	float maxValue,
+	float minValue, 
+	float nowValue)
+{
+	if (nowValue < minValue) return 0.0f;
+	if (nowValue > maxValue) return 1.0f;
+
+	return (nowValue - minValue) / (maxValue - minValue);
+}
+
+/// <summary>
+/// イースアウト
+/// </summary>
+/// <param name="normalDistanceProgress"></param>
+/// <returns></returns>
+float Camera::EaseOutQuad(float normalDistanceProgress)
+{
+	const float maxSize = 1.0f;
+
+	//2乗する
+	const float subSize = pow((maxSize - normalDistanceProgress), 2.0f);
+
+	return maxSize - subSize;
+}
+
+float Camera::CalculateBackEaseOutValue(float nowValue)
+{
+	const float maxSize = 1.0f;
+
+	return maxSize - (maxSize - pow(maxSize, nowValue));
 }

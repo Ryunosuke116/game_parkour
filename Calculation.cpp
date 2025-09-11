@@ -291,7 +291,7 @@ float Calculation::Triangle_by_verticalLength(const VECTOR& a, const VECTOR& b, 
 /// <summary>
 /// ラープ
 /// </summary>
-/// <param name="AimPosition"></param>
+/// <param name="cameraPosition"></param>
 VECTOR Calculation::Leap(const VECTOR& changePosition, const VECTOR& latestPosition, const float& speed)
 {
 	VECTOR SubPosition = VSub(latestPosition, changePosition);
@@ -391,16 +391,6 @@ float Calculation::radToDeg(float radian)
 float Calculation::DegToRad(float degree)
 {
 	return degree * DX_PI_F / 180.0f;
-}
-
-/// <summary>
-/// イースアウト
-/// </summary>
-/// <param name="t"></param>
-/// <returns></returns>
-float Calculation::EaseOutQuad(float t)
-{
-	return 1 - (1 - t) * (1 - t);
 }
 
 /// <summary>

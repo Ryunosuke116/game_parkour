@@ -171,7 +171,7 @@ void GameObjectManager::Update()
 			coinManager_actual->Update();
 			camera_actual->Update_layout();
 			layout->Update(
-				WorldSubSystem::GetInstance().GetSubSystem<Camera>()->GetSpherePosition(),
+				WorldSubSystem::GetInstance().GetSubSystem<Camera>()->GetLookPosition(),
 				*coinManager_actual);
 		}
 		

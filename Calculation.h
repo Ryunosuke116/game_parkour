@@ -23,7 +23,6 @@ public:
 	static float DegToRad(float degree);
 
 	static float area(const VECTOR& a, const VECTOR& b, const VECTOR& c);
-	static float EaseOutQuad(float t);
 	static float Triangle_by_verticalLength(const VECTOR& a, const VECTOR& b, const VECTOR& c);
 	static float GetVerticalLength(const VECTOR& a, const VECTOR& b);
 	static float LeapFloat(const float& change, const float& latest, const float& speed);

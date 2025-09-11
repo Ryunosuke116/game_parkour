@@ -93,9 +93,9 @@ float HitCheck::projectionCalc(const VECTOR& point, const VECTOR& P, const VECTO
 	////PQÇÃì‡êœ(2èÊ)
 	//float len2 = VDot(PQ, PQ);
 
-	//float t = VDot(PQ, P_point) / len2;
+	//float normalDistanceProgress = VDot(PQ, P_point) / len2;
 
-	//VECTOR foot = VAdd(P, VScale(PQ, t));
+	//VECTOR foot = VAdd(P, VScale(PQ, normalDistanceProgress));
 	//foot = VSub(point, foot);
 	//float D = VSize(foot);
 
@@ -185,7 +185,11 @@ bool HitCheck::AABBHitJudge(AABB a, AABB b)
 /// <param name="radius_1"></param>
 /// <param name="radius_2"></param>
 /// <returns></returns>
-bool HitCheck::HitConfirmation(VECTOR position_1, VECTOR position_2, const float radius_1, const float radius_2)
+bool HitCheck::HitConfirmation(
+	VECTOR position_1,
+	VECTOR position_2, 
+	const float radius_1,
+	const float radius_2)
 {
 
 	VECTOR positionSub = VSub(position_1, position_2);
@@ -292,10 +296,10 @@ std::pair<VECTOR, VECTOR> HitCheck::SegmentTriangleDistance(const VECTOR& p, con
 
 	for (int i = 0; i < num; i++)
 	{
-		float t = float(i) / num;
+		float normalDistanceProgress = float(i) / num;
 
 		//ê¸ï™ÇÃÇ«Ç±Çí≤Ç◊ÇÈÇ©
-		VECTOR PT = VAdd(p, VScale(PQ, t));
+		VECTOR PT = VAdd(p, VScale(PQ, normalDistanceProgress));
 
 		//ñ ÇÃÇ«Ç±Ç…ìñÇΩÇ¡ÇƒÇ¢ÇÈÇ©
 		VECTOR point = ClosestPtToPointTriangle(PT, a, b, c);
