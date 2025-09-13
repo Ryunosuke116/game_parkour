@@ -59,7 +59,6 @@ bool FinishCut::Update()
 
 void FinishCut::Draw()
 {
-
 	if (isDraw_finish)
 	{
 		DrawGraph(x_finishGraph, y_finishGraph, finishHandle, TRUE);

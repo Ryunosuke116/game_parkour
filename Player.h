@@ -22,6 +22,8 @@ public:
 	void Load(const nlohmann::json& jsonData)override;
 	void Initialize()override;
 	void Update()override;
+	void ResultInitialize()override;
+	void ResultUpdate()override;
 
 	void Update_start(const float& timer);
 	void Update_finish(const float& timer);
@@ -42,8 +44,8 @@ public:
 	VECTOR GetlinePos_end() const { return linePos_end; }
 	VECTOR GetHeadPos() const { return headPos; }
 	VECTOR GetNowMoveDirection() const { return nowMoveDirection; }
+	VECTOR GetFaceDirection()const { return faceDirection; }
 	bool GetIsGround() const { return playerData.isGround; }
-	int GetModelHandle() const { return modelHandle; }
 	int GetNowStateNumber() const { return animationChanger->GetAnimNumber_now(); }
 	PlayerData GetData() const { return playerData; }
 	PlayerStateBase::AnimState GetNowAnimState() const { return nowState->GetNowAnimState(); }

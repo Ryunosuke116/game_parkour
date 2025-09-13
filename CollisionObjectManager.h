@@ -15,6 +15,8 @@ public:
 	void Update()		override;
 	void Draw()			override;
 	void Add()			override{}
+	void ResultInitialize()override;
+	void ResultUpdate()override;
 
 	std::vector<std::weak_ptr<BaseObject>> const GetCollisionObjects()
 	{

@@ -12,5 +12,6 @@ public:
 	virtual void Initialize()							abstract;
 	virtual void Update()								abstract;
 	virtual void Draw()									abstract;
-
+	virtual void ResultInitialize()						abstract;
+	virtual void ResultUpdate()							abstract;
 };

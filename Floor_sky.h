@@ -13,7 +13,8 @@ public:
 	void Initialize()override;
 	void Update()override;
 	void Draw()override;
-
+	void ResultInitialize()override;
+	void ResultUpdate()override;
 
 private:
 	static constexpr float velocity = 0.5f;

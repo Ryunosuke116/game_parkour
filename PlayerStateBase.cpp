@@ -95,7 +95,6 @@ bool PlayerStateBase::MotionUpdate(PlayerData& playerData)
         MV1SetAttachAnimBlendRate(modelHandle, nowAnimState.AttachIndex, animBlendRate);
     }
 
-
     //再生しているアニメーション２の処理
     if (oldAnimState.AttachIndex != -1)
     {
@@ -113,15 +112,13 @@ bool PlayerStateBase::MotionUpdate(PlayerData& playerData)
 }
 
 
-bool PlayerStateBase::Draw()
+void PlayerStateBase::Draw()
 {
     DebugDrawer::Instance().InformationInput_string_int("nowAttachIndex %d\n", nowAnimState.AttachIndex);
     DebugDrawer::Instance().InformationInput_string_int("oldAttachIndex %d\n", oldAnimState.AttachIndex);
 
     DebugDrawer::Instance().InformationInput_string_float("nowPlayTime_anim %f\n", nowAnimState.PlayTime_anim);
     DebugDrawer::Instance().InformationInput_string_float("oldPlayTime_anim %f\n", oldAnimState.PlayTime_anim);
- 
-    return true;
 }
 
 /// <summary>
@@ -156,7 +153,6 @@ VECTOR PlayerStateBase::Move(const VECTOR& cameraDirection, PlayerData& playerDa
     if (VSize(moveDirection) != 0)
     {
         moveDirection = VNorm(moveDirection);
-        
     }
 
     //前フレームと現在のフレームで入力されてなければ動いてない
@@ -294,6 +290,10 @@ void PlayerStateBase::FlagReset_jump(PlayerData& playerData)
     }
 }
 
+/// <summary>
+/// アタッチするアニメーションを変更
+/// </summary>
+/// <param name="animNum"></param>
 void PlayerStateBase::SwitchingAnimation(const int& animNum)
 {
     //古い情報を削除
@@ -311,7 +311,6 @@ void PlayerStateBase::SwitchingAnimation(const int& animNum)
     //アニメーションをアタッチ
     this->nowAnimState.AttachIndex = MV1AttachAnim(modelHandle, animNum);
     nowAnimState.PlayTime_anim = 0.0f;
-
 }
 
 void PlayerStateBase::SetOldAnimState()

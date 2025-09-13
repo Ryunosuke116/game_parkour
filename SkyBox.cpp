@@ -38,8 +38,27 @@ void SkyBox::Create()
 /// </summary>
 void SkyBox::Initialize()
 {
-
+	//処理なし
 }
 
-void SkyBox::Update() {};
+void SkyBox::Update()
+{
+	//処理なし
+};
 
+
+/// <summary>
+/// リザルトシーン時の初期化
+/// </summary>
+void SkyBox::ResultInitialize()
+{
+	//処理なし
+}
+
+/// <summary>
+/// リザルトシーン時の更新処理
+/// </summary>
+void SkyBox::ResultUpdate()
+{
+	//処理なし
+}

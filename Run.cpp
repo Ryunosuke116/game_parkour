@@ -140,11 +140,19 @@ std::pair<VECTOR, PlayerData> Run::Update_wallRun(
    //äRíÕÇ›îªíË
 	if (playerData.isUseHanging)
 	{
+		VECTOR distancePlayerTopAndBottom =
+			VSub(player.GetPositionData().rayTopPosition,
+				player.GetPositionData().rayBottomPosition);
+
+		float playerSize = VSize(distancePlayerTopAndBottom);
+		VECTOR normalPlayerTopPosition = player.GetPositionData().rayBottomPosition;
+		normalPlayerTopPosition.y += playerSize;
+
 		auto result_cliff = HitCheck::CliffGrabbing(
 			fieldObjects,
 			player.GetPosition(),
-			player.GetPositionData().rayTopPosition,
-			player.GetNowMoveDirection(),
+			normalPlayerTopPosition,
+			player.GetFaceDirection(),
 			cliff_radius);
 
 		//íÕÇﬁÇ∆Ç±ÇÎÇ™ïΩçsÇæÇ¡ÇΩèÍçá
@@ -158,13 +166,10 @@ std::pair<VECTOR, PlayerData> Run::Update_wallRun(
 
 			float difference_y = nearestResult.linePos_start.y - nearestResult.linePos_end.y;
 
-			if (difference_y == 0)
-			{
-				playerData.isHanging = result_cliff.isHitHanging;
-				isChangeState = true;
-				player.playerCalculation->SetNearestResult(nearestResult);
-				return std::make_pair(moveDir, playerData);
-			}
+			playerData.isHanging = result_cliff.isHitHanging;
+			isChangeState = true;
+			player.playerCalculation->SetNearestResult(nearestResult);
+			return std::make_pair(moveDir, playerData);
 		}
 	}
 

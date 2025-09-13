@@ -109,42 +109,6 @@
     <Filter Include="ソース ファイル\object\game\player">
       <UniqueIdentifier>{177446bf-eb68-46e6-99cd-5c968117d403}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\object\game\player\animation">
-      <UniqueIdentifier>{25ee530f-5c21-4ee8-9271-3b0bedbca70d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\object\game\player\animation\Base">
-      <UniqueIdentifier>{94073645-165e-4d0d-b42d-68b29060cef2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\object\game\player\animation\falling_Idle">
-      <UniqueIdentifier>{b40c3a77-e359-4e55-9ca2-9795527822ca}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\object\game\player\animation\idle_to_sprint">
-      <UniqueIdentifier>{ef170e75-9be3-4c0d-babc-fc0764ed8cbc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\object\game\player\animation\jump">
-      <UniqueIdentifier>{f027c21f-f61a-4446-8085-ab3822338f95}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\object\game\player\animation\run">
-      <UniqueIdentifier>{41af47bd-3a60-436b-b164-77d22ae1b093}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\object\game\player\animation\run_to_stop">
-      <UniqueIdentifier>{ad1bbf69-df63-42d0-af47-aa4948d1fdff}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\object\game\player\animation\braced_Hang_To_Crouch">
-      <UniqueIdentifier>{c70c1186-0912-4049-a392-2034c0bc5f83}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\object\game\player\animation\hanging_Idle">
-      <UniqueIdentifier>{da44a1cc-a0e2-47f0-b13e-bed6339938ff}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\object\game\player\animation\idle">
-      <UniqueIdentifier>{ae649b4f-c1a5-45cd-87a9-b445c1eae15e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\object\game\player\animation\quick_roll">
-      <UniqueIdentifier>{86aa8a87-aaa1-45df-9575-21d005c28125}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\object\game\player\animation\walk">
-      <UniqueIdentifier>{6c61ab9a-ef05-4631-8e89-4b59ea63d1e1}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\object\game\player\moveCalclation">
       <UniqueIdentifier>{f9dc51d6-1cdb-4363-bbf5-2cf3ddbf8b9d}</UniqueIdentifier>
     </Filter>
@@ -235,6 +199,42 @@
     <Filter Include="ソース ファイル\manager\Collision">
       <UniqueIdentifier>{2330dc01-06b8-4627-a8c4-ec50186a5a27}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\object\game\player\state">
+      <UniqueIdentifier>{25ee530f-5c21-4ee8-9271-3b0bedbca70d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\object\game\player\state\Base">
+      <UniqueIdentifier>{94073645-165e-4d0d-b42d-68b29060cef2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\object\game\player\state\falling_Idle">
+      <UniqueIdentifier>{b40c3a77-e359-4e55-9ca2-9795527822ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\object\game\player\state\idle_to_sprint">
+      <UniqueIdentifier>{ef170e75-9be3-4c0d-babc-fc0764ed8cbc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\object\game\player\state\jump">
+      <UniqueIdentifier>{f027c21f-f61a-4446-8085-ab3822338f95}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\object\game\player\state\run">
+      <UniqueIdentifier>{41af47bd-3a60-436b-b164-77d22ae1b093}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\object\game\player\state\run_to_stop">
+      <UniqueIdentifier>{ad1bbf69-df63-42d0-af47-aa4948d1fdff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\object\game\player\state\braced_Hang_To_Crouch">
+      <UniqueIdentifier>{c70c1186-0912-4049-a392-2034c0bc5f83}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\object\game\player\state\hanging_Idle">
+      <UniqueIdentifier>{da44a1cc-a0e2-47f0-b13e-bed6339938ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\object\game\player\state\idle">
+      <UniqueIdentifier>{ae649b4f-c1a5-45cd-87a9-b445c1eae15e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\object\game\player\state\quick_roll">
+      <UniqueIdentifier>{86aa8a87-aaa1-45df-9575-21d005c28125}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\object\game\player\state\walk">
+      <UniqueIdentifier>{6c61ab9a-ef05-4631-8e89-4b59ea63d1e1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -250,7 +250,7 @@
       <Filter>ソース ファイル\object\game\skyBox</Filter>
     </ClCompile>
     <ClCompile Include="PlayerStateBase.cpp">
-      <Filter>ソース ファイル\object\game\player\animation\Base</Filter>
+      <Filter>ソース ファイル\object\game\player\state\Base</Filter>
     </ClCompile>
     <ClCompile Include="Field.cpp">
       <Filter>ソース ファイル\object\game\field</Filter>
@@ -260,9 +260,6 @@
     </ClCompile>
     <ClCompile Include="CoinObject.cpp">
       <Filter>ソース ファイル\object\game\coin</Filter>
-    </ClCompile>
-    <ClCompile Include="GameObjectManager.cpp">
-      <Filter>ソース ファイル\manager\gameObject</Filter>
     </ClCompile>
     <ClCompile Include="PlayerManager.cpp">
       <Filter>ソース ファイル\manager\player</Filter>
@@ -286,31 +283,31 @@
       <Filter>ソース ファイル\object\game\player\moveCalclation</Filter>
     </ClCompile>
     <ClCompile Include="FallingIdle.cpp">
-      <Filter>ソース ファイル\object\game\player\animation\falling_Idle</Filter>
+      <Filter>ソース ファイル\object\game\player\state\falling_Idle</Filter>
     </ClCompile>
     <ClCompile Include="HangingIdle.cpp">
-      <Filter>ソース ファイル\object\game\player\animation\hanging_Idle</Filter>
+      <Filter>ソース ファイル\object\game\player\state\hanging_Idle</Filter>
     </ClCompile>
     <ClCompile Include="Idle.cpp">
-      <Filter>ソース ファイル\object\game\player\animation\idle</Filter>
+      <Filter>ソース ファイル\object\game\player\state\idle</Filter>
     </ClCompile>
     <ClCompile Include="IdleToSprint.cpp">
-      <Filter>ソース ファイル\object\game\player\animation\idle_to_sprint</Filter>
+      <Filter>ソース ファイル\object\game\player\state\idle_to_sprint</Filter>
     </ClCompile>
     <ClCompile Include="Jump.cpp">
-      <Filter>ソース ファイル\object\game\player\animation\jump</Filter>
+      <Filter>ソース ファイル\object\game\player\state\jump</Filter>
     </ClCompile>
     <ClCompile Include="QuickRoll.cpp">
-      <Filter>ソース ファイル\object\game\player\animation\quick_roll</Filter>
+      <Filter>ソース ファイル\object\game\player\state\quick_roll</Filter>
     </ClCompile>
     <ClCompile Include="Run.cpp">
-      <Filter>ソース ファイル\object\game\player\animation\run</Filter>
+      <Filter>ソース ファイル\object\game\player\state\run</Filter>
     </ClCompile>
     <ClCompile Include="RunToStop.cpp">
-      <Filter>ソース ファイル\object\game\player\animation\run_to_stop</Filter>
+      <Filter>ソース ファイル\object\game\player\state\run_to_stop</Filter>
     </ClCompile>
     <ClCompile Include="BracedHangToCrouch.cpp">
-      <Filter>ソース ファイル\object\game\player\animation\braced_Hang_To_Crouch</Filter>
+      <Filter>ソース ファイル\object\game\player\state\braced_Hang_To_Crouch</Filter>
     </ClCompile>
     <ClCompile Include="Layout.cpp">
       <Filter>ソース ファイル\manager\layout</Filter>
@@ -379,7 +376,7 @@
       <Filter>ソース ファイル\object\game\UI\UI_controlManual</Filter>
     </ClCompile>
     <ClCompile Include="Walk.cpp">
-      <Filter>ソース ファイル\object\game\player\animation\walk</Filter>
+      <Filter>ソース ファイル\object\game\player\state\walk</Filter>
     </ClCompile>
     <ClCompile Include="Tutorial.cpp">
       <Filter>ソース ファイル\object\game\tutorial</Filter>
@@ -414,6 +411,9 @@
     <ClCompile Include="BackGround.cpp">
       <Filter>ソース ファイル\object\title\BackGround</Filter>
     </ClCompile>
+    <ClCompile Include="ObjectManager.cpp">
+      <Filter>ソース ファイル\manager\gameObject</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
@@ -429,7 +429,7 @@
       <Filter>ソース ファイル\object\game\skyBox</Filter>
     </ClInclude>
     <ClInclude Include="PlayerStateBase.h">
-      <Filter>ソース ファイル\object\game\player\animation\Base</Filter>
+      <Filter>ソース ファイル\object\game\player\state\Base</Filter>
     </ClInclude>
     <ClInclude Include="playerState.h">
       <Filter>ヘッダー ファイル</Filter>
@@ -439,9 +439,6 @@
     </ClInclude>
     <ClInclude Include="CoinObject.h">
       <Filter>ソース ファイル\object\game\coin</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObjectManager.h">
-      <Filter>ソース ファイル\manager\gameObject</Filter>
     </ClInclude>
     <ClInclude Include="PlayerManager.h">
       <Filter>ソース ファイル\manager\player</Filter>
@@ -474,31 +471,31 @@
       <Filter>ソース ファイル\object\game\player\moveCalclation</Filter>
     </ClInclude>
     <ClInclude Include="FallingIdle.h">
-      <Filter>ソース ファイル\object\game\player\animation\falling_Idle</Filter>
+      <Filter>ソース ファイル\object\game\player\state\falling_Idle</Filter>
     </ClInclude>
     <ClInclude Include="HangingIdle.h">
-      <Filter>ソース ファイル\object\game\player\animation\hanging_Idle</Filter>
+      <Filter>ソース ファイル\object\game\player\state\hanging_Idle</Filter>
     </ClInclude>
     <ClInclude Include="Idle.h">
-      <Filter>ソース ファイル\object\game\player\animation\idle</Filter>
+      <Filter>ソース ファイル\object\game\player\state\idle</Filter>
     </ClInclude>
     <ClInclude Include="IdleToSprint.h">
-      <Filter>ソース ファイル\object\game\player\animation\idle_to_sprint</Filter>
+      <Filter>ソース ファイル\object\game\player\state\idle_to_sprint</Filter>
     </ClInclude>
     <ClInclude Include="Jump.h">
-      <Filter>ソース ファイル\object\game\player\animation\jump</Filter>
+      <Filter>ソース ファイル\object\game\player\state\jump</Filter>
     </ClInclude>
     <ClInclude Include="QuickRoll.h">
-      <Filter>ソース ファイル\object\game\player\animation\quick_roll</Filter>
+      <Filter>ソース ファイル\object\game\player\state\quick_roll</Filter>
     </ClInclude>
     <ClInclude Include="Run.h">
-      <Filter>ソース ファイル\object\game\player\animation\run</Filter>
+      <Filter>ソース ファイル\object\game\player\state\run</Filter>
     </ClInclude>
     <ClInclude Include="RunToStop.h">
-      <Filter>ソース ファイル\object\game\player\animation\run_to_stop</Filter>
+      <Filter>ソース ファイル\object\game\player\state\run_to_stop</Filter>
     </ClInclude>
     <ClInclude Include="BracedHangToCrouch.h">
-      <Filter>ソース ファイル\object\game\player\animation\braced_Hang_To_Crouch</Filter>
+      <Filter>ソース ファイル\object\game\player\state\braced_Hang_To_Crouch</Filter>
     </ClInclude>
     <ClInclude Include="Layout.h">
       <Filter>ソース ファイル\manager\layout</Filter>
@@ -591,7 +588,7 @@
       <Filter>ソース ファイル\manager\Collision</Filter>
     </ClInclude>
     <ClInclude Include="Walk.h">
-      <Filter>ソース ファイル\object\game\player\animation\walk</Filter>
+      <Filter>ソース ファイル\object\game\player\state\walk</Filter>
     </ClInclude>
     <ClInclude Include="Tutorial.h">
       <Filter>ソース ファイル\object\game\tutorial</Filter>
@@ -634,6 +631,9 @@
     </ClInclude>
     <ClInclude Include="BackGround.h">
       <Filter>ソース ファイル\object\title\BackGround</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectManager.h">
+      <Filter>ソース ファイル\manager\gameObject</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

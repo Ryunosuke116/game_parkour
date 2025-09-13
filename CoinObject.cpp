@@ -63,7 +63,8 @@ void CoinObject::Initialize()
 /// <param name="playerPos_bottom"></param>
 /// <param name="radius"></param>
 /// <returns></returns>
-bool CoinObject::Update(const VECTOR& playerpos_top,
+bool CoinObject::Update(
+	const VECTOR& playerpos_top,
 	const VECTOR& playerPos_bottom,
 	const float radius)
 {
@@ -139,4 +140,37 @@ void CoinObject::Rotate()
 	}
 
 	MV1SetRotationXYZ(modelHandle, VGet(0.0f, radian_Y * DX_PI_F / 180.0f, 0.0f));
+}
+
+/// <summary>
+/// リザルトシーン時の初期化
+/// </summary>
+void CoinObject::ResultInitialize()
+{
+	flyAwayDirection = VGet(0.0f, 0.0f, 1.0f);
+
+	flyAwayVelocity = VAdd(flyAwayVelocity, flyAwayDirection);
+	flyAwayVelocity.y += flyPower;
+}
+
+/// <summary>
+/// リザルトシーン時の更新処理
+/// </summary>
+void CoinObject::ResultUpdate()
+{
+	const float gravity = -0.2f;
+
+	position = VAdd(position, flyAwayVelocity);
+	flyAwayVelocity.y += gravity;
+
+	radian_Y += 20.0f;
+
+	//コインモデルを回転させる
+	if (radian_Y >= 360.0f)
+	{
+		radian_Y = 0.0f;
+	}
+
+	MV1SetRotationXYZ(modelHandle, VGet(0.0f, radian_Y * DX_PI_F / 180.0f, 0.0f));
+	MV1SetPosition(modelHandle, position);
 }

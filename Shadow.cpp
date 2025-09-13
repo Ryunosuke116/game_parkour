@@ -54,4 +54,18 @@ void Shadow::Update()
 	SetShadowMapDrawArea(shadowMapHandle, minPos, maxPos);
 }
 
+/// <summary>
+/// リザルトシーン時の初期化
+/// </summary>
+void Shadow::ResultInitialize()
+{
+	Initialize();
+}
 
+/// <summary>
+/// リザルトシーン時の更新処理
+/// </summary>
+void Shadow::ResultUpdate()
+{
+	Update();
+}

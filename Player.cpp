@@ -150,7 +150,7 @@ void Player::Update()
     //状態変更
     ChangeState();
 
-    isChange_falling = nowState->MotionUpdate(playerData);
+    nowState->MotionUpdate(playerData);
 
     //move計算
     velocity = playerCalculation->Update(
@@ -210,9 +210,12 @@ void Player::Update()
     //頭 9
     //胸 6
     //腹 4
-
 }
 
+/// <summary>
+/// ゲームシーンのスタート時の更新処理
+/// </summary>
+/// <param name="timer"></param>
 void Player::Update_start(const float& timer)
 {
     velocity = VGet(0.0f, 0.0f, 0.5f);
@@ -230,9 +233,12 @@ void Player::Update_start(const float& timer)
     }
 
     nowState->MotionUpdate(playerData);
-
 }
 
+/// <summary>
+/// ゲームシーン終了時の更新処理
+/// </summary>
+/// <param name="timer"></param>
 void Player::Update_finish(const float& timer)
 {
     nowState->SetIsChangeState(true);
@@ -240,6 +246,30 @@ void Player::Update_finish(const float& timer)
     //状態変更
     ChangeState();
 
+    nowState->MotionUpdate(playerData);
+}
+
+/// <summary>
+/// リザルトシーン時の初期化
+/// </summary>
+void Player::ResultInitialize()
+{
+    const VECTOR initPosition = VGet(3.02443838f, 9.00285912f, -1215.93481f);
+
+    position = initPosition;
+
+    MV1SetPosition(modelHandle, position);
+
+    MV1SetRotationXYZ(modelHandle, VGet(rotate_x * DX_PI_F / 180.0f, radian + DX_PI_F, 0.0f));
+
+    animationChanger->Initialize(animNum::idle, modelHandle, nowState, playerData, *this);
+}
+
+/// <summary>
+/// リザルトシーン時の更新処理
+/// </summary>
+void Player::ResultUpdate()
+{
     nowState->MotionUpdate(playerData);
 }
 
@@ -267,8 +297,8 @@ void Player::MoveDirectionUpdate()
             nowMoveDirection,
             targetMoveDirection,
             leapSpeed);
+        nowMoveDirection.y = 0.0f;
     }
-
     //特定のアクション時は移動方向を変えられないように
     else if (!playerData.isHanging &&
         !playerData.isHangToCrouch &&
@@ -281,9 +311,11 @@ void Player::MoveDirectionUpdate()
             nowMoveDirection,
             targetMoveDirection, 
             speed);
+        nowMoveDirection.y = 0.0f;
     }
 
-    if (!playerData.isRunWall)
+    if (!playerData.isRunWall && 
+        nowMoveDirection.y == 0.0f)
     {
         faceDirection = nowMoveDirection;
     }
@@ -389,7 +421,6 @@ void Player::CollisionUpdate()
     }
 
     DebugDrawer::Instance().InformationInput_string_VECTOR("faceDirection %f %f %f\n", faceDirection);
-
 }
 
 void Player::Receive_CollisionResult()
@@ -431,7 +462,8 @@ void Player::DebugUpdate()
     
     //string_VECTOR
     DebugDrawer::Instance().InformationInput_string_VECTOR("playerPosition.x %f\nplayerPosition.y %f\nplayerPosition.z %f\n", position);
-    
+    DebugDrawer::Instance().InformationInput_string_VECTOR("nowMoveDirection.x %f\nowMoveDirection.y %f\nowMoveDirection.z %f\n", nowMoveDirection);
+
     //string_int
     DebugDrawer::Instance().InformationInput_string_int("frame現在数%d\n", nowFrameNumber);
 

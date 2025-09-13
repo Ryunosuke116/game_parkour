@@ -46,6 +46,12 @@ std::pair<VECTOR, PlayerData> FallingIdle::Update(const VECTOR& cameraDirection,
 
     FlagReset_jump(playerData);
 
+    VECTOR distancePlayerTopAndBottom = 
+        VSub(player.GetPositionData().rayTopPosition,
+            player.GetPositionData().rayBottomPosition);
+
+    float playerSize = VSize(distancePlayerTopAndBottom);
+
     VECTOR head = player.GetPositionData().rayTopPosition;
 
     //Œ©’¼‚µ
@@ -71,13 +77,10 @@ std::pair<VECTOR, PlayerData> FallingIdle::Update(const VECTOR& cameraDirection,
                 Calculation::SphereMeshOutsideTriangle_line(result_cliff.hangingPoly, head);
 
             DebugDrawer::Instance().InformationInput_line(nearestResult.linePos_start, nearestResult.linePos_end, GetColor(255, 0, 0));
-       
-            float difference_y = nearestResult.linePos_start.y - nearestResult.linePos_end.y;
-            float abs_value = abs(difference_y);
             
-                playerData.isHanging = result_cliff.isHitHanging;
-                isChangeState = true;
-                player.playerCalculation->SetNearestResult(nearestResult);
+            playerData.isHanging = result_cliff.isHitHanging;
+            isChangeState = true;
+            player.playerCalculation->SetNearestResult(nearestResult);
         }
     }
 

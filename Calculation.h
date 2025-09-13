@@ -27,6 +27,10 @@ public:
 	static float GetVerticalLength(const VECTOR& a, const VECTOR& b);
 	static float LeapFloat(const float& change, const float& latest, const float& speed);
 	static float Check_depth_Triangle(const VECTOR& dir, const VECTOR& a, const VECTOR& b, const VECTOR& c);
+	static float CalculateBackProgress(float maxValue, float minValue, float nowValue);
+	static float InterpolationCalc(float progressValue, float maxValue, float minValue);
+	static float EaseOutQuad(float normalDistanceProgress);
+	static float CalculateBackEaseOutValue(float nowValue);
 	static VECTOR NearestPoint(const VECTOR& position_1, const VECTOR& position_2,
 		 const VECTOR& point);
 	static VECTOR Projection(const VECTOR& plane_normal, const VECTOR& moveVec);

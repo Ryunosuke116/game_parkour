@@ -9,11 +9,11 @@
 #include "SoundPlayer.h"
 
 
-class GameObjectManager : public BaseManager
+class ObjectManager : public BaseManager
 {
 public:
-	GameObjectManager();
-	~GameObjectManager();
+	ObjectManager();
+	~ObjectManager();
 
 	void Create()override;
 	void Initialize()override;
@@ -23,6 +23,10 @@ public:
 	void StartUpdate();
 	void FinishUpdate();
 	void tutorialDraw();
+
+	void ResultCreate();
+	void ResultInitilize();
+	void ResultUpdate();
 
 	bool GetIsGoal() { return isGoal; }
 	int GetCoinCount() { return playerManager_actual->GetCoinCount(); }

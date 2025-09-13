@@ -50,7 +50,6 @@ void Field::Initialize()
 	MV1SetPosition(bullHandle, position);
 
 	isPoly = false;
-
 }
 
 /// <summary>
@@ -58,28 +57,6 @@ void Field::Initialize()
 /// </summary>
 void Field::Update()
 {
-	/*if (CheckHitKey(KEY_INPUT_1))
-	{
-		if (!isPush)
-		{
-			if (!isPoly)
-			{
-				isPoly = true;
-			}
-			else
-			{
-				isPoly = false;
-			}
-			isPush = true;
-		}
-	}
-	else
-	{
-		isPush = false;
-	}*/
-
-	// モデルの０番目のフレームのコリジョン情報を構築
-	//MV1SetupCollInfo(modelHandle, -1, 1, 1, 1);
 
 }
 
@@ -90,5 +67,20 @@ void Field::Draw()
 {
 	MV1DrawModel(modelHandle);
 	MV1DrawModel(bullHandle);
+}
 
+/// <summary>
+/// リザルトシーン時の初期化
+/// </summary>
+void Field::ResultInitialize()
+{
+	Initialize();
+}
+
+/// <summary>
+/// リザルトシーン時の更新処理
+/// </summary>
+void Field::ResultUpdate()
+{
+	//処理なし
 }

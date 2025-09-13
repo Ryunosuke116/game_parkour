@@ -28,7 +28,6 @@ Floor_sky::~Floor_sky()
 void Floor_sky::Create()
 {
 	Load(stateData);
-
 }
 
 void Floor_sky::Load(const nlohmann::json& jsonData)
@@ -105,4 +104,20 @@ void Floor_sky::Update()
 void Floor_sky::Draw()
 {
 	MV1DrawModel(modelHandle);
+}
+
+/// <summary>
+/// リザルトシーン時の初期化
+/// </summary>
+void Floor_sky::ResultInitialize()
+{
+	Initialize();
+}
+
+/// <summary>
+/// リザルトシーン時の更新処理
+/// </summary>
+void Floor_sky::ResultUpdate()
+{
+	//処理なし
 }

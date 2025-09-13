@@ -14,6 +14,9 @@ public:
 	void Initialize()override;
 	void Update()override;
 	void Draw()override {}
+	void ResultInitialize()override;
+	void ResultUpdate()override;
+
 	int GetShadowMapHandle()const { return shadowMapHandle; }
 
 private:

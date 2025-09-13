@@ -40,7 +40,7 @@ public:
 	void SetOldAnimState();
 	void ResetOldAnimState();
 	void ResetNowAnimState();
-	bool Draw();
+	void Draw();
 	void SwitchingAnimation(const int& animNum);
 	void FlagReset_jump(PlayerData& playerData);
 

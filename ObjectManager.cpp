@@ -1,7 +1,7 @@
 #include "common.h"
 #include <vector>
 #include <memory>
-#include "GameObjectManager.h"
+#include "ObjectManager.h"
 #include "DebugDrawer.h"
 #include "CollisionObjectManager.h"
 #include "SubSystemManager.h"
@@ -11,7 +11,7 @@
 /// <summary>
 /// コンストラクタ
 /// </summary>
-GameObjectManager::GameObjectManager():
+ObjectManager::ObjectManager():
 	streamStartPictureTimer(-1),
 	stream_finishPicture_timer(-1),
 	isStreamStartPicture(false),
@@ -23,7 +23,7 @@ GameObjectManager::GameObjectManager():
 /// <summary>
 /// デストラクタ	
 /// </summary>
-GameObjectManager::~GameObjectManager()
+ObjectManager::~ObjectManager()
 {
 	managers.clear();
 	objects.clear();
@@ -32,7 +32,7 @@ GameObjectManager::~GameObjectManager()
 /// <summary>
 /// オブジェクト生成
 /// </summary>
-void GameObjectManager::Create()
+void ObjectManager::Create()
 {
 	//vector型.atを使うとき用
 	const int playerManagerNumber = 1;
@@ -92,7 +92,7 @@ void GameObjectManager::Create()
 /// <summary>
 /// 初期化
 /// </summary>
-void GameObjectManager::Initialize()
+void ObjectManager::Initialize()
 {
 	for (auto& manager : managers)
 	{
@@ -119,7 +119,7 @@ void GameObjectManager::Initialize()
 /// <summary>
 /// 更新
 /// </summary>
-void GameObjectManager::Update()
+void ObjectManager::Update()
 {
 	if (isStreamStartPicture)
 	{
@@ -185,7 +185,7 @@ void GameObjectManager::Update()
 	}
 }
 
-void GameObjectManager::StartUpdate()
+void ObjectManager::StartUpdate()
 {
 	const int minAlpha = 0;
 	const int addAlpha = 5;
@@ -220,7 +220,7 @@ void GameObjectManager::StartUpdate()
 	}
 }
 
-void GameObjectManager::FinishUpdate()
+void ObjectManager::FinishUpdate()
 {
 	if (isStreamFinishPicture)
 	{
@@ -250,7 +250,7 @@ void GameObjectManager::FinishUpdate()
 /// <summary>
 /// 描画
 /// </summary>
-void GameObjectManager::Draw()
+void ObjectManager::Draw()
 {
 	// シャドウマップへの描画の準備
 	ShadowMap_DrawSetup(shadow_actual->GetShadowMapHandle());
@@ -304,10 +304,64 @@ void GameObjectManager::Draw()
 	//DrawLine3D(VGet(0.0f, 15.0f, 0.0f), VGet(0.0f, 15.0f, 10.0f), GetColor(0, 0, 255));
 }
 
-void GameObjectManager::tutorialDraw()
+void ObjectManager::tutorialDraw()
 {
 	if (isStreamStartPicture)
 	{
 		tutorial->Draw(streamStartPictureTimer);
+	}
+}
+
+void ObjectManager::ResultCreate()
+{
+	//生成
+	//object生成
+	objects.push_back(std::make_shared<SkyBox>());
+	objects.push_back(std::make_shared<Field>());
+	objects.push_back(std::make_shared<Camera>());
+	objects.push_back(std::make_shared<Shadow>());
+
+	//managerの生成
+	managers.push_back(std::make_shared<CollisionObjectManager>());
+	managers.push_back(std::make_shared<PlayerManager>());
+	managers.push_back(std::make_shared<UIManager>());
+	managers.push_back(std::make_shared<CoinManager>());
+
+	//Jsonデータを取得
+	for (auto& manager : managers)
+	{
+		manager->Create();
+	}
+
+	//ロード
+	for (auto& object : objects)
+	{
+		object->Create();
+	}
+}
+
+void ObjectManager::ResultInitilize()
+{
+	for (auto& manager : managers)
+	{
+		manager->ResultInitialize();
+	}
+
+	for (auto& object : objects)
+	{
+		object->ResultInitialize();
+	}
+}
+
+void ObjectManager::ResultUpdate()
+{
+	for (auto& manager : managers)
+	{
+		manager->ResultUpdate();
+	}
+
+	for (auto& object : objects)
+	{
+		object->ResultUpdate();
 	}
 }

@@ -23,6 +23,7 @@ CoinManager::CoinManager()
 CoinManager::~CoinManager()
 {
 	coins.clear();
+	resultUpdateCoins.clear();
 	int a = MV1DeleteModel(modelHandle);
 	observers.clear();
 }
@@ -56,7 +57,6 @@ void CoinManager::Initialize()
 	{
 		coin->Initialize();
 	}
-
 }
 
 
@@ -125,6 +125,55 @@ void CoinManager::NotifyCoinPicked(int amount)
 	}
 }
 
+void CoinManager::ResultCreate(int coinCount)
+{
+	nlohmann::json data = JsonManager::GetInstance().GetJsons("coin");
+	std::string modelPath = data["modelPath"];
+
+	modelHandle = MV1LoadModel(modelPath.c_str());
+
+	for (auto& pos : data["coin_list"])
+	{
+		coins.push_back(std::make_shared<CoinObject>());
+		coins.back()->Load(modelHandle,
+			VGet(pos[0].get<float>(), pos[1].get<float>(), pos[2].get<float>()));
+	}
+}
+
+/// <summary>
+/// リザルトシーン時の初期化処理
+/// </summary>
+void CoinManager::ResultInitialize()
+{
+	for (auto& coin : coins)
+	{
+		coin->ResultInitialize();
+	}
+	timer = 0.0f;
+	nowCoinCount = 0;
+}
+
+/// <summary>
+/// リザルトシーン時の更新処理
+/// </summary>
+void CoinManager::ResultUpdate()
+{
+	timer++;
+	//タイマーが規定値を超えたら更新処理するコインを追加する
+	if (timer >= maxAddResultUpdateCoinTimer)
+	{
+		resultUpdateCoins.push_back(coins.at(nowCoinCount));
+		nowCoinCount++;
+		timer = 0.0f;
+	}
+
+	for (auto& weakCoin : resultUpdateCoins)
+	{
+		auto coin = weakCoin.lock();
+		coin->ResultUpdate();
+	}
+}
+
 /// <summary>
 /// オブザーバーの解除
 /// </summary>
@@ -151,4 +200,3 @@ void CoinManager::RemoveObserver(std::shared_ptr<CoinObserver> observer)
 	// 実際にvectorの末尾の削除対象部分を削除する
 	observers.erase(newEnd, observers.end());
 }
-

@@ -21,6 +21,7 @@ public:
 	// ÉQÉbÉ^Å[
 	/////////////////////////////////////////////
 	int GetCoinCount()const { return coinCount; }
+	int GetModelHandle()const { return modelHandle; }
 	bool GetIsCollisionCheck()const { return isCollisionCheck; }
 	float GetRadian()const { return radian; }
 	float GetDegree()const { return Calculation::radToDeg(radian); }

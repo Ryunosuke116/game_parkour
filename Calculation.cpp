@@ -362,6 +362,66 @@ float Calculation::RotationAngleDegree(
 	return targetDegree - differenceAngle;
 }
 
+/// <summary>
+/// 進行度に基づいて結果を計算
+/// </summary>
+/// <param name="easedValue"></param>
+/// <param name="maxValue"></param>
+/// <param name="minValue"></param>
+/// <returns></returns>
+float Calculation::InterpolationCalc(
+	float progressValue,
+	float maxValue,
+	float minValue)
+{
+	return minValue + (maxValue - minValue) * progressValue;
+}
+
+/// <summary>
+/// 進行値(0～1)を現在の値から求める
+/// </summary>
+/// <param name="maxValue"></param>
+/// <param name="minValue"></param>
+/// <param name="nowValue"></param>
+/// <returns></returns>
+float Calculation::CalculateBackProgress(
+	float maxValue,
+	float minValue,
+	float nowValue)
+{
+	if (nowValue < minValue) return 0.0f;
+	if (nowValue > maxValue) return 1.0f;
+
+	return (nowValue - minValue) / (maxValue - minValue);
+}
+
+/// <summary>
+/// イースアウト
+/// </summary>
+/// <param name="normalDistanceProgress"></param>
+/// <returns></returns>
+float Calculation::EaseOutQuad(float normalDistanceProgress)
+{
+	const float maxSize = 1.0f;
+
+	//2乗する
+	const float subSize = pow((maxSize - normalDistanceProgress), 2.0f);
+
+	return maxSize - subSize;
+}
+
+/// <summary>
+/// 進行値に基づいて値を求める
+/// </summary>
+/// <param name="nowValue"></param>
+/// <returns></returns>
+float Calculation::CalculateBackEaseOutValue(float nowValue)
+{
+	const float maxSize = 1.0f;
+
+	return maxSize - (maxSize - pow(maxSize, nowValue));
+}
+
 MATRIX Calculation::Rotate(const VECTOR& wall_normal)
 {
 	VECTOR up = wall_normal;

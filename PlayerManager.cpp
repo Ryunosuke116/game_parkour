@@ -61,7 +61,6 @@ void PlayerManager::Update()
 {
 	actualPlayer->Update();
 
-
 	if (actualPlayer->GetData().isRunWall)
 	{
 		VECTOR oldPos = player->GetPosition();
@@ -90,9 +89,23 @@ void PlayerManager::Update()
 		actualPlayer->Receive_CollisionResult();
 	}
 
+	//座標更新
 	actualPlayer->PositionUpdate();
 
+	// プレイヤーデータの状態を確認し、変更があればオブザーバーに通知する
 	StateConfirmation();
+
+	const float playerAndCameraDistance = WorldSubSystem::GetInstance().GetSubSystem<Camera>()->GetCameraAndTargetDistanceSize();
+	const float maxCameraDistance = 20.0f;
+	const float minCameraDistance = 10.0f;
+
+	const float opacityRate = Calculation::CalculateBackProgress(
+		maxCameraDistance,
+		minCameraDistance,
+		playerAndCameraDistance);
+
+	//カメラとプレイヤーの距離が近づくにつれてキャラクターを透過する
+	MV1SetOpacityRate(player->GetModelHandle(), opacityRate);
 }
 
 void PlayerManager::Update_start(const float& timer)
@@ -118,6 +131,25 @@ void PlayerManager::Draw()
 	collisionManager->Draw();
 }
 
+/// <summary>
+/// リザルトシーン時の初期化
+/// </summary>
+void PlayerManager::ResultInitialize()
+{
+	player->ResultInitialize();
+}
+
+/// <summary>
+/// リザルトシーン時の更新処理
+/// </summary>
+void PlayerManager::ResultUpdate()
+{
+	player->ResultUpdate();
+}
+
+/// <summary>
+/// プレイヤーデータの状態を確認し、変更があれば通知する
+/// </summary>
 void PlayerManager::StateConfirmation()
 {
 	if (now_playerData != actualPlayer->GetData())

@@ -34,8 +34,8 @@ void Game::Create()
 	JsonManager::GetInstance().Create(jsonFileName);
 	SubSystemManager::GetInstance().Create(jsonFileName);
 
-	gameObjectManager = std::make_shared<GameObjectManager>();
-	gameObjectManager_actual = std::dynamic_pointer_cast<GameObjectManager>(gameObjectManager);
+	gameObjectManager = std::make_shared<ObjectManager>();
+	gameObjectManager_actual = std::dynamic_pointer_cast<ObjectManager>(gameObjectManager);
 
 	gameObjectManager->Create();
 	BlackOut::GetInstance().SetAlpha(255);

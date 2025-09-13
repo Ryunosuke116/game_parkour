@@ -119,3 +119,19 @@ void FieldMesh::Draw()
 
 	MV1DrawModel(modelHandle);
 }
+
+/// <summary>
+/// リザルトシーン時の初期化
+/// </summary>
+void FieldMesh::ResultInitialize()
+{
+	Initialize();
+}
+
+/// <summary>
+/// リザルトシーン時の更新処理
+/// </summary>
+void FieldMesh::ResultUpdate()
+{
+	//処理なし
+}

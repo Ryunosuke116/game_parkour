@@ -16,6 +16,8 @@ public:
 	void Initialize()override;
 	void Update()override;
 	void Draw()override;
+	void ResultInitialize()override;
+	void ResultUpdate()override;
 
 	void OnCoinPicked(int amount)override { coinCount += amount; }
 	void SetCoinPos(int set_x, int set_y) { x = set_x, y = set_y; }
@@ -30,6 +32,8 @@ private:
 	int crossHandle;
 	int coinCount;
 	std::string countNumber;
+
+
 
 };
 

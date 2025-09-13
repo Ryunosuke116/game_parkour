@@ -34,11 +34,18 @@ void UI_controlManual::Load(const nlohmann::json& jsonData)
 
 void UI_controlManual::Initialize()
 {
-	x = 50;
-	y = 30;
-	stateNumber = -1;
+	const int initX = 50;
+	const int initY = 30;
+	const int initStateNumber = -1;
+
+	x = initX;
+	y = initY;
+	stateNumber = initStateNumber;
 }
 
+/// <summary>
+/// playerの状態によって表示するUIを変更する
+/// </summary>
 void UI_controlManual::Update()
 {
 	draw_UIs.clear();
@@ -75,7 +82,6 @@ void UI_controlManual::Update()
 	{
 		draw_UIs.push_back(uiHandles.at("move_down"));
 	}
-
 }
 
 void UI_controlManual::Draw()
@@ -98,4 +104,20 @@ void UI_controlManual::Draw()
 void UI_controlManual::OnChangeState(const PlayerData& playerData)
 {
 	data = playerData;
+}
+
+/// <summary>
+/// リザルトシーン時の初期化
+/// </summary>
+void UI_controlManual::ResultInitialize()
+{
+	//処理なし
+}
+
+/// <summary>
+/// リザルトシーン時の更新処理
+/// </summary>
+void UI_controlManual::ResultUpdate()
+{
+	//処理なし
 }

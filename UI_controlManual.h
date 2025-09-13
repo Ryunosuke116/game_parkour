@@ -14,6 +14,8 @@ public:
 	void Initialize()override;
 	void Update()override;
 	void Draw()override;
+	void ResultInitialize()override;
+	void ResultUpdate()override;
 
 	void OnChangeState(const PlayerData& playerData)override;
 

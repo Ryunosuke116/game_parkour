@@ -12,6 +12,8 @@ public:
 	void Initialize()override;
 	void Update()override;
 	void Draw()override;
+	void ResultInitialize()override{}
+	void ResultUpdate()override{}
 
 	void SetCoinCount(const int& set) { coinCount = set; }
 

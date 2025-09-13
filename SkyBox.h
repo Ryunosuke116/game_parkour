@@ -12,6 +12,8 @@ public:
 	void Load(const nlohmann::json& jsonData)override;
 	void Initialize()override;
 	void Update()override;
+	void ResultInitialize()override;
+	void ResultUpdate()override;
 
 };
 

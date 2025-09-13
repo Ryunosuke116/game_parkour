@@ -184,5 +184,4 @@ float PadInput::GetJoyPad_old_y_right()
     return input->GetJoyPad_old_y_right();
 }
 
-//PadInput* PadInput::instance = nullptr;
 Input* PadInput::input = nullptr;

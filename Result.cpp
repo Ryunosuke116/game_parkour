@@ -60,7 +60,6 @@ void Result::Initialize()
         }
         UI->Initialize();
     }
-
 }
 
 /// <summary>

@@ -117,6 +117,7 @@ void GameTimer::Draw()
 	}
 }
 
+
 std::string GameTimer::CreateCountNumber(const int time)
 {
 	std::string countNumber = "";

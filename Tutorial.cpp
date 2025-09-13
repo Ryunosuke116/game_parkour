@@ -72,3 +72,4 @@ void Tutorial::Draw(const float& streamStartPictureTimer)
 		DrawGraph(x_startGraph, y_startGraph, startHandle, TRUE);
 	}
 }
+

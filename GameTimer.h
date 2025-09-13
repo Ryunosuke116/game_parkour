@@ -14,6 +14,8 @@ public:
 	void Draw()override;
 	void Create()override {}
 	void Add()override{}
+	void ResultInitialize()override{}
+	void ResultUpdate()override{}
 
 	bool IsUpdateMin();
 

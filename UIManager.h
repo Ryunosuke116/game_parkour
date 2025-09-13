@@ -16,6 +16,8 @@ public:
 	void Update()		override;
 	void Draw()			override;
 	void Add()			override{}
+	void ResultInitialize()override;
+	void ResultUpdate()override;
 
 	void Add(std::shared_ptr<BaseUI> ui);
 

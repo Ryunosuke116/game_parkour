@@ -13,8 +13,7 @@ UI_coin::UI_coin() :
 	std::fill(
 		std::begin(numberHandle),
 		std::end(numberHandle),
-		-1
-	);
+		-1);
 
 	jsonTag = "coin";
 }
@@ -49,12 +48,18 @@ void UI_coin::Load(const nlohmann::json& jsonData)
 
 void UI_coin::Initialize()
 {
-	cross_x = x + 105;
-	cross_y = y + 30;
-	number_x = x + 140;
-	number_y = y + 30;
+	const int addInitCrossX = 105;
+	const int addInitCrossY = 30;
+	const int addInitNumberX = 140;
+	const int addInitNumberY = 30;
+	const std::string initNumber = "00";
 
-	countNumber = "00";
+	cross_x = x + addInitCrossX;
+	cross_y = y + addInitCrossY;
+	number_x = x + addInitNumberX;
+	number_y = y + addInitNumberY;
+
+	countNumber = initNumber;
 	coinCount = 0;
 }
 
@@ -71,17 +76,37 @@ void UI_coin::Update()
 
 void UI_coin::Draw()
 {
+	const int addNumber_x = 32;
+
 	DrawGraph(x, y, coinHandle, TRUE);
 
 	int num_x = number_x;
-	const int addNumber_x = 32;
 
+	//コイン所持数の桁数分、大きい桁から順に描画
 	for (char c : countNumber)
 	{
 		int digit = c - '0';
 		DrawGraph(num_x, number_y, numberHandle[digit], TRUE);
+
+		//文字の幅分ずらす
 		num_x += addNumber_x;
 	}
 
 	DrawGraph(cross_x, cross_y, crossHandle, TRUE);
+}
+
+/// <summary>
+/// リザルトシーン時の初期化
+/// </summary>
+void UI_coin::ResultInitialize()
+{
+	Initialize();
+}
+
+/// <summary>
+/// リザルトシーン時の更新処理
+/// </summary>
+void UI_coin::ResultUpdate()
+{
+	Update();
 }

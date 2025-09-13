@@ -67,3 +67,19 @@ void CollisionObjectManager::Draw()
 		object->Draw();
 	}
 }
+
+void CollisionObjectManager::ResultInitialize()
+{
+	for (auto& object : collisionObjects)
+	{
+		object->Initialize();
+	}
+}
+
+void CollisionObjectManager::ResultUpdate()
+{
+	for (auto& object : collisionObjects)
+	{
+		object->Update();
+	}
+}
