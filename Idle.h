@@ -6,7 +6,8 @@ class Player;
 class Idle : public PlayerStateBase
 {
 public:
-	Idle(int& modelHandle, AnimState& oldAnimState,
+	Idle(int& modelHandle,
+		AnimState& oldAnimState,
 		AnimState& nowAnimState,
 		PlayerData& playerData);
 	~Idle();

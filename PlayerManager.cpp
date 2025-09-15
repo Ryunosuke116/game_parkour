@@ -132,6 +132,24 @@ void PlayerManager::Draw()
 }
 
 /// <summary>
+/// リザルトシーン時の生成
+/// </summary>
+/// <param name="coinCount"></param>
+void PlayerManager::ResultCreate()
+{
+	auto self = shared_from_this();
+
+	collisionManager = std::make_shared<CollisionManager>();
+
+	player = std::make_shared<Player>();
+	actualPlayer = std::dynamic_pointer_cast<Player>(player);
+	player->ResultCreate();
+
+	//サブシステムに追加
+	WorldSubSystem::GetInstance().AddSubSystem<PlayerManager>(self);
+}
+
+/// <summary>
 /// リザルトシーン時の初期化
 /// </summary>
 void PlayerManager::ResultInitialize()

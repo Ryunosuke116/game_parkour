@@ -24,16 +24,17 @@ public:
 	void FinishUpdate();
 	void tutorialDraw();
 
-	void ResultCreate();
+	void ResultCreate(int coinCount);
 	void ResultInitilize();
 	void ResultUpdate();
+	void ResultDraw();
 
 	bool GetIsGoal() { return isGoal; }
 	int GetCoinCount() { return playerManager_actual->GetCoinCount(); }
 
 private:
 	std::vector<std::shared_ptr<BaseGameObjectManager>> managers;
-	std::vector <std::shared_ptr<BaseObject>>				objects;
+	std::vector <std::shared_ptr<BaseObject>> objects;
 
 	std::shared_ptr<Layout>					layout				= NULL;
 	std::shared_ptr<Tutorial>				tutorial			= NULL;

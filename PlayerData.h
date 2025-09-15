@@ -16,7 +16,7 @@ struct PlayerData
 	bool isJumpAll;					//全てのジャンプが完了したか
 	bool isUseWallJump;			//壁ジャンプを使用できるか
 	bool isWalljump;				//壁ジャンプしているか
-	bool isRoll;					//転がるか
+	bool IsPushRT;					//転がるか
 	bool isUseRoll;				//ロールアクションを終えたか
 	bool isPossibleWallRun;		//壁走りが可能か
 	bool isSprint;					//走り出しか

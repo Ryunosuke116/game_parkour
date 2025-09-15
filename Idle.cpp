@@ -55,7 +55,7 @@ VECTOR Idle::Command(const VECTOR& cameraDirection, PlayerData& playerData, Play
     JumpMove(playerData, player);
     RollMove(playerData);
 
-    if (VSize(moveDirection) != 0.0f && !playerData.isRoll)
+    if (VSize(moveDirection) != 0.0f && !playerData.IsPushRT)
     {
         playerData.isRun = true;
         isChangeState = true;

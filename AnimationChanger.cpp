@@ -17,9 +17,12 @@ AnimationChanger::~AnimationChanger()
 
 }
 
-void AnimationChanger::Initialize(const int& num, int& modelHandle,
+void AnimationChanger::Initialize(
+    const int& num, 
+    int& modelHandle,
     std::shared_ptr<PlayerStateBase>& nowState,
-    PlayerData& playerData, Player& player)
+    PlayerData& playerData, 
+    Player& player)
 {
     animNumber_Now = num;
     //newStateを生成
@@ -34,11 +37,33 @@ void AnimationChanger::Initialize(const int& num, int& modelHandle,
     nowState->Enter(playerData);
 }
 
+void AnimationChanger::ResultInitialize(
+    const int& num, 
+    int& modelHandle,
+    std::shared_ptr<PlayerStateBase>& nowState,
+    PlayerData& playerData,
+    Player& player)
+{
+    animNumber_Now = num;
+    //newStateを生成
+    nowState = std::make_shared<Idle>(modelHandle,
+        oldAnimState,
+        nowAnimState,
+        playerData);
+
+    nowState->SetAnimNumber_old(animNumber_Now);
+
+    nowState->Initialize(modelHandle, animNumber_Now, player);
+    nowState->Enter(playerData);
+}
+
 /// <summary>
 /// アニメーション変更
 /// </summary>
-std::shared_ptr<PlayerStateBase> AnimationChanger::ChangeState(int& modelHandle,
-    Player& player, PlayerData& playerData,
+std::shared_ptr<PlayerStateBase> AnimationChanger::ChangeState(
+    int& modelHandle,
+    Player& player, 
+    PlayerData& playerData,
     std::shared_ptr<PlayerStateBase>& nowState)
 {
     std::shared_ptr<PlayerStateBase> newState = nullptr;
@@ -135,7 +160,7 @@ std::shared_ptr<PlayerStateBase> AnimationChanger::ChangeState(int& modelHandle,
     }
 
     //転がる
-    if (playerData.isRoll && animNumber_Now != animNum::quickRoll)
+    if (playerData.IsPushRT && animNumber_Now != animNum::quickRoll)
     {
         //nowState内のアニメーション情報を保存
         SetNowAnimState(nowState->GetNowAnimState());

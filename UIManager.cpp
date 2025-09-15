@@ -61,6 +61,15 @@ void UIManager::Add(std::shared_ptr<BaseUI> ui)
 }
 
 /// <summary>
+/// リザルトシーン時の生成
+/// </summary>
+/// <param name="coinCount"></param>
+void UIManager::ResultCreate()
+{
+	//処理なし
+}
+
+/// <summary>
 /// リザルトシーン時の初期化
 /// </summary>
 void UIManager::ResultInitialize()

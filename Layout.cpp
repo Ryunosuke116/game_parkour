@@ -1,8 +1,10 @@
 #include "common.h"
 #include <fstream>
+#include <format>
 #include "Layout.h"
 #include "DebugDrawer.h"
 #include "PadInput.h"
+#include "WorldSubSystem.h"
 
 Layout::Layout() :
 	isPush(false)
@@ -37,7 +39,7 @@ void Layout::Update(const VECTOR& pos,
 			isPush = true;
 		}
 
-		InputFile();
+		InputFile(WorldSubSystem::GetInstance().GetSubSystem<Camera>()->GetScreenCenterPosition());
 	}
 	else
 	{
@@ -53,10 +55,11 @@ void Layout::Draw()
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA,0);
 }
 
-void Layout::InputFile()
+void Layout::InputFile(const VECTOR& inputPosition)
 {
-	std::ofstream file("coinArrangement/input.txt");
+	std::ofstream file("coinArrangement/input.txt", std::ios::app);
 
-	file << "a";
+	file << std::format("[ {}, {}, {} ],\n", inputPosition.x, inputPosition.y, inputPosition.z);
+
 	file.close();
 }

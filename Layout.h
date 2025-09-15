@@ -16,7 +16,7 @@ public:
 	void Initialize(const int& modelHandle);
 
 	void Update(const VECTOR& pos, BaseGameObjectManager& manager);
-	void InputFile();
+	void InputFile(const VECTOR& inputPosition);
 
 	void Draw();
 

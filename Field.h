@@ -13,6 +13,7 @@ public:
 	void Initialize()override;
 	void Update()override;
 	void Draw()override;
+	void ResultCreate()override;
 	void ResultInitialize()override;
 	void ResultUpdate()override;
 

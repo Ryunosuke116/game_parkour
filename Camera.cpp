@@ -26,6 +26,7 @@ Camera::Camera():
 	isResetAngle(false),
 	isHitObject(false),
 	isPutBackDistance(false),
+	isPushRT(false),
 	cameraDirection(VGet(0.0f, 0.0f, 0.0f)),
 	normalCameraPosition(VGet(0.0f, 0.0f, 0.0f)),
 	cameraPosition(VGet(0.0f, 0.0f, 0.0f)),
@@ -63,10 +64,12 @@ void Camera::Initialize()
 	screenCenterPosition = initializeSpherePos;
 	nowDegree = initializeAngle;
 	cameraDistanceSize = initializeDistance;
+	normalCameraDistanceSize = initializeDistance;
 	normalDistanceProgress = initializeT;
 	normalLinearProgress = initializeT;
 	isResetAngle = false;
 	isHitObject = false;
+	isPushRT = false;
 	normalCameraHeightProgress = 0.0f;
 
 	SetCameraPositionAndTarget_UpVecY(cameraPosition, screenCenterPosition);
@@ -193,12 +196,6 @@ void Camera::Update_layout()
 		screenCenterPosition.z -= 1.0f;
 	}
 
-	
-	if (CheckHitKey(KEY_INPUT_9))
-	{
-		nowDegree = -177.55f;
-	}
-
 	//DistanceUpdate();
 
 	if (PadInput::GetJoyPad_y_right() > 0.0f)
@@ -212,7 +209,51 @@ void Camera::Update_layout()
 		screenCenterPosition.y -= 1.0f;
 	}
 
-	AngleUpdate(1.0f);
+	if (PadInput::GetJoyPad_x_right() > 0.0f)
+	{
+		if (PadInput::IsPushRT())
+		{
+			if (!isPushRT)
+			{
+				nowDegree -= 30.0f;
+				isPushRT = true;
+			}
+		}
+		else
+		{
+			nowDegree -= 2.5f;
+		}
+	}
+	else if (PadInput::GetJoyPad_x_right() < 0.0f)
+	{
+		if (PadInput::IsPushRT())
+		{
+			if (!isPushRT)
+			{
+				nowDegree += 30.0f;
+				isPushRT = true;
+			}
+		}
+		else
+		{
+			nowDegree += 2.5f;
+		}
+	}
+	else
+	{
+		isPushRT = false;
+	}
+
+	if (PadInput::IsPush_R())
+	{
+		nowDegree = -90.0f;
+	}
+
+	//180度以上はマイナス角度として扱う
+	if (nowDegree >= 180.0f)
+	{
+		nowDegree -= 360.0f;
+	}
 
 	float angleRadian = nowDegree * DX_PI_F / 360.0f;
 	this->angleRadian = angleRadian;
@@ -220,12 +261,9 @@ void Camera::Update_layout()
 	cameraPosition.x = screenCenterPosition.x + cameraDistanceSize * cos(angleRadian);
 	cameraPosition.z = screenCenterPosition.z + cameraDistanceSize * sin(angleRadian);
 
-	float maxRange = 5.0f;
-	float maxRange_ = 10.0f;
-
 	//RotateUpdate();
 
-	SetCameraPositionAndTarget_UpVecY(cameraPosition, centerPointSpherePos);
+	SetCameraPositionAndTarget_UpVecY(cameraPosition, screenCenterPosition);
 }
 
 /// <summary>
@@ -494,11 +532,22 @@ void Camera::CaluclateCameraAndTargetDistanceSize()
 }
 
 /// <summary>
+/// リザルトシーン時の生成
+/// </summary>
+/// <param name="coinCount"></param>
+void Camera::ResultCreate()
+{
+	Create();
+}
+
+/// <summary>
 /// リザルトシーン時の初期化
 /// </summary>
 void Camera::ResultInitialize()
 {
 	Initialize();
+	normalLinearProgress = 0.2f;
+	normalCameraDistanceSize = 100.0f;
 }
 
 /// <summary>
@@ -506,13 +555,21 @@ void Camera::ResultInitialize()
 /// </summary>
 void Camera::ResultUpdate()
 {
+	const float addHighCenterPos = 40.0f;		//カメラが中心からどれだけ離れられるか
+	const float addLowCenterPos = addCenterPos - 5.0f;
+	minHeight = screenCenterPosition.y - addLowCenterPos;
+	maxHeight = screenCenterPosition.y + addHighCenterPos;
+
 	centerPointSpherePos = WorldSubSystem::GetInstance().GetSubSystem<PlayerManager>()->GetPosition();
 	centerPointSpherePos.y += addCenterPos;
 	
 	//注視する座標からplayerがずれたら修正する
 	PosCalc();
+
+	RotateUpdate();
 	
-	AdjustCameraPosition();
+	//カメラ座標
+	cameraPosition = normalCameraPosition;
 
 	CaluclateCameraAndTargetDistanceSize();
 

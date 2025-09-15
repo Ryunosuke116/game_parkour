@@ -76,7 +76,7 @@ VECTOR Walk::Command(const VECTOR& cameraDirection, PlayerData& playerData, Play
 	}
 
 	//ã}ì]âÒÇπÇ∏Ç…é~Ç‹ÇÈèÍçá
-	if (!playerData.isMove && !playerData.isRoll)
+	if (!playerData.isMove && !playerData.IsPushRT)
 	{
 		playerData.isStopRun = true;
 		isChangeState = true;

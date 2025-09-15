@@ -17,6 +17,7 @@ CollisionObjectManager::~CollisionObjectManager()
 	collisionObjects.clear();
 }
 
+
 void CollisionObjectManager::Create()
 {
 	const nlohmann::json data_floor_sky = JsonManager::GetInstance().GetJsons("floor_sky");
@@ -66,6 +67,21 @@ void CollisionObjectManager::Draw()
 	{
 		object->Draw();
 	}
+}
+
+void CollisionObjectManager::ResultCreate()
+{
+	const auto self = shared_from_this();
+
+	collisionObjects.push_back(std::make_shared<FieldMesh>());
+
+	for (auto& object : collisionObjects)
+	{
+		object->Create();
+	}
+
+	//サブシステムに追加
+	WorldSubSystem::GetInstance().AddSubSystem<CollisionObjectManager>(self);
 }
 
 void CollisionObjectManager::ResultInitialize()

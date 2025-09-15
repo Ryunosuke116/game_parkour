@@ -82,7 +82,7 @@ VECTOR PlayerCalculation::Move(const int& animNumber_Now,
 
     VECTOR velocity = moveVec;
 
-    if (!playerData.isRoll)
+    if (!playerData.IsPushRT)
     {
         //動いている場合移動スピードを徐々に上げる
         if (playerData.isMove)
@@ -237,7 +237,7 @@ VECTOR PlayerCalculation::Roll(const int& animNumber_Now,
 {
     VECTOR move = moveVec;
 
-    if (playerData.isRoll)
+    if (playerData.IsPushRT)
     {
         //特定のフレームまで移動しない
         if (playTime_anim >= 10.0f)

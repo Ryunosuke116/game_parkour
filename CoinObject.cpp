@@ -12,6 +12,8 @@ CoinObject::CoinObject():
 	BaseObject(),
 	radian_Y(0.0f),
 	velocity_Y(0.0f),
+	flyAwayVelocity(VGet(0.0f, 0.0f, 0.0f)),
+	flyAwayDirection(VGet(0.0f, 0.0f, 0.0f)),
 	isHitPlayer(false),
 	deleteFlag(false),
 	hitFlag(false)
@@ -101,6 +103,49 @@ void CoinObject::Draw()
 }
 
 /// <summary>
+/// リザルトシーン時の生成
+/// </summary>
+/// <param name="coinCount"></param>
+void CoinObject::ResultCreate()
+{
+	//処理なし
+}
+
+/// <summary>
+/// リザルトシーン時の初期化
+/// </summary>
+void CoinObject::ResultInitialize()
+{
+	flyAwayDirection = VGet(0.0f, 0.0f, 1.0f);
+	flyAwayVelocity = VGet(0.0f, 0.0f, 0.0f);
+
+	flyAwayVelocity = VAdd(flyAwayVelocity, flyAwayDirection);
+	flyAwayVelocity.y += flyPower;
+}
+
+/// <summary>
+/// リザルトシーン時の更新処理
+/// </summary>
+void CoinObject::ResultUpdate()
+{
+	const float gravity = -0.2f;
+
+	position = VAdd(position, flyAwayVelocity);
+	flyAwayVelocity.y += gravity;
+
+	radian_Y += 20.0f;
+
+	//コインモデルを回転させる
+	if (radian_Y >= 360.0f)
+	{
+		radian_Y = 0.0f;
+	}
+
+	MV1SetRotationXYZ(modelHandle, VGet(0.0f, radian_Y * DX_PI_F / 180.0f, 0.0f));
+	MV1SetPosition(modelHandle, position);
+}
+
+/// <summary>
 /// プレイヤーと接触した時
 /// </summary>
 /// <param name="playerPos"></param>
@@ -142,35 +187,3 @@ void CoinObject::Rotate()
 	MV1SetRotationXYZ(modelHandle, VGet(0.0f, radian_Y * DX_PI_F / 180.0f, 0.0f));
 }
 
-/// <summary>
-/// リザルトシーン時の初期化
-/// </summary>
-void CoinObject::ResultInitialize()
-{
-	flyAwayDirection = VGet(0.0f, 0.0f, 1.0f);
-
-	flyAwayVelocity = VAdd(flyAwayVelocity, flyAwayDirection);
-	flyAwayVelocity.y += flyPower;
-}
-
-/// <summary>
-/// リザルトシーン時の更新処理
-/// </summary>
-void CoinObject::ResultUpdate()
-{
-	const float gravity = -0.2f;
-
-	position = VAdd(position, flyAwayVelocity);
-	flyAwayVelocity.y += gravity;
-
-	radian_Y += 20.0f;
-
-	//コインモデルを回転させる
-	if (radian_Y >= 360.0f)
-	{
-		radian_Y = 0.0f;
-	}
-
-	MV1SetRotationXYZ(modelHandle, VGet(0.0f, radian_Y * DX_PI_F / 180.0f, 0.0f));
-	MV1SetPosition(modelHandle, position);
-}

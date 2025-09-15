@@ -100,7 +100,7 @@ bool PadInput::isJump()
 /// </summary>
 /// <param name="input"></param>
 /// <returns></returns>
-bool PadInput::isRoll()
+bool PadInput::IsPushRT()
 {
     if (CheckHitKey(KEY_INPUT_F) ||
         input->GetNowFrameInput_direct_Z() < 0)

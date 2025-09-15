@@ -1,0 +1,9 @@
+{
+  "pathList": [
+    [ "material/png/rank_D.png", "D" ],
+    [ "material/png/rank_C.png", "C" ],
+    [ "material/png/rank_B.png", "B" ],
+    [ "material/png/rank_A.png", "A" ],
+    [ "material/png/rank_S.png", "S" ]
+  ]
+}

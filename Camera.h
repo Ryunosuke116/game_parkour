@@ -16,6 +16,7 @@ public:
 	void Initialize()override;
 	void Update()override;
 	void Draw()override;
+	void ResultCreate()override;
 	void ResultInitialize()override;
 	void ResultUpdate()override;
 
@@ -38,7 +39,7 @@ public:
 	// ゲッター
 	///////////////////////////////////////////////////////
 	VECTOR GetCameraDirection() { return cameraDirection; }
-	VECTOR GetLookPosition() { return screenCenterPosition; }
+	VECTOR GetScreenCenterPosition() { return screenCenterPosition; }
 	float GetCameraDistance() { return cameraDistanceSize; }
 	float GetCameraAndTargetDistanceSize() { return cameraAndTargetDistanceSize; }
 
@@ -67,6 +68,7 @@ private:
 	bool isResetAngle;
 	bool isHitObject;
 	bool isPutBackDistance;					//通常時のカメラ距離に戻すか
+	bool isPushRT;
 
 	static constexpr float lookRadius = 1.0f;
 	static constexpr float cameraRadius = 4.0f;

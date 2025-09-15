@@ -39,7 +39,6 @@ void Game::Create()
 
 	gameObjectManager->Create();
 	BlackOut::GetInstance().SetAlpha(255);
-
 }
 
 /// <summary>
@@ -63,12 +62,12 @@ void Game::Update()
 	{
 		ChangeScene("Title", gameObjectManager_actual->GetCoinCount());
 	}
-
 }
 
 void Game::StartUpdate()
 {
 	const int addalpha = 5;
+
 	BlackOut::GetInstance().BlackOutUpdate(addalpha);
 	gameObjectManager_actual->StartUpdate();
 }

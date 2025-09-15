@@ -63,7 +63,9 @@ void Player::Initialize()
 {
     const VECTOR initPosition = VGet(3.02443838f, 9.00285912f, -1215.93481f);
 
-    position = initPosition;
+    const VECTOR pos = VGet(-1663.0f, 688.5f, 788.0f);
+
+    position = pos;
     targetMoveDirection = VGet(0.0f, 0.0f, 0.0f);
     radian = 0.0f;
     rotate_x = 0.0f;
@@ -82,7 +84,7 @@ void Player::Initialize()
     playerData.isWalljump = false;
     playerData.isMove = false;
     playerData.isWalk = true;
-    playerData.isRoll = false;
+    playerData.IsPushRT = false;
     playerData.isSprint = false;
     playerData.isStopRun = false;
     playerData.isUseRoll = false;
@@ -127,7 +129,7 @@ void Player::Update()
     moveDirection = VGet(0.0f, 0.0f, 0.0f);
 
     //接地中であればロールアクションを使えるように
-    if (playerData.isGround && !playerData.isRoll)
+    if (playerData.isGround && !playerData.IsPushRT)
     {
         playerData.isUseRoll = false;
     }
@@ -250,19 +252,29 @@ void Player::Update_finish(const float& timer)
 }
 
 /// <summary>
+/// リザルトシーン時の生成
+/// </summary>
+/// <param name="coinCount"></param>
+void Player::ResultCreate()
+{
+    Create();
+}
+
+/// <summary>
 /// リザルトシーン時の初期化
 /// </summary>
 void Player::ResultInitialize()
 {
-    const VECTOR initPosition = VGet(3.02443838f, 9.00285912f, -1215.93481f);
+    const VECTOR initPosition = VGet(0.0f, 9.00285912f, -1205.93481f);
 
     position = initPosition;
+    radian = 0.0f;
 
     MV1SetPosition(modelHandle, position);
 
     MV1SetRotationXYZ(modelHandle, VGet(rotate_x * DX_PI_F / 180.0f, radian + DX_PI_F, 0.0f));
 
-    animationChanger->Initialize(animNum::idle, modelHandle, nowState, playerData, *this);
+    animationChanger->ResultInitialize(animNum::idle, modelHandle, nowState, playerData, *this);
 }
 
 /// <summary>
@@ -279,7 +291,7 @@ void Player::MoveDirectionUpdate()
         !playerData.isHangToCrouch &&
         !playerData.isFalling &&
         !playerData.isJump &&
-        !playerData.isRoll;
+        !playerData.IsPushRT;
 
     isCalcMoveVec = VSize(moveDirection) != 0;
 
@@ -488,7 +500,7 @@ void Player::DebugUpdate()
     DebugDrawer::Instance().InformationInput_string_bool("isJumpAll %d\n", playerData.isJumpAll);
     DebugDrawer::Instance().InformationInput_string_bool("isWalljump %d\n", playerData.isWalljump);
     DebugDrawer::Instance().InformationInput_string_bool("isUseWallJump %d\n", playerData.isUseWallJump);
-    DebugDrawer::Instance().InformationInput_string_bool("isRoll %d\n", playerData.isRoll);
+    DebugDrawer::Instance().InformationInput_string_bool("IsPushRT %d\n", playerData.IsPushRT);
     DebugDrawer::Instance().InformationInput_string_bool("isUseRoll %d\n", playerData.isUseRoll);
     DebugDrawer::Instance().InformationInput_string_bool("isFalling %d\n", playerData.isFalling);
     DebugDrawer::Instance().InformationInput_string_bool("isHanging %d\n", playerData.isHanging);

@@ -2,6 +2,7 @@
 #include <memory>
 #include <string>
 #include "Rank.h"
+#include "JsonManager.h"
 
 Rank::Rank():
     rankHandle(-1),
@@ -20,7 +21,7 @@ void Rank::Load(const nlohmann::json& jsonData)
     //îwåi
     std::unordered_map<std::string, std::string> Path;
 
-    for (auto& data : jsonData)
+    for (auto& data : jsonData["pathList"])
     {
         std::string path = data[0];     //HandlePath
         std::string name = data[1];     //pathÇÃñºëO
@@ -48,6 +49,12 @@ void Rank::Load(const nlohmann::json& jsonData)
     {
         rankHandle = LoadGraph(Path.at("S").c_str());
     }
+}
+
+void Rank::Create(int coinCount)
+{
+    this->coinCount = coinCount;
+    Load(JsonManager::GetInstance().GetJsons(jsonTag));
 }
 
 void Rank::Initialize()

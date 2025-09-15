@@ -38,7 +38,7 @@ public:
 	static bool isRight();
 	static bool isLeft();
 	static bool isJump();
-	static bool isRoll();
+	static bool IsPushRT();
 	static bool IsPush_A();
 	static bool IsPush_R();
 	static bool IsPushLT();

@@ -161,5 +161,5 @@ void QuickRoll::Enter(PlayerData& playerData)
 
 void QuickRoll::Exit(PlayerData& playerData)
 {
-    playerData.isRoll = false;
+    playerData.IsPushRT = false;
 }

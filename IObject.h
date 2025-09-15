@@ -14,4 +14,5 @@ public:
 	virtual void Draw()									abstract;
 	virtual void ResultInitialize()						abstract;
 	virtual void ResultUpdate()							abstract;
+	virtual void ResultCreate()							abstract;
 };

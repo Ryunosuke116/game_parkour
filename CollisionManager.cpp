@@ -71,6 +71,7 @@ CollisionResult CollisionManager::Check_all(
 	{
 		moveVec_new = moveVec;
 	}
+
 	VECTOR projection_ray_start = newPos;
 	VECTOR projection_ray_end = VAdd(newPos, VScale(VNorm(moveVec_new), 20.0f));
 

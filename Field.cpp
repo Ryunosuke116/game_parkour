@@ -70,6 +70,15 @@ void Field::Draw()
 }
 
 /// <summary>
+/// リザルトシーン時の生成
+/// </summary>
+/// <param name="coinCount"></param>
+void Field::ResultCreate()
+{
+	Create();
+}
+
+/// <summary>
 /// リザルトシーン時の初期化
 /// </summary>
 void Field::ResultInitialize()

@@ -15,9 +15,18 @@ public:
 
 	void SetOldAnimState(PlayerStateBase::AnimState animState);
 	void SetNowAnimState(PlayerStateBase::AnimState animState);
-	void Initialize(const int& num, int& modelHandle,
+	void Initialize(const int& num, 
+		int& modelHandle,
 		std::shared_ptr<PlayerStateBase>& nowState,
-		PlayerData& playerData, Player& player);
+		PlayerData& playerData,
+		Player& player);
+
+	void ResultInitialize(const int& num, 
+		int& modelHandle,
+		std::shared_ptr<PlayerStateBase>& nowState,
+		PlayerData& playerData,
+		Player& player);
+
 	int GetAnimNumber_now() { return animNumber_Now; }
 
 private:

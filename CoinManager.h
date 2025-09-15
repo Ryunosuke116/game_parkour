@@ -25,6 +25,7 @@ public:
 	void Add()override;
 	void ResultInitialize()override;
 	void ResultUpdate()override;
+	void ResultCreate()override;
 	void ResultCreate(int coinCount);
 
 	int GetModelHandle()const { return modelHandle; }
@@ -34,8 +35,8 @@ private:
 	std::vector<std::weak_ptr<CoinObserver>> observers;
 	
 	int modelHandle;
-	float timer;
 	int nowCoinCount;
+	float timer;
 
 	bool isAddResultUpdateCoin;				//更新するコインを追加するか
 	

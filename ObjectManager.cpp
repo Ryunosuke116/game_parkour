@@ -171,7 +171,7 @@ void ObjectManager::Update()
 			coinManager_actual->Update();
 			camera_actual->Update_layout();
 			layout->Update(
-				WorldSubSystem::GetInstance().GetSubSystem<Camera>()->GetLookPosition(),
+				WorldSubSystem::GetInstance().GetSubSystem<Camera>()->GetScreenCenterPosition(),
 				*coinManager_actual);
 		}
 		
@@ -312,8 +312,11 @@ void ObjectManager::tutorialDraw()
 	}
 }
 
-void ObjectManager::ResultCreate()
+void ObjectManager::ResultCreate(int coinCount)
 {
+	const int coinManagerNumber = 3;
+	const int shadowObjectNumber = 3;
+
 	//生成
 	//object生成
 	objects.push_back(std::make_shared<SkyBox>());
@@ -327,16 +330,24 @@ void ObjectManager::ResultCreate()
 	managers.push_back(std::make_shared<UIManager>());
 	managers.push_back(std::make_shared<CoinManager>());
 
+	//アップキャスト
+	shadow_actual = std::dynamic_pointer_cast<Shadow>(objects.at(shadowObjectNumber));
+
 	//Jsonデータを取得
 	for (auto& manager : managers)
 	{
-		manager->Create();
+		if (auto coinManager = std::dynamic_pointer_cast<CoinManager>(manager))
+		{
+			coinManager->ResultCreate(coinCount);
+			continue;
+		}
+		manager->ResultCreate();
 	}
 
 	//ロード
 	for (auto& object : objects)
 	{
-		object->Create();
+		object->ResultCreate();
 	}
 }
 
@@ -364,4 +375,43 @@ void ObjectManager::ResultUpdate()
 	{
 		object->ResultUpdate();
 	}
+}
+
+void ObjectManager::ResultDraw()
+{
+	// シャドウマップへの描画の準備
+	ShadowMap_DrawSetup(shadow_actual->GetShadowMapHandle());
+
+	for (auto& manager : managers)
+	{
+		if (std::dynamic_pointer_cast<PlayerManager>(manager) ||
+			std::dynamic_pointer_cast<CoinManager>(manager))
+		{
+			manager->Draw();
+		}
+	}
+
+	//シャドウマップへの描画を終了
+	ShadowMap_DrawEnd();
+
+	// 描画に使用するシャドウマップを設定
+	SetUseShadowMap(0, shadow_actual->GetShadowMapHandle());
+
+	for (auto& object : objects)
+	{
+		object->Draw();
+	}
+
+	for (auto& manager : managers)
+	{
+		if (auto uiManager = std::dynamic_pointer_cast<UIManager>(manager) &&
+			isStreamStartPicture)
+		{
+			continue;
+		}
+		manager->Draw();
+	}
+
+	// 描画に使用するシャドウマップの設定を解除
+	SetUseShadowMap(0, -1);
 }

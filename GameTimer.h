@@ -14,6 +14,7 @@ public:
 	void Draw()override;
 	void Create()override {}
 	void Add()override{}
+	void ResultCreate()override{}
 	void ResultInitialize()override{}
 	void ResultUpdate()override{}
 

@@ -176,9 +176,9 @@ VECTOR PlayerStateBase::Move(const VECTOR& cameraDirection, PlayerData& playerDa
 /// </summary>
 void PlayerStateBase::RollMove(PlayerData& playerData)
 {
-    if (PadInput::isRoll() && !playerData.isRoll && !playerData.isUseRoll)
+    if (PadInput::IsPushRT() && !playerData.IsPushRT && !playerData.isUseRoll)
     {
-        playerData.isRoll = true;
+        playerData.IsPushRT = true;
         playerData.isUseRoll = true;
         isChangeState = true;
     }

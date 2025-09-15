@@ -7,6 +7,7 @@
 #include "JsonManager.h"
 #include "Result_object.h"
 #include "BlackOut.h"
+#include "SubSystemManager.h"
 
 /// <summary>
 /// コンストラクタ
@@ -22,7 +23,7 @@ coin_x(-1),
 coin_y(-1),
 isPush(false)
 {
-    jsonTag = "png";
+
 }
 
 /// <summary>
@@ -35,11 +36,27 @@ Result::~Result()
 
 void Result::Create()
 {
-    nlohmann::json jsonData = JsonManager::GetJsons(jsonTag);
+    coinCount = 60;
+    const std::string jsonFileName = "JsonResult";
+    JsonManager::GetInstance().Create(jsonFileName);
+    SubSystemManager::GetInstance().AddSubSystem<SoundPlayer>();
+    SubSystemManager::GetInstance().Create(jsonFileName);
 
-    Add(std::make_shared<Result_backGround>(), jsonData);
-    Add(std::make_shared<UI_coin>(), jsonData);
-    Add(std::make_shared<Rank>(), jsonData);
+    //Add(std::make_shared<Result_backGround>(), jsonData);
+    //Add(std::make_shared<UI_coin>(), jsonData);
+    Add(std::make_shared<Rank>());
+    objectManager = std::make_shared<ObjectManager>();
+    objectManager->ResultCreate(coinCount);
+
+    for (auto& UI : ui_list)
+    {
+        if (auto rank = std::dynamic_pointer_cast<Rank>(UI))
+        {
+            rank->Create(coinCount);
+            continue;
+        }
+        UI->Create();
+    }
 }
 
 /// <summary>
@@ -60,6 +77,8 @@ void Result::Initialize()
         }
         UI->Initialize();
     }
+
+    objectManager->ResultInitilize();
 }
 
 /// <summary>
@@ -82,6 +101,7 @@ void Result::Update()
             ChangeScene("Title", 0);
         }
     }
+    objectManager->ResultUpdate();
 }
 
 /// <summary>
@@ -89,16 +109,17 @@ void Result::Update()
 /// </summary>
 void Result::Draw()
 {
+    objectManager->ResultDraw();
+
     for (auto& UI : ui_list)
     {
         UI->Draw();
     }
+
     BlackOut::GetInstance().Draw();
 }
 
-void Result::Add(std::shared_ptr<BaseUI> ui,
-    nlohmann::json& jsonData)
+void Result::Add(std::shared_ptr<BaseUI> ui)
 {
     ui_list.push_back(ui);
-    ui_list.back()->Load(jsonData[ui_list.back()->GetJsonTag()]);
 }

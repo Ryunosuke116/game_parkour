@@ -121,6 +121,15 @@ void FieldMesh::Draw()
 }
 
 /// <summary>
+/// リザルトシーン時の生成
+/// </summary>
+/// <param name="coinCount"></param>
+void FieldMesh::ResultCreate()
+{
+	Create();
+}
+
+/// <summary>
 /// リザルトシーン時の初期化
 /// </summary>
 void FieldMesh::ResultInitialize()

@@ -46,6 +46,14 @@ void SkyBox::Update()
 	//処理なし
 };
 
+/// <summary>
+/// リザルトシーン時の生成
+/// </summary>
+/// <param name="coinCount"></param>
+void SkyBox::ResultCreate()
+{
+	Create();
+}
 
 /// <summary>
 /// リザルトシーン時の初期化

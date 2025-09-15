@@ -107,6 +107,15 @@ void UI_controlManual::OnChangeState(const PlayerData& playerData)
 }
 
 /// <summary>
+/// リザルトシーン時の生成
+/// </summary>
+/// <param name="coinCount"></param>
+void UI_controlManual::ResultCreate()
+{
+	//処理なし
+}
+
+/// <summary>
 /// リザルトシーン時の初期化
 /// </summary>
 void UI_controlManual::ResultInitialize()

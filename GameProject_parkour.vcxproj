@@ -288,6 +288,12 @@
     <None Include="JsonGame\png.Json" />
     <None Include="JsonGame\sound.Json" />
     <None Include="JsonGame\tutorial.Json" />
+    <None Include="JsonResult\coin.Json" />
+    <None Include="JsonResult\field.Json" />
+    <None Include="JsonResult\object.Json" />
+    <None Include="JsonResult\player.Json" />
+    <None Include="JsonResult\rank.Json" />
+    <None Include="JsonResult\sound.Json" />
     <None Include="JsonTitle\png.Json" />
     <None Include="JsonTitle\sound.Json" />
   </ItemGroup>

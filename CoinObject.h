@@ -20,6 +20,7 @@ public:
 	void Draw()override;
 	void Load(const nlohmann::json& jsonData)override{}
 	void Create()override{}
+	void ResultCreate()override;
 	void ResultInitialize()override;
 	void ResultUpdate()override;
 

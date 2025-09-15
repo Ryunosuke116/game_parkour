@@ -8,6 +8,8 @@
 #include "WorldSubSystem.h"
 #include "JsonManager.h"
 #include "PlayerManager.h"
+#include "SubSystemManager.h"
+#include "SoundPlayer.h"
 
 /// <summary>
 /// コンストラクタ
@@ -83,7 +85,7 @@ void CoinManager::Update()
 		it++;
 	}
 
-	posAddObject = WorldSubSystem::GetInstance().GetSubSystem<Camera>()->GetLookPosition();
+	posAddObject = WorldSubSystem::GetInstance().GetSubSystem<Camera>()->GetScreenCenterPosition();
 }
 
 void CoinManager::Draw()
@@ -125,6 +127,19 @@ void CoinManager::NotifyCoinPicked(int amount)
 	}
 }
 
+/// <summary>
+/// リザルトシーン時の生成
+/// </summary>
+/// <param name="coinCount"></param>
+void CoinManager::ResultCreate()
+{
+	//処理なし
+}
+
+/// <summary>
+/// リザルトシーン時の生成
+/// </summary>
+/// <param name="coinCount"></param>
 void CoinManager::ResultCreate(int coinCount)
 {
 	nlohmann::json data = JsonManager::GetInstance().GetJsons("coin");
@@ -132,11 +147,11 @@ void CoinManager::ResultCreate(int coinCount)
 
 	modelHandle = MV1LoadModel(modelPath.c_str());
 
-	for (auto& pos : data["coin_list"])
+	for (int i = 0; i < coinCount; i++)
 	{
 		coins.push_back(std::make_shared<CoinObject>());
 		coins.back()->Load(modelHandle,
-			VGet(pos[0].get<float>(), pos[1].get<float>(), pos[2].get<float>()));
+			VGet(0.0f, 9.00285912f, -1205.93481f));
 	}
 }
 
@@ -158,19 +173,24 @@ void CoinManager::ResultInitialize()
 /// </summary>
 void CoinManager::ResultUpdate()
 {
+	const int maxCoinCount = coins.size();
+	auto soundPlayer = SubSystemManager::GetInstance().GetSubSystem<SoundPlayer>().lock();
+
 	timer++;
 	//タイマーが規定値を超えたら更新処理するコインを追加する
 	if (timer >= maxAddResultUpdateCoinTimer)
 	{
-		resultUpdateCoins.push_back(coins.at(nowCoinCount));
-		nowCoinCount++;
+		if (nowCoinCount <= maxCoinCount)
+		{
+			nowCoinCount++;
+			soundPlayer->Play("coinGet");
+		}
 		timer = 0.0f;
 	}
 
-	for (auto& weakCoin : resultUpdateCoins)
+	for (int i = 0; i < nowCoinCount; i++)
 	{
-		auto coin = weakCoin.lock();
-		coin->ResultUpdate();
+		coins.at(i)->ResultUpdate();
 	}
 }
 

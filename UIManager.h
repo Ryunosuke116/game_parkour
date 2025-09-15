@@ -16,6 +16,7 @@ public:
 	void Update()		override;
 	void Draw()			override;
 	void Add()			override{}
+	void ResultCreate()override;
 	void ResultInitialize()override;
 	void ResultUpdate()override;
 

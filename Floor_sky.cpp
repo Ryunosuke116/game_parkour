@@ -107,6 +107,15 @@ void Floor_sky::Draw()
 }
 
 /// <summary>
+/// リザルトシーン時の生成
+/// </summary>
+/// <param name="coinCount"></param>
+void Floor_sky::ResultCreate()
+{
+	//処理なし
+}
+
+/// <summary>
 /// リザルトシーン時の初期化
 /// </summary>
 void Floor_sky::ResultInitialize()
