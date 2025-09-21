@@ -7,6 +7,7 @@
 #include "SubSystemManager.h"
 #include "BlackOut.h"
 #include "WorldSubSystem.h"
+#include "boundaryRange.h"
 
 /// <summary>
 /// コンストラクタ
@@ -51,6 +52,7 @@ void ObjectManager::Create()
 	layout				= std::make_shared<Layout>();
 	tutorial			= std::make_shared<Tutorial>();
 	finishCut			= std::make_shared<FinishCut>();
+	L8TreeManager		= std::make_shared<Liner8TreeManager<CoinObject>>();
 
 	//managerの生成
 	managers.push_back(std::make_shared<CollisionObjectManager>());
@@ -84,6 +86,7 @@ void ObjectManager::Create()
 	{
 		object->Create();
 	}
+	L8TreeManager->Create();
 
 	tutorial->Load(JsonManager::GetInstance().GetJsons(tutorial->GetTag()));
 	finishCut->Load(JsonManager::GetInstance().GetJsons(finishCut->GetTag()));
@@ -94,6 +97,7 @@ void ObjectManager::Create()
 /// </summary>
 void ObjectManager::Initialize()
 {
+	L8TreeManager->Initialize(3,BoundaryRange::min,BoundaryRange::max);
 	for (auto& manager : managers)
 	{
 		manager->Initialize();
@@ -170,8 +174,7 @@ void ObjectManager::Update()
 		{
 			coinManager_actual->Update();
 			camera_actual->Update_layout();
-			layout->Update(
-				WorldSubSystem::GetInstance().GetSubSystem<Camera>()->GetScreenCenterPosition(),
+			layout->Update(WorldSubSystem::GetInstance().GetSubSystem<Camera>()->GetScreenCenterPosition(),
 				*coinManager_actual);
 		}
 		

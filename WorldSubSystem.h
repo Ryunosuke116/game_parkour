@@ -43,7 +43,5 @@ public:
 
 private:
 	std::unordered_map<std::type_index, std::weak_ptr<IObject>> subSystems;
-
-
 };
 

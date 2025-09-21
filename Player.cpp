@@ -432,7 +432,12 @@ void Player::CollisionUpdate()
             rotate_x);
     }
 
+    //AABB
+    mAABB.min = VGet(position.x - radius, position.y, position.z - radius);
+    mAABB.max = VGet(position.x + radius, positionData.rayTopPosition.y, position.z + radius);
+
     DebugDrawer::Instance().InformationInput_string_VECTOR("faceDirection %f %f %f\n", faceDirection);
+    DebugDrawer::Instance().InformationInput_AABB(mAABB.min, mAABB.max, GetColor(255, 0, 0));
 }
 
 void Player::Receive_CollisionResult()

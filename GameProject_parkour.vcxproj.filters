@@ -238,6 +238,12 @@
     <Filter Include="ソース ファイル\manager\scene">
       <UniqueIdentifier>{6ed27899-6b7f-44a8-b8d7-0648099a58a6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\cell">
+      <UniqueIdentifier>{94ce5b17-2956-4d81-a845-612d7db9a6fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Liner8TreeManager">
+      <UniqueIdentifier>{89701cc4-9c02-4c3e-830a-802cecef408b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -416,6 +422,12 @@
     </ClCompile>
     <ClCompile Include="ObjectManager.cpp">
       <Filter>ソース ファイル\manager\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Cell.cpp">
+      <Filter>ソース ファイル\cell</Filter>
+    </ClCompile>
+    <ClCompile Include="Liner8TreeManager.cpp">
+      <Filter>ソース ファイル\Liner8TreeManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -637,6 +649,18 @@
     </ClInclude>
     <ClInclude Include="ObjectManager.h">
       <Filter>ソース ファイル\manager\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectForTree.hpp">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Cell.hpp">
+      <Filter>ソース ファイル\cell</Filter>
+    </ClInclude>
+    <ClInclude Include="Liner8TreeManager.hpp">
+      <Filter>ソース ファイル\Liner8TreeManager</Filter>
+    </ClInclude>
+    <ClInclude Include="boundaryRange.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

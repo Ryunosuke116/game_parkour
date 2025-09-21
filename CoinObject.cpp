@@ -14,6 +14,8 @@ CoinObject::CoinObject():
 	velocity_Y(0.0f),
 	flyAwayVelocity(VGet(0.0f, 0.0f, 0.0f)),
 	flyAwayDirection(VGet(0.0f, 0.0f, 0.0f)),
+	boundsMin(VGet(0.0f, 0.0f, 0.0f)),
+	boundsMax(VGet(0.0f, 0.0f, 0.0f)),
 	isHitPlayer(false),
 	deleteFlag(false),
 	hitFlag(false)
@@ -35,8 +37,12 @@ CoinObject::~CoinObject()
 /// </summary>
 /// <param name="handle"></param>
 /// <param name="pos"></param>
-void CoinObject::Load(const int& handle, const VECTOR& pos)
+void CoinObject::Load(
+	const int listNumber,
+	const int handle, 
+	const VECTOR& pos)
 {
+	this->listNumber = listNumber;
 	modelHandle = MV1DuplicateModel(handle);
 	position = pos;
 	MV1SetScale(modelHandle, VGet(objectScale, objectScale, objectScale));
@@ -47,6 +53,8 @@ void CoinObject::Load(const int& handle, const VECTOR& pos)
 /// </summary>
 void CoinObject::Initialize()
 {
+	const VECTOR addAABB = VGet(radius, radius, radius);	//AABB‚Ì—Ìˆæ”ÍˆÍ
+
 	MV1SetPosition(modelHandle, position);
 	velocity_Y = 0.0f;
 	radian_Y = 0.0f;
@@ -54,6 +62,8 @@ void CoinObject::Initialize()
 	deleteFlag = false;
 	hitFlag = false;
 	isSound = false;
+	boundsMin = VSub(position, addAABB);
+	boundsMax = VAdd(position, addAABB);
 }
 
 

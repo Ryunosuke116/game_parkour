@@ -19,7 +19,7 @@ public:
     void Clear(); // 描画リストを削除
     void Draw(); // 登録された全てのデバッグ描画を行う
 
-    bool EnableDebugDraw = false; // デバッグ描画ON/OFFフラグ
+    bool EnableDebugDraw = true; // デバッグ描画ON/OFFフラグ
 
 private:
     struct Line { VECTOR start, end; unsigned int color; };

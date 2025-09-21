@@ -10,6 +10,11 @@
 #include "PlayerManager.h"
 #include "SubSystemManager.h"
 #include "SoundPlayer.h"
+#include "Liner8TreeManager.hpp"
+#include "boundaryRange.h"
+#include "ObjectForTree.hpp"
+#include "Cell.hpp"
+#include "DebugDrawer.h"
 
 /// <summary>
 /// コンストラクタ
@@ -38,12 +43,16 @@ void CoinManager::Create()
 	std::string modelPath = data["modelPath"];
 
 	modelHandle = MV1LoadModel(modelPath.c_str());
+	int i = 0;
 
 	for (auto& pos : data["coin_list"])
 	{
-		coins.push_back(std::make_shared<CoinObject>());
-		coins.back()->Load(modelHandle,
+		umCoins[i] = std::make_shared<CoinObject>();
+		umCoins.at(i)->Load(
+			i,
+			modelHandle,
 			VGet(pos[0].get<float>(), pos[1].get<float>(), pos[2].get<float>()));
+		i++;
 	}
 
 	WorldSubSystem::GetInstance().AddSubSystem<CoinManager>(self);
@@ -55,51 +64,105 @@ void CoinManager::Create()
 /// <param name="path"></param>
 void CoinManager::Initialize()
 {
-	for (auto& coin : coins)
+	auto L8TreeManager = WorldSubSystem::GetInstance().GetSubSystem<Liner8TreeManager<CoinObject>>();
+	
+	for (auto& coin : umCoins)
 	{
-		coin->Initialize();
-	}
-}
+		coin.second->Initialize();
 
+		//OFTに登録する
+		std::shared_ptr OFT = std::make_shared<ObjectForTree<CoinObject>>();
+		OFT->objectPointer = coin.second;
+	
+		L8TreeManager->Regist(coin.second->GetBoundsMin(),
+			coin.second->GetBoundsMax(),
+			OFT);
+	}
+
+}
 
 void CoinManager::Update()
 {
-	//vector型内の現在位置
-	std::vector<std::shared_ptr<CoinObject>>::iterator it;
+	auto L8TreeManager = WorldSubSystem::GetInstance().GetSubSystem<Liner8TreeManager<CoinObject>>();
+	auto spPlayerManager = WorldSubSystem::GetInstance().GetSubSystem<PlayerManager>();
+	
+	//プレイヤーがどの空間にいるか調べる
+	uint32_t playerSpaceNumber = L8TreeManager->GetMortonNumber(
+			spPlayerManager->GetPlayer()->GetAABB().min,
+			spPlayerManager->GetPlayer()->GetAABB().max);
 
-	for (it = coins.begin(); it != coins.end();)
+	DebugDrawer::Instance().InformationInput_string_int("playerSpaceNumber %d", playerSpaceNumber);
+	
+	std::shared_ptr<Cell<CoinObject>> cell = L8TreeManager->GetCell(playerSpaceNumber);
+
+	for (auto it = cell->GetObjectList().begin(); it != cell->GetObjectList().end();)
 	{
-		//playerと当たっていたら削除する
-		if ((*it)->Update(
-			WorldSubSystem::GetInstance().GetSubSystem<PlayerManager>()->GetPlayer()->GetTopPos(),
-			WorldSubSystem::GetInstance().GetSubSystem<PlayerManager>()->GetPlayer()->GetBottomPos(),
-			WorldSubSystem::GetInstance().GetSubSystem<PlayerManager>()->GetPlayer()->GetRadius()
-			))
+		auto object = (*it)->objectPointer.lock();
+		
+		if (!object)
 		{
+			it++;
+			continue;
+		}
+
+		//playerと当たっていたら削除する
+		if (object->Update(spPlayerManager->GetPlayer()->GetTopPos(),
+			spPlayerManager->GetPlayer()->GetBottomPos(),
+			spPlayerManager->GetPlayer()->GetRadius()
+		))
+		{
+			//コイン取得を通知
 			NotifyCoinPicked(coinValue);
 
-			//コインを削除
-			it = coins.erase(it);
+			//空間と実体のリストからコインを削除
+			it = cell->OnRemove(it);
+			umCoins.erase(object->GetListNumber());
 			continue;
 		}
 		it++;
 	}
+
+	////vector型内の現在位置
+	//std::vector<std::shared_ptr<CoinObject>>::iterator it;
+
+	//for (it = coins.begin(); it != coins.end();)
+	//{
+	//	//playerと当たっていたら削除する
+	//	if ((*it)->Update(
+	//		spPlayerManager->GetPlayer()->GetTopPos(),
+	//		spPlayerManager->GetPlayer()->GetBottomPos(),
+	//		spPlayerManager->GetPlayer()->GetRadius()
+	//		))
+	//	{
+	//		NotifyCoinPicked(coinValue);
+
+	//		//コインを削除
+	//		it = coins.erase(it);
+	//		continue;
+	//	}
+	//	it++;
+	//}
 
 	posAddObject = WorldSubSystem::GetInstance().GetSubSystem<Camera>()->GetScreenCenterPosition();
 }
 
 void CoinManager::Draw()
 {
-	for (auto& coin : coins)
+	for (auto& coin : umCoins)
 	{
-		coin->Draw();
+		coin.second->Draw();
 	}
 }
 
+/// <summary>
+/// オブジェクトの追加
+///LayOutクラスで生成する前提
+/// </summary>
 void CoinManager::Add()
 {
 	coins.push_back(std::make_shared<CoinObject>());
-	coins.back()->Load(modelHandle,
+	coins.back()->Load(-1,
+		modelHandle,
 		posAddObject);
 	coins.back()->Initialize();
 }
@@ -150,7 +213,8 @@ void CoinManager::ResultCreate(int coinCount)
 	for (int i = 0; i < coinCount; i++)
 	{
 		coins.push_back(std::make_shared<CoinObject>());
-		coins.back()->Load(modelHandle,
+		coins.back()->Load(i,
+			modelHandle,
 			VGet(0.0f, 9.00285912f, -1205.93481f));
 	}
 }

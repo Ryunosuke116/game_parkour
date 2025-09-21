@@ -7,7 +7,7 @@
 #include "JsonManager.h"
 #include "BaseGameObjectManager.h"
 #include "SoundPlayer.h"
-
+#include "Liner8TreeManager.hpp"
 
 class ObjectManager : public BaseManager
 {
@@ -47,6 +47,7 @@ private:
 	std::shared_ptr<Shadow>			 shadow_actual				= NULL;
 	std::shared_ptr<Camera>			camera_actual				= NULL;
 	std::shared_ptr<IEffectManager>  effectManager				= NULL;
+	std::shared_ptr<Liner8TreeManager<CoinObject>> L8TreeManager = NULL;
 
 	bool isCamera;
 	bool isPush;

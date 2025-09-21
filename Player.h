@@ -53,6 +53,7 @@ public:
 	PlayerData GetData() const { return playerData; }
 	PlayerStateBase::AnimState GetNowAnimState() const { return nowState->GetNowAnimState(); }
 	float GetRadius()const override { return radius; }
+	AABB GetAABB()const { return mAABB; }
 
 	//////////////////////////////////
 	/// セッター
@@ -101,6 +102,6 @@ private:
 	PlayerData playerData;
 	std::shared_ptr<PlayerStateBase>		nowState = NULL;
 	std::shared_ptr<AnimationChanger>		animationChanger = NULL;
-
+	AABB mAABB;
 };
 
