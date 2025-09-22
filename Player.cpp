@@ -65,7 +65,7 @@ void Player::Initialize()
 
     const VECTOR pos = VGet(-1663.0f, 688.5f, 788.0f);
 
-    position = pos;
+    position = initPosition;
     targetMoveDirection = VGet(0.0f, 0.0f, 0.0f);
     radian = 0.0f;
     rotate_x = 0.0f;

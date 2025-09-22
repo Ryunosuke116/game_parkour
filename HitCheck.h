@@ -35,7 +35,7 @@ public:
 
 	static float projectionCalc(const VECTOR& point, const VECTOR& P, const VECTOR& Q);
 
-	static VECTOR CapsuleHitConfirmation(VECTOR capsulePosition_1, VECTOR capsulePosition_2, VECTOR position, const float radius_1, const float radius_2);
+	static VECTOR CapsuleHitConfirmation(VECTOR capsulePosition_1, VECTOR capsulePosition_2, VECTOR position);
 
 	static VECTOR ClosestPtToPointTriangle(VECTOR centerPos, VECTOR a, VECTOR b, VECTOR c);
 

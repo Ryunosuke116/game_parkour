@@ -29,11 +29,12 @@ CoinManager::CoinManager()
 /// </summary>
 CoinManager::~CoinManager()
 {
-	coins.clear();
+	umCoins.clear();
 	resultUpdateCoins.clear();
 	int a = MV1DeleteModel(modelHandle);
 	observers.clear();
 }
+
 
 void CoinManager::Create()
 {
@@ -79,8 +80,12 @@ void CoinManager::Initialize()
 			OFT);
 	}
 
+	addNumber = 1000;
 }
 
+/// <summary>
+/// 更新処理
+/// </summary>
 void CoinManager::Update()
 {
 	auto L8TreeManager = WorldSubSystem::GetInstance().GetSubSystem<Liner8TreeManager<CoinObject>>();
@@ -91,8 +96,7 @@ void CoinManager::Update()
 			spPlayerManager->GetPlayer()->GetAABB().min,
 			spPlayerManager->GetPlayer()->GetAABB().max);
 
-	DebugDrawer::Instance().InformationInput_string_int("playerSpaceNumber %d", playerSpaceNumber);
-	
+	//playerのいる空間を検索
 	std::shared_ptr<Cell<CoinObject>> cell = L8TreeManager->GetCell(playerSpaceNumber);
 
 	for (auto it = cell->GetObjectList().begin(); it != cell->GetObjectList().end();)
@@ -106,7 +110,7 @@ void CoinManager::Update()
 		}
 
 		//playerと当たっていたら削除する
-		if (object->Update(spPlayerManager->GetPlayer()->GetTopPos(),
+		if (object->IsHitPlayer(spPlayerManager->GetPlayer()->GetTopPos(),
 			spPlayerManager->GetPlayer()->GetBottomPos(),
 			spPlayerManager->GetPlayer()->GetRadius()
 		))
@@ -114,36 +118,29 @@ void CoinManager::Update()
 			//コイン取得を通知
 			NotifyCoinPicked(coinValue);
 
-			//空間と実体のリストからコインを削除
+			//空間オブジェクトリストからコインを削除
 			it = cell->OnRemove(it);
-			umCoins.erase(object->GetListNumber());
 			continue;
 		}
+
 		it++;
 	}
 
-	////vector型内の現在位置
-	//std::vector<std::shared_ptr<CoinObject>>::iterator it;
+	for (auto umCoin = umCoins.begin(); umCoin != umCoins.end();)
+	{
+		umCoin->second->Update();
 
-	//for (it = coins.begin(); it != coins.end();)
-	//{
-	//	//playerと当たっていたら削除する
-	//	if ((*it)->Update(
-	//		spPlayerManager->GetPlayer()->GetTopPos(),
-	//		spPlayerManager->GetPlayer()->GetBottomPos(),
-	//		spPlayerManager->GetPlayer()->GetRadius()
-	//		))
-	//	{
-	//		NotifyCoinPicked(coinValue);
-
-	//		//コインを削除
-	//		it = coins.erase(it);
-	//		continue;
-	//	}
-	//	it++;
-	//}
+		//削除してよければリストから削除
+		if (umCoin->second->GetIsDelete())
+		{
+			umCoin = umCoins.erase(umCoin);
+			continue;
+		}
+		umCoin++;
+	}
 
 	posAddObject = WorldSubSystem::GetInstance().GetSubSystem<Camera>()->GetScreenCenterPosition();
+	DebugDrawer::Instance().InformationInput_string_int("playerSpaceNumber %d", playerSpaceNumber);
 }
 
 void CoinManager::Draw()
@@ -160,11 +157,13 @@ void CoinManager::Draw()
 /// </summary>
 void CoinManager::Add()
 {
-	coins.push_back(std::make_shared<CoinObject>());
-	coins.back()->Load(-1,
+	umCoins[addNumber] = std::make_shared<CoinObject>();
+	umCoins.at(addNumber)->Load(addNumber,
 		modelHandle,
 		posAddObject);
-	coins.back()->Initialize();
+	umCoins.at(addNumber)->Initialize();
+
+	addNumber++;
 }
 
 /// <summary>
@@ -212,8 +211,9 @@ void CoinManager::ResultCreate(int coinCount)
 
 	for (int i = 0; i < coinCount; i++)
 	{
-		coins.push_back(std::make_shared<CoinObject>());
-		coins.back()->Load(i,
+		umCoins[i]=std::make_shared<CoinObject>();
+
+		umCoins.at(i)->Load(i,
 			modelHandle,
 			VGet(0.0f, 9.00285912f, -1205.93481f));
 	}
@@ -224,9 +224,9 @@ void CoinManager::ResultCreate(int coinCount)
 /// </summary>
 void CoinManager::ResultInitialize()
 {
-	for (auto& coin : coins)
+	for (auto& coin : umCoins)
 	{
-		coin->ResultInitialize();
+		coin.second->ResultInitialize();
 	}
 	timer = 0.0f;
 	nowCoinCount = 0;
@@ -237,7 +237,7 @@ void CoinManager::ResultInitialize()
 /// </summary>
 void CoinManager::ResultUpdate()
 {
-	const int maxCoinCount = coins.size();
+	const int maxCoinCount = umCoins.size();
 	auto soundPlayer = SubSystemManager::GetInstance().GetSubSystem<SoundPlayer>().lock();
 
 	timer++;
@@ -254,7 +254,7 @@ void CoinManager::ResultUpdate()
 
 	for (int i = 0; i < nowCoinCount; i++)
 	{
-		coins.at(i)->ResultUpdate();
+		umCoins.at(i)->ResultUpdate();
 	}
 }
 

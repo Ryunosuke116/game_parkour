@@ -209,15 +209,13 @@ bool HitCheck::HitConfirmation(
 }
 
 /// <summary>
-/// カプセルから最も近い球を計算
+/// 対象の座標から最も近いカプセルの軸座標を算出
 /// </summary>
 /// <param name="capsulePosition_1"></param>
 /// <param name="capsulePosition_2"></param>
 /// <param name="position"></param>
-/// <param name="radius_1"></param>
-/// <param name="radius_2"></param>
 /// <returns></returns>
-VECTOR HitCheck::CapsuleHitConfirmation(VECTOR capsulePosition_1, VECTOR capsulePosition_2, VECTOR position, const float radius_1, const float radius_2)
+VECTOR HitCheck::CapsuleHitConfirmation(VECTOR capsulePosition_1, VECTOR capsulePosition_2, VECTOR position)
 {
 	VECTOR AB = VSub(capsulePosition_2, capsulePosition_1);
 	VECTOR AP = VSub(position, capsulePosition_1);

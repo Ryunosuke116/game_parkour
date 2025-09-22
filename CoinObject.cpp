@@ -10,15 +10,14 @@
 /// </summary>
 CoinObject::CoinObject():
 	BaseObject(),
-	radian_Y(0.0f),
+	radianY(0.0f),
 	velocity_Y(0.0f),
 	flyAwayVelocity(VGet(0.0f, 0.0f, 0.0f)),
 	flyAwayDirection(VGet(0.0f, 0.0f, 0.0f)),
 	boundsMin(VGet(0.0f, 0.0f, 0.0f)),
 	boundsMax(VGet(0.0f, 0.0f, 0.0f)),
 	isHitPlayer(false),
-	deleteFlag(false),
-	hitFlag(false)
+	isDelete(false)
 {
 
 }
@@ -57,10 +56,9 @@ void CoinObject::Initialize()
 
 	MV1SetPosition(modelHandle, position);
 	velocity_Y = 0.0f;
-	radian_Y = 0.0f;
+	radianY = 0.0f;
 	isHitPlayer = false;
-	deleteFlag = false;
-	hitFlag = false;
+	isDelete = false;
 	isSound = false;
 	boundsMin = VSub(position, addAABB);
 	boundsMax = VAdd(position, addAABB);
@@ -71,36 +69,36 @@ void CoinObject::Initialize()
 /// 更新
 /// </summary>
 /// <param name="effectManager"></param>
-/// <param name="playerpos_top"></param>
-/// <param name="playerPos_bottom"></param>
-/// <param name="radius"></param>
+/// <param name="topPlayerPos"></param>
+/// <param name="bottomPlayerPos"></param>
+/// <param name="playerRadius"></param>
 /// <returns></returns>
 bool CoinObject::Update(
-	const VECTOR& playerpos_top,
-	const VECTOR& playerPos_bottom,
-	const float radius)
+	const VECTOR& topPlayerPos,
+	const VECTOR& bottomPlayerPos,
+	const float playerRadius)
 {
-	VECTOR nearCapsulePos = HitCheck::CapsuleHitConfirmation(playerpos_top, playerPos_bottom, position, radius, 4.5f);
-
-	if (HitCheck::HitConfirmation(position, nearCapsulePos, 4.5f, radius))
-	{
-		hitFlag = true;
-		if (!isSound)
-		{
-			const auto& soundPlayer = SubSystemManager::GetInstance().GetSubSystem<SoundPlayer>().lock();
-			soundPlayer->Play("coinGet");
-			isSound = true;
-		}
-	}
-
 	Rotate();
 
-	if (hitFlag)
+	if (isHitPlayer)
 	{
 		HitPlayerAction();
 	}
 
-	return deleteFlag;
+	return isDelete;
+}
+
+/// <summary>
+/// 更新
+/// </summary>
+void CoinObject::Update()
+{
+	Rotate();
+
+	if (isHitPlayer)
+	{
+		HitPlayerAction();
+	}
 }
 
 /// <summary>
@@ -108,7 +106,6 @@ bool CoinObject::Update(
 /// </summary>
 void CoinObject::Draw()
 {
-	//printfDx("coin: %d", hitFlag);
 	MV1DrawModel(modelHandle);
 }
 
@@ -143,15 +140,15 @@ void CoinObject::ResultUpdate()
 	position = VAdd(position, flyAwayVelocity);
 	flyAwayVelocity.y += gravity;
 
-	radian_Y += 20.0f;
+	radianY += 20.0f;
 
 	//コインモデルを回転させる
-	if (radian_Y >= 360.0f)
+	if (radianY >= 360.0f)
 	{
-		radian_Y = 0.0f;
+		radianY = 0.0f;
 	}
 
-	MV1SetRotationXYZ(modelHandle, VGet(0.0f, radian_Y * DX_PI_F / 180.0f, 0.0f));
+	MV1SetRotationXYZ(modelHandle, VGet(0.0f, radianY * DX_PI_F / 180.0f, 0.0f));
 	MV1SetPosition(modelHandle, position);
 }
 
@@ -161,14 +158,16 @@ void CoinObject::ResultUpdate()
 /// <param name="playerPos"></param>
 void CoinObject::HitPlayerAction()
 {
-	if (velocity_Y <= 8.0f)
+	const float maxVelocityY = 8.0f;
+
+	if (velocity_Y <= maxVelocityY)
 	{
 		velocity_Y += addVelocity;
 		position.y += addVelocity;
 	}
 	else
 	{
-		deleteFlag = true;
+		isDelete = true;
 	}
 
 	MV1SetPosition(modelHandle, position);
@@ -179,21 +178,57 @@ void CoinObject::HitPlayerAction()
 /// </summary>
 void CoinObject::Rotate()
 {
-	if (!hitFlag)
+	const float normalAddRadianY = 1.0f;
+	const float addRadianY = 20.0f;
+
+	if (!isHitPlayer)
 	{
-		radian_Y += 1.0f;
+		radianY += normalAddRadianY;
 	}
 	else
 	{
-		radian_Y += 20.0f;
+		radianY += addRadianY;
 	}
 
 	//コインモデルを回転させる
-	if (radian_Y >= 360.0f)
+	if (radianY >= 360.0f)
 	{
-		radian_Y = 0.0f;
+		radianY = 0.0f;
 	}
 
-	MV1SetRotationXYZ(modelHandle, VGet(0.0f, radian_Y * DX_PI_F / 180.0f, 0.0f));
+	MV1SetRotationXYZ(modelHandle, VGet(0.0f, radianY * DX_PI_F / 180.0f, 0.0f));
+}
+
+/// <summary>
+/// プレイヤーとの接触判定
+/// </summary>
+/// <param name="topPlayerPos"></param>
+/// <param name="bottomPlayerPos"></param>
+/// <param name="playerRadius"></param>
+/// <returns></returns>
+bool CoinObject::IsHitPlayer(const VECTOR& topPlayerPos,
+	const VECTOR& bottomPlayerPos,
+	const float playerRadius)
+{
+	//既に当たっていたら戻る
+	if (isHitPlayer)return false;
+
+	//対象の座標から最も近いカプセルの軸座標を算出
+	VECTOR nearCapsulePos = HitCheck::CapsuleHitConfirmation(topPlayerPos, bottomPlayerPos, position);
+
+	//プレイヤーと接触しているか
+	if (HitCheck::HitConfirmation(position, nearCapsulePos, radius, playerRadius))
+	{
+		isHitPlayer = true;
+		if (!isSound)
+		{
+			const auto& soundPlayer = SubSystemManager::GetInstance().GetSubSystem<SoundPlayer>().lock();
+			soundPlayer->Play("coinGet");
+			isSound = true;
+		}
+		return true;
+	}
+
+	return false;
 }
 

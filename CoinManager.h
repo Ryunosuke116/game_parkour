@@ -32,15 +32,14 @@ public:
 
 	int GetModelHandle()const { return modelHandle; }
 private:
+	std::vector<std::shared_ptr<CoinObject>> activeCoins;
 	std::unordered_map<int, std::shared_ptr<CoinObject>> umCoins;
-	std::vector<std::shared_ptr<CoinObject>> coins;
 	std::vector<std::weak_ptr<CoinObject>> resultUpdateCoins;
 	std::vector<std::weak_ptr<CoinObserver>> observers;
-	std::vector<std::shared_ptr<ObjectForTree<CoinObject>>> OFTs;
-
 	
 	int modelHandle;
 	int nowCoinCount;
+	int addNumber;
 	float timer;
 
 	bool isAddResultUpdateCoin;				//更新するコインを追加するか

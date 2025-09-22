@@ -149,7 +149,6 @@ public:
 				shift = spaceIndex * 3;
 			}
 			xorNumber >>= 3;
-			i++;
 		}
 
 		//上位レベルのどのセルに位置しているかを計算
