@@ -85,11 +85,10 @@ public:
 		//空間の最大数より小さければ登録
 		if (spaceNumber < cellNumber)
 		{
-			//空間がない場合は新規作成
-			if (cellArray.find(spaceNumber) == cellArray.end())
-			{
-				CreateNewCell(spaceNumber);
-			}
+			//空間が生成されてない場合は新規作成
+			CreateNewCell(spaceNumber);
+
+			//登録
 			return cellArray.find(spaceNumber)->second->Push(spOFT);
 		}
 
@@ -101,8 +100,11 @@ public:
 	/// 親空間が作られてなかったら作成する
 	/// </summary>
 	/// <param name="spaceNumber"></param>
-	void CreateNewCell(uint32_t spaceNumber)
+	bool CreateNewCell(uint32_t spaceNumber)
 	{
+		//空間がある場合は抜ける
+		if (cellArray.find(spaceNumber) != cellArray.end()) return false;
+
 		//存在していないなら空間を新規作成する
 		while (cellArray.find(spaceNumber) == cellArray.end())
 		{
@@ -113,6 +115,7 @@ public:
 			spaceNumber = (spaceNumber - 1) >> 3;
 			if (spaceNumber >= cellNumber)break;
 		}
+		return true;
 	}
 
 	/// <summary>
@@ -137,32 +140,30 @@ public:
 		uint32_t xorNumber = rightBottom ^ leftTop;
 		uint32_t spaceIndex = 0;
 		uint32_t shift = 0;
-		int i = 0;
 
 		//空間レベル数分、差があるかチェック
 		for (unsigned int i = 0; i < lowestLevel; i++)
 		{
+			uint32_t checkNumber = (xorNumber >> (i * 3));
 			//3ビット分マスクして
-			if ((xorNumber & 0x7) != 0)
+			if ((checkNumber & 0x7) != 0)
 			{
 				spaceIndex = (i + 1);
 				shift = spaceIndex * 3;
 			}
-			xorNumber >>= 3;
 		}
 
 		//上位レベルのどのセルに位置しているかを計算
 		uint32_t spaceNumber = rightBottom >> shift;
 
 		//最上位空間から現在のレベル空間の位置までの
-		// 遠し番号を求める
-		uint32_t addNumber =
-			(iPow[lowestLevel - spaceIndex] - 1) / 7;
+		// 通し番号を求める
+		uint32_t addNumber = (iPow[lowestLevel - spaceIndex] - 1) / 7;
 
 		spaceNumber += addNumber;
 
 		//計算結果が配列範囲を超える場合はエラー値を返す
-		if (spaceNumber > cellNumber)
+		if (spaceNumber >= cellNumber)
 			return 0xffffffff;
 
 		return spaceNumber;
@@ -213,12 +214,72 @@ public:
 
 	std::shared_ptr<Cell<T>> GetCell(uint32_t spaceNumber) 
 	{ 
-		//空間がない場合は新規作成
+		//空間がない場合は空を返す
 		if (cellArray.find(spaceNumber) == cellArray.end())
 		{
-			CreateNewCell(spaceNumber);
+			return std::shared_ptr<Cell<T>>();
 		}
 		return cellArray.at(spaceNumber); 
+	}
+
+	/// <summary>
+	/// 親番号を計算
+	/// </summary>
+	/// <param name="spaceNumber"></param>
+	/// <returns></returns>
+	uint32_t GetParentNumber(uint32_t spaceNumber)
+	{
+		return spaceNumber - 1 / 8;
+	}
+
+	/// <summary>
+	/// 指定された空間からルート空間までの衝突対象を取得
+	/// </summary>
+	/// <param name="collisionList"></param>
+	/// <param name="spaceNumber"></param>
+	/// <returns></returns>
+	uint32_t GetAllCollisionList(std::vector<std::weak_ptr<T>>& collisionList,
+		uint32_t spaceNumber)
+	{
+		uint32_t nowSpaceNumber = spaceNumber;
+
+		//空間が存在していなければ抜ける
+		if (cellArray.size() == 0)
+		{
+			return 0;
+		}
+
+		for (unsigned int i = nowSpaceNumber; i < lowestLevel; i++)
+		{
+			GetCollisionList(collisionList, nowSpaceNumber);
+
+			uint32_t prevSpaceNumber = nowSpaceNumber;
+			nowSpaceNumber = GetParentNumber(nowSpaceNumber);
+
+			//既にルート空間(0)だった場合は抜ける
+			if (nowSpaceNumber == prevSpaceNumber)break;
+		}
+
+		collisionList.size();
+	}
+
+	bool GetCollisionList(std::vector<std::weak_ptr<T>>& collisionList,
+		uint32_t spaceNumber)
+	{
+		//空間を検索
+		std::shared_ptr<Cell<CoinObject>> cell = GetCell(spaceNumber);
+
+		//空間内に衝突対象が1つも無ければ抜ける
+		if (cell->GetObjectList().size() == 0)return false;
+
+		//空間内のオブジェクトを衝突対象として追加
+		for (auto it = cell->GetObjectList().begin(); it != cell->GetObjectList().end();)
+		{
+			collisionList.push_back((*it)->objectPointer);
+			it++;
+		}
+
+		return true;
 	}
 
 private:

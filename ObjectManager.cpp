@@ -98,6 +98,7 @@ void ObjectManager::Create()
 void ObjectManager::Initialize()
 {
 	L8TreeManager->Initialize(3,BoundaryRange::min,BoundaryRange::max);
+
 	for (auto& manager : managers)
 	{
 		manager->Initialize();

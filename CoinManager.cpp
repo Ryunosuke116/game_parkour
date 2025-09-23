@@ -75,7 +75,8 @@ void CoinManager::Initialize()
 		std::shared_ptr OFT = std::make_shared<ObjectForTree<CoinObject>>();
 		OFT->objectPointer = coin.second;
 	
-		L8TreeManager->Regist(coin.second->GetBoundsMin(),
+		L8TreeManager->Regist(
+			coin.second->GetBoundsMin(),
 			coin.second->GetBoundsMax(),
 			OFT);
 	}
@@ -99,31 +100,36 @@ void CoinManager::Update()
 	//playerのいる空間を検索
 	std::shared_ptr<Cell<CoinObject>> cell = L8TreeManager->GetCell(playerSpaceNumber);
 
-	for (auto it = cell->GetObjectList().begin(); it != cell->GetObjectList().end();)
+	//空間に衝突対象があれば処理を行う
+	if (cell)
 	{
-		auto object = (*it)->objectPointer.lock();
-		
-		if (!object)
+		//セル内のオブジェクトリストを走査
+		for (auto it = cell->GetObjectList().begin(); it != cell->GetObjectList().end();)
 		{
+			auto object = (*it)->objectPointer.lock();
+
+			if (!object)
+			{
+				it++;
+				continue;
+			}
+
+			//playerと当たっていたら削除する
+			if (object->IsHitPlayer(spPlayerManager->GetPlayer()->GetTopPos(),
+				spPlayerManager->GetPlayer()->GetBottomPos(),
+				spPlayerManager->GetPlayer()->GetRadius()
+			))
+			{
+				//コイン取得を通知
+				NotifyCoinPicked(coinValue);
+
+				//空間オブジェクトリストからコインを削除
+				it = cell->OnRemove(it);
+				continue;
+			}
+
 			it++;
-			continue;
 		}
-
-		//playerと当たっていたら削除する
-		if (object->IsHitPlayer(spPlayerManager->GetPlayer()->GetTopPos(),
-			spPlayerManager->GetPlayer()->GetBottomPos(),
-			spPlayerManager->GetPlayer()->GetRadius()
-		))
-		{
-			//コイン取得を通知
-			NotifyCoinPicked(coinValue);
-
-			//空間オブジェクトリストからコインを削除
-			it = cell->OnRemove(it);
-			continue;
-		}
-
-		it++;
 	}
 
 	for (auto umCoin = umCoins.begin(); umCoin != umCoins.end();)
@@ -237,7 +243,7 @@ void CoinManager::ResultInitialize()
 /// </summary>
 void CoinManager::ResultUpdate()
 {
-	const int maxCoinCount = umCoins.size();
+	const size_t maxCoinCount = umCoins.size();
 	auto soundPlayer = SubSystemManager::GetInstance().GetSubSystem<SoundPlayer>().lock();
 
 	timer++;

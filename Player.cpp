@@ -483,9 +483,9 @@ void Player::DebugUpdate()
 
     //string_int
     DebugDrawer::Instance().InformationInput_string_int("frameåªç›êî%d\n", nowFrameNumber);
+    DebugDrawer::Instance().InformationInput_string_int("coinCount %f\n", coinCount);
 
     //string_flaot
-    DebugDrawer::Instance().InformationInput_string_float("coinCount %f\n", coinCount);
     DebugDrawer::Instance().InformationInput_string_float("JoyPad_x_left %f\n", -PadInput::GetJoyPad_x_left());
     DebugDrawer::Instance().InformationInput_string_float("JoyPad_y_left %f\n", -PadInput::GetJoyPad_y_left());
     DebugDrawer::Instance().InformationInput_string_float("degree_pad_now %f\n", degree_pad_now);
