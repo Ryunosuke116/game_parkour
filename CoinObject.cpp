@@ -100,8 +100,6 @@ void CoinObject::Update()
 	{
 		HitPlayerAction();
 	}
-
-	DebugDrawer::Instance().InformationInput_AABB(boundsMin, boundsMax, GetColor(255, 0, 0));
 }
 
 /// <summary>

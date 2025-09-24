@@ -9,6 +9,7 @@
 #include "IObject.h"
 #include "WorldSubSystem.h"
 #include "boundaryRange.h"
+#include "DebugDrawer.h"
 
 template <class T>
 class Liner8TreeManager :
@@ -176,10 +177,25 @@ public:
 	/// <returns></returns>
 	uint32_t GetPointElem(const VECTOR& point)
 	{
+		const int maxIndex = (1 << lowestLevel) - 1;
+
+		//軸ごとの座標からセルインデックスを求める
+		auto computeAxisIndex = [&](float axisValue, float axisMin, float cellSize)->uint32_t {
+			float cellCoordFloat = (axisValue - axisMin) / cellSize;
+			int cellIndex = static_cast<int>(std::floor(cellCoordFloat));
+			if (cellIndex < 0) cellIndex = 0;
+			if (cellIndex > maxIndex) cellIndex = maxIndex;
+			return  static_cast<uint32_t>(cellIndex);
+		};
+
+		uint32_t uintX = computeAxisIndex(point.x, regionMin.x, regionSideLength.x);
+		uint32_t uintY = computeAxisIndex(point.y, regionMin.y, regionSideLength.y);
+		uint32_t uintZ = computeAxisIndex(point.z, regionMin.z, regionSideLength.z);
+
 		return Get3DMortonNumber(
-			(BYTE)((point.x - regionMin.x) / regionSideLength.x),
-			(BYTE)((point.y - regionMin.y) / regionSideLength.y),
-			(BYTE)((point.z - regionMin.z) / regionSideLength.z)
+			static_cast<BYTE>(uintX),
+			static_cast<BYTE>(uintY),
+			static_cast<BYTE>(uintZ)
 			);
 	}
 

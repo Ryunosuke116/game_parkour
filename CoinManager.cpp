@@ -113,6 +113,8 @@ void CoinManager::Update()
 			continue;
 		}
 
+		DebugDrawer::Instance().InformationInput_AABB(coin->GetBoundsMin(), coin->GetBoundsMax(), GetColor(255, 0, 0));
+
 		//player‚Æ“–‚½‚Á‚Ä‚¢‚½‚çíœ‚·‚é
 		if (coin->IsHitPlayer(spPlayerManager->GetPlayer()->GetTopPos(),
 			spPlayerManager->GetPlayer()->GetBottomPos(),
