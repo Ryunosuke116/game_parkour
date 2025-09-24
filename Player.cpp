@@ -16,7 +16,7 @@
 #include "SubSystemManager.h"
 
 /// <summary>
-/// /インストラクタ
+/// コンストラクタ
 /// </summary>
 Player::Player() :
     BaseChara(),

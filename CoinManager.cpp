@@ -31,7 +31,7 @@ CoinManager::~CoinManager()
 {
 	umCoins.clear();
 	resultUpdateCoins.clear();
-	int a = MV1DeleteModel(modelHandle);
+	MV1DeleteModel(modelHandle);
 	observers.clear();
 }
 
@@ -100,38 +100,56 @@ void CoinManager::Update()
 	//playerのいる空間を検索
 	std::shared_ptr<Cell<CoinObject>> cell = L8TreeManager->GetCell(playerSpaceNumber);
 
-	//空間に衝突対象があれば処理を行う
-	if (cell)
+	//衝突する可能性のあるオブジェクトを走査する
+	std::vector<std::weak_ptr<ObjectForTree<CoinObject>>> coinList;
+	L8TreeManager->GetAllCollisionList(coinList, playerSpaceNumber);
+
+	for (auto it = coinList.begin(); it != coinList.end();)
 	{
-		//セル内のオブジェクトリストを走査
-		for (auto it = cell->GetObjectList().begin(); it != cell->GetObjectList().end();)
+		std::shared_ptr<CoinObject> coin = it->lock()->objectPointer.lock();
+		if (!coin)
 		{
-			auto object = (*it)->objectPointer.lock();
-
-			if (!object)
-			{
-				it++;
-				continue;
-			}
-
-			//playerと当たっていたら削除する
-			if (object->IsHitPlayer(spPlayerManager->GetPlayer()->GetTopPos(),
-				spPlayerManager->GetPlayer()->GetBottomPos(),
-				spPlayerManager->GetPlayer()->GetRadius()
-			))
-			{
-				//コイン取得を通知
-				NotifyCoinPicked(coinValue);
-
-				//空間オブジェクトリストからコインを削除
-				it = cell->OnRemove(it);
-				continue;
-			}
-
 			it++;
+			continue;
 		}
+
+		//playerと当たっていたら削除する
+		if (coin->IsHitPlayer(spPlayerManager->GetPlayer()->GetTopPos(),
+			spPlayerManager->GetPlayer()->GetBottomPos(),
+			spPlayerManager->GetPlayer()->GetRadius()
+		))
+		{
+			std::shared_ptr<Cell<CoinObject>> cell = it->lock()->cellPointer.lock();
+
+			//空間のobjectリストからも削除する
+			if (cell)
+			{
+				std::shared_ptr<ObjectForTree<CoinObject>> spOFT = it->lock();	//shared型のOFT
+				auto& objectList = cell->GetObjectList();						//空間内のobjectリスト
+			
+				for (auto objectIt = objectList.begin(); objectIt != objectList.end(); objectIt++)
+				{
+					if (objectIt->get() == spOFT.get())
+					{
+						cell->OnRemove(objectIt);
+						break;
+					}
+				}
+			}
+
+			//コイン取得を通知
+			NotifyCoinPicked(coinValue);
+
+			//空間オブジェクトリストからコインを削除
+			it = coinList.erase(it);
+
+			continue;
+		}
+
+		it++;
 	}
 
+	//全コインの更新処理
 	for (auto umCoin = umCoins.begin(); umCoin != umCoins.end();)
 	{
 		umCoin->second->Update();

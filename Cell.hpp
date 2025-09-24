@@ -5,10 +5,9 @@
 #include "ObjectForTree.hpp"
 
 template<class T>
-class Cell
+class Cell : public std::enable_shared_from_this<Cell<T>>
 {
 public:
-
 	/// <summary>
 	/// オブジェクトを空間に登録
 	/// </summary>
@@ -18,14 +17,17 @@ public:
 		//無効なオブジェクトは登録しない
 		if (spOFT.get() == NULL)return false;
 
+		auto self = this->shared_from_this();
+
 		//二重登録チェック
-		if (spOFT->cellPointer == this)return false;
+		if (spOFT->cellPointer.lock() == self)return false;
 
 		//空間に新規登録する
 		objectList.push_back(spOFT);
 
+
 		//この空間に登録されていることを通知
-		spOFT->RegistCell(this);
+		spOFT->RegistCell(self);
 	}
 
 	/// <summary>

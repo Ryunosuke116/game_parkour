@@ -97,7 +97,8 @@ void ObjectManager::Create()
 /// </summary>
 void ObjectManager::Initialize()
 {
-	L8TreeManager->Initialize(3,BoundaryRange::min,BoundaryRange::max);
+	const int spaceLevel = 6;
+	L8TreeManager->Initialize(spaceLevel, BoundaryRange::min, BoundaryRange::max);
 
 	for (auto& manager : managers)
 	{

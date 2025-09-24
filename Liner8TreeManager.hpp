@@ -229,7 +229,14 @@ public:
 	/// <returns></returns>
 	uint32_t GetParentNumber(uint32_t spaceNumber)
 	{
-		return spaceNumber - 1 / 8;
+		//現空間が7以下の場合は親空間は0が確定しているので0を返す
+		//現空間0の場合も親がないので０を返す
+		if (spaceNumber <= 7)
+		{
+			return 0;
+		}
+
+		return (spaceNumber - 1) / 8;
 	}
 
 	/// <summary>
@@ -238,9 +245,12 @@ public:
 	/// <param name="collisionList"></param>
 	/// <param name="spaceNumber"></param>
 	/// <returns></returns>
-	uint32_t GetAllCollisionList(std::vector<std::weak_ptr<T>>& collisionList,
+	uint32_t GetAllCollisionList(std::vector<std::weak_ptr<ObjectForTree<T>>>& collisionList,
 		uint32_t spaceNumber)
 	{
+		//中身を初期化
+		collisionList.clear();
+
 		uint32_t nowSpaceNumber = spaceNumber;
 
 		//空間が存在していなければ抜ける
@@ -248,8 +258,9 @@ public:
 		{
 			return 0;
 		}
-
-		for (unsigned int i = nowSpaceNumber; i < lowestLevel; i++)
+		
+		//深度分走査する
+		for (unsigned int i = 0; i < lowestLevel; i++)
 		{
 			GetCollisionList(collisionList, nowSpaceNumber);
 
@@ -260,14 +271,17 @@ public:
 			if (nowSpaceNumber == prevSpaceNumber)break;
 		}
 
-		collisionList.size();
+		return collisionList.size();
 	}
 
-	bool GetCollisionList(std::vector<std::weak_ptr<T>>& collisionList,
+	bool GetCollisionList(std::vector<std::weak_ptr<ObjectForTree<T>>>& collisionList,
 		uint32_t spaceNumber)
 	{
 		//空間を検索
-		std::shared_ptr<Cell<CoinObject>> cell = GetCell(spaceNumber);
+		std::shared_ptr<Cell<T>> cell = GetCell(spaceNumber);
+
+		//空間が存在しなければ抜ける
+		if (cell == nullptr)return false;
 
 		//空間内に衝突対象が1つも無ければ抜ける
 		if (cell->GetObjectList().size() == 0)return false;
@@ -275,7 +289,8 @@ public:
 		//空間内のオブジェクトを衝突対象として追加
 		for (auto it = cell->GetObjectList().begin(); it != cell->GetObjectList().end();)
 		{
-			collisionList.push_back((*it)->objectPointer);
+			std::weak_ptr<ObjectForTree<T>> OFT = *it;
+			collisionList.push_back(OFT);
 			it++;
 		}
 
@@ -283,7 +298,7 @@ public:
 	}
 
 private:
-	static constexpr uint32_t maxLevel = 4;	//空間分割の最大レベル
+	static constexpr uint32_t maxLevel = 8;	//空間分割の最大レベル
 
 	unsigned int iPow[maxLevel + 1];	//べき乗数値配列
 	VECTOR regionWidth;				//領域の幅
