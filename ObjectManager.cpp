@@ -331,8 +331,8 @@ void ObjectManager::ResultCreate(int coinCount)
 	//managerの生成
 	managers.push_back(std::make_shared<CollisionObjectManager>());
 	managers.push_back(std::make_shared<PlayerManager>());
-	managers.push_back(std::make_shared<UIManager>());
 	managers.push_back(std::make_shared<CoinManager>());
+	managers.push_back(std::make_shared<UIManager>());
 
 	//アップキャスト
 	shadow_actual = std::dynamic_pointer_cast<Shadow>(objects.at(shadowObjectNumber));
@@ -343,6 +343,12 @@ void ObjectManager::ResultCreate(int coinCount)
 		if (auto coinManager = std::dynamic_pointer_cast<CoinManager>(manager))
 		{
 			coinManager->ResultCreate(coinCount);
+			continue;
+		}
+
+		if (auto uiManager = std::dynamic_pointer_cast<UIManager>(manager))
+		{
+			uiManager->ResultCreate(coinCount);
 			continue;
 		}
 		manager->ResultCreate();

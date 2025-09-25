@@ -16,11 +16,13 @@ public:
 	void Update()		override;
 	void Draw()			override;
 	void Add()			override{}
-	void ResultCreate()override;
+	void ResultCreate()override{}
 	void ResultInitialize()override;
 	void ResultUpdate()override;
 
+	void ResultCreate(const int coinCount);
 	void Add(std::shared_ptr<BaseUI> ui);
+	void ResultAdd(std::shared_ptr<BaseUI> ui);
 
 	std::shared_ptr<UI_coin> GetUI_coin()
 	{

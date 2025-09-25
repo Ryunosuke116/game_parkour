@@ -3,6 +3,7 @@
 #include <memory>
 #include "UIManager.h"
 #include "JsonManager.h"
+#include "Rank.h"
 
 UIManager::UIManager() :
 	BaseGameObjectManager()
@@ -20,19 +21,17 @@ void UIManager::Create()
 	Add(std::make_shared<UI_coin>());
 	Add(std::make_shared<UI_controlManual>());
 	Add(std::make_shared<GameTimer>());
+
+	for (auto& UI : ui_list)
+	{
+		UI->Create();
+	}
 }
 
 void UIManager::Initialize()
 {
-	const int coin_x = 30;
-	const int coin_y = 700;
-
 	for (auto& UI : ui_list)
 	{
-		if (auto ui_coin = std::dynamic_pointer_cast<UI_coin>(UI))
-		{
-			ui_coin->SetCoinPos(coin_x, coin_y);
-		}
 		UI->Initialize();
 	}
 }
@@ -55,18 +54,34 @@ void UIManager::Draw()
 
 void UIManager::Add(std::shared_ptr<BaseUI> ui)
 {
-	nlohmann::json data = JsonManager::GetInstance().GetJsons("png");
 	ui_list.push_back(ui);
-	ui_list.back()->Load(data[ui_list.back()->GetJsonTag()]);
 }
+
 
 /// <summary>
 /// リザルトシーン時の生成
 /// </summary>
 /// <param name="coinCount"></param>
-void UIManager::ResultCreate()
+void UIManager::ResultCreate(const int coinCount)
 {
-	//処理なし
+	ResultAdd(std::make_shared<Rank>());
+	ResultAdd(std::make_shared<UI_coin>());
+
+	for (auto& UI : ui_list)
+	{
+		if (auto ui_coin = std::dynamic_pointer_cast<UI_coin>(UI))
+		{
+			ui_coin->ResultCreate(coinCount);
+			continue;
+		}
+		if(auto ui_coin = std::dynamic_pointer_cast<Rank>(UI))
+		{
+			ui_coin->ResultCreate(coinCount);
+			continue;
+		}
+
+		UI->ResultCreate();
+	}
 }
 
 /// <summary>
@@ -96,4 +111,9 @@ void UIManager::ResultUpdate()
 	{
 		UI->ResultUpdate();
 	}
+}
+
+void UIManager::ResultAdd(std::shared_ptr<BaseUI> ui)
+{
+	ui_list.push_back(ui);
 }

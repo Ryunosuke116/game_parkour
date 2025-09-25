@@ -10,3 +10,4 @@
 #include "BracedHangToCrouch.h"
 #include "PlayerStateBase.h"
 #include "Walk.h"
+#include "Victory.h"

@@ -16,7 +16,7 @@ Idle::Idle(int& modelHandle,
     AnimState& oldAnimState, AnimState& nowAnimState, PlayerData& playerData) :
     PlayerStateBase(modelHandle, oldAnimState, nowAnimState)
 {
-
+    this->nowAnimState.PlayAnimSpeed = playAnimSpeed;
 }
 
 /// <summary>

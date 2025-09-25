@@ -3,6 +3,7 @@
 #include <unordered_map>
 #include "UI_controlManual.h"
 #include "AnimTime.h"
+#include "JsonManager.h"
 
 UI_controlManual::UI_controlManual():
 	BaseUI()
@@ -23,13 +24,18 @@ UI_controlManual::~UI_controlManual()
 
 void UI_controlManual::Load(const nlohmann::json& jsonData)
 {
-	for (auto& data : jsonData)
+	for (auto& data : jsonData["controlManual"])
 	{
 		std::string path = data[0];
 		std::string name = data[1];
 
 		uiHandles[name] = LoadGraph(path.c_str());
 	}
+}
+
+void UI_controlManual::Create()
+{
+	Load(JsonManager::GetInstance().GetJsons("png"));
 }
 
 void UI_controlManual::Initialize()

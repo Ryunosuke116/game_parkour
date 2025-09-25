@@ -1,7 +1,7 @@
 #include "common.h"
 #include <algorithm>
 #include "UI_coin.h"
-
+#include "JsonManager.h"
 
 UI_coin::UI_coin() :
 	BaseUI(),
@@ -32,7 +32,7 @@ void UI_coin::Load(const nlohmann::json& jsonData)
 {
 	std::unordered_map<std::string, std::string> uiPath;
 
-	for (auto& data : jsonData)
+	for (auto& data : jsonData["coin"])
 	{
 		std::string path = data[0];
 		std::string name = data[1];
@@ -46,18 +46,38 @@ void UI_coin::Load(const nlohmann::json& jsonData)
 		10, 10, 1, 32, 64, numberHandle);
 }
 
+void UI_coin::Create()
+{
+	Load(JsonManager::GetInstance().GetJsons("png"));
+}
+
+/// <summary>
+/// 初期化
+/// </summary>
 void UI_coin::Initialize()
 {
+	const int coin_x = 30;
+	const int coin_y = 700;
 	const int addInitCrossX = 105;
 	const int addInitCrossY = 30;
 	const int addInitNumberX = 140;
 	const int addInitNumberY = 30;
 	const std::string initNumber = "00";
 
+	x = coin_x;
+	y = coin_y;
 	cross_x = x + addInitCrossX;
 	cross_y = y + addInitCrossY;
 	number_x = x + addInitNumberX;
 	number_y = y + addInitNumberY;
+
+	coinWidth = 100;
+	coinHeight = 112;
+	crossWidth = 26;
+	crossHeight = 64;
+	numberWidth = 32;
+	numberHeight = 64;
+	addNumberX = 32;
 
 	countNumber = initNumber;
 	coinCount = 0;
@@ -76,9 +96,17 @@ void UI_coin::Update()
 
 void UI_coin::Draw()
 {
-	const int addNumber_x = 32;
-
-	DrawGraph(x, y, coinHandle, TRUE);
+	//コインイラスト描画
+	DrawExtendGraph(x, y, 
+		x + coinWidth, y + coinHeight, 
+		coinHandle, TRUE);
+	//DrawGraph(x, y, coinHandle, TRUE);
+	
+	//×描画
+	DrawExtendGraph(cross_x, cross_y,
+		cross_x + crossWidth, cross_y + crossHeight,
+		crossHandle, TRUE);
+	//DrawGraph(cross_x, cross_y, crossHandle, TRUE);
 
 	int num_x = number_x;
 
@@ -86,22 +114,25 @@ void UI_coin::Draw()
 	for (char c : countNumber)
 	{
 		int digit = c - '0';
-		DrawGraph(num_x, number_y, numberHandle[digit], TRUE);
+		DrawExtendGraph(num_x, number_y,
+			num_x + numberWidth, number_y + numberHeight,
+			numberHandle[digit], TRUE);
+		//DrawGraph(num_x, number_y, numberHandle[digit], TRUE);
 
 		//文字の幅分ずらす
-		num_x += addNumber_x;
+		num_x += addNumberX;
 	}
-
-	DrawGraph(cross_x, cross_y, crossHandle, TRUE);
+	
 }
 
 /// <summary>
 /// リザルトシーン時の生成
 /// </summary>
 /// <param name="coinCount"></param>
-void UI_coin::ResultCreate()
+void UI_coin::ResultCreate(const int coinCount)
 {
-	//処理なし
+	this->coinCount = coinCount;
+	Load(JsonManager::GetInstance().GetJsons("png"));
 }
 
 /// <summary>
@@ -109,7 +140,31 @@ void UI_coin::ResultCreate()
 /// </summary>
 void UI_coin::ResultInitialize()
 {
-	Initialize();
+	const int coin_x = 1000;
+	const int coin_y = 650;
+	const int addInitCrossX = 155;
+	const int addInitCrossY = 30;
+	const int addInitNumberX = 240;
+	const int addInitNumberY = 30;
+	const std::string initNumber = "00";
+
+	x = coin_x;
+	y = coin_y;
+	cross_x = x + addInitCrossX;
+	cross_y = y + addInitCrossY;
+	number_x = x + addInitNumberX;
+	number_y = y + addInitNumberY;
+
+	coinWidth = 150;
+	coinHeight = 162;
+	crossWidth = 76;
+	crossHeight = 114;
+	numberWidth = 82;
+	numberHeight = 114;
+	addNumberX = 82;
+
+	countNumber = initNumber;
+	coinCount = 0;
 }
 
 /// <summary>

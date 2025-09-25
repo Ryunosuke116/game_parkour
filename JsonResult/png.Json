@@ -1,10 +1,18 @@
 {
   "speechBubble": "material/png/fukidashi.png",
+
   "rankList": [
     [ "material/png/rank_D.png", "D" ],
     [ "material/png/rank_C.png", "C" ],
     [ "material/png/rank_B.png", "B" ],
     [ "material/png/rank_A.png", "A" ],
     [ "material/png/rank_S.png", "S" ]
+  ],
+
+  "coin": [
+    [ "material/png/coin_2d.png", "coin" ],
+    [ "material/png/number_font/x_32x64.png", "cross" ],
+    [ "material/png/suuji32x64_07.png", "number" ]
+
   ]
 }

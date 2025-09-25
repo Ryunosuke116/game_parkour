@@ -546,8 +546,8 @@ void Camera::ResultCreate()
 void Camera::ResultInitialize()
 {
 	Initialize();
-	normalLinearProgress = 0.2f;
-	normalCameraDistanceSize = 100.0f;
+	normalLinearProgress = 0.5f;
+	normalCameraDistanceSize = 3.0f;
 }
 
 /// <summary>
@@ -562,6 +562,7 @@ void Camera::ResultUpdate()
 
 	centerPointSpherePos = WorldSubSystem::GetInstance().GetSubSystem<PlayerManager>()->GetPosition();
 	centerPointSpherePos.y += addCenterPos;
+	centerPointSpherePos.x -= 3.0f;
 	
 	//íçéãÇ∑ÇÈç¿ïWÇ©ÇÁplayerÇ™Ç∏ÇÍÇΩÇÁèCê≥Ç∑ÇÈ
 	PosCalc();

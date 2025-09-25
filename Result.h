@@ -16,12 +16,9 @@ public:
 	void Update();
 	void Draw();
 
-	void Add(std::shared_ptr<BaseUI> ui);
-
 	std::string GetJsonTag() { return jsonTag; }
 
 private:
-	std::vector<std::shared_ptr<BaseUI>> ui_list;
 	std::shared_ptr<ObjectManager> objectManager;
 
 	int modelHandle;

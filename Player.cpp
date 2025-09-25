@@ -37,14 +37,6 @@ Player::~Player()
 
 }
 
-void Player::Create()
-{
-    const std::string jsonName = "player";
-    Load(JsonManager::GetInstance().GetJsons(jsonName));
-    playerCalculation = std::make_shared<PlayerCalculation>();
-    animationChanger = std::make_shared<AnimationChanger>();
-    MV1SetScale(modelHandle, VGet(modelScale, modelScale, modelScale));
-}
 
 /// <summary>
 /// ì«Ç›çûÇ›
@@ -54,6 +46,15 @@ void Player::Load(const nlohmann::json& jsonData)
 {
     std::string path = jsonData["playerPath"];
     modelHandle = MV1LoadModel(path.c_str());
+}
+
+void Player::Create()
+{
+    const std::string jsonName = "player";
+    Load(JsonManager::GetInstance().GetJsons(jsonName));
+    playerCalculation = std::make_shared<PlayerCalculation>();
+    animationChanger = std::make_shared<AnimationChanger>();
+    MV1SetScale(modelHandle, VGet(modelScale, modelScale, modelScale));
 }
 
 /// <summary>
@@ -274,7 +275,7 @@ void Player::ResultInitialize()
 
     MV1SetRotationXYZ(modelHandle, VGet(rotate_x * DX_PI_F / 180.0f, radian + DX_PI_F, 0.0f));
 
-    animationChanger->ResultInitialize(animNum::idle, modelHandle, nowState, playerData, *this);
+    animationChanger->ResultInitialize(animNum::victory, modelHandle, nowState, playerData, *this);
 }
 
 /// <summary>

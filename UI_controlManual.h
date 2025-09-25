@@ -8,7 +8,7 @@ public:
 	UI_controlManual();
 	~UI_controlManual();
 
-	void Create()override {}
+	void Create()override;
 	void Add()override{}
 	void Load(const nlohmann::json& jsonData)override;
 	void Initialize()override;

@@ -54,19 +54,19 @@ void Rank::Load(const nlohmann::json& jsonData)
     }
 }
 
-void Rank::Create(int coinCount)
+void Rank::ResultCreate(const int coinCount)
 {
     this->coinCount = coinCount;
     Load(JsonManager::GetInstance().GetJsons(jsonTag));
 }
 
-void Rank::Initialize()
+void Rank::ResultInitialize()
 {
     x = 400;
     y = 150;
 }
 
-void Rank::Update()
+void Rank::ResultUpdate()
 {
 
 }
@@ -74,6 +74,6 @@ void Rank::Update()
 void Rank::Draw()
 {
    // DrawGraph(x, y, rankHandle, TRUE);
-    DrawExtendGraph(250, 0, 850, 600, speechBubbleHandle, TRUE);
-    DrawExtendGraph(x, y, 700, 450, rankHandle, TRUE);
+    DrawExtendGraph(850, 0, 1450, 600, speechBubbleHandle, TRUE);
+    DrawExtendGraph(1000, y, 1300, 450, rankHandle, TRUE);
 }

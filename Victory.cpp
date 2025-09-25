@@ -17,7 +17,7 @@ Victory::Victory(int& modelHandle, AnimState& oldAnimState,
     AnimState& nowAnimState, PlayerData& playerData) :
     PlayerStateBase(modelHandle, oldAnimState, nowAnimState)
 {
-
+    this->nowAnimState.PlayAnimSpeed = playAnimSpeed;
 }
 
 /// @brief デストラクタ
@@ -26,19 +26,18 @@ Victory::~Victory()
 
 }
 
-/// @brief 初期化
-void Victory::Initialize(int& modelHandle, const int changeNum, Player& player)
-{
-    this->nowAnimState.PlayAnimSpeed = playAnimSpeed;
-}
-
 /// @brief 更新処理
 std::pair<VECTOR, PlayerData> Victory::Update(
     const VECTOR& cameraDirection,
     const std::vector<std::weak_ptr<BaseObject>>& fieldObjects,
     Player& player)
 {
+    VECTOR moveDirection = VGet(0.0f, 0.0f, 0.0f);
 
+    //データを取得
+    PlayerData playerData = player.GetData();
+
+    return std::make_pair(moveDirection, playerData);
 }
 
 bool Victory::MotionUpdate(PlayerData& playerData)
@@ -59,17 +58,15 @@ bool Victory::MotionUpdate(PlayerData& playerData)
 
     if (nowAnimState.AttachIndex != -1)
     {
-
-        // アタッチしたアニメーションの総再生時間を取得する
-        totalTime_anim = MV1GetAttachAnimTotalTime(modelHandle, nowAnimState.AttachIndex);
+        float poseFrame = 32.0f;
 
         //再生時間更新
         nowAnimState.PlayTime_anim += nowAnimState.PlayAnimSpeed;
 
-        //総再生時間を超えたらリセット
-        if (nowAnimState.PlayTime_anim >= totalTime_anim)
+        //32f(決めポーズ時)になったらそこでアニメーションを停止する
+        if (nowAnimState.PlayTime_anim >= poseFrame)
         {
-            nowAnimState.PlayTime_anim = totalTime_anim;
+            nowAnimState.PlayTime_anim = poseFrame;
         }
 
         // 再生時間をセットする
@@ -78,8 +75,15 @@ bool Victory::MotionUpdate(PlayerData& playerData)
         //アニメーションのモデルに対する反映率をセット
         MV1SetAttachAnimBlendRate(modelHandle, nowAnimState.AttachIndex, animBlendRate);
     }
+    return flag;
 }
 
+VECTOR Victory::Command(const VECTOR& cameraDirection, PlayerData& playerData, Player& player)
+{
+    VECTOR moveDirection = VGet(0.0f, 0.0f, 0.0f);
+
+    return moveDirection;
+}
 
 void Victory::Enter(PlayerData& playerData)
 {

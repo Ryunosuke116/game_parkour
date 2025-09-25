@@ -46,14 +46,14 @@ void AnimationChanger::ResultInitialize(
 {
     animNumber_Now = num;
     //newState‚ğ¶¬
-    nowState = std::make_shared<Idle>(modelHandle,
+    nowState = std::make_shared<Victory>(modelHandle,
         oldAnimState,
         nowAnimState,
         playerData);
 
     nowState->SetAnimNumber_old(animNumber_Now);
 
-    nowState->Initialize(modelHandle, animNumber_Now, player);
+      nowState->Initialize(modelHandle, animNumber_Now, player);
     nowState->Enter(playerData);
 }
 
