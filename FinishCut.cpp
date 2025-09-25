@@ -9,8 +9,8 @@ FinishCut::FinishCut() :
 	finishHandle(-1),
 	x_finishGraph(-1),
 	y_finishGraph(-1),
-	finishGraph_timer(-1),
-	isDraw_finish(false)
+	finishGraphTimer(-1),
+	isDrawFinish(false)
 {
 	tag = "png";
 }
@@ -37,20 +37,22 @@ void FinishCut::Load(const nlohmann::json& jsonData)
 
 void FinishCut::Initialize()
 {
-	isDraw_finish = false;
-	finishGraph_timer = 0.0f;
+	isDrawFinish = true;
+	finishGraphTimer = 0.0f;
 	x_finishGraph = 600;
 	y_finishGraph = 350;
 }
 
 bool FinishCut::Update()
 {
-	if (isDraw_finish)
+	const int maxFinishGraphTimer = 50.0f;
+
+	if (isDrawFinish)
 	{
-		finishGraph_timer++;
-		if (finishGraph_timer >= 50.0f)
+		finishGraphTimer++;
+		if (finishGraphTimer >= maxFinishGraphTimer)
 		{
-			isDraw_finish = false;
+			isDrawFinish = false;
 			return false;
 		}
 	}
@@ -59,7 +61,7 @@ bool FinishCut::Update()
 
 void FinishCut::Draw()
 {
-	if (isDraw_finish)
+	if (isDrawFinish)
 	{
 		DrawGraph(x_finishGraph, y_finishGraph, finishHandle, TRUE);
 	}

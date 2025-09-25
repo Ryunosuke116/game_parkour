@@ -202,6 +202,7 @@
     <ClCompile Include="UIManager.cpp" />
     <ClCompile Include="UI_coin.cpp" />
     <ClCompile Include="UI_controlManual.cpp" />
+    <ClCompile Include="Victory.cpp" />
     <ClCompile Include="Walk.cpp" />
     <ClCompile Include="WorldSubSystem.cpp" />
   </ItemGroup>
@@ -281,6 +282,7 @@
     <ClInclude Include="UIManager.h" />
     <ClInclude Include="UI_coin.h" />
     <ClInclude Include="UI_controlManual.h" />
+    <ClInclude Include="Victory.h" />
     <ClInclude Include="Walk.h" />
     <ClInclude Include="WorldSubSystem.h" />
   </ItemGroup>
@@ -298,7 +300,7 @@
     <None Include="JsonResult\field.Json" />
     <None Include="JsonResult\object.Json" />
     <None Include="JsonResult\player.Json" />
-    <None Include="JsonResult\rank.Json" />
+    <None Include="JsonResult\png.Json" />
     <None Include="JsonResult\sound.Json" />
     <None Include="JsonTitle\png.Json" />
     <None Include="JsonTitle\sound.Json" />

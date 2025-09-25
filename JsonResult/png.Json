@@ -1,5 +1,6 @@
 {
-  "pathList": [
+  "speechBubble": "material/png/fukidashi.png",
+  "rankList": [
     [ "material/png/rank_D.png", "D" ],
     [ "material/png/rank_C.png", "C" ],
     [ "material/png/rank_B.png", "B" ],

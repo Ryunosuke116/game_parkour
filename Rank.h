@@ -21,6 +21,7 @@ public:
 
 private:
 	int rankHandle;
+	int speechBubbleHandle;
 	int coinCount;
 };
 

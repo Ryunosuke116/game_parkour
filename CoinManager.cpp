@@ -270,7 +270,7 @@ void CoinManager::ResultUpdate()
 	//タイマーが規定値を超えたら更新処理するコインを追加する
 	if (timer >= maxAddResultUpdateCoinTimer)
 	{
-		if (nowCoinCount <= maxCoinCount)
+		if (nowCoinCount < maxCoinCount)
 		{
 			nowCoinCount++;
 			soundPlayer->Play("coinGet");

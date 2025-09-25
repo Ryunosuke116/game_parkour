@@ -244,6 +244,9 @@
     <Filter Include="ソース ファイル\Liner8TreeManager">
       <UniqueIdentifier>{89701cc4-9c02-4c3e-830a-802cecef408b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\object\game\player\state\victory">
+      <UniqueIdentifier>{6f317ff4-7e3c-45ef-99db-c178aa380761}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -428,6 +431,9 @@
     </ClCompile>
     <ClCompile Include="Liner8TreeManager.cpp">
       <Filter>ソース ファイル\Liner8TreeManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Victory.cpp">
+      <Filter>ソース ファイル\object\game\player\state\victory</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -662,6 +668,9 @@
     <ClInclude Include="boundaryRange.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="Victory.h">
+      <Filter>ソース ファイル\object\game\player\state\victory</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="JsonGame\coin.Json">
@@ -712,7 +721,7 @@
     <None Include="JsonResult\sound.Json">
       <Filter>ヘッダー ファイル\JsonResult</Filter>
     </None>
-    <None Include="JsonResult\rank.Json">
+    <None Include="JsonResult\png.Json">
       <Filter>ヘッダー ファイル\JsonResult</Filter>
     </None>
   </ItemGroup>

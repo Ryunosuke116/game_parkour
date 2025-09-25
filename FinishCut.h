@@ -14,16 +14,16 @@ public:
 
 	std::string GetTag() { return tag; }
 
-	void SetIsDraw_finish(const bool set) { isDraw_finish = set; }
+	void SetIsDrawFinish(const bool set) { isDrawFinish = set; }
 
 private:
 	int finishHandle;
 	int x_finishGraph;
 	int y_finishGraph;
 
-	bool isDraw_finish;
+	bool isDrawFinish;
 
-	float finishGraph_timer;				//スタート画像の挙動タイマー
+	float finishGraphTimer;				//スタート画像の挙動タイマー
 
 	std::string tag;
 	nlohmann::json	jsonData;

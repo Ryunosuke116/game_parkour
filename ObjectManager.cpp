@@ -61,10 +61,10 @@ void ObjectManager::Create()
 	managers.push_back(std::make_shared<CoinManager>());
 	
 	//アップキャスト
-	playerManager_actual = std::dynamic_pointer_cast<PlayerManager>(managers.at(playerManagerNumber));
-	uiManager_actual = std::dynamic_pointer_cast<UIManager>(managers.at(uiManagerNumber));
-	coinManager_actual = std::dynamic_pointer_cast<CoinManager>(managers.at(coinManagerNumber));
+	playerManager_actual	= std::dynamic_pointer_cast<PlayerManager>(managers.at(playerManagerNumber));
+	coinManager_actual		= std::dynamic_pointer_cast<CoinManager>(managers.at(coinManagerNumber));
 	shadow_actual			= std::dynamic_pointer_cast<Shadow>(objects.at(shadowObjectNumber));
+	uiManager_actual		= std::dynamic_pointer_cast<UIManager>(managers.at(uiManagerNumber));
 
 	//Jsonデータを取得
 	for (auto& manager : managers)
@@ -185,7 +185,7 @@ void ObjectManager::Update()
 			!isStreamFinishPicture)
 		{
 			isStreamFinishPicture = true;
-			finishCut->SetIsDraw_finish(true);
+			finishCut->SetIsDrawFinish(true);
 		}
 	}
 }
@@ -225,6 +225,7 @@ void ObjectManager::StartUpdate()
 	}
 }
 
+/// @brief 終了演出
 void ObjectManager::FinishUpdate()
 {
 	if (isStreamFinishPicture)
@@ -237,9 +238,7 @@ void ObjectManager::FinishUpdate()
 			const int addAlpha = 5;
 			BlackOut::GetInstance().BlackOutUpdate(addAlpha);
 
-			BlackOut::GetInstance().GetAlpha() >= maxAlpha ?
-				isGoal = true :
-				isGoal = false;
+			BlackOut::GetInstance().GetAlpha() >= maxAlpha ? isGoal = true : isGoal = false;
 		}
 
 		playerManager_actual->Update_finish(streamStartPictureTimer);

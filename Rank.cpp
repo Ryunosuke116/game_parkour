@@ -8,7 +8,7 @@ Rank::Rank():
     rankHandle(-1),
     coinCount(-1)
 {
-    jsonTag = "rank";
+    jsonTag = "png";
 }
 
 Rank::~Rank()
@@ -20,8 +20,11 @@ void Rank::Load(const nlohmann::json& jsonData)
 {
     //”wŒi
     std::unordered_map<std::string, std::string> Path;
+    std::string speechBubblePath = jsonData["speechBubble"];
 
-    for (auto& data : jsonData["pathList"])
+    speechBubbleHandle = LoadGraph(speechBubblePath.c_str());
+
+    for (auto& data : jsonData["rankList"])
     {
         std::string path = data[0];     //HandlePath
         std::string name = data[1];     //path‚Ì–¼‘O
@@ -71,5 +74,6 @@ void Rank::Update()
 void Rank::Draw()
 {
    // DrawGraph(x, y, rankHandle, TRUE);
+    DrawExtendGraph(250, 0, 850, 600, speechBubbleHandle, TRUE);
     DrawExtendGraph(x, y, 700, 450, rankHandle, TRUE);
 }

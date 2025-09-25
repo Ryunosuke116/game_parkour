@@ -9,6 +9,7 @@ private:
 	int		nowDirectInput;
 
 	DINPUT_JOYSTATE input_direct;
+	
 
 	struct JoyPad
 	{

@@ -36,7 +36,6 @@ Result::~Result()
 
 void Result::Create()
 {
-    coinCount = 60;
     const std::string jsonFileName = "JsonResult";
     JsonManager::GetInstance().Create(jsonFileName);
     SubSystemManager::GetInstance().AddSubSystem<SoundPlayer>();
