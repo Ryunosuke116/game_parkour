@@ -57,9 +57,9 @@ int WINAPI WinMain(HINSTANCE hInstance,
     PadInput::Initialize();
     BlackOut::GetInstance().Initialize();
 
+    sceneManager->Add<Result>("Result");
     sceneManager->Add<Title>("Title");
     sceneManager->Add<Game>("Game");
-    sceneManager->Add<Result>("Result");
 
     while (!ProcessMessage() && !ClearDrawScreen() && !CheckHitKey(KEY_INPUT_ESCAPE))
     {

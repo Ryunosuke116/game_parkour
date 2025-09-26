@@ -65,6 +65,8 @@ void Result::Update()
 {
     PadInput::Update();
 
+    objectManager->ResultUpdate();
+
     if (PadInput::IsPush_A() && !isPush)
     {
         isPush = true;
@@ -78,7 +80,6 @@ void Result::Update()
             ChangeScene("Title", 0);
         }
     }
-    objectManager->ResultUpdate();
 }
 
 /// <summary>

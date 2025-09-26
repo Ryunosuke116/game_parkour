@@ -37,7 +37,7 @@ void FinishCut::Load(const nlohmann::json& jsonData)
 
 void FinishCut::Initialize()
 {
-	isDrawFinish = true;
+	isDrawFinish = false;
 	finishGraphTimer = 0.0f;
 	x_finishGraph = 600;
 	y_finishGraph = 350;

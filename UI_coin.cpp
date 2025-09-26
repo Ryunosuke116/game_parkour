@@ -43,7 +43,7 @@ void UI_coin::Load(const nlohmann::json& jsonData)
 	coinHandle = LoadGraph(uiPath.at("coin").c_str());
 	crossHandle = LoadGraph(uiPath.at("cross").c_str());
 	LoadDivGraph(uiPath.at("number").c_str(),
-		10, 10, 1, 32, 64, numberHandle);
+		10, 10, 1, 480, 500, numberHandle);
 }
 
 void UI_coin::Create()
@@ -56,12 +56,13 @@ void UI_coin::Create()
 /// </summary>
 void UI_coin::Initialize()
 {
-	const int coin_x = 30;
-	const int coin_y = 700;
-	const int addInitCrossX = 105;
-	const int addInitCrossY = 30;
-	const int addInitNumberX = 140;
-	const int addInitNumberY = 30;
+	//•`‰æˆÊ’u
+	const int coin_x = 20;
+	const int coin_y = 690;
+	const int addInitCrossX = 135;
+	const int addInitCrossY = 70;
+	const int addInitNumberX = 190;
+	const int addInitNumberY = 40;
 	const std::string initNumber = "00";
 
 	x = coin_x;
@@ -71,13 +72,13 @@ void UI_coin::Initialize()
 	number_x = x + addInitNumberX;
 	number_y = y + addInitNumberY;
 
-	coinWidth = 100;
-	coinHeight = 112;
-	crossWidth = 26;
-	crossHeight = 64;
-	numberWidth = 32;
-	numberHeight = 64;
-	addNumberX = 32;
+	coinWidth = 140;
+	coinHeight = 152;
+	crossWidth = 60;
+	crossHeight = 60;
+	numberWidth = 100;
+	numberHeight = 100;
+	addNumberX = 70;
 
 	countNumber = initNumber;
 	coinCount = 0;
@@ -140,12 +141,12 @@ void UI_coin::ResultCreate(const int coinCount)
 /// </summary>
 void UI_coin::ResultInitialize()
 {
-	const int coin_x = 1000;
-	const int coin_y = 650;
-	const int addInitCrossX = 155;
-	const int addInitCrossY = 30;
-	const int addInitNumberX = 240;
-	const int addInitNumberY = 30;
+	const int coin_x = 960;
+	const int coin_y = 630;
+	const int addInitCrossX = 205;
+	const int addInitCrossY = 110;
+	const int addInitNumberX = 260;
+	const int addInitNumberY = 60;
 	const std::string initNumber = "00";
 
 	x = coin_x;
@@ -155,13 +156,13 @@ void UI_coin::ResultInitialize()
 	number_x = x + addInitNumberX;
 	number_y = y + addInitNumberY;
 
-	coinWidth = 150;
-	coinHeight = 162;
+	coinWidth = 200;
+	coinHeight = 212;
 	crossWidth = 76;
-	crossHeight = 114;
-	numberWidth = 82;
-	numberHeight = 114;
-	addNumberX = 82;
+	crossHeight = 76;
+	numberWidth = 150;
+	numberHeight = 150;
+	addNumberX = 120;
 
 	countNumber = initNumber;
 	coinCount = 0;

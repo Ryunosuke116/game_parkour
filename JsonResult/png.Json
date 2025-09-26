@@ -10,9 +10,9 @@
   ],
 
   "coin": [
-    [ "material/png/coin_2d.png", "coin" ],
-    [ "material/png/number_font/x_32x64.png", "cross" ],
-    [ "material/png/suuji32x64_07.png", "number" ]
+    [ "material/png/coin2d_01.png", "coin" ],
+    [ "material/png/unnamed_01.png", "cross" ],
+    [ "material/png/number.png", "number" ]
 
   ]
 }
