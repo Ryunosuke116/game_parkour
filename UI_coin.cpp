@@ -118,7 +118,6 @@ void UI_coin::Draw()
 		DrawExtendGraph(num_x, number_y,
 			num_x + numberWidth, number_y + numberHeight,
 			numberHandle[digit], TRUE);
-		//DrawGraph(num_x, number_y, numberHandle[digit], TRUE);
 
 		//•¶š‚Ì••ª‚¸‚ç‚·
 		num_x += addNumberX;

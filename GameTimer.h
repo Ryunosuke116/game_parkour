@@ -35,6 +35,8 @@ private:
 	int msec;       //ƒ~ƒŠ•b
 	int positionX;
 	int positionY;
+	int numberWidth;
+	int numberHeight;
 
 	bool isUpdateMin;	
 

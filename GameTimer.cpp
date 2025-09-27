@@ -48,8 +48,10 @@ void GameTimer::Initialize()
 	setTime = GetNowCount();
 	sec = 0;
 	min = 3;
-	positionX = 740;
+	positionX = 640;
 	positionY = 30;
+	numberWidth = 100;
+	numberHeight = 100;
 	isUpdateMin = false;
 	countNumberSec = "";
 }
@@ -104,22 +106,32 @@ void GameTimer::Update()
 void GameTimer::Draw()
 {
 	int num_x = positionX;
-	const int addNumber_x = 32;
+	const int addNumberX = 70;
+	const int addSpaceX = 40;
 
+	//ƒRƒCƒ“Š”‚ÌŒ…”•ªA‘å‚«‚¢Œ…‚©‚ç‡‚É•`‰æ
 	for (char c : countNumberMin)
 	{
 		int digit = c - '0';
-		DrawGraph(num_x, positionY, numberHandle[digit], TRUE);
-		num_x += addNumber_x;
+		DrawExtendGraph(num_x, positionY,
+			num_x + numberWidth, positionY + numberHeight,
+			numberHandle[digit], TRUE);
+
+		//•¶š‚Ì••ª‚¸‚ç‚·
+		num_x += addNumberX;
 	}
 
-	num_x += addNumber_x;
+	num_x += addSpaceX;
 
 	for (char c : countNumberSec)
 	{
 		int digit = c - '0';
-		DrawGraph(num_x, positionY, numberHandle[digit], TRUE);
-		num_x += addNumber_x;
+		DrawExtendGraph(num_x, positionY,
+			num_x + numberWidth, positionY + numberHeight,
+			numberHandle[digit], TRUE);
+
+		//•¶š‚Ì••ª‚¸‚ç‚·
+		num_x += addNumberX;
 	}
 }
 
