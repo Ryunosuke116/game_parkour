@@ -4,6 +4,7 @@
 #include "UIManager.h"
 #include "JsonManager.h"
 #include "Rank.h"
+#include "UIButton.h"
 
 UIManager::UIManager() :
 	BaseGameObjectManager()
@@ -66,6 +67,7 @@ void UIManager::ResultCreate(const int coinCount)
 {
 	ResultAdd(std::make_shared<Rank>());
 	ResultAdd(std::make_shared<UI_coin>());
+	ResultAdd(std::make_shared<UIButton>());
 
 	for (auto& UI : ui_list)
 	{

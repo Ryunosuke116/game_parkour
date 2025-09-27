@@ -1,4 +1,4 @@
 {
-  "backGround":  "material/png/title.png" ,
-  "startButton":  "material/png/START_04.png"
+  "backGround":  "material/png/title_back.png" ,
+  "startButton":  "material/png/start.png"
 }

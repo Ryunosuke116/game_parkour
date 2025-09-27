@@ -94,9 +94,6 @@
     <Filter Include="ソース ファイル\object\game\field">
       <UniqueIdentifier>{64988ae3-2089-4141-9140-37e45360d8db}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\object\game\gameTimer">
-      <UniqueIdentifier>{4366f260-6c87-43af-b722-fcca0dfe2fc4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\object\game\finishCut">
       <UniqueIdentifier>{b38ff83a-cf0d-471a-852e-9aa8dbc57bc4}</UniqueIdentifier>
     </Filter>
@@ -126,9 +123,6 @@
     </Filter>
     <Filter Include="ソース ファイル\object\result">
       <UniqueIdentifier>{65675199-6e5e-473c-8ac2-f810db254481}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\object\result\backGround">
-      <UniqueIdentifier>{6077586f-61d5-4426-ad7a-fdf975775294}</UniqueIdentifier>
     </Filter>
     <Filter Include="ソース ファイル\object\result\rank">
       <UniqueIdentifier>{dfbeeeaf-587b-4050-9709-c2babfe3b8ae}</UniqueIdentifier>
@@ -246,6 +240,12 @@
     </Filter>
     <Filter Include="ソース ファイル\object\game\player\state\victory">
       <UniqueIdentifier>{6f317ff4-7e3c-45ef-99db-c178aa380761}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\object\result\UIButton">
+      <UniqueIdentifier>{6de7afc0-0661-4e91-a0ae-8a4532e5c5ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\object\game\UI\gameTimer">
+      <UniqueIdentifier>{4366f260-6c87-43af-b722-fcca0dfe2fc4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -370,7 +370,7 @@
       <Filter>ソース ファイル\scene\blackOut</Filter>
     </ClCompile>
     <ClCompile Include="GameTimer.cpp">
-      <Filter>ソース ファイル\object\game\gameTimer</Filter>
+      <Filter>ソース ファイル\object\game\UI\gameTimer</Filter>
     </ClCompile>
     <ClCompile Include="EffectManager.cpp">
       <Filter>ソース ファイル\manager\effect</Filter>
@@ -395,9 +395,6 @@
     </ClCompile>
     <ClCompile Include="FinishCut.cpp">
       <Filter>ソース ファイル\object\game\finishCut</Filter>
-    </ClCompile>
-    <ClCompile Include="Result_backGround.cpp">
-      <Filter>ソース ファイル\object\result\backGround</Filter>
     </ClCompile>
     <ClCompile Include="Rank.cpp">
       <Filter>ソース ファイル\object\result\rank</Filter>
@@ -434,6 +431,9 @@
     </ClCompile>
     <ClCompile Include="Victory.cpp">
       <Filter>ソース ファイル\object\game\player\state\victory</Filter>
+    </ClCompile>
+    <ClCompile Include="UIButton.cpp">
+      <Filter>ソース ファイル\object\result\UIButton</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -579,7 +579,7 @@
       <Filter>ソース ファイル\scene\blackOut</Filter>
     </ClInclude>
     <ClInclude Include="GameTimer.h">
-      <Filter>ソース ファイル\object\game\gameTimer</Filter>
+      <Filter>ソース ファイル\object\game\UI\gameTimer</Filter>
     </ClInclude>
     <ClInclude Include="EffectManager.h">
       <Filter>ソース ファイル\manager\effect</Filter>
@@ -616,9 +616,6 @@
     </ClInclude>
     <ClInclude Include="FinishCut.h">
       <Filter>ソース ファイル\object\game\finishCut</Filter>
-    </ClInclude>
-    <ClInclude Include="Result_backGround.h">
-      <Filter>ソース ファイル\object\result\backGround</Filter>
     </ClInclude>
     <ClInclude Include="Rank.h">
       <Filter>ソース ファイル\object\result\rank</Filter>
@@ -670,6 +667,9 @@
     </ClInclude>
     <ClInclude Include="Victory.h">
       <Filter>ソース ファイル\object\game\player\state\victory</Filter>
+    </ClInclude>
+    <ClInclude Include="UIButton.h">
+      <Filter>ソース ファイル\object\result\UIButton</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

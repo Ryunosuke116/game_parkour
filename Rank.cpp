@@ -19,7 +19,7 @@ Rank::~Rank()
 void Rank::Load(const nlohmann::json& jsonData)
 {
     //”wŒi
-    std::unordered_map<std::string, std::string> Path;
+    std::unordered_map<std::string, std::string> handlePath;
     std::string speechBubblePath = jsonData["speechBubble"];
 
     speechBubbleHandle = LoadGraph(speechBubblePath.c_str());
@@ -29,28 +29,28 @@ void Rank::Load(const nlohmann::json& jsonData)
         std::string path = data[0];     //HandlePath
         std::string name = data[1];     //path‚Ì–¼‘O
 
-        Path[name] = path;
+        handlePath[name] = path;
     }
 
     if (coinCount <= 20)
     {
-        rankHandle = LoadGraph(Path.at("D").c_str());
+        rankHandle = LoadGraph(handlePath.at("D").c_str());
     }
     else if (coinCount <= 40)
     {
-        rankHandle = LoadGraph(Path.at("C").c_str());
+        rankHandle = LoadGraph(handlePath.at("C").c_str());
     }
     else if (coinCount <= 60)
     {
-        rankHandle = LoadGraph(Path.at("B").c_str());
+        rankHandle = LoadGraph(handlePath.at("B").c_str());
     }
     else if (coinCount <= 90)
     {
-        rankHandle = LoadGraph(Path.at("A").c_str());
+        rankHandle = LoadGraph(handlePath.at("A").c_str());
     }
     else if (coinCount == 100)
     {
-        rankHandle = LoadGraph(Path.at("S").c_str());
+        rankHandle = LoadGraph(handlePath.at("S").c_str());
     }
 }
 

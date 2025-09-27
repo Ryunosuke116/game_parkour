@@ -12,7 +12,7 @@ public:
 	void Initialize()override;
 	void Update()override;
 	void Draw()override;
-	void Create()override {}
+	void Create()override;
 	void Add()override{}
 	void ResultCreate()override{}
 	void ResultInitialize()override{}

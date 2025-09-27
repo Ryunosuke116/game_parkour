@@ -29,12 +29,18 @@ void TitleObjectManager::Create()
 
 void TitleObjectManager::Initialize()
 {
-
+	for (auto& object : objects)
+	{
+		object->Initialize();
+	}
 }
 
 void TitleObjectManager::Update()
 {
-
+	for (auto& object : objects)
+	{
+		object->Update();
+	}
 }
 
 void TitleObjectManager::Draw()

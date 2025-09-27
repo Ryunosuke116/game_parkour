@@ -189,7 +189,6 @@
     <ClCompile Include="QuickRoll.cpp" />
     <ClCompile Include="Rank.cpp" />
     <ClCompile Include="Result.cpp" />
-    <ClCompile Include="Result_backGround.cpp" />
     <ClCompile Include="Run.cpp" />
     <ClCompile Include="RunToStop.cpp" />
     <ClCompile Include="SceneManager.cpp" />
@@ -199,6 +198,7 @@
     <ClCompile Include="Title.cpp" />
     <ClCompile Include="TitleObjectManager.cpp" />
     <ClCompile Include="Tutorial.cpp" />
+    <ClCompile Include="UIButton.cpp" />
     <ClCompile Include="UIManager.cpp" />
     <ClCompile Include="UI_coin.cpp" />
     <ClCompile Include="UI_controlManual.cpp" />
@@ -266,7 +266,6 @@
     <ClInclude Include="QuickRoll.h" />
     <ClInclude Include="Rank.h" />
     <ClInclude Include="Result.h" />
-    <ClInclude Include="Result_backGround.h" />
     <ClInclude Include="Result_object.h" />
     <ClInclude Include="Run.h" />
     <ClInclude Include="RunToStop.h" />
@@ -279,6 +278,7 @@
     <ClInclude Include="Title.h" />
     <ClInclude Include="TitleObjectManager.h" />
     <ClInclude Include="Tutorial.h" />
+    <ClInclude Include="UIButton.h" />
     <ClInclude Include="UIManager.h" />
     <ClInclude Include="UI_coin.h" />
     <ClInclude Include="UI_controlManual.h" />

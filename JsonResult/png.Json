@@ -13,6 +13,10 @@
     [ "material/png/coin2d_01.png", "coin" ],
     [ "material/png/unnamed_01.png", "cross" ],
     [ "material/png/number.png", "number" ]
+  ],
 
+  "UIButton": [
+    [ "material/png/TitleButton.png", "titleButton" ],
+    [ "material/png/black.png" ,"black"]
   ]
 }

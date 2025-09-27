@@ -2,6 +2,7 @@
 #include <string>
 #include "GameTimer.h"
 #include "DebugDrawer.h"
+#include "JsonManager.h"
 
 /// <summary>
 /// コンストラクタ
@@ -27,10 +28,15 @@ GameTimer::~GameTimer()
 
 void GameTimer::Load(const nlohmann::json& jsonData)
 {
-	std::string path = jsonData[2][0];
+	std::string path = jsonData["coin"][2][0];
 
 	LoadDivGraph(path.c_str(),
-		10, 10, 1, 32, 64, numberHandle);
+		10, 10, 1, 480, 500, numberHandle);
+}
+
+void GameTimer::Create()
+{
+	Load(JsonManager::GetInstance().GetJsons("png"));
 }
 
 /// <summary>

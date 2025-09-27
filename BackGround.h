@@ -19,6 +19,10 @@ public:
 private:
 	int backGroundHandle;
 	int startButtonHandle;
+	int startButtonX;
+	int startButtonY;
+	int alpha;
 
+	int addAlpha = 2;
 };
 
