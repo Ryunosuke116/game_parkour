@@ -7,8 +7,6 @@
 #include "AnimationChanger.h"
 #include  "nlohmann/json.hpp"
 #include "CoinObserver.h"
-#include "ISoundPlayer.h"
-#include "IEffectManager.h"
 
 class EffectManager;
 
@@ -62,6 +60,7 @@ public:
 	void SetPos(VECTOR newPos) { position = newPos; }
 	void SetNowMoveDirection(const VECTOR& set) { nowMoveDirection = set; }
 	void SetFaceDirection(const VECTOR& set) { faceDirection = set; }
+
 	std::shared_ptr<PlayerCalculation> playerCalculation = NULL;
 private:
 

@@ -20,7 +20,6 @@ public:
 		subSystems[typeid(T)] = system;
 	}
 
-
 	template<typename T>
 	std::shared_ptr<T> GetSubSystem() const
 	{

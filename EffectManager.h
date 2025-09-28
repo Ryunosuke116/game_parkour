@@ -1,11 +1,10 @@
 #pragma once
 #include "BaseGameObjectManager.h"
 #include "EffectData.h"
-#include "IEffectManager.h"
-#include "ISubSystem.h"
+#include "IWorldSubSystem.h"
 
 class EffectManager :
-	public ISubSystem
+	public IWorldSubSystem
 {
 public:
 	EffectManager();
@@ -14,7 +13,7 @@ public:
 	void Create(const std::string& sceneName)override;
 	void Update()override;
 	void Draw()override;
-	void Shutdown()override{}
+	void Shutdown()override;
 
 	void Add(const char* path, std::string& setTag,
 		const float& scale);

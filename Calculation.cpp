@@ -12,17 +12,11 @@
 #include "DebugDrawer.h"
 
 
-/// <summary>
-/// 面積計算
-/// </summary>
-/// <param name="a"></param>
-/// <param name="b"></param>
-/// <param name="c"></param>
-/// <returns></returns>
-float Calculation::area(const VECTOR& a, const VECTOR& b, const VECTOR& c) 
+
+float Calculation::area(const VECTOR& vertex1, const VECTOR& vertex2, const VECTOR& vertex3)
 {
-	VECTOR AB = VSub(b, a);
-	VECTOR AC = VSub(c, a);
+	VECTOR AB = VSub(vertex2, vertex1);
+	VECTOR AC = VSub(vertex3, vertex1);
 	VECTOR cross = VCross(AB, AC);
 
 	float area = 0.5f * VSize(cross);
@@ -102,17 +96,17 @@ float Calculation::Check_depth_Triangle(const VECTOR& dir, const VECTOR& a, cons
 /// <summary>
 /// 点に対して最も近い三角形の辺
 /// </summary>
-/// <param name="poly"></param>
+/// <param name="subjectPoly"></param>
 /// <param name="pos"></param>
 /// <returns></returns>
-VECTOR Calculation::SphereMeshOutsideTriangle(const MV1_COLL_RESULT_POLY& poly, const VECTOR& pos)
+VECTOR Calculation::SphereMeshOutsideTriangle(const MV1_COLL_RESULT_POLY& subjectPoly, const VECTOR& pos)
 {
 	VECTOR nearestPoint;
 
 	//線分上の点との最近点
-	VECTOR nearPoint_1 = NearestPoint(poly.Position[0], poly.Position[1], pos);
-	VECTOR nearPoint_2 = NearestPoint(poly.Position[0], poly.Position[2], pos);
-	VECTOR nearPoint_3 = NearestPoint(poly.Position[1], poly.Position[2], pos);
+	VECTOR nearPoint_1 = NearestPoint(subjectPoly.Position[0], subjectPoly.Position[1], pos);
+	VECTOR nearPoint_2 = NearestPoint(subjectPoly.Position[0], subjectPoly.Position[2], pos);
+	VECTOR nearPoint_3 = NearestPoint(subjectPoly.Position[1], subjectPoly.Position[2], pos);
 
 	//各距離を求める
 	float d1 = VSize(VSub(nearPoint_1, pos));
@@ -140,19 +134,19 @@ VECTOR Calculation::SphereMeshOutsideTriangle(const MV1_COLL_RESULT_POLY& poly, 
 /// 点に対して最も近い三角形の辺
 /// 最も近い三角形の辺
 /// </summary>
-/// <param name="poly"></param>
+/// <param name="subjectPoly"></param>
 /// <param name="HitPos_ground"></param>
 /// <returns></returns>
 Calculation::NearestResult Calculation::SphereMeshOutsideTriangle_line(
-	const MV1_COLL_RESULT_POLY& poly,
+	const MV1_COLL_RESULT_POLY& subjectPoly,
 	const VECTOR& pos)
 {
 	NearestResult result;
 
 	//線分上の点との最近点
-	VECTOR nearPoint_1 = NearestPoint(poly.Position[0], poly.Position[1], pos);
-	VECTOR nearPoint_2 = NearestPoint(poly.Position[0], poly.Position[2], pos);
-	VECTOR nearPoint_3 = NearestPoint(poly.Position[1], poly.Position[2], pos);
+	VECTOR nearPoint_1 = NearestPoint(subjectPoly.Position[0], subjectPoly.Position[1], pos);
+	VECTOR nearPoint_2 = NearestPoint(subjectPoly.Position[0], subjectPoly.Position[2], pos);
+	VECTOR nearPoint_3 = NearestPoint(subjectPoly.Position[1], subjectPoly.Position[2], pos);
 
 	//各距離を求める
 	float d1 = VSize(VSub(nearPoint_1, pos));
@@ -166,20 +160,20 @@ Calculation::NearestResult Calculation::SphereMeshOutsideTriangle_line(
 	if (d1 <= d2 && d1 <= d3)
 	{
 		result.nearestPoint = nearPoint_1;
-		result.linePos_start = poly.Position[0];
-		result.linePos_end = poly.Position[1];
+		result.linePos_start = subjectPoly.Position[0];
+		result.linePos_end = subjectPoly.Position[1];
 	}
 	else if (d2 <= d3)
 	{
 		result.nearestPoint = nearPoint_2;
-		result.linePos_start = poly.Position[0];
-		result.linePos_end = poly.Position[2];
+		result.linePos_start = subjectPoly.Position[0];
+		result.linePos_end = subjectPoly.Position[2];
 	}
 	else
 	{
 		result.nearestPoint = nearPoint_3;
-		result.linePos_start = poly.Position[1];
-		result.linePos_end = poly.Position[2];
+		result.linePos_start = subjectPoly.Position[1];
+		result.linePos_end = subjectPoly.Position[2];
 	}
 
 	return result;
@@ -220,9 +214,6 @@ VECTOR Calculation::ProjectionDirection(const VECTOR& point, const VECTOR& a, co
 	//単位ベクトル(正規化)
 	VECTOR unitVector = VGet(0, 0, 0);
 	unitVector = VNorm(AB);
-	/*unitVector.x = AB.x / vectorLength;
-	unitVector.y = AB.y / vectorLength;
-	unitVector.z = AB.z / vectorLength;*/
 
 	//点の射影位置を計算(スカラー値)
 	float productionVector = (unitVector.x * AP.x) + (unitVector.y * AP.y) + (unitVector.z * AP.z);
@@ -252,14 +243,8 @@ float Calculation::GetVerticalLength(const VECTOR& a, const VECTOR& b)
 	return vertical_length;
 }
 
-/// <summary>
-/// 三角形のY軸の長さを求める
-/// </summary>
-/// <param name="a"></param>
-/// <param name="b"></param>
-/// <param name="c"></param>
-/// <returns></returns>
-float Calculation::Triangle_by_verticalLength(const VECTOR& a, const VECTOR& b, const VECTOR& c)
+
+float Calculation::TriangleByVerticalLength(const VECTOR& a, const VECTOR& b, const VECTOR& c)
 {
 	VECTOR highestPosition = a;
 
@@ -422,6 +407,21 @@ float Calculation::CalculateBackEaseOutValue(float nowValue)
 	return maxSize - (maxSize - pow(maxSize, nowValue));
 }
 
+/// <summary>
+/// 二つのべクトルのなす角
+/// </summary>
+/// <param name="direction1"></param>
+/// <param name="direction2"></param>
+/// <returns></returns>
+float Calculation::AngleBetWeenTwoVectors(const VECTOR& direction1, const VECTOR& direction2)
+{
+	float cosTheta = VDot(direction1, direction2) /
+		((VSize(direction1) * VSize(direction2)));
+
+	float radian = std::acos(cosTheta);
+	return RadToDeg(radian);
+}
+
 MATRIX Calculation::Rotate(const VECTOR& wall_normal)
 {
 	VECTOR up = wall_normal;
@@ -443,7 +443,7 @@ MATRIX Calculation::Rotate(const VECTOR& wall_normal)
 /// </summary>
 /// <param name="radian"></param>
 /// <returns></returns>
-float Calculation::radToDeg(float radian)
+float Calculation::RadToDeg(float radian)
 {
 	return radian * 180.0f / DX_PI_F;
 }

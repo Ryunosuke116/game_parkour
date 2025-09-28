@@ -11,7 +11,7 @@
 #include "CollisionManager.h"
 #include "Player.h"
 #include "PlayerManager.h"
-#include "CoinObject.h"
+#include "Coin.h"
 #include "CoinManager.h"
 #include "Floor_sky.h"
 #include "Shadow.h"

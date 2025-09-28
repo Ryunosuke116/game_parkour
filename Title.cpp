@@ -5,7 +5,7 @@
 #include "Title.h"
 #include "PadInput.h"
 #include "JsonManager.h"
-#include "SubSystemManager.h"
+#include "GameInstanceSubSystem.h"
 #include "SoundPlayer.h"
 
 class Game;
@@ -37,11 +37,10 @@ void Title::Create()
 
     const std::string jsonFileName = "JsonTitle";
 
-    SubSystemManager::GetInstance().AddSubSystem<SoundPlayer>();
     objectManager = std::make_shared<TitleObjectManager>();
 
     JsonManager::GetInstance().Create(jsonFileName);
-    SubSystemManager::GetInstance().Create(jsonFileName);
+    GameInstanceSubSystem::GetInstance().Load(jsonFileName);
 
     objectManager->Create();
 }
@@ -51,7 +50,7 @@ void Title::Create()
 /// </summary>
 void Title::Initialize()
 {
-    const auto soundPlayer = SubSystemManager::GetInstance().GetSubSystem<SoundPlayer>().lock();
+    const auto soundPlayer = GameInstanceSubSystem::GetInstance().GetSubSystem<SoundPlayer>().lock();
 	BlackOut::GetInstance().Initialize();
 	isPush = false;
     soundPlayer->Play("titleBGM");
@@ -65,7 +64,7 @@ void Title::Update()
 {
     const int addAlpha = 5;
     const int maxAlpha = 300;
-    const auto soundPlayer = SubSystemManager::GetInstance().GetSubSystem<SoundPlayer>().lock();
+    const auto soundPlayer = GameInstanceSubSystem::GetInstance().GetSubSystem<SoundPlayer>().lock();
 
     PadInput::Update();
 

@@ -1,9 +1,9 @@
 #pragma once
 
-class ISubSystem
+class IWorldSubSystem
 {
 public:
-	virtual ~ISubSystem() = default;
+	virtual ~IWorldSubSystem() = default;
 	virtual void Create(const std::string& sceneName)	abstract;
 	virtual void Update()								abstract;
 	virtual void Draw()									abstract;

@@ -28,6 +28,8 @@ public:
 
 		//‚±‚Ì‹óŠÔ‚É“o˜^‚³‚ê‚Ä‚¢‚é‚±‚Æ‚ð’Ê’m
 		spOFT->RegistCell(self);
+
+		return true;
 	}
 
 	/// <summary>

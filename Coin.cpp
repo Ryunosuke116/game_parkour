@@ -1,15 +1,14 @@
 #include "EffectManager.h"
-#include "CoinObject.h"
-
+#include "Coin.h"
 #include "SoundPlayer.h"
-#include "SubSystemManager.h"
+#include "GameInstanceSubSystem.h"
 #include <cassert>
 #include "DebugDrawer.h"
 
 /// <summary>
 /// コンストラクタ
 /// </summary>
-CoinObject::CoinObject():
+Coin::Coin():
 	BaseObject(),
 	radianY(0.0f),
 	velocity_Y(0.0f),
@@ -26,9 +25,9 @@ CoinObject::CoinObject():
 /// <summary>
 /// デストラクタ
 /// </summary>
-CoinObject::~CoinObject()
+Coin::~Coin()
 {
-
+	MV1DeleteModel(modelHandle);
 }
 
 /// <summary>
@@ -37,7 +36,7 @@ CoinObject::~CoinObject()
 /// </summary>
 /// <param name="handle"></param>
 /// <param name="pos"></param>
-void CoinObject::Load(
+void Coin::Load(
 	const int listNumber,
 	const int handle, 
 	const VECTOR& pos)
@@ -51,7 +50,7 @@ void CoinObject::Load(
 /// <summary>
 /// 初期化
 /// </summary>
-void CoinObject::Initialize()
+void Coin::Initialize()
 {
 	const VECTOR addAABB = VGet(radius, radius, radius);	//AABBの領域範囲
 
@@ -74,7 +73,7 @@ void CoinObject::Initialize()
 /// <param name="bottomPlayerPos"></param>
 /// <param name="playerRadius"></param>
 /// <returns></returns>
-bool CoinObject::Update(
+bool Coin::Update(
 	const VECTOR& topPlayerPos,
 	const VECTOR& bottomPlayerPos,
 	const float playerRadius)
@@ -92,7 +91,7 @@ bool CoinObject::Update(
 /// <summary>
 /// 更新
 /// </summary>
-void CoinObject::Update()
+void Coin::Update()
 {
 	Rotate();
 
@@ -105,7 +104,7 @@ void CoinObject::Update()
 /// <summary>
 /// 描画
 /// </summary>
-void CoinObject::Draw()
+void Coin::Draw()
 {
 	MV1DrawModel(modelHandle);
 }
@@ -114,7 +113,7 @@ void CoinObject::Draw()
 /// リザルトシーン時の生成
 /// </summary>
 /// <param name="coinCount"></param>
-void CoinObject::ResultCreate()
+void Coin::ResultCreate()
 {
 	//処理なし
 }
@@ -122,7 +121,7 @@ void CoinObject::ResultCreate()
 /// <summary>
 /// リザルトシーン時の初期化
 /// </summary>
-void CoinObject::ResultInitialize()
+void Coin::ResultInitialize()
 {
 	flyAwayDirection = VGet(0.0f, 0.0f, 1.0f);
 	flyAwayVelocity = VGet(0.0f, 0.0f, 0.0f);
@@ -134,7 +133,7 @@ void CoinObject::ResultInitialize()
 /// <summary>
 /// リザルトシーン時の更新処理
 /// </summary>
-void CoinObject::ResultUpdate()
+void Coin::ResultUpdate()
 {
 	const float gravity = -0.2f;
 
@@ -157,7 +156,7 @@ void CoinObject::ResultUpdate()
 /// プレイヤーと接触した時
 /// </summary>
 /// <param name="playerPos"></param>
-void CoinObject::HitPlayerAction()
+void Coin::HitPlayerAction()
 {
 	const float maxVelocityY = 8.0f;
 
@@ -177,7 +176,7 @@ void CoinObject::HitPlayerAction()
 /// <summary>
 /// コインモデルの回転制御
 /// </summary>
-void CoinObject::Rotate()
+void Coin::Rotate()
 {
 	const float normalAddRadianY = 1.0f;
 	const float addRadianY = 20.0f;
@@ -207,7 +206,7 @@ void CoinObject::Rotate()
 /// <param name="bottomPlayerPos"></param>
 /// <param name="playerRadius"></param>
 /// <returns></returns>
-bool CoinObject::IsHitPlayer(const VECTOR& topPlayerPos,
+bool Coin::IsHitPlayer(const VECTOR& topPlayerPos,
 	const VECTOR& bottomPlayerPos,
 	const float playerRadius)
 {
@@ -223,7 +222,7 @@ bool CoinObject::IsHitPlayer(const VECTOR& topPlayerPos,
 		isHitPlayer = true;
 		if (!isSound)
 		{
-			const auto& soundPlayer = SubSystemManager::GetInstance().GetSubSystem<SoundPlayer>().lock();
+			const auto& soundPlayer = GameInstanceSubSystem::GetInstance().GetSubSystem<SoundPlayer>().lock();
 			soundPlayer->Play("coinGet");
 			isSound = true;
 		}

@@ -5,7 +5,7 @@
 #include "PadInput.h"
 #include "AnimationChanger.h"
 #include "Player.h"
-#include "SubSystemManager.h"
+#include "GameInstanceSubSystem.h"
 #include "SoundPlayer.h"
 
 AnimationChanger::AnimationChanger()
@@ -68,7 +68,7 @@ std::shared_ptr<PlayerStateBase> AnimationChanger::ChangeState(
 {
     std::shared_ptr<PlayerStateBase> newState = nullptr;
     const auto soundPlayer = 
-        SubSystemManager::GetInstance().GetSubSystem<SoundPlayer>().lock();
+        GameInstanceSubSystem::GetInstance().GetSubSystem<SoundPlayer>().lock();
 
     //—§‚¿
     if (playerData.isIdle && 

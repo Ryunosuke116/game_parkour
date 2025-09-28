@@ -8,7 +8,7 @@
 #include "WorldSubSystem.h"
 #include "JsonManager.h"
 #include "PlayerManager.h"
-#include "SubSystemManager.h"
+#include "GameInstanceSubSystem.h"
 #include "SoundPlayer.h"
 #include "Liner8TreeManager.hpp"
 #include "boundaryRange.h"
@@ -48,7 +48,7 @@ void CoinManager::Create()
 
 	for (auto& pos : data["coin_list"])
 	{
-		umCoins[i] = std::make_shared<CoinObject>();
+		umCoins[i] = std::make_shared<Coin>();
 		umCoins.at(i)->Load(
 			i,
 			modelHandle,
@@ -65,16 +65,17 @@ void CoinManager::Create()
 /// <param name="path"></param>
 void CoinManager::Initialize()
 {
-	auto L8TreeManager = WorldSubSystem::GetInstance().GetSubSystem<Liner8TreeManager<CoinObject>>();
+	auto L8TreeManager = WorldSubSystem::GetInstance().GetSubSystem<Liner8TreeManager<Coin>>();
 	
 	for (auto& coin : umCoins)
 	{
 		coin.second->Initialize();
 
 		//OFTに登録する
-		std::shared_ptr OFT = std::make_shared<ObjectForTree<CoinObject>>();
+		std::shared_ptr OFT = std::make_shared<ObjectForTree<Coin>>();
 		OFT->objectPointer = coin.second;
 	
+		//空間に登録
 		L8TreeManager->Regist(
 			coin.second->GetBoundsMin(),
 			coin.second->GetBoundsMax(),
@@ -89,7 +90,7 @@ void CoinManager::Initialize()
 /// </summary>
 void CoinManager::Update()
 {
-	auto L8TreeManager = WorldSubSystem::GetInstance().GetSubSystem<Liner8TreeManager<CoinObject>>();
+	auto L8TreeManager = WorldSubSystem::GetInstance().GetSubSystem<Liner8TreeManager<Coin>>();
 	auto spPlayerManager = WorldSubSystem::GetInstance().GetSubSystem<PlayerManager>();
 	
 	//プレイヤーがどの空間にいるか調べる
@@ -98,36 +99,36 @@ void CoinManager::Update()
 			spPlayerManager->GetPlayer()->GetAABB().max);
 
 	//playerのいる空間を検索
-	std::shared_ptr<Cell<CoinObject>> cell = L8TreeManager->GetCell(playerSpaceNumber);
+	std::shared_ptr<Cell<Coin>> cell = L8TreeManager->GetCell(playerSpaceNumber);
 
 	//衝突する可能性のあるオブジェクトを走査する
-	std::vector<std::weak_ptr<ObjectForTree<CoinObject>>> coinList;
+	std::vector<std::shared_ptr<ObjectForTree<Coin>>> coinList;
 	L8TreeManager->GetAllCollisionList(coinList, playerSpaceNumber);
 
 	for (auto it = coinList.begin(); it != coinList.end();)
 	{
-		std::shared_ptr<CoinObject> coin = it->lock()->objectPointer.lock();
+		std::shared_ptr<Coin> coin = (*it)->objectPointer.lock();
+		
+		//中身がnullの場合次へ
 		if (!coin)
 		{
 			it++;
 			continue;
 		}
-
 		DebugDrawer::Instance().InformationInput_AABB(coin->GetBoundsMin(), coin->GetBoundsMax(), GetColor(255, 0, 0));
 
 		//playerと当たっていたら削除する
 		if (coin->IsHitPlayer(spPlayerManager->GetPlayer()->GetTopPos(),
 			spPlayerManager->GetPlayer()->GetBottomPos(),
-			spPlayerManager->GetPlayer()->GetRadius()
-		))
+			spPlayerManager->GetPlayer()->GetRadius()))
 		{
-			std::shared_ptr<Cell<CoinObject>> cell = it->lock()->cellPointer.lock();
+			std::shared_ptr<Cell<Coin>> cell = (*it)->cellPointer.lock();
 
 			//空間のobjectリストからも削除する
 			if (cell)
 			{
-				std::shared_ptr<ObjectForTree<CoinObject>> spOFT = it->lock();	//shared型のOFT
-				auto& objectList = cell->GetObjectList();						//空間内のobjectリスト
+				std::shared_ptr<ObjectForTree<Coin>> spOFT = (*it);		//shared型のOFT
+				auto& objectList = cell->GetObjectList();				//空間内のobjectリスト
 			
 				for (auto objectIt = objectList.begin(); objectIt != objectList.end(); objectIt++)
 				{
@@ -183,10 +184,11 @@ void CoinManager::Draw()
 /// </summary>
 void CoinManager::Add()
 {
-	umCoins[addNumber] = std::make_shared<CoinObject>();
+	umCoins[addNumber] = std::make_shared<Coin>();
 	umCoins.at(addNumber)->Load(addNumber,
 		modelHandle,
 		posAddObject);
+
 	umCoins.at(addNumber)->Initialize();
 
 	addNumber++;
@@ -237,7 +239,7 @@ void CoinManager::ResultCreate(int coinCount)
 
 	for (int i = 0; i < coinCount; i++)
 	{
-		umCoins[i]=std::make_shared<CoinObject>();
+		umCoins[i]=std::make_shared<Coin>();
 
 		umCoins.at(i)->Load(i,
 			modelHandle,
@@ -264,7 +266,7 @@ void CoinManager::ResultInitialize()
 void CoinManager::ResultUpdate()
 {
 	const size_t maxCoinCount = umCoins.size();
-	auto soundPlayer = SubSystemManager::GetInstance().GetSubSystem<SoundPlayer>().lock();
+	auto soundPlayer = GameInstanceSubSystem::GetInstance().GetSubSystem<SoundPlayer>().lock();
 
 	timer++;
 	//タイマーが規定値を超えたら更新処理するコインを追加する

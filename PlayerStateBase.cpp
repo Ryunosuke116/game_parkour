@@ -6,8 +6,9 @@
 #include "PlayerStateBase.h"
 #include "Player.h"
 #include "DebugDrawer.h"
-#include "SubSystemManager.h"
+#include "GameInstanceSubSystem.h"
 #include "EffectManager.h"
+#include "HitCheck.h"
 
 /// <summary>
 /// コンストラクタ
@@ -17,7 +18,8 @@
 /// <param name="oldAnimState"></param>
 /// <param name="nowAnimState"></param>
 PlayerStateBase::PlayerStateBase(int& modelHandle,
-    AnimState& oldAnimState, AnimState& nowAnimState):
+    AnimState& oldAnimState,
+    AnimState& nowAnimState):
     modelHandle(-1),
     animNumber_old(-1),
     animBlendRate(0.0f),
@@ -126,7 +128,8 @@ void PlayerStateBase::Draw()
 /// </summary>
 /// <param name="input"></param>
 /// <param name="moveVec"></param>
-VECTOR PlayerStateBase::Move(const VECTOR& cameraDirection, PlayerData& playerData)
+VECTOR PlayerStateBase::Move(const VECTOR& cameraDirection,
+    PlayerData& playerData)
 {
     moveDirection = VGet(0.0f, 0.0f, 0.0f);
     VECTOR moveDirection_old = VGet(0.0f, 0.0f, 0.0f);
@@ -187,7 +190,8 @@ void PlayerStateBase::RollMove(PlayerData& playerData)
 /// <summary>
 /// ジャンプ
 /// </summary>
-void PlayerStateBase::JumpMove(PlayerData& playerData, Player& player)
+void PlayerStateBase::JumpMove(PlayerData& playerData, 
+    Player& player)
 {
     if (PadInput::isJump() && !playerData.isJumpAll)
     {
@@ -206,7 +210,7 @@ void PlayerStateBase::JumpMove(PlayerData& playerData, Player& player)
         else if (playerData.isJumpFirst && !isPush &&
             !playerData.isJumpSecond)
         {
-            const auto effectManager = SubSystemManager::GetInstance().GetSubSystem<EffectManager>().lock();
+            const auto effectManager = GameInstanceSubSystem::GetInstance().GetSubSystem<EffectManager>().lock();
             effectManager->PlayEffect("jump");
             effectManager->SetPosition(player.GetPosition(), "jump");
             if (!playerData.isJump)
@@ -234,31 +238,43 @@ void PlayerStateBase::JumpMove(PlayerData& playerData, Player& player)
 /// </summary>
 /// <param name="playerData"></param>
 /// <param name="player"></param>
-void PlayerStateBase::WallRunMove(PlayerData& playerData, Player& player)
+void PlayerStateBase::WallRunMove(PlayerData& playerData, 
+    Player& player,
+    const std::shared_ptr<BaseObject>& collisionObject)
 {
-    const float entryDegreeWallRun = 50.0f;
+    const float kEntryDegreeWallRun = 50.0f;
+    MV1_COLL_RESULT_POLY hitPoly;
+    VECTOR addPos = VScale(player.GetFaceDirection(), 5.0f);
+    addPos.y = 0.0f;
+    VECTOR rayEndPosition = VAdd(player.GetPositionData().rayTopPosition, addPos);
 
-    //壁に当たっている場合のみ
-    if (playerData.isPossibleWallRun &&
+    //壁を走れるか
+    bool isUseWallRun = HitCheck::RayHitJudge(collisionObject->GetModelHandle(),
+        -1,
+        player.GetPositionData().rayTopPosition,
+        rayEndPosition,
+        hitPoly) &&
         playerData.isUseWallJump &&
-        playerData.isMove)
+        playerData.isMove;
+
+    if (isUseWallRun)
     {
-        VECTOR hitWallNormal = player.playerCalculation->GethitWallNormal();
-        
+        VECTOR hitWallNormal = hitPoly.Normal;
+
         //スティックが即座に反対方向に向いた場合slipをtrue
         //radian計算
         float radianWall = atan2f(-hitWallNormal.x, -hitWallNormal.z);
-        float radianPad = atan2f(moveDirection.x, moveDirection.z);
+        float radianPad = atan2f(player.GetFaceDirection().x, player.GetFaceDirection().z);
 
         //度数計算
-        float degreeWall = abs(Calculation::radToDeg(radianWall));
-        float degreePadNow = abs(Calculation::radToDeg(radianPad));
+        float degreeWall = abs(Calculation::RadToDeg(radianWall));
+        float degreePadNow = abs(Calculation::RadToDeg(radianPad));
 
         //スティック入力と壁の角度の差を求める
         float degreePadWallDifference = degreePadNow - degreeWall;
 
         //壁の法線ベクトルを利用して壁走りするかどうか
-        if (abs(degreePadWallDifference) <= entryDegreeWallRun)
+        if (abs(degreePadWallDifference) <= kEntryDegreeWallRun)
         {
             //ロールアクションとジャンプをできないように
             playerData.isRunWall = true;
@@ -270,6 +286,7 @@ void PlayerStateBase::WallRunMove(PlayerData& playerData, Player& player)
 
             player.playerCalculation->ChangeIsJumpPower_add_ture();
             player.playerCalculation->SetJumpPower();
+            player.playerCalculation->SetWallRunGravity(hitWallNormal);
             player.SetNowMoveDirection(VScale(hitWallNormal, -1.0f));
             player.SetFaceDirection(VScale(hitWallNormal, -1.0f));
             player.SetRotata_x(runWallRotateX);

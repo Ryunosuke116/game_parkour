@@ -1,10 +1,9 @@
 #pragma once
-#include "ISoundPlayer.h"
 #include "BaseGameObjectManager.h"
-#include "ISubSystem.h"
+#include "IWorldSubSystem.h"
 
 class SoundPlayer : 
-	public ISubSystem
+	public IWorldSubSystem
 {
 public:
 
@@ -12,7 +11,7 @@ public:
 	~SoundPlayer();
 
 	void Create(const std::string& sceneName)override;
-	void Shutdown()override {}
+	void Shutdown()override;
 	void Update()override {}
 	void Draw()override{}
 	void Play(const std::string& name);

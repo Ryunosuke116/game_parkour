@@ -2,7 +2,7 @@
 #include <cassert>
 #include "BaseScene.h"
 #include "SceneManager.h"
-#include "SubSystemManager.h"
+#include "GameInstanceSubSystem.h"
 
 SceneManager::SceneManager() :nowScene{ nullptr } {}
 
@@ -12,7 +12,7 @@ SceneManager::~SceneManager()
 	{
 		delete pair.second;
 	}
-	SubSystemManager::GetInstance().ShutdownAll();
+	GameInstanceSubSystem::GetInstance().ShutdownAll();
 }
 
 void SceneManager::ChangeScene(
@@ -33,6 +33,11 @@ void SceneManager::ChangeScene(
 	}
 }
 
+void SceneManager::Create()
+{
+	GameInstanceSubSystem::GetInstance().Create();
+}
+
 void SceneManager::Initialize()
 {
 	nowScene->Initialize();
@@ -41,12 +46,12 @@ void SceneManager::Initialize()
 void SceneManager::Update()
 {
 	nowScene->Update();
-	SubSystemManager::GetInstance().Update();
+	GameInstanceSubSystem::GetInstance().Update();
 }
 
 void SceneManager::Draw()
 {
 	nowScene->Draw();
-	SubSystemManager::GetInstance().Draw();
+	GameInstanceSubSystem::GetInstance().Draw();
 }
 

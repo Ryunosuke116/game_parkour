@@ -53,7 +53,8 @@ int WINAPI WinMain(HINSTANCE hInstance,
     // エスケープキーが押されるかウインドウが閉じられるまでループ
     LONGLONG frameTime = 0;
 
-    SceneManager* sceneManager = new SceneManager();
+    std::shared_ptr<SceneManager> sceneManager = std::make_shared<SceneManager>();
+    sceneManager->Create();
     PadInput::Initialize();
     BlackOut::GetInstance().Initialize();
 

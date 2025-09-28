@@ -4,7 +4,7 @@
 #include "EffekseerForDXLib.h"
 #include "EffectManager.h"
 #include "JsonManager.h"
-#include "SubSystemManager.h"
+#include "GameInstanceSubSystem.h"
 
 /// <summary>
 /// コンストラクタ
@@ -25,17 +25,34 @@ EffectManager::~EffectManager()
 	effectDatas.clear();
 }
 
+void EffectManager::Shutdown()
+{
+	for (auto& effectData : effectDatas)
+	{
+		DeleteEffekseerEffect(effectData->resourceHandle);
+	}
+	effectDatas.clear();
+}
+
 void EffectManager::Create(const std::string& sceneName)
 {
-	const nlohmann::json effectData = JsonManager::GetInstance().GetJsons("effectData");
-
-	for (auto& data : effectData["list"])
+	if (effectDatas.size() != 0)
 	{
-		std::string tag = data[1].get<std::string>();
-		std::string  path = data[0].get<std::string>();
-		float scale = data[2].get<float>();
+		assert("effectDatasの初期化が行われていません");
+	}
 
-		Add(path.c_str(), tag, scale);
+	if ("Game" == sceneName)
+	{
+		const nlohmann::json effectData = JsonManager::GetInstance().GetJsons("effectData");
+
+		for (auto& data : effectData["list"])
+		{
+			std::string tag = data[1].get<std::string>();
+			std::string  path = data[0].get<std::string>();
+			float scale = data[2].get<float>();
+
+			Add(path.c_str(), tag, scale);
+		}
 	}
 }
 

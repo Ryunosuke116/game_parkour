@@ -8,7 +8,7 @@
 #include "Player.h"
 #include "PadInput.h"
 #include "HitCheck.h"
-#include "SubSystemManager.h"
+#include "GameInstanceSubSystem.h"
 #include "EffectManager.h"
 
 /// <summary>
@@ -37,7 +37,8 @@ Run::~Run()
 }
 
 std::pair<VECTOR, PlayerData> Run::Update(const VECTOR& cameraDirection,
-	const std::vector<std::weak_ptr<BaseObject>>& fieldObjects, Player& player)
+	const std::vector<std::weak_ptr<BaseObject>>& fieldObjects,
+	Player& player)
 {
 	PlayerData playerData = player.GetData();
 
@@ -58,11 +59,10 @@ std::pair<VECTOR, PlayerData> Run::Update(const VECTOR& cameraDirection,
 		playerData = playerData_new;
 	}
 
-
 	if (playerData.isDash)
 	{
 		const VECTOR scale = VGet(5.0f, 5.0f, 5.0f);
-		const auto effectManager = SubSystemManager::GetInstance().GetSubSystem<EffectManager>().lock();
+		const auto effectManager = GameInstanceSubSystem::GetInstance().GetSubSystem<EffectManager>().lock();
 		effectManager->SetScale(scale, "foot_smoke");
 		this->nowAnimState.PlayAnimSpeed = DashAnimSpeed;
 	}
@@ -113,8 +113,7 @@ std::pair<VECTOR, PlayerData> Run::Update_wallRun(
 
 	//óéÇøÇÈ
 	//ï«Ç™Ç»Ç¢èÍçá
-	if (-PadInput::GetJoyPad_old_y_left() <= -1000 ||
-		!playerData.isPossibleWallRun)
+	if (-PadInput::GetJoyPad_old_y_left() <= -1000)
 	{
 		playerData.isRunWall = false;
 		playerData.isUseWallJump = false;
@@ -181,11 +180,10 @@ std::pair<VECTOR, PlayerData> Run::Update_wallRun(
 		playerData.isRunWall = false;
 		playerData.isUseWallJump = true;
 		playerData.isWalljump = true;
-		//player.SetNowMoveDirection(moveDirection_new);
 		player.playerCalculation->Reset_run_wall();
 
-		VECTOR hitWallNormal = player.playerCalculation->GethitWallNormal();
-		moveDir = VScale(hitWallNormal, 1.0f);
+		VECTOR hitWallNormal = player.playerCalculation->GetWallRunGravity();
+		moveDir = hitWallNormal;
 		player.SetNowMoveDirection(moveDir);
 		player.SetRotata_x(0.0f);
 	}

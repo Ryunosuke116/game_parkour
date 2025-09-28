@@ -7,7 +7,7 @@
 #include "Calculation.h"
 #include "BaseObject.h"
 #include "DebugDrawer.h"
-#include "SubSystemManager.h"
+#include "GameInstanceSubSystem.h"
 #include "WorldSubSystem.h"
 
 /// <summary>
@@ -71,6 +71,7 @@ void PlayerManager::Update()
 			oldPos,
 			newPos,
 			player->GetVelocity(),
+			actualPlayer->playerCalculation->GetWallRunGravity(),
 			player->GetRadius(),
 			player->GetPositionData());
 

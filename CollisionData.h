@@ -4,10 +4,8 @@
 
 struct CollisionResult
 {
-	VECTOR position_new = VGet(0.0f, 0.0f, 0.0f);
+	VECTOR newPosition = VGet(0.0f, 0.0f, 0.0f);
 	bool isHitGround = false;
-	bool isPossibleWallRun = false;
-	VECTOR ishitWallNormal = VGet(0.0f, 0.0f, 0.0f);
 	std::string objectTag = "";
 };
 

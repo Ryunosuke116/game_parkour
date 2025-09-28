@@ -1,0 +1,57 @@
+#include <iostream>
+#include <unordered_map>
+#include <memory>
+#include <typeindex>
+#include "IWorldSubSystem.h"
+#include "GameInstanceSubSystem.h"
+#include "assert.h"
+#include "SoundPlayer.h"
+#include "EffectManager.h"
+
+GameInstanceSubSystem& GameInstanceSubSystem::GetInstance()
+{
+	static GameInstanceSubSystem instance;
+	return instance;
+}
+
+void GameInstanceSubSystem::Load(const std::string& sceneName)
+{
+	for (auto& system : subSystems)
+	{
+		system.second->Create(sceneName);
+	}
+}
+
+void GameInstanceSubSystem::Create()
+{
+	if (subSystems.size() != 0)
+	{
+		assert("subSystems‚Ì‰Šú‰»‚ªs‚í‚ê‚Ä‚¢‚Ü‚¹‚ñ");
+	}
+	GameInstanceSubSystem::GetInstance().AddSubSystem<SoundPlayer>();
+	GameInstanceSubSystem::GetInstance().AddSubSystem<EffectManager>();
+}
+
+void GameInstanceSubSystem::Update()
+{
+	for (auto& system : subSystems)
+	{
+		system.second->Update();
+	}
+}
+
+void GameInstanceSubSystem::Draw()
+{
+	for (auto& system : subSystems)
+	{
+		system.second->Draw();
+	}
+}
+
+void GameInstanceSubSystem::ShutdownAll()
+{
+	for (auto& system : subSystems)
+	{
+		system.second->Shutdown();
+	}
+}

@@ -157,7 +157,7 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Cell.cpp" />
     <ClCompile Include="CoinManager.cpp" />
-    <ClCompile Include="CoinObject.cpp" />
+    <ClCompile Include="Coin.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="CollisionObjectManager.cpp" />
     <ClCompile Include="DebugDrawer.cpp" />
@@ -194,7 +194,7 @@
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="Shadow.cpp" />
     <ClCompile Include="SoundPlayer.cpp" />
-    <ClCompile Include="SubSystemManager.cpp" />
+    <ClCompile Include="GameInstanceSubSystem.cpp" />
     <ClCompile Include="Title.cpp" />
     <ClCompile Include="TitleObjectManager.cpp" />
     <ClCompile Include="Tutorial.cpp" />
@@ -222,7 +222,7 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Cell.hpp" />
     <ClInclude Include="CoinManager.h" />
-    <ClInclude Include="CoinObject.h" />
+    <ClInclude Include="Coin.h" />
     <ClInclude Include="CoinObserver.h" />
     <ClInclude Include="CollisionData.h" />
     <ClInclude Include="CollisionManager.h" />
@@ -241,10 +241,8 @@
     <ClInclude Include="HitCheck.h" />
     <ClInclude Include="Idle.h" />
     <ClInclude Include="IdleToSprint.h" />
-    <ClInclude Include="IEffectManager.h" />
     <ClInclude Include="Input.h" />
-    <ClInclude Include="ISoundPlayer.h" />
-    <ClInclude Include="ISubSystem.h" />
+    <ClInclude Include="IWorldSubSystem.h" />
     <ClInclude Include="JsonManager.h" />
     <ClInclude Include="Jump.h" />
     <ClInclude Include="Layout.h" />
@@ -274,7 +272,7 @@
     <ClInclude Include="common.h" />
     <ClInclude Include="Shadow.h" />
     <ClInclude Include="SoundPlayer.h" />
-    <ClInclude Include="SubSystemManager.h" />
+    <ClInclude Include="GameInstanceSubSystem.h" />
     <ClInclude Include="Title.h" />
     <ClInclude Include="TitleObjectManager.h" />
     <ClInclude Include="Tutorial.h" />

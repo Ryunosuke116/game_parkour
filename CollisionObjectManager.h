@@ -31,6 +31,24 @@ public:
 		return weakCollisionObjects;
 	}
 
+	/// <summary>
+	/// 引数で指定されたオブジェクトを返す
+	/// </summary>
+	/// <param name="objectTag"></param>
+	/// <returns></returns>
+	std::shared_ptr<BaseObject> const GetCollisionObject(const std::string& objectTag)
+	{
+		for (auto& collisionObject : collisionObjects)
+		{
+			if (collisionObject->GetTag() == objectTag)
+			{
+				return collisionObject;
+			}
+		}
+
+		return NULL;
+	}
+
 private:
 
 	std::vector<std::shared_ptr<BaseObject>> collisionObjects;

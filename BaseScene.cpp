@@ -3,7 +3,7 @@
 #include "SceneManager.h"
 #include "BaseScene.h"
 #include "JsonManager.h"
-#include "SubSystemManager.h"
+#include "GameInstanceSubSystem.h"
 #include "WorldSubSystem.h"
 
 /// <summary>
@@ -51,7 +51,7 @@ void BaseScene::Draw()
 void BaseScene::Shutdown()
 {
     JsonManager::GetInstance().Shutdown();
-    SubSystemManager::GetInstance().ShutdownAll();
+    GameInstanceSubSystem::GetInstance().ShutdownAll();
     WorldSubSystem::GetInstance().ShutdownAll();
 }
 

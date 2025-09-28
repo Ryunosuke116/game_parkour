@@ -7,7 +7,7 @@
 #include "JsonManager.h"
 #include "Result_object.h"
 #include "BlackOut.h"
-#include "SubSystemManager.h"
+#include "GameInstanceSubSystem.h"
 
 /// <summary>
 /// コンストラクタ
@@ -38,8 +38,7 @@ void Result::Create()
 {
     const std::string jsonFileName = "JsonResult";
     JsonManager::GetInstance().Create(jsonFileName);
-    SubSystemManager::GetInstance().AddSubSystem<SoundPlayer>();
-    SubSystemManager::GetInstance().Create(jsonFileName);
+    GameInstanceSubSystem::GetInstance().Load(jsonFileName);
 
     objectManager = std::make_shared<ObjectManager>();
     objectManager->ResultCreate(coinCount);

@@ -42,12 +42,12 @@ void BaseChara::UpdateAngle(const VECTOR& direction)
 {
     // プレイヤーの移動方向にモデルの方向を近づける
     float targetRadian;			                        // 目標角度
-    float nowDegree = Calculation::radToDeg(radian);
+    float nowDegree = Calculation::RadToDeg(radian);
 
     // 目標の方向ベクトルから角度値を算出する
     targetRadian = atan2(direction.x, direction.z);
 
-    const float targetDegree = Calculation::radToDeg(targetRadian);
+    const float targetDegree = Calculation::RadToDeg(targetRadian);
 
     nowDegree = Calculation::RotationAngleDegree(targetDegree, nowDegree, rotationSpeedDegree);
     radian = Calculation::DegToRad(nowDegree);

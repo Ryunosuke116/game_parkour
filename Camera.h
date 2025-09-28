@@ -50,6 +50,8 @@ private:
 	VECTOR centerPointSpherePos;			//カメラの中間地点にある球の中心
 	VECTOR screenCenterPosition;			//画面の中心座標
 	VECTOR lookPosition;					//注視点
+	VECTOR rayCastStartPosition;			//rayの開始座標
+
 	float angleRadian;
 	float cameraDistanceWhenHittingObject;	//オブジェクトに当たっているときのカメラの距離
 	float normalCameraDistanceSize;				//通常時のカメラ距離

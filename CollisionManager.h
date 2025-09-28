@@ -15,15 +15,16 @@ public:
 	//////////////////////////////////////////
 	//è’ìÀîªíË
 	/////////////////////////////////////////
-	std::pair<bool, std::string> GroundCollisionCheck(const std::vector<std::weak_ptr<BaseObject>>& collisionObjects,
-		const VECTOR& oldPos, VECTOR& newPos, const VECTOR& moveVec,
+	CollisionResult GroundCollisionCheck(const std::vector<std::weak_ptr<BaseObject>>& collisionObjects,
+		const VECTOR& oldPos, const VECTOR& subjectPosition, const VECTOR& moveVec,
 		const PositionData& positionData);
 
-	bool HeadCollisionCheck(const std::vector<std::weak_ptr<BaseObject>>& collisionObjects, VECTOR& newPos,
+	VECTOR HeadCollisionCheck(const std::vector<std::weak_ptr<BaseObject>>& collisionObjects,
+		const VECTOR& subjectPos,
 		const VECTOR& moveVec, const PositionData& positionData, const float& radius);
 
-	std::pair<bool, VECTOR> WallCollisionCheck(const std::vector<std::weak_ptr<BaseObject>>& collisionObjects,
-		VECTOR& newPos, const VECTOR& moveVec, const PositionData& positionData,
+	VECTOR WallCollisionCheck(const std::vector<std::weak_ptr<BaseObject>>& collisionObjects,
+		const VECTOR& subjectPos, const VECTOR& moveVec, const PositionData& positionData,
 		const float& radius);
 
 	CollisionResult Check_all(const std::vector<std::weak_ptr<BaseObject>>& collisionObjects,
@@ -38,29 +39,29 @@ public:
 		const VECTOR& oldPos,
 		const VECTOR& newPos,
 		const VECTOR& moveVec,
+		const VECTOR& gravityDirection,
 		const float radius,
 		const PositionData& positionData);
 
-	float GetTiltAngle_degree()const { return tiltAngle_degree; }
+	float GetTiltAngle_degree()const { return tiltAngleDegree; }
 
 	bool Draw();
 private:
 	MV1_COLL_RESULT_POLY hitPoly_Ground;
-	MV1_COLL_RESULT_POLY rayPoly_ground_now;
+	MV1_COLL_RESULT_POLY nowGroundRayPoly;
 
-	MV1_COLL_RESULT_POLY_DIM hitPoly_Wall;
-
-	VECTOR hitPos_head;
 	VECTOR hitPos_ground;
-	VECTOR hitWallNormal;
 
 	VECTOR ray_start_hanging_log;
 	VECTOR ray_end_hanging_log;
-	float tiltAngle_degree;
+	float tiltAngleDegree;
 
 	PositionData positionData;
 
 	PositionData GetPositionData() { return positionData; }
 
+	static constexpr float kAngleRange = 50.0f;
+	static constexpr int kFrameIndex = -1;
+	const VECTOR lengthDirection = VGet(0.0f, 1.0f, 0.0f);
 };
 

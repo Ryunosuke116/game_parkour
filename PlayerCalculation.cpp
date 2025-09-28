@@ -16,6 +16,7 @@
 
 PlayerCalculation::PlayerCalculation() :
     moveVec_old(VGet(0.0f, 0.0f, 0.0f)),
+    hitWallNormal(VGet(0.0f, 0.0f, 0.0f)),
     jumpPower_now(0.0f),
     moveSpeed_now(0.0f),
     rollMoveSpeed_now(0.0f),
@@ -152,7 +153,6 @@ VECTOR PlayerCalculation::Move(const int& animNumber_Now,
 
     //重力だけ前フレームのモノを使用
     velocity.y = moveVec_old.y;
-    //DebugDrawer::Instance().InformationInput_string_VECTOR("moveVec_old %f %f %f\n", moveVec_old);
 
     //重力計算
     velocity = Gravity(velocity, playerData);
@@ -434,7 +434,7 @@ std::pair<bool, VECTOR> PlayerCalculation::GroundCollisionCheckHangToCrouch(
     //ごまかしで少し下にrayを伸ばす
     bottomPos.y -= 5.0f;
 
-    MV1_COLL_RESULT_POLY rayPoly_ground;
+    MV1_COLL_RESULT_POLY groundRayPoly;
     VECTOR newPosition = position;
 
     for (const auto& fieldObject : fieldObjects)
@@ -442,14 +442,14 @@ std::pair<bool, VECTOR> PlayerCalculation::GroundCollisionCheckHangToCrouch(
         auto collisionObject = fieldObject.lock();
 
         //rayが当たっていれば
-        isWhenClimbingHitGround = HitCheck::RayHitJudge(collisionObject->GetModelHandle(), -1, topPos, bottomPos, rayPoly_ground);
+        isWhenClimbingHitGround = HitCheck::RayHitJudge(collisionObject->GetModelHandle(), -1, topPos, bottomPos, groundRayPoly);
 
         if (isWhenClimbingHitGround)
         {
             VECTOR newPlayerPos = VGet(0.0f, 0.0f, 0.0f);
 
             //床 - プレイヤーの足元で押し戻し量を計算
-            newPlayerPos.y = rayPoly_ground.HitPosition.y - foot.y;
+            newPlayerPos.y = groundRayPoly.HitPosition.y - foot.y;
             newPosition.y = newPosition.y + newPlayerPos.y;
         }
     }

@@ -108,6 +108,8 @@ void Camera::Update()
 
 	cameraDirection = VSub(screenCenterPosition, cameraPosition);
 	cameraDirection = VNorm(cameraDirection);
+
+	//DebugDrawer::Instance().InformationInput_sphere(screenCenterPosition, 3.5f, GetColor(255, 0, 255));
 }
 
 /// <summary>
@@ -381,8 +383,12 @@ void Camera::RotateUpdate()
 	//注視点はカメラとは反対方向に距離と高さを求める
 	VECTOR dir = VSub(screenCenterPosition, normalCameraPosition);
 	dir = VNorm(dir);
-	VECTOR scale = VScale(dir, 40.0f);
-	lookPosition = VAdd(screenCenterPosition, scale);
+	VECTOR add = VScale(dir, 40.0f);
+	lookPosition = VAdd(screenCenterPosition, add);
+
+	//rayCast用の座標を算出
+	VECTOR addStartRayCast = VScale(dir, -10.0f);
+	rayCastStartPosition = VAdd(normalCameraPosition, addStartRayCast);
 }
 
 
@@ -405,16 +411,13 @@ bool Camera::CameraPosCalc(const std::vector<std::weak_ptr<BaseObject>>& collisi
 		if (HitCheck::RayHitJudge(
 			collisionObject->GetModelHandle(),
 			-1,
-			normalCameraPosition, 
 			screenCenterPosition,
+			rayCastStartPosition,
 			hitPoly))
 		{
-			cameraVelocity = VSub(hitPoly.HitPosition, normalCameraPosition);
+			//カメラの移動量を算出
+			cameraVelocity = VSub(hitPoly.HitPosition, rayCastStartPosition);
 			VECTOR cameraDirection = VNorm(cameraVelocity);
-
-			//このままだと壁との接触座標に移動するので壁から少し離す
-			const VECTOR addVelocity = VScale(cameraDirection, velocityScale);
-			cameraVelocity = VAdd(cameraVelocity, addVelocity);
 
 			//オブジェクトからカメラを押し戻す
 			VECTOR newCameraPosition = VAdd(normalCameraPosition, cameraVelocity);

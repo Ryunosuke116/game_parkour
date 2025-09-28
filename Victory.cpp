@@ -44,8 +44,6 @@ bool Victory::MotionUpdate(PlayerData& playerData)
 {
     bool flag = false;
 
-    float totalTime_anim;
-
     // ƒuƒŒƒ“ƒh—¦‚ª‚PˆÈ‰º‚Ìê‡‚Í‚P‚É‹ß‚Ã‚¯‚é
     if (animBlendRate < 1.0f)
     {

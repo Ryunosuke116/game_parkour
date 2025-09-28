@@ -9,6 +9,8 @@
 #include "Player.h"
 #include "HitCheck.h"
 #include "DebugDrawer.h"
+#include "WorldSubSystem.h"
+#include "CollisionObjectManager.h"
 
 /// <summary>
 /// コンストラクタ
@@ -108,12 +110,13 @@ std::pair<VECTOR, PlayerData> FallingIdle::Update(const VECTOR& cameraDirection,
 VECTOR FallingIdle::Command(const VECTOR& cameraDirection, PlayerData& playerData, Player& player)
 {
     VECTOR moveDirection = VGet(0.0f, 0.0f, 0.0f);
+    auto collisionObjectManager = WorldSubSystem::GetInstance().GetSubSystem<CollisionObjectManager>();
 
     //moveDirを取得する
     moveDirection = Move(cameraDirection, playerData);
     JumpMove(playerData, player);
     RollMove(playerData);
-    WallRunMove(playerData, player);
+    WallRunMove(playerData, player, collisionObjectManager->GetCollisionObject("field"));
 
     if (playerData.isRunWall)
     {

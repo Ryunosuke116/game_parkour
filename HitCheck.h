@@ -30,13 +30,21 @@ public:
 	static bool HitConfirmation(VECTOR position_1, VECTOR position_2, const float radius_1, const float radius_2);
 	static bool TriangleAreaCheck_ground(const VECTOR& point, const VECTOR& a, const VECTOR& b, const VECTOR& c);
 
-	static void CapsuleHitWallJudge(const int& modelHandle, int frameIndex, float radius,
+	static bool CapsuleHitJudge(const int& modelHandle, int frameIndex, float radius,
 		VECTOR linePos_start, VECTOR linePos_end, MV1_COLL_RESULT_POLY_DIM& hitPoly);
 
 	static float projectionCalc(const VECTOR& point, const VECTOR& P, const VECTOR& Q);
 
 	static VECTOR CapsuleHitConfirmation(VECTOR capsulePosition_1, VECTOR capsulePosition_2, VECTOR position);
 
+	/// <summary>
+///  ñ Ç∆ÇÃê⁄êGç¿ïWÇÃåvéZ
+/// </summary>
+/// <param name="centerPos"></param>
+/// <param name="a"></param>
+/// <param name="b"></param>
+/// <param name="c"></param>
+/// <returns></returns>
 	static VECTOR ClosestPtToPointTriangle(VECTOR centerPos, VECTOR a, VECTOR b, VECTOR c);
 
 	static bool AABBHitJudge(AABB a, AABB b);

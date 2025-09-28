@@ -3,17 +3,17 @@
 #include <memory>
 #include <typeindex>
 
-class ISubSystem;
+class IWorldSubSystem;
 
-class SubSystemManager
+class GameInstanceSubSystem
 {
 public:
-	static SubSystemManager& GetInstance();
+	static GameInstanceSubSystem& GetInstance();
 
 	template <typename T, typename... Argument>
 	std::weak_ptr<T> AddSubSystem(Argument&&... argument)
 	{
-		static_assert(std::is_base_of<ISubSystem, T>::value, "TはIsubSystemクラスではありません");
+		static_assert(std::is_base_of<IWorldSubSystem, T>::value, "TはIsubSystemクラスではありません");
 
 		std::shared_ptr<T> subSystem = std::make_shared<T>(std::forward<Argument>(argument)...);
 		subSystems[typeid(T)] = subSystem;
@@ -34,14 +34,15 @@ public:
 		return std::weak_ptr<T>();
 	}
 
-	void Create(const std::string& sceneName);
+	void Create();
+	void Load(const std::string& sceneName);
 	void Update();
 	void Draw();
 
 	void ShutdownAll();
 
 private:
-	std::unordered_map<std::type_index, std::shared_ptr<ISubSystem>> subSystems;
+	std::unordered_map<std::type_index, std::shared_ptr<IWorldSubSystem>> subSystems;
 
 };
 

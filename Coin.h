@@ -1,16 +1,14 @@
 #pragma once
 #include "HitCheck.h"
 #include "BaseObject.h"
-#include "ISoundPlayer.h"
-#include "IEffectManager.h"
 
 class EffectManager;
 
-class CoinObject : public BaseObject
+class Coin : public BaseObject
 {
 public:
-	CoinObject();
-	~CoinObject();
+	Coin();
+	~Coin();
 
 	void Initialize()override;
 	void Update()override;

@@ -67,9 +67,6 @@
     <Filter Include="ソース ファイル\scene\result">
       <UniqueIdentifier>{c1f0c082-192f-467c-81eb-b67f7ef24bda}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\scene\blackOut">
-      <UniqueIdentifier>{339009be-2dcc-4bb8-b021-48b2d122fbf4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\Base\UI">
       <UniqueIdentifier>{d5b51631-8c3b-41df-8337-fa8a8aa08ccf}</UniqueIdentifier>
     </Filter>
@@ -247,6 +244,9 @@
     <Filter Include="ソース ファイル\object\game\UI\gameTimer">
       <UniqueIdentifier>{4366f260-6c87-43af-b722-fcca0dfe2fc4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\static\blackOut">
+      <UniqueIdentifier>{339009be-2dcc-4bb8-b021-48b2d122fbf4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -270,7 +270,7 @@
     <ClCompile Include="CollisionManager.cpp">
       <Filter>ソース ファイル\manager\Collision</Filter>
     </ClCompile>
-    <ClCompile Include="CoinObject.cpp">
+    <ClCompile Include="Coin.cpp">
       <Filter>ソース ファイル\object\game\coin</Filter>
     </ClCompile>
     <ClCompile Include="PlayerManager.cpp">
@@ -367,7 +367,7 @@
       <Filter>ソース ファイル\scene\result</Filter>
     </ClCompile>
     <ClCompile Include="BlackOut.cpp">
-      <Filter>ソース ファイル\scene\blackOut</Filter>
+      <Filter>ソース ファイル\static\blackOut</Filter>
     </ClCompile>
     <ClCompile Include="GameTimer.cpp">
       <Filter>ソース ファイル\object\game\UI\gameTimer</Filter>
@@ -405,7 +405,7 @@
     <ClCompile Include="Player.cpp">
       <Filter>ソース ファイル\object\game\player</Filter>
     </ClCompile>
-    <ClCompile Include="SubSystemManager.cpp">
+    <ClCompile Include="GameInstanceSubSystem.cpp">
       <Filter>ソース ファイル\subSystem</Filter>
     </ClCompile>
     <ClCompile Include="WorldSubSystem.cpp">
@@ -458,7 +458,7 @@
     <ClInclude Include="Field.h">
       <Filter>ソース ファイル\object\game\field</Filter>
     </ClInclude>
-    <ClInclude Include="CoinObject.h">
+    <ClInclude Include="Coin.h">
       <Filter>ソース ファイル\object\game\coin</Filter>
     </ClInclude>
     <ClInclude Include="PlayerManager.h">
@@ -576,7 +576,7 @@
       <Filter>ソース ファイル\scene\result</Filter>
     </ClInclude>
     <ClInclude Include="BlackOut.h">
-      <Filter>ソース ファイル\scene\blackOut</Filter>
+      <Filter>ソース ファイル\static\blackOut</Filter>
     </ClInclude>
     <ClInclude Include="GameTimer.h">
       <Filter>ソース ファイル\object\game\UI\gameTimer</Filter>
@@ -626,16 +626,10 @@
     <ClInclude Include="SoundPlayer.h">
       <Filter>ソース ファイル\manager\sound</Filter>
     </ClInclude>
-    <ClInclude Include="ISoundPlayer.h">
+    <ClInclude Include="IWorldSubSystem.h">
       <Filter>ソース ファイル\Interface</Filter>
     </ClInclude>
-    <ClInclude Include="IEffectManager.h">
-      <Filter>ソース ファイル\Interface</Filter>
-    </ClInclude>
-    <ClInclude Include="ISubSystem.h">
-      <Filter>ソース ファイル\Interface</Filter>
-    </ClInclude>
-    <ClInclude Include="SubSystemManager.h">
+    <ClInclude Include="GameInstanceSubSystem.h">
       <Filter>ソース ファイル\subSystem</Filter>
     </ClInclude>
     <ClInclude Include="WorldSubSystem.h">

@@ -62,6 +62,7 @@ public:
 	float GetWallRun_stopTime_max()const { return wallRun_stopTime_max; }
 	VECTOR GetHangingPoint()const { return hangingPoint; }
 	VECTOR GethitWallNormal() const { return hitWallNormal; }
+	VECTOR GetWallRunGravity()const { return wallRunGravity; }
 	MV1_COLL_RESULT_POLY GetHangingPoly() { return hangingPoly; }
 	Calculation::NearestResult GetNearestResult() { return nearestResult; }
 
@@ -75,7 +76,7 @@ public:
 	void SetHandPos_left(const VECTOR& set) { handPos_left = set; }
 	void SethitWallNormal(const VECTOR& set) { hitWallNormal = set; }
 	void SetNearestResult(const Calculation::NearestResult& set) { nearestResult = set; }
-
+	void SetWallRunGravity(const VECTOR& set) { wallRunGravity = set; }
 private:
 	static constexpr float MaxRunSpeed = 1.6f;	    // 移動速度
 	static constexpr  float MaxDashSpeed = 2.6f;	//ダッシュ速度
@@ -104,6 +105,7 @@ private:
 	VECTOR handPos_right;
 	VECTOR handPos_left;
 	VECTOR hitWallNormal;
+	VECTOR wallRunGravity;
 
 	Calculation::NearestResult nearestResult;
 	MV1_COLL_RESULT_POLY hangingPoly;

@@ -66,7 +66,7 @@ bool HitCheck::SphereHitJudge(
 /// <param name="linePos_start"></param>
 /// <param name="linePos_end"></param>
 /// <param name="hitPoly"></param>
-void HitCheck::CapsuleHitWallJudge(
+bool HitCheck::CapsuleHitJudge(
 	const int& modelHandle, 
 	int frameIndex,
 	float radius,
@@ -75,6 +75,9 @@ void HitCheck::CapsuleHitWallJudge(
 	MV1_COLL_RESULT_POLY_DIM& hitPoly)
 {
 	hitPoly = MV1CollCheck_Capsule(modelHandle, frameIndex, linePos_start, linePos_end, radius);
+	
+	if (hitPoly.HitNum >= 1)return true;
+	return false;
 }
 
 /// <summary>
@@ -107,14 +110,6 @@ float HitCheck::projectionCalc(const VECTOR& point, const VECTOR& P, const VECTO
 	return D;
 }
 
-/// <summary>
-///  面との接触座標の計算
-/// </summary>
-/// <param name="centerPos"></param>
-/// <param name="a"></param>
-/// <param name="b"></param>
-/// <param name="c"></param>
-/// <returns></returns>
 VECTOR HitCheck::ClosestPtToPointTriangle(VECTOR centerPos, VECTOR a, VECTOR b, VECTOR c)
 {
 
@@ -289,7 +284,6 @@ std::pair<VECTOR, VECTOR> HitCheck::SegmentTriangleDistance(const VECTOR& p, con
 		}
 	}
 	
-
 	bool flag = false;
 
 	for (int i = 0; i < num; i++)
@@ -328,7 +322,6 @@ std::pair<VECTOR, VECTOR> HitCheck::SegmentTriangleDistance(const VECTOR& p, con
 	//一番近い線分の点と面の衝突座標を返す
 	return std::make_pair(line_segment_point_closestSurface,
 		hittingPoint_surface);
-	
 }
 
 /// <summary>
@@ -450,15 +443,15 @@ HangingData HitCheck::CliffGrabbing(
 
 			for (int i = 0; i < poly_dim.HitNum; i++)
 			{
-				MV1_COLL_RESULT_POLY poly = poly_dim.Dim[i];
+				MV1_COLL_RESULT_POLY subjectPoly = poly_dim.Dim[i];
 				MV1_COLL_RESULT_POLY rayCheckWall;
 
 				//平面に当たっていればtrueに
-				if (poly.Normal.y >= 0.8f)
+				if (subjectPoly.Normal.y >= 0.8f)
 				{
 					//三角形の一番近い辺から一番近い点を求める
 					VECTOR nearestOutSide = Calculation::SphereMeshOutsideTriangle(
-						poly,
+						subjectPoly,
 						position);
 
 					//playerの座標から三角形のnearestOurSideとの間に壁があったら飛ばす
@@ -472,14 +465,14 @@ HangingData HitCheck::CliffGrabbing(
 
 					Calculation::NearestResult nearestResult = 
 						Calculation::SphereMeshOutsideTriangle_line(
-							poly,
+							subjectPoly,
 							position);
 
 				//奥行を調べるための座標
 				VECTOR depthDirection = VSub(nearestOutSide, position);
 				depthDirection = VNorm(depthDirection);
 
-				depthDirection = Calculation::Projection(poly.Normal, depthDirection);
+				depthDirection = Calculation::Projection(subjectPoly.Normal, depthDirection);
 
 				VECTOR rightRayPoint = VNorm(VSub(nearestResult.linePos_end, nearestOutSide));
 				VECTOR leftRayPoint = VNorm(VSub(nearestResult.linePos_start, nearestOutSide));
@@ -531,15 +524,15 @@ HangingData HitCheck::CliffGrabbing(
 				if (!leftRayCheck.HitFlag || 
 					!rightRayCheck.HitFlag)continue;
 
-					depthDirection = Calculation::Projection(poly.Normal, depthDirection);
+					depthDirection = Calculation::Projection(subjectPoly.Normal, depthDirection);
 
 					//奥行確認のためのrayの長さ
 					VECTOR depthDistance = VScale(depthDirection, max_velocity);
 					depthDistance = VAdd(nearestOutSide, depthDistance);
 
 					//少し浮かせる
-					VECTOR startWallCheckLine = VAdd(nearestOutSide, VScale(poly.Normal, 0.2f));
-					VECTOR endWallCheckLine = VAdd(depthDistance, VScale(poly.Normal, 0.2f));
+					VECTOR startWallCheckLine = VAdd(nearestOutSide, VScale(subjectPoly.Normal, 0.2f));
+					VECTOR endWallCheckLine = VAdd(depthDistance, VScale(subjectPoly.Normal, 0.2f));
 
 
 					DebugDrawer::Instance().InformationInput_capsule(startWallCheckLine, endWallCheckLine,1.0f, GetColor(255, 0, 255));
@@ -564,7 +557,7 @@ HangingData HitCheck::CliffGrabbing(
 					if (minSize == NULL || minSize >= sub_size)
 					{
 						minSize = sub_size;
-						hangingData.hangingPoly = poly;
+						hangingData.hangingPoly = subjectPoly;
 
 					}
 					

@@ -19,8 +19,22 @@ SoundPlayer::~SoundPlayer()
 	soundDatas.clear();
 }
 
+void SoundPlayer::Shutdown()
+{
+	for (auto& soundData : soundDatas)
+	{
+		DeleteSoundMem(soundData.second.handle);
+	}
+	soundDatas.clear();
+}
+
 void SoundPlayer::Create(const std::string& sceneName)
 {
+	if (soundDatas.size() != 0)
+	{
+		assert("soundDatas‚Ì‰Šú‰»‚ªs‚í‚ê‚Ä‚¢‚Ü‚¹‚ñ");
+	}
+
 	const nlohmann::json soundData = JsonManager::GetInstance().GetJsons("sound");
 	for (auto& data : soundData["list"])
 	{

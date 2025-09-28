@@ -1,5 +1,4 @@
 #pragma once
-#include "dxlib.h"
 
 class BaseManager
 {

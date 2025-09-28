@@ -4,7 +4,7 @@
 #include "ObjectManager.h"
 #include "DebugDrawer.h"
 #include "CollisionObjectManager.h"
-#include "SubSystemManager.h"
+#include "GameInstanceSubSystem.h"
 #include "BlackOut.h"
 #include "WorldSubSystem.h"
 #include "boundaryRange.h"
@@ -52,7 +52,7 @@ void ObjectManager::Create()
 	layout				= std::make_shared<Layout>();
 	tutorial			= std::make_shared<Tutorial>();
 	finishCut			= std::make_shared<FinishCut>();
-	L8TreeManager		= std::make_shared<Liner8TreeManager<CoinObject>>();
+	L8TreeManager		= std::make_shared<Liner8TreeManager<Coin>>();
 
 	//managerÇÃê∂ê¨
 	managers.push_back(std::make_shared<CollisionObjectManager>());
@@ -212,7 +212,7 @@ void ObjectManager::StartUpdate()
 
 		if (!isStreamStartPicture)
 		{
-			const auto soundPlayer = SubSystemManager::GetInstance().GetSubSystem<SoundPlayer>().lock();
+			const auto soundPlayer = GameInstanceSubSystem::GetInstance().GetSubSystem<SoundPlayer>().lock();
 			uiManager_actual->GetGameTimer()->ResetSetTime();
 			soundPlayer->Play("gameBGM");
 		}
@@ -245,7 +245,7 @@ void ObjectManager::FinishUpdate()
 		camera_actual->Update();
 		if (isGoal)
 		{
-			auto soundPlayer = SubSystemManager::GetInstance().GetSubSystem<SoundPlayer>().lock();
+			auto soundPlayer = GameInstanceSubSystem::GetInstance().GetSubSystem<SoundPlayer>().lock();
 			soundPlayer->Stop("gameBGM");
 		}
 	}

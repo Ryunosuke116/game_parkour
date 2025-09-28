@@ -13,7 +13,7 @@
 #include "JsonManager.h"
 #include "WorldSubSystem.h"
 #include "CollisionObjectManager.h"
-#include "SubSystemManager.h"
+#include "GameInstanceSubSystem.h"
 
 /// <summary>
 /// コンストラクタ
@@ -120,11 +120,16 @@ void Player::Initialize()
 /// </summary>
 void Player::Update()
 {
+    //床抜けバグ対策
+    if (position.y < -10.0f)
+    {
+        position = VGet(3.02443838f, 9.00285912f, -1215.93481f);
+    }
      //positionData更新
     CollisionUpdate();
 
     //エフェクトマネージャーのポインタを参照
-    std::shared_ptr<EffectManager> effectManager = SubSystemManager::GetInstance().GetSubSystem<EffectManager>().lock();
+    std::shared_ptr<EffectManager> effectManager = GameInstanceSubSystem::GetInstance().GetSubSystem<EffectManager>().lock();
 
     //リセット
     moveDirection = VGet(0.0f, 0.0f, 0.0f);
@@ -199,7 +204,7 @@ void Player::Update()
     float radian_pad = atan2f(-PadInput::GetJoyPad_x_left(), -PadInput::GetJoyPad_y_left());
 
     //度数計算
-    degree_pad_now = Calculation::radToDeg(radian_pad);
+    degree_pad_now = Calculation::RadToDeg(radian_pad);
 
     DebugUpdate();
     
@@ -327,8 +332,7 @@ void Player::MoveDirectionUpdate()
         nowMoveDirection.y = 0.0f;
     }
 
-    if (!playerData.isRunWall && 
-        nowMoveDirection.y == 0.0f)
+    if (!playerData.isRunWall)
     {
         faceDirection = nowMoveDirection;
     }
@@ -446,12 +450,7 @@ void Player::Receive_CollisionResult()
     if (isCollisionCheck)
     {
         playerData.isGround = collision_result.isHitGround;
-        position = collision_result.position_new;
-        playerData.isPossibleWallRun = collision_result.isPossibleWallRun;
-        if (VSize(collision_result.ishitWallNormal) != 0)
-        {
-            playerCalculation->SethitWallNormal(collision_result.ishitWallNormal);
-        }
+        position = collision_result.newPosition;
     }
     else
     {
@@ -512,7 +511,5 @@ void Player::DebugUpdate()
     DebugDrawer::Instance().InformationInput_string_bool("isHanging %d\n", playerData.isHanging);
     DebugDrawer::Instance().InformationInput_string_bool("isHanging_now %d\n", playerData.isHanging_now);
     DebugDrawer::Instance().InformationInput_string_bool("isUseHanging %d\n", playerData.isUseHanging);
-    DebugDrawer::Instance().InformationInput_string_bool("isPossibleWallRun %d\n", playerData.isPossibleWallRun);
     DebugDrawer::Instance().InformationInput_string_bool("isHangToCrouch %d\n", playerData.isHangToCrouch);
-
 }

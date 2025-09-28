@@ -1,8 +1,9 @@
 #pragma once
 #include "BaseScene.h"
+#include "BaseManager.h"
 #include <unordered_map>
 
-class SceneManager
+class SceneManager : public BaseManager
 {
 public:
 
@@ -22,9 +23,10 @@ public:
         }
     }
 
-    void Initialize();
-    void Update();
-    void Draw();
+    void Create()override;
+    void Initialize()override;
+    void Update()override;
+    void Draw()override;
 
     void ChangeScene(std::string_view name, const int coinCount);
 

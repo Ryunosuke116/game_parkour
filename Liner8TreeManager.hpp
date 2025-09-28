@@ -261,7 +261,8 @@ public:
 	/// <param name="collisionList"></param>
 	/// <param name="spaceNumber"></param>
 	/// <returns></returns>
-	uint32_t GetAllCollisionList(std::vector<std::weak_ptr<ObjectForTree<T>>>& collisionList,
+	uint32_t GetAllCollisionList(
+		std::vector<std::shared_ptr<ObjectForTree<T>>>& collisionList,
 		uint32_t spaceNumber)
 	{
 		//中身を初期化
@@ -273,6 +274,16 @@ public:
 		if (cellArray.size() == 0)
 		{
 			return 0;
+		}
+
+		//現在の空間の子空間を走査
+		const int divisionNumber = 8;	//空間の分割数
+		uint32_t childSpaceNumber = spaceNumber << 3;
+
+		for (unsigned int i = 0; i < divisionNumber; i++)
+		{
+			GetCollisionList(collisionList, childSpaceNumber);
+			childSpaceNumber++;
 		}
 		
 		//深度分走査する
@@ -290,7 +301,8 @@ public:
 		return collisionList.size();
 	}
 
-	bool GetCollisionList(std::vector<std::weak_ptr<ObjectForTree<T>>>& collisionList,
+	bool GetCollisionList(
+		std::vector<std::shared_ptr<ObjectForTree<T>>>& collisionList,
 		uint32_t spaceNumber)
 	{
 		//空間を検索
@@ -305,8 +317,7 @@ public:
 		//空間内のオブジェクトを衝突対象として追加
 		for (auto it = cell->GetObjectList().begin(); it != cell->GetObjectList().end();)
 		{
-			std::weak_ptr<ObjectForTree<T>> OFT = *it;
-			collisionList.push_back(OFT);
+			collisionList.push_back(*it);
 			it++;
 		}
 

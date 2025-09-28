@@ -35,7 +35,7 @@ public:
 	virtual VECTOR Move(const VECTOR& cameraDirection, PlayerData& playerData);
 	virtual void RollMove(PlayerData& playerData);
 	virtual void JumpMove(PlayerData& playerData, Player& player);
-	virtual void WallRunMove(PlayerData& playerData, Player& player);
+	virtual void WallRunMove(PlayerData& playerData, Player& player, const std::shared_ptr<BaseObject>& collisionObjects);
 
 	void SetOldAnimState();
 	void ResetOldAnimState();

@@ -5,7 +5,7 @@
 #include "Game.h"
 #include "DebugDrawer.h"
 #include "HitCheck.h"
-#include "SubSystemManager.h"
+#include "GameInstanceSubSystem.h"
 
 class Title;
 
@@ -28,11 +28,9 @@ Game::~Game()
 void Game::Create()
 {
 	const std::string jsonFileName = "JsonGame";
-	SubSystemManager::GetInstance().AddSubSystem<SoundPlayer>();
-	SubSystemManager::GetInstance().AddSubSystem<EffectManager>();
 
 	JsonManager::GetInstance().Create(jsonFileName);
-	SubSystemManager::GetInstance().Create(jsonFileName);
+	GameInstanceSubSystem::GetInstance().Load(jsonFileName);
 
 	gameObjectManager = std::make_shared<ObjectManager>();
 	gameObjectManager_actual = std::dynamic_pointer_cast<ObjectManager>(gameObjectManager);

@@ -24,7 +24,7 @@ public:
 	int GetModelHandle()const { return modelHandle; }
 	bool GetIsCollisionCheck()const { return isCollisionCheck; }
 	float GetRadian()const { return radian; }
-	float GetDegree()const { return Calculation::radToDeg(radian); }
+	float GetDegree()const { return Calculation::RadToDeg(radian); }
 	VECTOR GetPosition()const { return position; }
 	VECTOR GetFramePosition()const { return framePosition; }
 	VECTOR GetVelocity()const { return velocity; }

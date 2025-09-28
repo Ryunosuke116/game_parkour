@@ -2,7 +2,6 @@
 #include "BaseGameObjectManager.h"
 #include "HitCheck.h"
 #include "PlayerStateObserver.h"
-#include "ISoundPlayer.h"
 #include "BaseChara.h"
 
 class CollisionManager;
