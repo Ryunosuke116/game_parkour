@@ -71,6 +71,7 @@ private:
 	bool isHitObject;
 	bool isPutBackDistance;					//’Êí‚ÌƒJƒƒ‰‹——£‚É–ß‚·‚©
 	bool isPushRT;
+	bool isPush;
 
 	static constexpr float lookRadius = 1.0f;
 	static constexpr float cameraRadius = 4.0f;

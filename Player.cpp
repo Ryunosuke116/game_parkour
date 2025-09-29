@@ -440,9 +440,6 @@ void Player::CollisionUpdate()
     //AABB
     mAABB.min = VGet(position.x - radius, position.y, position.z - radius);
     mAABB.max = VGet(position.x + radius, positionData.rayTopPosition.y, position.z + radius);
-
-    DebugDrawer::Instance().InformationInput_string_VECTOR("faceDirection %f %f %f\n", faceDirection);
-    DebugDrawer::Instance().InformationInput_AABB(mAABB.min, mAABB.max, GetColor(255, 0, 0));
 }
 
 void Player::Receive_CollisionResult()
@@ -461,16 +458,14 @@ void Player::Receive_CollisionResult()
 void Player::DebugUpdate()
 {
     //ÉJÉvÉZÉã
-    DebugDrawer::Instance().InformationInput_capsule(
+  /*  DebugDrawer::Instance().InformationInput_capsule(
         positionData.capsuleTopPosition,
         positionData.capsuleBottomPosition,
         radius,
-        GetColor(255, 0, 0));
+        GetColor(255, 0, 0));*/
 
     //AABB
-    VECTOR min = VGet(153.0f, 8.0f, 750.0f);
-    VECTOR max = VGet(245.0f, 80.0f, 815.0f);
-    //DebugDrawer::Instance().InformationInput_AABB(min, max, GetColor(255, 0, 0));
+    //DebugDrawer::Instance().InformationInput_AABB(mAABB.min, mAABB.max, GetColor(255, 0, 0));
    
 
     //ãÖëÃ
@@ -480,6 +475,7 @@ void Player::DebugUpdate()
     //string_VECTOR
     DebugDrawer::Instance().InformationInput_string_VECTOR("playerPosition.x %f\nplayerPosition.y %f\nplayerPosition.z %f\n", position);
     DebugDrawer::Instance().InformationInput_string_VECTOR("nowMoveDirection.x %f\nowMoveDirection.y %f\nowMoveDirection.z %f\n", nowMoveDirection);
+    DebugDrawer::Instance().InformationInput_string_VECTOR("faceDirection %f %f %f\n", faceDirection);
 
     //string_int
     DebugDrawer::Instance().InformationInput_string_int("frameåªç›êî%d\n", nowFrameNumber);

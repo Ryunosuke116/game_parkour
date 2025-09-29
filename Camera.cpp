@@ -70,6 +70,7 @@ void Camera::Initialize()
 	isResetAngle = false;
 	isHitObject = false;
 	isPushRT = false;
+	isPush = false;
 	normalCameraHeightProgress = 0.0f;
 
 	SetCameraPositionAndTarget_UpVecY(cameraPosition, screenCenterPosition);
@@ -96,8 +97,20 @@ void Camera::Update()
 	RotateUpdate();
 
 	//カメラがオブジェクトに埋まらないようにする
-	isHitObject = CameraPosCalc(
-		WorldSubSystem::GetInstance().GetSubSystem<CollisionObjectManager>()->GetCollisionObjects());
+	if(CheckHitKey(KEY_INPUT_4))
+	{
+		if (!isPush)
+		{
+			isPush = true;
+			isHitObject = false;
+		}
+	}
+	else
+	{
+		isHitObject = CameraPosCalc(
+			WorldSubSystem::GetInstance().GetSubSystem<CollisionObjectManager>()->GetCollisionObjects());
+		isPush = false;
+	}
 	
 	AdjustCameraPosition();
 

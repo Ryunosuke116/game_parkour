@@ -413,11 +413,6 @@ HangingData HitCheck::CliffGrabbing(
 
 	DebugDrawer::Instance().InformationInput_line(startUpperCheckPos, endUpperCheckPos, GetColor(255, 0, 255));
 
-	//TODO::崖を掴む条件を厳しくする
-	// 1、プレイヤーの肩幅より少し大きめに横幅を計算
-	// 2、横幅の両端から下にrayを飛ばして床があるか確認
-	// 3、奥行計算
-
 	//落下中にplayerの上部の球で判定を取る
 	for (const auto& fieldObject : collisionObjects)
 	{

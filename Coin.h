@@ -51,7 +51,7 @@ private:
 	VECTOR boundsMin;			//AABBの最小値
 	VECTOR boundsMax;			//AABBの最大値
 
-	static constexpr float radius = 6.0f;		//半径
+	static constexpr float radius = 7.0f;		//半径
 	static constexpr float objectScale = 0.3f;	//オブジェクトの大きさ
 	static constexpr float addVelocity = 0.4f;	//移動量
 	static constexpr float flyPower = 5.0f;		//飛ぶ大きさ

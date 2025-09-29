@@ -36,8 +36,8 @@ ObjectManager::~ObjectManager()
 void ObjectManager::Create()
 {
 	//vector型.atを使うとき用
-	const int playerManagerNumber = 1;
-	const int coinManagerNumber = 2;
+	const int coinManagerNumber = 1;
+	const int playerManagerNumber = 2;
 	const int uiManagerNumber = 3;
 	const int cameraObjectNumber = 2;
 	const int shadowObjectNumber = 3;
@@ -56,8 +56,8 @@ void ObjectManager::Create()
 
 	//managerの生成
 	managers.push_back(std::make_shared<CollisionObjectManager>());
-	managers.push_back(std::make_shared<PlayerManager>());
 	managers.push_back(std::make_shared<CoinManager>());
+	managers.push_back(std::make_shared<PlayerManager>());
 	managers.push_back(std::make_shared<UIManager>());
 	
 	//アップキャスト

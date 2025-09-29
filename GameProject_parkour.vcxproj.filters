@@ -420,9 +420,6 @@
     <ClCompile Include="BackGround.cpp">
       <Filter>ソース ファイル\object\title\BackGround</Filter>
     </ClCompile>
-    <ClCompile Include="ObjectManager.cpp">
-      <Filter>ソース ファイル\manager\Object</Filter>
-    </ClCompile>
     <ClCompile Include="Cell.cpp">
       <Filter>ソース ファイル\cell</Filter>
     </ClCompile>
@@ -434,6 +431,9 @@
     </ClCompile>
     <ClCompile Include="UIButton.cpp">
       <Filter>ソース ファイル\object\result\UIButton</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectManager.cpp">
+      <Filter>ソース ファイル\manager\Object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

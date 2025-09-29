@@ -324,7 +324,6 @@ VECTOR PlayerCalculation::HangingAngle(const MV1_COLL_RESULT_POLY& hangingPoly)
 
     direction = VScale(direction, -1.0f);
 
-
     return VNorm(direction);
 }
 
@@ -355,9 +354,6 @@ VECTOR PlayerCalculation::HangingDirection( const VECTOR& centerPos)
 {
     //ŽË‰eƒxƒNƒgƒ‹
     VECTOR a = Calculation::ProjectionDirection(centerPos, nearestResult.linePos_start, nearestResult.linePos_end);
-
-    //DebugDrawer::Instance().InformationInput_line(nearestResult.linePos_start, nearestResult.linePos_end, GetColor(255, 0, 0));
-    //DebugDrawer::Instance().InformationInput_sphere(a, 2.0f, GetColor(0, 255, 0));
 
     VECTOR direction = VSub(a, centerPos);
     direction.y = 0.0f;

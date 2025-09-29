@@ -77,7 +77,6 @@ CollisionResult CollisionManager::Check_all(
 
 	CollisionResult collisionResult;
 	collisionResult.newPosition = newPosition;
-	DebugDrawer::Instance().InformationInput_line(projection_ray_start, projection_ray_end, GetColor(255, 0, 255));
 
 	//----------------------------------//
 	// óDêÊèáÇ…è’ìÀîªíËÇçsÇ§
@@ -446,8 +445,6 @@ VECTOR CollisionManager::WallGroundCollisionCheck(
 
 	VECTOR returnNewPos = newPosition;
 	VECTOR HitWallPlayerPosition = VAdd(newPosition, VScale(gravityForWallRun, charaRadius));
-
-	DebugDrawer::Instance().InformationInput_line(rayStartPosition, rayEndPosition, GetColor(255, 0, 255));
 
 	MV1_COLL_RESULT_POLY groundRayPoly;
 
