@@ -37,10 +37,12 @@ private:
 	int positionY;
 	int numberWidth;
 	int numberHeight;
+	int numberHandle[10];
+	int colonHandle;
+	int colonPositionX;
 
 	bool isUpdateMin;	
 
-	int numberHandle[10];
 	std::string countNumberSec;
 	std::string countNumberMin;
 };

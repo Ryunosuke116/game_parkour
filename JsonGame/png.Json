@@ -4,11 +4,12 @@
   "coin": [
     [ "material/png/coin2d_01.png", "coin" ],
     [ "material/png/unnamed_01.png", "cross" ],
-    [ "material/png/number.png", "number" ]
-
+    [ "material/png/number.png", "number" ],
+    [ "material/png/Colon.png", "colon" ]
   ],
 
   "controlManual": [
+    [ "material/png/manual/command.png", "commandBack" ],
     [ "material/png/manual/move_.png", "move" ],
     [ "material/png/manual/move_camera_.png", "move_camera" ],
     [ "material/png/manual/move_down_.png", "move_down" ],

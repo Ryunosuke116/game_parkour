@@ -172,8 +172,12 @@ void Player::Update()
         effectTimer++;
         if (effectTimer >= 10.0f)
         {
+            VECTOR effectPosition = position;
+            effectPosition.y += 2.0f;
+            const VECTOR scale = VGet(4.0f, 4.0f, 4.0f);
             effectManager->PlayEffect("foot_smoke");
-            effectManager->SetPosition(position,"foot_smoke");
+            effectManager->SetScale(scale, "foot_moke");
+            effectManager->SetPosition(effectPosition,"foot_smoke");
             effectTimer = 0.0f;
         }
     }

@@ -24,6 +24,9 @@ private:
 	std::unordered_map<std::string, int> uiHandles;
 	std::vector<int> draw_UIs;
 	int stateNumber;
+	int commandsBackHandle;
+	int commandsBackPosX;
+	int commandsBackPosY;
 
 	PlayerData data;
 

@@ -59,17 +59,7 @@ std::pair<VECTOR, PlayerData> Run::Update(const VECTOR& cameraDirection,
 		playerData = playerData_new;
 	}
 
-	if (playerData.isDash)
-	{
-		const VECTOR scale = VGet(5.0f, 5.0f, 5.0f);
-		const auto effectManager = GameInstanceSubSystem::GetInstance().GetSubSystem<EffectManager>().lock();
-		effectManager->SetScale(scale, "foot_smoke");
-		this->nowAnimState.PlayAnimSpeed = DashAnimSpeed;
-	}
-	else
-	{
-		this->nowAnimState.PlayAnimSpeed = playAnimSpeed;
-	}
+	this->nowAnimState.PlayAnimSpeed = playAnimSpeed;
 
 	return std::make_pair(moveDir, playerData);
 }
@@ -276,7 +266,6 @@ VECTOR Run::Command(
 
 	//moveDir‚ðŽæ“¾‚·‚é
 	moveDir = Move(cameraDirection, playerData);
-	DashMove(playerData);
 	JumpMove(playerData, player);
 	RollMove(playerData);
 

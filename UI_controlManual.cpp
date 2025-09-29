@@ -40,12 +40,14 @@ void UI_controlManual::Create()
 
 void UI_controlManual::Initialize()
 {
-	const int initX = 50;
-	const int initY = 30;
+	const int initX = 90;
+	const int initY = 120;
 	const int initStateNumber = -1;
 
 	x = initX;
 	y = initY;
+	commandsBackPosX = 30;
+	commandsBackPosY = 60;
 	stateNumber = initStateNumber;
 }
 
@@ -93,12 +95,10 @@ void UI_controlManual::Update()
 void UI_controlManual::Draw()
 {
 	int alpha_Box = 100;
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha_Box);
-	DrawBox(30, 10, 220, 250, GetColor(0, 0, 0), true);
-
-	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 	int draw_y = y;
+
+	DrawGraph(commandsBackPosX, commandsBackPosY, uiHandles.at("commandBack"),TRUE);
 
 	for (auto& draw_UI : draw_UIs)
 	{

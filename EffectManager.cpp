@@ -41,7 +41,7 @@ void EffectManager::Create(const std::string& sceneName)
 		assert("effectDatas‚Ì‰Šú‰»‚ªs‚í‚ê‚Ä‚¢‚Ü‚¹‚ñ");
 	}
 
-	if ("Game" == sceneName)
+	if ("JsonGame" == sceneName)
 	{
 		const nlohmann::json effectData = JsonManager::GetInstance().GetJsons("effectData");
 
@@ -71,7 +71,6 @@ void EffectManager::Add(const char* path, std::string& setTag,
 	data->tag = setTag;
 
 	effectDatas.push_back(data);
-
 }
 
 void EffectManager::Update()

@@ -9,6 +9,8 @@
 /// </summary>
 GameTimer::GameTimer():
 	BaseUI(),
+	colonHandle(-1),
+	colonPositionX(-1),
 	isUpdateMin(false),
 	countNumberSec("")
 {
@@ -29,9 +31,11 @@ GameTimer::~GameTimer()
 void GameTimer::Load(const nlohmann::json& jsonData)
 {
 	std::string path = jsonData["coin"][2][0];
+	std::string colonPath = jsonData["coin"][3][0];
 
 	LoadDivGraph(path.c_str(),
 		10, 10, 1, 480, 500, numberHandle);
+	colonHandle = LoadGraph(colonPath.c_str());
 }
 
 void GameTimer::Create()
@@ -50,6 +54,7 @@ void GameTimer::Initialize()
 	min = 3;
 	positionX = 640;
 	positionY = 30;
+	colonPositionX = 765;
 	numberWidth = 100;
 	numberHeight = 100;
 	isUpdateMin = false;
@@ -121,6 +126,9 @@ void GameTimer::Draw()
 		num_x += addNumberX;
 	}
 
+	DrawExtendGraph(colonPositionX, positionY,
+		colonPositionX + numberWidth, positionY + numberHeight,
+		colonHandle, TRUE);
 	num_x += addSpaceX;
 
 	for (char c : countNumberSec)
