@@ -78,7 +78,7 @@ void UI_coin::Initialize()
 	crossHeight = 60;
 	numberWidth = 100;
 	numberHeight = 100;
-	addNumberX = 70;
+	addNumberX = 60;
 
 	countNumber = initNumber;
 	coinCount = 0;
@@ -98,11 +98,11 @@ void UI_coin::Update()
 void UI_coin::Draw()
 {
 	//コインイラスト描画
-	DrawExtendGraph(x, y, 
-		x + coinWidth, y + coinHeight, 
+	DrawExtendGraph(x, y,
+		x + coinWidth, y + coinHeight,
 		coinHandle, TRUE);
 	//DrawGraph(x, y, coinHandle, TRUE);
-	
+
 	//×描画
 	DrawExtendGraph(cross_x, cross_y,
 		cross_x + crossWidth, cross_y + crossHeight,
@@ -122,7 +122,7 @@ void UI_coin::Draw()
 		//文字の幅分ずらす
 		num_x += addNumberX;
 	}
-	
+
 }
 
 /// <summary>
@@ -164,7 +164,6 @@ void UI_coin::ResultInitialize()
 	addNumberX = 120;
 
 	countNumber = initNumber;
-	coinCount = 0;
 }
 
 /// <summary>

@@ -12,9 +12,8 @@
 /// コンストラクタ
 /// </summary>
 /// <param name="modelHandle"></param>
-Idle::Idle(int& modelHandle,
-    AnimState& oldAnimState, AnimState& nowAnimState, PlayerData& playerData) :
-    PlayerStateBase(modelHandle, oldAnimState, nowAnimState)
+Idle::Idle(const int modelHandle) :
+    PlayerStateBase(modelHandle)
 {
     this->nowAnimState.PlayAnimSpeed = playAnimSpeed;
 }
@@ -24,7 +23,7 @@ Idle::Idle(int& modelHandle,
 /// </summary>
 Idle::~Idle()
 {
-  //  MV1DetachAnim(modelHandle, this->nowAnimState.AttachIndex);
+  //  MV1DetachAnim(modelHandle, this->nowAnimState.attachIndex);
 }
 
 /// <summary>
@@ -55,18 +54,13 @@ VECTOR Idle::Command(const VECTOR& cameraDirection, PlayerData& playerData, Play
     JumpMove(playerData, player);
     RollMove(playerData);
 
-    if (VSize(moveDirection) != 0.0f && !playerData.IsPushRT)
+    if (VSize(moveDirection) != 0.0f && !playerData.isRoll)
     {
         playerData.isRun = true;
         isChangeState = true;
     }
 
     return moveDirection;
-}
-
-void Idle::Enter(PlayerData& playerData)
-{
-    playerData.isIdle = true;
 }
 
 void Idle::Exit(PlayerData& playerData)

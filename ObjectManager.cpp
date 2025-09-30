@@ -12,7 +12,7 @@
 /// <summary>
 /// コンストラクタ
 /// </summary>
-ObjectManager::ObjectManager():
+ObjectManager::ObjectManager() :
 	streamStartPictureTimer(-1),
 	stream_finishPicture_timer(-1),
 	isStreamStartPicture(false),
@@ -26,7 +26,6 @@ ObjectManager::ObjectManager():
 /// </summary>
 ObjectManager::~ObjectManager()
 {
-	managers.clear();
 	objects.clear();
 }
 
@@ -36,11 +35,11 @@ ObjectManager::~ObjectManager()
 void ObjectManager::Create()
 {
 	//vector型.atを使うとき用
-	const int coinManagerNumber = 1;
-	const int playerManagerNumber = 2;
-	const int uiManagerNumber = 3;
 	const int cameraObjectNumber = 2;
 	const int shadowObjectNumber = 3;
+	const int coinManagerNumber = 5;
+	const int playerManagerNumber = 6;
+	const int uiManagerNumber = 7;
 
 	//生成
 	//object生成
@@ -49,29 +48,30 @@ void ObjectManager::Create()
 	objects.push_back(std::make_shared<Camera>());
 	objects.push_back(std::make_shared<Shadow>());
 
-	layout				= std::make_shared<Layout>();
-	tutorial			= std::make_shared<Tutorial>();
-	finishCut			= std::make_shared<FinishCut>();
-	L8TreeManager		= std::make_shared<Liner8TreeManager<Coin>>();
+	layout = std::make_shared<Layout>();
+	tutorial = std::make_shared<Tutorial>();
+	finishCut = std::make_shared<FinishCut>();
+	L8TreeManager = std::make_shared<Liner8TreeManager<Coin>>();
 
 	//managerの生成
-	managers.push_back(std::make_shared<CollisionObjectManager>());
-	managers.push_back(std::make_shared<CoinManager>());
-	managers.push_back(std::make_shared<PlayerManager>());
-	managers.push_back(std::make_shared<UIManager>());
-	
+	objects.push_back(std::make_shared<CollisionObjectManager>());
+	objects.push_back(std::make_shared<CoinManager>());
+	objects.push_back(std::make_shared<PlayerManager>());
+	objects.push_back(std::make_shared<UIManager>());
+
 	//アップキャスト
-	playerManager_actual	= std::dynamic_pointer_cast<PlayerManager>(managers.at(playerManagerNumber));
-	coinManager_actual		= std::dynamic_pointer_cast<CoinManager>(managers.at(coinManagerNumber));
-	shadow_actual			= std::dynamic_pointer_cast<Shadow>(objects.at(shadowObjectNumber));
-	uiManager_actual		= std::dynamic_pointer_cast<UIManager>(managers.at(uiManagerNumber));
+	camera_actual = std::dynamic_pointer_cast<Camera>(objects.at(cameraObjectNumber));
+	shadow_actual = std::dynamic_pointer_cast<Shadow>(objects.at(shadowObjectNumber));
+	playerManager_actual = std::dynamic_pointer_cast<PlayerManager>(objects.at(playerManagerNumber));
+	coinManager_actual = std::dynamic_pointer_cast<CoinManager>(objects.at(coinManagerNumber));
+	uiManager_actual = std::dynamic_pointer_cast<UIManager>(objects.at(uiManagerNumber));
 
 	//Jsonデータを取得
-	for (auto& manager : managers)
+	for (auto& object : objects)
 	{
-		manager->Create();
+		object->Create();
 	}
-	
+
 	//コインオブザーバーに追加
 	coinManager_actual->AddObserver(playerManager_actual->GetPlayer());
 	coinManager_actual->AddObserver(uiManager_actual->GetUI_coin());
@@ -79,13 +79,7 @@ void ObjectManager::Create()
 	//プレイヤーステートオブサーバーに追加
 	playerManager_actual->AddObserver(uiManager_actual->GetUI_controlManual());
 
-	camera_actual = std::dynamic_pointer_cast<Camera>(objects.at(cameraObjectNumber));
-
 	//ロード
-	for (auto& object : objects)
-	{
-		object->Create();
-	}
 	L8TreeManager->Create();
 
 	tutorial->Load(JsonManager::GetInstance().GetJsons(tutorial->GetTag()));
@@ -99,11 +93,6 @@ void ObjectManager::Initialize()
 {
 	const int spaceLevel = 6;
 	L8TreeManager->Initialize(spaceLevel, BoundaryRange::min, BoundaryRange::max);
-
-	for (auto& manager : managers)
-	{
-		manager->Initialize();
-	}
 
 	for (auto& object : objects)
 	{
@@ -134,7 +123,7 @@ void ObjectManager::Update()
 
 	FinishUpdate();
 
-	if (!isStreamStartPicture && 
+	if (!isStreamStartPicture &&
 		!isStreamFinishPicture)
 	{
 		if (CheckHitKey(KEY_INPUT_0))
@@ -166,11 +155,6 @@ void ObjectManager::Update()
 				object->Update();
 			}
 
-			for (auto& manager : managers)
-			{
-				manager->Update();
-			}
-
 		}
 		else
 		{
@@ -179,7 +163,7 @@ void ObjectManager::Update()
 			layout->Update(WorldSubSystem::GetInstance().GetSubSystem<Camera>()->GetScreenCenterPosition(),
 				*coinManager_actual);
 		}
-		
+
 		//ゴール判定
 		if (uiManager_actual->GetGameTimer()->IsFinish() &&
 			!isStreamFinishPicture)
@@ -187,6 +171,22 @@ void ObjectManager::Update()
 			isStreamFinishPicture = true;
 			finishCut->SetIsDrawFinish(true);
 		}
+	}
+}
+
+void ObjectManager::NormalUpdate()
+{
+	for (auto& object : objects)
+	{
+		object->Update();
+	}
+
+	//ゴール判定
+	if (uiManager_actual->GetGameTimer()->IsFinish() &&
+		!isStreamFinishPicture)
+	{
+		isStreamFinishPicture = true;
+		finishCut->SetIsDrawFinish(true);
 	}
 }
 
@@ -259,12 +259,12 @@ void ObjectManager::Draw()
 	// シャドウマップへの描画の準備
 	ShadowMap_DrawSetup(shadow_actual->GetShadowMapHandle());
 
-	for (auto& manager : managers)
+	for (auto& object : objects)
 	{
-		if (std::dynamic_pointer_cast<PlayerManager>(manager) ||
-			std::dynamic_pointer_cast<CoinManager>(manager))
+		if (std::dynamic_pointer_cast<PlayerManager>(object) ||
+			std::dynamic_pointer_cast<CoinManager>(object))
 		{
-			manager->Draw();
+			object->Draw();
 		}
 	}
 
@@ -276,17 +276,12 @@ void ObjectManager::Draw()
 
 	for (auto& object : objects)
 	{
-		object->Draw();
-	}
-
-	for (auto& manager : managers)
-	{
-		if (auto uiManager = std::dynamic_pointer_cast<UIManager>(manager) &&
+		if (std::dynamic_pointer_cast<UIManager>(object) &&
 			isStreamStartPicture)
 		{
 			continue;
 		}
-		manager->Draw();
+		object->Draw();
 	}
 
 	// 描画に使用するシャドウマップの設定を解除
@@ -318,8 +313,8 @@ void ObjectManager::tutorialDraw()
 
 void ObjectManager::ResultCreate(int coinCount)
 {
-	const int coinManagerNumber = 3;
 	const int shadowObjectNumber = 3;
+	const int coinManagerNumber = 6;
 
 	//生成
 	//object生成
@@ -329,45 +324,35 @@ void ObjectManager::ResultCreate(int coinCount)
 	objects.push_back(std::make_shared<Shadow>());
 
 	//managerの生成
-	managers.push_back(std::make_shared<CollisionObjectManager>());
-	managers.push_back(std::make_shared<PlayerManager>());
-	managers.push_back(std::make_shared<CoinManager>());
-	managers.push_back(std::make_shared<UIManager>());
+	objects.push_back(std::make_shared<CollisionObjectManager>());
+	objects.push_back(std::make_shared<PlayerManager>());
+	objects.push_back(std::make_shared<CoinManager>());
+	objects.push_back(std::make_shared<UIManager>());
 
 	//アップキャスト
 	shadow_actual = std::dynamic_pointer_cast<Shadow>(objects.at(shadowObjectNumber));
 
-	//Jsonデータを取得
-	for (auto& manager : managers)
+	//ロード
+	for (auto& object : objects)
 	{
-		if (auto coinManager = std::dynamic_pointer_cast<CoinManager>(manager))
+		if (auto coinManager = std::dynamic_pointer_cast<CoinManager>(object))
 		{
 			coinManager->ResultCreate(coinCount);
 			continue;
 		}
 
-		if (auto uiManager = std::dynamic_pointer_cast<UIManager>(manager))
+		if (auto uiManager = std::dynamic_pointer_cast<UIManager>(object))
 		{
 			uiManager->ResultCreate(coinCount);
 			continue;
 		}
-		manager->ResultCreate();
-	}
 
-	//ロード
-	for (auto& object : objects)
-	{
 		object->ResultCreate();
 	}
 }
 
 void ObjectManager::ResultInitilize()
 {
-	for (auto& manager : managers)
-	{
-		manager->ResultInitialize();
-	}
-
 	for (auto& object : objects)
 	{
 		object->ResultInitialize();
@@ -376,11 +361,6 @@ void ObjectManager::ResultInitilize()
 
 void ObjectManager::ResultUpdate()
 {
-	for (auto& manager : managers)
-	{
-		manager->ResultUpdate();
-	}
-
 	for (auto& object : objects)
 	{
 		object->ResultUpdate();
@@ -392,12 +372,12 @@ void ObjectManager::ResultDraw()
 	// シャドウマップへの描画の準備
 	ShadowMap_DrawSetup(shadow_actual->GetShadowMapHandle());
 
-	for (auto& manager : managers)
+	for (auto& object : objects)
 	{
-		if (std::dynamic_pointer_cast<PlayerManager>(manager) ||
-			std::dynamic_pointer_cast<CoinManager>(manager))
+		if (std::dynamic_pointer_cast<PlayerManager>(object) ||
+			std::dynamic_pointer_cast<CoinManager>(object))
 		{
-			manager->Draw();
+			object->Draw();
 		}
 	}
 
@@ -409,17 +389,12 @@ void ObjectManager::ResultDraw()
 
 	for (auto& object : objects)
 	{
-		object->Draw();
-	}
-
-	for (auto& manager : managers)
-	{
-		if (auto uiManager = std::dynamic_pointer_cast<UIManager>(manager) &&
+		if (std::dynamic_pointer_cast<UIManager>(object) &&
 			isStreamStartPicture)
 		{
 			continue;
 		}
-		manager->Draw();
+		object->Draw();
 	}
 
 	// 描画に使用するシャドウマップの設定を解除

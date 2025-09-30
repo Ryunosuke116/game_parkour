@@ -4,7 +4,6 @@
 #include "Jump.h"
 #include "Run.h"
 #include "QuickRoll.h"
-#include "IdleToSprint.h"
 #include "RunToStop.h"
 #include "HangingIdle.h"
 #include "BracedHangToCrouch.h"

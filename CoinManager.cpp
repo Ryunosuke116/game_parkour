@@ -66,15 +66,17 @@ void CoinManager::Create()
 void CoinManager::Initialize()
 {
 	auto L8TreeManager = WorldSubSystem::GetInstance().GetSubSystem<Liner8TreeManager<Coin>>();
-	
+
 	for (auto& coin : umCoins)
 	{
 		coin.second->Initialize();
 
 		//OFT‚É“o˜^‚·‚é
-		std::shared_ptr OFT = std::make_shared<ObjectForTree<Coin>>();
+		std::shared_ptr<ObjectForTree<Coin>> OFT =
+			std::make_shared<ObjectForTree<Coin>>();
+
 		OFT->objectPointer = coin.second;
-	
+
 		//‹óŠÔ‚É“o˜^
 		L8TreeManager->Regist(
 			coin.second->GetBoundsMin(),
@@ -92,11 +94,11 @@ void CoinManager::Update()
 {
 	auto L8TreeManager = WorldSubSystem::GetInstance().GetSubSystem<Liner8TreeManager<Coin>>();
 	auto spPlayerManager = WorldSubSystem::GetInstance().GetSubSystem<PlayerManager>();
-	
+
 	//ƒvƒŒƒCƒ„[‚ª‚Ç‚Ì‹óŠÔ‚É‚¢‚é‚©’²‚×‚é
 	uint32_t playerSpaceNumber = L8TreeManager->GetMortonNumber(
-			spPlayerManager->GetPlayer()->GetAABB().min,
-			spPlayerManager->GetPlayer()->GetAABB().max);
+		spPlayerManager->GetPlayer()->GetAABB().min,
+		spPlayerManager->GetPlayer()->GetAABB().max);
 
 	//player‚Ì‚¢‚é‹óŠÔ‚ğŒŸõ
 	std::shared_ptr<Cell<Coin>> cell = L8TreeManager->GetCell(playerSpaceNumber);
@@ -108,7 +110,7 @@ void CoinManager::Update()
 	for (auto it = coinList.begin(); it != coinList.end();)
 	{
 		std::shared_ptr<Coin> coin = (*it)->objectPointer.lock();
-		
+
 		//’†g‚ªnull‚Ìê‡Ÿ‚Ö
 		if (!coin)
 		{
@@ -129,7 +131,7 @@ void CoinManager::Update()
 			{
 				std::shared_ptr<ObjectForTree<Coin>> spOFT = (*it);		//sharedŒ^‚ÌOFT
 				auto& objectList = cell->GetObjectList();				//‹óŠÔ“à‚ÌobjectƒŠƒXƒg
-			
+
 				for (auto objectIt = objectList.begin(); objectIt != objectList.end(); objectIt++)
 				{
 					if (objectIt->get() == spOFT.get())
@@ -201,15 +203,15 @@ void CoinManager::Add()
 void CoinManager::NotifyCoinPicked(int amount)
 {
 	//ƒŠƒXƒg“à‚Ì—v‘f‚ğˆê‚Â‚¸‚Â’²¸‚·‚é
-	for (auto it = observers.begin(); it != observers.end(); ) 
+	for (auto it = observers.begin(); it != observers.end(); )
 	{
 		//lock‚Åweak_ptr‚©‚çshared_ptr‚Öˆê“I‚É•ÏŠ·
-		if (auto obs = it->lock()) 
+		if (auto obs = it->lock())
 		{
 			obs->OnCoinPicked(amount);
 			++it;
 		}
-		else 
+		else
 		{
 			// ‚·‚Å‚É”jŠü‚³‚ê‚Ä‚¢‚é observer ‚ğíœ
 			it = observers.erase(it);
@@ -239,7 +241,7 @@ void CoinManager::ResultCreate(int coinCount)
 
 	for (int i = 0; i < coinCount; i++)
 	{
-		umCoins[i]=std::make_shared<Coin>();
+		umCoins[i] = std::make_shared<Coin>();
 
 		umCoins.at(i)->Load(i,
 			modelHandle,

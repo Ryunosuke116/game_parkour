@@ -4,9 +4,7 @@
 class Victory : public PlayerStateBase
 {
 public:
-	Victory(int& modelHandle, AnimState& oldAnimState,
-		AnimState& nowAnimState,
-		PlayerData& playerData);
+	Victory(const int modelHandle);
 	~Victory();
 
 	std::pair<VECTOR, PlayerData> Update(const VECTOR& cameraDirection,
@@ -14,7 +12,6 @@ public:
 
 	VECTOR Command(const VECTOR& cameraDirection, PlayerData& playerData, Player& player)override;
 	bool MotionUpdate(PlayerData& playerData)override;
-	void Enter(PlayerData& playerData) override;		//ó‘Ô‚É“ü‚Á‚½‚Æ‚«
 	void Exit(PlayerData& playerData) override;			//ó‘Ô‚ğ”²‚¯‚é‚Æ‚«
 
 private:

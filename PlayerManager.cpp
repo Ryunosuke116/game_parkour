@@ -13,9 +13,9 @@
 /// <summary>
 /// コンストラクタ
 /// </summary>
-PlayerManager::PlayerManager():
+PlayerManager::PlayerManager() :
 	BaseGameObjectManager(),
-	now_playerData({false})
+	now_playerData({ false })
 {
 	tag = "player";
 }
@@ -28,7 +28,7 @@ PlayerManager::~PlayerManager()
 	observers.clear();
 }
 
-void PlayerManager::Create() 
+void PlayerManager::Create()
 {
 	auto self = shared_from_this();
 
@@ -75,7 +75,7 @@ void PlayerManager::Update()
 			player->GetRadius(),
 			player->GetPositionData());
 
-		collisionManager->HeadCollisionCheck(
+		newPositon = collisionManager->HeadCollisionCheck(
 			WorldSubSystem::GetInstance().GetSubSystem<CollisionObjectManager>()->GetCollisionObjects(),
 			newPositon,
 			player->GetVelocity(),
@@ -178,17 +178,6 @@ void PlayerManager::StateConfirmation()
 	}
 }
 
-VECTOR PlayerManager::PositionCheck(const VECTOR& hangingPos, const VECTOR& playerPos)
-{
-	VECTOR newPlayerPos = playerPos;
-	VECTOR hanging = hangingPos;
-	hanging.y = playerPos.y;
-
-	Calculation::Leap(newPlayerPos, hanging, 0.1f);
-
-	return newPlayerPos;
-}
-
 /// <summary>
 /// 状態が変わったことを通知する
 /// </summary>
@@ -219,18 +208,20 @@ void PlayerManager::NotifyStateChanged(const PlayerData& playerData)
 void PlayerManager::RemoveObserver(std::shared_ptr<PlayerStateObserver> observer)
 {
 	// 削除対象か判定するラムダ関数を用意
-	auto shouldRemove = [&](const std::weak_ptr<PlayerStateObserver>& weakObs) {
-		
-		// weak_ptrからshared_ptrを取得
-		std::shared_ptr<PlayerStateObserver> locked = weakObs.lock();
+	auto shouldRemove = [&](const std::weak_ptr<PlayerStateObserver>& weakObs)
+		{
 
-		// 生きていて、かつobserverと同じオブジェクトならtrue
-		if (locked) {
-			return locked == observer;
-		}
+			// weak_ptrからshared_ptrを取得
+			std::shared_ptr<PlayerStateObserver> locked = weakObs.lock();
 
-		// 期限切れまたは違うオブジェクトならfalse
-		return false;
+			// 生きていて、かつobserverと同じオブジェクトならtrue
+			if (locked)
+			{
+				return locked == observer;
+			}
+
+			// 期限切れまたは違うオブジェクトならfalse
+			return false;
 		};
 
 	// remove_ifを呼んで削除対象の要素を末尾に移動させる

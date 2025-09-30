@@ -16,7 +16,7 @@ class PlayerManager :
 public:
 	PlayerManager();
 	~PlayerManager();
-	
+
 	void Update_start(const float& timer);
 	void Update_finish(const float& timer);
 
@@ -24,12 +24,11 @@ public:
 	void Initialize()	override;
 	void Update()		override;
 	void Draw()			override;
-	void Add()			override{}
+	void Add()			override {}
 	void ResultCreate()override;
 	void ResultInitialize()override;
 	void ResultUpdate()override;
-	
-	VECTOR PositionCheck(const VECTOR& hangingPos, const VECTOR& playerPos);
+
 	void StateConfirmation();
 
 	//ÉQÉbÉ^Å[

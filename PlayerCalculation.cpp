@@ -17,14 +17,14 @@
 PlayerCalculation::PlayerCalculation() :
     moveVec_old(VGet(0.0f, 0.0f, 0.0f)),
     hitWallNormal(VGet(0.0f, 0.0f, 0.0f)),
-    jumpPower_now(0.0f),
+    nowJumpPower(0.0f),
     moveSpeed_now(0.0f),
     rollMoveSpeed_now(0.0f),
-    wallRun_stopTime(0.0f),
-    isCalc_deceleration(false),
+    WallRunStopTime(0.0f),
+    isCalcDeceleration(false),
     isSlip_after(false),
-    isRunWall_Stop(false),
-    isJumpPower_add(false)
+    isStopRunWall(false),
+    isAddJumpPower(false)
 {
 
 }
@@ -83,15 +83,15 @@ VECTOR PlayerCalculation::Move(const int& animNumber_Now,
 
     VECTOR velocity = moveVec;
 
-    if (!playerData.IsPushRT)
+    if (!playerData.isRoll)
     {
         //動いている場合移動スピードを徐々に上げる
         if (playerData.isMove)
         {
             //減速スピード計算していたらfalseに
-            if (isCalc_deceleration)
+            if (isCalcDeceleration)
             {
-                isCalc_deceleration = false;
+                isCalcDeceleration = false;
             }
 
             //徐々にスピードを上げる
@@ -119,11 +119,11 @@ VECTOR PlayerCalculation::Move(const int& animNumber_Now,
             if (playerData.isGround)
             {
                 //アニメーションフレームに合わせて減速
-                if (!isCalc_deceleration)
+                if (!isCalcDeceleration)
                 {
                     const float stopFrame = 10.0f;
                     decelerationSpeed = moveSpeed_now / stopFrame;
-                    isCalc_deceleration = true;
+                    isCalcDeceleration = true;
                 }
 
                 moveSpeed_now -= decelerationSpeed;
@@ -149,7 +149,6 @@ VECTOR PlayerCalculation::Move(const int& animNumber_Now,
 
         velocity = VScale(moveDirection, moveSpeed_now);
     }
-
 
     //重力だけ前フレームのモノを使用
     velocity.y = moveVec_old.y;
@@ -185,14 +184,14 @@ VECTOR PlayerCalculation::Jump(const VECTOR& moveVec,const int& animNumber_Now,
 {
     VECTOR move = moveVec;
 
-    if (isJumpPower_add)
+    if (isAddJumpPower)
     {
         if (playerData.isJumpSecond)
         {
             move.y = 0.0f;
         }
-        move.y += jumpPower_now;
-        isJumpPower_add = false;
+        move.y += nowJumpPower;
+        isAddJumpPower = false;
     }
 
     return move;
@@ -237,7 +236,7 @@ VECTOR PlayerCalculation::Roll(const int& animNumber_Now,
 {
     VECTOR move = moveVec;
 
-    if (playerData.IsPushRT)
+    if (playerData.isRoll)
     {
         //特定のフレームまで移動しない
         if (playTime_anim >= 10.0f)
@@ -265,50 +264,34 @@ VECTOR PlayerCalculation::Run_Wall(
     VECTOR move = moveVec;
 
     //一度だけジャンプ力を付与
-    if (isJumpPower_add)
+    if (isAddJumpPower)
     {
-        isRunWall_Stop = false;
-        wallRun_stopTime = 0.0f;
+        isStopRunWall = false;
+        WallRunStopTime = 0.0f;
         move.y = 0.0f;
-        move.y += jumpPower_now;
-        isJumpPower_add = false;
+        move.y += nowJumpPower;
+        isAddJumpPower = false;
     }
     
     //ジャンプ力が0になったら少し留まる
-    if (move.y <= 0.0f && !isRunWall_Stop)
+    if (move.y <= 0.0f && !isStopRunWall)
     {
-        isRunWall_Stop = true;
+        isStopRunWall = true;
         move.y = 0.0f;
     }
 
     //少しの間留まる
-    if (isRunWall_Stop)
+    if (isStopRunWall)
     {
-        if (wallRun_stopTime <= wallRun_stopTime_max)
+        if (WallRunStopTime <= wallRun_stopTime_max)
         {
-            wallRun_stopTime++;
+            WallRunStopTime++;
             move.y = 0.0f;
         }
         
     }
 
     return move;
-}
-
-void PlayerCalculation::ObstacleCheck(
-    const VECTOR& moveDirection,
-    const VECTOR& playerPosition,
-    const float radius)
-{
-    const float reverseScale = -1.0f;
-    const VECTOR reverseMoveDirection = VScale(moveDirection, reverseScale);
-    const auto collisionObjects = WorldSubSystem::GetInstance().GetSubSystem<CollisionObjectManager>()->GetCollisionObjects();
-    const VECTOR wallContactPlayerPosition = VAdd(playerPosition, VScale(moveDirection, radius));
-
-    for (const auto& collisionObject : collisionObjects)
-    {
-        
-    }
 }
 
 /// <summary>
@@ -380,7 +363,7 @@ VECTOR PlayerCalculation::HangToCrouchMove(
     VECTOR velocity = VGet(0.0f, 0.0f, 0.0f);
 
     //指定のフレームまでは手に合わせて座標を更新
-    if (actualPlayer->GetNowAnimState().PlayTime_anim <= 22.0f)
+    if (actualPlayer->GetNowAnimState().playAnimTime <= 22.0f)
     {
         VECTOR addPos = HangingPosition();
 
@@ -458,13 +441,13 @@ std::pair<bool, VECTOR> PlayerCalculation::GroundCollisionCheckHangToCrouch(
 void PlayerCalculation::Reset_move()
 {
     moveSpeed_now = 0.0f;
-    jumpPower_now = 0.0f;
+    nowJumpPower = 0.0f;
 }
 
 void PlayerCalculation::Reset_run_wall()
 {
-    wallRun_stopTime = 0.0f;
-    isRunWall_Stop = false;
+    WallRunStopTime = 0.0f;
+    isStopRunWall = false;
 }
 
 

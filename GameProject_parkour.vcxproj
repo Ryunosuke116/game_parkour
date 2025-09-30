@@ -172,7 +172,6 @@
     <ClCompile Include="HangingIdle.cpp" />
     <ClCompile Include="HitCheck.cpp" />
     <ClCompile Include="Idle.cpp" />
-    <ClCompile Include="IdleToSprint.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="JsonManager.cpp" />
     <ClCompile Include="Jump.cpp" />
@@ -240,7 +239,6 @@
     <ClInclude Include="HangingIdle.h" />
     <ClInclude Include="HitCheck.h" />
     <ClInclude Include="Idle.h" />
-    <ClInclude Include="IdleToSprint.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="IWorldSubSystem.h" />
     <ClInclude Include="JsonManager.h" />

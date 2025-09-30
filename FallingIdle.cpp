@@ -15,9 +15,8 @@
 /// <summary>
 /// コンストラクタ
 /// </summary>
-FallingIdle::FallingIdle(int& modelHandle,
-	AnimState& oldAnimState, AnimState& nowAnimState) :
-	PlayerStateBase(modelHandle, oldAnimState, nowAnimState)
+FallingIdle::FallingIdle(const int modelHandle) :
+	PlayerStateBase(modelHandle)
 {
     this->nowAnimState.PlayAnimSpeed = playAnimSpeed;
 }
@@ -27,7 +26,7 @@ FallingIdle::FallingIdle(int& modelHandle,
 /// </summary>
 FallingIdle::~FallingIdle()
 {
-	//MV1DetachAnim(modelHandle, nowAnimState.AttachIndex);
+	//MV1DetachAnim(modelHandle, nowAnimState.attachIndex);
 }
 
 /// <summary>
@@ -41,7 +40,6 @@ std::pair<VECTOR, PlayerData> FallingIdle::Update(const VECTOR& cameraDirection,
     const std::vector<std::weak_ptr<BaseObject>>& fieldObjects, Player& player)
 {
     VECTOR moveDirection = VGet(0.0f, 0.0f, 0.0f);
-
     PlayerData playerData = player.GetData();
 
     moveDirection = Command(cameraDirection, playerData, player);
@@ -86,7 +84,6 @@ std::pair<VECTOR, PlayerData> FallingIdle::Update(const VECTOR& cameraDirection,
         }
     }
 
-
     //着地したときに動いているかどうかで次のアニメーションを決める
     if (playerData.isGround)
     {
@@ -124,11 +121,6 @@ VECTOR FallingIdle::Command(const VECTOR& cameraDirection, PlayerData& playerDat
     }
 
     return moveDirection;
-}
-
-void FallingIdle::Enter(PlayerData& playerData)
-{
-    playerData.isFalling = true;
 }
 
 void FallingIdle::Exit(PlayerData& playerData)

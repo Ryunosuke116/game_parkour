@@ -4,7 +4,7 @@
 #include "Rank.h"
 #include "JsonManager.h"
 
-Rank::Rank():
+Rank::Rank() :
     rankHandle(-1),
     coinCount(-1)
 {
@@ -44,11 +44,11 @@ void Rank::Load(const nlohmann::json& jsonData)
     {
         rankHandle = LoadGraph(handlePath.at("B").c_str());
     }
-    else if (coinCount <= 90)
+    else if (coinCount < 100)
     {
         rankHandle = LoadGraph(handlePath.at("A").c_str());
     }
-    else if (coinCount == 100)
+    else if (coinCount >= 100)
     {
         rankHandle = LoadGraph(handlePath.at("S").c_str());
     }
@@ -73,7 +73,7 @@ void Rank::ResultUpdate()
 
 void Rank::Draw()
 {
-   // DrawGraph(x, y, rankHandle, TRUE);
+    // DrawGraph(x, y, rankHandle, TRUE);
     DrawExtendGraph(850, 0, 1450, 600, speechBubbleHandle, TRUE);
     DrawExtendGraph(1000, y, 1300, 450, rankHandle, TRUE);
 }

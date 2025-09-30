@@ -34,7 +34,7 @@ Player::Player() :
 /// </summary>
 Player::~Player()
 {
-
+    MV1DeleteModel(modelHandle);
 }
 
 
@@ -54,6 +54,7 @@ void Player::Create()
     Load(JsonManager::GetInstance().GetJsons(jsonName));
     playerCalculation = std::make_shared<PlayerCalculation>();
     animationChanger = std::make_shared<AnimationChanger>();
+    animationChanger->Create(modelHandle);
     MV1SetScale(modelHandle, VGet(modelScale, modelScale, modelScale));
 }
 
@@ -85,7 +86,7 @@ void Player::Initialize()
     playerData.isWalljump = false;
     playerData.isMove = false;
     playerData.isWalk = true;
-    playerData.IsPushRT = false;
+    playerData.isRoll = false;
     playerData.isSprint = false;
     playerData.isStopRun = false;
     playerData.isUseRoll = false;
@@ -135,7 +136,7 @@ void Player::Update()
     moveDirection = VGet(0.0f, 0.0f, 0.0f);
 
     //接地中であればロールアクションを使えるように
-    if (playerData.isGround && !playerData.IsPushRT)
+    if (playerData.isGround && !playerData.isRoll)
     {
         playerData.isUseRoll = false;
     }
@@ -163,7 +164,7 @@ void Player::Update()
     //move計算
     velocity = playerCalculation->Update(
         nowMoveDirection,
-        nowState->GetNowAnimState().PlayTime_anim,
+        nowState->GetNowAnimState().playAnimTime,
         animationChanger->GetAnimNumber_now(),
         playerData);
 
@@ -267,7 +268,11 @@ void Player::Update_finish(const float& timer)
 /// <param name="coinCount"></param>
 void Player::ResultCreate()
 {
-    Create();
+    const std::string jsonName = "player";
+    Load(JsonManager::GetInstance().GetJsons(jsonName));
+    playerCalculation = std::make_shared<PlayerCalculation>();
+    animationChanger = std::make_shared<AnimationChanger>();
+    MV1SetScale(modelHandle, VGet(modelScale, modelScale, modelScale));
 }
 
 /// <summary>
@@ -301,7 +306,7 @@ void Player::MoveDirectionUpdate()
         !playerData.isHangToCrouch &&
         !playerData.isFalling &&
         !playerData.isJump &&
-        !playerData.IsPushRT;
+        !playerData.isRoll;
 
     isCalcMoveVec = VSize(moveDirection) != 0;
 
@@ -349,7 +354,7 @@ void Player::ChangeState()
         //終了時に調整
         nowState->Exit(playerData);
 
-        nowState = std::move(animationChanger->ChangeState(modelHandle, *this, playerData, nowState));
+        nowState = animationChanger->ChangeState(modelHandle, *this, playerData, nowState);
     }
 }
 
@@ -383,7 +388,9 @@ void Player::CollisionUpdate()
     positionData.rayBottomPosition.y -= 0.1f;
      
     //投影で歩くためのごまかし
-    if (playerData.isRun && !playerData.isJump)
+    if ((playerData.isRun &&
+        !playerData.isJump) ||
+        playerData.isRoll)
     {
         positionData.rayBottomPosition.y -= playerCalculation->GetMoveSpeed_now();
     }
@@ -505,7 +512,7 @@ void Player::DebugUpdate()
     DebugDrawer::Instance().InformationInput_string_bool("isJumpAll %d\n", playerData.isJumpAll);
     DebugDrawer::Instance().InformationInput_string_bool("isWalljump %d\n", playerData.isWalljump);
     DebugDrawer::Instance().InformationInput_string_bool("isUseWallJump %d\n", playerData.isUseWallJump);
-    DebugDrawer::Instance().InformationInput_string_bool("IsPushRT %d\n", playerData.IsPushRT);
+    DebugDrawer::Instance().InformationInput_string_bool("isRoll %d\n", playerData.isRoll);
     DebugDrawer::Instance().InformationInput_string_bool("isUseRoll %d\n", playerData.isUseRoll);
     DebugDrawer::Instance().InformationInput_string_bool("isFalling %d\n", playerData.isFalling);
     DebugDrawer::Instance().InformationInput_string_bool("isHanging %d\n", playerData.isHanging);

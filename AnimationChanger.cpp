@@ -10,117 +10,109 @@
 
 AnimationChanger::AnimationChanger()
 {
+
 }
 
 AnimationChanger::~AnimationChanger()
 {
+    stateList.clear();
+}
 
+void AnimationChanger::Create(const int modelHandle)
+{
+    stateList[animNum::idle] = std::make_shared<Idle>(modelHandle);
+    stateList[animNum::bracedHangToCrouch] = std::make_shared<BracedHangToCrouch>(modelHandle);
+    stateList[animNum::fallingIdle] = std::make_shared<FallingIdle>(modelHandle);
+    stateList[animNum::hangingIdle] = std::make_shared<HangingIdle>(modelHandle);
+    stateList[animNum::jump] = std::make_shared<Jump>(modelHandle);
+    stateList[animNum::quickRoll] = std::make_shared<QuickRoll>(modelHandle);
+    stateList[animNum::run] = std::make_shared<Run>(modelHandle);
+    stateList[animNum::runToStop] = std::make_shared<RunToStop>(modelHandle);
+    stateList[animNum::walk] = std::make_shared<Walk>(modelHandle);
 }
 
 void AnimationChanger::Initialize(
     const int& num, 
-    int& modelHandle,
+    const int modelHandle,
     std::shared_ptr<PlayerStateBase>& nowState,
     PlayerData& playerData, 
     Player& player)
 {
     animNumber_Now = num;
-    //newStateを生成
-    nowState = std::make_shared<Walk>(modelHandle,
-        oldAnimState,
+
+    //nowStateにwalkStateをセット
+	nowState = stateList[animNumber_Now];
+    nowState->Enter(oldAnimState,
         nowAnimState);
 
     nowState->SetAnimNumber_old(animNumber_Now);
     animNumber_Now = animNum::walk;
 
-    nowState->Initialize(modelHandle, animNumber_Now,player);
-    nowState->Enter(playerData);
+    nowState->Initialize(modelHandle, animNumber_Now, player);
 }
 
-void AnimationChanger::ResultInitialize(
-    const int& num, 
-    int& modelHandle,
+void AnimationChanger::ResultInitialize(const int& num, 
+    const int modelHandle,
     std::shared_ptr<PlayerStateBase>& nowState,
     PlayerData& playerData,
     Player& player)
 {
     animNumber_Now = num;
     //newStateを生成
-    nowState = std::make_shared<Victory>(modelHandle,
-        oldAnimState,
-        nowAnimState,
-        playerData);
+    nowState = std::make_shared<Victory>(modelHandle);
+    nowState->Enter(oldAnimState,
+        nowAnimState);
 
     nowState->SetAnimNumber_old(animNumber_Now);
 
-      nowState->Initialize(modelHandle, animNumber_Now, player);
-    nowState->Enter(playerData);
+    nowState->Initialize(modelHandle, animNumber_Now, player);
 }
 
 /// <summary>
 /// アニメーション変更
 /// </summary>
 std::shared_ptr<PlayerStateBase> AnimationChanger::ChangeState(
-    int& modelHandle,
+    const int modelHandle,
     Player& player, 
     PlayerData& playerData,
     std::shared_ptr<PlayerStateBase>& nowState)
 {
     std::shared_ptr<PlayerStateBase> newState = nullptr;
-    const auto soundPlayer = 
-        GameInstanceSubSystem::GetInstance().GetSubSystem<SoundPlayer>().lock();
 
-    //立ち
-    if (playerData.isIdle && 
-        animNumber_Now != animNum::idle)
+    // 新しいstateを生成するラムダ関数を用意
+    auto Change = [&](const int animNumber,
+        Player & player,
+        PlayerData & playerData)
     {
         //nowState内のアニメーション情報を保存
         SetNowAnimState(nowState->GetNowAnimState());
         SetOldAnimState(nowState->GetOldAnimState());
 
         //newStateを生成
-        newState = std::make_shared<Idle>(modelHandle,
-            oldAnimState,
-            nowAnimState,
-           
-            playerData);
+        newState = stateList.at(animNumber);
 
         newState->SetAnimNumber_old(animNumber_Now);
-        animNumber_Now = animNum::idle;
+        animNumber_Now = animNumber;
+    };
+
+    //立ち
+    if (playerData.isIdle && 
+        animNumber_Now != animNum::idle)
+    {
+         Change(animNum::idle, player, playerData);
     }
 
     //歩く
     if (playerData.isWalk &&
         animNumber_Now != animNum::walk)
     {
-        //nowState内のアニメーション情報を保存
-        SetNowAnimState(nowState->GetNowAnimState());
-        SetOldAnimState(nowState->GetOldAnimState());
-
-        //newStateを生成
-        newState = std::make_shared<Walk>(modelHandle,
-            oldAnimState,
-            nowAnimState);
-
-        newState->SetAnimNumber_old(animNumber_Now);
-        animNumber_Now = animNum::walk;
+        Change(animNum::walk, player, playerData);
     }
 
     //走る
     if (playerData.isRun && animNumber_Now != animNum::run)
     {
-        //nowState内のアニメーション情報を保存
-        SetNowAnimState(nowState->GetNowAnimState());
-        SetOldAnimState(nowState->GetOldAnimState());
-
-        //newStateを生成
-        newState = std::make_shared<Run>(modelHandle,
-            oldAnimState,
-            nowAnimState);
-
-        newState->SetAnimNumber_old(animNumber_Now);
-        animNumber_Now = animNum::run;
-        soundPlayer->Play("dash");
+        Change(animNum::run, player, playerData);
     }
 
     //ジャンプ
@@ -128,126 +120,48 @@ std::shared_ptr<PlayerStateBase> AnimationChanger::ChangeState(
         animNumber_Now != animNum::jump &&
         animNumber_Now != animNum::runJump)
     {
-        //nowState内のアニメーション情報を保存
-        SetNowAnimState(nowState->GetNowAnimState());
-        SetOldAnimState(nowState->GetOldAnimState());
-
-        //newStateを生成
-        newState = std::make_shared<Jump>(modelHandle,
-            oldAnimState,
-            nowAnimState,
-            playerData);
-
-        newState->SetAnimNumber_old(animNumber_Now);
-        animNumber_Now = animNum::jump;
+        Change(animNum::jump, player, playerData);
     }
 
     //落下中
     if (playerData.isFalling &&
         animNumber_Now != animNum::fallingIdle)
     {
-        //nowState内のアニメーション情報を保存
-        SetNowAnimState(nowState->GetNowAnimState());
-        SetOldAnimState(nowState->GetOldAnimState());
-
-        //newStateを生成
-        newState = std::make_shared<FallingIdle>(modelHandle,
-            oldAnimState,
-            nowAnimState);
-
-        newState->SetAnimNumber_old(animNumber_Now);
-        animNumber_Now = animNum::fallingIdle;
+        Change(animNum::fallingIdle, player, playerData);
     }
 
     //転がる
-    if (playerData.IsPushRT && animNumber_Now != animNum::quickRoll)
+    if (playerData.isRoll &&
+        animNumber_Now != animNum::quickRoll)
     {
-        //nowState内のアニメーション情報を保存
-        SetNowAnimState(nowState->GetNowAnimState());
-        SetOldAnimState(nowState->GetOldAnimState());
-
-        //newStateを生成
-        newState = std::make_shared<QuickRoll>(modelHandle,
-            oldAnimState,
-            nowAnimState);
-
-        newState->SetAnimNumber_old(animNumber_Now);
-        animNumber_Now = animNum::roll;
-    }
-
-    //走り出し
-    if (playerData.isSprint && animNumber_Now != animNum::idleToSprint)
-    {
-        //nowState内のアニメーション情報を保存
-        SetNowAnimState(nowState->GetNowAnimState());
-        SetOldAnimState(nowState->GetOldAnimState());
-
-        //newStateを生成
-        newState = std::make_shared<IdleToSprint>(modelHandle,
-            oldAnimState,
-            nowAnimState);
-
-        newState->SetAnimNumber_old(animNumber_Now);
-        animNumber_Now = animNum::idleToSprint;
+        Change(animNum::quickRoll, player, playerData);
     }
 
     //走り終わり
-    if (playerData.isStopRun && animNumber_Now != animNum::runToStop)
+    if (playerData.isStopRun && 
+        animNumber_Now != animNum::runToStop)
     {
-        //nowState内のアニメーション情報を保存
-        SetNowAnimState(nowState->GetNowAnimState());
-        SetOldAnimState(nowState->GetOldAnimState());
-
-        //newStateを生成
-        newState = std::make_shared<RunToStop>(modelHandle,
-            oldAnimState,
-            nowAnimState);
-
-        newState->SetAnimNumber_old(animNumber_Now);
-        animNumber_Now = animNum::runToStop;
+        Change(animNum::runToStop, player, playerData);
     }
 
     //崖つかみ
-    if (playerData.isHanging && animNumber_Now != animNum::hangingIdle)
+    if (playerData.isHanging &&
+        animNumber_Now != animNum::hangingIdle)
     {
-        //nowState内のアニメーション情報を保存
-        SetNowAnimState(nowState->GetNowAnimState());
-        SetOldAnimState(nowState->GetOldAnimState());
-
-        //newStateを生成
-        newState = std::make_shared<HangingIdle>(modelHandle,
-            oldAnimState,
-            nowAnimState);
-
-        newState->SetAnimNumber_old(animNumber_Now);
-        animNumber_Now = animNum::hangingIdle;
+        Change(animNum::hangingIdle, player, playerData);
     }
 
     //崖のぼり
     if (playerData.isHangToCrouch &&
         animNumber_Now != animNum::bracedHangToCrouch)
     {
-        //nowState内のアニメーション情報を保存
-        SetNowAnimState(nowState->GetNowAnimState());
-        SetOldAnimState(nowState->GetOldAnimState());
-
-        //newStateを生成
-        newState = std::make_shared<BracedHangToCrouch>(modelHandle,
-            oldAnimState,
-            nowAnimState);
-
-        newState->SetAnimNumber_old(animNumber_Now);
-        animNumber_Now = animNum::bracedHangToCrouch;
+        Change(animNum::bracedHangToCrouch, player, playerData);
     }
 
     if (newState)
     {
+        newState->Enter(oldAnimState, nowAnimState);
         newState->Initialize(modelHandle, animNumber_Now, player);
-        newState->Enter(playerData);
-        if (!playerData.isRun)
-        {
-            soundPlayer->Stop("dash");
-        }
         return newState;
     }
 
@@ -260,16 +174,16 @@ std::shared_ptr<PlayerStateBase> AnimationChanger::ChangeState(
 /// <param name="AnimState"></param>
 void AnimationChanger::SetOldAnimState(PlayerStateBase::AnimState animState)
 {
-    oldAnimState.AttachIndex = animState.AttachIndex;
+    oldAnimState.attachIndex = animState.attachIndex;
     oldAnimState.PlayAnimSpeed = animState.PlayAnimSpeed;
-    oldAnimState.PlayTime_anim = animState.PlayTime_anim;
+    oldAnimState.playAnimTime = animState.playAnimTime;
     oldAnimState.TotalPlayTime_anim = animState.TotalPlayTime_anim;
 }
 
 void AnimationChanger::SetNowAnimState(PlayerStateBase::AnimState animState)
 {
-    nowAnimState.AttachIndex = animState.AttachIndex;
+    nowAnimState.attachIndex = animState.attachIndex;
     nowAnimState.PlayAnimSpeed = animState.PlayAnimSpeed;
-    nowAnimState.PlayTime_anim = animState.PlayTime_anim;
+    nowAnimState.playAnimTime = animState.playAnimTime;
     nowAnimState.TotalPlayTime_anim = animState.TotalPlayTime_anim;
 }

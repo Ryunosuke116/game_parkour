@@ -17,12 +17,12 @@ class Liner8TreeManager :
 	public std::enable_shared_from_this<Liner8TreeManager<T>>
 {
 public:
-	virtual void Initialize()			override{}
-	virtual void Update()				override{}
-	virtual void Draw()					override{}
-	virtual void ResultInitialize()		override{}
-	virtual void ResultUpdate()			override{}
-	virtual void ResultCreate()			override{}
+	virtual void Initialize()			override {}
+	virtual void Update()				override {}
+	virtual void Draw()					override {}
+	virtual void ResultInitialize()		override {}
+	virtual void ResultUpdate()			override {}
+	virtual void ResultCreate()			override {}
 public:
 	Liner8TreeManager()
 	{
@@ -68,8 +68,10 @@ public:
 		regionSideLength.z = regionWidth.z / ((float)(1 << spaceLevel));
 
 		lowestLevel = spaceLevel;
+
+		return true;	//成功
 	}
-	
+
 	/// <summary>
 	/// オブジェクトを空間セルに登録する
 	/// </summary>
@@ -186,7 +188,7 @@ public:
 			if (cellIndex < 0) cellIndex = 0;
 			if (cellIndex > maxIndex) cellIndex = maxIndex;
 			return  static_cast<uint32_t>(cellIndex);
-		};
+			};
 
 		uint32_t uintX = computeAxisIndex(point.x, regionMin.x, regionSideLength.x);
 		uint32_t uintY = computeAxisIndex(point.y, regionMin.y, regionSideLength.y);
@@ -196,7 +198,7 @@ public:
 			static_cast<BYTE>(uintX),
 			static_cast<BYTE>(uintY),
 			static_cast<BYTE>(uintZ)
-			);
+		);
 	}
 
 	/// <summary>
@@ -228,14 +230,14 @@ public:
 			(BitSeparateFor3D(z) << 2);
 	}
 
-	std::shared_ptr<Cell<T>> GetCell(uint32_t spaceNumber) 
-	{ 
+	std::shared_ptr<Cell<T>> GetCell(uint32_t spaceNumber)
+	{
 		//空間がない場合は空を返す
 		if (cellArray.find(spaceNumber) == cellArray.end())
 		{
 			return std::shared_ptr<Cell<T>>();
 		}
-		return cellArray.at(spaceNumber); 
+		return cellArray.at(spaceNumber);
 	}
 
 	/// <summary>
@@ -285,7 +287,7 @@ public:
 			GetCollisionList(collisionList, childSpaceNumber);
 			childSpaceNumber++;
 		}
-		
+
 		//深度分走査する
 		for (unsigned int i = 0; i < lowestLevel; i++)
 		{
@@ -337,4 +339,3 @@ private:
 
 	std::unordered_map <uint32_t, std::shared_ptr<Cell<T>>> cellArray;		//空間リスト
 };
-

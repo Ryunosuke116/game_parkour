@@ -13,9 +13,8 @@
 /// @param oldAnimState 
 /// @param nowAnimState 
 /// @param playerData 
-Victory::Victory(int& modelHandle, AnimState& oldAnimState,
-    AnimState& nowAnimState, PlayerData& playerData) :
-    PlayerStateBase(modelHandle, oldAnimState, nowAnimState)
+Victory::Victory(const int modelHandle) :
+    PlayerStateBase(modelHandle)
 {
     this->nowAnimState.PlayAnimSpeed = playAnimSpeed;
 }
@@ -54,24 +53,24 @@ bool Victory::MotionUpdate(PlayerData& playerData)
         }
     }
 
-    if (nowAnimState.AttachIndex != -1)
+    if (nowAnimState.attachIndex != -1)
     {
         float poseFrame = 32.0f;
 
         //再生時間更新
-        nowAnimState.PlayTime_anim += nowAnimState.PlayAnimSpeed;
+        nowAnimState.playAnimTime += nowAnimState.PlayAnimSpeed;
 
         //32f(決めポーズ時)になったらそこでアニメーションを停止する
-        if (nowAnimState.PlayTime_anim >= poseFrame)
+        if (nowAnimState.playAnimTime >= poseFrame)
         {
-            nowAnimState.PlayTime_anim = poseFrame;
+            nowAnimState.playAnimTime = poseFrame;
         }
 
         // 再生時間をセットする
-        MV1SetAttachAnimTime(modelHandle, nowAnimState.AttachIndex, nowAnimState.PlayTime_anim);
+        MV1SetAttachAnimTime(modelHandle, nowAnimState.attachIndex, nowAnimState.playAnimTime);
 
         //アニメーションのモデルに対する反映率をセット
-        MV1SetAttachAnimBlendRate(modelHandle, nowAnimState.AttachIndex, animBlendRate);
+        MV1SetAttachAnimBlendRate(modelHandle, nowAnimState.attachIndex, animBlendRate);
     }
     return flag;
 }
@@ -81,11 +80,6 @@ VECTOR Victory::Command(const VECTOR& cameraDirection, PlayerData& playerData, P
     VECTOR moveDirection = VGet(0.0f, 0.0f, 0.0f);
 
     return moveDirection;
-}
-
-void Victory::Enter(PlayerData& playerData)
-{
-    playerData.isVictory = true;
 }
 
 void Victory::Exit(PlayerData& playerData)

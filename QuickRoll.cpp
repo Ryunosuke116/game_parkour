@@ -15,9 +15,8 @@
 /// <param name="modelHandle"></param>
 /// <param name="oldAnimState"></param>
 /// <param name="nowAnimState"></param>
-QuickRoll::QuickRoll(int& modelHandle,
-    AnimState& oldAnimState, AnimState& nowAnimState) :
-	PlayerStateBase(modelHandle, oldAnimState, nowAnimState)
+QuickRoll::QuickRoll(const int modelHandle) :
+	PlayerStateBase(modelHandle)
 {
     this->nowAnimState.PlayAnimSpeed = playAnimSpeed;
 }
@@ -83,6 +82,8 @@ bool QuickRoll::MotionUpdate(PlayerData& playerData)
 {
     float totalTime_anim;
     float flag = false;
+    //空中にいるときのアニメーション最大フレーム数
+    const float kWhenAirMaxAnimTime = 40.0f;
 
     // ブレンド率が１以下の場合は１に近づける
     if (animBlendRate < 1.0f)
@@ -94,15 +95,15 @@ bool QuickRoll::MotionUpdate(PlayerData& playerData)
         }
     }
 
-    if (nowAnimState.AttachIndex != -1)
+    if (nowAnimState.attachIndex != -1)
     {
         // アタッチしたアニメーションの総再生時間を取得する
-        totalTime_anim = MV1GetAttachAnimTotalTime(modelHandle, nowAnimState.AttachIndex);
+        totalTime_anim = MV1GetAttachAnimTotalTime(modelHandle, nowAnimState.attachIndex);
 
         //再生時間更新
-        nowAnimState.PlayTime_anim += nowAnimState.PlayAnimSpeed;
+        nowAnimState.playAnimTime += nowAnimState.PlayAnimSpeed;
 
-        if (nowAnimState.PlayTime_anim >= 40.0f)
+        if (nowAnimState.playAnimTime >= kWhenAirMaxAnimTime)
         {
             if (!playerData.isGround)
             {
@@ -112,54 +113,47 @@ bool QuickRoll::MotionUpdate(PlayerData& playerData)
         }
 
         //総再生時間を超えたらリセット
-        if (nowAnimState.PlayTime_anim >= totalTime_anim)
+        if (nowAnimState.playAnimTime >= totalTime_anim)
         {
             playerData.isRun = isRun;
             playerData.isIdle = isIdle;
             isChangeState = true;
         }
 
-
         // 再生時間をセットする
-        MV1SetAttachAnimTime(modelHandle, nowAnimState.AttachIndex, nowAnimState.PlayTime_anim);
+        MV1SetAttachAnimTime(modelHandle, nowAnimState.attachIndex, nowAnimState.playAnimTime);
 
         //アニメーションのモデルに対する反映率をセット
-        MV1SetAttachAnimBlendRate(modelHandle, nowAnimState.AttachIndex, animBlendRate);
+        MV1SetAttachAnimBlendRate(modelHandle, nowAnimState.attachIndex, animBlendRate);
     }
 
 
     //再生しているアニメーション２の処理
-    if (oldAnimState.AttachIndex != -1)
+    if (oldAnimState.attachIndex != -1)
     {
         // アニメーションの総時間を取得
-        totalTime_anim = MV1GetAttachAnimTotalTime(modelHandle, oldAnimState.AttachIndex);
+        totalTime_anim = MV1GetAttachAnimTotalTime(modelHandle, oldAnimState.attachIndex);
 
         // 再生時間を進める
-        oldAnimState.PlayTime_anim += oldAnimState.PlayAnimSpeed;
+        oldAnimState.playAnimTime += oldAnimState.PlayAnimSpeed;
 
         // 再生時間が総時間に到達していたら再生時間をループさせる
-        if (oldAnimState.PlayTime_anim > totalTime_anim)
+        if (oldAnimState.playAnimTime > totalTime_anim)
         {
-            oldAnimState.PlayTime_anim = static_cast<float>(fmod(oldAnimState.PlayTime_anim, totalTime_anim));
+            oldAnimState.playAnimTime = static_cast<float>(fmod(oldAnimState.playAnimTime, totalTime_anim));
         }
 
         // 変更した再生時間をモデルに反映させる
-        MV1SetAttachAnimTime(modelHandle, oldAnimState.AttachIndex, oldAnimState.PlayTime_anim);
+        MV1SetAttachAnimTime(modelHandle, oldAnimState.attachIndex, oldAnimState.playAnimTime);
 
         // アニメーション２のモデルに対する反映率をセット
-        MV1SetAttachAnimBlendRate(modelHandle, oldAnimState.AttachIndex, 1.0f - animBlendRate);
+        MV1SetAttachAnimBlendRate(modelHandle, oldAnimState.attachIndex, 1.0f - animBlendRate);
     }
 
     return flag;
 }
 
-void QuickRoll::Enter(PlayerData& playerData)
-{
-    playerData.isJumpAll = false;
-    playerData.isJumpSecond = false;
-}
-
 void QuickRoll::Exit(PlayerData& playerData)
 {
-    playerData.IsPushRT = false;
+    playerData.isRoll = false;
 }

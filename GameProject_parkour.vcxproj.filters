@@ -193,9 +193,6 @@
     <Filter Include="ソース ファイル\object\game\player\state\falling_Idle">
       <UniqueIdentifier>{b40c3a77-e359-4e55-9ca2-9795527822ca}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\object\game\player\state\idle_to_sprint">
-      <UniqueIdentifier>{ef170e75-9be3-4c0d-babc-fc0764ed8cbc}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\object\game\player\state\jump">
       <UniqueIdentifier>{f027c21f-f61a-4446-8085-ab3822338f95}</UniqueIdentifier>
     </Filter>
@@ -232,9 +229,6 @@
     <Filter Include="ソース ファイル\cell">
       <UniqueIdentifier>{94ce5b17-2956-4d81-a845-612d7db9a6fb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\Liner8TreeManager">
-      <UniqueIdentifier>{89701cc4-9c02-4c3e-830a-802cecef408b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\object\game\player\state\victory">
       <UniqueIdentifier>{6f317ff4-7e3c-45ef-99db-c178aa380761}</UniqueIdentifier>
     </Filter>
@@ -246,6 +240,9 @@
     </Filter>
     <Filter Include="ソース ファイル\static\blackOut">
       <UniqueIdentifier>{339009be-2dcc-4bb8-b021-48b2d122fbf4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\manager\Liner8TreeManager">
+      <UniqueIdentifier>{89701cc4-9c02-4c3e-830a-802cecef408b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -302,9 +299,6 @@
     </ClCompile>
     <ClCompile Include="Idle.cpp">
       <Filter>ソース ファイル\object\game\player\state\idle</Filter>
-    </ClCompile>
-    <ClCompile Include="IdleToSprint.cpp">
-      <Filter>ソース ファイル\object\game\player\state\idle_to_sprint</Filter>
     </ClCompile>
     <ClCompile Include="Jump.cpp">
       <Filter>ソース ファイル\object\game\player\state\jump</Filter>
@@ -424,7 +418,7 @@
       <Filter>ソース ファイル\cell</Filter>
     </ClCompile>
     <ClCompile Include="Liner8TreeManager.cpp">
-      <Filter>ソース ファイル\Liner8TreeManager</Filter>
+      <Filter>ソース ファイル\manager\Liner8TreeManager</Filter>
     </ClCompile>
     <ClCompile Include="Victory.cpp">
       <Filter>ソース ファイル\object\game\player\state\victory</Filter>
@@ -499,9 +493,6 @@
     </ClInclude>
     <ClInclude Include="Idle.h">
       <Filter>ソース ファイル\object\game\player\state\idle</Filter>
-    </ClInclude>
-    <ClInclude Include="IdleToSprint.h">
-      <Filter>ソース ファイル\object\game\player\state\idle_to_sprint</Filter>
     </ClInclude>
     <ClInclude Include="Jump.h">
       <Filter>ソース ファイル\object\game\player\state\jump</Filter>
@@ -654,7 +645,7 @@
       <Filter>ソース ファイル\cell</Filter>
     </ClInclude>
     <ClInclude Include="Liner8TreeManager.hpp">
-      <Filter>ソース ファイル\Liner8TreeManager</Filter>
+      <Filter>ソース ファイル\manager\Liner8TreeManager</Filter>
     </ClInclude>
     <ClInclude Include="boundaryRange.h">
       <Filter>ヘッダー ファイル</Filter>

@@ -16,7 +16,7 @@ struct PlayerData
 	bool isJumpAll;					//全てのジャンプが完了したか
 	bool isUseWallJump;				//壁ジャンプを使用できるか
 	bool isWalljump;				//壁ジャンプしているか
-	bool IsPushRT;					//転がるか
+	bool isRoll;					//転がるか
 	bool isUseRoll;					//ロールアクションを終えたか
 	bool isSprint;					//走り出しか
 	bool isStopRun;					//走り終わったか
@@ -30,5 +30,4 @@ struct PlayerData
 	bool isVictory;					//勝利モーションをしているか
 
 	auto operator<=>(const PlayerData&) const = default;
-
 };

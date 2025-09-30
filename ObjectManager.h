@@ -22,6 +22,7 @@ public:
 
 	void StartUpdate();
 	void FinishUpdate();
+	void NormalUpdate();
 	void tutorialDraw();
 
 	void ResultCreate(int coinCount);
@@ -33,20 +34,19 @@ public:
 	int GetCoinCount() { return playerManager_actual->GetCoinCount(); }
 
 private:
-	std::vector<std::shared_ptr<BaseGameObjectManager>> managers;
-	std::vector <std::shared_ptr<BaseObject>> objects;
+	std::vector <std::shared_ptr<IObject>> objects;
 
-	std::shared_ptr<Layout>					layout				= NULL;
-	std::shared_ptr<Tutorial>				tutorial			= NULL;
-	std::shared_ptr<FinishCut>				finishCut			= NULL;
+	std::shared_ptr<Layout>					layout = NULL;
+	std::shared_ptr<Tutorial>				tutorial = NULL;
+	std::shared_ptr<FinishCut>				finishCut = NULL;
 
-	std::shared_ptr<PlayerManager>	playerManager_actual		= NULL;
-	std::shared_ptr<CoinManager>	coinManager_actual			= NULL;
-	std::shared_ptr<UIManager>		uiManager_actual			= NULL;
-	std::shared_ptr<GameTimer>		gameTimer_actual			= NULL;
-	std::shared_ptr<Shadow>			 shadow_actual				= NULL;
-	std::shared_ptr<Camera>			camera_actual				= NULL;
-	std::shared_ptr<Liner8TreeManager<Coin>> L8TreeManager = NULL;
+	std::shared_ptr<PlayerManager>				playerManager_actual = NULL;
+	std::shared_ptr<CoinManager>				coinManager_actual = NULL;
+	std::shared_ptr<UIManager>					uiManager_actual = NULL;
+	std::shared_ptr<GameTimer>					gameTimer_actual = NULL;
+	std::shared_ptr<Shadow>						shadow_actual = NULL;
+	std::shared_ptr<Camera>						camera_actual = NULL;
+	std::shared_ptr<Liner8TreeManager<Coin>>	L8TreeManager = NULL;
 
 	bool isCamera;
 	bool isPush;

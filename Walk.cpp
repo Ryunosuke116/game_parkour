@@ -13,9 +13,8 @@
 /// ÉRÉìÉXÉgÉâÉNÉ^
 /// </summary>
 /// <param name="modelHandle"></param>
-Walk::Walk(int& modelHandle,
-	AnimState& oldAnimState, AnimState& nowAnimState) :
-	PlayerStateBase(modelHandle, oldAnimState, nowAnimState),
+Walk::Walk(const int modelHandle) :
+	PlayerStateBase(modelHandle),
 	degree_difference(0.0f),
 	stopTime(0.0f),
 	angle(-1),
@@ -31,7 +30,7 @@ Walk::Walk(int& modelHandle,
 /// </summary>
 Walk::~Walk()
 {
-	//	MV1DetachAnim(modelHandle, nowAnimState.AttachIndex);
+	//	MV1DetachAnim(modelHandle, nowAnimState.attachIndex);
 }
 
 std::pair<VECTOR, PlayerData> Walk::Update(const VECTOR& cameraDirection,
@@ -76,7 +75,7 @@ VECTOR Walk::Command(const VECTOR& cameraDirection, PlayerData& playerData, Play
 	}
 
 	//ã}ì]âÒÇπÇ∏Ç…é~Ç‹ÇÈèÍçá
-	if (!playerData.isMove && !playerData.IsPushRT)
+	if (!playerData.isMove && !playerData.isRoll)
 	{
 		playerData.isStopRun = true;
 		isChangeState = true;
@@ -133,12 +132,6 @@ VECTOR Walk::Move(const VECTOR& cameraDirection, PlayerData& playerData)
 	//ïKÇ∏ê≥ãKâªÇ≥ÇÍÇΩÇ‡ÇÃÇ©0Çï‘Ç∑
 	return moveDirection;
 
-}
-
-void Walk::Enter(PlayerData& playerData)
-{
-	playerData.isWalk = true;
-	
 }
 
 void Walk::Exit(PlayerData& playerData)

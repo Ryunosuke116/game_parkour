@@ -10,8 +10,8 @@ enum animNum : int
 	idle,						//静止時
 	idleToSprint,				//走り出し
 	jump,						//ジャンプ
-	roll,						//ロールジャンプ
-	quickRoll,					//転がる
+	quickRoll,					//ロールジャンプ
+	roll,						//転がる
 	run,						//走る
 	runJump,					//走りながらジャンプ
 	runToStop,					//止まる

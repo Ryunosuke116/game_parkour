@@ -6,8 +6,7 @@ class Player;
 class Run : public PlayerStateBase
 {
 public:
-	Run(int& modelHandle,
-		AnimState& oldAnimState, AnimState& nowAnimState);
+	Run(const int modelHandle);
 	~Run();
 
 	std::pair<VECTOR, PlayerData> Update(const VECTOR& cameraDirection,
@@ -17,15 +16,10 @@ public:
 	
 	VECTOR Command(const VECTOR& cameraDirection, PlayerData& playerData, Player& player)override;
 	VECTOR Move(const VECTOR& cameraDirection, PlayerData& playerData)override;
-	void Enter(PlayerData& playerData) override;		//ó‘Ô‚É“ü‚Á‚½‚Æ‚«
+	void Enter(AnimState& oldAnimState, AnimState& nowAnimState)override;		//ó‘Ô‚É“ü‚Á‚½‚Æ‚«
 	void Exit(PlayerData& playerData) override;			//ó‘Ô‚ğ”²‚¯‚é‚Æ‚«
 
 	void DashMove(PlayerData& playerData);
-	void ObstacleCheck(
-		const std::vector<std::weak_ptr<BaseObject>>& fieldObjects,
-		const VECTOR& moveDirection,
-		const VECTOR& playerPosition,
-		const float radius);
 
 	std::pair<VECTOR, PlayerData> Update_normal(const VECTOR& cameraDirection, Player& player);
 	std::pair<VECTOR, PlayerData> Update_wallRun(Player& player,

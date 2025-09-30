@@ -10,14 +10,14 @@
 #include "HitCheck.h"
 #include "GameInstanceSubSystem.h"
 #include "EffectManager.h"
+#include "SoundPlayer.h"
 
 /// <summary>
 /// コンストラクタ
 /// </summary>
 /// <param name="modelHandle"></param>
-Run::Run(int& modelHandle, 
-	AnimState& oldAnimState, AnimState& nowAnimState) :
-	PlayerStateBase(modelHandle,  oldAnimState, nowAnimState),
+Run::Run(const int modelHandle) :
+	PlayerStateBase(modelHandle),
 	degree_difference(0.0f),
 	stopTime(0.0f),
 	angle(-1),
@@ -98,7 +98,7 @@ std::pair<VECTOR, PlayerData> Run::Update_wallRun(
 	PlayerData playerData = player.GetData();
 
 	VECTOR moveDir = VGet(0.0f, 0.0f, 0.0f);
-	const float wallRun_stopTime = player.playerCalculation->GetWallRun_stopTime();
+	const float WallRunStopTime = player.playerCalculation->GetWallRun_stopTime();
 	const float wallRun_stopTime_max = player.playerCalculation->GetWallRun_stopTime_max();
 
 	//落ちる
@@ -117,7 +117,7 @@ std::pair<VECTOR, PlayerData> Run::Update_wallRun(
 	}
 
 	//止まって一定時間過ぎたら落下する
-	if (wallRun_stopTime >= wallRun_stopTime_max)
+	if (WallRunStopTime >= wallRun_stopTime_max)
 	{
 		isChangeState = true;
 		playerData.isFalling = true;
@@ -200,39 +200,39 @@ bool Run::MotionUpdate(PlayerData& playerData)
 		}
 	}
 
-	if (nowAnimState.AttachIndex != -1)
+	if (nowAnimState.attachIndex != -1)
 	{
 		// アタッチしたアニメーションの総再生時間を取得する
-		totalTime_anim = MV1GetAttachAnimTotalTime(modelHandle, nowAnimState.AttachIndex);
+		totalTime_anim = MV1GetAttachAnimTotalTime(modelHandle, nowAnimState.attachIndex);
 
 		//再生時間更新
-		nowAnimState.PlayTime_anim += nowAnimState.PlayAnimSpeed;
+		nowAnimState.playAnimTime += nowAnimState.PlayAnimSpeed;
 
 		//総再生時間を超えたらリセット
-		if (nowAnimState.PlayTime_anim >= totalTime_anim)
+		if (nowAnimState.playAnimTime >= totalTime_anim)
 		{
-			nowAnimState.PlayTime_anim = static_cast<float>(fmod(nowAnimState.PlayTime_anim, totalTime_anim));
+			nowAnimState.playAnimTime = static_cast<float>(fmod(nowAnimState.playAnimTime, totalTime_anim));
 		}
 
 		// 再生時間をセットする
-		MV1SetAttachAnimTime(modelHandle, nowAnimState.AttachIndex, nowAnimState.PlayTime_anim);
+		MV1SetAttachAnimTime(modelHandle, nowAnimState.attachIndex, nowAnimState.playAnimTime);
 
 		//アニメーションのモデルに対する反映率をセット
-		MV1SetAttachAnimBlendRate(modelHandle, nowAnimState.AttachIndex, animBlendRate);
+		MV1SetAttachAnimBlendRate(modelHandle, nowAnimState.attachIndex, animBlendRate);
 	}
 
 
 	//再生しているアニメーション２の処理
-	if (oldAnimState.AttachIndex != -1)
+	if (oldAnimState.attachIndex != -1)
 	{
 		// アニメーションの総時間を取得
-		totalTime_anim = MV1GetAttachAnimTotalTime(modelHandle, oldAnimState.AttachIndex);
+		totalTime_anim = MV1GetAttachAnimTotalTime(modelHandle, oldAnimState.attachIndex);
 
 		// 変更した再生時間をモデルに反映させる
-		MV1SetAttachAnimTime(modelHandle, oldAnimState.AttachIndex, oldAnimState.PlayTime_anim);
+		MV1SetAttachAnimTime(modelHandle, oldAnimState.attachIndex, oldAnimState.playAnimTime);
 
 		// アニメーション２のモデルに対する反映率をセット
-		MV1SetAttachAnimBlendRate(modelHandle, oldAnimState.AttachIndex, 1.0f - animBlendRate);
+		MV1SetAttachAnimBlendRate(modelHandle, oldAnimState.attachIndex, 1.0f - animBlendRate);
 	}
 
 	return false;
@@ -281,7 +281,7 @@ VECTOR Run::Command(
 
 	//急転回せずに止まる場合
 	if (!playerData.isMove &&
-		!playerData.IsPushRT)
+		!playerData.isRoll)
 	{
 		playerData.isStopRun = true;
 		isChangeState = true;
@@ -349,33 +349,20 @@ void Run::DashMove(PlayerData& playerData)
 		playerData.isDash = false;
 }
 
-void Run::ObstacleCheck(
-	const std::vector<std::weak_ptr<BaseObject>>& fieldObjects,
-	const VECTOR& moveDirection,
-	const VECTOR& playerPosition,
-	const float radius)
+void Run::Enter(AnimState& oldAnimState, AnimState& nowAnimState)
 {
-	const float reverseScale = -1.0f;
-	const VECTOR reverseMoveDirection = VScale(moveDirection, reverseScale);
-
-	for (const auto& fieldObject : fieldObjects)
-	{
-
-	}
-}
-
-void Run::Enter(PlayerData& playerData)
-{
-	playerData.isRun = true;
-	if (playerData.isRunWall)
-	{
-		playerData.isJumpAll = false;
-		playerData.isJumpSecond = false;
-	}
+	PlayerStateBase::Enter(oldAnimState, nowAnimState);
+	const auto soundPlayer =
+		GameInstanceSubSystem::GetInstance().GetSubSystem<SoundPlayer>().lock();
+	soundPlayer->Play("dash");
 }
 
 void Run::Exit(PlayerData& playerData)
 {
 	playerData.isRun = false;
 	playerData.isRunWall = false;
+	const auto soundPlayer =
+		GameInstanceSubSystem::GetInstance().GetSubSystem<SoundPlayer>().lock();
+
+	soundPlayer->Stop("dash");
 }

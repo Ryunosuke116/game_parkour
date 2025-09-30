@@ -17,9 +17,7 @@
 /// <param name="prevAttachIndex"></param>
 /// <param name="oldAnimState"></param>
 /// <param name="nowAnimState"></param>
-PlayerStateBase::PlayerStateBase(int& modelHandle,
-    AnimState& oldAnimState,
-    AnimState& nowAnimState):
+PlayerStateBase::PlayerStateBase(const int modelHandle):
     modelHandle(-1),
     animNumber_old(-1),
     animBlendRate(0.0f),
@@ -30,32 +28,39 @@ PlayerStateBase::PlayerStateBase(int& modelHandle,
     isChangeState(false)
 {
     this->modelHandle = modelHandle;
+}
+
+void PlayerStateBase::Enter(AnimState& oldAnimState, AnimState& nowAnimState)
+{
+    isChangeState = false;
 
     //いままで情報をprevに保存
-    this->oldAnimState.AttachIndex = oldAnimState.AttachIndex;
+    this->oldAnimState.attachIndex = oldAnimState.attachIndex;
 
-    if (this->oldAnimState.AttachIndex != -1)
+    if (this->oldAnimState.attachIndex != -1)
     {
-        MV1DetachAnim(this->modelHandle, this->oldAnimState.AttachIndex);
-        this->oldAnimState.AttachIndex = -1;
+        MV1DetachAnim(this->modelHandle, this->oldAnimState.attachIndex);
+        this->oldAnimState.attachIndex = -1;
     }
 
     //いままで情報をprevに保存
-    this->oldAnimState.AttachIndex = nowAnimState.AttachIndex;
-    this->oldAnimState.PlayTime_anim = nowAnimState.PlayTime_anim;
+    this->oldAnimState.attachIndex = nowAnimState.attachIndex;
+    this->oldAnimState.playAnimTime = nowAnimState.playAnimTime;
     this->oldAnimState.PlayAnimSpeed = nowAnimState.PlayAnimSpeed;
 
     // ブレンド率はPrevが有効ではない場合は１．０ｆ( 現在モーションが１００％の状態 )にする
-    animBlendRate = this->oldAnimState.AttachIndex == -1 ? 1.0f : 0.0f;
+    animBlendRate = this->oldAnimState.attachIndex == -1 ? 1.0f : 0.0f;
 }
 
-void PlayerStateBase::Initialize(int& modelHandle,const int changeNum, Player& player)
+void PlayerStateBase::Initialize(const int modelHandle,
+    const int changeNum,
+    Player& player)
 {
     // ３Ｄモデルの０番目のアニメーションをアタッチする
-    this->nowAnimState.AttachIndex = MV1AttachAnim(modelHandle, changeNum);
+    this->nowAnimState.attachIndex = MV1AttachAnim(this->modelHandle, changeNum);
 
-    this->nowAnimState.PlayTime_anim = 0.0f;
-    this->nowAnimState.TotalPlayTime_anim = MV1GetAttachAnimTotalTime(modelHandle, this->nowAnimState.AttachIndex);
+    this->nowAnimState.playAnimTime = 0.0f;
+    this->nowAnimState.TotalPlayTime_anim = MV1GetAttachAnimTotalTime(this->modelHandle, this->nowAnimState.attachIndex);
 }
 
 /// <summary>
@@ -76,38 +81,38 @@ bool PlayerStateBase::MotionUpdate(PlayerData& playerData)
         }
     }
 
-    if (nowAnimState.AttachIndex != -1)
+    if (nowAnimState.attachIndex != -1)
     {
         // アタッチしたアニメーションの総再生時間を取得する
-        totalTime_anim = MV1GetAttachAnimTotalTime(modelHandle, nowAnimState.AttachIndex);
+        totalTime_anim = MV1GetAttachAnimTotalTime(modelHandle, nowAnimState.attachIndex);
 
         //再生時間更新
-        nowAnimState.PlayTime_anim += nowAnimState.PlayAnimSpeed;
+        nowAnimState.playAnimTime += nowAnimState.PlayAnimSpeed;
 
         //総再生時間を超えたらリセット
-        if (nowAnimState.PlayTime_anim >= totalTime_anim)
+        if (nowAnimState.playAnimTime >= totalTime_anim)
         {
-            nowAnimState.PlayTime_anim = static_cast<float>(fmod(nowAnimState.PlayTime_anim, totalTime_anim));
+            nowAnimState.playAnimTime = static_cast<float>(fmod(nowAnimState.playAnimTime, totalTime_anim));
         }
 
         // 再生時間をセットする
-        MV1SetAttachAnimTime(modelHandle, nowAnimState.AttachIndex, nowAnimState.PlayTime_anim);
+        MV1SetAttachAnimTime(modelHandle, nowAnimState.attachIndex, nowAnimState.playAnimTime);
 
         //アニメーションのモデルに対する反映率をセット
-        MV1SetAttachAnimBlendRate(modelHandle, nowAnimState.AttachIndex, animBlendRate);
+        MV1SetAttachAnimBlendRate(modelHandle, nowAnimState.attachIndex, animBlendRate);
     }
 
     //再生しているアニメーション２の処理
-    if (oldAnimState.AttachIndex != -1)
+    if (oldAnimState.attachIndex != -1)
     {
         // アニメーションの総時間を取得
-        totalTime_anim = MV1GetAttachAnimTotalTime(modelHandle, oldAnimState.AttachIndex);
+        totalTime_anim = MV1GetAttachAnimTotalTime(modelHandle, oldAnimState.attachIndex);
 
         // 変更した再生時間をモデルに反映させる
-        MV1SetAttachAnimTime(modelHandle, oldAnimState.AttachIndex, oldAnimState.PlayTime_anim);
+        MV1SetAttachAnimTime(modelHandle, oldAnimState.attachIndex, oldAnimState.playAnimTime);
 
         // アニメーション２のモデルに対する反映率をセット
-        MV1SetAttachAnimBlendRate(modelHandle, oldAnimState.AttachIndex, 1.0f - animBlendRate);
+        MV1SetAttachAnimBlendRate(modelHandle, oldAnimState.attachIndex, 1.0f - animBlendRate);
     }
 
     return false;
@@ -116,11 +121,11 @@ bool PlayerStateBase::MotionUpdate(PlayerData& playerData)
 
 void PlayerStateBase::Draw()
 {
-    DebugDrawer::Instance().InformationInput_string_int("nowAttachIndex %d\n", nowAnimState.AttachIndex);
-    DebugDrawer::Instance().InformationInput_string_int("oldAttachIndex %d\n", oldAnimState.AttachIndex);
+    DebugDrawer::Instance().InformationInput_string_int("nowAttachIndex %d\n", nowAnimState.attachIndex);
+    DebugDrawer::Instance().InformationInput_string_int("oldAttachIndex %d\n", oldAnimState.attachIndex);
 
-    DebugDrawer::Instance().InformationInput_string_float("nowPlayTime_anim %f\n", nowAnimState.PlayTime_anim);
-    DebugDrawer::Instance().InformationInput_string_float("oldPlayTime_anim %f\n", oldAnimState.PlayTime_anim);
+    DebugDrawer::Instance().InformationInput_string_float("nowPlayTime_anim %f\n", nowAnimState.playAnimTime);
+    DebugDrawer::Instance().InformationInput_string_float("oldPlayTime_anim %f\n", oldAnimState.playAnimTime);
 }
 
 /// <summary>
@@ -179,10 +184,14 @@ VECTOR PlayerStateBase::Move(const VECTOR& cameraDirection,
 /// </summary>
 void PlayerStateBase::RollMove(PlayerData& playerData)
 {
-    if (PadInput::IsPushRT() && !playerData.IsPushRT && !playerData.isUseRoll)
+    if (PadInput::IsPushRT() && 
+        !playerData.isRoll && 
+        !playerData.isUseRoll)
     {
-        playerData.IsPushRT = true;
+        playerData.isRoll = true;
         playerData.isUseRoll = true;
+        playerData.isJumpAll = false;
+        playerData.isJumpSecond = false;
         isChangeState = true;
     }
 }
@@ -197,7 +206,8 @@ void PlayerStateBase::JumpMove(PlayerData& playerData,
     {
         //ジャンプ
         if (!player.playerCalculation->GetIsJumpPower_add() &&
-            !isPush && !playerData.isJumpFirst)
+            !isPush &&
+            !playerData.isJumpFirst)
         {
             isChangeState = true;
             playerData.isJump = true;
@@ -207,7 +217,8 @@ void PlayerStateBase::JumpMove(PlayerData& playerData,
             player.playerCalculation->SetJumpPower();
         }
         //二段ジャンプ
-        else if (playerData.isJumpFirst && !isPush &&
+        else if (playerData.isJumpFirst &&
+            !isPush &&
             !playerData.isJumpSecond)
         {
             const auto effectManager = GameInstanceSubSystem::GetInstance().GetSubSystem<EffectManager>().lock();
@@ -224,7 +235,7 @@ void PlayerStateBase::JumpMove(PlayerData& playerData,
             player.playerCalculation->ChangeIsJumpPower_add_ture();
             player.playerCalculation->SetJumpPower_second();
 
-            nowAnimState.PlayTime_anim = 5.0f;
+            nowAnimState.playAnimTime = 5.0f;
         }
     }
     else
@@ -314,43 +325,43 @@ void PlayerStateBase::FlagReset_jump(PlayerData& playerData)
 void PlayerStateBase::SwitchingAnimation(const int& animNum)
 {
     //古い情報を削除
-    if (this->oldAnimState.AttachIndex != -1)
+    if (this->oldAnimState.attachIndex != -1)
     {
-        MV1DetachAnim(modelHandle, this->oldAnimState.AttachIndex);
-        this->oldAnimState.AttachIndex = -1;
+        MV1DetachAnim(modelHandle, this->oldAnimState.attachIndex);
+        this->oldAnimState.attachIndex = -1;
     }
 
     ////いままで情報をprevに保存
-    this->oldAnimState.AttachIndex = nowAnimState.AttachIndex;
-    this->oldAnimState.PlayTime_anim = nowAnimState.PlayTime_anim;
+    this->oldAnimState.attachIndex = nowAnimState.attachIndex;
+    this->oldAnimState.playAnimTime = nowAnimState.playAnimTime;
     animBlendRate = 0.0f;
 
     //アニメーションをアタッチ
-    this->nowAnimState.AttachIndex = MV1AttachAnim(modelHandle, animNum);
-    nowAnimState.PlayTime_anim = 0.0f;
+    this->nowAnimState.attachIndex = MV1AttachAnim(modelHandle, animNum);
+    nowAnimState.playAnimTime = 0.0f;
 }
 
 void PlayerStateBase::SetOldAnimState()
 {
-    oldAnimState.AttachIndex = nowAnimState.AttachIndex;
+    oldAnimState.attachIndex = nowAnimState.attachIndex;
     oldAnimState.PlayAnimSpeed = nowAnimState.PlayAnimSpeed;
-    oldAnimState.PlayTime_anim = nowAnimState.PlayTime_anim;
+    oldAnimState.playAnimTime = nowAnimState.playAnimTime;
     oldAnimState.TotalPlayTime_anim = nowAnimState.TotalPlayTime_anim;
 }
 
 void PlayerStateBase::ResetOldAnimState()
 {
-    oldAnimState.AttachIndex = -1;
+    oldAnimState.attachIndex = -1;
     oldAnimState.PlayAnimSpeed = 0.0f;
-    oldAnimState.PlayTime_anim = 0.0f;
+    oldAnimState.playAnimTime = 0.0f;
     oldAnimState.TotalPlayTime_anim = 0.0f;
 
 }
 
 void PlayerStateBase::ResetNowAnimState()
 {
-    nowAnimState.AttachIndex = -1;
+    nowAnimState.attachIndex = -1;
     nowAnimState.PlayAnimSpeed = 0.0f;
-    nowAnimState.PlayTime_anim = 0.0f;
+    nowAnimState.playAnimTime = 0.0f;
     nowAnimState.TotalPlayTime_anim = 0.0f;
 }

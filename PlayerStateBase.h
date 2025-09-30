@@ -12,23 +12,21 @@ class PlayerStateBase
 public:
 	struct AnimState
 	{
-		int AttachIndex;			//アニメーション情報
-		float PlayTime_anim;		//再生時間
+		int attachIndex;			//アニメーション情報
+		float playAnimTime;		//再生時間
 		float TotalPlayTime_anim;	//総再生時間
 		float PlayAnimSpeed;		//アニメーションスピード
 	};
 
-	PlayerStateBase(int& modelHandle,
-		AnimState& oldAnimState,
-		AnimState& nowAnimState);
+	PlayerStateBase(const int modelHandle);
 	~PlayerStateBase() {};
 
 	//純粋仮想関数
-	virtual void Initialize(int& modelHandle,const int changeNum, Player& player);
+	virtual void Initialize(const int modelHandle,const int changeNum, Player& player);
 	virtual std::pair<VECTOR, PlayerData> Update(const VECTOR& cameraDirection,
 		const std::vector<std::weak_ptr<BaseObject>>& fieldObjects, Player& player)abstract;
 	virtual VECTOR Command(const VECTOR& cameraDirection, PlayerData& playerData, Player& player)abstract;
-	virtual void Enter(PlayerData& playerData) abstract;		//状態に入ったとき
+	virtual void Enter(AnimState& oldAnimState, AnimState& nowAnimState);		//状態に入ったとき
 	virtual void Exit(PlayerData& playerData) abstract;			//状態を抜けるとき
 
 	virtual bool MotionUpdate(PlayerData& playerData);
@@ -47,13 +45,13 @@ public:
 	//////////////////////////////////////////////
 	// ゲッター
 	//////////////////////////////////////////////
-	//int GetPrevAttachIndex() { return oldAnimState.AttachIndex; }
+	//int GetPrevAttachIndex() { return oldAnimState.attachIndex; }
 	AnimState GetOldAnimState() const { return oldAnimState; }
 	AnimState GetNowAnimState() const { return nowAnimState; }
 	float GetAnimBlendRate()const { return animBlendRate; }
 	bool GetIsChangeState()const { return isChangeState; }
 
-	void SetPlayAnimSpeed_now(const float set) { nowAnimState.PlayTime_anim = set; }
+	void SetPlayAnimSpeed_now(const float set) { nowAnimState.playAnimTime = set; }
 	void SetAnimNumber_old(const int num) { animNumber_old = num; }
 	void SetIsChangeState(const bool set) { isChangeState = set; }
 	
@@ -74,9 +72,5 @@ protected:
 
 	AnimState oldAnimState;
 	AnimState nowAnimState;
-
-	//移動
-	//VECTOR moveVec;
-
 };
 

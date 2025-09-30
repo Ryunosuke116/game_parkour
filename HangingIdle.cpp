@@ -15,9 +15,8 @@
 /// <param name="oldAnimState"></param>
 /// <param name="nowAnimState"></param>
 /// <param name="playerData"></param>
-HangingIdle::HangingIdle(int& modelHandle,
-    AnimState& oldAnimState, AnimState& nowAnimState) :
-    PlayerStateBase(modelHandle, oldAnimState, nowAnimState)
+HangingIdle::HangingIdle(const int modelHandle) :
+    PlayerStateBase(modelHandle)
 {
     this->nowAnimState.PlayAnimSpeed = playAnimSpeed;
 }
@@ -34,15 +33,15 @@ HangingIdle::~HangingIdle()
 /// 初期化
 /// </summary>
 /// <param name="modelHandle"></param>
-void HangingIdle::Initialize(int& modelHandle,const int changeNum, Player& player)
+void HangingIdle::Initialize(const int modelHandle,const int changeNum, Player& player)
 {
     PlayerStateBase::Initialize(modelHandle, changeNum, player);
     animBlendRate = 1.0f;
 
     // 再生時間をセットする
-    MV1SetAttachAnimTime(modelHandle, nowAnimState.AttachIndex, nowAnimState.PlayTime_anim);
+    MV1SetAttachAnimTime(modelHandle, nowAnimState.attachIndex, nowAnimState.playAnimTime);
     //アニメーションのモデルに対する反映率をセット
-    MV1SetAttachAnimBlendRate(modelHandle, nowAnimState.AttachIndex, animBlendRate);
+    MV1SetAttachAnimBlendRate(modelHandle, nowAnimState.attachIndex, animBlendRate);
 
     //胴体座標
     VECTOR centerPosition = MV1GetFramePosition(modelHandle, 2);
@@ -61,10 +60,8 @@ void HangingIdle::Initialize(int& modelHandle,const int changeNum, Player& playe
 /// <returns></returns>
 std::pair<VECTOR, PlayerData> HangingIdle::Update(const VECTOR& cameraDirection,
     const std::vector<std::weak_ptr<BaseObject>>& fieldObjects, Player& player)
-{
-    
+{   
     VECTOR moveDirection = player.GetNowMoveDirection();
-
     PlayerData playerData = player.GetData();
     playerData.isHanging_now = true;
     playerData.isGround = true;
@@ -104,11 +101,6 @@ VECTOR HangingIdle::Command(const VECTOR& cameraDirection, PlayerData& playerDat
     RollMove(playerData);
 
     return moveDirection;
-}
-
-void HangingIdle::Enter(PlayerData& playerData)
-{
-    playerData.isHanging = true;
 }
 
 void HangingIdle::Exit(PlayerData& playerData)

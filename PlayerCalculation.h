@@ -44,21 +44,16 @@ public:
 		const VECTOR& foot,
 		const VECTOR& position);
 
-	void ObstacleCheck(
-		const VECTOR& moveDirection,
-		const VECTOR& playerPosition,
-		const float radius);
-
 	void Reset_move();
 	void Reset_run_wall();
 	void ResetMoveVec_old() { moveVec_old = VGet(0.0f, 0.0f, 0.0f); }
 
-	bool GetIsJumpPower_add()const { return isJumpPower_add; }
+	bool GetIsJumpPower_add()const { return isAddJumpPower; }
 	bool GetIsWhenClimbingHitGround()const { return isWhenClimbingHitGround; }
-	float GetjumpSpeed_now() const { return jumpPower_now; }
+	float GetjumpSpeed_now() const { return nowJumpPower; }
 	float GetMoveSpeed_now() const { return moveSpeed_now; }
 	float GetMoveSpeed_max() const { return MaxRunSpeed; }
-	float GetWallRun_stopTime()const { return wallRun_stopTime; }
+	float GetWallRun_stopTime()const { return WallRunStopTime; }
 	float GetWallRun_stopTime_max()const { return wallRun_stopTime_max; }
 	VECTOR GetHangingPoint()const { return hangingPoint; }
 	VECTOR GethitWallNormal() const { return hitWallNormal; }
@@ -66,10 +61,10 @@ public:
 	MV1_COLL_RESULT_POLY GetHangingPoly() { return hangingPoly; }
 	Calculation::NearestResult GetNearestResult() { return nearestResult; }
 
-	void ChangeIsJumpPower_add_ture() { isJumpPower_add = true; }
-	void SetJumpPower() { jumpPower_now = addJumpPower; }
-	void SetJumpPower_second() { jumpPower_now = addJumpPowe_second; }
-	void SetjumpSpeed_now(const float& jumpSpeed) { jumpPower_now = jumpSpeed; }
+	void ChangeIsJumpPower_add_ture() { isAddJumpPower = true; }
+	void SetJumpPower() { nowJumpPower = addJumpPower; }
+	void SetJumpPower_second() { nowJumpPower = addJumpPowe_second; }
+	void SetjumpSpeed_now(const float& jumpSpeed) { nowJumpPower = jumpSpeed; }
 	void SetHangingPoly(const MV1_COLL_RESULT_POLY& set) { hangingPoly = set; }
 	void SetHangingPoint(const VECTOR& set) { hangingPoint = set; }
 	void SetHandPos_right(const VECTOR& set) { handPos_right = set; }
@@ -86,18 +81,18 @@ private:
 	static constexpr float gravity = -0.06f;
 	static constexpr float wallRun_stopTime_max = 10.0f;	
 
-	float jumpPower_now;			//現在のジャンプスピード
+	float nowJumpPower;			//現在のジャンプスピード
 	float moveSpeed_now;
 	float rollMoveSpeed_now;		//現在のロールスピード
 	float decelerationSpeed;		//減速速度
-	float wallRun_stopTime;		//壁に留まる時間
+	float WallRunStopTime;		//壁に留まる時間
 	float velocity_gravity;			//現在かかっている重力
 	
 
-	bool isCalc_deceleration;		//止まるときに一度だけ減速スピードを計算
+	bool isCalcDeceleration;		//止まるときに一度だけ減速スピードを計算
 	bool isSlip_after;				//slipした後か
-	bool isRunWall_Stop;
-	bool isJumpPower_add;
+	bool isStopRunWall;
+	bool isAddJumpPower;
 	bool isWhenClimbingHitGround;	//登っているときに床と接触しているか
 
 	VECTOR moveVec_old;

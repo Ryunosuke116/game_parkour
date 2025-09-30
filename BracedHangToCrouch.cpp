@@ -15,9 +15,8 @@
 /// <param name="oldAnimState"></param>
 /// <param name="nowAnimState"></param>
 /// <param name="playerData"></param>
-BracedHangToCrouch::BracedHangToCrouch(int& modelHandle,
-    AnimState& oldAnimState, AnimState& nowAnimState) :
-    PlayerStateBase(modelHandle, oldAnimState, nowAnimState)
+BracedHangToCrouch::BracedHangToCrouch(const int modelHandle) :
+    PlayerStateBase(modelHandle)
 {
     this->nowAnimState.PlayAnimSpeed = playAnimSpeed;
 }
@@ -47,7 +46,7 @@ std::pair<VECTOR, PlayerData> BracedHangToCrouch::Update(
     PlayerData playerData = player.GetData();
 
     //ã‚èI‚í‚Á‚½‚çplayerData‚ð‰Šú‰»
-    if (nowAnimState.PlayTime_anim >=
+    if (nowAnimState.playAnimTime >=
         nowAnimState.TotalPlayTime_anim - 1.0f)
     {
         isChangeState = true;
@@ -74,11 +73,6 @@ VECTOR BracedHangToCrouch::Command(const VECTOR& cameraDirection, PlayerData& pl
     moveDirection = Move(cameraDirection, playerData);
 
     return moveDirection;
-}
-
-void BracedHangToCrouch::Enter(PlayerData& playerData)
-{
-    playerData.isHangToCrouch = true;
 }
 
 void BracedHangToCrouch::Exit(PlayerData& playerData)
