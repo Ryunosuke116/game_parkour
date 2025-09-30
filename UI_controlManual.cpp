@@ -4,6 +4,7 @@
 #include "UI_controlManual.h"
 #include "AnimTime.h"
 #include "JsonManager.h"
+#include "Calculation.h"
 
 UI_controlManual::UI_controlManual():
 	BaseUI()
@@ -40,14 +41,16 @@ void UI_controlManual::Create()
 
 void UI_controlManual::Initialize()
 {
-	const int initX = 90;
-	const int initY = 120;
+	const float initManualUiPosX = -350.0f;
+	const float initManualUiPosY = 120.0f;
+	const float initCommandsBackPosX = -290.0f;
+	const float initCommandsBackPosY = 60.0f;
 	const int initStateNumber = -1;
 
-	x = initX;
-	y = initY;
-	commandsBackPosX = 30;
-	commandsBackPosY = 60;
+	manualUiPosX = initManualUiPosX;
+	manualUiPosY = initManualUiPosY;
+	commandsBackPosX = initCommandsBackPosX;
+	commandsBackPosY = initCommandsBackPosY;
 	stateNumber = initStateNumber;
 }
 
@@ -56,54 +59,61 @@ void UI_controlManual::Initialize()
 /// </summary>
 void UI_controlManual::Update()
 {
-	draw_UIs.clear();
+	drawUis.clear();
 
-	draw_UIs.push_back(uiHandles.at("move_camera"));
-	draw_UIs.push_back(uiHandles.at("reset_camera"));
+	drawUis.push_back(uiHandles.at("move_camera"));
+	drawUis.push_back(uiHandles.at("reset_camera"));
 
-	if ((!data.isHanging_now ||
+	if ((!data.isNowHanging ||
 		!data.isRunWall) &&
-		!data.isHanging_now)
+		!data.isNowHanging)
 	{
-		draw_UIs.push_back(uiHandles.at("move"));
+		drawUis.push_back(uiHandles.at("move"));
 	}
 
-	if (!data.isJumpAll && 
-		!data.isHanging_now)
+	if (!data.isAllJump && 
+		!data.isNowHanging)
 	{
-		draw_UIs.push_back(uiHandles.at("jump"));
+		drawUis.push_back(uiHandles.at("jump"));
 	}
 
 	if (!data.isUseRoll &&
-		!data.isHanging_now)
+		!data.isNowHanging)
 	{
-		draw_UIs.push_back(uiHandles.at("roll"));
+		drawUis.push_back(uiHandles.at("roll"));
 	}
 	
-	if (data.isHanging_now)
+	if (data.isNowHanging)
 	{
-		draw_UIs.push_back(uiHandles.at("move_up"));
-		draw_UIs.push_back(uiHandles.at("move_down"));
+		drawUis.push_back(uiHandles.at("move_up"));
+		drawUis.push_back(uiHandles.at("move_down"));
 	}
 
 	if (data.isRunWall)
 	{
-		draw_UIs.push_back(uiHandles.at("move_down"));
+		drawUis.push_back(uiHandles.at("move_down"));
 	}
+
+	const float targetManualPosX = 90.0f;
+	const float targetCommandsBackPosX = 30.0f;
+
+	manualUiPosX = Calculation::Leap(manualUiPosX, targetManualPosX, 0.1f);
+	commandsBackPosX = Calculation::Leap(commandsBackPosX, targetCommandsBackPosX, 0.1f);
 }
 
 void UI_controlManual::Draw()
 {
 	int alpha_Box = 100;
+	const int kAddPosY = 40;
 
-	int draw_y = y;
+	int nowManualUiPosY = manualUiPosY;
 
-	DrawGraph(commandsBackPosX, commandsBackPosY, uiHandles.at("commandBack"),TRUE);
+	DrawGraphF(commandsBackPosX, commandsBackPosY, uiHandles.at("commandBack"),TRUE);
 
-	for (auto& draw_UI : draw_UIs)
+	for (auto& drawUi : drawUis)
 	{
-		DrawGraph(x, draw_y, draw_UI, TRUE);
-		draw_y += 40;
+		DrawGraphF(manualUiPosX, nowManualUiPosY, drawUi, TRUE);
+		nowManualUiPosY += kAddPosY;
 	}
 }
 

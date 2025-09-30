@@ -20,5 +20,8 @@ public:
 private:
 	int titleButtonHandle;
 	int backGroundHandle;
+	int alpha;
+
+	int addAlpha;
 };
 

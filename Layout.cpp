@@ -27,7 +27,7 @@ void Layout::Update(const VECTOR& pos,
 	BaseGameObjectManager& manager)
 {
 	MV1SetPosition(modelHandle, pos);
-	DebugDrawer::Instance().InformationInput_string_VECTOR("position x %f  y %f  z %f\n", pos);
+	DebugDrawer::GetInstance().InformationInput_string_VECTOR("position x %f  y %f  z %f\n", pos);
 
 
 	if (CheckHitKey(KEY_INPUT_SPACE) ||

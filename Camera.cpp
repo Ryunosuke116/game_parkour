@@ -122,7 +122,7 @@ void Camera::Update()
 	cameraDirection = VSub(screenCenterPosition, cameraPosition);
 	cameraDirection = VNorm(cameraDirection);
 
-	//DebugDrawer::Instance().InformationInput_sphere(screenCenterPosition, 3.5f, GetColor(255, 0, 255));
+	//DebugDrawer::GetInstance().InformationInput_sphere(screenCenterPosition, 3.5f, GetColor(255, 0, 255));
 }
 
 /// <summary>
@@ -171,8 +171,8 @@ void Camera::Update_layout()
 	rightMove.y = 0.0f;
 
 	//パッド or arrowキーの入力方向で計算
-	moveDirection = VAdd(VScale(rightMove, -PadInput::GetJoyPad_x_left()),
-		VScale(upMove, -PadInput::GetJoyPad_y_left()));
+	moveDirection = VAdd(VScale(rightMove, -PadInput::GetJoyPadXLeft()),
+		VScale(upMove, -PadInput::GetJoyPadYLeft()));
 
 	//0でなければ正規化
 	if (VSize(moveDirection) != 0)
@@ -213,18 +213,18 @@ void Camera::Update_layout()
 
 	//DistanceUpdate();
 
-	if (PadInput::GetJoyPad_y_right() > 0.0f)
+	if (PadInput::GetJoyPadYRight() > 0.0f)
 	{
 		cameraPosition.y += 1.0f;
 		screenCenterPosition.y += 1.0f;
 	}
-	if (PadInput::GetJoyPad_y_right() < 0.0f)
+	if (PadInput::GetJoyPadYRight() < 0.0f)
 	{
 		cameraPosition.y -= 1.0f;
 		screenCenterPosition.y -= 1.0f;
 	}
 
-	if (PadInput::GetJoyPad_x_right() > 0.0f)
+	if (PadInput::GetJoyPadXRight() > 0.0f)
 	{
 		if (PadInput::IsPushRT())
 		{
@@ -239,7 +239,7 @@ void Camera::Update_layout()
 			nowDegree -= 2.5f;
 		}
 	}
-	else if (PadInput::GetJoyPad_x_right() < 0.0f)
+	else if (PadInput::GetJoyPadXRight() < 0.0f)
 	{
 		if (PadInput::IsPushRT())
 		{
@@ -312,7 +312,7 @@ void Camera::DistanceUpdate()
 	const float minNormalizedTimeDistance = 0.0f;
 	const float maxNormalizedTime = 1.0f;
 
-	if (PadInput::GetJoyPad_y_right() > 0.0f)
+	if (PadInput::GetJoyPadYRight() > 0.0f)
 	{
 		normalLinearProgress -= addNormalizedTime;
 		
@@ -321,7 +321,7 @@ void Camera::DistanceUpdate()
 			normalLinearProgress = minNormalizedTimeDistance;
 		}
 	}
-	if (PadInput::GetJoyPad_y_right() < 0.0f)
+	if (PadInput::GetJoyPadYRight() < 0.0f)
 	{
 		normalLinearProgress += addNormalizedTime;
 
@@ -331,8 +331,8 @@ void Camera::DistanceUpdate()
 		}
 	}
 
-	DebugDrawer::Instance().InformationInput_string_float("normalDistanceProgress %f\n", normalDistanceProgress);
-	DebugDrawer::Instance().InformationInput_string_float("normalCameraHeightProgress %f\n", normalCameraHeightProgress);
+	DebugDrawer::GetInstance().InformationInput_string_float("normalDistanceProgress %f\n", normalDistanceProgress);
+	DebugDrawer::GetInstance().InformationInput_string_float("normalCameraHeightProgress %f\n", normalCameraHeightProgress);
 
 	//リニア値からカメラの距離を求める
 	normalCameraDistanceSize = Calculation::InterpolationCalc(normalLinearProgress, maxDistanceSize, minDistanceSize);
@@ -343,11 +343,11 @@ void Camera::DistanceUpdate()
 /// </summary>
 void Camera::AngleUpdate(const float& angle_player)
 {
-	if (PadInput::GetJoyPad_x_right() < 0.0f)
+	if (PadInput::GetJoyPadXRight() < 0.0f)
 	{
 		nowDegree -= 1.5f;
 	}
-	else if (PadInput::GetJoyPad_x_right() > 0.0f)
+	else if (PadInput::GetJoyPadXRight() > 0.0f)
 	{
 		nowDegree += 1.5f;
 	}
@@ -460,15 +460,17 @@ void Camera::AdjustCameraPosition()
 {
 	if (!isHitObject)
 	{
-		if (PadInput::GetJoyPad_y_right() != 0.0f)
+		if (PadInput::GetJoyPadYRight() != 0.0f)
 		{
-			cameraDistanceSize = Calculation::LeapFloat(cameraDistanceSize, normalCameraDistanceSize, 0.2f);
+			const float kLeapSpeed = 0.2f;
+			cameraDistanceSize = Calculation::Leap(cameraDistanceSize, normalCameraDistanceSize, kLeapSpeed);
 		}
-		else if (PadInput::GetJoyPad_x_left() != 0.0f ||
-			PadInput::GetJoyPad_y_left() != 0.0f ||
-			PadInput::GetJoyPad_x_right() != 0.0f)
+		else if (PadInput::GetJoyPadXLeft() != 0.0f ||
+			PadInput::GetJoyPadYLeft() != 0.0f ||
+			PadInput::GetJoyPadXRight() != 0.0f)
 		{
-			cameraDistanceSize = Calculation::LeapFloat(cameraDistanceSize, normalCameraDistanceSize, 0.02f);
+			const float kSlowLeapSpeed = 0.02f;
+			cameraDistanceSize = Calculation::Leap(cameraDistanceSize, normalCameraDistanceSize, kSlowLeapSpeed);
 		}
 	}
 
@@ -480,12 +482,12 @@ void Camera::AdjustCameraPosition()
 	cameraPosition.z = screenCenterPosition.z + cameraDistanceSize * sin(angleRadian);
 	cameraPosition.y = normalCameraPosition.y;
 
-	DebugDrawer::Instance().InformationInput_string_float("cameraDistanceSize %f\n", cameraDistanceSize);
-	DebugDrawer::Instance().InformationInput_string_float("normalCameraDistanceSize %f\n", normalCameraDistanceSize);
-	DebugDrawer::Instance().InformationInput_string_float("progressCameraPosition %f\n", progressCameraPosition);
-	DebugDrawer::Instance().InformationInput_string_VECTOR("normalCameraPosition %f %f %f\n", normalCameraPosition);
-	DebugDrawer::Instance().InformationInput_string_VECTOR("cameraPosition %f %f %f\n", cameraPosition);
-	DebugDrawer::Instance().InformationInput_string_VECTOR("screenCenterPosition %f %f %f\n", screenCenterPosition);
+	DebugDrawer::GetInstance().InformationInput_string_float("cameraDistanceSize %f\n", cameraDistanceSize);
+	DebugDrawer::GetInstance().InformationInput_string_float("normalCameraDistanceSize %f\n", normalCameraDistanceSize);
+	DebugDrawer::GetInstance().InformationInput_string_float("progressCameraPosition %f\n", progressCameraPosition);
+	DebugDrawer::GetInstance().InformationInput_string_VECTOR("normalCameraPosition %f %f %f\n", normalCameraPosition);
+	DebugDrawer::GetInstance().InformationInput_string_VECTOR("cameraPosition %f %f %f\n", cameraPosition);
+	DebugDrawer::GetInstance().InformationInput_string_VECTOR("screenCenterPosition %f %f %f\n", screenCenterPosition);
 }
 
 /// <summary>
@@ -507,7 +509,7 @@ void Camera::ResetAngle(const float& angle_player)
 	}
 
 	if (isResetAngle &&
-		PadInput::GetJoyPad_x_right() == 0.0f)
+		PadInput::GetJoyPadXRight() == 0.0f)
 	{
 		nowDegree = Calculation::RotationAngleDegree(newDegree, nowDegree, rotationSpeed);
 

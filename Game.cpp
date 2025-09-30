@@ -74,5 +74,5 @@ void Game::Draw()
 {
 	clsDx();
 	gameObjectManager->Draw();
-	DebugDrawer::Instance().Draw();
+	DebugDrawer::GetInstance().Draw();
 }

@@ -106,6 +106,7 @@ void EffectManager::PlayEffect(const std::string& tag)
 		{
 			// エフェクトを再生する。
 			effect->playingEffectHandle = PlayEffekseer3DEffect(effect->resourceHandle);
+			break;
 		}
 	}
 }

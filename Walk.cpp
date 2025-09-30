@@ -104,8 +104,8 @@ VECTOR Walk::Move(const VECTOR& cameraDirection, PlayerData& playerData)
 	rightMove.y = 0.0f;
 
 	//パッド or arrowキーの入力方向で計算
-	moveDirection = VAdd(VScale(rightMove, -PadInput::GetJoyPad_x_left()),
-		VScale(upMove, -PadInput::GetJoyPad_y_left()));
+	moveDirection = VAdd(VScale(rightMove, -PadInput::GetJoyPadXLeft()),
+		VScale(upMove, -PadInput::GetJoyPadYLeft()));
 
 	//0でなければ正規化
 	if (VSize(moveDirection) != 0)

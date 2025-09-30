@@ -1,10 +1,9 @@
 {
   "list": [
     [ "material/sound/button.mp3", "button", false ],
-    [ "material/sound/coinGet.mp3", "coinGet", false ],
-    [ "material/sound/gameBGM.mp3", "gameBGM", true ],
-    [ "material/sound/gool.mp3", "gool", false ],
-    [ "material/sound/jump.mp3", "jump", false ],
-    [ "material/sound/dash.mp3", "dash", false ]
+    [ "material/sound/resultBGM.mp3", "resultBGM", true ],
+    [ "material/sound/praise_S.mp3", "praiseS", false ],
+    [ "material/sound/praise_S01.mp3", "praiseS01", false ],
+    [ "material/sound/praise_A.mp3", "praiseA", false ]
   ]
 }

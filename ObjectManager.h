@@ -31,21 +31,21 @@ public:
 	void ResultDraw();
 
 	bool GetIsGoal() { return isGoal; }
-	int GetCoinCount() { return playerManager_actual->GetCoinCount(); }
+	int GetCoinCount() { return actualPlayerManager->GetCoinCount(); }
 
 private:
-	std::vector <std::shared_ptr<IObject>> objects;
+	std::vector<std::shared_ptr<IObject>> objects;
 
 	std::shared_ptr<Layout>					layout = NULL;
 	std::shared_ptr<Tutorial>				tutorial = NULL;
 	std::shared_ptr<FinishCut>				finishCut = NULL;
 
-	std::shared_ptr<PlayerManager>				playerManager_actual = NULL;
-	std::shared_ptr<CoinManager>				coinManager_actual = NULL;
-	std::shared_ptr<UIManager>					uiManager_actual = NULL;
-	std::shared_ptr<GameTimer>					gameTimer_actual = NULL;
-	std::shared_ptr<Shadow>						shadow_actual = NULL;
-	std::shared_ptr<Camera>						camera_actual = NULL;
+	std::shared_ptr<PlayerManager>				actualPlayerManager = NULL;
+	std::shared_ptr<CoinManager>				actualCoinManager = NULL;
+	std::shared_ptr<UIManager>					actualUiManager = NULL;
+	std::shared_ptr<GameTimer>					actualGameTimer = NULL;
+	std::shared_ptr<Shadow>						actualShadow = NULL;
+	std::shared_ptr<Camera>						actualCamera = NULL;
 	std::shared_ptr<Liner8TreeManager<Coin>>	L8TreeManager = NULL;
 
 	bool isCamera;
@@ -55,7 +55,7 @@ private:
 	bool isStreamFinishPicture;	//フィニッシュ演出を流すか
 
 	float streamStartPictureTimer;	//スタート画面のタイマー
-	float stream_finishPicture_timer;	//フィニッシュ画面のタイマー
+	float streamFinishPictureTimer;	//フィニッシュ画面のタイマー
 
 };
 

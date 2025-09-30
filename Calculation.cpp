@@ -132,12 +132,11 @@ VECTOR Calculation::SphereMeshOutsideTriangle(const MV1_COLL_RESULT_POLY& subjec
 
 /// <summary>
 /// 点に対して最も近い三角形の辺
-/// 最も近い三角形の辺
 /// </summary>
 /// <param name="subjectPoly"></param>
 /// <param name="HitPos_ground"></param>
 /// <returns></returns>
-Calculation::NearestResult Calculation::SphereMeshOutsideTriangle_line(
+Calculation::NearestResult Calculation::SphereMeshOutsideTriangleLine(
 	const MV1_COLL_RESULT_POLY& subjectPoly,
 	const VECTOR& pos)
 {
@@ -153,27 +152,27 @@ Calculation::NearestResult Calculation::SphereMeshOutsideTriangle_line(
 	float d2 = VSize(VSub(nearPoint_2, pos));
 	float d3 = VSize(VSub(nearPoint_3, pos));
 
-	//DebugDrawer::Instance().InformationInput_sphere(nearPoint_1, 2.0f, GetColor(255, 0, 0));
-	//DebugDrawer::Instance().InformationInput_sphere(nearPoint_2, 2.0f, GetColor(0, 255, 0));
-	//DebugDrawer::Instance().InformationInput_sphere(nearPoint_3, 2.0f, GetColor(0, 0, 255));
+	//DebugDrawer::GetInstance().InformationInput_sphere(nearPoint_1, 2.0f, GetColor(255, 0, 0));
+	//DebugDrawer::GetInstance().InformationInput_sphere(nearPoint_2, 2.0f, GetColor(0, 255, 0));
+	//DebugDrawer::GetInstance().InformationInput_sphere(nearPoint_3, 2.0f, GetColor(0, 0, 255));
 	//一番近い座標を選択する
 	if (d1 <= d2 && d1 <= d3)
 	{
 		result.nearestPoint = nearPoint_1;
-		result.linePos_start = subjectPoly.Position[0];
-		result.linePos_end = subjectPoly.Position[1];
+		result.startLinePos = subjectPoly.Position[0];
+		result.endLinePos = subjectPoly.Position[1];
 	}
 	else if (d2 <= d3)
 	{
 		result.nearestPoint = nearPoint_2;
-		result.linePos_start = subjectPoly.Position[0];
-		result.linePos_end = subjectPoly.Position[2];
+		result.startLinePos = subjectPoly.Position[0];
+		result.endLinePos = subjectPoly.Position[2];
 	}
 	else
 	{
 		result.nearestPoint = nearPoint_3;
-		result.linePos_start = subjectPoly.Position[1];
-		result.linePos_end = subjectPoly.Position[2];
+		result.startLinePos = subjectPoly.Position[1];
+		result.endLinePos = subjectPoly.Position[2];
 	}
 
 	return result;
@@ -182,14 +181,15 @@ Calculation::NearestResult Calculation::SphereMeshOutsideTriangle_line(
 /// <summary>
 /// 投影の正規化ベクトルを返す
 /// </summary>
-/// <param name="plane_normal"></param>
-/// <param name="moveVec"></param>
+/// <param name="normalPlane"></param>
+/// <param name="velocity"></param>
 /// <returns></returns>
-VECTOR Calculation::Projection(const VECTOR& plane_normal,const VECTOR& moveVec)
+VECTOR Calculation::Projection(const VECTOR& normalPlane,
+	const VECTOR& velocity)
 {
-	float dot = VDot(plane_normal, moveVec);	//内積
+	float dot = VDot(normalPlane, velocity);	//内積
 	
-	VECTOR projection = VSub(moveVec, VScale(plane_normal, dot));
+	VECTOR projection = VSub(velocity, VScale(normalPlane, dot));
 	projection = VNorm(projection);
 
 	return projection;
@@ -287,25 +287,7 @@ VECTOR Calculation::Leap(const VECTOR& changePosition, const VECTOR& latestPosit
 	return VAdd(changePosition, scalePosition);
 }
 
-/// <summary>
-/// ラープ
-/// float
-/// </summary>
-/// <param name="change"></param>
-/// <param name="latest"></param>
-/// <param name="speed"></param>
-/// <returns></returns>
-float Calculation::LeapFloat(
-	const float& change,
-	const float& latest, 
-	const float& speed)
-{
-	float sub = latest - change;
-	float scale = 0;
-	scale = sub * speed;
 
-	return change + scale;
-}
 
 float Calculation::RotationAngleDegree(
 	const float targetDegree,

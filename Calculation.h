@@ -11,8 +11,8 @@ private:
 public:
 	struct NearestResult
 	{
-		VECTOR linePos_start;
-		VECTOR linePos_end;
+		VECTOR startLinePos;
+		VECTOR endLinePos;
 		VECTOR nearestPoint;
 	};
 
@@ -30,6 +30,7 @@ public:
 	/// <param name="vertex3"></param>
 	/// <returns></returns>
 	static float area(const VECTOR& vertex1, const VECTOR& vertex2, const VECTOR& vertex3);
+	
 	/// <summary>
 	/// 三角形のY軸の長さを求める
 	/// </summary>
@@ -39,7 +40,24 @@ public:
 	/// <returns></returns>
 	static float TriangleByVerticalLength(const VECTOR& a, const VECTOR& b, const VECTOR& c);
 	static float GetVerticalLength(const VECTOR& a, const VECTOR& b);
-	static float LeapFloat(const float& change, const float& latest, const float& speed);
+	
+	/// <summary>
+	/// ラープ
+	/// </summary>
+	/// <typeparam name="Type"></typeparam>
+	/// <param name="change"></param>
+	/// <param name="latest"></param>
+	/// <param name="speed"></param>
+	/// <returns></returns>
+	template <class Type>
+	static Type Leap(const Type& change, const Type& latest, const Type& speed)
+	{
+		Type sub = latest - change;
+		Type scale = 0;
+		scale = sub * speed;
+
+		return change + scale;
+	}
 	static float Check_depth_Triangle(const VECTOR& dir, const VECTOR& a, const VECTOR& b, const VECTOR& c);
 	static float CalculateBackProgress(float maxValue, float minValue, float nowValue);
 	static float InterpolationCalc(float progressValue, float maxValue, float minValue);
@@ -47,7 +65,7 @@ public:
 	static float CalculateBackEaseOutValue(float nowValue);
 	static VECTOR NearestPoint(const VECTOR& position_1, const VECTOR& position_2,
 		 const VECTOR& point);
-	static VECTOR Projection(const VECTOR& plane_normal, const VECTOR& moveVec);
+	static VECTOR Projection(const VECTOR& plane_normal, const VECTOR& velocity);
 	static MATRIX Rotate(const VECTOR& wall_normal);
 	static VECTOR ProjectionDirection(const VECTOR& point, const VECTOR& a, const VECTOR& b);
 	static VECTOR Leap(const VECTOR& changePosition, const VECTOR& latestPosition, const float& speed);
@@ -64,9 +82,13 @@ public:
 		const float targetDegree,
 		const float nowDegree,
 		const float rotationSpeed);
-
-	static NearestResult SphereMeshOutsideTriangle_line(const MV1_COLL_RESULT_POLY& subjectPoly, const VECTOR& pos);
-	static VECTOR AxisRotationX(const VECTOR& rotation, const float angle);
+	/// <summary>
+	/// 点に対して最も近い三角形の辺
+	/// </summary>
+	/// <param name="subjectPoly"></param>
+	/// <param name="HitPos_ground"></param>
+	/// <returns></returns>
+	static NearestResult SphereMeshOutsideTriangleLine(const MV1_COLL_RESULT_POLY& subjectPoly, const VECTOR& pos);
 };
 
 

@@ -26,7 +26,6 @@ public:
 	void DistanceUpdate();
 	void AdjustCameraPosition();
 	void PosCalc();
-	void Leap(VECTOR& changePosition, const VECTOR& playerPosition, const float& speed);
 
 	void Update_start(const float& timer,
 		const VECTOR& playerPosition,

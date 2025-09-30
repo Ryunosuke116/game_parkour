@@ -6,12 +6,12 @@
 
 
 Tutorial::Tutorial():
-	x_tutorialGraph(-1),
-	y_tutorialGraph(-1),
-	x_startGraph(-1),
-	y_startGraph(-1),
-	startGraph_timer(-1),
-	isPush_start(false)
+	tutorialGraphPosX(-1),
+	tutorialGraphPosY(-1),
+	startGraphPosX(-1),
+	startGraphPosY(-1),
+	startGraphTimer(-1),
+	isPushStart(false)
 {
 	tag = "tutorial";
 }
@@ -32,44 +32,45 @@ void Tutorial::Load(const nlohmann::json& jsonData)
 
 void Tutorial::Initialize()
 {
-	isPush_start = false;
-	startGraph_timer = 0.0f;
-	x_tutorialGraph = 200;
-	y_tutorialGraph = 112;
-	x_startGraph = 600;
-	y_startGraph = 350;
+	isPushStart = false;
+	startGraphTimer = 0.0f;
+	tutorialGraphPosX = 0;
+	tutorialGraphPosY = 0;
+	startGraphPosX = 600;
+	startGraphPosY = 350;
 }
 
 bool Tutorial::Update()
 {
 	if (PadInput::IsPush_A() &&
-		!isPush_start)
+		!isPushStart)
 	{
-		isPush_start = true;
+		isPushStart = true;
 	}
 
-	if (isPush_start)
+	if (isPushStart)
 	{
-		startGraph_timer++;
-		if (startGraph_timer >= 50.0f)
+		startGraphTimer++;
+		if (startGraphTimer >= 50.0f)
 		{
 			return false;
 		}
 	}
+
 	return true;
 }
 
 void Tutorial::Draw(const float& streamStartPictureTimer)
 {
 	if (streamStartPictureTimer >= 50.0f &&
-		!isPush_start)
+		!isPushStart)
 	{
-		DrawGraph(x_tutorialGraph, y_tutorialGraph, tutorialHandle, TRUE);
+		DrawGraph(tutorialGraphPosX, tutorialGraphPosY, tutorialHandle, TRUE);
 	}
 
-	if (isPush_start)
+	if (isPushStart)
 	{
-		DrawGraph(x_startGraph, y_startGraph, startHandle, TRUE);
+		DrawGraph(startGraphPosX, startGraphPosY, startHandle, TRUE);
 	}
 }
 

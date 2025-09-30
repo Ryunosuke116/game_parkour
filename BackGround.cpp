@@ -32,6 +32,7 @@ void BackGround::Initialize()
 	startButtonX = 350;
 	startButtonY = 650;
 	alpha = 254;
+	addAlpha = 2;
 }
 
 void BackGround::Update()

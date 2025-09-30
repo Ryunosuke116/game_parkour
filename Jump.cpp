@@ -14,8 +14,8 @@
 /// <param name="modelHandle"></param>
 Jump::Jump(const int modelHandle) :
     PlayerStateBase(modelHandle),
-    isJumpFirst(false),
-    isJumpSecond(false)
+    isFirstJump(false),
+    isSecondJump(false)
 {
     
 }
@@ -42,8 +42,8 @@ void Jump::Initialize(const int modelHandle,const int changeNum, Player& player)
 
     this->nowAnimState.PlayAnimSpeed = playAnimSpeed;
 
-    isJumpFirst = player.GetData().isJump;
-    isJumpSecond = player.GetData().isJumpSecond;
+    isFirstJump = player.GetData().isJump;
+    isSecondJump = player.GetData().isSecondJump;
 }
 
 /// <summary>
@@ -66,7 +66,7 @@ std::pair<VECTOR, PlayerData> Jump::Update(
     moveDirection = Command(cameraDirection, playerData, player);
 
     //接地した場合、着地アニメーションに切り替え
-    FlagReset_jump(playerData);
+    ResetIsJumps(playerData);
 
     if (playerData.isGround && !isRun)
     {

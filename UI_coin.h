@@ -25,21 +25,24 @@ public:
 	void SetCoinPos(int set_x, int set_y) { x = set_x, y = set_y; }
 
 private:
-	int cross_x;
-	int cross_y;
-	int number_x;
-	int number_y;
 	int coinHandle;
 	int numberHandle[10];
 	int crossHandle;
 	int coinCount;
-	int coinWidth;
-	int coinHeight;
-	int crossWidth;
-	int crossHeight;
-	int numberWidth;
-	int numberHeight;
-	int addNumberX;
+
+	float coinPosX;
+	float coinPosY;
+	float crossPosX;
+	float crossPosY;
+	float numberPosX;
+	float numberPosY;
+	float coinWidth;
+	float coinHeight;
+	float crossWidth;
+	float crossHeight;
+	float numberWidth;
+	float numberHeight;
+	float addNumberX;
 	std::string countNumber;
 
 

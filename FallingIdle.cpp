@@ -37,14 +37,15 @@ FallingIdle::~FallingIdle()
 /// <param name="player"></param>
 /// <returns></returns>
 std::pair<VECTOR, PlayerData> FallingIdle::Update(const VECTOR& cameraDirection,
-    const std::vector<std::weak_ptr<BaseObject>>& fieldObjects, Player& player)
+    const std::vector<std::weak_ptr<BaseObject>>& fieldObjects, 
+    Player& player)
 {
     VECTOR moveDirection = VGet(0.0f, 0.0f, 0.0f);
     PlayerData playerData = player.GetData();
 
     moveDirection = Command(cameraDirection, playerData, player);
 
-    FlagReset_jump(playerData);
+    ResetIsJumps(playerData);
 
     VECTOR distancePlayerTopAndBottom = 
         VSub(player.GetPositionData().rayTopPosition,
@@ -52,33 +53,38 @@ std::pair<VECTOR, PlayerData> FallingIdle::Update(const VECTOR& cameraDirection,
 
     float playerSize = VSize(distancePlayerTopAndBottom);
 
-    VECTOR head = player.GetPositionData().rayTopPosition;
+    VECTOR spherePos = player.GetPositionData().rayTopPosition;
 
     //Œ©’¼‚µ
     //ŠR’Í‚Ý”»’è
     if (playerData.isUseHanging)
     {
         //ŠR‚Â‚©‚Ý”»’è
-        auto result_cliff = HitCheck::CliffGrabbing(
+        auto resultCheckCliff = HitCheck::CliffGrabbing(
             fieldObjects,
             player.GetPosition(),
-            head,
+            spherePos,
             player.GetNowMoveDirection(),
-            cliff_radius);
+            kCliffRadius);
         
         //’Í‚Þ‚Æ‚±‚ë‚ª•½s‚¾‚Á‚½ê‡
         //ŠR’Í‚ÝŽž‚Ìî•ñ‚ð•Û‘¶
-        if (result_cliff.isHitHanging)
+        if (resultCheckCliff.isHitHanging)
         {
             //“·‘ÌÀ•W
-            VECTOR centerPosition = MV1GetFramePosition(modelHandle, 2);
+            const int kChestBoneNumber = MV1SearchFrame(modelHandle,
+                "mixamorig:Spine1");
+            VECTOR centerPosition = MV1GetFramePosition(modelHandle, kChestBoneNumber);
        
             Calculation::NearestResult nearestResult =
-                Calculation::SphereMeshOutsideTriangle_line(result_cliff.hangingPoly, head);
+                Calculation::SphereMeshOutsideTriangleLine(resultCheckCliff.hangingPoly, spherePos);
 
-            DebugDrawer::Instance().InformationInput_line(nearestResult.linePos_start, nearestResult.linePos_end, GetColor(255, 0, 0));
+            DebugDrawer::GetInstance().InformationInput_line(nearestResult.startLinePos,
+                nearestResult.endLinePos, 
+                GetColor(255, 0, 0));
             
-            playerData.isHanging = result_cliff.isHitHanging;
+            playerData.isHanging = resultCheckCliff.isHitHanging;
+            playerData.isMove = false;
             isChangeState = true;
             player.playerCalculation->SetNearestResult(nearestResult);
         }

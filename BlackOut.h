@@ -7,6 +7,7 @@ public:
 
 
     void Initialize();
+    void ResultInitialize();
     void BlackOutUpdate(int addAlpha);
     void LightChangeUpdate(int addAlpha);
     void Draw();

@@ -23,14 +23,14 @@ HitCheck::~HitCheck()
 /// </summary>
 /// <param name="modelHandle"></param>
 /// <param name="frameIndex"></param>
-/// <param name="linePos_start"></param>
-/// <param name="linePos_end"></param>
+/// <param name="startLinePos"></param>
+/// <param name="endLinePos"></param>
 /// <param name="hitPoly"></param>
 /// <returns></returns>
 bool HitCheck::RayHitJudge(const int& modelHandle, int frameIndex,
-	VECTOR linePos_start, VECTOR linePos_end, MV1_COLL_RESULT_POLY& hitPoly)
+	VECTOR startLinePos, VECTOR endLinePos, MV1_COLL_RESULT_POLY& hitPoly)
 {
-	hitPoly = MV1CollCheck_Line(modelHandle, frameIndex, linePos_start, linePos_end);
+	hitPoly = MV1CollCheck_Line(modelHandle, frameIndex, startLinePos, endLinePos);
 
 	return hitPoly.HitFlag;
 }
@@ -41,17 +41,17 @@ bool HitCheck::RayHitJudge(const int& modelHandle, int frameIndex,
 /// <param name="modelHandle"></param>
 /// <param name="frameIndex"></param>
 /// <param name="radius"></param>
-/// <param name="linePos_end"></param>
+/// <param name="endLinePos"></param>
 /// <param name="hitPoly"></param>
 /// <returns></returns>
 bool HitCheck::SphereHitJudge(
 	const int& modelHandle, 
 	int frameIndex,
 	const float& radius,
-	VECTOR linePos_end,
+	VECTOR endLinePos,
 	MV1_COLL_RESULT_POLY_DIM& hitPoly)
 {
-	hitPoly = MV1CollCheck_Sphere(modelHandle, frameIndex, linePos_end, radius);
+	hitPoly = MV1CollCheck_Sphere(modelHandle, frameIndex, endLinePos, radius);
 
 	if (hitPoly.HitNum >= 1)return true;
 	return false;
@@ -63,18 +63,18 @@ bool HitCheck::SphereHitJudge(
 /// <param name="modelHandle"></param>
 /// <param name="frameIndex"></param>
 /// <param name="radius"></param>
-/// <param name="linePos_start"></param>
-/// <param name="linePos_end"></param>
+/// <param name="startLinePos"></param>
+/// <param name="endLinePos"></param>
 /// <param name="hitPoly"></param>
 bool HitCheck::CapsuleHitJudge(
 	const int& modelHandle, 
 	int frameIndex,
 	float radius,
-	VECTOR linePos_start,
-	VECTOR linePos_end, 
+	VECTOR startLinePos,
+	VECTOR endLinePos, 
 	MV1_COLL_RESULT_POLY_DIM& hitPoly)
 {
-	hitPoly = MV1CollCheck_Capsule(modelHandle, frameIndex, linePos_start, linePos_end, radius);
+	hitPoly = MV1CollCheck_Capsule(modelHandle, frameIndex, startLinePos, endLinePos, radius);
 	
 	if (hitPoly.HitNum >= 1)return true;
 	return false;
@@ -388,10 +388,14 @@ bool HitCheck::TriangleAreaCheck_ground(const VECTOR& point, const VECTOR& a, co
 }
 
 /// <summary>
-/// 崖つかみ判定
+/// 崖掴み判定
 /// </summary>
-/// <param name="player"></param>
-/// <param name="modelHandle"></param>
+/// <param name="collisionObjects"></param>
+/// <param name="position"></param>
+/// <param name="topPosition"></param>
+/// <param name="moveDirection"></param>
+/// <param name="radius"></param>
+/// <returns></returns>
 HangingData HitCheck::CliffGrabbing(
 	const std::vector<std::weak_ptr<BaseObject>>& collisionObjects,
 	const VECTOR& position,
@@ -399,8 +403,11 @@ HangingData HitCheck::CliffGrabbing(
 	const VECTOR& moveDirection,
 	const float& radius)
 {
-	const float max_velocity = 11.2f;			//移動量の最大値
-	const float checkWidth = 4.0f;				//床確認の幅
+	const int kFrameIndex = -1;
+	const float kMaxVelocity = 11.2f;			//移動量の最大値
+	const float kCheckWidth = 4.0f;				//床確認の幅
+	const float kAngleRange = 50.0f;
+	const VECTOR kLengthDirection = VGet(0.0f, 1.0f, 0.0f);
 
 	VECTOR spherePos = VAdd(topPosition, VScale(moveDirection, 5.0f));
 
@@ -408,10 +415,7 @@ HangingData HitCheck::CliffGrabbing(
 	VECTOR endUpperCheckPos = VAdd(startUpperCheckPos, VScale(moveDirection, 8.0f));
 	endUpperCheckPos.y = startUpperCheckPos.y - 4.0f;
 
-	bool returnFlag = false;
 	HangingData hangingData = { false,VGet(0.0f,0.0f,0.0f),NULL };
-
-	DebugDrawer::Instance().InformationInput_line(startUpperCheckPos, endUpperCheckPos, GetColor(255, 0, 255));
 
 	//落下中にplayerの上部の球で判定を取る
 	for (const auto& fieldObject : collisionObjects)
@@ -441,103 +445,121 @@ HangingData HitCheck::CliffGrabbing(
 				MV1_COLL_RESULT_POLY subjectPoly = poly_dim.Dim[i];
 				MV1_COLL_RESULT_POLY rayCheckWall;
 
+				//三角形ポリゴンの法線と上方向ベクトルとの
+				// なす角を求める
+				float tiltAngleDegree =
+					Calculation::AngleBetWeenTwoVectors(
+						kLengthDirection,
+						subjectPoly.Normal);
+
+				tiltAngleDegree = abs(tiltAngleDegree);
+
 				//平面に当たっていればtrueに
-				if (subjectPoly.Normal.y >= 0.8f)
+				if (tiltAngleDegree <= kAngleRange)
 				{
 					//三角形の一番近い辺から一番近い点を求める
-					VECTOR nearestOutSide = Calculation::SphereMeshOutsideTriangle(
+					VECTOR nearestOutSide = 
+						Calculation::SphereMeshOutsideTriangle(
 						subjectPoly,
 						position);
 
 					//playerの座標から三角形のnearestOurSideとの間に壁があったら飛ばす
 					HitCheck::RayHitJudge(sharedCollisionObject->GetModelHandle(),
-						-1,
+						kFrameIndex,
 						position,
 						nearestOutSide,
 						rayCheckWall);
 
 					if (rayCheckWall.HitFlag)continue;
 
+					//座標に対して最も近い三角形の辺を求める
 					Calculation::NearestResult nearestResult = 
-						Calculation::SphereMeshOutsideTriangle_line(
+						Calculation::SphereMeshOutsideTriangleLine(
 							subjectPoly,
 							position);
 
-				//奥行を調べるための座標
-				VECTOR depthDirection = VSub(nearestOutSide, position);
-				depthDirection = VNorm(depthDirection);
+					//奥行を調べるための座標
+					VECTOR depthDirection = VSub(nearestOutSide, position);
+					depthDirection = VNorm(depthDirection);
 
-				depthDirection = Calculation::Projection(subjectPoly.Normal, depthDirection);
-
-				VECTOR rightRayPoint = VNorm(VSub(nearestResult.linePos_end, nearestOutSide));
-				VECTOR leftRayPoint = VNorm(VSub(nearestResult.linePos_start, nearestOutSide));
-
-				rightRayPoint = VScale(rightRayPoint, checkWidth);
-				leftRayPoint = VScale(leftRayPoint, checkWidth);
-
-				rightRayPoint = VAdd(nearestOutSide, rightRayPoint);
-				leftRayPoint = VAdd(nearestOutSide, leftRayPoint);
-
-				rightRayPoint = VAdd(rightRayPoint, VScale(depthDirection, 0.5f));
-				leftRayPoint = VAdd(leftRayPoint, VScale(depthDirection, 0.5f));
-
-				VECTOR endRightRayPoint = VAdd(rightRayPoint, VGet(0.0f, -1.0f, 0.0f));
-				VECTOR endLeftRayPoint = VAdd(leftRayPoint, VGet(0.0f, -1.0f, 0.0f));
-				rightRayPoint = VAdd(rightRayPoint, VGet(0.0f, 1.0f, 0.0f));
-				leftRayPoint = VAdd(leftRayPoint, VGet(0.0f, 1.0f, 0.0f));
-				
-				MV1_COLL_RESULT_POLY leftRayCheck;
-				MV1_COLL_RESULT_POLY rightRayCheck;
-
-				DebugDrawer::Instance().InformationInput_line(leftRayPoint, endLeftRayPoint, GetColor(255, 255, 255));
-				DebugDrawer::Instance().InformationInput_line(rightRayPoint, endRightRayPoint, GetColor(255, 255, 255));
-				DebugDrawer::Instance().InformationInput_sphere(nearestOutSide, 2.5f, GetColor(255, 0, 255));
-				
-				//精度悪いから要調整！！！
-				for (const auto& fieldObject : collisionObjects)
-				{
-					//掴む所の幅を確認して、一定の幅がないと掴めないようにする
-					auto sharedCollisionObject = fieldObject.lock();
-					HitCheck::RayHitJudge(
-						sharedCollisionObject->GetModelHandle(),
-						-1,
-						leftRayPoint,
-						endLeftRayPoint,
-						leftRayCheck);
-
-					HitCheck::RayHitJudge(
-						sharedCollisionObject->GetModelHandle(),
-						-1,
-						rightRayPoint,
-						endRightRayPoint,
-						rightRayCheck);
-
-					if (leftRayCheck.HitFlag && 
-						rightRayCheck.HitFlag)break;
-				}
-
-				if (!leftRayCheck.HitFlag || 
-					!rightRayCheck.HitFlag)continue;
-
+					//対象の三角形の表面を沿うための方向ベクトルを算出
 					depthDirection = Calculation::Projection(subjectPoly.Normal, depthDirection);
 
+					//一番近い三角形の辺の座標からキャラの肩幅くらい距離を
+					// 左右に取ってその座標から下にrayを飛ばして
+					// 床があるか確認する
+					VECTOR rightRayPoint = VNorm(VSub(nearestResult.endLinePos, nearestOutSide));
+					VECTOR leftRayPoint = VNorm(VSub(nearestResult.startLinePos, nearestOutSide));
+
+					rightRayPoint = VScale(rightRayPoint, kCheckWidth);
+					leftRayPoint = VScale(leftRayPoint, kCheckWidth);
+
+					rightRayPoint = VAdd(nearestOutSide, rightRayPoint);
+					leftRayPoint = VAdd(nearestOutSide, leftRayPoint);
+
+					rightRayPoint = VAdd(rightRayPoint, VScale(depthDirection, 0.5f));
+					leftRayPoint = VAdd(leftRayPoint, VScale(depthDirection, 0.5f));
+
+					VECTOR endRightRayPoint = VAdd(rightRayPoint, VGet(0.0f, -1.0f, 0.0f));
+					VECTOR endLeftRayPoint = VAdd(leftRayPoint, VGet(0.0f, -1.0f, 0.0f));
+					rightRayPoint = VAdd(rightRayPoint, VGet(0.0f, 1.0f, 0.0f));
+					leftRayPoint = VAdd(leftRayPoint, VGet(0.0f, 1.0f, 0.0f));
+				
+					MV1_COLL_RESULT_POLY leftRayCheck;
+					MV1_COLL_RESULT_POLY rightRayCheck;
+
+					//デバック
+					DebugDrawer::GetInstance().InformationInput_line(leftRayPoint, endLeftRayPoint, GetColor(255, 255, 255));
+					DebugDrawer::GetInstance().InformationInput_line(rightRayPoint, endRightRayPoint, GetColor(255, 255, 255));
+					DebugDrawer::GetInstance().InformationInput_sphere(nearestOutSide, 2.5f, GetColor(255, 0, 255));
+				
+					//rayを飛ばして確認
+					for (const auto& wpCollisionObject : collisionObjects)
+					{
+						//掴む所の幅を確認して、一定の幅がないと掴めないようにする
+						auto spCollisionObject = wpCollisionObject.lock();
+						HitCheck::RayHitJudge(
+							spCollisionObject->GetModelHandle(),
+							kFrameIndex,
+							leftRayPoint,
+							endLeftRayPoint,
+							leftRayCheck);
+
+						HitCheck::RayHitJudge(
+							spCollisionObject->GetModelHandle(),
+							kFrameIndex,
+							rightRayPoint,
+							endRightRayPoint,
+							rightRayCheck);
+
+						//両方当たっていれば次の確認へ
+						if (leftRayCheck.HitFlag && 
+							rightRayCheck.HitFlag)break;
+					}
+
+					//いずれかが当たっていなければ飛ばす
+					if (!leftRayCheck.HitFlag ||
+						!rightRayCheck.HitFlag)
+					{
+						continue;
+					}
+
 					//奥行確認のためのrayの長さ
-					VECTOR depthDistance = VScale(depthDirection, max_velocity);
+					VECTOR depthDistance = VScale(depthDirection, kMaxVelocity);
 					depthDistance = VAdd(nearestOutSide, depthDistance);
 
 					//少し浮かせる
 					VECTOR startWallCheckLine = VAdd(nearestOutSide, VScale(subjectPoly.Normal, 0.2f));
 					VECTOR endWallCheckLine = VAdd(depthDistance, VScale(subjectPoly.Normal, 0.2f));
 
-
-					DebugDrawer::Instance().InformationInput_capsule(startWallCheckLine, endWallCheckLine,1.0f, GetColor(255, 0, 255));
+					DebugDrawer::GetInstance().InformationInput_capsule(startWallCheckLine, endWallCheckLine,1.0f, GetColor(255, 0, 255));
 
 					MV1_COLL_RESULT_POLY wallCheck = {};
 
 					//壁に当たっていたら崖掴みができない
 					HitCheck::RayHitJudge(
 						sharedCollisionObject->GetModelHandle(),
-						-1,
+						kFrameIndex,
 						startWallCheckLine,
 						endWallCheckLine,
 						wallCheck);
@@ -570,7 +592,9 @@ HangingData HitCheck::CliffGrabbing(
 		// 検出したプレイヤーの周囲のポリゴン情報を開放する
 		MV1CollResultPolyDimTerminate(poly_dim);
 	}
-	DebugDrawer::Instance().InformationInput_sphere(spherePos, radius, GetColor(255, 255, 255));
+	
+	DebugDrawer::GetInstance().InformationInput_sphere(spherePos, radius, GetColor(255, 255, 255));
+	DebugDrawer::GetInstance().InformationInput_line(startUpperCheckPos, endUpperCheckPos, GetColor(255, 0, 255));
 
 	return hangingData;
 

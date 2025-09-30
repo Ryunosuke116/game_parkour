@@ -15,6 +15,6 @@ public:
 	void Exit(PlayerData& playerData) override;			//ó‘Ô‚ğ”²‚¯‚é‚Æ‚«
 private:
 	static constexpr float playAnimSpeed = 0.4f;	    // ˆÚ“®‘¬“x
-	static constexpr float cliff_radius = 4.0f;
+	static constexpr float kCliffRadius = 4.0f;
 };
 

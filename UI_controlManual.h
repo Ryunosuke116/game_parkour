@@ -22,13 +22,14 @@ public:
 
 private:
 	std::unordered_map<std::string, int> uiHandles;
-	std::vector<int> draw_UIs;
+	std::vector<int> drawUis;
 	int stateNumber;
 	int commandsBackHandle;
-	int commandsBackPosX;
-	int commandsBackPosY;
+	float commandsBackPosX;
+	float commandsBackPosY;
+	float manualUiPosX;
+	float manualUiPosY;
 
 	PlayerData data;
-
 };
 

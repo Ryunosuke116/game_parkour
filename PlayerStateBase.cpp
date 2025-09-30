@@ -7,6 +7,8 @@
 #include "Player.h"
 #include "DebugDrawer.h"
 #include "GameInstanceSubSystem.h"
+#include "WorldSubSystem.h"
+#include "CollisionObjectManager.h"
 #include "EffectManager.h"
 #include "HitCheck.h"
 
@@ -121,23 +123,22 @@ bool PlayerStateBase::MotionUpdate(PlayerData& playerData)
 
 void PlayerStateBase::Draw()
 {
-    DebugDrawer::Instance().InformationInput_string_int("nowAttachIndex %d\n", nowAnimState.attachIndex);
-    DebugDrawer::Instance().InformationInput_string_int("oldAttachIndex %d\n", oldAnimState.attachIndex);
+    DebugDrawer::GetInstance().InformationInput_string_int("nowAttachIndex %d\n", nowAnimState.attachIndex);
+    DebugDrawer::GetInstance().InformationInput_string_int("oldAttachIndex %d\n", oldAnimState.attachIndex);
 
-    DebugDrawer::Instance().InformationInput_string_float("nowPlayTime_anim %f\n", nowAnimState.playAnimTime);
-    DebugDrawer::Instance().InformationInput_string_float("oldPlayTime_anim %f\n", oldAnimState.playAnimTime);
+    DebugDrawer::GetInstance().InformationInput_string_float("nowPlayTime_anim %f\n", nowAnimState.playAnimTime);
+    DebugDrawer::GetInstance().InformationInput_string_float("oldPlayTime_anim %f\n", oldAnimState.playAnimTime);
 }
 
 /// <summary>
 /// 移動処理
 /// </summary>
 /// <param name="input"></param>
-/// <param name="moveVec"></param>
+/// <param name="velocity"></param>
 VECTOR PlayerStateBase::Move(const VECTOR& cameraDirection,
     PlayerData& playerData)
 {
     moveDirection = VGet(0.0f, 0.0f, 0.0f);
-    VECTOR moveDirection_old = VGet(0.0f, 0.0f, 0.0f);
 
     playerData.isMove = false;
     VECTOR rightMove = VCross(cameraDirection, VGet(0.0f, 1.0f, 0.0f));
@@ -149,13 +150,9 @@ VECTOR PlayerStateBase::Move(const VECTOR& cameraDirection,
     upMove.y = 0.0f;
     rightMove.y = 0.0f;
 
-    //前フレームのパッドスティック情報
-    moveDirection_old = VAdd(VScale(rightMove, -PadInput::GetJoyPad_old_x_left()),
-        VScale(upMove, -PadInput::GetJoyPad_old_y_left()));
-
     //パッド or arrowキーの入力方向で計算
-    moveDirection = VAdd(VScale(rightMove, -PadInput::GetJoyPad_x_left()),
-        VScale(upMove, -PadInput::GetJoyPad_y_left()));
+    moveDirection = VAdd(VScale(rightMove, -PadInput::GetJoyPadXLeft()),
+        VScale(upMove, -PadInput::GetJoyPadYLeft()));
 
     //0でなければ正規化
     if (VSize(moveDirection) != 0)
@@ -163,9 +160,8 @@ VECTOR PlayerStateBase::Move(const VECTOR& cameraDirection,
         moveDirection = VNorm(moveDirection);
     }
 
-    //前フレームと現在のフレームで入力されてなければ動いてない
-    if (VSize(moveDirection_old) == 0 &&
-        VSize(moveDirection) == 0)
+    //入力されてなければ動いてない
+    if (VSize(moveDirection) == 0)
     {
         playerData.isMove = false;
     }
@@ -190,8 +186,8 @@ void PlayerStateBase::RollMove(PlayerData& playerData)
     {
         playerData.isRoll = true;
         playerData.isUseRoll = true;
-        playerData.isJumpAll = false;
-        playerData.isJumpSecond = false;
+        playerData.isAllJump = false;
+        playerData.isSecondJump = false;
         isChangeState = true;
     }
 }
@@ -202,24 +198,24 @@ void PlayerStateBase::RollMove(PlayerData& playerData)
 void PlayerStateBase::JumpMove(PlayerData& playerData, 
     Player& player)
 {
-    if (PadInput::isJump() && !playerData.isJumpAll)
+    if (PadInput::isJump() && !playerData.isAllJump)
     {
         //ジャンプ
         if (!player.playerCalculation->GetIsJumpPower_add() &&
             !isPush &&
-            !playerData.isJumpFirst)
+            !playerData.isFirstJump)
         {
             isChangeState = true;
             playerData.isJump = true;
-            playerData.isJumpFirst = true;
+            playerData.isFirstJump = true;
             isPush = true;
             player.playerCalculation->ChangeIsJumpPower_add_ture();
             player.playerCalculation->SetJumpPower();
         }
         //二段ジャンプ
-        else if (playerData.isJumpFirst &&
+        else if (playerData.isFirstJump &&
             !isPush &&
-            !playerData.isJumpSecond)
+            !playerData.isSecondJump)
         {
             const auto effectManager = GameInstanceSubSystem::GetInstance().GetSubSystem<EffectManager>().lock();
             effectManager->PlayEffect("jump");
@@ -230,8 +226,8 @@ void PlayerStateBase::JumpMove(PlayerData& playerData,
                 playerData.isJump = true;
             }
             isPush = true;
-            playerData.isJumpSecond = true;
-            playerData.isJumpAll = true;
+            playerData.isSecondJump = true;
+            playerData.isAllJump = true;
             player.playerCalculation->ChangeIsJumpPower_add_ture();
             player.playerCalculation->SetJumpPower_second();
 
@@ -291,8 +287,8 @@ void PlayerStateBase::WallRunMove(PlayerData& playerData,
             playerData.isRunWall = true;
             playerData.isRun = true;
             playerData.isUseWallJump = false;
-            playerData.isJumpSecond = false;
-            playerData.isJumpAll = false;
+            playerData.isSecondJump = false;
+            playerData.isAllJump = false;
             isChangeState = true;
 
             player.playerCalculation->ChangeIsJumpPower_add_ture();
@@ -300,7 +296,7 @@ void PlayerStateBase::WallRunMove(PlayerData& playerData,
             player.playerCalculation->SetWallRunGravity(hitWallNormal);
             player.SetNowMoveDirection(VScale(hitWallNormal, -1.0f));
             player.SetFaceDirection(VScale(hitWallNormal, -1.0f));
-            player.SetRotata_x(runWallRotateX);
+            player.SetRotateX(runWallRotateX);
         }
     }
 }
@@ -308,13 +304,13 @@ void PlayerStateBase::WallRunMove(PlayerData& playerData,
 /// <summary>
 /// ジャンプ状況リセット
 /// </summary>
-void PlayerStateBase::FlagReset_jump(PlayerData& playerData)
+void PlayerStateBase::ResetIsJumps(PlayerData& playerData)
 {
     if (playerData.isGround)
     {
-        playerData.isJumpFirst = false;
-        playerData.isJumpSecond = false;
-        playerData.isJumpAll = false;
+        playerData.isFirstJump = false;
+        playerData.isSecondJump = false;
+        playerData.isAllJump = false;
     }
 }
 

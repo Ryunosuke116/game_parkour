@@ -1,7 +1,7 @@
 #include "common.h"
 #include "DebugDrawer.h"
 
-DebugDrawer& DebugDrawer::Instance()
+DebugDrawer& DebugDrawer::GetInstance()
 {
     static DebugDrawer instance;
     return instance;

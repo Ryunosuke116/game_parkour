@@ -38,17 +38,17 @@ void AnimationChanger::Initialize(
     PlayerData& playerData, 
     Player& player)
 {
-    animNumber_Now = num;
+    NowAnimNumber = num;
 
     //nowStateにwalkStateをセット
-	nowState = stateList[animNumber_Now];
+	nowState = stateList[NowAnimNumber];
     nowState->Enter(oldAnimState,
         nowAnimState);
 
-    nowState->SetAnimNumber_old(animNumber_Now);
-    animNumber_Now = animNum::walk;
+    nowState->SetAnimNumber_old(NowAnimNumber);
+    NowAnimNumber = animNum::walk;
 
-    nowState->Initialize(modelHandle, animNumber_Now, player);
+    nowState->Initialize(modelHandle, NowAnimNumber, player);
 }
 
 void AnimationChanger::ResultInitialize(const int& num, 
@@ -57,15 +57,15 @@ void AnimationChanger::ResultInitialize(const int& num,
     PlayerData& playerData,
     Player& player)
 {
-    animNumber_Now = num;
+    NowAnimNumber = num;
     //newStateを生成
     nowState = std::make_shared<Victory>(modelHandle);
     nowState->Enter(oldAnimState,
         nowAnimState);
 
-    nowState->SetAnimNumber_old(animNumber_Now);
+    nowState->SetAnimNumber_old(NowAnimNumber);
 
-    nowState->Initialize(modelHandle, animNumber_Now, player);
+    nowState->Initialize(modelHandle, NowAnimNumber, player);
 }
 
 /// <summary>
@@ -91,69 +91,69 @@ std::shared_ptr<PlayerStateBase> AnimationChanger::ChangeState(
         //newStateを生成
         newState = stateList.at(animNumber);
 
-        newState->SetAnimNumber_old(animNumber_Now);
-        animNumber_Now = animNumber;
+        newState->SetAnimNumber_old(NowAnimNumber);
+        NowAnimNumber = animNumber;
     };
 
     //立ち
     if (playerData.isIdle && 
-        animNumber_Now != animNum::idle)
+        NowAnimNumber != animNum::idle)
     {
          Change(animNum::idle, player, playerData);
     }
 
     //歩く
     if (playerData.isWalk &&
-        animNumber_Now != animNum::walk)
+        NowAnimNumber != animNum::walk)
     {
         Change(animNum::walk, player, playerData);
     }
 
     //走る
-    if (playerData.isRun && animNumber_Now != animNum::run)
+    if (playerData.isRun && NowAnimNumber != animNum::run)
     {
         Change(animNum::run, player, playerData);
     }
 
     //ジャンプ
     if (playerData.isJump &&
-        animNumber_Now != animNum::jump &&
-        animNumber_Now != animNum::runJump)
+        NowAnimNumber != animNum::jump &&
+        NowAnimNumber != animNum::runJump)
     {
         Change(animNum::jump, player, playerData);
     }
 
     //落下中
     if (playerData.isFalling &&
-        animNumber_Now != animNum::fallingIdle)
+        NowAnimNumber != animNum::fallingIdle)
     {
         Change(animNum::fallingIdle, player, playerData);
     }
 
     //転がる
     if (playerData.isRoll &&
-        animNumber_Now != animNum::quickRoll)
+        NowAnimNumber != animNum::quickRoll)
     {
         Change(animNum::quickRoll, player, playerData);
     }
 
     //走り終わり
     if (playerData.isStopRun && 
-        animNumber_Now != animNum::runToStop)
+        NowAnimNumber != animNum::runToStop)
     {
         Change(animNum::runToStop, player, playerData);
     }
 
     //崖つかみ
     if (playerData.isHanging &&
-        animNumber_Now != animNum::hangingIdle)
+        NowAnimNumber != animNum::hangingIdle)
     {
         Change(animNum::hangingIdle, player, playerData);
     }
 
     //崖のぼり
     if (playerData.isHangToCrouch &&
-        animNumber_Now != animNum::bracedHangToCrouch)
+        NowAnimNumber != animNum::bracedHangToCrouch)
     {
         Change(animNum::bracedHangToCrouch, player, playerData);
     }
@@ -161,7 +161,7 @@ std::shared_ptr<PlayerStateBase> AnimationChanger::ChangeState(
     if (newState)
     {
         newState->Enter(oldAnimState, nowAnimState);
-        newState->Initialize(modelHandle, animNumber_Now, player);
+        newState->Initialize(modelHandle, NowAnimNumber, player);
         return newState;
     }
 

@@ -23,5 +23,16 @@ private:
 	int rankHandle;
 	int speechBubbleHandle;
 	int coinCount;
+
+	int rankPosX;
+	int rankPosY;
+	int rankWidth;
+	int rankHeight;
+	int speechBubblePosX;
+	int speechBubblePosY;
+	int speechBubbleWidth;
+	int speechBubbleHeight;
+	int rankScale;
+	int addScaling;
 };
 

@@ -2,6 +2,7 @@
 #include <algorithm>
 #include "UI_coin.h"
 #include "JsonManager.h"
+#include "Calculation.h"
 
 UI_coin::UI_coin() :
 	BaseUI(),
@@ -57,28 +58,28 @@ void UI_coin::Create()
 void UI_coin::Initialize()
 {
 	//ï`âÊà íu
-	const int coin_x = 20;
-	const int coin_y = 690;
-	const int addInitCrossX = 135;
-	const int addInitCrossY = 70;
-	const int addInitNumberX = 190;
-	const int addInitNumberY = 40;
+	const float InitCoinPosX = -480.0f;
+	const float InitCoinPosY = 690.0f;
+	const float InitCrossX = -345.0f;
+	const float InitCrossY = 760.0f;
+	const float InitNumberX = -290.0f;
+	const float InitNumberY = 730.0f;
 	const std::string initNumber = "00";
 
-	x = coin_x;
-	y = coin_y;
-	cross_x = x + addInitCrossX;
-	cross_y = y + addInitCrossY;
-	number_x = x + addInitNumberX;
-	number_y = y + addInitNumberY;
+	coinPosX = InitCoinPosX;
+	coinPosY = InitCoinPosY;
+	crossPosX = InitCrossX;
+	crossPosY = InitCrossY;
+	numberPosX = InitNumberX;
+	numberPosY = InitNumberY;
 
-	coinWidth = 140;
-	coinHeight = 152;
-	crossWidth = 60;
-	crossHeight = 60;
-	numberWidth = 100;
-	numberHeight = 100;
-	addNumberX = 60;
+	coinWidth = 140.0f;
+	coinHeight = 152.0f;
+	crossWidth = 60.0f;
+	crossHeight = 60.0f;
+	numberWidth = 100.0f;
+	numberHeight = 100.0f;
+	addNumberX = 60.0f;
 
 	countNumber = initNumber;
 	coinCount = 0;
@@ -93,36 +94,41 @@ void UI_coin::Update()
 	{
 		countNumber.insert(0, "0");
 	}
+
+	const float targetCoinPosX = 20;
+	const float targetCrossX = 155;
+	const float targetNumberX = 210;
+
+	coinPosX = Calculation::Leap(coinPosX, targetCoinPosX, 0.1f);
+	crossPosX = Calculation::Leap(crossPosX, targetCrossX, 0.1f);
+	numberPosX = Calculation::Leap(numberPosX, targetNumberX, 0.1f);
 }
 
 void UI_coin::Draw()
 {
 	//ÉRÉCÉìÉCÉâÉXÉgï`âÊ
-	DrawExtendGraph(x, y,
-		x + coinWidth, y + coinHeight,
+	DrawExtendGraphF(coinPosX, coinPosY,
+		coinPosX + coinWidth, coinPosY + coinHeight,
 		coinHandle, TRUE);
-	//DrawGraph(x, y, coinHandle, TRUE);
 
-	//Å~ï`âÊ
-	DrawExtendGraph(cross_x, cross_y,
-		cross_x + crossWidth, cross_y + crossHeight,
+	//crossï`âÊ
+	DrawExtendGraphF(crossPosX, crossPosY,
+		crossPosX + crossWidth, crossPosY + crossHeight,
 		crossHandle, TRUE);
-	//DrawGraph(cross_x, cross_y, crossHandle, TRUE);
 
-	int num_x = number_x;
+	float nowNumberPosX = numberPosX;
 
 	//ÉRÉCÉìèäéùêîÇÃåÖêîï™ÅAëÂÇ´Ç¢åÖÇ©ÇÁèáÇ…ï`âÊ
 	for (char c : countNumber)
 	{
 		int digit = c - '0';
-		DrawExtendGraph(num_x, number_y,
-			num_x + numberWidth, number_y + numberHeight,
+		DrawExtendGraphF(nowNumberPosX, numberPosY,
+			nowNumberPosX + numberWidth, numberPosY + numberHeight,
 			numberHandle[digit], TRUE);
 
 		//ï∂éöÇÃïùï™Ç∏ÇÁÇ∑
-		num_x += addNumberX;
+		nowNumberPosX += addNumberX;
 	}
-
 }
 
 /// <summary>
@@ -140,30 +146,35 @@ void UI_coin::ResultCreate(const int coinCount)
 /// </summary>
 void UI_coin::ResultInitialize()
 {
-	const int coin_x = 960;
-	const int coin_y = 630;
-	const int addInitCrossX = 205;
-	const int addInitCrossY = 110;
-	const int addInitNumberX = 260;
-	const int addInitNumberY = 60;
-	const std::string initNumber = "00";
+	const float InitCoinPosX = 1800.0f;
+	const float InitCoinPosY = 630.0f;
+	const float InitCrossX = 2005.0f;
+	const float InitCrossY = 740.0f;
+	const float InitNumberX = 2060.0f;
+	const float InitNumberY = 690.0f;
 
-	x = coin_x;
-	y = coin_y;
-	cross_x = x + addInitCrossX;
-	cross_y = y + addInitCrossY;
-	number_x = x + addInitNumberX;
-	number_y = y + addInitNumberY;
+	coinPosX = InitCoinPosX;
+	coinPosY = InitCoinPosY;
+	crossPosX = InitCrossX;
+	crossPosY = InitCrossY;
+	numberPosX = InitNumberX;
+	numberPosY = InitNumberY;
 
-	coinWidth = 200;
-	coinHeight = 212;
-	crossWidth = 76;
-	crossHeight = 76;
-	numberWidth = 150;
-	numberHeight = 150;
-	addNumberX = 120;
+	coinWidth = 200.0f;
+	coinHeight = 212.0f;
+	crossWidth = 76.0f;
+	crossHeight = 76.0f;
+	numberWidth = 150.0f;
+	numberHeight = 150.0f;
+	addNumberX = 120.0f;
 
-	countNumber = initNumber;
+	countNumber = std::to_string(coinCount);
+
+	//àÍï∂éöÇµÇ©ì¸Ç¡ÇƒÇ»Ç¢èÍçáêÊì™Ç…0Çë}ì¸Ç∑ÇÈ
+	if (countNumber.length() == 1)
+	{
+		countNumber.insert(0, "0");
+	}
 }
 
 /// <summary>
@@ -171,5 +182,11 @@ void UI_coin::ResultInitialize()
 /// </summary>
 void UI_coin::ResultUpdate()
 {
-	Update();
+	const float InitCoinPosX = 960.0f;
+	const float InitCrossX = 1165.0f;
+	const float InitNumberX = 1220.0f;
+
+	coinPosX = Calculation::Leap(coinPosX, InitCoinPosX, 0.1f);
+	crossPosX = Calculation::Leap(crossPosX, InitCrossX, 0.1f);
+	numberPosX = Calculation::Leap(numberPosX, InitNumberX, 0.1f);
 }

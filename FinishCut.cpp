@@ -52,11 +52,10 @@ bool FinishCut::Update()
 		finishGraphTimer++;
 		if (finishGraphTimer >= maxFinishGraphTimer)
 		{
-			isDrawFinish = false;
-			return false;
+			return true;
 		}
 	}
-	return true;
+	return false;
 }
 
 void FinishCut::Draw()

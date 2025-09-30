@@ -40,7 +40,7 @@ public:
 	void ResetNowAnimState();
 	void Draw();
 	void SwitchingAnimation(const int& animNum);
-	void FlagReset_jump(PlayerData& playerData);
+	void ResetIsJumps(PlayerData& playerData);
 
 	//////////////////////////////////////////////
 	// ゲッター
@@ -55,11 +55,10 @@ public:
 	void SetAnimNumber_old(const int num) { animNumber_old = num; }
 	void SetIsChangeState(const bool set) { isChangeState = set; }
 	
-
 protected:
 	static constexpr float	AnimBlendSpeed = 0.1f;		// アニメーションのブレンド率変化速度
 	static constexpr float runWallRotateX = 30.0f;
-	static constexpr float cliff_radius = 4.0f;
+	static constexpr float kCliffRadius = 4.0f;			//崖掴み判定用の半径
 
 	int modelHandle;			//モデルハンドル
 	int animNumber_old;

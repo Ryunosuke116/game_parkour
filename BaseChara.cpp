@@ -52,8 +52,8 @@ void BaseChara::UpdateAngle(const VECTOR& direction)
     nowDegree = Calculation::RotationAngleDegree(targetDegree, nowDegree, rotationSpeedDegree);
     radian = Calculation::DegToRad(nowDegree);
 
-    DebugDrawer::Instance().InformationInput_string_float("radian %f\n", radian);
-    DebugDrawer::Instance().InformationInput_string_float("rotate_x %f\n", rotate_x);
+    DebugDrawer::GetInstance().InformationInput_string_float("radian %f\n", radian);
+    DebugDrawer::GetInstance().InformationInput_string_float("rotate_x %f\n", rotate_x);
     MV1SetRotationXYZ(modelHandle, VGet(rotate_x * DX_PI_F / 180.0f, radian + DX_PI_F, 0.0f));
 }
 

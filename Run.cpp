@@ -36,7 +36,8 @@ Run::~Run()
 {
 }
 
-std::pair<VECTOR, PlayerData> Run::Update(const VECTOR& cameraDirection,
+std::pair<VECTOR, PlayerData> Run::Update(
+	const VECTOR& cameraDirection,
 	const std::vector<std::weak_ptr<BaseObject>>& fieldObjects,
 	Player& player)
 {
@@ -46,14 +47,14 @@ std::pair<VECTOR, PlayerData> Run::Update(const VECTOR& cameraDirection,
 
 	if (playerData.isRunWall)
 	{
-		auto [moveDir_new,playerData_new] = Update_wallRun(player, fieldObjects);
+		auto [moveDir_new,playerData_new] = WallRunUpdate(player, fieldObjects);
 	
 		moveDir = moveDir_new;
 		playerData = playerData_new;
 	}
 	else
 	{
-		auto [moveDir_new, playerData_new] = Update_normal(cameraDirection, player);
+		auto [moveDir_new, playerData_new] = NormalUpdate(cameraDirection, player);
 	
 		moveDir = moveDir_new;
 		playerData = playerData_new;
@@ -70,7 +71,9 @@ std::pair<VECTOR, PlayerData> Run::Update(const VECTOR& cameraDirection,
 /// <param name="cameraDirection"></param>
 /// <param name="player"></param>
 /// <returns></returns>
-std::pair<VECTOR,PlayerData> Run::Update_normal(const VECTOR& cameraDirection, Player& player )
+std::pair<VECTOR,PlayerData> Run::NormalUpdate(
+	const VECTOR& cameraDirection,
+	Player& player )
 {
 	PlayerData playerData = player.GetData();
 
@@ -91,7 +94,7 @@ std::pair<VECTOR,PlayerData> Run::Update_normal(const VECTOR& cameraDirection, P
 /// <param name="player"></param>
 /// <param name="fieldObjects"></param>
 /// <returns></returns>
-std::pair<VECTOR, PlayerData> Run::Update_wallRun(
+std::pair<VECTOR, PlayerData> Run::WallRunUpdate(
 	Player& player, 
 	const std::vector<std::weak_ptr<BaseObject>>& fieldObjects)
 {
@@ -99,33 +102,31 @@ std::pair<VECTOR, PlayerData> Run::Update_wallRun(
 
 	VECTOR moveDir = VGet(0.0f, 0.0f, 0.0f);
 	const float WallRunStopTime = player.playerCalculation->GetWallRun_stopTime();
-	const float wallRun_stopTime_max = player.playerCalculation->GetWallRun_stopTime_max();
+	const float kWallRunMaxStopTime = player.playerCalculation->GetWallRun_stopTime_max();
+	const int kMinJoyPadLeft = -1000;
 
 	//落ちる
-	//壁がない場合
-	if (-PadInput::GetJoyPad_old_y_left() <= -1000)
+	if (-PadInput::GetJoyPadYLeft() <= kMinJoyPadLeft)
 	{
 		playerData.isRunWall = false;
 		playerData.isUseWallJump = false;
 		playerData.isFalling = true;
 		isChangeState = true;
-		player.playerCalculation->Reset_run_wall();
-		player.playerCalculation->ResetMoveVec_old();
-		player.SetRotata_x(0.0f);
+		player.playerCalculation->ResetWallRun();
+		player.SetRotateX(0.0f);
 
 		return std::make_pair(moveDir, playerData);
 	}
 
 	//止まって一定時間過ぎたら落下する
-	if (WallRunStopTime >= wallRun_stopTime_max)
+	if (WallRunStopTime >= kWallRunMaxStopTime)
 	{
 		isChangeState = true;
 		playerData.isFalling = true;
 		playerData.isUseWallJump = false;
-		player.SetRotata_x(0.0f);
+		player.SetRotateX(0.0f);
 	}
 
-	//見直し
    //崖掴み判定
 	if (playerData.isUseHanging)
 	{
@@ -137,27 +138,32 @@ std::pair<VECTOR, PlayerData> Run::Update_wallRun(
 		VECTOR normalPlayerTopPosition = player.GetPositionData().rayBottomPosition;
 		normalPlayerTopPosition.y += playerSize;
 
-		auto result_cliff = HitCheck::CliffGrabbing(
+		auto resultCheckCliff = HitCheck::CliffGrabbing(
 			fieldObjects,
 			player.GetPosition(),
 			normalPlayerTopPosition,
 			player.GetFaceDirection(),
-			cliff_radius);
+			kCliffRadius);
 
 		//掴むところが平行だった場合
 		//崖掴み時の情報を保存
-		if (result_cliff.isHitHanging)
+		if (resultCheckCliff.isHitHanging)
 		{
 			//胴体座標
-			VECTOR centerPosition = MV1GetFramePosition(modelHandle, 2);
+			const int kChestBoneNumber = MV1SearchFrame(modelHandle,
+				"mixamorig:Spine1");
+			VECTOR centerPosition = MV1GetFramePosition(modelHandle, kChestBoneNumber);
 
-			Calculation::NearestResult nearestResult = Calculation::SphereMeshOutsideTriangle_line(result_cliff.hangingPoly, centerPosition);
+			Calculation::NearestResult nearestResult =
+				Calculation::SphereMeshOutsideTriangleLine(
+				resultCheckCliff.hangingPoly,
+				centerPosition);
 
-			float difference_y = nearestResult.linePos_start.y - nearestResult.linePos_end.y;
-
-			playerData.isHanging = result_cliff.isHitHanging;
+			playerData.isHanging = resultCheckCliff.isHitHanging;
+			playerData.isMove = false;
 			isChangeState = true;
 			player.playerCalculation->SetNearestResult(nearestResult);
+			
 			return std::make_pair(moveDir, playerData);
 		}
 	}
@@ -165,17 +171,17 @@ std::pair<VECTOR, PlayerData> Run::Update_wallRun(
 	JumpMove(playerData, player);
 
 	//壁ジャンプする
-	if (playerData.isJumpSecond)
+	if (playerData.isSecondJump)
 	{
 		playerData.isRunWall = false;
 		playerData.isUseWallJump = true;
 		playerData.isWalljump = true;
-		player.playerCalculation->Reset_run_wall();
+		player.playerCalculation->ResetWallRun();
 
 		VECTOR hitWallNormal = player.playerCalculation->GetWallRunGravity();
 		moveDir = hitWallNormal;
 		player.SetNowMoveDirection(moveDir);
-		player.SetRotata_x(0.0f);
+		player.SetRotateX(0.0f);
 	}
 
 	return std::make_pair(moveDir, playerData);
@@ -312,8 +318,8 @@ VECTOR Run::Move(
 	rightMove.y = 0.0f;
 
 	//パッド or arrowキーの入力方向で計算
-	moveDirection = VAdd(VScale(rightMove, -PadInput::GetJoyPad_x_left()),
-		VScale(upMove, -PadInput::GetJoyPad_y_left()));
+	moveDirection = VAdd(VScale(rightMove, -PadInput::GetJoyPadXLeft()),
+		VScale(upMove, -PadInput::GetJoyPadYLeft()));
 
 	//0でなければ正規化
 	if (VSize(moveDirection) != 0)

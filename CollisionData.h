@@ -4,8 +4,8 @@
 
 struct CollisionResult
 {
+	MV1_COLL_RESULT_POLY nowGroundRayPoly = { NULL };
 	VECTOR newPosition = VGet(0.0f, 0.0f, 0.0f);
-	bool isHitGround = false;
 	std::string objectTag = "";
 };
 
@@ -22,9 +22,9 @@ struct PositionData
 
 struct HangingData
 {
-	bool isHitHanging;
-	VECTOR hitHangingPos;
-	MV1_COLL_RESULT_POLY hangingPoly;
+	bool isHitHanging;					//íÕÇﬂÇÈÇ©
+	VECTOR hitHangingPos;				//íÕÇﬁç¿ïW
+	MV1_COLL_RESULT_POLY hangingPoly;	
 };
 
 struct AABB

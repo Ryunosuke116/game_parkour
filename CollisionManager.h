@@ -16,19 +16,19 @@ public:
 	//è’ìÀîªíË
 	/////////////////////////////////////////
 	CollisionResult GroundCollisionCheck(const std::vector<std::weak_ptr<BaseObject>>& collisionObjects,
-		const VECTOR& oldPos, const VECTOR& subjectPosition, const VECTOR& moveVec,
+		const VECTOR& oldPos, const VECTOR& subjectPosition, const VECTOR& velocity,
 		const PositionData& positionData);
 
 	VECTOR HeadCollisionCheck(const std::vector<std::weak_ptr<BaseObject>>& collisionObjects,
 		const VECTOR& subjectPos,
-		const VECTOR& moveVec, const PositionData& positionData, const float& radius);
+		const VECTOR& velocity, const PositionData& positionData, const float& radius);
 
 	VECTOR WallCollisionCheck(const std::vector<std::weak_ptr<BaseObject>>& collisionObjects,
-		const VECTOR& subjectPos, const VECTOR& moveVec, const PositionData& positionData,
+		const VECTOR& subjectPos, const VECTOR& velocity, const PositionData& positionData,
 		const float& radius);
 
 	CollisionResult Check_all(const std::vector<std::weak_ptr<BaseObject>>& collisionObjects,
-		const VECTOR& playerPos, const VECTOR& moveVec, const float& radius,
+		const VECTOR& playerPos, const VECTOR& velocity, const float& radius,
 		const PositionData& positionData, const PlayerData& playerData);
 
 	void Update(BaseChara& chara,
@@ -38,7 +38,7 @@ public:
 		const std::vector<std::weak_ptr<BaseObject>>& collisionObjects,
 		const VECTOR& oldPos,
 		const VECTOR& newPos,
-		const VECTOR& moveVec,
+		const VECTOR& velocity,
 		const VECTOR& gravityDirection,
 		const float radius,
 		const PositionData& positionData);
@@ -62,6 +62,6 @@ private:
 
 	static constexpr float kAngleRange = 50.0f;
 	static constexpr int kFrameIndex = -1;
-	const VECTOR lengthDirection = VGet(0.0f, 1.0f, 0.0f);
+	const VECTOR kLengthDirection = VGet(0.0f, 1.0f, 0.0f);
 };
 

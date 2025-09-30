@@ -14,7 +14,7 @@
 /// </summary>
 ObjectManager::ObjectManager() :
 	streamStartPictureTimer(-1),
-	stream_finishPicture_timer(-1),
+	streamFinishPictureTimer(-1),
 	isStreamStartPicture(false),
 	isStreamFinishPicture(false)
 {
@@ -60,11 +60,11 @@ void ObjectManager::Create()
 	objects.push_back(std::make_shared<UIManager>());
 
 	//アップキャスト
-	camera_actual = std::dynamic_pointer_cast<Camera>(objects.at(cameraObjectNumber));
-	shadow_actual = std::dynamic_pointer_cast<Shadow>(objects.at(shadowObjectNumber));
-	playerManager_actual = std::dynamic_pointer_cast<PlayerManager>(objects.at(playerManagerNumber));
-	coinManager_actual = std::dynamic_pointer_cast<CoinManager>(objects.at(coinManagerNumber));
-	uiManager_actual = std::dynamic_pointer_cast<UIManager>(objects.at(uiManagerNumber));
+	actualCamera = std::dynamic_pointer_cast<Camera>(objects.at(cameraObjectNumber));
+	actualShadow = std::dynamic_pointer_cast<Shadow>(objects.at(shadowObjectNumber));
+	actualPlayerManager = std::dynamic_pointer_cast<PlayerManager>(objects.at(playerManagerNumber));
+	actualCoinManager = std::dynamic_pointer_cast<CoinManager>(objects.at(coinManagerNumber));
+	actualUiManager = std::dynamic_pointer_cast<UIManager>(objects.at(uiManagerNumber));
 
 	//Jsonデータを取得
 	for (auto& object : objects)
@@ -73,11 +73,11 @@ void ObjectManager::Create()
 	}
 
 	//コインオブザーバーに追加
-	coinManager_actual->AddObserver(playerManager_actual->GetPlayer());
-	coinManager_actual->AddObserver(uiManager_actual->GetUI_coin());
+	actualCoinManager->AddObserver(actualPlayerManager->GetPlayer());
+	actualCoinManager->AddObserver(actualUiManager->GetUI_coin());
 
 	//プレイヤーステートオブサーバーに追加
-	playerManager_actual->AddObserver(uiManager_actual->GetUI_controlManual());
+	actualPlayerManager->AddObserver(actualUiManager->GetUI_controlManual());
 
 	//ロード
 	L8TreeManager->Create();
@@ -108,7 +108,7 @@ void ObjectManager::Initialize()
 	isStreamStartPicture = true;
 	isStreamFinishPicture = false;
 	streamStartPictureTimer = 0.0f;
-	stream_finishPicture_timer = 0.0f;
+	streamFinishPictureTimer = 0.0f;
 }
 
 /// <summary>
@@ -158,18 +158,20 @@ void ObjectManager::Update()
 		}
 		else
 		{
-			coinManager_actual->Update();
-			camera_actual->Update_layout();
+			actualCoinManager->Update();
+			actualCamera->Update_layout();
 			layout->Update(WorldSubSystem::GetInstance().GetSubSystem<Camera>()->GetScreenCenterPosition(),
-				*coinManager_actual);
+				*actualCoinManager);
 		}
 
 		//ゴール判定
-		if (uiManager_actual->GetGameTimer()->IsFinish() &&
+		if (actualUiManager->GetGameTimer()->IsFinish() &&
 			!isStreamFinishPicture)
 		{
 			isStreamFinishPicture = true;
 			finishCut->SetIsDrawFinish(true);
+			const auto soundPlayer = GameInstanceSubSystem::GetInstance().GetSubSystem<SoundPlayer>().lock();
+			soundPlayer->Play("gool");
 		}
 	}
 }
@@ -182,7 +184,7 @@ void ObjectManager::NormalUpdate()
 	}
 
 	//ゴール判定
-	if (uiManager_actual->GetGameTimer()->IsFinish() &&
+	if (actualUiManager->GetGameTimer()->IsFinish() &&
 		!isStreamFinishPicture)
 	{
 		isStreamFinishPicture = true;
@@ -213,15 +215,16 @@ void ObjectManager::StartUpdate()
 		if (!isStreamStartPicture)
 		{
 			const auto soundPlayer = GameInstanceSubSystem::GetInstance().GetSubSystem<SoundPlayer>().lock();
-			uiManager_actual->GetGameTimer()->ResetSetTime();
+			actualUiManager->GetGameTimer()->ResetSetTime();
 			soundPlayer->Play("gameBGM");
 		}
 	}
 	else
 	{
 		streamStartPictureTimer++;
-		playerManager_actual->Update_start(streamStartPictureTimer);
-		camera_actual->Update();
+		actualShadow->Update();
+		actualPlayerManager->Update_start(streamStartPictureTimer);
+		actualCamera->Update();
 	}
 }
 
@@ -238,11 +241,13 @@ void ObjectManager::FinishUpdate()
 			const int addAlpha = 5;
 			BlackOut::GetInstance().BlackOutUpdate(addAlpha);
 
-			BlackOut::GetInstance().GetAlpha() >= maxAlpha ? isGoal = true : isGoal = false;
+			BlackOut::GetInstance().GetAlpha() >= maxAlpha ? 
+				isGoal = true :
+				isGoal = false;
 		}
 
-		playerManager_actual->Update_finish(streamStartPictureTimer);
-		camera_actual->Update();
+		actualPlayerManager->Update_finish(streamStartPictureTimer);
+		actualCamera->Update();
 		if (isGoal)
 		{
 			auto soundPlayer = GameInstanceSubSystem::GetInstance().GetSubSystem<SoundPlayer>().lock();
@@ -257,7 +262,7 @@ void ObjectManager::FinishUpdate()
 void ObjectManager::Draw()
 {
 	// シャドウマップへの描画の準備
-	ShadowMap_DrawSetup(shadow_actual->GetShadowMapHandle());
+	ShadowMap_DrawSetup(actualShadow->GetShadowMapHandle());
 
 	for (auto& object : objects)
 	{
@@ -272,7 +277,7 @@ void ObjectManager::Draw()
 	ShadowMap_DrawEnd();
 
 	// 描画に使用するシャドウマップを設定
-	SetUseShadowMap(0, shadow_actual->GetShadowMapHandle());
+	SetUseShadowMap(0, actualShadow->GetShadowMapHandle());
 
 	for (auto& object : objects)
 	{
@@ -297,10 +302,6 @@ void ObjectManager::Draw()
 	finishCut->Draw();
 
 	BlackOut::GetInstance().Draw();
-
-	//DrawLine3D(VGet(0.0f, 15.0f, 0.0f), VGet(10.0f, 15.0f, 0.0f), GetColor(255, 0, 0));
-	//DrawLine3D(VGet(0.0f, 15.0f, 0.0f), VGet(0.0f, 25.0f, 0.0f), GetColor(0, 255, 0));
-	//DrawLine3D(VGet(0.0f, 15.0f, 0.0f), VGet(0.0f, 15.0f, 10.0f), GetColor(0, 0, 255));
 }
 
 void ObjectManager::tutorialDraw()
@@ -314,7 +315,6 @@ void ObjectManager::tutorialDraw()
 void ObjectManager::ResultCreate(int coinCount)
 {
 	const int shadowObjectNumber = 3;
-	const int coinManagerNumber = 6;
 
 	//生成
 	//object生成
@@ -326,21 +326,14 @@ void ObjectManager::ResultCreate(int coinCount)
 	//managerの生成
 	objects.push_back(std::make_shared<CollisionObjectManager>());
 	objects.push_back(std::make_shared<PlayerManager>());
-	objects.push_back(std::make_shared<CoinManager>());
 	objects.push_back(std::make_shared<UIManager>());
 
 	//アップキャスト
-	shadow_actual = std::dynamic_pointer_cast<Shadow>(objects.at(shadowObjectNumber));
+	actualShadow = std::dynamic_pointer_cast<Shadow>(objects.at(shadowObjectNumber));
 
 	//ロード
 	for (auto& object : objects)
 	{
-		if (auto coinManager = std::dynamic_pointer_cast<CoinManager>(object))
-		{
-			coinManager->ResultCreate(coinCount);
-			continue;
-		}
-
 		if (auto uiManager = std::dynamic_pointer_cast<UIManager>(object))
 		{
 			uiManager->ResultCreate(coinCount);
@@ -361,6 +354,17 @@ void ObjectManager::ResultInitilize()
 
 void ObjectManager::ResultUpdate()
 {
+ 	if (BlackOut::GetInstance().GetIsLightChange())
+	{
+		const int minAlpha = 0;
+		const int addAlpha = 5;
+		BlackOut::GetInstance().LightChangeUpdate(addAlpha);
+
+		BlackOut::GetInstance().GetAlpha() <= minAlpha ?
+			BlackOut::GetInstance().SetIsLightChange(false) :
+			BlackOut::GetInstance().SetIsLightChange(true);
+	}
+
 	for (auto& object : objects)
 	{
 		object->ResultUpdate();
@@ -370,12 +374,11 @@ void ObjectManager::ResultUpdate()
 void ObjectManager::ResultDraw()
 {
 	// シャドウマップへの描画の準備
-	ShadowMap_DrawSetup(shadow_actual->GetShadowMapHandle());
+	ShadowMap_DrawSetup(actualShadow->GetShadowMapHandle());
 
 	for (auto& object : objects)
 	{
-		if (std::dynamic_pointer_cast<PlayerManager>(object) ||
-			std::dynamic_pointer_cast<CoinManager>(object))
+		if (std::dynamic_pointer_cast<PlayerManager>(object))
 		{
 			object->Draw();
 		}
@@ -385,7 +388,7 @@ void ObjectManager::ResultDraw()
 	ShadowMap_DrawEnd();
 
 	// 描画に使用するシャドウマップを設定
-	SetUseShadowMap(0, shadow_actual->GetShadowMapHandle());
+	SetUseShadowMap(0, actualShadow->GetShadowMapHandle());
 
 	for (auto& object : objects)
 	{

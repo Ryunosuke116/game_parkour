@@ -6,7 +6,16 @@
 
 Rank::Rank() :
     rankHandle(-1),
-    coinCount(-1)
+    speechBubbleHandle(-1),
+    coinCount(-1),
+    rankPosX(-1),
+    rankPosY(-1),
+    rankWidth(-1),
+    rankHeight(-1),
+    speechBubblePosX(-1),
+    speechBubblePosY(-1),
+    speechBubbleWidth(-1),
+    speechBubbleHeight(-1)
 {
     jsonTag = "png";
 }
@@ -56,7 +65,7 @@ void Rank::Load(const nlohmann::json& jsonData)
 
 void Rank::ResultCreate(const int coinCount)
 {
-    this->coinCount = coinCount;
+    this->coinCount = 100;
     Load(JsonManager::GetInstance().GetJsons(jsonTag));
 }
 
@@ -64,16 +73,40 @@ void Rank::ResultInitialize()
 {
     x = 400;
     y = 150;
+    rankPosX = 1000;
+    rankPosY = 150;
+    rankWidth = 300;
+    rankHeight = 300;
+    speechBubblePosX = 850;
+    speechBubblePosY = 0;
+    speechBubbleWidth = 600;
+    speechBubbleHeight = 600;
+    
+    rankScale = 0;
+    addScaling = 2;
 }
 
 void Rank::ResultUpdate()
 {
+    rankScale += addScaling;
 
+    if (rankScale <= 0 || rankScale >= 50)
+    {
+        addScaling = -addScaling;
+    }
 }
 
 void Rank::Draw()
 {
-    // DrawGraph(x, y, rankHandle, TRUE);
-    DrawExtendGraph(850, 0, 1450, 600, speechBubbleHandle, TRUE);
-    DrawExtendGraph(1000, y, 1300, 450, rankHandle, TRUE);
+    DrawExtendGraph(speechBubblePosX,
+        speechBubblePosY, 
+        speechBubblePosX + speechBubbleWidth,
+        speechBubblePosY + speechBubbleHeight, 
+        speechBubbleHandle, TRUE);
+
+    DrawExtendGraph(rankPosX - rankScale,
+        rankPosY - rankScale,
+        rankPosX + rankWidth + rankScale,
+        rankPosY + rankHeight + rankScale,
+        rankHandle, TRUE);
 }

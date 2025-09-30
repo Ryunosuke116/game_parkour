@@ -28,10 +28,10 @@ public:
 		PlayerData& playerData,
 		Player& player);
 
-	int GetAnimNumber_now() { return animNumber_Now; }
+	int GetAnimNumber_now() { return NowAnimNumber; }
 
 private:
-	int animNumber_Now;
+	int NowAnimNumber;
 
 	std::unordered_map<int, std::shared_ptr<PlayerStateBase>> stateList;
 

@@ -17,6 +17,12 @@ void BlackOut::Initialize()
     isLightChange = false;
 }
 
+void BlackOut::ResultInitialize()
+{
+    alpha = 300;
+    isLightChange = true;
+}
+
 /// <summary>
 /// ˆÃ“]
 /// </summary>

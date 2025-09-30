@@ -33,13 +33,13 @@ private:
 	int sec;        //•b
 	int min;        //•ª
 	int msec;       //ƒ~ƒŠ•b
-	int positionX;
-	int positionY;
-	int numberWidth;
-	int numberHeight;
+	float numPosX;
+	float numPosY;
+	float numWidth;
+	float numHeight;
 	int numberHandle[10];
 	int colonHandle;
-	int colonPositionX;
+	float colonPosX;
 
 	bool isUpdateMin;	
 

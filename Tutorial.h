@@ -16,14 +16,14 @@ public:
 private:
 	int tutorialHandle;
 	int startHandle;
-	int x_tutorialGraph;
-	int y_tutorialGraph;
-	int x_startGraph;
-	int y_startGraph;
+	int tutorialGraphPosX;
+	int tutorialGraphPosY;
+	int startGraphPosX;
+	int startGraphPosY;
 
-	bool isPush_start;
+	bool isPushStart;
 
-	float startGraph_timer;				//スタート画像の挙動タイマー
+	float startGraphTimer;				//スタート画像の挙動タイマー
 
 	std::string tag;
 	nlohmann::json	jsonData;

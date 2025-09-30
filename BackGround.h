@@ -23,6 +23,6 @@ private:
 	int startButtonY;
 	int alpha;
 
-	int addAlpha = 2;
+	int addAlpha;
 };
 

@@ -140,24 +140,24 @@ bool PadInput::IsPush_R()
     return false;
 }
 
-float PadInput::GetJoyPad_x_left()
+float PadInput::GetJoyPadXLeft()
 {
-    return input->GetJoyPad_x_left();
+    return input->GetJoyPadXLeft();
 }
 
-float PadInput::GetJoyPad_y_left()
+float PadInput::GetJoyPadYLeft()
 {
-    return input->GetJoyPad_y_left();
+    return input->GetJoyPadYLeft();
 }
 
-float PadInput::GetJoyPad_x_right()
+float PadInput::GetJoyPadXRight()
 {
-    return input->GetJoyPad_x_right();
+    return input->GetJoyPadXRight();
 }
 
-float PadInput::GetJoyPad_y_right()
+float PadInput::GetJoyPadYRight()
 {
-    return input->GetJoyPad_y_right();
+    return input->GetJoyPadYRight();
 }
 
 ////////////////////////////////////

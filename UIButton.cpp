@@ -40,15 +40,24 @@ void UIButton::ResultInitialize()
 {
     x = 400;
     y = 150;
+    alpha = 0;
+    addAlpha = 2;
 }
 
 void UIButton::ResultUpdate()
 {
+    alpha += addAlpha;
 
+    if (alpha <= 0 || alpha >= 255)
+    {
+        addAlpha = -addAlpha;
+    }
 }
 
 void UIButton::Draw()
 {
+    SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
     DrawExtendGraph(140, 680, 960, 900, backGroundHandle, TRUE);
     DrawExtendGraph(200, 740, 970, 840, titleButtonHandle, TRUE);
+    SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 }

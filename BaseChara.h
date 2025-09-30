@@ -29,11 +29,11 @@ public:
 	VECTOR GetFramePosition()const { return framePosition; }
 	VECTOR GetVelocity()const { return velocity; }
 	PositionData GetPositionData() const { return positionData; }
-	CollisionResult GetCollisionResult()const { return collision_result; }
+	CollisionResult GetCollisionResult()const { return resultCollision; }
 	virtual float GetRadius()const abstract;
 
-	void SetCollision_result(const CollisionResult& newResult) { collision_result = newResult; }
-	void SetRotata_x(const float& set) { rotate_x = set; }
+	void SetResultCollision(const CollisionResult& newResult) { resultCollision = newResult; }
+	void SetRotateX(const float& set) { rotate_x = set; }
 	void SetIsCollisionCheck(const bool& set) { isCollisionCheck = set; }
 protected:
 
@@ -53,7 +53,7 @@ protected:
 	VECTOR moveDirection;
 
 	PositionData positionData;
-	CollisionResult collision_result;
+	CollisionResult resultCollision;
 
 	static constexpr float	MoveSpeed = 0.4f;	    // ˆÚ“®‘¬“x
 	static constexpr float rotationSpeedDegree = 11.0f;

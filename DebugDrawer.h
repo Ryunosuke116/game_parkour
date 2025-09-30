@@ -5,7 +5,7 @@
 class DebugDrawer
 {
 public:
-    static DebugDrawer& Instance();  // シングルトン取得
+    static DebugDrawer& GetInstance();  // シングルトン取得
 
     void InformationInput_line(const VECTOR& start, const VECTOR& end, unsigned int color);
     void InformationInput_sphere(const VECTOR& center, const float radius, unsigned int color);

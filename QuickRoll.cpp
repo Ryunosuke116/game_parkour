@@ -48,11 +48,13 @@ std::pair<VECTOR, PlayerData> QuickRoll::Update(const VECTOR& cameraDirection,
     return std::make_pair(moveDirection, playerData);
 }
 
-VECTOR QuickRoll::Command(const VECTOR& cameraDirection, PlayerData& playerData, Player& player)
+VECTOR QuickRoll::Command(const VECTOR& cameraDirection, 
+    PlayerData& playerData, 
+    Player& player)
 {
     VECTOR moveDirection = VGet(0.0f, 0.0f, 0.0f);
 
-    FlagReset_jump(playerData);
+    ResetIsJumps(playerData);
 
     //moveDir‚ðŽæ“¾‚·‚é
     moveDirection = Move(cameraDirection, playerData);

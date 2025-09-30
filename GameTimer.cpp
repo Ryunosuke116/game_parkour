@@ -3,6 +3,7 @@
 #include "GameTimer.h"
 #include "DebugDrawer.h"
 #include "JsonManager.h"
+#include "Calculation.h"
 
 /// <summary>
 /// コンストラクタ
@@ -10,7 +11,7 @@
 GameTimer::GameTimer():
 	BaseUI(),
 	colonHandle(-1),
-	colonPositionX(-1),
+	colonPosX(-1),
 	isUpdateMin(false),
 	countNumberSec("")
 {
@@ -48,15 +49,21 @@ void GameTimer::Create()
 /// </summary>
 void GameTimer::Initialize()
 {
+	const float initNumPosX = 640.0;
+	const float initNumPosY = -290.0f;
+	const float initColonPosX = 765.0f;
+	const float initNumWidth = 100.0f;
+	const float initHeight = 100.0f;
+
 	time = 0;
 	setTime = GetNowCount();
 	sec = 0;
 	min = 3;
-	positionX = 640;
-	positionY = 30;
-	colonPositionX = 765;
-	numberWidth = 100;
-	numberHeight = 100;
+	numPosX = initNumPosX;
+	numPosY = initNumPosY;
+	colonPosX = initColonPosX;
+	numWidth = initNumWidth;
+	numHeight = initHeight;
 	isUpdateMin = false;
 	countNumberSec = "";
 }
@@ -93,15 +100,19 @@ void GameTimer::Update()
 	countNumberSec = CreateCountNumber(sec);
 	countNumberMin = CreateCountNumber(min);
 
+	const float targetNumPosY = 30;
+
+	numPosY = Calculation::Leap(numPosY, targetNumPosY, 0.1f);
+
+	//----------------------------------//
+	// デバッグ用
+	//----------------------------------//
+
 	if (CheckHitKey(KEY_INPUT_9))
 	{
 		sec = 0;
 		min = 0;
 	}
-
-	DebugDrawer::Instance().InformationInput_string_int("min %d\n", min);
-	DebugDrawer::Instance().InformationInput_string_int("sec %d\n", sec);
-	DebugDrawer::Instance().InformationInput_string_int("msec %d\n", msec);
 }
 
 /// <summary>
@@ -110,36 +121,42 @@ void GameTimer::Update()
 /// <returns></returns>
 void GameTimer::Draw()
 {
-	int num_x = positionX;
-	const int addNumberX = 70;
+	float numX = numPosX;
+	const int addnumPosX = 70;
 	const int addSpaceX = 40;
 
 	//コイン所持数の桁数分、大きい桁から順に描画
 	for (char c : countNumberMin)
 	{
 		int digit = c - '0';
-		DrawExtendGraph(num_x, positionY,
-			num_x + numberWidth, positionY + numberHeight,
+		DrawExtendGraphF(numX,
+			numPosY,
+			numX + numWidth,
+			numPosY + numHeight,
 			numberHandle[digit], TRUE);
 
 		//文字の幅分ずらす
-		num_x += addNumberX;
+		numX += addnumPosX;
 	}
 
-	DrawExtendGraph(colonPositionX, positionY,
-		colonPositionX + numberWidth, positionY + numberHeight,
+	DrawExtendGraphF(colonPosX,
+		numPosY,
+		colonPosX + numWidth,
+		numPosY + numHeight,
 		colonHandle, TRUE);
-	num_x += addSpaceX;
+	numX += addSpaceX;
 
 	for (char c : countNumberSec)
 	{
 		int digit = c - '0';
-		DrawExtendGraph(num_x, positionY,
-			num_x + numberWidth, positionY + numberHeight,
+		DrawExtendGraphF(numX,
+			numPosY,
+			numX + numWidth,
+			numPosY + numHeight,
 			numberHandle[digit], TRUE);
 
 		//文字の幅分ずらす
-		num_x += addNumberX;
+		numX += addnumPosX;
 	}
 }
 

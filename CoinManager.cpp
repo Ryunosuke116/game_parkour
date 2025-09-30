@@ -117,7 +117,7 @@ void CoinManager::Update()
 			it++;
 			continue;
 		}
-		DebugDrawer::Instance().InformationInput_AABB(coin->GetBoundsMin(), coin->GetBoundsMax(), GetColor(255, 0, 0));
+		DebugDrawer::GetInstance().InformationInput_AABB(coin->GetBoundsMin(), coin->GetBoundsMax(), GetColor(255, 0, 0));
 
 		//player‚Æ“–‚½‚Á‚Ä‚¢‚½‚çíœ‚·‚é
 		if (coin->IsHitPlayer(spPlayerManager->GetPlayer()->GetTopPos(),
@@ -169,7 +169,7 @@ void CoinManager::Update()
 	}
 
 	posAddObject = WorldSubSystem::GetInstance().GetSubSystem<Camera>()->GetScreenCenterPosition();
-	DebugDrawer::Instance().InformationInput_string_int("playerSpaceNumber %d", playerSpaceNumber);
+	DebugDrawer::GetInstance().InformationInput_string_int("playerSpaceNumber %d", playerSpaceNumber);
 }
 
 void CoinManager::Draw()

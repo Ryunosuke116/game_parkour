@@ -42,7 +42,7 @@ public:
 	VECTOR GetTopPos() const { return positionData.capsuleTopPosition; }
 	VECTOR GetBottomPos() const { return positionData.capsuleBottomPosition; }
 	VECTOR GetVelocity() const { return velocity; }
-	VECTOR GetlinePos_end() const { return linePos_end; }
+	VECTOR GetlinePos_end() const { return endLinePos; }
 	VECTOR GetHeadPos() const { return headPos; }
 	VECTOR GetNowMoveDirection() const { return nowMoveDirection; }
 	VECTOR GetFaceDirection()const { return faceDirection; }
@@ -62,11 +62,15 @@ public:
 	void SetFaceDirection(const VECTOR& set) { faceDirection = set; }
 
 	std::shared_ptr<PlayerCalculation> playerCalculation = NULL;
+
+private:
+	void CounterplanBug();
+
 private:
 
 	static constexpr float modelScale = 0.06f;
 	static constexpr float MaxMoveSpeed = 1.4f;	    // 移動速度
-	static constexpr float rollMoveSpeed_max = 2.5f;	//ロール速度
+	static constexpr float kMaxRollMoveSpeed = 2.5f;	//ロール速度
 	static constexpr float rotationSpeedDegree = 0.3f;
 	static constexpr float addJumpPower = 1.7f;		//ジャンプパワー
 	static constexpr float gravity = -0.06f;
@@ -75,7 +79,7 @@ private:
 	static constexpr float radius = 3.5f;
 	static constexpr float height = 10.0f;
 
-	VECTOR linePos_end;
+	VECTOR endLinePos;
 	VECTOR topPosition;
 	VECTOR bottomPosition;
 	VECTOR moveVec_normal;

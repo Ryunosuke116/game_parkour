@@ -42,10 +42,10 @@ public:
 	static bool IsPush_A();
 	static bool IsPush_R();
 	static bool IsPushLT();
-	static float GetJoyPad_x_left();
-	static float GetJoyPad_y_left();
-	static float GetJoyPad_x_right();
-	static float GetJoyPad_y_right();
+	static float GetJoyPadXLeft();
+	static float GetJoyPadYLeft();
+	static float GetJoyPadXRight();
+	static float GetJoyPadYRight();
 	static float GetJoyPad_old_x_left();
 	static float GetJoyPad_old_y_left();
 	static float GetJoyPad_old_x_right();

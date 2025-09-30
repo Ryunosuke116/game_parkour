@@ -52,9 +52,14 @@ void Result::Initialize()
     const int coin_x = 30;
     const int coin_y = 700;
 
-    BlackOut::GetInstance().Initialize();
+    BlackOut::GetInstance().ResultInitialize();
 
     objectManager->ResultInitilize();
+    isPush = false;
+
+    const auto soundPlayer =
+        GameInstanceSubSystem::GetInstance().GetSubSystem<SoundPlayer>().lock();
+    soundPlayer->Play("resultBGM");
 }
 
 /// <summary>
@@ -69,6 +74,10 @@ void Result::Update()
     if (PadInput::IsPush_A() && !isPush)
     {
         isPush = true;
+
+        const auto soundPlayer =
+            GameInstanceSubSystem::GetInstance().GetSubSystem<SoundPlayer>().lock();
+        soundPlayer->Play("button");
     }
 
     if (isPush)
@@ -76,6 +85,9 @@ void Result::Update()
         BlackOut::GetInstance().BlackOutUpdate(5);
         if (BlackOut::GetInstance().GetAlpha() >= 300)
         {
+            const auto soundPlayer =
+                GameInstanceSubSystem::GetInstance().GetSubSystem<SoundPlayer>().lock();
+            soundPlayer->Stop("resultBGM");
             ChangeScene("Title", 0);
         }
     }

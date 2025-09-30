@@ -19,7 +19,7 @@ void CollisionManager::Update(
 {
 	if (chara.GetIsCollisionCheck())
 	{
-		chara.SetCollision_result(
+		chara.SetResultCollision(
 			Check_all(WorldSubSystem::GetInstance().GetSubSystem<CollisionObjectManager>()->GetCollisionObjects(),
 				chara.GetPosition(),
 				chara.GetVelocity(),
@@ -47,33 +47,14 @@ CollisionResult CollisionManager::Check_all(
 {
 	VECTOR oldPosition = playerPos;
 	VECTOR newPosition = VAdd(oldPosition, charaVelocity);
-	VECTOR newVelocity = VGet(0.0f, 0.0f, 0.0f);
 
 	bool isCalc = nowGroundRayPoly.HitFlag;
 	const float headRadius = 2.0f;
 
-	//床に沿うように移動する
-	if (isCalc && VSize(charaVelocity) != 0 &&
-		!playerData.isJump)
-	{
-		//移動量を計算
-		float size = VSize(charaVelocity);
-		
-		//方向ベクトルを計算
-		newVelocity = Calculation::Projection(nowGroundRayPoly.Normal, charaVelocity);
-		
-		//移動量を再計算
-		newVelocity = VScale(newVelocity, size);
-
-		newPosition = VAdd(oldPosition, newVelocity);
-	}
-	else
-	{
-		newVelocity = charaVelocity;
-	}
-
 	VECTOR projection_ray_start = newPosition;
-	VECTOR projection_ray_end = VAdd(newPosition, VScale(VNorm(newVelocity), 20.0f));
+	VECTOR projection_ray_end = VAdd(newPosition, VScale(VNorm(charaVelocity), 20.0f));
+
+	DebugDrawer::GetInstance().InformationInput_line(projection_ray_start, projection_ray_end, GetColor(255, 0, 255));
 
 	CollisionResult collisionResult;
 	collisionResult.newPosition = newPosition;
@@ -85,14 +66,14 @@ CollisionResult CollisionManager::Check_all(
 	//壁衝突判定
 	collisionResult.newPosition = WallCollisionCheck(wpCollisionObjects,
 		collisionResult.newPosition,
-		newVelocity, 
+		charaVelocity,
 		charaPositionData, 
 		charaRadius);
 
 	//頭上衝突判定
 	collisionResult.newPosition = HeadCollisionCheck(wpCollisionObjects,
 		collisionResult.newPosition,
-		newVelocity,
+		charaVelocity,
 		charaPositionData,
 		headRadius);
 
@@ -101,7 +82,7 @@ CollisionResult CollisionManager::Check_all(
 		wpCollisionObjects,
 		oldPosition,
 		collisionResult.newPosition,
-		newVelocity,
+		charaVelocity,
 		charaPositionData);
 
 	return collisionResult;
@@ -150,7 +131,7 @@ VECTOR CollisionManager::HeadCollisionCheck(
 				//三角形ポリゴンの法線と上方向ベクトルとの
 				// なす角を求める
 				float headTiltAngleDegree = Calculation::AngleBetWeenTwoVectors(
-					lengthDirection,
+					kLengthDirection,
 					subjectPoly.Normal);
 
 				if (headTiltAngleDegree <= kAngleRange)
@@ -236,14 +217,17 @@ CollisionResult CollisionManager::GroundCollisionCheck(
 		{
 			//三角形ポリゴンの法線と上方向ベクトルとの
 			// なす角を求める
-			tiltAngleDegree = Calculation::AngleBetWeenTwoVectors(lengthDirection, groundRayPoly.Normal);
+			tiltAngleDegree = Calculation::AngleBetWeenTwoVectors(
+				kLengthDirection,
+				groundRayPoly.Normal);
+
 			tiltAngleDegree = abs(tiltAngleDegree);
 			
 			//kAngleRangeより角度が下回っていれば床とみなす
 			if (tiltAngleDegree <= kAngleRange)
 			{
 				//三角形データを保存
-				nowGroundRayPoly = groundRayPoly;
+				collisionResult.nowGroundRayPoly = groundRayPoly;
 
 				VECTOR addNewPlayerPosition = VGet(0.0f, 0.0f, 0.0f);
 
@@ -256,8 +240,6 @@ CollisionResult CollisionManager::GroundCollisionCheck(
 
 				//接触しているオブジェクトのtagを渡す
 				collisionResult.objectTag = collisionObject->GetTag();
-				//床と接触しているためtrueにする
-				collisionResult.isHitGround = true;
 			}
 		}
 	}
@@ -339,7 +321,7 @@ VECTOR CollisionManager::WallCollisionCheck(
 				//三角形ポリゴンの法線と上方向ベクトルとの
 				// なす角を求める
 				float wallDegree = Calculation::AngleBetWeenTwoVectors(
-					lengthDirection, 
+					kLengthDirection, 
 					subjectPoly.Normal);
 
 				// kAngleRangeよりもなす角が大きければ壁として扱う

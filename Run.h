@@ -21,8 +21,8 @@ public:
 
 	void DashMove(PlayerData& playerData);
 
-	std::pair<VECTOR, PlayerData> Update_normal(const VECTOR& cameraDirection, Player& player);
-	std::pair<VECTOR, PlayerData> Update_wallRun(Player& player,
+	std::pair<VECTOR, PlayerData> NormalUpdate(const VECTOR& cameraDirection, Player& player);
+	std::pair<VECTOR, PlayerData> WallRunUpdate(Player& player,
 		const std::vector<std::weak_ptr<BaseObject>>& fieldObjects);
 
 private:

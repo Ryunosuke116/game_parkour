@@ -33,7 +33,9 @@ HangingIdle::~HangingIdle()
 /// èâä˙âª
 /// </summary>
 /// <param name="modelHandle"></param>
-void HangingIdle::Initialize(const int modelHandle,const int changeNum, Player& player)
+void HangingIdle::Initialize(const int modelHandle,
+    const int changeNum, 
+    Player& player)
 {
     PlayerStateBase::Initialize(modelHandle, changeNum, player);
     animBlendRate = 1.0f;
@@ -46,9 +48,9 @@ void HangingIdle::Initialize(const int modelHandle,const int changeNum, Player& 
     //ì∑ëÃç¿ïW
     VECTOR centerPosition = MV1GetFramePosition(modelHandle, 2);
 
-    player.playerCalculation->Reset_move();
+    player.playerCalculation->ResetMove();
     player.SetNowMoveDirection(player.playerCalculation->HangingDirection(centerPosition));
-    player.SetRotata_x(0.0f);
+    player.SetRotateX(0.0f);
 }
 
 /// <summary>
@@ -63,7 +65,7 @@ std::pair<VECTOR, PlayerData> HangingIdle::Update(const VECTOR& cameraDirection,
 {   
     VECTOR moveDirection = player.GetNowMoveDirection();
     PlayerData playerData = player.GetData();
-    playerData.isHanging_now = true;
+    playerData.isNowHanging = true;
     playerData.isGround = true;
 
     //è„Ç…ìoÇÈ
@@ -71,12 +73,11 @@ std::pair<VECTOR, PlayerData> HangingIdle::Update(const VECTOR& cameraDirection,
     {
         playerData.isHangToCrouch = true;
         player.SetIsCollisionCheck(false);
-        player.playerCalculation->ResetMoveVec_old();
         isChangeState = true;
-        playerData.isJumpFirst = false;
-        playerData.isJumpSecond = false;
-        playerData.isJumpAll = false;
-        playerData.isHanging_now = false;
+        playerData.isFirstJump = false;
+        playerData.isSecondJump = false;
+        playerData.isAllJump = false;
+        playerData.isNowHanging = false;
     }
 
     //ç~ÇËÇÈ
@@ -84,7 +85,7 @@ std::pair<VECTOR, PlayerData> HangingIdle::Update(const VECTOR& cameraDirection,
     {
         isChangeState = true;
         playerData.isFalling = true;
-        playerData.isHanging_now = false;
+        playerData.isNowHanging = false;
         playerData.isUseHanging = false;
     }
 

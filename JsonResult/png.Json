@@ -2,10 +2,10 @@
   "speechBubble": "material/png/fukidashi.png",
 
   "rankList": [
-    [ "material/png/rank_D.png", "D" ],
-    [ "material/png/rank_C.png", "C" ],
-    [ "material/png/rank_B.png", "B" ],
-    [ "material/png/rank_A.png", "A" ],
+    [ "material/png/rank/D.png", "D" ],
+    [ "material/png/rank/C.png", "C" ],
+    [ "material/png/rank/B.png", "B" ],
+    [ "material/png/rank/A.png", "A" ],
     [ "material/png/rank/S.png", "S" ]
   ],
 
