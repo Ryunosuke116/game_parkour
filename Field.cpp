@@ -33,11 +33,11 @@ void Field::Load(const nlohmann::json& jsonData)
 
 void Field::Create()
 {
-	const VECTOR modelScale = VGet(0.9f, 0.9f, 0.9f);
+	const VECTOR kModelScale = VGet(0.9f, 0.9f, 0.9f);
 	Load(JsonManager::GetInstance().GetJsons("field"));
 
-	MV1SetScale(modelHandle, modelScale);
-	MV1SetScale(bullHandle, modelScale);
+	MV1SetScale(modelHandle, kModelScale);
+	MV1SetScale(bullHandle, kModelScale);
 }
 
 /// <summary>

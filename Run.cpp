@@ -18,7 +18,7 @@
 /// <param name="modelHandle"></param>
 Run::Run(const int modelHandle) :
 	PlayerStateBase(modelHandle),
-	degree_difference(0.0f),
+	differenceDegree(0.0f),
 	stopTime(0.0f),
 	angle(-1),
 	playerMoveSpeed(-1),
@@ -26,7 +26,7 @@ Run::Run(const int modelHandle) :
 	degree_new(-1)
 {
 	animationNum_now = animNum::run;
-	this->nowAnimState.PlayAnimSpeed = playAnimSpeed;
+	this->nowAnimState.PlayAnimSpeed = kPlayAnimSpeed;
 }
 
 /// <summary>
@@ -60,7 +60,7 @@ std::pair<VECTOR, PlayerData> Run::Update(
 		playerData = playerData_new;
 	}
 
-	this->nowAnimState.PlayAnimSpeed = playAnimSpeed;
+	this->nowAnimState.PlayAnimSpeed = kPlayAnimSpeed;
 
 	return std::make_pair(moveDir, playerData);
 }

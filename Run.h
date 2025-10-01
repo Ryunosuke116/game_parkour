@@ -26,9 +26,9 @@ public:
 		const std::vector<std::weak_ptr<BaseObject>>& fieldObjects);
 
 private:
-	static constexpr float playAnimSpeed = 0.45f;	    // ˆÚ“®‘¬“x
+	static constexpr float kPlayAnimSpeed = 0.45f;	    // ˆÚ“®‘¬“x
 	static constexpr float DashAnimSpeed = 0.9f;
-	float degree_difference;
+	float differenceDegree;
 	float stopTime;				//‰½fŽ~‚Ü‚Á‚Ä‚¢‚é‚©
 	float angle;
 	float playerMoveSpeed;

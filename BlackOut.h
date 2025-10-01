@@ -23,4 +23,6 @@ private:
     bool isLightChange;
     BlackOut() = default;
     ~BlackOut() = default;
+
+    static constexpr int maxAlpha = 300;
 };

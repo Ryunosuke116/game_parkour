@@ -26,7 +26,6 @@ public:
 	float GetRadian()const { return radian; }
 	float GetDegree()const { return Calculation::RadToDeg(radian); }
 	VECTOR GetPosition()const { return position; }
-	VECTOR GetFramePosition()const { return framePosition; }
 	VECTOR GetVelocity()const { return velocity; }
 	PositionData GetPositionData() const { return positionData; }
 	CollisionResult GetCollisionResult()const { return resultCollision; }
@@ -37,7 +36,7 @@ public:
 	void SetIsCollisionCheck(const bool& set) { isCollisionCheck = set; }
 protected:
 
-	int modelHandle;
+	int modelHandle;		//モデルハンドル
 	int nowFrameNumber;
 	int coinCount;		//コインの所持枚数
 
@@ -55,11 +54,10 @@ protected:
 	PositionData positionData;
 	CollisionResult resultCollision;
 
-	static constexpr float	MoveSpeed = 0.4f;	    // 移動速度
-	static constexpr float rotationSpeedDegree = 11.0f;
+	static constexpr float	MoveSpeed = 0.4f;				// 移動速度
+	static constexpr float kRotationSpeedDegree = 11.0f;	// キャラクターが方向転換するスピード
 
-	const VECTOR initializeAimPos = VGet(-0.169435501f, 53.7492065f, -1224.39844f);
-	const VECTOR initializeSpherePos = VGet(-1.28232884f, 24.0028648f, -1172.35425f);
-
+	const VECTOR initializeAimPos = VGet(-0.17f, 53.75f, -1224.4f);
+	const VECTOR initializeSpherePos = VGet(-1.3f, 24.0f, -1172.35f);
 };
 

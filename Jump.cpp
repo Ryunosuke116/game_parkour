@@ -40,7 +40,7 @@ void Jump::Initialize(const int modelHandle,const int changeNum, Player& player)
         PlayerStateBase::Initialize(modelHandle, animNum::runJump, player) :
         PlayerStateBase::Initialize(modelHandle, animNum::jump, player);
 
-    this->nowAnimState.PlayAnimSpeed = playAnimSpeed;
+    this->nowAnimState.PlayAnimSpeed = kPlayAnimSpeed;
 
     isFirstJump = player.GetData().isJump;
     isSecondJump = player.GetData().isSecondJump;

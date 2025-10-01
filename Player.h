@@ -42,8 +42,6 @@ public:
 	VECTOR GetTopPos() const { return positionData.capsuleTopPosition; }
 	VECTOR GetBottomPos() const { return positionData.capsuleBottomPosition; }
 	VECTOR GetVelocity() const { return velocity; }
-	VECTOR GetlinePos_end() const { return endLinePos; }
-	VECTOR GetHeadPos() const { return headPos; }
 	VECTOR GetNowMoveDirection() const { return nowMoveDirection; }
 	VECTOR GetFaceDirection()const { return faceDirection; }
 	bool GetIsGround() const { return playerData.isGround; }
@@ -65,39 +63,26 @@ public:
 
 private:
 	void CounterplanBug();
+	void EffectUpdate();
 
 private:
 
-	static constexpr float modelScale = 0.06f;
-	static constexpr float MaxMoveSpeed = 1.4f;	    // 移動速度
+	static constexpr float kModelScale = 0.06f;
+	static constexpr float kMaxMoveSpeed = 1.4f;	    // 移動速度
 	static constexpr float kMaxRollMoveSpeed = 2.5f;	//ロール速度
-	static constexpr float rotationSpeedDegree = 0.3f;
-	static constexpr float addJumpPower = 1.7f;		//ジャンプパワー
-	static constexpr float gravity = -0.06f;
 	static constexpr float runWallRotateX = 30.0f;
-	static constexpr float entryDegree_wallRun = 30.0f;
 	static constexpr float radius = 3.5f;
 	static constexpr float height = 10.0f;
 
-	VECTOR endLinePos;
-	VECTOR topPosition;
-	VECTOR bottomPosition;
-	VECTOR moveVec_normal;
-	VECTOR headPos;
-	VECTOR handCenterPos;
-	VECTOR nowMoveDirection;		//現在向いている方向
-	VECTOR faceDirection;
-	VECTOR padInput_now;
 
-	float radian_wall;
-	float degree_pad_now;
-	float degree_difference;
-	float degree_pad_wall_difference;
+	VECTOR normalVelocity;			//通常時の移動量
+	VECTOR nowMoveDirection;		//現在向いている方向
+	VECTOR faceDirection;			//キャラクターの向いている方向
+
 	float effectTimer;
-	float start_walkTime;
+	float startWalkTime;
 
 	bool isPush;					//ボタンを押したか
-	bool isChange_falling;				//アニメーションを変更するか
 	bool isCalc;
 	bool isCalcMoveVec;
 

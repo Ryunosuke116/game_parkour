@@ -15,7 +15,7 @@ public:
 	VECTOR Command(const VECTOR& cameraDirection, PlayerData& playerData, Player& player)override;
 	void Exit(PlayerData& playerData) override;			//状態を抜けるとき
 private:
-	static constexpr float playAnimSpeed = 0.4f;	    // アニメーション速度
+	static constexpr float kPlayAnimSpeed = 0.4f;	    // アニメーション速度
 
 };
 

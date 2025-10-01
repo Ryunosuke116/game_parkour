@@ -30,7 +30,7 @@ public:
 	void Update_start(const float& timer,
 		const VECTOR& playerPosition,
 		const float& angle_player);
-	void Update_layout();
+	void LayOutUpdate();
 	bool CameraPosCalc(const std::vector<std::weak_ptr<BaseObject>>& collisionObjects);
 	void CaluclateCameraAndTargetDistanceSize();
 
@@ -76,13 +76,13 @@ private:
 	static constexpr float cameraRadius = 4.0f;
 	static constexpr float maxDistanceSize = 70.0f;
 	static constexpr float minDistanceSize = 15.0f;
-	static constexpr float initializeAngle = -177.55f;
+	static constexpr float initializeAngle = -2.45f;
 	static constexpr float initializeDistance = 50.0f;
 	static constexpr float initializeT = 0.7f;
 	static constexpr float addCenterPos = 15.0f;					//playerPosÇÃYé≤Ç…â¡éZÇµÇƒÉJÉÅÉâÇ∆íçéãì_ÇÃä‘ÇÃç¿ïWÇãÅÇﬂÇÈ
 	
-	const VECTOR initializeAimPos = VGet(-0.169435501f, 53.7492065f, -1224.39844f);
-	const VECTOR initializeSpherePos = VGet(-1.28232884f, 24.0028648f, -1172.35425f);
+	const VECTOR initializeAimPos = VGet(-0.17f, 53.75f, -1224.4f);
+	const VECTOR initializeSpherePos = VGet(-1.3f, 24.0f, -1172.35f);
 
 };
 

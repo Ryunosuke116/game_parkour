@@ -15,14 +15,14 @@
 /// <param name="modelHandle"></param>
 Walk::Walk(const int modelHandle) :
 	PlayerStateBase(modelHandle),
-	degree_difference(0.0f),
+	differenceDegree(0.0f),
 	stopTime(0.0f),
 	angle(-1),
 	playerMoveSpeed(-1),
 	playerMoveSpeed_max(-1),
 	degree_new(-1)
 {
-	this->nowAnimState.PlayAnimSpeed = playAnimSpeed;
+	this->nowAnimState.PlayAnimSpeed = kPlayAnimSpeed;
 }
 
 /// <summary>

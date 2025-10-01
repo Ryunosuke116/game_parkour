@@ -106,7 +106,7 @@ void UI_controlManual::Draw()
 	int alpha_Box = 100;
 	const int kAddPosY = 40;
 
-	int nowManualUiPosY = manualUiPosY;
+	float nowManualUiPosY = manualUiPosY;
 
 	DrawGraphF(commandsBackPosX, commandsBackPosY, uiHandles.at("commandBack"),TRUE);
 

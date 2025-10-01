@@ -300,7 +300,7 @@ public:
 			if (nowSpaceNumber == prevSpaceNumber)break;
 		}
 
-		return collisionList.size();
+		return static_cast<uint32_t>(collisionList.size());
 	}
 
 	bool GetCollisionList(

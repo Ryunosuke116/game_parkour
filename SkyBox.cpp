@@ -27,10 +27,10 @@ void SkyBox::Load(const nlohmann::json& jsonData)
 
 void SkyBox::Create()
 {
-	const VECTOR modelScale = VGet(2.7f, 2.7f, 2.7f);
+	const VECTOR kModelScale = VGet(2.7f, 2.7f, 2.7f);
 
 	Load(JsonManager::GetInstance().GetJsons("field"));
-	MV1SetScale(modelHandle, modelScale);
+	MV1SetScale(modelHandle, kModelScale);
 }
 
 /// <summary>

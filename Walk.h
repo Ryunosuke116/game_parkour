@@ -18,9 +18,9 @@ public:
 	VECTOR Move(const VECTOR& cameraDirection, PlayerData& playerData)override;
 
 private:
-	static constexpr float playAnimSpeed = 0.5f;	    // ˆÚ“®‘¬“x
+	static constexpr float kPlayAnimSpeed = 0.5f;	    // ˆÚ“®‘¬“x
 
-	float degree_difference;
+	float differenceDegree;
 	float stopTime;				//‰½fŽ~‚Ü‚Á‚Ä‚¢‚é‚©
 	float angle;
 	float playerMoveSpeed;

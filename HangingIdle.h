@@ -18,6 +18,6 @@ public:
 
 
 private:
-	static constexpr float playAnimSpeed = 0.4f;	    // アニメーション速度
+	static constexpr float kPlayAnimSpeed = 0.4f;	    // アニメーション速度
 };
 

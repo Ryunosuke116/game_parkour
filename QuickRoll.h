@@ -16,7 +16,7 @@ public:
 	bool MotionUpdate(PlayerData& playerData)override;
 	void Exit(PlayerData& playerData) override;			//状態を抜けるとき
 private:
-	static constexpr float playAnimSpeed = 0.9f;	    // 移動速度
+	static constexpr float kPlayAnimSpeed = 0.9f;	    // 移動速度
 
 	bool isPush;		//ボタンを押したか
 	bool isRun;

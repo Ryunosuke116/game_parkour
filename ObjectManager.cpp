@@ -121,48 +121,21 @@ void ObjectManager::Update()
 		StartUpdate();
 	}
 
-	FinishUpdate();
+	if (isStreamFinishPicture)
+	{
+		FinishUpdate();
+	}
 
 	if (!isStreamStartPicture &&
 		!isStreamFinishPicture)
 	{
-		if (CheckHitKey(KEY_INPUT_0))
-		{
-			if (!isPush)
-			{
-				if (!isCamera)
-				{
-					isCamera = true;
-					layout->Initialize(WorldSubSystem::GetInstance().GetSubSystem<CoinManager>()->GetModelHandle());
-				}
-				else
-				{
-					isCamera = false;
-				}
-
-				isPush = true;
-			}
-		}
-		else
-		{
-			isPush = false;
-		}
-
-		if (!isCamera)
-		{
-			for (auto& object : objects)
-			{
-				object->Update();
-			}
-
-		}
-		else
-		{
-			actualCoinManager->Update();
-			actualCamera->Update_layout();
-			layout->Update(WorldSubSystem::GetInstance().GetSubSystem<Camera>()->GetScreenCenterPosition(),
-				*actualCoinManager);
-		}
+		// Release用のUpdate
+		#if defined(NDEBUG)
+			NormalUpdate();
+		#else
+		//　Debug用のUpdate
+			WhenDebugUpdate();
+		#endif
 
 		//ゴール判定
 		if (actualUiManager->GetGameTimer()->IsFinish() &&
@@ -182,13 +155,47 @@ void ObjectManager::NormalUpdate()
 	{
 		object->Update();
 	}
+}
 
-	//ゴール判定
-	if (actualUiManager->GetGameTimer()->IsFinish() &&
-		!isStreamFinishPicture)
+void ObjectManager::WhenDebugUpdate()
+{
+	if (CheckHitKey(KEY_INPUT_0))
 	{
-		isStreamFinishPicture = true;
-		finishCut->SetIsDrawFinish(true);
+		if (!isPush)
+		{
+			if (!isCamera)
+			{
+				isCamera = true;
+				layout->Initialize(WorldSubSystem::GetInstance().GetSubSystem<CoinManager>()->GetModelHandle());
+			}
+			else
+			{
+				isCamera = false;
+			}
+
+			isPush = true;
+		}
+	}
+	else
+	{
+		isPush = false;
+	}
+
+	if (!isCamera)
+	{
+		for (auto& object : objects)
+		{
+			object->Update();
+		}
+
+	}
+	else
+	{
+		actualShadow->Update();
+		actualCoinManager->Update();
+		actualCamera->LayOutUpdate();
+		layout->Update(WorldSubSystem::GetInstance().GetSubSystem<Camera>()->GetScreenCenterPosition(),
+			*actualCoinManager);
 	}
 }
 
@@ -231,28 +238,25 @@ void ObjectManager::StartUpdate()
 /// @brief 終了演出
 void ObjectManager::FinishUpdate()
 {
-	if (isStreamFinishPicture)
+	BlackOut::GetInstance().SetIsLightChange(finishCut->Update());
+
+	if (BlackOut::GetInstance().GetIsLightChange())
 	{
-		BlackOut::GetInstance().SetIsLightChange(finishCut->Update());
+		const int maxAlpha = 300;
+		const int addAlpha = 5;
+		BlackOut::GetInstance().BlackOutUpdate(addAlpha);
 
-		if (BlackOut::GetInstance().GetIsLightChange())
-		{
-			const int maxAlpha = 300;
-			const int addAlpha = 5;
-			BlackOut::GetInstance().BlackOutUpdate(addAlpha);
+		BlackOut::GetInstance().GetAlpha() >= maxAlpha ?
+			isGoal = true :
+			isGoal = false;
+	}
 
-			BlackOut::GetInstance().GetAlpha() >= maxAlpha ? 
-				isGoal = true :
-				isGoal = false;
-		}
-
-		actualPlayerManager->Update_finish(streamStartPictureTimer);
-		actualCamera->Update();
-		if (isGoal)
-		{
-			auto soundPlayer = GameInstanceSubSystem::GetInstance().GetSubSystem<SoundPlayer>().lock();
-			soundPlayer->Stop("gameBGM");
-		}
+	actualPlayerManager->Update_finish(streamStartPictureTimer);
+	actualCamera->Update();
+	if (isGoal)
+	{
+		auto soundPlayer = GameInstanceSubSystem::GetInstance().GetSubSystem<SoundPlayer>().lock();
+		soundPlayer->Stop("gameBGM");
 	}
 }
 

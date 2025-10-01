@@ -49,7 +49,7 @@ void BaseChara::UpdateAngle(const VECTOR& direction)
 
     const float targetDegree = Calculation::RadToDeg(targetRadian);
 
-    nowDegree = Calculation::RotationAngleDegree(targetDegree, nowDegree, rotationSpeedDegree);
+    nowDegree = Calculation::RotationAngleDegree(targetDegree, nowDegree, kRotationSpeedDegree);
     radian = Calculation::DegToRad(nowDegree);
 
     DebugDrawer::GetInstance().InformationInput_string_float("radian %f\n", radian);

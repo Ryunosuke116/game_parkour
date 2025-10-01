@@ -45,7 +45,7 @@ void FinishCut::Initialize()
 
 bool FinishCut::Update()
 {
-	const int maxFinishGraphTimer = 50.0f;
+	const float maxFinishGraphTimer = 50.0f;
 
 	if (isDrawFinish)
 	{

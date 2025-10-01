@@ -154,7 +154,7 @@ void Camera::Update_start(const float& timer,
 /// <summary>
 /// layout—pƒJƒƒ‰
 /// </summary>
-void Camera::Update_layout()
+void Camera::LayOutUpdate()
 {
 	cameraDirection = VSub(screenCenterPosition, cameraPosition);
 	cameraDirection = VNorm(cameraDirection);

@@ -18,7 +18,7 @@
 BracedHangToCrouch::BracedHangToCrouch(const int modelHandle) :
     PlayerStateBase(modelHandle)
 {
-    this->nowAnimState.PlayAnimSpeed = playAnimSpeed;
+    this->nowAnimState.PlayAnimSpeed = kPlayAnimSpeed;
 }
 
 /// <summary>

@@ -19,7 +19,7 @@ void BlackOut::Initialize()
 
 void BlackOut::ResultInitialize()
 {
-    alpha = 300;
+    alpha = maxAlpha;
     isLightChange = true;
 }
 
@@ -28,7 +28,7 @@ void BlackOut::ResultInitialize()
 /// </summary>
 void BlackOut::BlackOutUpdate(int addAlpha)
 {
-    if (!(alpha >= 300))
+    if (!(alpha >= maxAlpha))
     {
         alpha += addAlpha;
     }

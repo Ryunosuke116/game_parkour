@@ -14,7 +14,7 @@ public:
 	VECTOR Command(const VECTOR& cameraDirection, PlayerData& playerData, Player& player)override;
 	void Exit(PlayerData& playerData) override;			//ó‘Ô‚ğ”²‚¯‚é‚Æ‚«
 private:
-	static constexpr float playAnimSpeed = 0.4f;	    // ˆÚ“®‘¬“x
+	static constexpr float kPlayAnimSpeed = 0.4f;	    // ˆÚ“®‘¬“x
 	static constexpr float kCliffRadius = 4.0f;
 };
 

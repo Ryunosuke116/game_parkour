@@ -23,6 +23,7 @@ public:
 	void StartUpdate();
 	void FinishUpdate();
 	void NormalUpdate();
+	void WhenDebugUpdate();
 	void tutorialDraw();
 
 	void ResultCreate(int coinCount);

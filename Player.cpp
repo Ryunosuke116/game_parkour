@@ -20,9 +20,9 @@
 /// </summary>
 Player::Player() :
     BaseChara(),
-    start_walkTime(-1),
+    startWalkTime(-1),
     nowMoveDirection(VGet(0.0f, 0.0f, 0.0f)),
-    moveVec_normal(VGet(0.0f,0.0f,0.0f)),
+    normalVelocity(VGet(0.0f,0.0f,0.0f)),
     faceDirection(VGet(0.0f,0.0f,0.0f)),
     isCalcMoveVec(false),
     playerData({false})
@@ -35,6 +35,7 @@ Player::Player() :
 Player::~Player()
 {
     MV1DeleteModel(modelHandle);
+
 }
 
 
@@ -55,7 +56,7 @@ void Player::Create()
     playerCalculation = std::make_shared<PlayerCalculation>();
     animationChanger = std::make_shared<AnimationChanger>();
     animationChanger->Create(modelHandle);
-    MV1SetScale(modelHandle, VGet(modelScale, modelScale, modelScale));
+    MV1SetScale(modelHandle, VGet(kModelScale, kModelScale, kModelScale));
 }
 
 /// <summary>
@@ -71,12 +72,11 @@ void Player::Initialize()
     targetMoveDirection = VGet(0.0f, 0.0f, 0.0f);
     radian = 0.0f;
     rotate_x = 0.0f;
-    start_walkTime = 0.0f;
+    startWalkTime = 0.0f;
 
     MV1SetPosition(modelHandle, position);
 
     isPush = false;
-    isChange_falling = false;
 
     playerData.isIdle = false;
     playerData.isGround = true;
@@ -106,9 +106,7 @@ void Player::Initialize()
     isCollisionCheck = true;
    
     coinCount = 0;
-    degree_pad_now = 0.0f;
     effectTimer = 0.0f;
-    padInput_now = VGet(0.0f, 0.0f, 0.0f);
     nowMoveDirection = VGet(0.0f, 0.0f, 0.0f);
 
     MV1SetRotationXYZ(modelHandle, VGet(rotate_x * DX_PI_F / 180.0f, radian + DX_PI_F, 0.0f));
@@ -126,9 +124,6 @@ void Player::Update()
 
      //positionData更新
     CollisionUpdate();
-
-    //エフェクトマネージャーのポインタを参照
-    std::shared_ptr<EffectManager> effectManager = GameInstanceSubSystem::GetInstance().GetSubSystem<EffectManager>().lock();
 
     //リセット
     moveDirection = VGet(0.0f, 0.0f, 0.0f);
@@ -167,21 +162,7 @@ void Player::Update()
         animationChanger->GetAnimNumber_now(),
         playerData);
 
-    if (playerData.isRun)
-    {
-        effectTimer++;
-        if (effectTimer >= 10.0f)
-        {
-            const VECTOR kScale = VGet(6.0f, 6.0f, 6.0f);
-            VECTOR effectPosition = position;
-
-            effectPosition.y += 2.0f;
-            effectManager->PlayEffect("foot_smoke");
-            effectManager->SetScale(kScale, "foot_smoke");
-            effectManager->SetPosition(effectPosition,"foot_smoke");
-            effectTimer = 0.0f;
-        }
-    }
+    EffectUpdate();
 
     ///////////////////////////////////////
     //  デバッグ用
@@ -201,23 +182,9 @@ void Player::Update()
         isCalc = false;
     }
 
-    float radian_pad = atan2f(-PadInput::GetJoyPadXLeft(), -PadInput::GetJoyPadYLeft());
-
-    //度数計算
-    degree_pad_now = Calculation::RadToDeg(radian_pad);
-
     DebugUpdate();
     
     nowState->Draw();
-    //2胴体
-    //0真下
-    //頭 9
-    //左手 65
-    //右手 106
-    //足もと 167
-    //頭 9
-    //胸 6
-    //腹 4
 }
 
 /// <summary>
@@ -267,7 +234,7 @@ void Player::ResultCreate()
     Load(JsonManager::GetInstance().GetJsons(jsonName));
     playerCalculation = std::make_shared<PlayerCalculation>();
     animationChanger = std::make_shared<AnimationChanger>();
-    MV1SetScale(modelHandle, VGet(modelScale, modelScale, modelScale));
+    MV1SetScale(modelHandle, VGet(kModelScale, kModelScale, kModelScale));
 }
 
 /// <summary>
@@ -297,11 +264,15 @@ void Player::ResultUpdate()
 
 void Player::MoveDirectionUpdate()
 {
-    const bool isAction = !playerData.isHanging &&
+    const bool isNotAction = !playerData.isHanging &&
         !playerData.isHangToCrouch &&
         !playerData.isFalling &&
         !playerData.isJump &&
         !playerData.isRoll;
+
+    const bool isAction = !playerData.isHanging &&
+        !playerData.isHangToCrouch &&
+        !playerData.isWalljump;
 
     isCalcMoveVec = VSize(moveDirection) != 0;
 
@@ -312,27 +283,26 @@ void Player::MoveDirectionUpdate()
     }
 
     //通常時は進行方向にすぐ向くように
-    if (isAction)
+    if (isNotAction)
     {
-        const float leapSpeed = 0.15f;
+        const float kLeapSpeed = 0.15f;
         nowMoveDirection = Calculation::Leap(
             nowMoveDirection,
             targetMoveDirection,
-            leapSpeed);
+            kLeapSpeed);
         nowMoveDirection.y = 0.0f;
     }
     //特定のアクション時は移動方向を変えられないように
-    else if (!playerData.isHanging &&
-        !playerData.isHangToCrouch &&
-        !playerData.isWalljump)
+    else if (isAction)
     {
-        const float speed = 0.03f;
+        const float kSpeed = 0.03f;
 
         //ゆっくり最新の方向に向く
         nowMoveDirection = Calculation::Leap(
             nowMoveDirection,
             targetMoveDirection, 
-            speed);
+            kSpeed);
+
         nowMoveDirection.y = 0.0f;
     }
 
@@ -473,8 +443,37 @@ void Player::Receive_CollisionResult()
     }
 }
 
+void Player::EffectUpdate()
+{
+    if (playerData.isRun)
+    {
+        //エフェクトマネージャーのポインタを参照
+        std::shared_ptr<EffectManager> effectManager = GameInstanceSubSystem::GetInstance().GetSubSystem<EffectManager>().lock();
+        const float kMaxEffectTimer = 10.0f;
+        const float kAddEffectPositionY = 2.0f;
+        effectTimer++;
+
+        if (effectTimer >= kMaxEffectTimer)
+        {
+            const VECTOR kEffectScale = VGet(4.0f, 4.0f, 4.0f);
+            VECTOR effectPosition = position;
+
+            effectPosition.y += kAddEffectPositionY;
+            effectManager->PlayEffect("foot_smoke");
+            effectManager->SetScale(kEffectScale, "foot_smoke");
+            effectManager->SetPosition(effectPosition, "foot_smoke");
+            effectTimer = 0.0f;
+        }
+    }
+}
+
 void Player::DebugUpdate()
 {
+    float padRadian = atan2f(-PadInput::GetJoyPadXLeft(), -PadInput::GetJoyPadYLeft());
+
+    //度数計算
+    float nowPadDegree = Calculation::RadToDeg(padRadian);
+
     //カプセル
     DebugDrawer::GetInstance().InformationInput_capsule(positionData.capsuleTopPosition,
         positionData.capsuleBottomPosition, radius, GetColor(255, 0, 0));
@@ -491,7 +490,7 @@ void Player::DebugUpdate()
     //string_flaot
     DebugDrawer::GetInstance().InformationInput_string_float("JoyPad_x_left %f\n", -PadInput::GetJoyPadXLeft());
     DebugDrawer::GetInstance().InformationInput_string_float("JoyPad_y_left %f\n", -PadInput::GetJoyPadYLeft());
-    DebugDrawer::GetInstance().InformationInput_string_float("degree_pad_now %f\n", degree_pad_now);
+    DebugDrawer::GetInstance().InformationInput_string_float("nowPadDegree %f\n", nowPadDegree);
     DebugDrawer::GetInstance().InformationInput_string_float("playerDegree %f\n", GetDegree());
 
     //string_bool
@@ -521,8 +520,7 @@ void Player::CounterplanBug()
 {
     if (position.y < -10.0f)
     {
-        position = VGet(3.02443838f, 9.00285912f, -1215.93481f);
-        isChange_falling = false;
+        position = VGet(3.0f, 9.0f, -1210.0f);
         playerData.isIdle = true;
         playerData.isGround = false;
         playerData.isJump = false;
