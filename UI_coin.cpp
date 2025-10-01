@@ -182,11 +182,12 @@ void UI_coin::ResultInitialize()
 /// </summary>
 void UI_coin::ResultUpdate()
 {
-	const float InitCoinPosX = 960.0f;
-	const float InitCrossX = 1165.0f;
-	const float InitNumberX = 1220.0f;
+	const float kTargetCoinPosX = 960.0f;
+	const float kTargetCrossX = 1165.0f;
+	const float kTargetNumberX = 1220.0f;
+	const float kLeapSpeed = 0.1f;
 
-	coinPosX = Calculation::Leap(coinPosX, InitCoinPosX, 0.1f);
-	crossPosX = Calculation::Leap(crossPosX, InitCrossX, 0.1f);
-	numberPosX = Calculation::Leap(numberPosX, InitNumberX, 0.1f);
+	coinPosX = Calculation::Leap(coinPosX, kTargetCoinPosX, kLeapSpeed);
+	crossPosX = Calculation::Leap(crossPosX, kTargetCrossX, kLeapSpeed);
+	numberPosX = Calculation::Leap(numberPosX, kTargetNumberX, kLeapSpeed);
 }

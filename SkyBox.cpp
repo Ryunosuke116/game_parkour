@@ -2,6 +2,8 @@
 #include "SkyBox.h"
 #include "BaseObject.h"
 #include "JsonManager.h"
+#include "WorldSubSystem.h"
+#include "PlayerManager.h"
 
 /// <summary>
 /// コンストラクタ
@@ -38,12 +40,17 @@ void SkyBox::Create()
 /// </summary>
 void SkyBox::Initialize()
 {
-	//処理なし
+	const VECTOR kInitPos = VGet(0.0f, 0.0f, 0.0f);
+	position = kInitPos;
+	MV1SetPosition(modelHandle, position);
 }
 
 void SkyBox::Update()
 {
-	//処理なし
+	auto spPlayerManager = WorldSubSystem::GetInstance().GetSubSystem<PlayerManager>();
+
+	position = spPlayerManager->GetPosition();
+	MV1SetPosition(modelHandle, position);
 };
 
 /// <summary>

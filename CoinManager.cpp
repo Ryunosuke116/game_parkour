@@ -234,19 +234,7 @@ void CoinManager::ResultCreate()
 /// <param name="coinCount"></param>
 void CoinManager::ResultCreate(int coinCount)
 {
-	nlohmann::json data = JsonManager::GetInstance().GetJsons("coin");
-	std::string modelPath = data["modelPath"];
-
-	modelHandle = MV1LoadModel(modelPath.c_str());
-
-	for (int i = 0; i < coinCount; i++)
-	{
-		umCoins[i] = std::make_shared<Coin>();
-
-		umCoins.at(i)->Load(i,
-			modelHandle,
-			VGet(0.0f, 9.00285912f, -1205.93481f));
-	}
+	//ˆ—‚È‚µ
 }
 
 /// <summary>

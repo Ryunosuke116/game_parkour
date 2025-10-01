@@ -13,7 +13,14 @@ int WINAPI WinMain(HINSTANCE hInstance,
     int nCmdShow)
 {
     // 画面モードのセット
-    ChangeWindowMode(FALSE);
+    #if defined(NDEBUG)
+        // Release
+        ChangeWindowMode(FALSE);
+    #else
+        //　Debug
+        ChangeWindowMode(TRUE);
+    #endif
+
     SetGraphMode(1600, 900, 16);
 
     // DirectX11を使用するようにする。(DirectX9も可、一部機能不可)

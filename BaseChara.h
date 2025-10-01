@@ -57,7 +57,7 @@ protected:
 	static constexpr float	MoveSpeed = 0.4f;				// 移動速度
 	static constexpr float kRotationSpeedDegree = 11.0f;	// キャラクターが方向転換するスピード
 
-	const VECTOR initializeAimPos = VGet(-0.17f, 53.75f, -1224.4f);
-	const VECTOR initializeSpherePos = VGet(-1.3f, 24.0f, -1172.35f);
+	const VECTOR kInitializeAimPos = VGet(-0.17f, 53.75f, -1224.4f);
+	const VECTOR kInitializeSpherePos = VGet(-1.3f, 24.0f, -1172.35f);
 };
 

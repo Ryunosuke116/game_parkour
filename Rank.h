@@ -24,14 +24,14 @@ private:
 	int speechBubbleHandle;
 	int coinCount;
 
-	int rankPosX;
-	int rankPosY;
-	int rankWidth;
-	int rankHeight;
-	int speechBubblePosX;
-	int speechBubblePosY;
-	int speechBubbleWidth;
-	int speechBubbleHeight;
+	float rankPosX;
+	float rankPosY;
+	float rankWidth;
+	float rankHeight;
+	float speechBubblePosX;
+	float speechBubblePosY;
+	float speechBubbleWidth;
+	float speechBubbleHeight;
 	int rankScale;
 	int addScaling;
 };

@@ -72,17 +72,18 @@ private:
 	bool isPushRT;
 	bool isPush;
 
-	static constexpr float lookRadius = 1.0f;
-	static constexpr float cameraRadius = 4.0f;
-	static constexpr float maxDistanceSize = 70.0f;
-	static constexpr float minDistanceSize = 15.0f;
-	static constexpr float initializeAngle = -2.45f;
-	static constexpr float initializeDistance = 50.0f;
-	static constexpr float initializeT = 0.7f;
-	static constexpr float addCenterPos = 15.0f;					//playerPosのY軸に加算してカメラと注視点の間の座標を求める
+	static constexpr float kLookRadius = 1.0f;
+	static constexpr float kCameraRadius = 4.0f;
+	static constexpr float kMaxDistanceSize = 70.0f;
+	static constexpr float kMinDistanceSize = 15.0f;
+	static constexpr float kInitializeAngle = -2.45f;
+	static constexpr float kResultInitializeAngle = -177.55f;
+	static constexpr float kInitializeDistance = 50.0f;
+	static constexpr float kInitializeProgress = 0.7f;
+	static constexpr float kAddCenterPosY = 15.0f;					//playerPosのY軸に加算してカメラと注視点の間の座標を求める
 	
-	const VECTOR initializeAimPos = VGet(-0.17f, 53.75f, -1224.4f);
-	const VECTOR initializeSpherePos = VGet(-1.3f, 24.0f, -1172.35f);
+	const VECTOR kInitializeAimPos = VGet(-0.17f, 53.75f, -1224.4f);
+	const VECTOR kInitializeSpherePos = VGet(-1.3f, 24.0f, -1172.35f);
 
 };
 

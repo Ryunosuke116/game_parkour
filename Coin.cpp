@@ -44,7 +44,7 @@ void Coin::Load(
 	this->listNumber = listNumber;
 	modelHandle = MV1DuplicateModel(handle);
 	position = pos;
-	MV1SetScale(modelHandle, VGet(objectScale, objectScale, objectScale));
+	MV1SetScale(modelHandle, VGet(kObjectScale, kObjectScale, kObjectScale));
 }
 
 /// <summary>
@@ -52,7 +52,7 @@ void Coin::Load(
 /// </summary>
 void Coin::Initialize()
 {
-	const VECTOR addAABB = VGet(radius, radius, radius);	//AABB‚Ì—Ìˆæ”ÍˆÍ
+	const VECTOR addAABB = VGet(kRadius, kRadius, kRadius);	//AABB‚Ì—Ìˆæ”ÍˆÍ
 
 	MV1SetPosition(modelHandle, position);
 	velocity_Y = 0.0f;
@@ -127,7 +127,7 @@ void Coin::ResultInitialize()
 	flyAwayVelocity = VGet(0.0f, 0.0f, 0.0f);
 
 	flyAwayVelocity = VAdd(flyAwayVelocity, flyAwayDirection);
-	flyAwayVelocity.y += flyPower;
+	flyAwayVelocity.y += kFlyPower;
 }
 
 /// <summary>
@@ -162,8 +162,8 @@ void Coin::HitPlayerAction()
 
 	if (velocity_Y <= maxVelocityY)
 	{
-		velocity_Y += addVelocity;
-		position.y += addVelocity;
+		velocity_Y += kAddVelocity;
+		position.y += kAddVelocity;
 	}
 	else
 	{
@@ -217,7 +217,7 @@ bool Coin::IsHitPlayer(const VECTOR& topPlayerPos,
 	VECTOR nearCapsulePos = HitCheck::CapsuleHitConfirmation(topPlayerPos, bottomPlayerPos, position);
 
 	//ƒvƒŒƒCƒ„[‚ÆÚG‚µ‚Ä‚¢‚é‚©
-	if (HitCheck::HitConfirmation(position, nearCapsulePos, radius, playerRadius))
+	if (HitCheck::HitConfirmation(position, nearCapsulePos, kRadius, playerRadius))
 	{
 		isHitPlayer = true;
 		if (!isSound)

@@ -60,13 +60,13 @@ void Camera::Create()
 /// </summary>
 void Camera::Initialize()
 {
-	cameraPosition = initializeAimPos;
-	screenCenterPosition = initializeSpherePos;
-	nowDegree = initializeAngle;
-	cameraDistanceSize = initializeDistance;
-	normalCameraDistanceSize = initializeDistance;
-	normalDistanceProgress = initializeT;
-	normalLinearProgress = initializeT;
+	cameraPosition = kInitializeAimPos;
+	screenCenterPosition = kInitializeSpherePos;
+	nowDegree = kInitializeAngle;
+	cameraDistanceSize = kInitializeDistance;
+	normalCameraDistanceSize = kInitializeDistance;
+	normalDistanceProgress = kInitializeProgress;
+	normalLinearProgress = kInitializeProgress;
 	isResetAngle = false;
 	isHitObject = false;
 	isPushRT = false;
@@ -82,7 +82,7 @@ void Camera::Initialize()
 void Camera::Update()
 {
 	centerPointSpherePos = WorldSubSystem::GetInstance().GetSubSystem<PlayerManager>()->GetPosition();
-	centerPointSpherePos.y += addCenterPos;
+	centerPointSpherePos.y += kAddCenterPosY;
 	
 	//注視する座標からplayerがずれたら修正する
 	PosCalc();
@@ -304,7 +304,7 @@ void Camera::Draw()
 void Camera::DistanceUpdate()
 {
 	const float addHighCenterPos = 40.0f;		//カメラが中心からどれだけ離れられるか
-	const float addLowCenterPos = addCenterPos - 5.0f;
+	const float addLowCenterPos = kAddCenterPosY - 5.0f;
 	minHeight = screenCenterPosition.y - addLowCenterPos;
 	maxHeight = screenCenterPosition.y + addHighCenterPos;
 
@@ -335,7 +335,7 @@ void Camera::DistanceUpdate()
 	DebugDrawer::GetInstance().InformationInput_string_float("normalCameraHeightProgress %f\n", normalCameraHeightProgress);
 
 	//リニア値からカメラの距離を求める
-	normalCameraDistanceSize = Calculation::InterpolationCalc(normalLinearProgress, maxDistanceSize, minDistanceSize);
+	normalCameraDistanceSize = Calculation::InterpolationCalc(normalLinearProgress, kMaxDistanceSize, kMinDistanceSize);
 }
 
 /// <summary>
@@ -475,7 +475,7 @@ void Camera::AdjustCameraPosition()
 	}
 
 	//カメラの距離の進行値を求める
-	progressCameraPosition = Calculation::CalculateBackProgress(maxDistanceSize, minDistanceSize, cameraDistanceSize);
+	progressCameraPosition = Calculation::CalculateBackProgress(kMaxDistanceSize, kMinDistanceSize, cameraDistanceSize);
 
 	//カメラ座標
 	cameraPosition.x = screenCenterPosition.x + cameraDistanceSize * -cos(angleRadian);
@@ -522,17 +522,18 @@ void Camera::ResetAngle(const float& angle_player)
 
 void Camera::PosCalc()
 {
-	static constexpr float normalCameraSpeed = 0.05f;
-	const float outSphereCameraSpeed = 0.1f;
+	static constexpr float kNormalCameraSpeed = 0.05f;
+	const float kOutSphereCameraSpeed = 0.1f;
+	const float kCenterPointSphereRadius = 0.5f;
 
 	//lookPosが球の外側にいった場合球の中心座標をずらす
-	if (!HitCheck::HitConfirmation(screenCenterPosition, centerPointSpherePos, lookRadius, 0.5f))
+	if (!HitCheck::HitConfirmation(screenCenterPosition, centerPointSpherePos, kLookRadius, kCenterPointSphereRadius))
 	{
-		screenCenterPosition = Calculation::Leap(screenCenterPosition, centerPointSpherePos, outSphereCameraSpeed);
+		screenCenterPosition = Calculation::Leap(screenCenterPosition, centerPointSpherePos, kOutSphereCameraSpeed);
 	}
 	else
 	{
-		screenCenterPosition = Calculation::Leap(screenCenterPosition, centerPointSpherePos, normalCameraSpeed);
+		screenCenterPosition = Calculation::Leap(screenCenterPosition, centerPointSpherePos, kNormalCameraSpeed);
 	}
 }
 
@@ -564,6 +565,7 @@ void Camera::ResultCreate()
 void Camera::ResultInitialize()
 {
 	Initialize();
+	nowDegree = kResultInitializeAngle;
 	normalLinearProgress = 0.5f;
 	normalCameraDistanceSize = 3.0f;
 }
@@ -574,12 +576,12 @@ void Camera::ResultInitialize()
 void Camera::ResultUpdate()
 {
 	const float addHighCenterPos = 40.0f;		//カメラが中心からどれだけ離れられるか
-	const float addLowCenterPos = addCenterPos - 5.0f;
+	const float addLowCenterPos = kAddCenterPosY - 5.0f;
 	minHeight = screenCenterPosition.y - addLowCenterPos;
 	maxHeight = screenCenterPosition.y + addHighCenterPos;
 
 	centerPointSpherePos = WorldSubSystem::GetInstance().GetSubSystem<PlayerManager>()->GetPosition();
-	centerPointSpherePos.y += addCenterPos;
+	centerPointSpherePos.y += kAddCenterPosY;
 	centerPointSpherePos.x -= 3.0f;
 	
 	//注視する座標からplayerがずれたら修正する

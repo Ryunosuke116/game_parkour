@@ -3,6 +3,7 @@
 #include <string>
 #include "Rank.h"
 #include "JsonManager.h"
+#include "Calculation.h"
 
 Rank::Rank() :
     rankHandle(-1),
@@ -65,22 +66,29 @@ void Rank::Load(const nlohmann::json& jsonData)
 
 void Rank::ResultCreate(const int coinCount)
 {
-    this->coinCount = 100;
+    this->coinCount = coinCount;
     Load(JsonManager::GetInstance().GetJsons(jsonTag));
 }
 
 void Rank::ResultInitialize()
 {
-    x = 400;
-    y = 150;
-    rankPosX = 1000;
-    rankPosY = 150;
-    rankWidth = 300;
-    rankHeight = 300;
-    speechBubblePosX = 850;
-    speechBubblePosY = 0;
-    speechBubbleWidth = 600;
-    speechBubbleHeight = 600;
+    const float kInitRankPosX = 1840.0f;
+    const float kInitRankPosY = 150.0f;
+    const float lkInitRankWidth = 300.0f;
+    const float lkInitRankHeight = 300.0f;
+    const float kInitSpeechBubblePosX = 1690.0f;
+    const float kInitSpeechBubblePosY = 0.0f;
+    const float kInitSpeechBubbleWidth = 600.0f;
+    const float kInitSpeechBubbleHeight = 600.0f;
+
+    rankPosX = kInitRankPosX;
+    rankPosY = kInitRankPosY;
+    rankWidth = lkInitRankWidth;
+    rankHeight = lkInitRankHeight;
+    speechBubblePosX = kInitSpeechBubblePosX;
+    speechBubblePosY = kInitSpeechBubblePosY;
+    speechBubbleWidth = kInitSpeechBubbleWidth;
+    speechBubbleHeight = kInitSpeechBubbleHeight;
     
     rankScale = 0;
     addScaling = 2;
@@ -88,23 +96,31 @@ void Rank::ResultInitialize()
 
 void Rank::ResultUpdate()
 {
+    const int kMaxRankScale = 50;
+    const float kTargetrankPosX = 1000.0f;
+    const float kTargetspeechBubblePosX = 850.0f;
+    const float kLeapSpeed = 0.1f;
+
     rankScale += addScaling;
 
-    if (rankScale <= 0 || rankScale >= 50)
+    if (rankScale <= 0 || rankScale >= kMaxRankScale)
     {
         addScaling = -addScaling;
     }
+
+    rankPosX = Calculation::Leap(rankPosX, kTargetrankPosX, kLeapSpeed);
+    speechBubblePosX = Calculation::Leap(speechBubblePosX, kTargetspeechBubblePosX, kLeapSpeed);
 }
 
 void Rank::Draw()
 {
-    DrawExtendGraph(speechBubblePosX,
+    DrawExtendGraphF(speechBubblePosX,
         speechBubblePosY, 
         speechBubblePosX + speechBubbleWidth,
         speechBubblePosY + speechBubbleHeight, 
         speechBubbleHandle, TRUE);
 
-    DrawExtendGraph(rankPosX - rankScale,
+    DrawExtendGraphF(rankPosX - rankScale,
         rankPosY - rankScale,
         rankPosX + rankWidth + rankScale,
         rankPosY + rankHeight + rankScale,
