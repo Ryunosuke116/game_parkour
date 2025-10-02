@@ -101,8 +101,8 @@ std::pair<VECTOR, PlayerData> Run::WallRunUpdate(
 	PlayerData playerData = player.GetData();
 
 	VECTOR moveDir = VGet(0.0f, 0.0f, 0.0f);
-	const float WallRunStopTime = player.playerCalculation->GetWallRun_stopTime();
-	const float kWallRunMaxStopTime = player.playerCalculation->GetWallRun_stopTime_max();
+	const float wallRunStopTime = player.playerCalculation->GetWallRunStopTime();
+	const float kWallRunMaxStopTime = player.playerCalculation->GetWallRunMaxStopTime();
 	const int kMinJoyPadLeft = -1000;
 
 	//—‚¿‚é
@@ -119,7 +119,7 @@ std::pair<VECTOR, PlayerData> Run::WallRunUpdate(
 	}
 
 	//~‚Ü‚Á‚Äˆê’èŠÔ‰ß‚¬‚½‚ç—‰º‚·‚é
-	if (WallRunStopTime >= kWallRunMaxStopTime)
+	if (wallRunStopTime >= kWallRunMaxStopTime)
 	{
 		isChangeState = true;
 		playerData.isFalling = true;
@@ -199,7 +199,7 @@ bool Run::MotionUpdate(PlayerData& playerData)
 	// ƒuƒŒƒ“ƒh—¦‚ª‚PˆÈ‰º‚Ìê‡‚Í‚P‚É‹ß‚Ã‚¯‚é
 	if (animBlendRate < 1.0f)
 	{
-		animBlendRate += AnimBlendSpeed;
+		animBlendRate += kAnimBlendSpeed;
 		if (animBlendRate > 1.0f)
 		{
 			animBlendRate = 1.0f;
@@ -267,8 +267,8 @@ VECTOR Run::Command(
 {
 	VECTOR moveDir = VGet(0.0f, 0.0f, 0.0f);
 	angle = player.GetRadian();
-	playerMoveSpeed = player.playerCalculation->GetMoveSpeed_now();
-	playerMoveSpeed_max = player.playerCalculation->GetMoveSpeed_max();
+	playerMoveSpeed = player.playerCalculation->GetNowMoveSpeed();
+	playerMoveSpeed_max = player.playerCalculation->GetMaxMoveSpeed();
 
 	//moveDir‚ğæ“¾‚·‚é
 	moveDir = Move(cameraDirection, playerData);

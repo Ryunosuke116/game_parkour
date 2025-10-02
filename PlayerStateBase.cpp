@@ -21,7 +21,7 @@
 /// <param name="nowAnimState"></param>
 PlayerStateBase::PlayerStateBase(const int modelHandle):
     modelHandle(-1),
-    animNumber_old(-1),
+    animOldNumber(-1),
     animBlendRate(0.0f),
     isPush(false),
     moveDirection(VGet(0.0f, 0.0f, 0.0f)),
@@ -76,7 +76,7 @@ bool PlayerStateBase::MotionUpdate(PlayerData& playerData)
     // ブレンド率が１以下の場合は１に近づける
     if (animBlendRate < 1.0f)
     {
-        animBlendRate += AnimBlendSpeed;
+        animBlendRate += kAnimBlendSpeed;
         if (animBlendRate > 1.0f)
         {
             animBlendRate = 1.0f;
@@ -201,7 +201,7 @@ void PlayerStateBase::JumpMove(PlayerData& playerData,
     if (PadInput::isJump() && !playerData.isAllJump)
     {
         //ジャンプ
-        if (!player.playerCalculation->GetIsJumpPower_add() &&
+        if (!player.playerCalculation->GetIsAddJumpPower() &&
             !isPush &&
             !playerData.isFirstJump)
         {
@@ -209,7 +209,7 @@ void PlayerStateBase::JumpMove(PlayerData& playerData,
             playerData.isJump = true;
             playerData.isFirstJump = true;
             isPush = true;
-            player.playerCalculation->ChangeIsJumpPower_add_ture();
+            player.playerCalculation->ChangeTrueIsAddJumpPower();
             player.playerCalculation->SetJumpPower();
         }
         //二段ジャンプ
@@ -228,8 +228,8 @@ void PlayerStateBase::JumpMove(PlayerData& playerData,
             isPush = true;
             playerData.isSecondJump = true;
             playerData.isAllJump = true;
-            player.playerCalculation->ChangeIsJumpPower_add_ture();
-            player.playerCalculation->SetJumpPower_second();
+            player.playerCalculation->ChangeTrueIsAddJumpPower();
+            player.playerCalculation->SetSecondJumpPower();
 
             nowAnimState.playAnimTime = 5.0f;
         }
@@ -250,14 +250,17 @@ void PlayerStateBase::WallRunMove(PlayerData& playerData,
     const std::shared_ptr<BaseObject>& collisionObject)
 {
     const float kEntryDegreeWallRun = 50.0f;
+    const float kAddRayEndPosition = 5.0f;
+    const int kFrameIndex = -1;
+
     MV1_COLL_RESULT_POLY hitPoly;
-    VECTOR addPos = VScale(player.GetFaceDirection(), 5.0f);
+    VECTOR addPos = VScale(player.GetFaceDirection(), kAddRayEndPosition);
     addPos.y = 0.0f;
     VECTOR rayEndPosition = VAdd(player.GetPositionData().rayTopPosition, addPos);
 
     //壁を走れるか
     bool isUseWallRun = HitCheck::RayHitJudge(collisionObject->GetModelHandle(),
-        -1,
+        kFrameIndex,
         player.GetPositionData().rayTopPosition,
         rayEndPosition,
         hitPoly) &&
@@ -283,6 +286,8 @@ void PlayerStateBase::WallRunMove(PlayerData& playerData,
         //壁の法線ベクトルを利用して壁走りするかどうか
         if (abs(degreePadWallDifference) <= kEntryDegreeWallRun)
         {
+            const float kInversionScale = -1.0f;
+
             //ロールアクションとジャンプをできないように
             playerData.isRunWall = true;
             playerData.isRun = true;
@@ -291,12 +296,12 @@ void PlayerStateBase::WallRunMove(PlayerData& playerData,
             playerData.isAllJump = false;
             isChangeState = true;
 
-            player.playerCalculation->ChangeIsJumpPower_add_ture();
+            player.playerCalculation->ChangeTrueIsAddJumpPower();
             player.playerCalculation->SetJumpPower();
             player.playerCalculation->SetWallRunGravity(hitWallNormal);
-            player.SetNowMoveDirection(VScale(hitWallNormal, -1.0f));
-            player.SetFaceDirection(VScale(hitWallNormal, -1.0f));
-            player.SetRotateX(runWallRotateX);
+            player.SetNowMoveDirection(VScale(hitWallNormal, kInversionScale));
+            player.SetFaceDirection(VScale(hitWallNormal, kInversionScale));
+            player.SetRotateX(kRunWallRotateX);
         }
     }
 }

@@ -13,7 +13,7 @@ public:
 	struct AnimState
 	{
 		int attachIndex;			//アニメーション情報
-		float playAnimTime;		//再生時間
+		float playAnimTime;			//再生時間
 		float TotalPlayTime_anim;	//総再生時間
 		float PlayAnimSpeed;		//アニメーションスピード
 	};
@@ -45,23 +45,22 @@ public:
 	//////////////////////////////////////////////
 	// ゲッター
 	//////////////////////////////////////////////
-	//int GetPrevAttachIndex() { return oldAnimState.attachIndex; }
 	AnimState GetOldAnimState() const { return oldAnimState; }
 	AnimState GetNowAnimState() const { return nowAnimState; }
 	float GetAnimBlendRate()const { return animBlendRate; }
 	bool GetIsChangeState()const { return isChangeState; }
 
 	void SetPlayAnimSpeed_now(const float set) { nowAnimState.playAnimTime = set; }
-	void SetAnimNumber_old(const int num) { animNumber_old = num; }
+	void SetOldAnimNumber(const int num) { animOldNumber = num; }
 	void SetIsChangeState(const bool set) { isChangeState = set; }
 	
 protected:
-	static constexpr float	AnimBlendSpeed = 0.1f;		// アニメーションのブレンド率変化速度
-	static constexpr float runWallRotateX = 30.0f;
+	static constexpr float kAnimBlendSpeed = 0.1f;		// アニメーションのブレンド率変化速度
+	static constexpr float kRunWallRotateX = 30.0f;
 	static constexpr float kCliffRadius = 4.0f;			//崖掴み判定用の半径
 
 	int modelHandle;			//モデルハンドル
-	int animNumber_old;
+	int animOldNumber;
 	float animBlendRate;
 
 	bool isPush;

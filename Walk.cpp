@@ -56,8 +56,8 @@ VECTOR Walk::Command(const VECTOR& cameraDirection, PlayerData& playerData, Play
 {
 	VECTOR moveDir = VGet(0.0f, 0.0f, 0.0f);
 	angle = player.GetRadian();
-	playerMoveSpeed = player.playerCalculation->GetMoveSpeed_now();
-	playerMoveSpeed_max = player.playerCalculation->GetMoveSpeed_max();
+	playerMoveSpeed = player.playerCalculation->GetNowMoveSpeed();
+	playerMoveSpeed_max = player.playerCalculation->GetMaxMoveSpeed();
 
 	//moveDir‚ðŽæ“¾‚·‚é
 	moveDir = Move(cameraDirection, playerData);

@@ -16,7 +16,7 @@ public:
 	const VECTOR GetPosition() { return position; }
 	const std::string GetTag() { return tag; }
 	std::string GetJsonTag() { return jsonTag; }
-	const VECTOR GetDifferencePosition() { return pos_difference; }
+	const VECTOR GetDifferencePosition() { return differencePosition; }
 
 	virtual void Load(const nlohmann::json& jsonData)	abstract;
 
@@ -25,6 +25,6 @@ protected:
 	VECTOR position;
 	std::string tag;
 	std::string jsonTag;
-	VECTOR pos_difference;
+	VECTOR differencePosition;
 };
 

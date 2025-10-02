@@ -28,15 +28,17 @@ void FieldMesh::Load(const nlohmann::json& jsonData)
 {
 	std::string path = jsonData["meshPath"];
 	modelHandle = MV1LoadModel(path.c_str());
-	position = VGet(0, 0, 0);
-	MV1SetScale(modelHandle, VGet(0.9f, 0.9f, 0.9f));
-	MV1SetPosition(modelHandle, position);
-	pos_difference = VGet(0.0f, 0.0f, 0.0f);
 }
 
 void FieldMesh::Create()
 {
+	const VECTOR kModelScale = VGet(0.9f, 0.9f, 0.9f);
+
 	Load(JsonManager::GetInstance().GetJsons(jsonTag));
+	position = VGet(0.0f, 0.0f, 0.0f);
+	MV1SetScale(modelHandle, kModelScale);
+	MV1SetPosition(modelHandle, position);
+	differencePosition = VGet(0.0f, 0.0f, 0.0f);
 }
 
 /// <summary>
@@ -63,34 +65,24 @@ void FieldMesh::Initialize()
 /// </summary>
 void FieldMesh::Update()
 {
+	const int kMaxBlend = 255;
+	const int kMinBlend = 0;
+
 	if (CheckHitKey(KEY_INPUT_1))
 	{
 		if (!isPush)
 		{
-			int a = MV1GetMaterialNum(modelHandle);
+			int materialNum = MV1GetMaterialNum(modelHandle);
 
 			if (!isPoly)
 			{
 				isPoly = true;
-				for (int i = 0; i < a; i++)
-				{
-					// ３Ｄモデルに含まれる０番目のマテリアルの描画ブレンドモードを DX_BLENDMODE_ADD に変更する
-					MV1SetMaterialDrawBlendMode(modelHandle, i, DX_BLENDMODE_ADD);
-					// マテリアルのブレンドパラメータを 128 に変更する
-					MV1SetMaterialDrawBlendParam(modelHandle, i, 255);
-				}
+				ChangeBlendParam(materialNum, kMaxBlend);
 			}
 			else
 			{
 				isPoly = false;
-
-				for (int i = 0; i < a; i++)
-				{
-					// ３Ｄモデルに含まれる０番目のマテリアルの描画ブレンドモードを DX_BLENDMODE_ADD に変更する
-					MV1SetMaterialDrawBlendMode(modelHandle, i, DX_BLENDMODE_ADD);
-					// マテリアルのブレンドパラメータを 128 に変更する
-					MV1SetMaterialDrawBlendParam(modelHandle, i, 0);
-				}
+				ChangeBlendParam(materialNum, kMinBlend);
 			}
 			isPush = true;
 		}
@@ -107,7 +99,6 @@ void FieldMesh::Update()
 /// </summary>
 void FieldMesh::Draw()
 {
-	//MV1SetWireFrameDrawFlag(modelHandle, FALSE);
 	if (isPoly)
 	{
 		MV1SetWireFrameDrawFlag(modelHandle, TRUE);
@@ -143,4 +134,15 @@ void FieldMesh::ResultInitialize()
 void FieldMesh::ResultUpdate()
 {
 	//処理なし
+}
+
+void FieldMesh::ChangeBlendParam(const int materialNum, const int blendParam)
+{
+	for (int i = 0; i < materialNum; i++)
+	{
+		// ３Ｄモデルに含まれる０番目のマテリアルの描画ブレンドモードを DX_BLENDMODE_ADD に変更する
+		MV1SetMaterialDrawBlendMode(modelHandle, i, DX_BLENDMODE_ADD);
+		// マテリアルのブレンドパラメータを 128 に変更する
+		MV1SetMaterialDrawBlendParam(modelHandle, i, blendParam);
+	}
 }

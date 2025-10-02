@@ -20,7 +20,7 @@ PlayerCalculation::PlayerCalculation() :
     nowJumpPower(0.0f),
     nowMoveSpeed(0.0f),
     nowRollMoveSpeed(0.0f),
-    WallRunStopTime(0.0f),
+    wallRunStopTime(0.0f),
     decelerationSpeed(0.0f),
     isCalcDeceleration(false),
     isSlip_after(false),
@@ -33,21 +33,21 @@ PlayerCalculation::PlayerCalculation() :
 VECTOR PlayerCalculation::Update(
     const VECTOR& moveDirection, 
     const float playAnimTime,
-    const int NowAnimNumber, 
+    const int nowAnimNumber, 
     const PlayerData& playerData)
 {
     VECTOR velocity = moveDirection;
 
     //進むスピードを乗算
       //ロールアクション中はそれに応じた速度
-    velocity = Roll(NowAnimNumber,
+    velocity = Roll(nowAnimNumber,
         velocity,
         moveDirection,
         playAnimTime,
         playerData);
    
     //通常時
-    velocity = Move(NowAnimNumber, moveDirection, velocity, playerData);
+    velocity = Move(nowAnimNumber, moveDirection, velocity, playerData);
 
     //崖掴み中
     if (playerData.isNowHanging)
@@ -76,7 +76,7 @@ VECTOR PlayerCalculation::Update(
 /// <param name="moveDirection"></param>
 /// <param name="playerData"></param>
 /// <returns></returns>
-VECTOR PlayerCalculation::Move(const int& NowAnimNumber,
+VECTOR PlayerCalculation::Move(const int& nowAnimNumber,
     const VECTOR& moveDirection,
     const VECTOR& velocity, 
     const PlayerData& playerData)
@@ -95,7 +95,7 @@ VECTOR PlayerCalculation::Move(const int& NowAnimNumber,
     newVelocity = CalcProjectionVelocity(playerData, newVelocity);
 
     //重力計算
-    newVelocity = Gravity(newVelocity, playerData);
+    newVelocity = GravityUpdate(newVelocity, playerData);
 
     //壁を走るときに一度だけジャンプ力を加算
     if (playerData.isRunWall)
@@ -105,7 +105,7 @@ VECTOR PlayerCalculation::Move(const int& NowAnimNumber,
     //ジャンプ計算
     else
     {
-        newVelocity = Jump(newVelocity, NowAnimNumber, playerData);
+        newVelocity = Jump(newVelocity, nowAnimNumber, playerData);
     }
 
     return newVelocity;
@@ -115,10 +115,10 @@ VECTOR PlayerCalculation::Move(const int& NowAnimNumber,
 /// ジャンプ力計算
 /// </summary>
 /// <param name="velocity"></param>
-/// <param name="NowAnimNumber"></param>
+/// <param name="nowAnimNumber"></param>
 /// <param name="playerData"></param>
 /// <returns></returns>
-VECTOR PlayerCalculation::Jump(const VECTOR& velocity,const int& NowAnimNumber,
+VECTOR PlayerCalculation::Jump(const VECTOR& velocity,const int& nowAnimNumber,
     const PlayerData& playerData)
 {
     VECTOR newVelocity = velocity;
@@ -143,7 +143,7 @@ VECTOR PlayerCalculation::Jump(const VECTOR& velocity,const int& NowAnimNumber,
 /// </summary>
 /// <param name="velocity"></param>
 /// <param name="playerData"></param>
-VECTOR PlayerCalculation::Gravity(const VECTOR& velocity, 
+VECTOR PlayerCalculation::GravityUpdate(const VECTOR& velocity,
     const PlayerData& playerData)
 {
     VECTOR newVelocity = velocity;
@@ -156,8 +156,8 @@ VECTOR PlayerCalculation::Gravity(const VECTOR& velocity,
 
     newVelocity.y += gravityPower;
 
-    newVelocity.y += gravity;
-    gravityPower += gravity;
+    newVelocity.y += kGravity;
+    gravityPower += kGravity;
 
     return newVelocity;
 }
@@ -170,7 +170,7 @@ VECTOR PlayerCalculation::Gravity(const VECTOR& velocity,
 /// <param name="playAnimTime"></param>
 /// <param name="playerData"></param>
 /// <returns></returns>
-VECTOR PlayerCalculation::Roll(const int& NowAnimNumber, 
+VECTOR PlayerCalculation::Roll(const int& nowAnimNumber, 
     const VECTOR& velocity, 
     const VECTOR& moveDirection,
     const float playAnimTime,
@@ -191,7 +191,7 @@ VECTOR PlayerCalculation::Roll(const int& NowAnimNumber,
         }
 
         if (playAnimTime >= kMaxPlayAnimTime ||
-            NowAnimNumber != animNum::quickRoll)
+            nowAnimNumber != animNum::quickRoll)
         {
             newVelocity = VScale(velocity, kMaxRollMoveSpeed);
             nowMoveSpeed = kMaxRunSpeed;
@@ -211,7 +211,7 @@ VECTOR PlayerCalculation::RunWall(
     if (isAddJumpPower)
     {
         isStopRunWall = false;
-        WallRunStopTime = 0.0f;
+        wallRunStopTime = 0.0f;
         newVelocity.y = 0.0f;
         gravityPower = 0.0f;
 
@@ -231,9 +231,9 @@ VECTOR PlayerCalculation::RunWall(
     //少しの間留まる
     if (isStopRunWall)
     {
-        if (WallRunStopTime <= kWallRunMaxStopTime)
+        if (wallRunStopTime <= kWallRunMaxStopTime)
         {
-            WallRunStopTime++;
+            wallRunStopTime++;
             newVelocity.y = 0.0f;
             gravityPower = 0.0f;
         }
@@ -261,14 +261,16 @@ VECTOR PlayerCalculation::HangingAngle(const MV1_COLL_RESULT_POLY& hangingPoly)
 /// <summary>
 /// 掴まる場所計算
 /// </summary>
-/// <param name="handPos_left"></param>
-/// <param name="handPos_right"></param>
+/// <param name="leftHandPos"></param>
+/// <param name="RightHandPos"></param>
 /// <param name="nearestPoint"></param>
 /// <returns></returns>
 VECTOR PlayerCalculation::HangingPosition()
 {
-    VECTOR centerPos = VAdd(handPos_left, handPos_right);
-    centerPos = VScale(centerPos, 0.5f);
+    const float kHalfScale = 0.5f;
+
+    VECTOR centerPos = VAdd(leftHandPos, RightHandPos);
+    centerPos = VScale(centerPos, kHalfScale);
     
     VECTOR newPos = VSub(nearestResult.nearestPoint, centerPos);
     return newPos;
@@ -363,10 +365,8 @@ std::pair<bool, VECTOR> PlayerCalculation::GroundCollisionCheckHangToCrouch(
     const VECTOR& endRayPos,
     const VECTOR& position)
 {
+    const int kFrameIndex = -1;
     VECTOR bottomPos = VGet(startRayPos.x, endRayPos.y, startRayPos.z);
-    
-    //ごまかしで少し下にrayを伸ばす
-    bottomPos.y -= 5.0f;
 
     MV1_COLL_RESULT_POLY groundRayPoly;
     VECTOR newPosition = position;
@@ -378,7 +378,7 @@ std::pair<bool, VECTOR> PlayerCalculation::GroundCollisionCheckHangToCrouch(
         //rayが当たっていれば
         isWhenClimbingHitGround = HitCheck::RayHitJudge(
             collisionObject->GetModelHandle(),
-            -1, 
+            kFrameIndex,
             startRayPos,
             bottomPos,
             groundRayPoly);
@@ -513,7 +513,7 @@ void PlayerCalculation::ResetMove()
 
 void PlayerCalculation::ResetWallRun()
 {
-    WallRunStopTime = 0.0f;
+    wallRunStopTime = 0.0f;
     isStopRunWall = false;
 }
 

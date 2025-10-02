@@ -18,12 +18,12 @@ public:
 	void ResultUpdate()override;
 
 private:
-	static constexpr float velocity = 0.5f;
+	static constexpr float kVelocity = 0.5f;
 
 	bool isUp;
 	float moveAmount;
 	VECTOR moveDirection;
-	VECTOR position_Init;
+	VECTOR kInitPosition;
 	nlohmann::json stateData;
 };
 

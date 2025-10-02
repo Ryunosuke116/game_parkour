@@ -5,6 +5,7 @@
 #include <vector>
 
 class TitleObjectManager;
+class ObjectManager;
 
 class Title : public BaseScene
 {

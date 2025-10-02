@@ -11,7 +11,7 @@
 Coin::Coin():
 	BaseObject(),
 	radianY(0.0f),
-	velocity_Y(0.0f),
+	velocityY(0.0f),
 	flyAwayVelocity(VGet(0.0f, 0.0f, 0.0f)),
 	flyAwayDirection(VGet(0.0f, 0.0f, 0.0f)),
 	boundsMin(VGet(0.0f, 0.0f, 0.0f)),
@@ -55,7 +55,7 @@ void Coin::Initialize()
 	const VECTOR addAABB = VGet(kRadius, kRadius, kRadius);	//AABBの領域範囲
 
 	MV1SetPosition(modelHandle, position);
-	velocity_Y = 0.0f;
+	velocityY = 0.0f;
 	radianY = 0.0f;
 	isHitPlayer = false;
 	isDelete = false;
@@ -123,8 +123,11 @@ void Coin::ResultCreate()
 /// </summary>
 void Coin::ResultInitialize()
 {
-	flyAwayDirection = VGet(0.0f, 0.0f, 1.0f);
-	flyAwayVelocity = VGet(0.0f, 0.0f, 0.0f);
+	const VECTOR kInitFlyAwayDirection = VGet(0.0f, 0.0f, 1.0f);
+	const VECTOR kInitFlyAwayVelocity = VGet(0.0f, 0.0f, 0.0f);
+
+	flyAwayDirection = kInitFlyAwayDirection;
+	flyAwayVelocity = kInitFlyAwayVelocity;
 
 	flyAwayVelocity = VAdd(flyAwayVelocity, flyAwayDirection);
 	flyAwayVelocity.y += kFlyPower;
@@ -135,12 +138,13 @@ void Coin::ResultInitialize()
 /// </summary>
 void Coin::ResultUpdate()
 {
-	const float gravity = -0.2f;
+	const float kGravity = -0.2f;
+	const float kAddRadian = 20.0f;
 
 	position = VAdd(position, flyAwayVelocity);
-	flyAwayVelocity.y += gravity;
+	flyAwayVelocity.y += kGravity;
 
-	radianY += 20.0f;
+	radianY += kAddRadian;
 
 	//コインモデルを回転させる
 	if (radianY >= 360.0f)
@@ -148,7 +152,7 @@ void Coin::ResultUpdate()
 		radianY = 0.0f;
 	}
 
-	MV1SetRotationXYZ(modelHandle, VGet(0.0f, radianY * DX_PI_F / 180.0f, 0.0f));
+	MV1SetRotationXYZ(modelHandle, VGet(0.0f, (radianY * DX_PI_F / 180.0f), 0.0f));
 	MV1SetPosition(modelHandle, position);
 }
 
@@ -158,11 +162,11 @@ void Coin::ResultUpdate()
 /// <param name="playerPos"></param>
 void Coin::HitPlayerAction()
 {
-	const float maxVelocityY = 8.0f;
+	const float kMaxVelocityY = 8.0f;
 
-	if (velocity_Y <= maxVelocityY)
+	if (velocityY <= kMaxVelocityY)
 	{
-		velocity_Y += kAddVelocity;
+		velocityY += kAddVelocity;
 		position.y += kAddVelocity;
 	}
 	else
@@ -178,16 +182,16 @@ void Coin::HitPlayerAction()
 /// </summary>
 void Coin::Rotate()
 {
-	const float normalAddRadianY = 1.0f;
-	const float addRadianY = 20.0f;
+	const float kNormalAddRadianY = 1.0f;
+	const float kAddRadianY = 20.0f;
 
 	if (!isHitPlayer)
 	{
-		radianY += normalAddRadianY;
+		radianY += kNormalAddRadianY;
 	}
 	else
 	{
-		radianY += addRadianY;
+		radianY += kAddRadianY;
 	}
 
 	//コインモデルを回転させる
@@ -196,7 +200,7 @@ void Coin::Rotate()
 		radianY = 0.0f;
 	}
 
-	MV1SetRotationXYZ(modelHandle, VGet(0.0f, radianY * DX_PI_F / 180.0f, 0.0f));
+	MV1SetRotationXYZ(modelHandle, VGet(0.0f, (radianY * DX_PI_F / 180.0f), 0.0f));
 }
 
 /// <summary>

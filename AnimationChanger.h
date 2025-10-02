@@ -22,16 +22,16 @@ public:
 		PlayerData& playerData,
 		Player& player);
 
-	void ResultInitialize(const int& num, 
+	void ResultInitialize(const int num, 
 		const int modelHandle,
 		std::shared_ptr<PlayerStateBase>& nowState,
 		PlayerData& playerData,
 		Player& player);
 
-	int NowGetAnimNumber() { return NowAnimNumber; }
+	int NowGetAnimNumber() { return nowAnimNumber; }
 
 private:
-	int NowAnimNumber;
+	int nowAnimNumber;
 
 	std::unordered_map<int, std::shared_ptr<PlayerStateBase>> stateList;
 

@@ -341,8 +341,8 @@ void Player::CollisionUpdate()
     const VECTOR kRotatePosition = VAdd(position, faceDirection);
     const VECTOR kAddCenterPosition = VGet(0.0f, 10.0f, 0.0f);       //キャラの足もとから中心までの差
 
-    playerCalculation->SetHandPos_left(MV1GetFramePosition(modelHandle, left));
-    playerCalculation->SetHandPos_right(MV1GetFramePosition(modelHandle, right));
+    playerCalculation->SetLeftHandPos(MV1GetFramePosition(modelHandle, left));
+    playerCalculation->SetRightHandPos(MV1GetFramePosition(modelHandle, right));
     positionData.oldPosition = position;
 
     //床衝突判定用ray
@@ -358,7 +358,7 @@ void Player::CollisionUpdate()
         !playerData.isJump) ||
         playerData.isRoll)
     {
-        positionData.rayBottomPosition.y -= playerCalculation->GetMoveSpeed_now();
+        positionData.rayBottomPosition.y -= playerCalculation->GetNowMoveSpeed();
     }
 
     //キャラの横軸を求める

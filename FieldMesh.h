@@ -16,6 +16,7 @@ public:
 	void ResultInitialize()						override;
 	void ResultUpdate()							override;
 
+	void ChangeBlendParam(const int materialNum, const int blendParam);
 private:
 	bool isPoly;
 	bool isPush;

@@ -46,7 +46,7 @@ bool Victory::MotionUpdate(PlayerData& playerData)
     // ƒuƒŒƒ“ƒh—¦‚ª‚PˆÈ‰º‚Ìê‡‚Í‚P‚É‹ß‚Ã‚¯‚é
     if (animBlendRate < 1.0f)
     {
-        animBlendRate += AnimBlendSpeed;
+        animBlendRate += kAnimBlendSpeed;
         if (animBlendRate > 1.0f)
         {
             animBlendRate = 1.0f;

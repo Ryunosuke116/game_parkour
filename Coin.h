@@ -44,7 +44,7 @@ private:
 
 	int listNumber;
 	float radianY;
-	float velocity_Y;
+	float velocityY;
 
 	VECTOR flyAwayDirection;
 	VECTOR flyAwayVelocity;			//‚Á”ò‚Ô‚Æ‚«‚ÌˆÚ“®—Ê

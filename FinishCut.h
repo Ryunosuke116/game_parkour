@@ -18,12 +18,12 @@ public:
 
 private:
 	int finishHandle;
-	int x_finishGraph;
-	int y_finishGraph;
 
 	bool isDrawFinish;
 
 	float finishGraphTimer;				//スタート画像の挙動タイマー
+	float finishGraphPosX;
+	float finishGraphPosY;
 
 	std::string tag;
 	nlohmann::json	jsonData;
