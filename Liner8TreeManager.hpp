@@ -11,10 +11,10 @@
 #include "boundaryRange.h"
 #include "DebugDrawer.h"
 
-template <class T>
+template <class Type>
 class Liner8TreeManager :
 	public IObject,
-	public std::enable_shared_from_this<Liner8TreeManager<T>>
+	public std::enable_shared_from_this<Liner8TreeManager<Type>>
 {
 public:
 	virtual void Initialize()			override {}
@@ -33,7 +33,7 @@ public:
 	{
 		auto self = this->shared_from_this();
 
-		WorldSubSystem::GetInstance().AddSubSystem<Liner8TreeManager<T>>(self);
+		WorldSubSystem::GetInstance().AddSubSystem<Liner8TreeManager<Type>>(self);
 	}
 
 	/// <summary>
@@ -80,7 +80,7 @@ public:
 	/// <param name="wOFT"></param>
 	bool Regist(const VECTOR& objectMin,
 		const VECTOR& objectMax,
-		std::shared_ptr<ObjectForTree<T>>& spOFT)
+		std::shared_ptr<ObjectForTree<Type>>& spOFT)
 	{
 		//オブジェクトの境界範囲から登録モートン番号を算出
 		uint32_t spaceNumber = GetMortonNumber(objectMin, objectMax);
@@ -112,7 +112,7 @@ public:
 		while (cellArray.find(spaceNumber) == cellArray.end())
 		{
 			//指定の要素番号に空間を新規作成
-			cellArray[spaceNumber] = std::make_shared<Cell<T>>();
+			cellArray[spaceNumber] = std::make_shared<Cell<Type>>();
 
 			//親空間に移動
 			spaceNumber = (spaceNumber - 1) >> 3;
@@ -142,7 +142,7 @@ public:
 
 		uint32_t xorNumber = rightBottom ^ leftTop;
 		uint32_t spaceIndex = 0;
-		uint32_t shift = 0;
+		uint32_t shift = 0; 
 
 		//空間レベル数分、差があるかチェック
 		for (unsigned int i = 0; i < lowestLevel; i++)
@@ -230,12 +230,12 @@ public:
 			(BitSeparateFor3D(z) << 2);
 	}
 
-	std::shared_ptr<Cell<T>> GetCell(uint32_t spaceNumber)
+	std::shared_ptr<Cell<Type>> GetCell(uint32_t spaceNumber)
 	{
 		//空間がない場合は空を返す
 		if (cellArray.find(spaceNumber) == cellArray.end())
 		{
-			return std::shared_ptr<Cell<T>>();
+			return std::shared_ptr<Cell<Type>>();
 		}
 		return cellArray.at(spaceNumber);
 	}
@@ -264,7 +264,7 @@ public:
 	/// <param name="spaceNumber"></param>
 	/// <returns></returns>
 	uint32_t GetAllCollisionList(
-		std::vector<std::shared_ptr<ObjectForTree<T>>>& collisionList,
+		std::vector<std::shared_ptr<ObjectForTree<Type>>>& collisionList,
 		uint32_t spaceNumber)
 	{
 		//中身を初期化
@@ -304,11 +304,11 @@ public:
 	}
 
 	bool GetCollisionList(
-		std::vector<std::shared_ptr<ObjectForTree<T>>>& collisionList,
+		std::vector<std::shared_ptr<ObjectForTree<Type>>>& collisionList,
 		uint32_t spaceNumber)
 	{
 		//空間を検索
-		std::shared_ptr<Cell<T>> cell = GetCell(spaceNumber);
+		std::shared_ptr<Cell<Type>> cell = GetCell(spaceNumber);
 
 		//空間が存在しなければ抜ける
 		if (cell == nullptr)return false;
@@ -337,5 +337,5 @@ private:
 	uint32_t cellNumber;			//空間の数
 	unsigned int lowestLevel;		//最下位レベル
 
-	std::unordered_map <uint32_t, std::shared_ptr<Cell<T>>> cellArray;		//空間リスト
+	std::unordered_map <uint32_t, std::shared_ptr<Cell<Type>>> cellArray;		//空間リスト
 };

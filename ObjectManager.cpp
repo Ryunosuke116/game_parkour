@@ -8,15 +8,19 @@
 #include "BlackOut.h"
 #include "WorldSubSystem.h"
 #include "boundaryRange.h"
+#include "BackGround.h"
 
 /// <summary>
 /// コンストラクタ
 /// </summary>
 ObjectManager::ObjectManager() :
-	streamStartPictureTimer(-1),
-	streamFinishPictureTimer(-1),
+	streamStartPictureTimer(-1.0f),
+	streamFinishPictureTimer(-1.0f),
 	isStreamStartPicture(false),
-	isStreamFinishPicture(false)
+	isStreamFinishPicture(false),
+	isGoal(false),
+	isPush(false),
+	isCamera(false)
 {
 
 }
@@ -35,11 +39,11 @@ ObjectManager::~ObjectManager()
 void ObjectManager::Create()
 {
 	//vector型.atを使うとき用
-	const int cameraObjectNumber = 2;
-	const int shadowObjectNumber = 3;
-	const int coinManagerNumber = 5;
-	const int playerManagerNumber = 6;
-	const int uiManagerNumber = 7;
+	const int kCameraObjectNumber = 2;
+	const int kShadowObjectNumber = 3;
+	const int kCoinManagerNumber = 5;
+	const int kPlayerManagerNumber = 6;
+	const int kUiManagerNumber = 7;
 
 	//生成
 	//object生成
@@ -60,11 +64,11 @@ void ObjectManager::Create()
 	objects.push_back(std::make_shared<UIManager>());
 
 	//アップキャスト
-	actualCamera = std::dynamic_pointer_cast<Camera>(objects.at(cameraObjectNumber));
-	actualShadow = std::dynamic_pointer_cast<Shadow>(objects.at(shadowObjectNumber));
-	actualPlayerManager = std::dynamic_pointer_cast<PlayerManager>(objects.at(playerManagerNumber));
-	actualCoinManager = std::dynamic_pointer_cast<CoinManager>(objects.at(coinManagerNumber));
-	actualUiManager = std::dynamic_pointer_cast<UIManager>(objects.at(uiManagerNumber));
+	actualCamera = std::dynamic_pointer_cast<Camera>(objects.at(kCameraObjectNumber));
+	actualShadow = std::dynamic_pointer_cast<Shadow>(objects.at(kShadowObjectNumber));
+	actualPlayerManager = std::dynamic_pointer_cast<PlayerManager>(objects.at(kPlayerManagerNumber));
+	actualCoinManager = std::dynamic_pointer_cast<CoinManager>(objects.at(kCoinManagerNumber));
+	actualUiManager = std::dynamic_pointer_cast<UIManager>(objects.at(kUiManagerNumber));
 
 	//Jsonデータを取得
 	for (auto& object : objects)
@@ -74,10 +78,10 @@ void ObjectManager::Create()
 
 	//コインオブザーバーに追加
 	actualCoinManager->AddObserver(actualPlayerManager->GetPlayer());
-	actualCoinManager->AddObserver(actualUiManager->GetUI_coin());
+	actualCoinManager->AddObserver(actualUiManager->GetCoinUi());
 
 	//プレイヤーステートオブサーバーに追加
-	actualPlayerManager->AddObserver(actualUiManager->GetUI_controlManual());
+	actualPlayerManager->AddObserver(actualUiManager->GetControlManualUi());
 
 	//ロード
 	L8TreeManager->Create();
@@ -201,20 +205,21 @@ void ObjectManager::WhenDebugUpdate()
 
 void ObjectManager::StartUpdate()
 {
-	const int minAlpha = 0;
-	const int addAlpha = 5;
-	const float maxTimer = 50.0f;
+	const int kMinAlpha = 0;
+	const int kAddAlpha = 5;
+	const float kMaxTimer = 50.0f;
 
+	//画面の明転処理
 	if (BlackOut::GetInstance().GetIsLightChange())
 	{
-		BlackOut::GetInstance().LightChangeUpdate(addAlpha);
+		BlackOut::GetInstance().LightChangeUpdate(kAddAlpha);
 
-		BlackOut::GetInstance().GetAlpha() <= minAlpha ?
+		BlackOut::GetInstance().GetAlpha() <= kMinAlpha ?
 			BlackOut::GetInstance().SetIsLightChange(false) :
 			BlackOut::GetInstance().SetIsLightChange(true);
 	}
 
-	if (streamStartPictureTimer >= maxTimer)
+	if (streamStartPictureTimer >= kMaxTimer)
 	{
 		isStreamStartPicture = tutorial->Update();
 		streamStartPictureTimer++;
@@ -230,7 +235,7 @@ void ObjectManager::StartUpdate()
 	{
 		streamStartPictureTimer++;
 		actualShadow->Update();
-		actualPlayerManager->Update_start(streamStartPictureTimer);
+		actualPlayerManager->StartUpdate(streamStartPictureTimer);
 		actualCamera->Update();
 	}
 }
@@ -242,16 +247,16 @@ void ObjectManager::FinishUpdate()
 
 	if (BlackOut::GetInstance().GetIsLightChange())
 	{
-		const int maxAlpha = 300;
-		const int addAlpha = 5;
-		BlackOut::GetInstance().BlackOutUpdate(addAlpha);
+		const int kMaxAlpha = 300;
+		const int kAddAlpha = 5;
+		BlackOut::GetInstance().BlackOutUpdate(kAddAlpha);
 
-		BlackOut::GetInstance().GetAlpha() >= maxAlpha ?
+		BlackOut::GetInstance().GetAlpha() >= kMaxAlpha ?
 			isGoal = true :
 			isGoal = false;
 	}
 
-	actualPlayerManager->Update_finish(streamStartPictureTimer);
+	actualPlayerManager->FinishUpdate(streamStartPictureTimer);
 	actualCamera->Update();
 	if (isGoal)
 	{
@@ -316,9 +321,48 @@ void ObjectManager::tutorialDraw()
 	}
 }
 
+void ObjectManager::TitleCreate()
+{
+	//-----------------------------------------//
+	// 2D描画するobjectを追加する場合
+	// 先に描画したい順にリストに追加する
+	//----------------------------------------//
+
+	objects.push_back(std::make_shared<BackGround>());
+
+	for (auto& object : objects)
+	{
+		object->Create();
+	}
+}
+
+void ObjectManager::TitleInitilize()
+{
+	for (auto& object : objects)
+	{
+		object->Initialize();
+	}
+}
+
+void ObjectManager::TitleUpdate()
+{
+	for (auto& object : objects)
+	{
+		object->Update();
+	}
+}
+
+void ObjectManager::TitleDraw()
+{
+	for (auto& object : objects)
+	{
+		object->Draw();
+	}
+}
+
 void ObjectManager::ResultCreate(int coinCount)
 {
-	const int shadowObjectNumber = 3;
+	const int kShadowObjectNumber = 3;
 
 	//生成
 	//object生成
@@ -333,7 +377,7 @@ void ObjectManager::ResultCreate(int coinCount)
 	objects.push_back(std::make_shared<UIManager>());
 
 	//アップキャスト
-	actualShadow = std::dynamic_pointer_cast<Shadow>(objects.at(shadowObjectNumber));
+	actualShadow = std::dynamic_pointer_cast<Shadow>(objects.at(kShadowObjectNumber));
 
 	//ロード
 	for (auto& object : objects)
@@ -360,11 +404,11 @@ void ObjectManager::ResultUpdate()
 {
  	if (BlackOut::GetInstance().GetIsLightChange())
 	{
-		const int minAlpha = 0;
-		const int addAlpha = 5;
-		BlackOut::GetInstance().LightChangeUpdate(addAlpha);
+		const int kMinAlpha = 0;
+		const int kAddAlpha = 5;
+		BlackOut::GetInstance().LightChangeUpdate(kAddAlpha);
 
-		BlackOut::GetInstance().GetAlpha() <= minAlpha ?
+		BlackOut::GetInstance().GetAlpha() <= kMinAlpha ?
 			BlackOut::GetInstance().SetIsLightChange(false) :
 			BlackOut::GetInstance().SetIsLightChange(true);
 	}

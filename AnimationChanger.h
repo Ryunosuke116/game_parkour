@@ -28,7 +28,7 @@ public:
 		PlayerData& playerData,
 		Player& player);
 
-	int GetAnimNumber_now() { return NowAnimNumber; }
+	int NowGetAnimNumber() { return NowAnimNumber; }
 
 private:
 	int NowAnimNumber;

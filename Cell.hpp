@@ -4,15 +4,15 @@
 #include <vector>
 #include "ObjectForTree.hpp"
 
-template<class T>
-class Cell : public std::enable_shared_from_this<Cell<T>>
+template<class Type>
+class Cell : public std::enable_shared_from_this<Cell<Type>>
 {
 public:
 	/// <summary>
 	/// オブジェクトを空間に登録
 	/// </summary>
 	/// <param name="wOFT"></param>
-	bool Push(std::shared_ptr<ObjectForTree<T>>& spOFT)
+	bool Push(std::shared_ptr<ObjectForTree<Type>>& spOFT)
 	{
 		//無効なオブジェクトは登録しない
 		if (spOFT.get() == NULL)return false;
@@ -37,8 +37,8 @@ public:
 	/// </summary>
 	/// <param name="RemoveObject"></param>
 	/// <returns></returns>
-	std::vector<std::shared_ptr<ObjectForTree<T>>>::iterator OnRemove(
-		std::vector<std::shared_ptr<ObjectForTree<T>>>::iterator& RemoveObject)
+	std::vector<std::shared_ptr<ObjectForTree<Type>>>::iterator OnRemove(
+		std::vector<std::shared_ptr<ObjectForTree<Type>>>::iterator& RemoveObject)
 	{
 		if (RemoveObject != objectList.end())
 		{
@@ -47,9 +47,9 @@ public:
 		return ++RemoveObject;
 	}
 
-	std::vector<std::shared_ptr<ObjectForTree<T>>>& GetObjectList() { return objectList; }
+	std::vector<std::shared_ptr<ObjectForTree<Type>>>& GetObjectList() { return objectList; }
 
 private:
-	std::vector<std::shared_ptr<ObjectForTree<T>>> objectList;
+	std::vector<std::shared_ptr<ObjectForTree<Type>>> objectList;
 };
 

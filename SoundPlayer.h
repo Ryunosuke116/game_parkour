@@ -6,7 +6,6 @@ class SoundPlayer :
 	public IWorldSubSystem
 {
 public:
-
 	SoundPlayer();
 	~SoundPlayer();
 

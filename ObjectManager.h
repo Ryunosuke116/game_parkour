@@ -31,6 +31,11 @@ public:
 	void ResultUpdate();
 	void ResultDraw();
 
+	void TitleCreate();
+	void TitleInitilize();
+	void TitleUpdate();
+	void TitleDraw();
+
 	bool GetIsGoal() { return isGoal; }
 	int GetCoinCount() { return actualPlayerManager->GetCoinCount(); }
 

@@ -14,16 +14,16 @@ UIManager::UIManager() :
 
 UIManager::~UIManager()
 {
-	ui_list.clear();
+	uiList.clear();
 }
 
 void UIManager::Create()
 {
-	Add(std::make_shared<UI_coin>());
+	Add(std::make_shared<CoinUi>());
 	Add(std::make_shared<UI_controlManual>());
 	Add(std::make_shared<GameTimer>());
 
-	for (auto& UI : ui_list)
+	for (auto& UI : uiList)
 	{
 		UI->Create();
 	}
@@ -31,7 +31,7 @@ void UIManager::Create()
 
 void UIManager::Initialize()
 {
-	for (auto& UI : ui_list)
+	for (auto& UI : uiList)
 	{
 		UI->Initialize();
 	}
@@ -39,7 +39,7 @@ void UIManager::Initialize()
 
 void UIManager::Update()
 {
-	for (auto& UI : ui_list)
+	for (auto& UI : uiList)
 	{
 		UI->Update();
 	}
@@ -47,7 +47,7 @@ void UIManager::Update()
 
 void UIManager::Draw()
 {
-	for (auto& UI : ui_list)
+	for (auto& UI : uiList)
 	{
 		UI->Draw();
 	}
@@ -55,7 +55,7 @@ void UIManager::Draw()
 
 void UIManager::Add(std::shared_ptr<BaseUI> ui)
 {
-	ui_list.push_back(ui);
+	uiList.push_back(ui);
 }
 
 
@@ -66,12 +66,12 @@ void UIManager::Add(std::shared_ptr<BaseUI> ui)
 void UIManager::ResultCreate(const int coinCount)
 {
 	ResultAdd(std::make_shared<Rank>());
-	ResultAdd(std::make_shared<UI_coin>());
+	ResultAdd(std::make_shared<CoinUi>());
 	ResultAdd(std::make_shared<UIButton>());
 
-	for (auto& UI : ui_list)
+	for (auto& UI : uiList)
 	{
-		if (auto ui_coin = std::dynamic_pointer_cast<UI_coin>(UI))
+		if (auto ui_coin = std::dynamic_pointer_cast<CoinUi>(UI))
 		{
 			ui_coin->ResultCreate(coinCount);
 			continue;
@@ -91,15 +91,8 @@ void UIManager::ResultCreate(const int coinCount)
 /// </summary>
 void UIManager::ResultInitialize()
 {
-	const int coin_x = 30;
-	const int coin_y = 700;
-
-	for (auto& UI : ui_list)
+	for (auto& UI : uiList)
 	{
-		if (auto ui_coin = std::dynamic_pointer_cast<UI_coin>(UI))
-		{
-			ui_coin->SetCoinPos(coin_x, coin_y);
-		}
 		UI->ResultInitialize();
 	}
 }
@@ -109,7 +102,7 @@ void UIManager::ResultInitialize()
 /// </summary>
 void UIManager::ResultUpdate()
 {
-	for (auto& UI : ui_list)
+	for (auto& UI : uiList)
 	{
 		UI->ResultUpdate();
 	}
@@ -117,5 +110,5 @@ void UIManager::ResultUpdate()
 
 void UIManager::ResultAdd(std::shared_ptr<BaseUI> ui)
 {
-	ui_list.push_back(ui);
+	uiList.push_back(ui);
 }

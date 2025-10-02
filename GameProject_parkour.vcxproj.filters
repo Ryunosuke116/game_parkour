@@ -148,9 +148,6 @@
     <Filter Include="ソース ファイル\object\title">
       <UniqueIdentifier>{eafa151f-6c0c-49da-86c7-21684ba99c08}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\manager\titleObject">
-      <UniqueIdentifier>{86db2449-6857-4868-bb9c-85341c620c2c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\object\title\BackGround">
       <UniqueIdentifier>{a1095ea5-ed9a-4e84-a18c-e10cf39144f8}</UniqueIdentifier>
     </Filter>
@@ -369,7 +366,7 @@
     <ClCompile Include="BaseUI.cpp">
       <Filter>ソース ファイル\Base\UI</Filter>
     </ClCompile>
-    <ClCompile Include="UI_coin.cpp">
+    <ClCompile Include="CoinUi.cpp">
       <Filter>ソース ファイル\object\game\UI\coin</Filter>
     </ClCompile>
     <ClCompile Include="UIManager.cpp">
@@ -404,9 +401,6 @@
     </ClCompile>
     <ClCompile Include="CollisionObjectManager.cpp">
       <Filter>ソース ファイル\manager\CollisionObjectManager</Filter>
-    </ClCompile>
-    <ClCompile Include="TitleObjectManager.cpp">
-      <Filter>ソース ファイル\manager\titleObject</Filter>
     </ClCompile>
     <ClCompile Include="BackGround.cpp">
       <Filter>ソース ファイル\object\title\BackGround</Filter>
@@ -527,9 +521,6 @@
     <ClInclude Include="JsonManager.h">
       <Filter>ソース ファイル\static\json</Filter>
     </ClInclude>
-    <ClInclude Include="IObjectManager.h">
-      <Filter>ソース ファイル\Interface</Filter>
-    </ClInclude>
     <ClInclude Include="BaseGameObjectManager.h">
       <Filter>ソース ファイル\Base\ObjectManger</Filter>
     </ClInclude>
@@ -584,7 +575,7 @@
     <ClInclude Include="BaseUI.h">
       <Filter>ソース ファイル\Base\UI</Filter>
     </ClInclude>
-    <ClInclude Include="UI_coin.h">
+    <ClInclude Include="CoinUi.h">
       <Filter>ソース ファイル\object\game\UI\coin</Filter>
     </ClInclude>
     <ClInclude Include="UIManager.h">
@@ -628,9 +619,6 @@
     </ClInclude>
     <ClInclude Include="CollisionObjectManager.h">
       <Filter>ソース ファイル\manager\CollisionObjectManager</Filter>
-    </ClInclude>
-    <ClInclude Include="TitleObjectManager.h">
-      <Filter>ソース ファイル\manager\titleObject</Filter>
     </ClInclude>
     <ClInclude Include="BackGround.h">
       <Filter>ソース ファイル\object\title\BackGround</Filter>

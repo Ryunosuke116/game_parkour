@@ -1,10 +1,10 @@
 #include "common.h"
 #include <algorithm>
-#include "UI_coin.h"
+#include "CoinUi.h"
 #include "JsonManager.h"
 #include "Calculation.h"
 
-UI_coin::UI_coin() :
+CoinUi::CoinUi() :
 	BaseUI(),
 	coinHandle(-1),
 	crossHandle(-1),
@@ -19,7 +19,7 @@ UI_coin::UI_coin() :
 	jsonTag = "coin";
 }
 
-UI_coin::~UI_coin()
+CoinUi::~CoinUi()
 {
 	for (auto& numberHandle : numberHandle)
 	{
@@ -29,7 +29,7 @@ UI_coin::~UI_coin()
 	DeleteGraph(crossHandle);
 }
 
-void UI_coin::Load(const nlohmann::json& jsonData)
+void CoinUi::Load(const nlohmann::json& jsonData)
 {
 	std::unordered_map<std::string, std::string> uiPath;
 
@@ -47,7 +47,7 @@ void UI_coin::Load(const nlohmann::json& jsonData)
 		10, 10, 1, 480, 500, numberHandle);
 }
 
-void UI_coin::Create()
+void CoinUi::Create()
 {
 	Load(JsonManager::GetInstance().GetJsons("png"));
 }
@@ -55,7 +55,7 @@ void UI_coin::Create()
 /// <summary>
 /// 初期化
 /// </summary>
-void UI_coin::Initialize()
+void CoinUi::Initialize()
 {
 	//描画位置
 	const float InitCoinPosX = -480.0f;
@@ -85,7 +85,7 @@ void UI_coin::Initialize()
 	coinCount = 0;
 }
 
-void UI_coin::Update()
+void CoinUi::Update()
 {
 	countNumber = std::to_string(coinCount);
 
@@ -104,7 +104,7 @@ void UI_coin::Update()
 	numberPosX = Calculation::Leap(numberPosX, targetNumberX, 0.1f);
 }
 
-void UI_coin::Draw()
+void CoinUi::Draw()
 {
 	//コインイラスト描画
 	DrawExtendGraphF(coinPosX, coinPosY,
@@ -135,7 +135,7 @@ void UI_coin::Draw()
 /// リザルトシーン時の生成
 /// </summary>
 /// <param name="coinCount"></param>
-void UI_coin::ResultCreate(const int coinCount)
+void CoinUi::ResultCreate(const int coinCount)
 {
 	this->coinCount = coinCount;
 	Load(JsonManager::GetInstance().GetJsons("png"));
@@ -144,7 +144,7 @@ void UI_coin::ResultCreate(const int coinCount)
 /// <summary>
 /// リザルトシーン時の初期化
 /// </summary>
-void UI_coin::ResultInitialize()
+void CoinUi::ResultInitialize()
 {
 	const float InitCoinPosX = 1800.0f;
 	const float InitCoinPosY = 630.0f;
@@ -180,7 +180,7 @@ void UI_coin::ResultInitialize()
 /// <summary>
 /// リザルトシーン時の更新処理
 /// </summary>
-void UI_coin::ResultUpdate()
+void CoinUi::ResultUpdate()
 {
 	const float kTargetCoinPosX = 960.0f;
 	const float kTargetCrossX = 1165.0f;

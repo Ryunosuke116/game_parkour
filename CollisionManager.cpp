@@ -20,7 +20,7 @@ void CollisionManager::Update(
 	if (chara.GetIsCollisionCheck())
 	{
 		chara.SetResultCollision(
-			Check_all(WorldSubSystem::GetInstance().GetSubSystem<CollisionObjectManager>()->GetCollisionObjects(),
+			AllCheck(WorldSubSystem::GetInstance().GetSubSystem<CollisionObjectManager>()->GetCollisionObjects(),
 				chara.GetPosition(),
 				chara.GetVelocity(),
 				chara.GetRadius(),
@@ -37,7 +37,7 @@ void CollisionManager::Update(
 /// <param name="charaRadius"></param>
 /// <param name="charaPositionData"></param>
 /// <returns></returns>
-CollisionResult CollisionManager::Check_all(
+CollisionResult CollisionManager::AllCheck(
 	const std::vector<std::weak_ptr<BaseObject>>& wpCollisionObjects,
 	const VECTOR& playerPos,
 	const VECTOR& charaVelocity,
@@ -49,12 +49,7 @@ CollisionResult CollisionManager::Check_all(
 	VECTOR newPosition = VAdd(oldPosition, charaVelocity);
 
 	bool isCalc = nowGroundRayPoly.HitFlag;
-	const float headRadius = 2.0f;
-
-	VECTOR projection_ray_start = newPosition;
-	VECTOR projection_ray_end = VAdd(newPosition, VScale(VNorm(charaVelocity), 20.0f));
-
-	DebugDrawer::GetInstance().InformationInput_line(projection_ray_start, projection_ray_end, GetColor(255, 0, 255));
+	const float kHeadRadius = 2.0f;
 
 	CollisionResult collisionResult;
 	collisionResult.newPosition = newPosition;
@@ -75,7 +70,7 @@ CollisionResult CollisionManager::Check_all(
 		collisionResult.newPosition,
 		charaVelocity,
 		charaPositionData,
-		headRadius);
+		kHeadRadius);
 
 	//床衝突判定
 	collisionResult = GroundCollisionCheck(
@@ -285,11 +280,13 @@ VECTOR CollisionManager::WallCollisionCheck(
 	const PositionData& charaPositionData,
 	const float& charaRadius)
 {
+	const float kReviseBottomPosY = 1.0f;
+
 	VECTOR newTopPosition = VAdd(charaPositionData.capsuleTopPosition, charaVelocity);
 	VECTOR newBottomPosition = VAdd(charaPositionData.capsuleBottomPosition, charaVelocity);
 
 	//ちょっとした段差を壁として扱わないように座標を調整
-	newBottomPosition.y += 1.0f;
+	newBottomPosition.y += kReviseBottomPosY;
 	
 	//カプセルの軸
 	VECTOR topCapsuleAxis = VAdd(charaPositionData.rayTopPosition, charaVelocity);
@@ -412,9 +409,10 @@ VECTOR CollisionManager::WallGroundCollisionCheck(
 {
 	bool isHitGround = false;
 	bool returnFlag = false;
-	const float reverseScale = -1.0f;		//方向ベクトル反転用
-	const float extendRayScale = 15.0f;		//rayの大きさ
-	const VECTOR gravityForWallRun = VScale(gravityDirection, reverseScale);
+	const float kReverseScale = -1.0f;		//方向ベクトル反転用
+	const float kExtendRayScale = 15.0f;		//rayの大きさ
+	const int kFrameIndex = -1;
+	const VECTOR gravityForWallRun = VScale(gravityDirection, kReverseScale);
 	std::string returnTag = "";
 
 	//ray開始を少しずらさないと壁に埋まって反応しないためずらす
@@ -423,7 +421,7 @@ VECTOR CollisionManager::WallGroundCollisionCheck(
 		charaPositionData.capsuleBottomPosition.y,
 		charaPositionData.centerPosition.z);
 
-	VECTOR rayEndPosition = VAdd(rayStartPosition, VScale(gravityForWallRun, extendRayScale));
+	VECTOR rayEndPosition = VAdd(rayStartPosition, VScale(gravityForWallRun, kExtendRayScale));
 
 	VECTOR returnNewPos = newPosition;
 	VECTOR HitWallPlayerPosition = VAdd(newPosition, VScale(gravityForWallRun, charaRadius));
@@ -437,7 +435,7 @@ VECTOR CollisionManager::WallGroundCollisionCheck(
 		//rayが当たっていれば
 		isHitGround = HitCheck::RayHitJudge(
 			collisionObject->GetModelHandle(),
-			-1,
+			kFrameIndex,
 			rayStartPosition,
 			rayEndPosition,
 			groundRayPoly);
@@ -465,40 +463,4 @@ VECTOR CollisionManager::WallGroundCollisionCheck(
 
 	//接地しているか
 	return returnNewPos;
-}
-
-/// <summary>
-/// 描画
-/// </summary>
-bool CollisionManager::Draw()
-{
-	//printfDx("NormalPos.y %f\n", subPos.y);
-	//printfDx("NormalPos_Wall.x %f\n", normal.x);
-	//printfDx("NormalPos_Wall.z %f\n", normal.z);
-	//printfDx("hitPos_ground.x %f\n", hitPos_ground.x);
-	//printfDx("hitPos_ground.y %f\n", hitPos_ground.y);
-	//printfDx("hitPos_ground.z %f\n", hitPos_ground.z);
-
-	/*printfDx("tiltAngleDegree %f\n", tiltAngleDegree);*/
-
-	/*DrawSphere3D(hitPos_ground, 2.0f, 30, GetColor(0, 0, 0),
-		GetColor(255, 0, 0), FALSE);
-
-	DrawSphere3D(hitPos_head, 2.0f, 30, GetColor(0, 0, 0),
-		GetColor(0, 0, 255), FALSE);
-	DrawSphere3D(hitHangingPos, 2.0f, 30, GetColor(0, 0, 0),
-		GetColor(0, 255, 0), FALSE);*/
-
-	/*DrawSphere3D(projection_ray_start, 2.0f, 30, GetColor(0, 0, 0),
-		GetColor(0, 255, 0), FALSE);
-
-	DrawSphere3D(projection_ray_end, 2.0f, 30, GetColor(0, 0, 0),
-		GetColor(0, 255, 0), FALSE);*/
-
-	/*DrawLine3D(topPos_ray, bottomPos_ray, GetColor(255, 0, 0));
-	DrawLine3D(ray_start_hanging_log, ray_end_hanging_log, GetColor(0, 255, 0));
-
-	DrawLine3D(pos_now, pos_new, GetColor(0, 0, 255));
-	DrawLine3D(projection_ray_start, projection_ray_end, GetColor(255, 0, 255));*/
-	return true;
 }

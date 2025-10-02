@@ -22,6 +22,6 @@ private:
 	int backGroundHandle;
 	int alpha;
 
-	int addAlpha;
+	int kAddAlpha;
 };
 

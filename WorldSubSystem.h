@@ -12,18 +12,18 @@ class WorldSubSystem
 public:
 	static WorldSubSystem& GetInstance();
 
-	template <typename T>
-	void AddSubSystem(const std::shared_ptr<T>& system)
+	template <typename Type>
+	void AddSubSystem(const std::shared_ptr<Type>& system)
 	{
-		static_assert(std::is_base_of<IObject, T>::value, "TはIObjectクラスではありません");
+		static_assert(std::is_base_of<IObject, Type>::value, "TypeはIObjectクラスではありません");
 
-		subSystems[typeid(T)] = system;
+		subSystems[typeid(Type)] = system;
 	}
 
-	template<typename T>
-	std::shared_ptr<T> GetSubSystem() const
+	template<typename Type>
+	std::shared_ptr<Type> GetSubSystem() const
 	{
-		auto it = subSystems.find(typeid(T));
+		auto it = subSystems.find(typeid(Type));
 
 		if (it == subSystems.end())
 		{
@@ -32,7 +32,7 @@ public:
 
 		if (auto object = it->second.lock())
 		{
-			return std::dynamic_pointer_cast<T>(object);
+			return std::dynamic_pointer_cast<Type>(object);
 		}
 
 		return nullptr;

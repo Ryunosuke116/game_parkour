@@ -2,13 +2,13 @@
 #include "BaseUI.h"
 #include "CoinObserver.h"
 
-class UI_coin :
+class CoinUi :
 	public BaseUI,
 	public CoinObserver
 {
 public:
-	UI_coin();
-	~UI_coin();
+	CoinUi();
+	~CoinUi();
 
 	void Create()override;
 	void Add()override{}
@@ -22,8 +22,6 @@ public:
 
 	void ResultCreate(const int coinCount);
 	void OnCoinPicked(int amount)override { coinCount += amount; }
-	void SetCoinPos(int set_x, int set_y) { x = set_x, y = set_y; }
-
 private:
 	int coinHandle;
 	int numberHandle[10];
@@ -44,8 +42,5 @@ private:
 	float numberHeight;
 	float addNumberX;
 	std::string countNumber;
-
-
-
 };
 

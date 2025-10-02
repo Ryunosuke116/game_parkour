@@ -1,6 +1,5 @@
 #pragma once
 #include "BaseGameObjectManager.h"
-#include "HitCheck.h"
 #include "PlayerStateObserver.h"
 #include "BaseChara.h"
 
@@ -17,8 +16,8 @@ public:
 	PlayerManager();
 	~PlayerManager();
 
-	void Update_start(const float& timer);
-	void Update_finish(const float& timer);
+	void StartUpdate(const float& timer);
+	void FinishUpdate(const float& timer);
 
 	void Create()		override;
 	void Initialize()	override;
@@ -29,7 +28,6 @@ public:
 	void ResultInitialize()override;
 	void ResultUpdate()override;
 
-	void StateConfirmation();
 
 	//ƒQƒbƒ^[
 	VECTOR GetPosition()const { return player->GetPosition(); }
@@ -42,6 +40,9 @@ public:
 	void AddObserver(std::shared_ptr<PlayerStateObserver> observer) { observers.push_back(observer); }
 	void RemoveObserver(std::shared_ptr<PlayerStateObserver> observer);
 	void NotifyStateChanged(const PlayerData& playerData);
+private:
+	void TransparencyUpdate();
+	void StateConfirmation();
 
 private:
 	std::shared_ptr<CollisionManager> collisionManager;
@@ -49,6 +50,6 @@ private:
 
 	std::shared_ptr<BaseChara> player = NULL;
 	std::shared_ptr<Player> actualPlayer = NULL;
-	PlayerData now_playerData;
+	PlayerData nowPlayerData;
 };
 

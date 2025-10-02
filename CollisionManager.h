@@ -27,7 +27,7 @@ public:
 		const VECTOR& subjectPos, const VECTOR& velocity, const PositionData& positionData,
 		const float& radius);
 
-	CollisionResult Check_all(const std::vector<std::weak_ptr<BaseObject>>& collisionObjects,
+	CollisionResult AllCheck(const std::vector<std::weak_ptr<BaseObject>>& collisionObjects,
 		const VECTOR& playerPos, const VECTOR& velocity, const float& radius,
 		const PositionData& positionData, const PlayerData& playerData);
 
@@ -44,8 +44,6 @@ public:
 		const PositionData& positionData);
 
 	float GetTiltAngle_degree()const { return tiltAngleDegree; }
-
-	bool Draw();
 private:
 	MV1_COLL_RESULT_POLY hitPoly_Ground;
 	MV1_COLL_RESULT_POLY nowGroundRayPoly;

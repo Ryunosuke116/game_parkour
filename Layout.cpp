@@ -19,8 +19,10 @@ Layout::~Layout()
 
 void Layout::Initialize(const int& modelHandle)
 {
+	const VECTOR kMoedlScale = VGet(0.3f, 0.3f, 0.3f);
+
 	this->modelHandle = MV1DuplicateModel(modelHandle);
-	MV1SetScale(this->modelHandle, VGet(0.3f, 0.3f, 0.3f));
+	MV1SetScale(this->modelHandle, kMoedlScale);
 }
 
 void Layout::Update(const VECTOR& pos,
@@ -28,7 +30,6 @@ void Layout::Update(const VECTOR& pos,
 {
 	MV1SetPosition(modelHandle, pos);
 	DebugDrawer::GetInstance().InformationInput_string_VECTOR("position x %f  y %f  z %f\n", pos);
-
 
 	if (CheckHitKey(KEY_INPUT_SPACE) ||
 		PadInput::IsPush_A())
@@ -49,10 +50,12 @@ void Layout::Update(const VECTOR& pos,
 
 void Layout::Draw()
 {
+	const int kMaxAlpha = 255;
+	const int kMinAlpha = 0;
 	// マテリアルのブレンドパラメータを 128 に変更する
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, kMaxAlpha);
 	MV1DrawModel(modelHandle);
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA,0);
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, kMinAlpha);
 }
 
 void Layout::InputFile(const VECTOR& inputPosition)

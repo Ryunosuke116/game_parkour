@@ -1,7 +1,7 @@
 #include "common.h"
 #include "SceneManager.h"
 #include "BaseScene.h"
-#include "TitleObjectManager.h"
+#include "ObjectManager.h"
 #include "Title.h"
 #include "PadInput.h"
 #include "JsonManager.h"
@@ -37,12 +37,12 @@ void Title::Create()
 
     const std::string jsonFileName = "JsonTitle";
 
-    objectManager = std::make_shared<TitleObjectManager>();
+    objectManager = std::make_shared<ObjectManager>();
 
     JsonManager::GetInstance().Create(jsonFileName);
     GameInstanceSubSystem::GetInstance().Load(jsonFileName);
 
-    objectManager->Create();
+    objectManager->TitleCreate();
 }
 
 /// <summary>
@@ -54,7 +54,7 @@ void Title::Initialize()
 	BlackOut::GetInstance().Initialize();
 	isPush = false;
     soundPlayer->Play("titleBGM");
-    objectManager->Initialize();
+    objectManager->TitleInitilize();
 }
 
 /// <summary>
@@ -62,13 +62,13 @@ void Title::Initialize()
 /// </summary>
 void Title::Update()
 {
-    const int addAlpha = 5;
-    const int maxAlpha = 300;
+    const int kAddAlpha = 5;
+    const int kMaxAlpha = 300;
     const auto soundPlayer = GameInstanceSubSystem::GetInstance().GetSubSystem<SoundPlayer>().lock();
 
     PadInput::Update();
 
-    objectManager->Update();
+    objectManager->TitleUpdate();
 
     if (PadInput::IsPush_A() && !isPush)
     {
@@ -78,8 +78,8 @@ void Title::Update()
 
     if (isPush)
     {
-        BlackOut::GetInstance().BlackOutUpdate(addAlpha);
-        if (BlackOut::GetInstance().GetAlpha() >= maxAlpha)
+        BlackOut::GetInstance().BlackOutUpdate(kAddAlpha);
+        if (BlackOut::GetInstance().GetAlpha() >= kMaxAlpha)
         {
             BlackOut::GetInstance().SetIsLightChange(true);
             soundPlayer->Stop("titleBGM");
@@ -90,6 +90,6 @@ void Title::Update()
 
 void Title::Draw()
 {
-    objectManager->Draw();
+    objectManager->TitleDraw();
     BlackOut::GetInstance().Draw();
 }

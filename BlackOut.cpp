@@ -19,29 +19,29 @@ void BlackOut::Initialize()
 
 void BlackOut::ResultInitialize()
 {
-    alpha = maxAlpha;
+    alpha = kMaxAlpha;
     isLightChange = true;
 }
 
 /// <summary>
 /// ˆÃ“]
 /// </summary>
-void BlackOut::BlackOutUpdate(int addAlpha)
+void BlackOut::BlackOutUpdate(int kAddAlpha)
 {
-    if (!(alpha >= maxAlpha))
+    if (!(alpha >= kMaxAlpha))
     {
-        alpha += addAlpha;
+        alpha += kAddAlpha;
     }
 }
 
 /// <summary>
 /// –¾“]
 /// </summary>
-void BlackOut::LightChangeUpdate(int addAlpha)
+void BlackOut::LightChangeUpdate(int kAddAlpha)
 {
     if (!(alpha <= 0))
     {
-        alpha -= addAlpha;
+        alpha -= kAddAlpha;
     }
 }
 

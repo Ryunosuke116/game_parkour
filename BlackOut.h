@@ -8,8 +8,8 @@ public:
 
     void Initialize();
     void ResultInitialize();
-    void BlackOutUpdate(int addAlpha);
-    void LightChangeUpdate(int addAlpha);
+    void BlackOutUpdate(int kAddAlpha);
+    void LightChangeUpdate(int kAddAlpha);
     void Draw();
 
     void SetAlpha(int setAlpha) { alpha = setAlpha; }
@@ -24,5 +24,5 @@ private:
     BlackOut() = default;
     ~BlackOut() = default;
 
-    static constexpr int maxAlpha = 300;
+    static constexpr int kMaxAlpha = 300;
 };

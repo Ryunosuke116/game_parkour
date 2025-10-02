@@ -1,5 +1,7 @@
 #pragma once
 #include "IObject.h"
+#include "nlohmann/json.hpp"
+#include <string>
 
 class BaseUI : public IObject
 {
@@ -10,11 +12,7 @@ public:
 	std::string GetJsonTag() { return jsonTag; }
 	virtual void Add()									abstract;
 	virtual void Load(const nlohmann::json& jsonData)	abstract;
-
 protected:
-	int x;
-	int y;
 	std::string jsonTag;
-
 };
 

@@ -32,16 +32,16 @@ void BackGround::Initialize()
 	startButtonX = 350;
 	startButtonY = 650;
 	alpha = 254;
-	addAlpha = 2;
+	kAddAlpha = 2;
 }
 
 void BackGround::Update()
 {
-	alpha += addAlpha;
+	alpha += kAddAlpha;
 
 	if (alpha <= 0 || alpha >= 255)
 	{
-		addAlpha = -addAlpha;
+		kAddAlpha = -kAddAlpha;
 	}
 }
 

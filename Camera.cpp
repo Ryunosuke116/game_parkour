@@ -121,8 +121,6 @@ void Camera::Update()
 
 	cameraDirection = VSub(screenCenterPosition, cameraPosition);
 	cameraDirection = VNorm(cameraDirection);
-
-	//DebugDrawer::GetInstance().InformationInput_sphere(screenCenterPosition, 3.5f, GetColor(255, 0, 255));
 }
 
 /// <summary>
@@ -131,12 +129,13 @@ void Camera::Update()
 /// <param name="timer"></param>
 /// <param name="playerPosition"></param>
 /// <param name="angle_player"></param>
-void Camera::Update_start(const float& timer,
+void Camera::StartUpdate(const float& timer,
 	const VECTOR& playerPosition,
 	const float& angle_player)
 {
+	const float kAddCenterPointSpherePosY = 15.0f;
 	centerPointSpherePos = playerPosition;
-	centerPointSpherePos.y += 15.0f;
+	centerPointSpherePos.y += kAddCenterPointSpherePosY;
 
 	DistanceUpdate();
 
@@ -286,16 +285,6 @@ void Camera::LayOutUpdate()
 /// </summary>
 void Camera::Draw()
 {
-
-	/*DrawSphere3D(screenCenterPosition, radius, 30, GetColor(0, 0, 0),
-		    GetColor(255, 0, 0), FALSE);*/
-
-	//printfDx("screenCenterPosition.x %f\n", screenCenterPosition.x);
-	//printfDx("screenCenterPosition.y %f\n", screenCenterPosition.y);
-	//printfDx("screenCenterPosition.z %f\n", screenCenterPosition.z);
-	//printfDx("cameraPosition.x %f\n", cameraPosition.x);
-	//printfDx("cameraPosition.y %f\n", cameraPosition.y);
-	//printfDx("cameraPosition.z %f\n", cameraPosition.z);
 }
 
 /// <summary>
@@ -303,31 +292,31 @@ void Camera::Draw()
 /// </summary>
 void Camera::DistanceUpdate()
 {
-	const float addHighCenterPos = 40.0f;		//カメラが中心からどれだけ離れられるか
+	const float kAddHighCenterPos = 40.0f;		//カメラが中心からどれだけ離れられるか
 	const float addLowCenterPos = kAddCenterPosY - 5.0f;
 	minHeight = screenCenterPosition.y - addLowCenterPos;
-	maxHeight = screenCenterPosition.y + addHighCenterPos;
+	maxHeight = screenCenterPosition.y + kAddHighCenterPos;
 
-	const float addNormalizedTime = 0.02f;
-	const float minNormalizedTimeDistance = 0.0f;
-	const float maxNormalizedTime = 1.0f;
+	const float kAddNormalizedTime = 0.02f;
+	const float kMinNormalizedTimeDistance = 0.0f;
+	const float kMaxNormalizedTime = 1.0f;
 
 	if (PadInput::GetJoyPadYRight() > 0.0f)
 	{
-		normalLinearProgress -= addNormalizedTime;
+		normalLinearProgress -= kAddNormalizedTime;
 		
-		if (normalLinearProgress <= minNormalizedTimeDistance)
+		if (normalLinearProgress <= kMinNormalizedTimeDistance)
 		{
-			normalLinearProgress = minNormalizedTimeDistance;
+			normalLinearProgress = kMinNormalizedTimeDistance;
 		}
 	}
 	if (PadInput::GetJoyPadYRight() < 0.0f)
 	{
-		normalLinearProgress += addNormalizedTime;
+		normalLinearProgress += kAddNormalizedTime;
 
-		if (normalLinearProgress >= maxNormalizedTime)
+		if (normalLinearProgress >= kMaxNormalizedTime)
 		{
-			normalLinearProgress = maxNormalizedTime;
+			normalLinearProgress = kMaxNormalizedTime;
 		}
 	}
 
@@ -341,15 +330,17 @@ void Camera::DistanceUpdate()
 /// <summary>
 /// カメラの回転値更新
 /// </summary>
-void Camera::AngleUpdate(const float& angle_player)
+void Camera::AngleUpdate(const float& playerAngle)
 {
+	const float kAddDegree = 1.5f;
+
 	if (PadInput::GetJoyPadXRight() < 0.0f)
 	{
-		nowDegree -= 1.5f;
+		nowDegree -= kAddDegree;
 	}
 	else if (PadInput::GetJoyPadXRight() > 0.0f)
 	{
-		nowDegree += 1.5f;
+		nowDegree += kAddDegree;
 	}
 
 	//0°～360°にしかならないように調整
@@ -362,7 +353,7 @@ void Camera::AngleUpdate(const float& angle_player)
 		nowDegree += 360.0f;
 	}
 
-	ResetAngle(angle_player);
+	ResetAngle(playerAngle);
 }
 
 /// <summary>
@@ -373,6 +364,8 @@ void Camera::RotateUpdate()
 	//キャラとカメラの正面方向が違うためplayerの正面方向に合わせる
 	float degreesForRdianConversion = nowDegree;
 	degreesForRdianConversion -= 90.0f;
+	const float kLookDirectionScale = 40.0f;
+	const float kStartRayDirectionScale = -10.0f;
 	
 	//180度以上はマイナス角度として扱う
 	if (degreesForRdianConversion >= 180.0f)
@@ -396,14 +389,13 @@ void Camera::RotateUpdate()
 	//注視点はカメラとは反対方向に距離と高さを求める
 	VECTOR dir = VSub(screenCenterPosition, normalCameraPosition);
 	dir = VNorm(dir);
-	VECTOR add = VScale(dir, 40.0f);
+	VECTOR add = VScale(dir, kLookDirectionScale);
 	lookPosition = VAdd(screenCenterPosition, add);
 
 	//rayCast用の座標を算出
-	VECTOR addStartRayCast = VScale(dir, -10.0f);
+	VECTOR addStartRayCast = VScale(dir, kStartRayDirectionScale);
 	rayCastStartPosition = VAdd(normalCameraPosition, addStartRayCast);
 }
-
 
 /// <summary>
 /// カメラの位置調整
@@ -575,10 +567,10 @@ void Camera::ResultInitialize()
 /// </summary>
 void Camera::ResultUpdate()
 {
-	const float addHighCenterPos = 40.0f;		//カメラが中心からどれだけ離れられるか
+	const float kAddHighCenterPos = 40.0f;		//カメラが中心からどれだけ離れられるか
 	const float addLowCenterPos = kAddCenterPosY - 5.0f;
 	minHeight = screenCenterPosition.y - addLowCenterPos;
-	maxHeight = screenCenterPosition.y + addHighCenterPos;
+	maxHeight = screenCenterPosition.y + kAddHighCenterPos;
 
 	centerPointSpherePos = WorldSubSystem::GetInstance().GetSubSystem<PlayerManager>()->GetPosition();
 	centerPointSpherePos.y += kAddCenterPosY;

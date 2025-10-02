@@ -23,6 +23,6 @@ private:
 	int titleHandle;
 
 	bool isPush;
-	std::shared_ptr<TitleObjectManager>	objectManager;
+	std::shared_ptr<ObjectManager>	objectManager;
 };
 

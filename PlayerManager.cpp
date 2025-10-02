@@ -2,7 +2,6 @@
 #include <vector>
 #include "Player.h"
 #include "CollisionManager.h"
-#include "EffectManager.h"
 #include "PlayerManager.h"
 #include "Calculation.h"
 #include "BaseObject.h"
@@ -15,7 +14,7 @@
 /// </summary>
 PlayerManager::PlayerManager() :
 	BaseGameObjectManager(),
-	now_playerData({ false })
+	nowPlayerData({ false })
 {
 	tag = "player";
 }
@@ -49,7 +48,7 @@ void PlayerManager::Initialize()
 {
 	actualPlayer->Initialize();
 
-	now_playerData = { false };
+	nowPlayerData = { false };
 }
 
 /// <summary>
@@ -96,29 +95,19 @@ void PlayerManager::Update()
 	// プレイヤーデータの状態を確認し、変更があればオブザーバーに通知する
 	StateConfirmation();
 
-	const float playerAndCameraDistance = WorldSubSystem::GetInstance().GetSubSystem<Camera>()->GetCameraAndTargetDistanceSize();
-	const float maxCameraDistance = 20.0f;
-	const float minCameraDistance = 10.0f;
-
-	const float opacityRate = Calculation::CalculateBackProgress(
-		maxCameraDistance,
-		minCameraDistance,
-		playerAndCameraDistance);
-
-	//カメラとプレイヤーの距離が近づくにつれてキャラクターを透過する
-	MV1SetOpacityRate(player->GetModelHandle(), opacityRate);
+	TransparencyUpdate();
 }
 
-void PlayerManager::Update_start(const float& timer)
+void PlayerManager::StartUpdate(const float& timer)
 {
-	actualPlayer->Update_start(timer);
+	actualPlayer->StartUpdate(timer);
 
 	actualPlayer->PositionUpdate();
 }
 
-void PlayerManager::Update_finish(const float& timer)
+void PlayerManager::FinishUpdate(const float& timer)
 {
-	actualPlayer->Update_finish(timer);
+	actualPlayer->FinishUpdate(timer);
 	actualPlayer->PositionUpdate();
 }
 
@@ -128,8 +117,6 @@ void PlayerManager::Update_finish(const float& timer)
 void PlayerManager::Draw()
 {
 	actualPlayer->Draw();
-
-	collisionManager->Draw();
 }
 
 /// <summary>
@@ -171,11 +158,27 @@ void PlayerManager::ResultUpdate()
 /// </summary>
 void PlayerManager::StateConfirmation()
 {
-	if (now_playerData != actualPlayer->GetData())
+	if (nowPlayerData != actualPlayer->GetData())
 	{
-		now_playerData = actualPlayer->GetData();
-		NotifyStateChanged(now_playerData);
+		nowPlayerData = actualPlayer->GetData();
+		NotifyStateChanged(nowPlayerData);
 	}
+}
+
+/// @brief キャラとカメラの距離に応じて透過する
+void PlayerManager::TransparencyUpdate()
+{
+	const float playerAndCameraDistance = WorldSubSystem::GetInstance().GetSubSystem<Camera>()->GetCameraAndTargetDistanceSize();
+	const float kMaxCameraDistance = 20.0f;
+	const float kMinCameraDistance = 10.0f;
+
+	const float opacityRate = Calculation::CalculateBackProgress(
+		kMaxCameraDistance,
+		kMinCameraDistance,
+		playerAndCameraDistance);
+
+	//カメラとプレイヤーの距離が近づくにつれてキャラクターを透過する
+	MV1SetOpacityRate(player->GetModelHandle(), opacityRate);
 }
 
 /// <summary>
@@ -210,7 +213,6 @@ void PlayerManager::RemoveObserver(std::shared_ptr<PlayerStateObserver> observer
 	// 削除対象か判定するラムダ関数を用意
 	auto shouldRemove = [&](const std::weak_ptr<PlayerStateObserver>& weakObs)
 		{
-
 			// weak_ptrからshared_ptrを取得
 			std::shared_ptr<PlayerStateObserver> locked = weakObs.lock();
 

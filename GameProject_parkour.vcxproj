@@ -195,11 +195,10 @@
     <ClCompile Include="SoundPlayer.cpp" />
     <ClCompile Include="GameInstanceSubSystem.cpp" />
     <ClCompile Include="Title.cpp" />
-    <ClCompile Include="TitleObjectManager.cpp" />
     <ClCompile Include="Tutorial.cpp" />
     <ClCompile Include="UIButton.cpp" />
     <ClCompile Include="UIManager.cpp" />
-    <ClCompile Include="UI_coin.cpp" />
+    <ClCompile Include="CoinUi.cpp" />
     <ClCompile Include="UI_controlManual.cpp" />
     <ClCompile Include="Victory.cpp" />
     <ClCompile Include="Walk.cpp" />
@@ -248,7 +247,6 @@
     <ClInclude Include="ObjectForTree.hpp" />
     <ClInclude Include="ObjectManager.h" />
     <ClInclude Include="SkyBox.h" />
-    <ClInclude Include="IObjectManager.h" />
     <ClInclude Include="IObject.h" />
     <ClInclude Include="PlayerCalculation.h" />
     <ClInclude Include="objects.h" />
@@ -272,11 +270,10 @@
     <ClInclude Include="SoundPlayer.h" />
     <ClInclude Include="GameInstanceSubSystem.h" />
     <ClInclude Include="Title.h" />
-    <ClInclude Include="TitleObjectManager.h" />
     <ClInclude Include="Tutorial.h" />
     <ClInclude Include="UIButton.h" />
     <ClInclude Include="UIManager.h" />
-    <ClInclude Include="UI_coin.h" />
+    <ClInclude Include="CoinUi.h" />
     <ClInclude Include="UI_controlManual.h" />
     <ClInclude Include="Victory.h" />
     <ClInclude Include="Walk.h" />

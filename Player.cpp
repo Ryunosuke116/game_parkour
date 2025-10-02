@@ -7,7 +7,6 @@
 #include "Player.h"
 #include "HitCheck.h"
 #include "Calculation.h"
-#include "BaseObject.h"
 #include "DebugDrawer.h"
 #include "Camera.h"
 #include "JsonManager.h"
@@ -35,7 +34,6 @@ Player::Player() :
 Player::~Player()
 {
     MV1DeleteModel(modelHandle);
-
 }
 
 
@@ -71,7 +69,7 @@ void Player::Initialize()
     position = initPosition;
     targetMoveDirection = VGet(0.0f, 0.0f, 0.0f);
     radian = 0.0f;
-    rotate_x = 0.0f;
+    rotateX = 0.0f;
     startWalkTime = 0.0f;
 
     MV1SetPosition(modelHandle, position);
@@ -109,7 +107,7 @@ void Player::Initialize()
     effectTimer = 0.0f;
     nowMoveDirection = VGet(0.0f, 0.0f, 0.0f);
 
-    MV1SetRotationXYZ(modelHandle, VGet(rotate_x * DX_PI_F / 180.0f, radian + DX_PI_F, 0.0f));
+    MV1SetRotationXYZ(modelHandle, VGet((rotateX * DX_PI_F / 180.0f), radian + DX_PI_F, 0.0f));
 
     animationChanger->Initialize(animNum::walk, modelHandle, nowState, playerData, *this);
 }
@@ -159,7 +157,7 @@ void Player::Update()
     velocity = playerCalculation->Update(
         nowMoveDirection,
         nowState->GetNowAnimState().playAnimTime,
-        animationChanger->GetAnimNumber_now(),
+        animationChanger->NowGetAnimNumber(),
         playerData);
 
     EffectUpdate();
@@ -191,11 +189,13 @@ void Player::Update()
 /// ゲームシーンのスタート時の更新処理
 /// </summary>
 /// <param name="timer"></param>
-void Player::Update_start(const float& timer)
+void Player::StartUpdate(const float& timer)
 {
+    const float kMaxTimer = 40.0f;
+
     velocity = VGet(0.0f, 0.0f, 0.5f);
 
-    if (timer <= 40.0f)
+    if (timer <= kMaxTimer)
     {
         position = VAdd(position, velocity);
     }
@@ -214,7 +214,7 @@ void Player::Update_start(const float& timer)
 /// ゲームシーン終了時の更新処理
 /// </summary>
 /// <param name="timer"></param>
-void Player::Update_finish(const float& timer)
+void Player::FinishUpdate(const float& timer)
 {
     nowState->SetIsChangeState(true);
     playerData.isIdle = true;
@@ -242,14 +242,14 @@ void Player::ResultCreate()
 /// </summary>
 void Player::ResultInitialize()
 {
-    const VECTOR initPosition = VGet(0.0f, 9.00285912f, -1205.93481f);
+    const VECTOR kInitPosition = VGet(0.0f, 9.0f, -1206.0f);
 
-    position = initPosition;
+    position = kInitPosition;
     radian = 0.0f;
 
     MV1SetPosition(modelHandle, position);
 
-    MV1SetRotationXYZ(modelHandle, VGet(rotate_x * DX_PI_F / 180.0f, radian + DX_PI_F, 0.0f));
+    MV1SetRotationXYZ(modelHandle, VGet((rotateX * DX_PI_F / 180.0f), radian + DX_PI_F, 0.0f));
 
     animationChanger->ResultInitialize(animNum::victory, modelHandle, nowState, playerData, *this);
 }
@@ -286,10 +286,12 @@ void Player::MoveDirectionUpdate()
     if (isNotAction)
     {
         const float kLeapSpeed = 0.15f;
+
         nowMoveDirection = Calculation::Leap(
             nowMoveDirection,
             targetMoveDirection,
             kLeapSpeed);
+
         nowMoveDirection.y = 0.0f;
     }
     //特定のアクション時は移動方向を変えられないように
@@ -409,19 +411,19 @@ void Player::CollisionUpdate()
             positionData.capsuleBottomPosition,
             positionData.capsuleTopPosition,
             kSideDirection,
-            rotate_x);
+            rotateX);
 
         positionData.centerPosition = Calculation::RotateLineSegment(
             positionData.capsuleBottomPosition,
             positionData.centerPosition,
             kSideDirection,
-            rotate_x);
+            rotateX);
 
         positionData.rayTopPosition = Calculation::RotateLineSegment(
             positionData.capsuleBottomPosition,
             positionData.rayTopPosition,
             kSideDirection,
-            rotate_x);
+            rotateX);
     }
 
     //AABB
@@ -516,11 +518,15 @@ void Player::DebugUpdate()
     DebugDrawer::GetInstance().InformationInput_string_bool("isHangToCrouch %d\n", playerData.isHangToCrouch);
 }
 
+/// @brief プレイヤーが特定の位置より下に落下した場合に、位置と状態をリセット
 void Player::CounterplanBug()
 {
-    if (position.y < -10.0f)
+    const float kMaxPosY = -10.0f;
+    const VECTOR kResetPosition = VGet(3.0f, 9.0f, -1200.0f);
+
+    if (position.y < kMaxPosY)
     {
-        position = VGet(3.0f, 9.0f, -1210.0f);
+        position = kResetPosition;
         playerData.isIdle = true;
         playerData.isGround = false;
         playerData.isJump = false;

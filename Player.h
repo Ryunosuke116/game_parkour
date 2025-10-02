@@ -26,8 +26,8 @@ public:
 	void ResultInitialize()override;
 	void ResultUpdate()override;
 
-	void Update_start(const float& timer);
-	void Update_finish(const float& timer);
+	void StartUpdate(const float& timer);
+	void FinishUpdate(const float& timer);
 	void DebugUpdate();
 	void MoveDirectionUpdate();
 	void Receive_CollisionResult();
@@ -45,7 +45,7 @@ public:
 	VECTOR GetNowMoveDirection() const { return nowMoveDirection; }
 	VECTOR GetFaceDirection()const { return faceDirection; }
 	bool GetIsGround() const { return playerData.isGround; }
-	int GetNowStateNumber() const { return animationChanger->GetAnimNumber_now(); }
+	int GetNowStateNumber() const { return animationChanger->NowGetAnimNumber(); }
 	PlayerData GetData() const { return playerData; }
 	PlayerStateBase::AnimState GetNowAnimState() const { return nowState->GetNowAnimState(); }
 	float GetRadius()const override { return radius; }

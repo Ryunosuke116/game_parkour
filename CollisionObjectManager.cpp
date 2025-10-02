@@ -32,8 +32,7 @@ void CollisionObjectManager::Create()
 	{
 		collisionObjects.push_back(std::make_shared<Floor_sky>(
 			modelHandle,
-			data
-		));
+			data));
 	}
 
 	for (auto& object : collisionObjects)

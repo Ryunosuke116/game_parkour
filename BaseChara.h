@@ -1,8 +1,8 @@
 #pragma once
-
 #include "CollisionData.h"
 #include "IObject.h"
 #include "Calculation.h"
+#include"nlohmann/json.hpp"
 
 class BaseChara : public IObject
 {
@@ -32,7 +32,7 @@ public:
 	virtual float GetRadius()const abstract;
 
 	void SetResultCollision(const CollisionResult& newResult) { resultCollision = newResult; }
-	void SetRotateX(const float& set) { rotate_x = set; }
+	void SetRotateX(const float& set) { rotateX = set; }
 	void SetIsCollisionCheck(const bool& set) { isCollisionCheck = set; }
 protected:
 
@@ -41,7 +41,7 @@ protected:
 	int coinCount;		//ƒRƒCƒ“‚ÌŠ–‡”
 
 	float radian;
-	float rotate_x;
+	float rotateX;
 
 	bool isCollisionCheck;
 

@@ -1,5 +1,6 @@
 #pragma once
 #include "IObject.h"
+#include "nlohmann/json.hpp"
 
 class Tutorial 
 {

@@ -1,7 +1,7 @@
 #pragma once
 #include "BaseGameObjectManager.h"
 #include "BaseUI.h"
-#include "UI_coin.h"
+#include "CoinUi.h"
 #include "UI_controlManual.h"
 #include "GameTimer.h"
 
@@ -24,11 +24,11 @@ public:
 	void Add(std::shared_ptr<BaseUI> ui);
 	void ResultAdd(std::shared_ptr<BaseUI> ui);
 
-	std::shared_ptr<UI_coin> GetUI_coin()
+	std::shared_ptr<CoinUi> GetCoinUi()
 	{
-		for (auto& ui : ui_list)
+		for (auto& ui : uiList)
 		{
-			if (auto ui_coin = std::dynamic_pointer_cast<UI_coin>(ui))
+			if (auto ui_coin = std::dynamic_pointer_cast<CoinUi>(ui))
 			{
 				return ui_coin;
 			}
@@ -36,9 +36,9 @@ public:
 		return nullptr;
 	}
 
-	std::shared_ptr<UI_controlManual> GetUI_controlManual()
+	std::shared_ptr<UI_controlManual> GetControlManualUi()
 	{
-		for (auto& ui : ui_list)
+		for (auto& ui : uiList)
 		{
 			if (auto ui_controlManual = std::dynamic_pointer_cast<UI_controlManual>(ui))
 			{
@@ -50,7 +50,7 @@ public:
 
 	std::shared_ptr<GameTimer> GetGameTimer()
 	{
-		for (auto& ui : ui_list)
+		for (auto& ui : uiList)
 		{
 			if (auto ui_gameTimer = std::dynamic_pointer_cast<GameTimer>(ui))
 			{
@@ -62,6 +62,6 @@ public:
 
 
 private:
-	std::vector<std::shared_ptr<BaseUI>> ui_list;
+	std::vector<std::shared_ptr<BaseUI>> uiList;
 };
 

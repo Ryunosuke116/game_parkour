@@ -9,7 +9,7 @@ BaseChara::BaseChara() :
     coinCount(-1),
     nowFrameNumber(-1),
     radian(-1),
-    rotate_x(-1.0f),
+    rotateX(-1.0f),
     isCollisionCheck(false),
     position(VGet(-1.0f, -1.0f, -1.0f)),
     framePosition(VGet(-1.0f, -1.0f, -1.0f)),
@@ -53,8 +53,8 @@ void BaseChara::UpdateAngle(const VECTOR& direction)
     radian = Calculation::DegToRad(nowDegree);
 
     DebugDrawer::GetInstance().InformationInput_string_float("radian %f\n", radian);
-    DebugDrawer::GetInstance().InformationInput_string_float("rotate_x %f\n", rotate_x);
-    MV1SetRotationXYZ(modelHandle, VGet(rotate_x * DX_PI_F / 180.0f, radian + DX_PI_F, 0.0f));
+    DebugDrawer::GetInstance().InformationInput_string_float("rotateX %f\n", rotateX);
+    MV1SetRotationXYZ(modelHandle, VGet(rotateX * DX_PI_F / 180.0f, radian + DX_PI_F, 0.0f));
 }
 
 void BaseChara::PositionUpdate()

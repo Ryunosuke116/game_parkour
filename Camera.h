@@ -21,15 +21,15 @@ public:
 	void ResultUpdate()override;
 
 	void RotateUpdate();
-	void AngleUpdate(const float& angle_player);
-	void ResetAngle(const float& angle_player);
+	void AngleUpdate(const float& playerAngle);
+	void ResetAngle(const float& playerAngle);
 	void DistanceUpdate();
 	void AdjustCameraPosition();
 	void PosCalc();
 
-	void Update_start(const float& timer,
+	void StartUpdate(const float& timer,
 		const VECTOR& playerPosition,
-		const float& angle_player);
+		const float& playerAngle);
 	void LayOutUpdate();
 	bool CameraPosCalc(const std::vector<std::weak_ptr<BaseObject>>& collisionObjects);
 	void CaluclateCameraAndTargetDistanceSize();

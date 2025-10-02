@@ -38,19 +38,22 @@ void UIButton::ResultCreate()
 
 void UIButton::ResultInitialize()
 {
-    x = 400;
-    y = 150;
-    alpha = 0;
-    addAlpha = 2;
+    const int kInitAlpha = 0;
+    const int kInitAddAlpha = 2;
+
+    alpha = kInitAlpha;
+    kAddAlpha = kInitAddAlpha;
 }
 
 void UIButton::ResultUpdate()
 {
-    alpha += addAlpha;
+    const int kMaxAlpha = 255;
 
-    if (alpha <= 0 || alpha >= 255)
+    alpha += kAddAlpha;
+
+    if (alpha <= 0 || alpha >= kMaxAlpha)
     {
-        addAlpha = -addAlpha;
+        kAddAlpha = -kAddAlpha;
     }
 }
 

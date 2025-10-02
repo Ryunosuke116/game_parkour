@@ -66,6 +66,7 @@ void CoinManager::Create()
 void CoinManager::Initialize()
 {
 	auto L8TreeManager = WorldSubSystem::GetInstance().GetSubSystem<Liner8TreeManager<Coin>>();
+	const int kInitAddNumber = 1000;
 
 	for (auto& coin : umCoins)
 	{
@@ -84,7 +85,7 @@ void CoinManager::Initialize()
 			OFT);
 	}
 
-	addNumber = 1000;
+	addNumber = kInitAddNumber;
 }
 
 /// <summary>
@@ -242,12 +243,15 @@ void CoinManager::ResultCreate(int coinCount)
 /// </summary>
 void CoinManager::ResultInitialize()
 {
+	const float kInitTimer = 0.0f;
+	const int kInitNowCoinCount = 0;
+
 	for (auto& coin : umCoins)
 	{
 		coin.second->ResultInitialize();
 	}
-	timer = 0.0f;
-	nowCoinCount = 0;
+	timer = kInitTimer;
+	nowCoinCount = kInitNowCoinCount;
 }
 
 /// <summary>
@@ -256,6 +260,7 @@ void CoinManager::ResultInitialize()
 void CoinManager::ResultUpdate()
 {
 	const size_t maxCoinCount = umCoins.size();
+	const float kResetTimer = 0.0f;
 	auto soundPlayer = GameInstanceSubSystem::GetInstance().GetSubSystem<SoundPlayer>().lock();
 
 	timer++;
@@ -267,7 +272,7 @@ void CoinManager::ResultUpdate()
 			nowCoinCount++;
 			soundPlayer->Play("coinGet");
 		}
-		timer = 0.0f;
+		timer = kResetTimer;
 	}
 
 	for (int i = 0; i < nowCoinCount; i++)
