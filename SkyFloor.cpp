@@ -1,6 +1,6 @@
 #include "common.h"
 #include  "nlohmann/json.hpp"
-#include "Floor_sky.h"
+#include "SkyFloor.h"
 #include "Calculation.h"
 
 /// <summary>
@@ -9,7 +9,7 @@
 /// <param name="handle"></param>
 /// <param name="pos"></param>
 /// <param name="objectTag"></param>
-Floor_sky::Floor_sky(const int modelHandle, 
+SkyFloor::SkyFloor(const int modelHandle, 
 	const nlohmann::json& jsonData):
 	moveAmount(0.0f),
 	isUp(false),
@@ -23,17 +23,17 @@ Floor_sky::Floor_sky(const int modelHandle,
 /// <summary>
 /// デストラクタ
 /// </summary>
-Floor_sky::~Floor_sky()
+SkyFloor::~SkyFloor()
 {
 
 }
 
-void Floor_sky::Create()
+void SkyFloor::Create()
 {
 	Load(stateData);
 }
 
-void Floor_sky::Load(const nlohmann::json& jsonData)
+void SkyFloor::Load(const nlohmann::json& jsonData)
 {
 	const float degree = jsonData[3];
 
@@ -50,7 +50,7 @@ void Floor_sky::Load(const nlohmann::json& jsonData)
 /// <summary>
 /// 初期化
 /// </summary>
-void Floor_sky::Initialize()
+void SkyFloor::Initialize()
 {
 	const VECTOR kModelScale = VGet(0.3f, 0.3f, 0.3f);
 	isUp = true;
@@ -67,7 +67,7 @@ void Floor_sky::Initialize()
 /// <summary>
 /// 更新
 /// </summary>
-void Floor_sky::Update()
+void SkyFloor::Update()
 {
 	VECTOR newPos = position;
 	const float kMaxMoveAmount = 140.0f;
@@ -108,7 +108,7 @@ void Floor_sky::Update()
 /// 描画
 /// </summary>
 /// <returns></returns>
-void Floor_sky::Draw()
+void SkyFloor::Draw()
 {
 	MV1DrawModel(modelHandle);
 }
@@ -117,7 +117,7 @@ void Floor_sky::Draw()
 /// リザルトシーン時の生成
 /// </summary>
 /// <param name="coinCount"></param>
-void Floor_sky::ResultCreate()
+void SkyFloor::ResultCreate()
 {
 	//処理なし
 }
@@ -125,7 +125,7 @@ void Floor_sky::ResultCreate()
 /// <summary>
 /// リザルトシーン時の初期化
 /// </summary>
-void Floor_sky::ResultInitialize()
+void SkyFloor::ResultInitialize()
 {
 	Initialize();
 }
@@ -133,7 +133,7 @@ void Floor_sky::ResultInitialize()
 /// <summary>
 /// リザルトシーン時の更新処理
 /// </summary>
-void Floor_sky::ResultUpdate()
+void SkyFloor::ResultUpdate()
 {
 	//処理なし
 }

@@ -11,8 +11,6 @@ public:
 
 	std::pair<VECTOR, PlayerData> Update(const VECTOR& cameraDirection,
 		const std::vector<std::weak_ptr<BaseObject>>& fieldObjects, Player& player)override;
-
-	bool MotionUpdate(PlayerData& playerData)override;
 	
 	VECTOR Command(const VECTOR& cameraDirection, PlayerData& playerData, Player& player)override;
 	VECTOR Move(const VECTOR& cameraDirection, PlayerData& playerData)override;

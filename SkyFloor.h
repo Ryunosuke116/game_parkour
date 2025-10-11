@@ -1,12 +1,12 @@
 #pragma once
 #include "BaseObject.h"
 
-class Floor_sky : public BaseObject
+class SkyFloor : public BaseObject
 {
 public:
-	Floor_sky(const int modelHandle, 
+	SkyFloor(const int modelHandle, 
 		const nlohmann::json& jsonData);
-	~Floor_sky();
+	~SkyFloor();
 
 	void Load(const nlohmann::json& jsonData)override;
 	void Create()override;

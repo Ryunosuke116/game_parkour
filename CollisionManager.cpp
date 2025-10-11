@@ -24,7 +24,8 @@ void CollisionManager::Update(
 				chara.GetPosition(),
 				chara.GetVelocity(),
 				chara.GetRadius(),
-			chara.GetPositionData(),playerData));
+				chara.GetPositionData(),
+				playerData));
 	}
 }
 
@@ -45,11 +46,12 @@ CollisionResult CollisionManager::AllCheck(
 	const PositionData& charaPositionData,
 	const PlayerData& playerData)
 {
+	const float kHeadRadius = 2.0f;
+
 	VECTOR oldPosition = playerPos;
 	VECTOR newPosition = VAdd(oldPosition, charaVelocity);
 
 	bool isCalc = nowGroundRayPoly.HitFlag;
-	const float kHeadRadius = 2.0f;
 
 	CollisionResult collisionResult;
 	collisionResult.newPosition = newPosition;
@@ -380,7 +382,6 @@ VECTOR CollisionManager::WallCollisionCheck(
 				}
 			}
 		}
-
 		// 検出したプレイヤーの周囲のポリゴン情報を開放する
 		MV1CollResultPolyDimTerminate(hitWallPoly);
 	}

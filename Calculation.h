@@ -60,7 +60,9 @@ public:
 	}
 	static float Check_depth_Triangle(const VECTOR& dir, const VECTOR& a, const VECTOR& b, const VECTOR& c);
 	static float CalculateBackProgress(float maxValue, float minValue, float nowValue);
-	static float InterpolationCalc(float progressValue, float maxValue, float minValue);
+	static float InterpolationCalc(const float progressValue,
+		const float maxValue,
+		const float minValue);
 	static float EaseOutQuad(float normalDistanceProgress);
 	static float CalculateBackEaseOutValue(float nowValue);
 	static VECTOR NearestPoint(const VECTOR& position_1, const VECTOR& position_2,

@@ -49,9 +49,6 @@ void Result::Create()
 /// </summary>
 void Result::Initialize()
 {
-    const int coin_x = 30;
-    const int coin_y = 700;
-
     BlackOut::GetInstance().ResultInitialize();
 
     objectManager->ResultInitilize();
@@ -67,11 +64,11 @@ void Result::Initialize()
 /// </summary>
 void Result::Update()
 {
+    const int kMaxAlpha = 300;
+
     PadInput::Update();
 
     objectManager->ResultUpdate();
-
-    const int kMaxAlpha = 300;
 
     if (BlackOut::GetInstance().GetAlpha() >= kMaxAlpha)
     {
@@ -88,6 +85,5 @@ void Result::Update()
 void Result::Draw()
 {
     objectManager->ResultDraw();
-
     BlackOut::GetInstance().Draw();
 }

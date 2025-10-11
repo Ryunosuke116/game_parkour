@@ -208,9 +208,6 @@ VECTOR Calculation::ProjectionDirection(const VECTOR& point, const VECTOR& a, co
 	VECTOR AB = VSub(b, a);
 	VECTOR AP = VSub(point, a);
 
-	//ベクトルの長さ
-	float vectorLength = pow((AB.x * AB.x) + (AB.y * AB.y) + (AB.z * AB.z), 0.5f);
-
 	//単位ベクトル(正規化)
 	VECTOR unitVector = VGet(0, 0, 0);
 	unitVector = VNorm(AB);
@@ -233,7 +230,8 @@ VECTOR Calculation::ProjectionDirection(const VECTOR& point, const VECTOR& a, co
 /// <param name="a"></param>
 /// <param name="b"></param>
 /// <returns></returns>
-float Calculation::GetVerticalLength(const VECTOR& a, const VECTOR& b)
+float Calculation::GetVerticalLength(const VECTOR& a,
+	const VECTOR& b)
 {
 	VECTOR sub = VSub(a, b);
 	sub = VGet(0.0f, sub.y, 0.0f);
@@ -244,7 +242,9 @@ float Calculation::GetVerticalLength(const VECTOR& a, const VECTOR& b)
 }
 
 
-float Calculation::TriangleByVerticalLength(const VECTOR& a, const VECTOR& b, const VECTOR& c)
+float Calculation::TriangleByVerticalLength(const VECTOR& a, 
+	const VECTOR& b, 
+	const VECTOR& c)
 {
 	VECTOR highestPosition = a;
 
@@ -337,9 +337,9 @@ float Calculation::RotationAngleDegree(
 /// <param name="minValue"></param>
 /// <returns></returns>
 float Calculation::InterpolationCalc(
-	float progressValue,
-	float maxValue,
-	float minValue)
+	const float progressValue,
+	const float maxValue,
+	const float minValue)
 {
 	return minValue + (maxValue - minValue) * progressValue;
 }
@@ -369,12 +369,12 @@ float Calculation::CalculateBackProgress(
 /// <returns></returns>
 float Calculation::EaseOutQuad(float normalDistanceProgress)
 {
-	const float maxSize = 1.0f;
+	const float kMaxSize = 1.0f;
 
 	//2乗する
-	const float subSize = pow((maxSize - normalDistanceProgress), 2.0f);
+	const float subSize = pow((kMaxSize - normalDistanceProgress), 2.0f);
 
-	return maxSize - subSize;
+	return kMaxSize - subSize;
 }
 
 /// <summary>

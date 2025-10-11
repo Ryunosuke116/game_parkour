@@ -59,6 +59,18 @@ void DebugDrawer::Draw()
 {
     if (!EnableDebugDraw) return;
 
+    frameCount++;
+
+    int nowTime = GetNowCount();
+    if (nowTime - startTime >= 1000)  // 1ïbåoâﬂÇ≤Ç∆Ç…åvéZ
+    {
+        fps = frameCount * 1000.0f / (nowTime - startTime);
+        startTime = nowTime;
+        frameCount = 0;
+    }
+
+    printfDx("FPS : %.1f\n", fps);
+
     for (const auto& line : lines)
     {
         DrawLine3D(line.start, line.end, line.color);

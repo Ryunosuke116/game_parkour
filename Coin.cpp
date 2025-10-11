@@ -106,7 +106,10 @@ void Coin::Update()
 /// </summary>
 void Coin::Draw()
 {
-	MV1DrawModel(modelHandle);
+	if (!CheckCameraViewClip(position))
+	{
+		MV1DrawModel(modelHandle);
+	}
 }
 
 /// <summary>

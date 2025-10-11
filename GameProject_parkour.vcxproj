@@ -166,7 +166,7 @@
     <ClCompile Include="Field.cpp" />
     <ClCompile Include="FieldMesh.cpp" />
     <ClCompile Include="FinishCut.cpp" />
-    <ClCompile Include="Floor_sky.cpp" />
+    <ClCompile Include="SkyFloor.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameTimer.cpp" />
     <ClCompile Include="HangingIdle.cpp" />
@@ -232,7 +232,7 @@
     <ClInclude Include="Field.h" />
     <ClInclude Include="FieldMesh.h" />
     <ClInclude Include="FinishCut.h" />
-    <ClInclude Include="Floor_sky.h" />
+    <ClInclude Include="SkyFloor.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameTimer.h" />
     <ClInclude Include="HangingIdle.h" />

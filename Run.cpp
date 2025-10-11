@@ -102,7 +102,7 @@ std::pair<VECTOR, PlayerData> Run::WallRunUpdate(
 
 	VECTOR moveDir = VGet(0.0f, 0.0f, 0.0f);
 	const float wallRunStopTime = player.playerCalculation->GetWallRunStopTime();
-	const float kWallRunMaxStopTime = player.playerCalculation->GetWallRunMaxStopTime();
+	const float wallRunMaxStopTime = player.playerCalculation->GetWallRunMaxStopTime();
 	const int kMinJoyPadLeft = -1000;
 
 	//落ちる
@@ -119,7 +119,7 @@ std::pair<VECTOR, PlayerData> Run::WallRunUpdate(
 	}
 
 	//止まって一定時間過ぎたら落下する
-	if (wallRunStopTime >= kWallRunMaxStopTime)
+	if (wallRunStopTime >= wallRunMaxStopTime)
 	{
 		isChangeState = true;
 		playerData.isFalling = true;
@@ -163,6 +163,7 @@ std::pair<VECTOR, PlayerData> Run::WallRunUpdate(
 			playerData.isMove = false;
 			isChangeState = true;
 			player.playerCalculation->SetNearestResult(nearestResult);
+			player.SetRotateX(0.0f);
 			
 			return std::make_pair(moveDir, playerData);
 		}
@@ -185,70 +186,6 @@ std::pair<VECTOR, PlayerData> Run::WallRunUpdate(
 	}
 
 	return std::make_pair(moveDir, playerData);
-}
-
-/// <summary>
-/// アニメーション更新
-/// </summary>
-/// <param name="playerData"></param>
-/// <returns></returns>
-bool Run::MotionUpdate(PlayerData& playerData)
-{
-	float totalTime_anim;
-
-	// ブレンド率が１以下の場合は１に近づける
-	if (animBlendRate < 1.0f)
-	{
-		animBlendRate += kAnimBlendSpeed;
-		if (animBlendRate > 1.0f)
-		{
-			animBlendRate = 1.0f;
-		}
-	}
-
-	if (nowAnimState.attachIndex != -1)
-	{
-		// アタッチしたアニメーションの総再生時間を取得する
-		totalTime_anim = MV1GetAttachAnimTotalTime(modelHandle, nowAnimState.attachIndex);
-
-		//再生時間更新
-		nowAnimState.playAnimTime += nowAnimState.PlayAnimSpeed;
-
-		//総再生時間を超えたらリセット
-		if (nowAnimState.playAnimTime >= totalTime_anim)
-		{
-			nowAnimState.playAnimTime = static_cast<float>(fmod(nowAnimState.playAnimTime, totalTime_anim));
-		}
-
-		// 再生時間をセットする
-		MV1SetAttachAnimTime(modelHandle, nowAnimState.attachIndex, nowAnimState.playAnimTime);
-
-		//アニメーションのモデルに対する反映率をセット
-		MV1SetAttachAnimBlendRate(modelHandle, nowAnimState.attachIndex, animBlendRate);
-	}
-
-
-	//再生しているアニメーション２の処理
-	if (oldAnimState.attachIndex != -1)
-	{
-		// アニメーションの総時間を取得
-		totalTime_anim = MV1GetAttachAnimTotalTime(modelHandle, oldAnimState.attachIndex);
-
-		// 変更した再生時間をモデルに反映させる
-		MV1SetAttachAnimTime(modelHandle, oldAnimState.attachIndex, oldAnimState.playAnimTime);
-
-		// アニメーション２のモデルに対する反映率をセット
-		MV1SetAttachAnimBlendRate(modelHandle, oldAnimState.attachIndex, 1.0f - animBlendRate);
-	}
-
-	return false;
-
-	if (!playerData.isGround)
-	{
-		return true;
-	}
-
-	return false;
 }
 
 /// <summary>

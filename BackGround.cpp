@@ -29,19 +29,27 @@ void BackGround::Create()
 
 void BackGround::Initialize()
 {
-	startButtonX = 350;
-	startButtonY = 650;
-	alpha = 254;
-	kAddAlpha = 2;
+	const int kInitStartButtonX = 350;
+	const int kInitStartButtonY = 650;
+	const int kInitAlpha = 254;
+	const int kInitAddAlpha = 2;
+	
+	startButtonX = kInitStartButtonX;
+	startButtonY = kInitStartButtonY;
+	alpha = kInitAlpha;
+	addAlpha = kInitAddAlpha;
 }
 
 void BackGround::Update()
 {
-	alpha += kAddAlpha;
+	const int kMaxAlpha = 255;
+	const int kMinAlpha = 0;
 
-	if (alpha <= 0 || alpha >= 255)
+	alpha += addAlpha;
+
+	if (alpha <= kMinAlpha || alpha >= kMaxAlpha)
 	{
-		kAddAlpha = -kAddAlpha;
+		addAlpha = -addAlpha;
 	}
 }
 

@@ -329,8 +329,7 @@ void Player::ChangeState()
 void Player::CollisionUpdate()
 {
     bool isReverse = false;
-    //positionDataçXêV
-    
+
     const int left = MV1SearchFrame(modelHandle, "mixamorig:LeftHandIndex4");
     const int right = MV1SearchFrame(modelHandle, "mixamorig:RightHandMiddle4_end");
     const int head = 7;
@@ -400,7 +399,7 @@ void Player::CollisionUpdate()
         }
     }
 
-    const VECTOR kSideDirection = VNorm(VSub(position, positionData.sideShaft));
+    const VECTOR sideDirection = VNorm(VSub(position, positionData.sideShaft));
     
     //ècÇÃé≤ÇÃê¸ï™ÇâÒì]Ç≥ÇπÇÈ
     if (playerData.isRunWall)
@@ -408,19 +407,19 @@ void Player::CollisionUpdate()
         positionData.capsuleTopPosition = Calculation::RotateLineSegment(
             positionData.capsuleBottomPosition,
             positionData.capsuleTopPosition,
-            kSideDirection,
+            sideDirection,
             rotateX);
 
         positionData.centerPosition = Calculation::RotateLineSegment(
             positionData.capsuleBottomPosition,
             positionData.centerPosition,
-            kSideDirection,
+            sideDirection,
             rotateX);
 
         positionData.rayTopPosition = Calculation::RotateLineSegment(
             positionData.capsuleBottomPosition,
             positionData.rayTopPosition,
-            kSideDirection,
+            sideDirection,
             rotateX);
     }
 
@@ -451,12 +450,12 @@ void Player::EffectUpdate()
         std::shared_ptr<EffectManager> effectManager = GameInstanceSubSystem::GetInstance().GetSubSystem<EffectManager>().lock();
         const float kMaxEffectTimer = 10.0f;
         const float kAddEffectPositionY = 2.0f;
+        const VECTOR kEffectScale = VGet(4.0f, 4.0f, 4.0f);
 
         effectTimer++;
 
         if (effectTimer >= kMaxEffectTimer)
         {
-            const VECTOR kEffectScale = VGet(4.0f, 4.0f, 4.0f);
             VECTOR effectPosition = position;
 
             effectPosition.y += kAddEffectPositionY;

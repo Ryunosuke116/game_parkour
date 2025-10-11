@@ -3,7 +3,7 @@
 #include <memory>
 #include "CollisionObjectManager.h"
 #include "FieldMesh.h"
-#include "Floor_sky.h"
+#include "SkyFloor.h"
 #include "JsonManager.h"
 #include "WorldSubSystem.h"
 
@@ -30,7 +30,7 @@ void CollisionObjectManager::Create()
 	//floor_sky‚ð’Ç‰Á
 	for (auto& data : data_floor_sky["list"])
 	{
-		collisionObjects.push_back(std::make_shared<Floor_sky>(
+		collisionObjects.push_back(std::make_shared<SkyFloor>(
 			modelHandle,
 			data));
 	}

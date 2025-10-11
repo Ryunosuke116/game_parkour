@@ -45,6 +45,11 @@ private:
     std::vector<Text_float> texts_float;
     std::vector<Text_bool> texts_bool;
     std::vector<Text_VECTOR> texts_VECTOR;
+
+    int frameCount = 0;
+    int startTime = 0;
+    float fps = 0.0f;
+
     DebugDrawer() = default;
     ~DebugDrawer() = default;
 

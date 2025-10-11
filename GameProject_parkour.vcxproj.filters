@@ -79,45 +79,6 @@
     <Filter Include="ソース ファイル\Base\BaseScene">
       <UniqueIdentifier>{378eeac6-818c-493c-b8c7-d8a11c305dc3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\object\game">
-      <UniqueIdentifier>{d34609d8-b5f8-4b9f-b2b1-6fce63407292}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\object\game\camera">
-      <UniqueIdentifier>{cc117ea6-a7a3-4076-be42-23ed644f3ca4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\object\game\coin">
-      <UniqueIdentifier>{ee632bc8-260c-4376-bdbe-b6979949e267}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\object\game\field">
-      <UniqueIdentifier>{64988ae3-2089-4141-9140-37e45360d8db}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\object\game\finishCut">
-      <UniqueIdentifier>{b38ff83a-cf0d-471a-852e-9aa8dbc57bc4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\object\game\tutorial">
-      <UniqueIdentifier>{19085903-b420-471d-b6ac-998333d85a5b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\object\game\player">
-      <UniqueIdentifier>{177446bf-eb68-46e6-99cd-5c968117d403}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\object\game\player\moveCalclation">
-      <UniqueIdentifier>{f9dc51d6-1cdb-4363-bbf5-2cf3ddbf8b9d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\object\game\player\animationChanger">
-      <UniqueIdentifier>{abdff138-57d9-4360-b150-7469ae254d34}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\object\game\shadow">
-      <UniqueIdentifier>{fc540499-a255-488c-9209-0f2b29b3851c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\object\game\UI">
-      <UniqueIdentifier>{c948dba5-aa4d-4d17-aee9-30e4bf5bc655}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\object\game\UI\UI_controlManual">
-      <UniqueIdentifier>{2cc8af79-44e4-41ff-b736-2c506a061bfc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\object\game\UI\coin">
-      <UniqueIdentifier>{8df00727-c934-4d6b-9b46-d1764bc00fed}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\object\result">
       <UniqueIdentifier>{65675199-6e5e-473c-8ac2-f810db254481}</UniqueIdentifier>
     </Filter>
@@ -166,20 +127,56 @@
     <Filter Include="ソース ファイル\manager\player">
       <UniqueIdentifier>{2a33576b-268e-4832-9dee-8902d408c493}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\object\game\skyBox">
-      <UniqueIdentifier>{0564d51b-3b2a-45a6-905c-a0ad4e3256b2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\object\game\collisionObject">
-      <UniqueIdentifier>{80e5d24e-986d-4291-ae86-75607b41a3fb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\object\game\collisionObject\mesh">
-      <UniqueIdentifier>{0960e21f-eac8-4067-ad0e-cfc094d6d27c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\object\game\collisionObject\floor_sky">
-      <UniqueIdentifier>{828f1d62-3c20-4137-8228-5f854e5c690e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\manager\Collision">
       <UniqueIdentifier>{2330dc01-06b8-4627-a8c4-ec50186a5a27}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\JsonResult">
+      <UniqueIdentifier>{8ee20bde-fb5d-471f-b7e7-9fb60a21ed31}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\manager\Object">
+      <UniqueIdentifier>{733bd2bf-452d-40b4-a80b-71e93c23b571}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\manager\scene">
+      <UniqueIdentifier>{6ed27899-6b7f-44a8-b8d7-0648099a58a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\cell">
+      <UniqueIdentifier>{94ce5b17-2956-4d81-a845-612d7db9a6fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\object\result\UIButton">
+      <UniqueIdentifier>{6de7afc0-0661-4e91-a0ae-8a4532e5c5ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\static\blackOut">
+      <UniqueIdentifier>{339009be-2dcc-4bb8-b021-48b2d122fbf4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\manager\Liner8TreeManager">
+      <UniqueIdentifier>{89701cc4-9c02-4c3e-830a-802cecef408b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\object\game">
+      <UniqueIdentifier>{d34609d8-b5f8-4b9f-b2b1-6fce63407292}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\object\game\camera">
+      <UniqueIdentifier>{cc117ea6-a7a3-4076-be42-23ed644f3ca4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\object\game\coin">
+      <UniqueIdentifier>{ee632bc8-260c-4376-bdbe-b6979949e267}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\object\game\field">
+      <UniqueIdentifier>{64988ae3-2089-4141-9140-37e45360d8db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\object\game\finishCut">
+      <UniqueIdentifier>{b38ff83a-cf0d-471a-852e-9aa8dbc57bc4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\object\game\tutorial">
+      <UniqueIdentifier>{19085903-b420-471d-b6ac-998333d85a5b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\object\game\player">
+      <UniqueIdentifier>{177446bf-eb68-46e6-99cd-5c968117d403}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\object\game\player\moveCalclation">
+      <UniqueIdentifier>{f9dc51d6-1cdb-4363-bbf5-2cf3ddbf8b9d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\object\game\player\animationChanger">
+      <UniqueIdentifier>{abdff138-57d9-4360-b150-7469ae254d34}</UniqueIdentifier>
     </Filter>
     <Filter Include="ソース ファイル\object\game\player\state">
       <UniqueIdentifier>{25ee530f-5c21-4ee8-9271-3b0bedbca70d}</UniqueIdentifier>
@@ -199,32 +196,8 @@
     <Filter Include="ソース ファイル\object\game\player\state\walk">
       <UniqueIdentifier>{6c61ab9a-ef05-4631-8e89-4b59ea63d1e1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ヘッダー ファイル\JsonResult">
-      <UniqueIdentifier>{8ee20bde-fb5d-471f-b7e7-9fb60a21ed31}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\manager\Object">
-      <UniqueIdentifier>{733bd2bf-452d-40b4-a80b-71e93c23b571}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\manager\scene">
-      <UniqueIdentifier>{6ed27899-6b7f-44a8-b8d7-0648099a58a6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\cell">
-      <UniqueIdentifier>{94ce5b17-2956-4d81-a845-612d7db9a6fb}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\object\game\player\state\victory">
       <UniqueIdentifier>{6f317ff4-7e3c-45ef-99db-c178aa380761}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\object\result\UIButton">
-      <UniqueIdentifier>{6de7afc0-0661-4e91-a0ae-8a4532e5c5ef}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\object\game\UI\gameTimer">
-      <UniqueIdentifier>{4366f260-6c87-43af-b722-fcca0dfe2fc4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\static\blackOut">
-      <UniqueIdentifier>{339009be-2dcc-4bb8-b021-48b2d122fbf4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\manager\Liner8TreeManager">
-      <UniqueIdentifier>{89701cc4-9c02-4c3e-830a-802cecef408b}</UniqueIdentifier>
     </Filter>
     <Filter Include="ソース ファイル\object\game\player\state\bracedHangToCrouch">
       <UniqueIdentifier>{c70c1186-0912-4049-a392-2034c0bc5f83}</UniqueIdentifier>
@@ -240,6 +213,33 @@
     </Filter>
     <Filter Include="ソース ファイル\object\game\player\state\roll">
       <UniqueIdentifier>{86aa8a87-aaa1-45df-9575-21d005c28125}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\object\game\shadow">
+      <UniqueIdentifier>{fc540499-a255-488c-9209-0f2b29b3851c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\object\game\UI">
+      <UniqueIdentifier>{c948dba5-aa4d-4d17-aee9-30e4bf5bc655}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\object\game\UI\UI_controlManual">
+      <UniqueIdentifier>{2cc8af79-44e4-41ff-b736-2c506a061bfc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\object\game\UI\coin">
+      <UniqueIdentifier>{8df00727-c934-4d6b-9b46-d1764bc00fed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\object\game\UI\gameTimer">
+      <UniqueIdentifier>{4366f260-6c87-43af-b722-fcca0dfe2fc4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\object\game\skyBox">
+      <UniqueIdentifier>{0564d51b-3b2a-45a6-905c-a0ad4e3256b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\object\game\collisionObject">
+      <UniqueIdentifier>{80e5d24e-986d-4291-ae86-75607b41a3fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\object\game\collisionObject\mesh">
+      <UniqueIdentifier>{0960e21f-eac8-4067-ad0e-cfc094d6d27c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\object\game\collisionObject\skyFloor">
+      <UniqueIdentifier>{828f1d62-3c20-4137-8228-5f854e5c690e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -330,8 +330,8 @@
     <ClCompile Include="BaseGameObjectManager.cpp">
       <Filter>ソース ファイル\Base\ObjectManger</Filter>
     </ClCompile>
-    <ClCompile Include="Floor_sky.cpp">
-      <Filter>ソース ファイル\object\game\collisionObject\floor_sky</Filter>
+    <ClCompile Include="SkyFloor.cpp">
+      <Filter>ソース ファイル\object\game\collisionObject\skyFloor</Filter>
     </ClCompile>
     <ClCompile Include="AnimationChanger.cpp">
       <Filter>ソース ファイル\object\game\player\animationChanger</Filter>
@@ -524,8 +524,8 @@
     <ClInclude Include="BaseGameObjectManager.h">
       <Filter>ソース ファイル\Base\ObjectManger</Filter>
     </ClInclude>
-    <ClInclude Include="Floor_sky.h">
-      <Filter>ソース ファイル\object\game\collisionObject\floor_sky</Filter>
+    <ClInclude Include="SkyFloor.h">
+      <Filter>ソース ファイル\object\game\collisionObject\skyFloor</Filter>
     </ClInclude>
     <ClInclude Include="AnimationChanger.h">
       <Filter>ソース ファイル\object\game\player\animationChanger</Filter>

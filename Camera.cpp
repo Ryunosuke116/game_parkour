@@ -107,8 +107,7 @@ void Camera::Update()
 	}
 	else
 	{
-		isHitObject = CameraPosCalc(
-			WorldSubSystem::GetInstance().GetSubSystem<CollisionObjectManager>()->GetCollisionObjects());
+		isHitObject = CameraPosCalc(WorldSubSystem::GetInstance().GetSubSystem<CollisionObjectManager>()->GetCollisionObjects());
 		isPush = false;
 	}
 	
@@ -155,6 +154,10 @@ void Camera::StartUpdate(const float& timer,
 /// </summary>
 void Camera::LayOutUpdate()
 {
+	const float kAddCameraPos = 1.0f;
+	const float kNormalAddDegree = 2.5f;
+	const float kSpecialAddDegree = 30.0f;
+
 	cameraDirection = VSub(screenCenterPosition, cameraPosition);
 	cameraDirection = VNorm(cameraDirection);
 
@@ -186,41 +189,39 @@ void Camera::LayOutUpdate()
 	if (CheckHitKey(KEY_INPUT_UP) &&
 		CheckHitKey(KEY_INPUT_LCONTROL))
 	{
-		cameraPosition.y += 1.0f;
-		screenCenterPosition.y += 1.0f;
+		cameraPosition.y += kAddCameraPos;
+		screenCenterPosition.y += kAddCameraPos;
 	}
 	//z軸↑移動
 	else if (CheckHitKey(KEY_INPUT_UP))
 	{
-		cameraPosition.z += 1.0f;
-		screenCenterPosition.z += 1.0f;
+		cameraPosition.z += kAddCameraPos;
+		screenCenterPosition.z += kAddCameraPos;
 	}
 
 	//y軸↓移動
 	if (CheckHitKey(KEY_INPUT_DOWN) &&
 		CheckHitKey(KEY_INPUT_LCONTROL))
 	{
-		cameraPosition.y -= 1.0f;
-		screenCenterPosition.y -= 1.0f;
+		cameraPosition.y -= kAddCameraPos;
+		screenCenterPosition.y -= kAddCameraPos;
 	}
 	//z軸↓移動
 	else if (CheckHitKey(KEY_INPUT_DOWN))
 	{
-		cameraPosition.z -= 1.0f;
-		screenCenterPosition.z -= 1.0f;
+		cameraPosition.z -= kAddCameraPos;
+		screenCenterPosition.z -= kAddCameraPos;
 	}
-
-	//DistanceUpdate();
 
 	if (PadInput::GetJoyPadYRight() > 0.0f)
 	{
-		cameraPosition.y += 1.0f;
-		screenCenterPosition.y += 1.0f;
+		cameraPosition.y += kAddCameraPos;
+		screenCenterPosition.y += kAddCameraPos;
 	}
 	if (PadInput::GetJoyPadYRight() < 0.0f)
 	{
-		cameraPosition.y -= 1.0f;
-		screenCenterPosition.y -= 1.0f;
+		cameraPosition.y -= kAddCameraPos;
+		screenCenterPosition.y -= kAddCameraPos;
 	}
 
 	if (PadInput::GetJoyPadXRight() > 0.0f)
@@ -229,13 +230,13 @@ void Camera::LayOutUpdate()
 		{
 			if (!isPushRT)
 			{
-				nowDegree -= 30.0f;
+				nowDegree -= kSpecialAddDegree;
 				isPushRT = true;
 			}
 		}
 		else
 		{
-			nowDegree -= 2.5f;
+			nowDegree -= kNormalAddDegree;
 		}
 	}
 	else if (PadInput::GetJoyPadXRight() < 0.0f)
@@ -244,13 +245,13 @@ void Camera::LayOutUpdate()
 		{
 			if (!isPushRT)
 			{
-				nowDegree += 30.0f;
+				nowDegree += kSpecialAddDegree;
 				isPushRT = true;
 			}
 		}
 		else
 		{
-			nowDegree += 2.5f;
+			nowDegree += kNormalAddDegree;
 		}
 	}
 	else
@@ -269,7 +270,7 @@ void Camera::LayOutUpdate()
 		nowDegree -= 360.0f;
 	}
 
-	float angleRadian = nowDegree * DX_PI_F / 360.0f;
+	float angleRadian = Calculation::DegToRad(nowDegree);
 	this->angleRadian = angleRadian;
 
 	cameraPosition.x = screenCenterPosition.x + cameraDistanceSize * cos(angleRadian);
@@ -294,12 +295,12 @@ void Camera::DistanceUpdate()
 {
 	const float kAddHighCenterPos = 40.0f;		//カメラが中心からどれだけ離れられるか
 	const float addLowCenterPos = kAddCenterPosY - 5.0f;
-	minHeight = screenCenterPosition.y - addLowCenterPos;
-	maxHeight = screenCenterPosition.y + kAddHighCenterPos;
-
 	const float kAddNormalizedTime = 0.02f;
 	const float kMinNormalizedTimeDistance = 0.0f;
 	const float kMaxNormalizedTime = 1.0f;
+
+	minHeight = screenCenterPosition.y - addLowCenterPos;
+	maxHeight = screenCenterPosition.y + kAddHighCenterPos;
 
 	if (PadInput::GetJoyPadYRight() > 0.0f)
 	{
@@ -406,7 +407,8 @@ bool Camera::CameraPosCalc(const std::vector<std::weak_ptr<BaseObject>>& collisi
 	MV1_COLL_RESULT_POLY hitPoly;
 	VECTOR cameraVelocity;
 	VECTOR subPosition;
-	const float velocityScale = 2.0f;
+	const float kVelocityScale = 2.0f;
+	const float kFrameIndex = -1;
 
 	for (const auto& fieldObject : collisionObjects)
 	{
@@ -415,7 +417,7 @@ bool Camera::CameraPosCalc(const std::vector<std::weak_ptr<BaseObject>>& collisi
 		//rayが当たっている場合カメラの位置をいじる
 		if (HitCheck::RayHitJudge(
 			collisionObject->GetModelHandle(),
-			-1,
+			kFrameIndex,
 			screenCenterPosition,
 			rayCastStartPosition,
 			hitPoly))
@@ -488,7 +490,7 @@ void Camera::AdjustCameraPosition()
 /// <param name="angle_player"></param>
 void Camera::ResetAngle(const float& angle_player)
 {
-	const float rotationSpeed = 6.0f;
+	const float kRotationSpeed = 6.0f;
 
 	if (PadInput::IsPushR())
 	{
@@ -503,7 +505,7 @@ void Camera::ResetAngle(const float& angle_player)
 	if (isResetAngle &&
 		PadInput::GetJoyPadXRight() == 0.0f)
 	{
-		nowDegree = Calculation::RotationAngleDegree(newDegree, nowDegree, rotationSpeed);
+		nowDegree = Calculation::RotationAngleDegree(newDegree, nowDegree, kRotationSpeed);
 
 		if (nowDegree == newDegree)
 		{
@@ -556,10 +558,13 @@ void Camera::ResultCreate()
 /// </summary>
 void Camera::ResultInitialize()
 {
+	const float kInitNormalLinearProgress = 0.5f;
+	const float kInitNormalCameraDistanceSize = 3.0f;
+
 	Initialize();
 	nowDegree = kResultInitializeAngle;
-	normalLinearProgress = 0.5f;
-	normalCameraDistanceSize = 3.0f;
+	normalLinearProgress = kInitNormalLinearProgress;
+	normalCameraDistanceSize = kInitNormalCameraDistanceSize;
 }
 
 /// <summary>
@@ -568,13 +573,15 @@ void Camera::ResultInitialize()
 void Camera::ResultUpdate()
 {
 	const float kAddHighCenterPos = 40.0f;		//カメラが中心からどれだけ離れられるか
-	const float addLowCenterPos = kAddCenterPosY - 5.0f;
-	minHeight = screenCenterPosition.y - addLowCenterPos;
+	const float kAddLowCenterPos = kAddCenterPosY - 5.0f;
+	const float kAddCenterPosX = -3.0f;
+
+	minHeight = screenCenterPosition.y - kAddLowCenterPos;
 	maxHeight = screenCenterPosition.y + kAddHighCenterPos;
 
 	centerPointSpherePos = WorldSubSystem::GetInstance().GetSubSystem<PlayerManager>()->GetPosition();
 	centerPointSpherePos.y += kAddCenterPosY;
-	centerPointSpherePos.x -= 3.0f;
+	centerPointSpherePos.x += kAddCenterPosX;
 	
 	//注視する座標からplayerがずれたら修正する
 	PosCalc();

@@ -13,7 +13,7 @@
 #include "PlayerManager.h"
 #include "Coin.h"
 #include "CoinManager.h"
-#include "Floor_sky.h"
+#include "SkyFloor.h"
 #include "Shadow.h"
 #include "GameTimer.h"
 #include "EffectManager.h"
