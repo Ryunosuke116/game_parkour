@@ -14,7 +14,7 @@ public:
 	{
 		int attachIndex;			//アニメーション情報
 		float playAnimTime;			//再生時間
-		float TotalPlayTime_anim;	//総再生時間
+		float totalPlayAnimTime;	//総再生時間
 		float PlayAnimSpeed;		//アニメーションスピード
 	};
 
@@ -26,7 +26,7 @@ public:
 	virtual std::pair<VECTOR, PlayerData> Update(const VECTOR& cameraDirection,
 		const std::vector<std::weak_ptr<BaseObject>>& fieldObjects, Player& player)abstract;
 	virtual VECTOR Command(const VECTOR& cameraDirection, PlayerData& playerData, Player& player)abstract;
-	virtual void Enter(AnimState& oldAnimState, AnimState& nowAnimState);		//状態に入ったとき
+	virtual void Enter(const AnimState& oldAnimState, const AnimState& nowAnimState);		//状態に入ったとき
 	virtual void Exit(PlayerData& playerData) abstract;			//状態を抜けるとき
 
 	virtual bool MotionUpdate(PlayerData& playerData);

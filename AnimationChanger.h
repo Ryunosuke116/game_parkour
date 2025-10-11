@@ -10,11 +10,10 @@ public:
 	~AnimationChanger();
 
 	std::shared_ptr<PlayerStateBase> ChangeState(const int modelHandle,
-		Player& player, PlayerData& playerData,
+		Player& player, 
+		PlayerData& playerData,
 		std::shared_ptr<PlayerStateBase>& nowState);
 
-	void SetOldAnimState(PlayerStateBase::AnimState animState);
-	void SetNowAnimState(PlayerStateBase::AnimState animState);
 	void Create(const int modelHandle);
 	void Initialize(const int& num, 
 		const int modelHandle,

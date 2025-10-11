@@ -120,7 +120,7 @@ bool PadInput::IsPushLT()
     return false;
 }
 
-bool PadInput::IsPush_A()
+bool PadInput::IsPushA()
 {
     if ((input->GetNowFrameNewInput() & PAD_INPUT_A ||
         CheckHitKey(KEY_INPUT_SPACE)))
@@ -130,7 +130,7 @@ bool PadInput::IsPush_A()
     return false;
 }
 
-bool PadInput::IsPush_R()
+bool PadInput::IsPushR()
 {
     if ((input->GetNowFrameNewInput() & PAD_INPUT_6 ||
         CheckHitKey(KEY_INPUT_SPACE)))
@@ -164,24 +164,24 @@ float PadInput::GetJoyPadYRight()
 //‘OƒtƒŒ[ƒ€
 ////////////////////////////////////
 
-float PadInput::GetJoyPad_old_x_left()
+float PadInput::GetOldJoyPadXLeft()
 {
-    return input->GetJoyPad_old_x_left();
+    return input->GetOldJoyPadXLeft();
 }
 
-float PadInput::GetJoyPad_old_y_left()
+float PadInput::GetOldJoyPadYLeft()
 {
-    return input->GetJoyPad_old_y_left();
+    return input->GetOldJoyPadYLeft();
 }
 
-float PadInput::GetJoyPad_old_x_right()
+float PadInput::GetOldJoyPadXRight()
 {
-    return input->GetJoyPad_old_x_right();
+    return input->GetOldJoyPadXRight();
 }
 
-float PadInput::GetJoyPad_old_y_right()
+float PadInput::GetOldJoyPadYRight()
 {
-    return input->GetJoyPad_old_y_right();
+    return input->GetOldJoyPadYRight();
 }
 
 Input* PadInput::input = nullptr;

@@ -42,8 +42,6 @@ void AnimationChanger::Initialize(
 
     //nowStateにwalkStateをセット
 	nowState = stateList[nowAnimNumber];
-    nowState->Enter(oldAnimState,
-        nowAnimState);
 
     nowState->SetOldAnimNumber(nowAnimNumber);
     nowAnimNumber = animNum::walk;
@@ -61,8 +59,6 @@ void AnimationChanger::ResultInitialize(const int num,
 
     //newStateを生成
     nowState = std::make_shared<Victory>(modelHandle);
-    nowState->Enter(oldAnimState,
-        nowAnimState);
 
     nowState->SetOldAnimNumber(nowAnimNumber);
 
@@ -85,10 +81,6 @@ std::shared_ptr<PlayerStateBase> AnimationChanger::ChangeState(
         Player & player,
         PlayerData & playerData)
     {
-        //nowState内のアニメーション情報を保存
-        SetNowAnimState(nowState->GetNowAnimState());
-        SetOldAnimState(nowState->GetOldAnimState());
-
         //newStateを生成
         newState = stateList.at(animNumber);
 
@@ -161,30 +153,10 @@ std::shared_ptr<PlayerStateBase> AnimationChanger::ChangeState(
 
     if (newState)
     {
-        newState->Enter(oldAnimState, nowAnimState);
+        newState->Enter(nowState->GetOldAnimState(), nowState->GetNowAnimState());
         newState->Initialize(modelHandle, nowAnimNumber, player);
         return newState;
     }
 
     return nowState;
-}
-
-/// <summary>
-/// アニメーション情報をセット
-/// </summary>
-/// <param name="AnimState"></param>
-void AnimationChanger::SetOldAnimState(PlayerStateBase::AnimState animState)
-{
-    oldAnimState.attachIndex = animState.attachIndex;
-    oldAnimState.PlayAnimSpeed = animState.PlayAnimSpeed;
-    oldAnimState.playAnimTime = animState.playAnimTime;
-    oldAnimState.TotalPlayTime_anim = animState.TotalPlayTime_anim;
-}
-
-void AnimationChanger::SetNowAnimState(PlayerStateBase::AnimState animState)
-{
-    nowAnimState.attachIndex = animState.attachIndex;
-    nowAnimState.PlayAnimSpeed = animState.PlayAnimSpeed;
-    nowAnimState.playAnimTime = animState.playAnimTime;
-    nowAnimState.TotalPlayTime_anim = animState.TotalPlayTime_anim;
 }

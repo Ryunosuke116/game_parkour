@@ -47,17 +47,17 @@ std::pair<VECTOR, PlayerData> Run::Update(
 
 	if (playerData.isRunWall)
 	{
-		auto [moveDir_new,playerData_new] = WallRunUpdate(player, fieldObjects);
+		auto [newMoveDir,newPlayerData] = WallRunUpdate(player, fieldObjects);
 	
-		moveDir = moveDir_new;
-		playerData = playerData_new;
+		moveDir = newMoveDir;
+		playerData = newPlayerData;
 	}
 	else
 	{
-		auto [moveDir_new, playerData_new] = NormalUpdate(cameraDirection, player);
+		auto [newMoveDir, newPlayerData] = NormalUpdate(cameraDirection, player);
 	
-		moveDir = moveDir_new;
-		playerData = playerData_new;
+		moveDir = newMoveDir;
+		playerData = newPlayerData;
 	}
 
 	this->nowAnimState.PlayAnimSpeed = kPlayAnimSpeed;
@@ -355,7 +355,7 @@ void Run::DashMove(PlayerData& playerData)
 		playerData.isDash = false;
 }
 
-void Run::Enter(AnimState& oldAnimState, AnimState& nowAnimState)
+void Run::Enter(const AnimState& oldAnimState, const AnimState& nowAnimState)
 {
 	PlayerStateBase::Enter(oldAnimState, nowAnimState);
 	const auto soundPlayer =

@@ -26,8 +26,8 @@ public:
 	void ResultInitialize()override;
 	void ResultUpdate()override;
 
-	void StartUpdate(const float& timer);
-	void FinishUpdate(const float& timer);
+	void StartUpdate(const float timer);
+	void FinishUpdate(const float timer);
 	void DebugUpdate();
 	void MoveDirectionUpdate();
 	void Receive_CollisionResult();

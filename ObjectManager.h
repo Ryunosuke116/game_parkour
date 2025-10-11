@@ -56,6 +56,7 @@ private:
 
 	bool isCamera;
 	bool isPush;
+	bool isPushResult;
 	bool isGoal;
 	bool isStreamStartPicture;		//スタート演出を流すか
 	bool isStreamFinishPicture;	//フィニッシュ演出を流すか

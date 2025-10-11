@@ -71,25 +71,14 @@ void Result::Update()
 
     objectManager->ResultUpdate();
 
-    if (PadInput::IsPush_A() && !isPush)
-    {
-        isPush = true;
+    const int kMaxAlpha = 300;
 
+    if (BlackOut::GetInstance().GetAlpha() >= kMaxAlpha)
+    {
         const auto soundPlayer =
             GameInstanceSubSystem::GetInstance().GetSubSystem<SoundPlayer>().lock();
-        soundPlayer->Play("button");
-    }
-
-    if (isPush)
-    {
-        BlackOut::GetInstance().BlackOutUpdate(5);
-        if (BlackOut::GetInstance().GetAlpha() >= 300)
-        {
-            const auto soundPlayer =
-                GameInstanceSubSystem::GetInstance().GetSubSystem<SoundPlayer>().lock();
-            soundPlayer->Stop("resultBGM");
-            ChangeScene("Title", 0);
-        }
+        soundPlayer->Stop("resultBGM");
+        ChangeScene("Title", 0);
     }
 }
 
@@ -99,7 +88,6 @@ void Result::Update()
 void Result::Draw()
 {
     objectManager->ResultDraw();
-
 
     BlackOut::GetInstance().Draw();
 }

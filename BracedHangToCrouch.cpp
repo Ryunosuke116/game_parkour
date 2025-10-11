@@ -47,7 +47,7 @@ std::pair<VECTOR, PlayerData> BracedHangToCrouch::Update(
 
     //ã‚èI‚í‚Á‚½‚çplayerData‚ð‰Šú‰»
     if (nowAnimState.playAnimTime >=
-        nowAnimState.TotalPlayTime_anim - 1.0f)
+        nowAnimState.totalPlayAnimTime - 1.0f)
     {
         isChangeState = true;
         player.SetIsCollisionCheck(true);

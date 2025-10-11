@@ -15,7 +15,6 @@
 
 
 PlayerCalculation::PlayerCalculation() :
-    hitWallNormal(VGet(0.0f, 0.0f, 0.0f)),
     gravityPower(0.0f),
     nowJumpPower(0.0f),
     nowMoveSpeed(0.0f),

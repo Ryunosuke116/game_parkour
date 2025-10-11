@@ -30,9 +30,12 @@ PlayerStateBase::PlayerStateBase(const int modelHandle):
     isChangeState(false)
 {
     this->modelHandle = modelHandle;
+    nowAnimState.attachIndex = -1;
+    oldAnimState.attachIndex = -1;
 }
 
-void PlayerStateBase::Enter(AnimState& oldAnimState, AnimState& nowAnimState)
+void PlayerStateBase::Enter(const AnimState& oldAnimState, 
+    const AnimState& nowAnimState)
 {
     isChangeState = false;
 
@@ -62,7 +65,7 @@ void PlayerStateBase::Initialize(const int modelHandle,
     this->nowAnimState.attachIndex = MV1AttachAnim(this->modelHandle, changeNum);
 
     this->nowAnimState.playAnimTime = 0.0f;
-    this->nowAnimState.TotalPlayTime_anim = MV1GetAttachAnimTotalTime(this->modelHandle, this->nowAnimState.attachIndex);
+    this->nowAnimState.totalPlayAnimTime = MV1GetAttachAnimTotalTime(this->modelHandle, this->nowAnimState.attachIndex);
 }
 
 /// <summary>
@@ -347,7 +350,7 @@ void PlayerStateBase::SetOldAnimState()
     oldAnimState.attachIndex = nowAnimState.attachIndex;
     oldAnimState.PlayAnimSpeed = nowAnimState.PlayAnimSpeed;
     oldAnimState.playAnimTime = nowAnimState.playAnimTime;
-    oldAnimState.TotalPlayTime_anim = nowAnimState.TotalPlayTime_anim;
+    oldAnimState.totalPlayAnimTime = nowAnimState.totalPlayAnimTime;
 }
 
 void PlayerStateBase::ResetOldAnimState()
@@ -355,7 +358,7 @@ void PlayerStateBase::ResetOldAnimState()
     oldAnimState.attachIndex = -1;
     oldAnimState.PlayAnimSpeed = 0.0f;
     oldAnimState.playAnimTime = 0.0f;
-    oldAnimState.TotalPlayTime_anim = 0.0f;
+    oldAnimState.totalPlayAnimTime = 0.0f;
 
 }
 
@@ -364,5 +367,5 @@ void PlayerStateBase::ResetNowAnimState()
     nowAnimState.attachIndex = -1;
     nowAnimState.PlayAnimSpeed = 0.0f;
     nowAnimState.playAnimTime = 0.0f;
-    nowAnimState.TotalPlayTime_anim = 0.0f;
+    nowAnimState.totalPlayAnimTime = 0.0f;
 }

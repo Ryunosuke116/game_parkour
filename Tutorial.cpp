@@ -42,7 +42,7 @@ void Tutorial::Initialize()
 
 bool Tutorial::Update()
 {
-	if (PadInput::IsPush_A() &&
+	if (PadInput::IsPushA() &&
 		!isPushStart)
 	{
 		isPushStart = true;

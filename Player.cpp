@@ -62,9 +62,7 @@ void Player::Create()
 /// </summary>
 void Player::Initialize()
 {
-    const VECTOR initPosition = VGet(3.02443838f, 9.00285912f, -1215.93481f);
-
-    const VECTOR pos = VGet(-1663.0f, 688.5f, 788.0f);
+    const VECTOR initPosition = VGet(3.0f, 9.0f, -1210.0f);
 
     position = initPosition;
     targetMoveDirection = VGet(0.0f, 0.0f, 0.0f);
@@ -189,7 +187,7 @@ void Player::Update()
 /// ゲームシーンのスタート時の更新処理
 /// </summary>
 /// <param name="timer"></param>
-void Player::StartUpdate(const float& timer)
+void Player::StartUpdate(const float timer)
 {
     const float kMaxTimer = 40.0f;
 
@@ -214,7 +212,7 @@ void Player::StartUpdate(const float& timer)
 /// ゲームシーン終了時の更新処理
 /// </summary>
 /// <param name="timer"></param>
-void Player::FinishUpdate(const float& timer)
+void Player::FinishUpdate(const float timer)
 {
     nowState->SetIsChangeState(true);
     playerData.isIdle = true;
@@ -453,6 +451,7 @@ void Player::EffectUpdate()
         std::shared_ptr<EffectManager> effectManager = GameInstanceSubSystem::GetInstance().GetSubSystem<EffectManager>().lock();
         const float kMaxEffectTimer = 10.0f;
         const float kAddEffectPositionY = 2.0f;
+
         effectTimer++;
 
         if (effectTimer >= kMaxEffectTimer)
@@ -534,7 +533,7 @@ void Player::CounterplanBug()
         playerData.isAllJump = false;
         playerData.isWalljump = false;
         playerData.isMove = false;
-        playerData.isWalk = true;
+        playerData.isWalk = false;
         playerData.isRoll = false;
         playerData.isSprint = false;
         playerData.isStopRun = false;

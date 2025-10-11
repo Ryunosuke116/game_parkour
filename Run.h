@@ -16,7 +16,7 @@ public:
 	
 	VECTOR Command(const VECTOR& cameraDirection, PlayerData& playerData, Player& player)override;
 	VECTOR Move(const VECTOR& cameraDirection, PlayerData& playerData)override;
-	void Enter(AnimState& oldAnimState, AnimState& nowAnimState)override;		//ó‘Ô‚É“ü‚Á‚½‚Æ‚«
+	void Enter(const AnimState& oldAnimState, const AnimState& nowAnimState)override;		//ó‘Ô‚É“ü‚Á‚½‚Æ‚«
 	void Exit(PlayerData& playerData) override;			//ó‘Ô‚ğ”²‚¯‚é‚Æ‚«
 
 	void DashMove(PlayerData& playerData);

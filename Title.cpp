@@ -70,7 +70,7 @@ void Title::Update()
 
     objectManager->TitleUpdate();
 
-    if (PadInput::IsPush_A() && !isPush)
+    if (PadInput::IsPushA() && !isPush)
     {
         isPush = true;
         soundPlayer->Play("button");

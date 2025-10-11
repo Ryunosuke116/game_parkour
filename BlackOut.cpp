@@ -28,7 +28,7 @@ void BlackOut::ResultInitialize()
 /// </summary>
 void BlackOut::BlackOutUpdate(int kAddAlpha)
 {
-    if (!(alpha >= kMaxAlpha))
+    if (alpha <= kMaxAlpha)
     {
         alpha += kAddAlpha;
     }
@@ -39,9 +39,13 @@ void BlackOut::BlackOutUpdate(int kAddAlpha)
 /// </summary>
 void BlackOut::LightChangeUpdate(int kAddAlpha)
 {
-    if (!(alpha <= 0))
+    if (alpha > 0)
     {
         alpha -= kAddAlpha;
+        if (alpha < 0)
+        {
+            alpha = 0;
+        }
     }
 }
 

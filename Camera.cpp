@@ -258,7 +258,7 @@ void Camera::LayOutUpdate()
 		isPushRT = false;
 	}
 
-	if (PadInput::IsPush_R())
+	if (PadInput::IsPushR())
 	{
 		nowDegree = -90.0f;
 	}
@@ -490,7 +490,7 @@ void Camera::ResetAngle(const float& angle_player)
 {
 	const float rotationSpeed = 6.0f;
 
-	if (PadInput::IsPush_R())
+	if (PadInput::IsPushR())
 	{
 		newDegree = angle_player;
 		if (newDegree <= 0.0f)

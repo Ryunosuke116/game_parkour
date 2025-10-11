@@ -20,6 +20,7 @@ ObjectManager::ObjectManager() :
 	isStreamFinishPicture(false),
 	isGoal(false),
 	isPush(false),
+	isPushResult(false),
 	isCamera(false)
 {
 
@@ -398,14 +399,34 @@ void ObjectManager::ResultInitilize()
 	{
 		object->ResultInitialize();
 	}
+	isPushResult = false;
 }
 
 void ObjectManager::ResultUpdate()
 {
- 	if (BlackOut::GetInstance().GetIsLightChange())
+	if (PadInput::IsPushA() && 
+		!isPushResult &&
+		!BlackOut::GetInstance().GetIsLightChange())
+	{
+		isPushResult = true;
+
+		const auto soundPlayer =
+			GameInstanceSubSystem::GetInstance().GetSubSystem<SoundPlayer>().lock();
+		soundPlayer->Play("button");
+	}
+
+	if (isPushResult)
+	{
+		const int kAddAlpha = 5;
+		const int kMaxAlpha = 300;
+
+		BlackOut::GetInstance().BlackOutUpdate(kAddAlpha);
+	}
+	else if (BlackOut::GetInstance().GetIsLightChange())
 	{
 		const int kMinAlpha = 0;
 		const int kAddAlpha = 5;
+
 		BlackOut::GetInstance().LightChangeUpdate(kAddAlpha);
 
 		BlackOut::GetInstance().GetAlpha() <= kMinAlpha ?

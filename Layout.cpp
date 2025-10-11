@@ -32,7 +32,7 @@ void Layout::Update(const VECTOR& pos,
 	DebugDrawer::GetInstance().InformationInput_string_VECTOR("position x %f  y %f  z %f\n", pos);
 
 	if (CheckHitKey(KEY_INPUT_SPACE) ||
-		PadInput::IsPush_A())
+		PadInput::IsPushA())
 	{
 		if (!isPush)
 		{
