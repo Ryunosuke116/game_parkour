@@ -277,14 +277,14 @@ void PlayerStateBase::WallRunMove(PlayerData& playerData,
         //スティックが即座に反対方向に向いた場合slipをtrue
         //radian計算
         float radianWall = atan2f(-hitWallNormal.x, -hitWallNormal.z);
-        float radianPad = atan2f(player.GetFaceDirection().x, player.GetFaceDirection().z);
+        float radianFaceDirection = atan2f(player.GetFaceDirection().x, player.GetFaceDirection().z);
 
         //度数計算
         float degreeWall = abs(Calculation::RadToDeg(radianWall));
-        float degreePadNow = abs(Calculation::RadToDeg(radianPad));
+        float degreeFaceDirection = abs(Calculation::RadToDeg(radianFaceDirection));
 
         //スティック入力と壁の角度の差を求める
-        float degreePadWallDifference = degreePadNow - degreeWall;
+        float degreePadWallDifference = degreeFaceDirection - degreeWall;
 
         //壁の法線ベクトルを利用して壁走りするかどうか
         if (abs(degreePadWallDifference) <= kEntryDegreeWallRun)

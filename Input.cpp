@@ -10,7 +10,7 @@ Input::Input()
 	nowFrameNewInput(0),
 	input_direct({NULL}),
 	joyPad(new JoyPad{ 0.0f, 0.0f, 0.0f, 0.0f }),
-	joyPad_old(new JoyPad{ 0.0f, 0.0f, 0.0f, 0.0f })
+	OldJoyPad(new JoyPad{ 0.0f, 0.0f, 0.0f, 0.0f })
 {
 	SetJoypadDeadZone(DX_INPUT_KEY_PAD1, 0.4f);
 }
@@ -38,21 +38,21 @@ void Input::Update()
 	// 今のフレームで新たに押されたボタンのビットだけ立っている値を nowFrameNewInput に代入する
 	nowFrameNewInput = nowFrameInput & ~Old;
 
-	int input_x_left;
-	int input_y_left;
-	int input_x_Right;
-	int input_y_Right;
+	int inputXLeft;
+	int inputYLeft;
+	int inputXRight;
+	int inputYRight;
 
 	//左スティック
-	GetJoypadAnalogInput(&input_x_left, &input_y_left, DX_INPUT_KEY_PAD1);
+	GetJoypadAnalogInput(&inputXLeft, &inputYLeft, DX_INPUT_KEY_PAD1);
 	//右スティック
-	GetJoypadAnalogInputRight(&input_x_Right, &input_y_Right, DX_INPUT_KEY_PAD1);
+	GetJoypadAnalogInputRight(&inputXRight, &inputYRight, DX_INPUT_KEY_PAD1);
 
-	joyPad_old->input_x_left = joyPad->input_x_left;
-	joyPad_old->input_y_left = joyPad->input_y_left;
+	OldJoyPad->inputXLeft = joyPad->inputXLeft;
+	OldJoyPad->inputYLeft = joyPad->inputYLeft;
 
-	joyPad->input_x_left = static_cast<float>(input_x_left);
-	joyPad->input_y_left = static_cast<float>(input_y_left);
-	joyPad->input_x_Right = static_cast<float>(input_x_Right);
-	joyPad->input_y_Right = static_cast<float>(input_y_Right);
+	joyPad->inputXLeft = static_cast<float>(inputXLeft);
+	joyPad->inputYLeft = static_cast<float>(inputYLeft);
+	joyPad->inputXRight = static_cast<float>(inputXRight);
+	joyPad->inputYRight = static_cast<float>(inputYRight);
 }

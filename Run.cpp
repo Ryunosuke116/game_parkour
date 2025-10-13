@@ -103,10 +103,11 @@ std::pair<VECTOR, PlayerData> Run::WallRunUpdate(
 	VECTOR moveDir = VGet(0.0f, 0.0f, 0.0f);
 	const float wallRunStopTime = player.playerCalculation->GetWallRunStopTime();
 	const float wallRunMaxStopTime = player.playerCalculation->GetWallRunMaxStopTime();
-	const int kMinJoyPadLeft = -1000;
+	const int kMinJoyPadLeft = 1000;
 
 	//—Ž‚¿‚é
-	if (-PadInput::GetJoyPadYLeft() <= kMinJoyPadLeft)
+	if (PadInput::GetJoyPadYLeft() >= kMinJoyPadLeft &&
+		!(PadInput::GetOldJoyPadYLeft() >= kMinJoyPadLeft))
 	{
 		playerData.isRunWall = false;
 		playerData.isUseWallJump = false;

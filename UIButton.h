@@ -18,10 +18,14 @@ public:
 	void ResultUpdate()override;
 
 private:
-	int titleButtonHandle;
 	int backGroundHandle;
+	int titleButtonHandle;
 	int alpha;
+	int addAlpha;
 
-	int kAddAlpha;
+	float backGroundX;
+	float backGroundY;
+	float titleButtonX;
+	float titleButtonY;
 };
 

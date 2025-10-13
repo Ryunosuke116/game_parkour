@@ -40,27 +40,37 @@ void UIButton::ResultInitialize()
 {
     const int kInitAlpha = 0;
     const int kInitAddAlpha = 2;
+    const float kInitBackGroundX = 140.0f;
+    const float kInitBackGroundY = 680.0f;
+    const float kInitTitleButtonX = 200.0f;
+    const float kInitTitleButtonY = 740.0f;
+
+    backGroundX = kInitBackGroundX;
+    backGroundY = kInitBackGroundY;
+    titleButtonX = kInitTitleButtonX;
+    titleButtonY = kInitTitleButtonY;
 
     alpha = kInitAlpha;
-    kAddAlpha = kInitAddAlpha;
+    addAlpha = kInitAddAlpha;
 }
 
 void UIButton::ResultUpdate()
 {
     const int kMaxAlpha = 255;
+    const int kMinAlpha = 0;
 
-    alpha += kAddAlpha;
+    alpha += addAlpha;
 
-    if (alpha <= 0 || alpha >= kMaxAlpha)
+    if (alpha <= kMinAlpha || alpha >= kMaxAlpha)
     {
-        kAddAlpha = -kAddAlpha;
+        addAlpha = -addAlpha;
     }
 }
 
 void UIButton::Draw()
 {
     SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
-    DrawExtendGraph(140, 680, 960, 900, backGroundHandle, TRUE);
+    DrawExtendGraph(backGroundX, backGroundY, 960, 900, backGroundHandle, TRUE);
     DrawExtendGraph(200, 740, 970, 840, titleButtonHandle, TRUE);
     SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 }
