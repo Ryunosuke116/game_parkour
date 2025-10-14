@@ -2,11 +2,11 @@
 #include "BaseUI.h"
 #include "PlayerStateObserver.h"
 
-class UI_controlManual : public BaseUI, public PlayerStateObserver
+class ControlManualUi : public BaseUI, public PlayerStateObserver
 {
 public:
-	UI_controlManual();
-	~UI_controlManual();
+	ControlManualUi();
+	~ControlManualUi();
 
 	void Create()override;
 	void Add()override{}

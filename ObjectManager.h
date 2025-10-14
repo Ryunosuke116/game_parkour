@@ -2,7 +2,7 @@
 #include "BaseManager.h"
 #include "BaseChara.h"
 #include "BaseObject.h"
-#include "objects.h"
+#include "GameObjects.h"
 #include "Layout.h"
 #include "JsonManager.h"
 #include "BaseGameObjectManager.h"

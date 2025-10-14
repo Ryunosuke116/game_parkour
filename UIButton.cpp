@@ -1,4 +1,4 @@
-#include "common.h"
+#include "Common.h"
 #include <memory>
 #include <string>
 #include "UIButton.h"
@@ -44,11 +44,19 @@ void UIButton::ResultInitialize()
     const float kInitBackGroundY = 680.0f;
     const float kInitTitleButtonX = 200.0f;
     const float kInitTitleButtonY = 740.0f;
+    const float kInitBackGroundWidth = 820.0f;
+    const float kInitBackGroundHeight = 220.0f;
+    const float kInitTitleButtonWidth = 770.0f;
+    const float kInitTitleButtonHeight = 100.0f;
 
     backGroundX = kInitBackGroundX;
     backGroundY = kInitBackGroundY;
+    backGroundWidth = kInitBackGroundWidth;
+    backGroundHeight = kInitBackGroundHeight;
     titleButtonX = kInitTitleButtonX;
     titleButtonY = kInitTitleButtonY;
+    titleButtonWidth = kInitTitleButtonWidth;
+    titleButtonHeight = kInitTitleButtonHeight;
 
     alpha = kInitAlpha;
     addAlpha = kInitAddAlpha;
@@ -70,7 +78,15 @@ void UIButton::ResultUpdate()
 void UIButton::Draw()
 {
     SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
-    DrawExtendGraph(backGroundX, backGroundY, 960, 900, backGroundHandle, TRUE);
-    DrawExtendGraph(200, 740, 970, 840, titleButtonHandle, TRUE);
+    DrawExtendGraphF(backGroundX,
+        backGroundY, 
+        backGroundX + backGroundWidth,
+        backGroundY + backGroundHeight,
+        backGroundHandle, TRUE);
+    DrawExtendGraphF(titleButtonX,
+        titleButtonY, 
+        titleButtonX + titleButtonWidth,
+        titleButtonY + titleButtonHeight,
+        titleButtonHandle, TRUE);
     SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 }

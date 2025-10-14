@@ -1,4 +1,4 @@
-#include "common.h"
+#include "Common.h"
 #include "EffekseerForDXLib.h"
 #include "SceneManager.h"
 #include "Title.h"

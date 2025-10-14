@@ -11,7 +11,7 @@
 #include "GameInstanceSubSystem.h"
 #include "SoundPlayer.h"
 #include "Liner8TreeManager.hpp"
-#include "boundaryRange.h"
+#include "BoundaryRange.h"
 #include "ObjectForTree.hpp"
 #include "Cell.hpp"
 #include "DebugDrawer.h"

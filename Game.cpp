@@ -1,4 +1,4 @@
-#include "common.h"
+#include "Common.h"
 #include "EffekseerForDXLib.h"
 #include "SceneManager.h"
 #include "BaseScene.h"
@@ -28,6 +28,7 @@ Game::~Game()
 void Game::Create()
 {
 	const std::string jsonFileName = "JsonGame";
+	const int kAlpha = 255;
 
 	JsonManager::GetInstance().Create(jsonFileName);
 	GameInstanceSubSystem::GetInstance().Load(jsonFileName);
@@ -36,7 +37,7 @@ void Game::Create()
 	gameObjectManager_actual = std::dynamic_pointer_cast<ObjectManager>(gameObjectManager);
 
 	gameObjectManager->Create();
-	BlackOut::GetInstance().SetAlpha(255);
+	BlackOut::GetInstance().SetAlpha(kAlpha);
 }
 
 /// <summary>

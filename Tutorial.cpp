@@ -1,4 +1,4 @@
-#include "common.h"
+#include "Common.h"
 #include <vector>
 #include <memory>
 #include "Tutorial.h"
@@ -51,7 +51,7 @@ bool Tutorial::Update()
 	if (isPushStart)
 	{
 		startGraphTimer++;
-		if (startGraphTimer >= 50.0f)
+		if (startGraphTimer >= kMaxStartGraphTimer)
 		{
 			return false;
 		}
@@ -62,7 +62,7 @@ bool Tutorial::Update()
 
 void Tutorial::Draw(const float& streamStartPictureTimer)
 {
-	if (streamStartPictureTimer >= 50.0f &&
+	if (streamStartPictureTimer >= kMaxStartGraphTimer &&
 		!isPushStart)
 	{
 		DrawGraph(tutorialGraphPosX, tutorialGraphPosY, tutorialHandle, TRUE);

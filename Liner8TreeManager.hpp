@@ -8,7 +8,7 @@
 #include "Cell.hpp"
 #include "IObject.h"
 #include "WorldSubSystem.h"
-#include "boundaryRange.h"
+#include "BoundaryRange.h"
 #include "DebugDrawer.h"
 
 template <class Type>

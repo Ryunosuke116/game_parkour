@@ -1,4 +1,4 @@
-#include "common.h"
+#include "Common.h"
 #include "HitCheck.h"
 #include "Calculation.h"
 #include "DebugDrawer.h"
@@ -18,60 +18,37 @@ HitCheck::~HitCheck()
 
 }
 
-/// <summary>
-///  rayの当たり判定
-/// </summary>
-/// <param name="modelHandle"></param>
-/// <param name="frameIndex"></param>
-/// <param name="startLinePos"></param>
-/// <param name="endLinePos"></param>
-/// <param name="hitPoly"></param>
-/// <returns></returns>
-bool HitCheck::RayHitJudge(const int& modelHandle, int frameIndex,
-	VECTOR startLinePos, VECTOR endLinePos, MV1_COLL_RESULT_POLY& hitPoly)
+bool HitCheck::RayHitJudge(const int modelHandle, 
+	const int frameIndex,
+	const VECTOR& startLinePos, 
+	const VECTOR& endLinePos,
+	MV1_COLL_RESULT_POLY& hitPoly)
 {
 	hitPoly = MV1CollCheck_Line(modelHandle, frameIndex, startLinePos, endLinePos);
 
 	return hitPoly.HitFlag;
 }
 
-/// <summary>
-/// 球の当たり判定
-/// </summary>
-/// <param name="modelHandle"></param>
-/// <param name="frameIndex"></param>
-/// <param name="radius"></param>
-/// <param name="endLinePos"></param>
-/// <param name="hitPoly"></param>
-/// <returns></returns>
-bool HitCheck::SphereHitJudge(
-	const int& modelHandle, 
-	int frameIndex,
-	const float& radius,
-	VECTOR endLinePos,
+bool HitCheck::SphereHitJudge(const int modelHandle, 
+	const int frameIndex,
+	const float radius,
+	const VECTOR& endLinePos,
 	MV1_COLL_RESULT_POLY_DIM& hitPoly)
 {
 	hitPoly = MV1CollCheck_Sphere(modelHandle, frameIndex, endLinePos, radius);
 
-	if (hitPoly.HitNum >= 1)return true;
+	if (hitPoly.HitNum >= 1)
+	{
+		return true;
+	}
 	return false;
 }
 
-/// <summary>
-/// カプセルの当たり判定
-/// </summary>
-/// <param name="modelHandle"></param>
-/// <param name="frameIndex"></param>
-/// <param name="radius"></param>
-/// <param name="startLinePos"></param>
-/// <param name="endLinePos"></param>
-/// <param name="hitPoly"></param>
-bool HitCheck::CapsuleHitJudge(
-	const int& modelHandle, 
-	int frameIndex,
-	float radius,
-	VECTOR startLinePos,
-	VECTOR endLinePos, 
+bool HitCheck::CapsuleHitJudge(const int modelHandle, 
+	const int frameIndex,
+	const float radius,
+	const VECTOR& startLinePos,
+	const VECTOR& endLinePos, 
 	MV1_COLL_RESULT_POLY_DIM& hitPoly)
 {
 	hitPoly = MV1CollCheck_Capsule(modelHandle, frameIndex, startLinePos, endLinePos, radius);
@@ -80,120 +57,75 @@ bool HitCheck::CapsuleHitJudge(
 	return false;
 }
 
-/// <summary>
-/// 垂線の足の計算
-/// </summary>
-/// <param name="point"></param>
-/// <param name="P"></param>
-/// <param name="Q"></param>
-/// <returns></returns>
-float HitCheck::projectionCalc(const VECTOR& point, const VECTOR& P, const VECTOR& Q)
+VECTOR HitCheck::ClosestPtToPointTriangle(const VECTOR& point,
+	const VECTOR& vertex1,
+	const VECTOR& vertex2,
+	const VECTOR& vertex3)
 {
-	////線分ベクトル
-	//VECTOR PQ = VSub(Q, P);
-	//VECTOR P_point = VSub(point, P);
-	//
-	////PQの内積(2乗)
-	//float len2 = VDot(PQ, PQ);
-
-	//float normalDistanceProgress = VDot(PQ, P_point) / len2;
-
-	//VECTOR foot = VAdd(P, VScale(PQ, normalDistanceProgress));
-	//foot = VSub(point, foot);
-	//float D = VSize(foot);
-
-	VECTOR a, normal;
-	VECTOR AP = VSub(point, a);
-
-	float D = VDot(AP, normal) / VDot(normal, normal);
-
-	return D;
-}
-
-VECTOR HitCheck::ClosestPtToPointTriangle(VECTOR centerPos, VECTOR a, VECTOR b, VECTOR c)
-{
-
 	//PがAの外側の頂点座標の中にあるかどうかチェック
-	VECTOR ab = VSub(b, a);
-	VECTOR ac = VSub(c, a);
-	VECTOR ap = VSub(centerPos, a);
+	VECTOR edgeAB = VSub(vertex2, vertex1);
+	VECTOR edgeAC = VSub(vertex3, vertex1);
+	VECTOR vecAP = VSub(point, vertex1);
 
-	float d1 = VDot(ab, ap);
-	float d2 = VDot(ac, ap);
+	float dotAB_AP = VDot(edgeAB, vecAP);
+	float dotAC_AP = VDot(edgeAC, vecAP);
 
 	//PがBの外側の頂点領域の中にあるかどうかチェック
-	VECTOR bp = VSub(centerPos, b);
-	float d3 = VDot(ab, bp);
-	float d4 = VDot(ac, bp);
+	VECTOR vecBP = VSub(point, vertex2);
+	float dotAB_BP = VDot(edgeAB, vecBP);
+	float dotAC_BP = VDot(edgeAC, vecBP);
 
 	//PがABの辺領域の中にあるかどうかチェックし、あればPのAB上に対する射影を返す
-	float vc = d1 * d4 - d3 * d2;
+	float areaAB = dotAB_AP * dotAC_BP - dotAB_BP * dotAC_AP;
 
 	//PがCの外側の頂点領域の中にあるかどうかチェック
-	VECTOR cp = VSub(centerPos, c);
-	float d5 = VDot(ab, cp);
-	float d6 = VDot(ac, cp);
+	VECTOR vecCP = VSub(point, vertex3);
+	float dotAB_CP = VDot(edgeAB, vecCP);
+	float dotAC_CP = VDot(edgeAC, vecCP);
 
 	//PがACの辺領域の中にあるかどうかチェックし、あればPのAC上に対する射影を返す
-	float vb = d5 * d2 - d1 * d6;
+	float areaAC = dotAB_CP * dotAC_AP - dotAB_AP * dotAC_CP;
 
 	//PがBCの辺領域の中にあるかどうかチェックし、あればPのBC上に対する射影を返す
-	float va = d3 * d6 - d5 * d4;
+	float areaBC = dotAB_BP * dotAC_CP - dotAB_CP * dotAC_BP;
 
 	//Pは面領域の中にある。Qをその重心座標(u,v,w)を用いて計算
-	float denom = 1.0f / (va + vb + vc);
-	float v = vb * denom;
-	float w = vc * denom;
+	float baryDenom = 1.0f / (areaBC + areaAC + areaAB);
+	float baryV = areaAC * baryDenom;
+	float baryW = areaAB * baryDenom;
 
-	return VAdd(a, VAdd(VScale(ab, v), VScale(ac, w)));
+	return VAdd(vertex1, VAdd(VScale(edgeAB, baryV), VScale(edgeAC, baryW)));
 
 }
 
-
-/// <summary>
-/// AABB同士が接触しているか
-/// </summary>
-/// <param name="a"></param>
-/// <param name="b"></param>
-/// <returns></returns>
-bool HitCheck::AABBHitJudge(AABB a, AABB b)
+bool HitCheck::AABBHitJudge(const AABB& AABB1, const AABB& AABB2)
 {
-	if (a.min.x <= b.max.x &&
-		a.max.x >= b.min.x &&
-		a.min.y <= b.max.y &&
-		a.max.y >= b.min.y &&
-		a.min.z <= b.max.z &&
-		a.max.z >= b.min.z)
+	if (AABB1.min.x <= AABB2.max.x &&
+		AABB1.max.x >= AABB2.min.x &&
+		AABB1.min.y <= AABB2.max.y &&
+		AABB1.max.y >= AABB2.min.y &&
+		AABB1.min.z <= AABB2.max.z &&
+		AABB1.max.z >= AABB2.min.z)
 	{
 		return true;
 	}
 
 	return false;
-
 }
 
-/// <summary>
-/// 球と球の当たり判定
-/// </summary>
-/// <param name="position_1"></param>
-/// <param name="position_2"></param>
-/// <param name="radius_1"></param>
-/// <param name="radius_2"></param>
-/// <returns></returns>
 bool HitCheck::HitConfirmation(
-	VECTOR position_1,
-	VECTOR position_2, 
-	const float radius_1,
-	const float radius_2)
+	const VECTOR& spherePos1,
+	const VECTOR& spherePos2, 
+	const float radius1,
+	const float radius2)
 {
-
-	VECTOR positionSub = VSub(position_1, position_2);
+	VECTOR positionSub = VSub(spherePos1, spherePos2);
 
 	//球と球の中心点との距離
 	float positionRange = VSize(positionSub);
 
 	//半径の合計
-	float radiusAdd = radius_1 + radius_2;
+	float radiusAdd = radius1 + radius2;
 
 	// 1と2の半径よりも球と球の中心点との距離が近ければ当たっている
 	if (radiusAdd > positionRange)
@@ -203,48 +135,36 @@ bool HitCheck::HitConfirmation(
 	return false;
 }
 
-/// <summary>
-/// 対象の座標から最も近いカプセルの軸座標を算出
-/// </summary>
-/// <param name="capsulePosition_1"></param>
-/// <param name="capsulePosition_2"></param>
-/// <param name="position"></param>
-/// <returns></returns>
-VECTOR HitCheck::CapsuleHitConfirmation(VECTOR capsulePosition_1, VECTOR capsulePosition_2, VECTOR position)
+VECTOR HitCheck::CapsuleHitConfirmation(const VECTOR& capsulePos1,
+	const VECTOR& capsulePos2,
+	const VECTOR& point)
 {
-	VECTOR AB = VSub(capsulePosition_2, capsulePosition_1);
-	VECTOR AP = VSub(position, capsulePosition_1);
-
-	//ベクトルの長さ
-	float vectorLength = pow((AB.x * AB.x) + (AB.y * AB.y) + (AB.z * AB.z), 0.5f);
+	VECTOR edgeAB = VSub(capsulePos2, capsulePos1);
+	VECTOR edgeAP = VSub(point, capsulePos1);
 
 	//単位ベクトル(正規化)
-	VECTOR unitVector = VGet(0, 0, 0);
-	unitVector.x = AB.x / vectorLength;
-	unitVector.y = AB.y / vectorLength;
-	unitVector.z = AB.z / vectorLength;
+	VECTOR unitVector = VNorm(edgeAB);
 
 	//点の射影位置を計算(スカラー値)
-	float productionVector = (unitVector.x * AP.x) + (unitVector.y * AP.y) + (unitVector.z * AP.z);
+	float productionVector = VDot(edgeAP, unitVector);
 
 	//線分上の最近点を計算
-	VECTOR AX;
-	AX.x = capsulePosition_1.x + (unitVector.x * productionVector);
-	AX.y = capsulePosition_1.y + (unitVector.y * productionVector);
-	AX.z = capsulePosition_1.z + (unitVector.z * productionVector);
+	VECTOR edgeAX;
+	edgeAX.x = capsulePos1.x + (unitVector.x * productionVector);
+	edgeAX.y = capsulePos1.y + (unitVector.y * productionVector);
+	edgeAX.z = capsulePos1.z + (unitVector.z * productionVector);
 
 
-	if (AX.y <= capsulePosition_2.y)
+	if (edgeAX.y <= capsulePos2.y)
 	{
-		AX.y = capsulePosition_2.y;
+		edgeAX.y = capsulePos2.y;
 	}
-	if (AX.y >= capsulePosition_1.y)
+	if (edgeAX.y >= capsulePos1.y)
 	{
-		AX.y = capsulePosition_1.y;
+		edgeAX.y = capsulePos1.y;
 	}
 
-	return AX;
-
+	return edgeAX;
 }
 
 /// <summary>
@@ -257,7 +177,12 @@ VECTOR HitCheck::CapsuleHitConfirmation(VECTOR capsulePosition_1, VECTOR capsule
 /// <param name="c"></param>
 /// <param name="normal"></param>
 /// <returns></returns>
-std::pair<VECTOR, VECTOR> HitCheck::SegmentTriangleDistance(const VECTOR& p, const VECTOR& q, const VECTOR& a, const VECTOR& b, const VECTOR& c, const VECTOR& normal)
+std::pair<VECTOR, VECTOR> HitCheck::SegmentTriangleDistance(const VECTOR& p,
+	const VECTOR& q,
+	const VECTOR& a, 
+	const VECTOR& b, 
+	const VECTOR& c, 
+	const VECTOR& normal)
 {
 	//線分の方向ベクトル
 	VECTOR PQ = VSub(q, p);

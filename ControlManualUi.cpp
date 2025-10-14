@@ -1,20 +1,20 @@
-#include "common.h"
+#include "Common.h"
 #include <vector>
 #include <unordered_map>
-#include "UI_controlManual.h"
+#include "ControlManualUi.h"
 #include "AnimTime.h"
 #include "JsonManager.h"
 #include "Calculation.h"
 
-UI_controlManual::UI_controlManual():
-	BaseUI()
+ControlManualUi::ControlManualUi():
+	BaseUI(),
+	stateNumber(-1)
 {
-	stateNumber = -1;
 	jsonTag = "controlManual";
 }
 
 
-UI_controlManual::~UI_controlManual()
+ControlManualUi::~ControlManualUi()
 {
 	for (auto& uiHandle : uiHandles)
 	{
@@ -23,7 +23,7 @@ UI_controlManual::~UI_controlManual()
 }
 
 
-void UI_controlManual::Load(const nlohmann::json& jsonData)
+void ControlManualUi::Load(const nlohmann::json& jsonData)
 {
 	for (auto& data : jsonData["controlManual"])
 	{
@@ -34,12 +34,12 @@ void UI_controlManual::Load(const nlohmann::json& jsonData)
 	}
 }
 
-void UI_controlManual::Create()
+void ControlManualUi::Create()
 {
 	Load(JsonManager::GetInstance().GetJsons("png"));
 }
 
-void UI_controlManual::Initialize()
+void ControlManualUi::Initialize()
 {
 	const float initManualUiPosX = -350.0f;
 	const float initManualUiPosY = 120.0f;
@@ -57,9 +57,11 @@ void UI_controlManual::Initialize()
 /// <summary>
 /// playerの状態によって表示するUIを変更する
 /// </summary>
-void UI_controlManual::Update()
+void ControlManualUi::Update()
 {
-	drawUis.clear();
+	const float kLeapSpeed = 0.1f;
+	const float targetManualPosX = 90.0f;
+	const float targetCommandsBackPosX = 30.0f;
 
 	drawUis.push_back(uiHandles.at("move_camera"));
 	drawUis.push_back(uiHandles.at("reset_camera"));
@@ -94,16 +96,12 @@ void UI_controlManual::Update()
 		drawUis.push_back(uiHandles.at("move_down"));
 	}
 
-	const float targetManualPosX = 90.0f;
-	const float targetCommandsBackPosX = 30.0f;
-
-	manualUiPosX = Calculation::Leap(manualUiPosX, targetManualPosX, 0.1f);
-	commandsBackPosX = Calculation::Leap(commandsBackPosX, targetCommandsBackPosX, 0.1f);
+	manualUiPosX = Calculation::Leap(manualUiPosX, targetManualPosX, kLeapSpeed);
+	commandsBackPosX = Calculation::Leap(commandsBackPosX, targetCommandsBackPosX, kLeapSpeed);
 }
 
-void UI_controlManual::Draw()
+void ControlManualUi::Draw()
 {
-	int alpha_Box = 100;
 	const int kAddPosY = 40;
 
 	float nowManualUiPosY = manualUiPosY;
@@ -117,7 +115,7 @@ void UI_controlManual::Draw()
 	}
 }
 
-void UI_controlManual::OnChangeState(const PlayerData& playerData)
+void ControlManualUi::OnChangeState(const PlayerData& playerData)
 {
 	data = playerData;
 }
@@ -126,7 +124,7 @@ void UI_controlManual::OnChangeState(const PlayerData& playerData)
 /// リザルトシーン時の生成
 /// </summary>
 /// <param name="coinCount"></param>
-void UI_controlManual::ResultCreate()
+void ControlManualUi::ResultCreate()
 {
 	//処理なし
 }
@@ -134,7 +132,7 @@ void UI_controlManual::ResultCreate()
 /// <summary>
 /// リザルトシーン時の初期化
 /// </summary>
-void UI_controlManual::ResultInitialize()
+void ControlManualUi::ResultInitialize()
 {
 	//処理なし
 }
@@ -142,7 +140,7 @@ void UI_controlManual::ResultInitialize()
 /// <summary>
 /// リザルトシーン時の更新処理
 /// </summary>
-void UI_controlManual::ResultUpdate()
+void ControlManualUi::ResultUpdate()
 {
 	//処理なし
 }

@@ -1,4 +1,4 @@
-#include "common.h"
+#include "Common.h"
 #include <algorithm>
 #include "CoinUi.h"
 #include "JsonManager.h"
@@ -31,6 +31,12 @@ CoinUi::~CoinUi()
 
 void CoinUi::Load(const nlohmann::json& jsonData)
 {
+	const int kXNum = 10;
+	const int kYNum = 10;
+	const int kAllNum = 1;
+	const int kXSize = 480;
+	const int kYSize = 500;
+
 	std::unordered_map<std::string, std::string> uiPath;
 
 	for (auto& data : jsonData["coin"])
@@ -44,7 +50,7 @@ void CoinUi::Load(const nlohmann::json& jsonData)
 	coinHandle = LoadGraph(uiPath.at("coin").c_str());
 	crossHandle = LoadGraph(uiPath.at("cross").c_str());
 	LoadDivGraph(uiPath.at("number").c_str(),
-		10, 10, 1, 480, 500, numberHandle);
+		kXNum, kYNum, kAllNum, kXSize, kYSize, numberHandle);
 }
 
 void CoinUi::Create()
@@ -64,6 +70,13 @@ void CoinUi::Initialize()
 	const float InitCrossY = 760.0f;
 	const float InitNumberX = -290.0f;
 	const float InitNumberY = 730.0f;
+	const float kInitCoinWidth = 140.0f;
+	const float kInitCoinHeight = 152.0f;
+	const float kInitCrossWidth = 60.0f;
+	const float kInitCrossHeight = 60.0f;
+	const float kInitNumberWidth = 100.0f;
+	const float kInitNumberHeight = 100.0f;
+	const float kInitAddNumberX = 60.0f;
 	const std::string initNumber = "00";
 
 	coinPosX = InitCoinPosX;
@@ -73,13 +86,13 @@ void CoinUi::Initialize()
 	numberPosX = InitNumberX;
 	numberPosY = InitNumberY;
 
-	coinWidth = 140.0f;
-	coinHeight = 152.0f;
-	crossWidth = 60.0f;
-	crossHeight = 60.0f;
-	numberWidth = 100.0f;
-	numberHeight = 100.0f;
-	addNumberX = 60.0f;
+	coinWidth = kInitCoinWidth;
+	coinHeight = kInitCoinHeight;
+	crossWidth = kInitCrossWidth;
+	crossHeight = kInitCrossHeight;
+	numberWidth = kInitNumberWidth;
+	numberHeight = kInitNumberHeight;
+	addNumberX = kInitAddNumberX;
 
 	countNumber = initNumber;
 	coinCount = 0;
@@ -87,6 +100,11 @@ void CoinUi::Initialize()
 
 void CoinUi::Update()
 {
+	const float targetCoinPosX = 20;
+	const float targetCrossX = 155;
+	const float targetNumberX = 210;
+	const float kLeapSpeed = 0.1f;
+
 	countNumber = std::to_string(coinCount);
 
 	//àÍï∂éöÇµÇ©ì¸Ç¡ÇƒÇ»Ç¢èÍçáêÊì™Ç…0Çë}ì¸Ç∑ÇÈ
@@ -95,25 +113,25 @@ void CoinUi::Update()
 		countNumber.insert(0, "0");
 	}
 
-	const float targetCoinPosX = 20;
-	const float targetCrossX = 155;
-	const float targetNumberX = 210;
-
-	coinPosX = Calculation::Leap(coinPosX, targetCoinPosX, 0.1f);
-	crossPosX = Calculation::Leap(crossPosX, targetCrossX, 0.1f);
-	numberPosX = Calculation::Leap(numberPosX, targetNumberX, 0.1f);
+	coinPosX = Calculation::Leap(coinPosX, targetCoinPosX, kLeapSpeed);
+	crossPosX = Calculation::Leap(crossPosX, targetCrossX, kLeapSpeed);
+	numberPosX = Calculation::Leap(numberPosX, targetNumberX, kLeapSpeed);
 }
 
 void CoinUi::Draw()
 {
 	//ÉRÉCÉìÉCÉâÉXÉgï`âÊ
-	DrawExtendGraphF(coinPosX, coinPosY,
-		coinPosX + coinWidth, coinPosY + coinHeight,
+	DrawExtendGraphF(coinPosX, 
+		coinPosY,
+		coinPosX + coinWidth,
+		coinPosY + coinHeight,
 		coinHandle, TRUE);
 
 	//crossï`âÊ
-	DrawExtendGraphF(crossPosX, crossPosY,
-		crossPosX + crossWidth, crossPosY + crossHeight,
+	DrawExtendGraphF(crossPosX, 
+		crossPosY,
+		crossPosX + crossWidth,
+		crossPosY + crossHeight,
 		crossHandle, TRUE);
 
 	float nowNumberPosX = numberPosX;
@@ -122,8 +140,10 @@ void CoinUi::Draw()
 	for (char c : countNumber)
 	{
 		int digit = c - '0';
-		DrawExtendGraphF(nowNumberPosX, numberPosY,
-			nowNumberPosX + numberWidth, numberPosY + numberHeight,
+		DrawExtendGraphF(nowNumberPosX,
+			numberPosY,
+			nowNumberPosX + numberWidth,
+			numberPosY + numberHeight,
 			numberHandle[digit], TRUE);
 
 		//ï∂éöÇÃïùï™Ç∏ÇÁÇ∑
@@ -152,6 +172,13 @@ void CoinUi::ResultInitialize()
 	const float InitCrossY = 740.0f;
 	const float InitNumberX = 2060.0f;
 	const float InitNumberY = 690.0f;
+	const float kInitCoinWidth = 200.0f;
+	const float kInitCoinHeight = 212.0f;
+	const float kInitCrossWidth = 76.0f;
+	const float kInitCrossHeight = 76.0f;
+	const float kInitNumberWidth = 150.0f;
+	const float kInitNumberHeight = 150.0f;
+	const float kInitAddNumberX = 120.0f;
 
 	coinPosX = InitCoinPosX;
 	coinPosY = InitCoinPosY;
@@ -160,13 +187,13 @@ void CoinUi::ResultInitialize()
 	numberPosX = InitNumberX;
 	numberPosY = InitNumberY;
 
-	coinWidth = 200.0f;
-	coinHeight = 212.0f;
-	crossWidth = 76.0f;
-	crossHeight = 76.0f;
-	numberWidth = 150.0f;
-	numberHeight = 150.0f;
-	addNumberX = 120.0f;
+	coinWidth = kInitCoinHeight;
+	coinHeight = kInitCoinHeight;
+	crossWidth = kInitCrossWidth;
+	crossHeight = kInitCrossHeight;
+	numberWidth = kInitNumberWidth;
+	numberHeight = kInitNumberHeight;
+	addNumberX = kInitAddNumberX;
 
 	countNumber = std::to_string(coinCount);
 

@@ -1,4 +1,4 @@
-#include "common.h"
+#include "Common.h"
 #include "SkyBox.h"
 #include "BaseObject.h"
 #include "JsonManager.h"

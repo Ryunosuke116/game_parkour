@@ -27,5 +27,8 @@ private:
 	float backGroundY;
 	float titleButtonX;
 	float titleButtonY;
+	float backGroundWidth;
+	float backGroundHeight;
+	float titleButtonWidth;
+	float titleButtonHeight;
 };
-

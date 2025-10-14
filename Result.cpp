@@ -1,11 +1,11 @@
-#include "common.h"
+#include "Common.h"
 #include <memory>
 #include <string>
 #include "BaseScene.h"
 #include "Result.h"
 #include "PadInput.h"
 #include "JsonManager.h"
-#include "Result_object.h"
+#include "ResultObject.h"
 #include "BlackOut.h"
 #include "GameInstanceSubSystem.h"
 

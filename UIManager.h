@@ -2,7 +2,7 @@
 #include "BaseGameObjectManager.h"
 #include "BaseUI.h"
 #include "CoinUi.h"
-#include "UI_controlManual.h"
+#include "ControlManualUi.h"
 #include "GameTimer.h"
 
 class UIManager : public BaseGameObjectManager
@@ -36,11 +36,11 @@ public:
 		return nullptr;
 	}
 
-	std::shared_ptr<UI_controlManual> GetControlManualUi()
+	std::shared_ptr<ControlManualUi> GetControlManualUi()
 	{
 		for (auto& ui : uiList)
 		{
-			if (auto ui_controlManual = std::dynamic_pointer_cast<UI_controlManual>(ui))
+			if (auto ui_controlManual = std::dynamic_pointer_cast<ControlManualUi>(ui))
 			{
 				return ui_controlManual;
 			}

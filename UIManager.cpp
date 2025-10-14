@@ -1,4 +1,4 @@
-#include "common.h"
+#include "Common.h"
 #include <vector>
 #include <memory>
 #include "UIManager.h"
@@ -20,7 +20,7 @@ UIManager::~UIManager()
 void UIManager::Create()
 {
 	Add(std::make_shared<CoinUi>());
-	Add(std::make_shared<UI_controlManual>());
+	Add(std::make_shared<ControlManualUi>());
 	Add(std::make_shared<GameTimer>());
 
 	for (auto& UI : uiList)

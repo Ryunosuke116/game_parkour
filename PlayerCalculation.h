@@ -1,6 +1,6 @@
 #pragma once
 #include "DxLib.h"
-#include"playerState.h"
+#include"PlayerState.h"
 #include"Calculation.h"
 
 class PlayerCalculation

@@ -1,4 +1,4 @@
-#include "common.h"
+#include "Common.h"
 #include <vector>
 #include <memory>
 #include "ObjectManager.h"
@@ -7,7 +7,7 @@
 #include "GameInstanceSubSystem.h"
 #include "BlackOut.h"
 #include "WorldSubSystem.h"
-#include "boundaryRange.h"
+#include "BoundaryRange.h"
 #include "BackGround.h"
 
 /// <summary>
@@ -192,7 +192,6 @@ void ObjectManager::WhenDebugUpdate()
 		{
 			object->Update();
 		}
-
 	}
 	else
 	{

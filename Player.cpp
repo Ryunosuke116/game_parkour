@@ -1,6 +1,6 @@
-#include "common.h"
+#include "Common.h"
 #include <fstream>
-#include"playerState.h"
+#include"PlayerState.h"
 #include "AnimTime.h"
 #include "PadInput.h"
 #include "EffectManager.h"

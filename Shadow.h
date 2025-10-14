@@ -24,6 +24,6 @@ private:
 	int shadowMapHandle;
 	VECTOR lightDirection;
 
-	static constexpr int Shadow_Quality = 2048;		//影のクオリティ
+	static constexpr int shadowQuality = 2048;		//影のクオリティ
 };
 

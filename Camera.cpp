@@ -1,4 +1,4 @@
-#include "common.h"
+#include "Common.h"
 #include <cmath>
 #include "math.h"
 #include "EffekseerForDXLib.h"
@@ -127,10 +127,10 @@ void Camera::Update()
 /// </summary>
 /// <param name="timer"></param>
 /// <param name="playerPosition"></param>
-/// <param name="angle_player"></param>
+/// <param name="playerAngle"></param>
 void Camera::StartUpdate(const float& timer,
 	const VECTOR& playerPosition,
-	const float& angle_player)
+	const float playerAngle)
 {
 	const float kAddCenterPointSpherePosY = 15.0f;
 	centerPointSpherePos = playerPosition;
@@ -138,7 +138,7 @@ void Camera::StartUpdate(const float& timer,
 
 	DistanceUpdate();
 
-	AngleUpdate(angle_player);
+	AngleUpdate(playerAngle);
 
 	RotateUpdate();
 
@@ -273,10 +273,10 @@ void Camera::LayOutUpdate()
 	float angleRadian = Calculation::DegToRad(nowDegree);
 	this->angleRadian = angleRadian;
 
+	
+
 	cameraPosition.x = screenCenterPosition.x + cameraDistanceSize * cos(angleRadian);
 	cameraPosition.z = screenCenterPosition.z + cameraDistanceSize * sin(angleRadian);
-
-	//RotateUpdate();
 
 	SetCameraPositionAndTarget_UpVecY(cameraPosition, screenCenterPosition);
 }
@@ -294,10 +294,10 @@ void Camera::Draw()
 void Camera::DistanceUpdate()
 {
 	const float kAddHighCenterPos = 40.0f;		//ÉJÉÅÉâÇ™íÜêSÇ©ÇÁÇ«ÇÍÇæÇØó£ÇÍÇÁÇÍÇÈÇ©
-	const float addLowCenterPos = kAddCenterPosY - 5.0f;
 	const float kAddNormalizedTime = 0.02f;
 	const float kMinNormalizedTimeDistance = 0.0f;
 	const float kMaxNormalizedTime = 1.0f;
+	const float addLowCenterPos = kAddCenterPosY - 5.0f;
 
 	minHeight = screenCenterPosition.y - addLowCenterPos;
 	maxHeight = screenCenterPosition.y + kAddHighCenterPos;
@@ -408,7 +408,7 @@ bool Camera::CameraPosCalc(const std::vector<std::weak_ptr<BaseObject>>& collisi
 	VECTOR cameraVelocity;
 	VECTOR subPosition;
 	const float kVelocityScale = 2.0f;
-	const float kFrameIndex = -1;
+	const int kFrameIndex = -1;
 
 	for (const auto& fieldObject : collisionObjects)
 	{
@@ -452,18 +452,19 @@ bool Camera::CameraPosCalc(const std::vector<std::weak_ptr<BaseObject>>& collisi
 /// </summary>
 void Camera::AdjustCameraPosition()
 {
+	const float kLeapSpeed = 0.2f;
+	const float kSlowLeapSpeed = 0.02f;
+	
 	if (!isHitObject)
 	{
 		if (PadInput::GetJoyPadYRight() != 0.0f)
 		{
-			const float kLeapSpeed = 0.2f;
 			cameraDistanceSize = Calculation::Leap(cameraDistanceSize, normalCameraDistanceSize, kLeapSpeed);
 		}
 		else if (PadInput::GetJoyPadXLeft() != 0.0f ||
 			PadInput::GetJoyPadYLeft() != 0.0f ||
 			PadInput::GetJoyPadXRight() != 0.0f)
 		{
-			const float kSlowLeapSpeed = 0.02f;
 			cameraDistanceSize = Calculation::Leap(cameraDistanceSize, normalCameraDistanceSize, kSlowLeapSpeed);
 		}
 	}

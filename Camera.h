@@ -29,7 +29,7 @@ public:
 
 	void StartUpdate(const float& timer,
 		const VECTOR& playerPosition,
-		const float& playerAngle);
+		const float playerAngle);
 	void LayOutUpdate();
 	bool CameraPosCalc(const std::vector<std::weak_ptr<BaseObject>>& collisionObjects);
 	void CaluclateCameraAndTargetDistanceSize();

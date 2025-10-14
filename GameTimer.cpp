@@ -1,4 +1,4 @@
-#include "common.h"
+#include "Common.h"
 #include <string>
 #include "GameTimer.h"
 #include "DebugDrawer.h"
@@ -31,11 +31,17 @@ GameTimer::~GameTimer()
 
 void GameTimer::Load(const nlohmann::json& jsonData)
 {
+	const int kXNum = 10;
+	const int kYNum = 10;
+	const int kAllNum = 1;
+	const int kXSize = 480;
+	const int kYSize = 500;
+
 	std::string path = jsonData["coin"][2][0];
 	std::string colonPath = jsonData["coin"][3][0];
 
 	LoadDivGraph(path.c_str(),
-		10, 10, 1, 480, 500, numberHandle);
+		kXNum, kYNum, kAllNum, kXSize, kYSize, numberHandle);
 	colonHandle = LoadGraph(colonPath.c_str());
 }
 
@@ -54,11 +60,14 @@ void GameTimer::Initialize()
 	const float initColonPosX = 765.0f;
 	const float initNumWidth = 100.0f;
 	const float initHeight = 100.0f;
+	const int	kInitTime = 0;
+	const int	kInitSec = 0;
+	const int	kInitMin = 3;
 
-	time = 0;
+	time = kInitTime;
 	setTime = GetNowCount();
-	sec = 0;
-	min = 3;
+	sec = kInitSec;
+	min = kInitMin;
 	numPosX = initNumPosX;
 	numPosY = initNumPosY;
 	colonPosX = initColonPosX;
@@ -73,8 +82,10 @@ void GameTimer::Initialize()
 /// </summary>
 void GameTimer::Update()
 {
-	const int subMin = 1;
-	const int maxSec = 60;
+	const int kSubMin = 1;
+	const int kMaxSec = 60;
+	const float kTargetNumPosY = 30;
+	const float kLeapSpeed = 0.1f;
 
 	time = GetNowCount() - setTime;
 
@@ -82,27 +93,26 @@ void GameTimer::Update()
 	int elapsedMin = elapsedSec / 60;
 	elapsedSec -= elapsedMin * 60;
 
-	sec = maxSec - elapsedSec;
+	sec = kMaxSec - elapsedSec;
 
 	//60の時に分を減らす
 	if (!isUpdateMin &&
-		sec == maxSec - 1)
+		sec == kMaxSec - kSubMin)
 	{
-		min = min - subMin;
+		min = min - kSubMin;
 
 		isUpdateMin = true;
 	}
 
-	sec = TimeForciblyZero(maxSec);
+	sec = TimeForciblyZero(kMaxSec);
 
 	isUpdateMin = IsUpdateMin();
 
 	countNumberSec = CreateCountNumber(sec);
 	countNumberMin = CreateCountNumber(min);
 
-	const float targetNumPosY = 30;
 
-	numPosY = Calculation::Leap(numPosY, targetNumPosY, 0.1f);
+	numPosY = Calculation::Leap(numPosY, kTargetNumPosY, kLeapSpeed);
 
 	//----------------------------------//
 	// デバッグ用
@@ -164,14 +174,14 @@ void GameTimer::Draw()
 std::string GameTimer::CreateCountNumber(const int time)
 {
 	std::string countNumber = "";
-	const int characterCount = 1;
-	const int firstCount = 0;
+	const int kCharacterCount = 1;
+	const int kFirstCount = 0;
 
 	countNumber = std::to_string(time);
 
-	if (countNumber.length() == characterCount)
+	if (countNumber.length() == kCharacterCount)
 	{
-		countNumber.insert(firstCount, "0");
+		countNumber.insert(kFirstCount, "0");
 		return countNumber;
 	}
 

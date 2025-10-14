@@ -28,5 +28,7 @@ private:
 
 	std::string tag;
 	nlohmann::json	jsonData;
+
+	static constexpr float kMaxStartGraphTimer = 50.0f;
 };
 

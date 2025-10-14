@@ -2,7 +2,7 @@
 #include "Calculation.h"
 #include "PlayerData.h"
 #include "PlayerCalculation.h"
-#include"playerState.h"
+#include"PlayerState.h"
 #include "AnimTime.h"
 #include "HitCheck.h"
 #include "DebugDrawer.h"

@@ -1,6 +1,5 @@
-#include "common.h"
+#include "Common.h"
 #include "Shadow.h"
-
 #include "WorldSubSystem.h"
 #include "PlayerManager.h"
 
@@ -26,10 +25,10 @@ Shadow::~Shadow()
 /// </summary>
 void Shadow::Initialize()
 {
-	const VECTOR initLightDirection = VGet(0.5f, -1.0f, 0.5f);
+	const VECTOR kInitLightDirection = VGet(0.5f, -1.0f, 0.5f);
 
-	shadowMapHandle = MakeShadowMap(Shadow_Quality, Shadow_Quality);
-	lightDirection = initLightDirection;
+	shadowMapHandle = MakeShadowMap(shadowQuality, shadowQuality);
+	lightDirection = kInitLightDirection;
 
 	//ƒ‰ƒCƒg‚Ì•ûŒü‚ğİ’è
 	SetLightDirection(lightDirection);

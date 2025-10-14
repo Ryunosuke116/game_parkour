@@ -1,7 +1,7 @@
-#include "common.h"
+#include "Common.h"
 #include <memory>
 #include "AnimTime.h"
-#include "playerState.h"
+#include "PlayerState.h"
 #include "PadInput.h"
 #include "AnimationChanger.h"
 #include "Player.h"

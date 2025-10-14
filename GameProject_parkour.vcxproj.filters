@@ -220,9 +220,6 @@
     <Filter Include="ソース ファイル\object\game\UI">
       <UniqueIdentifier>{c948dba5-aa4d-4d17-aee9-30e4bf5bc655}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\object\game\UI\UI_controlManual">
-      <UniqueIdentifier>{2cc8af79-44e4-41ff-b736-2c506a061bfc}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\object\game\UI\coin">
       <UniqueIdentifier>{8df00727-c934-4d6b-9b46-d1764bc00fed}</UniqueIdentifier>
     </Filter>
@@ -240,6 +237,9 @@
     </Filter>
     <Filter Include="ソース ファイル\object\game\collisionObject\skyFloor">
       <UniqueIdentifier>{828f1d62-3c20-4137-8228-5f854e5c690e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\object\game\UI\controlManual">
+      <UniqueIdentifier>{2cc8af79-44e4-41ff-b736-2c506a061bfc}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -372,8 +372,8 @@
     <ClCompile Include="UIManager.cpp">
       <Filter>ソース ファイル\manager\UI</Filter>
     </ClCompile>
-    <ClCompile Include="UI_controlManual.cpp">
-      <Filter>ソース ファイル\object\game\UI\UI_controlManual</Filter>
+    <ClCompile Include="ControlManualUi.cpp">
+      <Filter>ソース ファイル\object\game\UI\controlManual</Filter>
     </ClCompile>
     <ClCompile Include="Walk.cpp">
       <Filter>ソース ファイル\object\game\player\state\walk</Filter>
@@ -440,7 +440,7 @@
     <ClInclude Include="PlayerStateBase.h">
       <Filter>ソース ファイル\object\game\player\state\Base</Filter>
     </ClInclude>
-    <ClInclude Include="playerState.h">
+    <ClInclude Include="PlayerState.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Field.h">
@@ -470,10 +470,10 @@
     <ClInclude Include="PadInput.h">
       <Filter>ソース ファイル\static\Pad</Filter>
     </ClInclude>
-    <ClInclude Include="common.h">
+    <ClInclude Include="Common.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="objects.h">
+    <ClInclude Include="GameObjects.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="PlayerCalculation.h">
@@ -581,8 +581,8 @@
     <ClInclude Include="UIManager.h">
       <Filter>ソース ファイル\manager\UI</Filter>
     </ClInclude>
-    <ClInclude Include="UI_controlManual.h">
-      <Filter>ソース ファイル\object\game\UI\UI_controlManual</Filter>
+    <ClInclude Include="ControlManualUi.h">
+      <Filter>ソース ファイル\object\game\UI\controlManual</Filter>
     </ClInclude>
     <ClInclude Include="PlayerStateObserver.h">
       <Filter>ソース ファイル\Observer\playerState</Filter>
@@ -602,7 +602,7 @@
     <ClInclude Include="Rank.h">
       <Filter>ソース ファイル\object\result\rank</Filter>
     </ClInclude>
-    <ClInclude Include="Result_object.h">
+    <ClInclude Include="ResultObject.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="SoundPlayer.h">
@@ -635,7 +635,7 @@
     <ClInclude Include="Liner8TreeManager.hpp">
       <Filter>ソース ファイル\manager\Liner8TreeManager</Filter>
     </ClInclude>
-    <ClInclude Include="boundaryRange.h">
+    <ClInclude Include="BoundaryRange.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Victory.h">
