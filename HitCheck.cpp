@@ -4,15 +4,17 @@
 #include "DebugDrawer.h"
 
 
-/// @brief コンストラクタ
-/// @return 
+/// <summary>
+/// コンストラクタ
+/// </summary>
 HitCheck::HitCheck()
 {
 
 }
 
-/// @brief デストラクタ
-/// @return 
+/// <summary>
+/// デストラクタ
+/// </summary>
 HitCheck::~HitCheck()
 {
 
@@ -98,7 +100,8 @@ VECTOR HitCheck::ClosestPtToPointTriangle(const VECTOR& point,
 
 }
 
-bool HitCheck::AABBHitJudge(const AABB& AABB1, const AABB& AABB2)
+bool HitCheck::AABBHitJudge(const AABB& AABB1, 
+	const AABB& AABB2)
 {
 	if (AABB1.min.x <= AABB2.max.x &&
 		AABB1.max.x >= AABB2.min.x &&
@@ -167,73 +170,65 @@ VECTOR HitCheck::CapsuleHitConfirmation(const VECTOR& capsulePos1,
 	return edgeAX;
 }
 
-/// <summary>
-/// 面積を使った点の内外判定計算
-/// </summary>
-/// <param name="p"></param>
-/// <param name="q"></param>
-/// <param name="a"></param>
-/// <param name="b"></param>
-/// <param name="c"></param>
-/// <param name="normal"></param>
-/// <returns></returns>
-std::pair<VECTOR, VECTOR> HitCheck::SegmentTriangleDistance(const VECTOR& p,
-	const VECTOR& q,
-	const VECTOR& a, 
-	const VECTOR& b, 
-	const VECTOR& c, 
+std::pair<VECTOR, VECTOR> HitCheck::SegmentTriangleDistance(
+	const VECTOR& startLinePos,
+	const VECTOR& endLinePos,
+	const VECTOR& vertex1,
+	const VECTOR& vertex2,
+	const VECTOR& vertex3,
 	const VECTOR& normal)
 {
 	//線分の方向ベクトル
-	VECTOR PQ = VSub(q, p);
+	VECTOR PQ = VSub(endLinePos, startLinePos);
 
 	//線分をx分割して一つずつ調べる
 	const int num = 100;
 	float minSize = 1000;
-	VECTOR line_segment_point_closestSurface;		//面と一番近い線分点
-	VECTOR hittingPoint_surface;					//面との接触点
+	bool flag = false;
+	VECTOR lineSegmentPointClosestSurface;		//面と一番近い線分点
+	VECTOR hittingPointSurface;					//面との接触点
 
-	VECTOR point_P = ClosestPtToPointTriangle(p, a, b, c);
-	VECTOR point_Q = ClosestPtToPointTriangle(q, a, b, c);
+	VECTOR startPoint = ClosestPtToPointTriangle(startLinePos, vertex1, vertex2, vertex3);
+	VECTOR endPoint = ClosestPtToPointTriangle(endLinePos, vertex1, vertex2, vertex3);
 
- 	if (TriangleAreaCheck(point_P, a, b, c) && TriangleAreaCheck(point_Q, a, b, c))
+	//面に線の両端
+ 	if (TriangleAreaCheck(startPoint, vertex1, vertex2, vertex3) &&
+		TriangleAreaCheck(endPoint, vertex1, vertex2, vertex3))
 	{
 		//小さい方を返す
-		if (VSize(point_P) < VSize(point_Q))
+		if (VSize(startPoint) < VSize(endPoint))
 		{
-			return std::make_pair(p, point_P);
+			return std::make_pair(startLinePos, startPoint);
 		}
 		else
 		{
-			return std::make_pair(q, point_Q);
+			return std::make_pair(endLinePos, endPoint);
 		}
 	}
 	
-	bool flag = false;
-
 	for (int i = 0; i < num; i++)
 	{
 		float normalDistanceProgress = float(i) / num;
 
 		//線分のどこを調べるか
-		VECTOR PT = VAdd(p, VScale(PQ, normalDistanceProgress));
+		VECTOR linePoint = VAdd(startLinePos,
+			VScale(PQ, normalDistanceProgress));
 
 		//面のどこに当たっているか
-		VECTOR point = ClosestPtToPointTriangle(PT, a, b, c);
+		VECTOR point = ClosestPtToPointTriangle(linePoint, vertex1, vertex2, vertex3);
 
 		//三角形の内側かどうか
-		if (TriangleAreaCheck(point, a, b, c))
+		if (TriangleAreaCheck(point, vertex1, vertex2, vertex3))
 		{
-
 			//線分の点から接触面までの大きさ
-			VECTOR size = VSub(point, PT);
+			VECTOR size = VSub(point, linePoint);
 
 			//一番距離が近いものを選択
 			if (minSize > VSize(size))
 			{
 				minSize = VSize(size);
-				line_segment_point_closestSurface = PT;
-				hittingPoint_surface = point;
+				lineSegmentPointClosestSurface = linePoint;
+				hittingPointSurface = point;
 				flag = true;
 			}
 		}
@@ -241,12 +236,12 @@ std::pair<VECTOR, VECTOR> HitCheck::SegmentTriangleDistance(const VECTOR& p,
 
 	if (!flag)
 	{
-		return std::make_pair(q, point_Q);
+		return std::make_pair(endLinePos, endPoint);
 	}
 
 	//一番近い線分の点と面の衝突座標を返す
-	return std::make_pair(line_segment_point_closestSurface,
-		hittingPoint_surface);
+	return std::make_pair(lineSegmentPointClosestSurface,
+		hittingPointSurface);
 }
 
 /// <summary>

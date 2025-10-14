@@ -108,12 +108,29 @@ public:
 	static VECTOR CapsuleHitConfirmation(const VECTOR& capsulePos1,
 		const VECTOR& capsulePos2,
 		const VECTOR& point);
+
+	/// <summary>
+	/// 面積を使った点の内外判定計算
+	/// </summary>
+	/// <param name="startLinePos"></param>
+	/// <param name="endLinePos"></param>
+	/// <param name="vertex1"></param>
+	/// <param name="vertex2"></param>
+	/// <param name="vertex3"></param>
+	/// <param name="normal"></param>
+	/// <returns></returns>
+	static std::pair<VECTOR,VECTOR> SegmentTriangleDistance(
+		const VECTOR& startLinePos,
+		const VECTOR& endLinePos,
+		const VECTOR& vertex1,
+		const VECTOR& vertex2,
+		const VECTOR& vertex3,
+		const VECTOR& normal);
+
 	static bool TriangleAreaCheck(const VECTOR& point, const VECTOR& a, const VECTOR& b, const VECTOR& c);
 	static bool TriangleAreaCheck_ground(const VECTOR& point, const VECTOR& a, const VECTOR& b, const VECTOR& c);
 
 
-	
-	static std::pair<VECTOR,VECTOR> SegmentTriangleDistance(const VECTOR& p, const VECTOR& q, const VECTOR& a, const VECTOR& b, const VECTOR& c, const VECTOR& normal);
 	static HangingData CliffGrabbing(
 		const std::vector<std::weak_ptr<BaseObject>>& collisionObjects,
 		const VECTOR& position,
