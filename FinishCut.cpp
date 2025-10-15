@@ -66,6 +66,6 @@ void FinishCut::Draw()
 {
 	if (isDrawFinish)
 	{
-		DrawGraph(finishGraphPosX, finishGraphPosY, finishHandle, TRUE);
+		DrawGraphF(finishGraphPosX, finishGraphPosY, finishHandle, TRUE);
 	}
 }

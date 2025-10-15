@@ -285,7 +285,7 @@ void Player::MoveDirectionUpdate()
     {
         const float kLeapSpeed = 0.15f;
 
-        nowMoveDirection = Calculation::Leap(
+        nowMoveDirection = Calculation::LeapVector(
             nowMoveDirection,
             targetMoveDirection,
             kLeapSpeed);
@@ -298,7 +298,7 @@ void Player::MoveDirectionUpdate()
         const float kSpeed = 0.03f;
 
         //Ç‰Ç¡Ç≠ÇËç≈êVÇÃï˚å¸Ç…å¸Ç≠
-        nowMoveDirection = Calculation::Leap(
+        nowMoveDirection = Calculation::LeapVector(
             nowMoveDirection,
             targetMoveDirection, 
             kSpeed);

@@ -11,163 +11,116 @@
 #include "Calculation.h"
 #include "DebugDrawer.h"
 
-
-
-float Calculation::area(const VECTOR& vertex1, const VECTOR& vertex2, const VECTOR& vertex3)
+float Calculation::area(const VECTOR& vertexA,
+	const VECTOR& vertexB, 
+	const VECTOR& vertexC)
 {
-	VECTOR AB = VSub(vertex2, vertex1);
-	VECTOR AC = VSub(vertex3, vertex1);
-	VECTOR cross = VCross(AB, AC);
+	VECTOR edgeAB = VSub(vertexB, vertexA);
+	VECTOR edgeAC = VSub(vertexC, vertexA);
+	VECTOR crossAB_AC = VCross(edgeAB, edgeAC);
 
-	float area = 0.5f * VSize(cross);
-	return 0.5f * VSize(cross);
+	//三角形の面積を返す
+	return 0.5f * VSize(crossAB_AC);
 }
 
-/// <summary>
-/// 線分と点の最接近点
-/// </summary>
-/// <param name="position_1"></param>
-/// <param name="position_2"></param>
-/// <param name="point"></param>
-/// <returns></returns>
 VECTOR Calculation::NearestPoint(
-	const VECTOR& position_1, 
-	const VECTOR& position_2,
+	const VECTOR& startLinePos, 
+	const VECTOR& endLinePos,
 	const VECTOR& point)
 {
 	//線分と点の最近点
-	VECTOR AB = VSub(position_2, position_1);
-	VECTOR AP = VSub(point, position_1);
+	VECTOR edgeAB = VSub(endLinePos, startLinePos);
+	VECTOR edgeAP = VSub(point, startLinePos);
 
-	VECTOR lineDirection = VNorm(AB);
-	VECTOR APDirection = VNorm(AP);
+	VECTOR lineDirection = VNorm(edgeAB);
+	VECTOR directionAP = VNorm(edgeAP);
 
-	if (VDot(lineDirection, APDirection) < 0)
+	//内積が負ならstartLinePosが最接近点
+	if (VDot(lineDirection, directionAP) < 0)
 	{
-		return position_1;
+		return startLinePos;
 	}
 
-	VECTOR BPDirection = VNorm(VSub(point, position_2));
+	VECTOR directionBP = VNorm(VSub(point, endLinePos));
 
-	if (VDot(lineDirection, BPDirection) > 0)
+	//内積が正ならendLinePosが最接近点
+	if (VDot(lineDirection, directionBP) > 0)
 	{
-		return position_2;
+		return endLinePos;
 	}
 
 	//ベクトルの長さ
-	float vectorLength = pow(VSquareSize(AB), 0.5f);
+	float vectorLength = pow(VSquareSize(edgeAB), 0.5f);
 
 	//単位ベクトル
-	VECTOR unitVector = VGet(0, 0, 0);
-	unitVector = VNorm(AB);
+	VECTOR unitVector = VNorm(edgeAB);
 	
 	//内積
-	float productionVector = VDot(unitVector, AP);
+	float productionVector = VDot(unitVector, edgeAP);
 
-	VECTOR AX;
-	AX = VAdd(position_1, VScale(unitVector, productionVector));
-
-	return AX;
+	return VAdd(startLinePos, VScale(unitVector, productionVector));
 }
 
-/// <summary>
-/// 三角形のdir方向の奥行を調べる
-/// </summary>
-/// <param name="dir"></param>
-/// <param name="a"></param>
-/// <param name="b"></param>
-/// <param name="c"></param>
-/// <returns></returns>
-float Calculation::Check_depth_Triangle(const VECTOR& dir, const VECTOR& a, const VECTOR& b, const VECTOR& c)
+VECTOR Calculation::NearestPointOnTriangleEdge(const MV1_COLL_RESULT_POLY& subjectPoly,
+	const VECTOR& point)
 {
-	float dot_1 = VDot(a, dir);
-	float dot_2 = VDot(b, dir);
-	float dot_3 = VDot(c, dir);
-
-	float max_projection = max(dot_1, dot_2);
-	max_projection = max(max_projection, dot_3);
-
-	float min_projection = min(dot_1, dot_2);
-	min_projection = min(min_projection, dot_3);
-
-	return max_projection - min_projection;
-}
-
-/// <summary>
-/// 点に対して最も近い三角形の辺
-/// </summary>
-/// <param name="subjectPoly"></param>
-/// <param name="pos"></param>
-/// <returns></returns>
-VECTOR Calculation::SphereMeshOutsideTriangle(const MV1_COLL_RESULT_POLY& subjectPoly, const VECTOR& pos)
-{
-	VECTOR nearestPoint;
-
 	//線分上の点との最近点
-	VECTOR nearPoint_1 = NearestPoint(subjectPoly.Position[0], subjectPoly.Position[1], pos);
-	VECTOR nearPoint_2 = NearestPoint(subjectPoly.Position[0], subjectPoly.Position[2], pos);
-	VECTOR nearPoint_3 = NearestPoint(subjectPoly.Position[1], subjectPoly.Position[2], pos);
+	VECTOR nearPoint1 = NearestPoint(subjectPoly.Position[0], subjectPoly.Position[1], point);
+	VECTOR nearPoint2 = NearestPoint(subjectPoly.Position[0], subjectPoly.Position[2], point);
+	VECTOR nearPoint3 = NearestPoint(subjectPoly.Position[1], subjectPoly.Position[2], point);
 
-	//各距離を求める
-	float d1 = VSize(VSub(nearPoint_1, pos));
-	float d2 = VSize(VSub(nearPoint_2, pos));
-	float d3 = VSize(VSub(nearPoint_3, pos));
+	//各距離の大きさを求める
+	float distanceSize1 = VSize(VSub(nearPoint1, point));
+	float distanceSize2 = VSize(VSub(nearPoint2, point));
+	float distanceSize3 = VSize(VSub(nearPoint3, point));
 
 	//一番近い座標を選択する
-	if (d1 <= d2 && d1 <= d3)
+	if (distanceSize1 <= distanceSize2 &&
+		distanceSize1 <= distanceSize3)
 	{
-		nearestPoint = nearPoint_1;
+		return nearPoint1;
 	}
-	else if (d2 <= d3)
+	else if (distanceSize2 <= distanceSize3)
 	{
-		nearestPoint = nearPoint_2;
-	}
-	else
-	{
-		nearestPoint = nearPoint_3;
+		return nearPoint2;
 	}
 
-	return nearestPoint;
+	return nearPoint3;
 }
 
-/// <summary>
-/// 点に対して最も近い三角形の辺
-/// </summary>
-/// <param name="subjectPoly"></param>
-/// <param name="HitPos_ground"></param>
-/// <returns></returns>
 Calculation::NearestResult Calculation::SphereMeshOutsideTriangleLine(
 	const MV1_COLL_RESULT_POLY& subjectPoly,
-	const VECTOR& pos)
+	const VECTOR& point)
 {
 	NearestResult result;
 
 	//線分上の点との最近点
-	VECTOR nearPoint_1 = NearestPoint(subjectPoly.Position[0], subjectPoly.Position[1], pos);
-	VECTOR nearPoint_2 = NearestPoint(subjectPoly.Position[0], subjectPoly.Position[2], pos);
-	VECTOR nearPoint_3 = NearestPoint(subjectPoly.Position[1], subjectPoly.Position[2], pos);
+	VECTOR nearPoint1 = NearestPoint(subjectPoly.Position[0], subjectPoly.Position[1], point);
+	VECTOR nearPoint2 = NearestPoint(subjectPoly.Position[0], subjectPoly.Position[2], point);
+	VECTOR nearPoint3 = NearestPoint(subjectPoly.Position[1], subjectPoly.Position[2], point);
 
 	//各距離を求める
-	float d1 = VSize(VSub(nearPoint_1, pos));
-	float d2 = VSize(VSub(nearPoint_2, pos));
-	float d3 = VSize(VSub(nearPoint_3, pos));
+	float distanceSize1 = VSize(VSub(nearPoint1, point));
+	float distanceSize2 = VSize(VSub(nearPoint2, point));
+	float distanceSize3 = VSize(VSub(nearPoint3, point));
 
 	//一番近い座標を選択する
-	if (d1 <= d2 && d1 <= d3)
+	if (distanceSize1 <= distanceSize2 &&
+		distanceSize1 <= distanceSize3)
 	{
-		result.nearestPoint = nearPoint_1;
+		result.nearestPoint = nearPoint1;
 		result.startLinePos = subjectPoly.Position[0];
 		result.endLinePos = subjectPoly.Position[1];
 	}
-	else if (d2 <= d3)
+	else if (distanceSize2 <= distanceSize3)
 	{
-		result.nearestPoint = nearPoint_2;
+		result.nearestPoint = nearPoint2;
 		result.startLinePos = subjectPoly.Position[0];
 		result.endLinePos = subjectPoly.Position[2];
 	}
 	else
 	{
-		result.nearestPoint = nearPoint_3;
+		result.nearestPoint = nearPoint3;
 		result.startLinePos = subjectPoly.Position[1];
 		result.endLinePos = subjectPoly.Position[2];
 	}
@@ -175,106 +128,47 @@ Calculation::NearestResult Calculation::SphereMeshOutsideTriangleLine(
 	return result;
 }
 
-/// <summary>
-/// 投影の正規化ベクトルを返す
-/// </summary>
-/// <param name="normalPlane"></param>
-/// <param name="velocity"></param>
-/// <returns></returns>
 VECTOR Calculation::Projection(const VECTOR& normalPlane,
 	const VECTOR& velocity)
 {
 	float dot = VDot(normalPlane, velocity);	//内積
 	
 	VECTOR projection = VSub(velocity, VScale(normalPlane, dot));
-	projection = VNorm(projection);
 
-	return projection;
+	return  VNorm(projection);
 }
 
-
-/// <summary>
-/// 射影方向
-/// </summary>
-/// <param name="point"></param>
-/// <param name="a"></param>
-/// <param name="b"></param>
-/// <returns></returns>
-VECTOR Calculation::ProjectionDirection(const VECTOR& point, const VECTOR& a, const VECTOR& b)
+VECTOR Calculation::ProjectionDirection(const VECTOR& point,
+	const VECTOR& capsulePos1,
+	const VECTOR& capsulePos2)
 {
-	VECTOR AB = VSub(b, a);
-	VECTOR AP = VSub(point, a);
+	VECTOR edgeAB = VSub(capsulePos2, capsulePos1);
+	VECTOR edgeAP = VSub(point, capsulePos1);
 
 	//単位ベクトル(正規化)
-	VECTOR unitVector = VGet(0, 0, 0);
-	unitVector = VNorm(AB);
+	VECTOR unitVector = VNorm(edgeAB);
 
 	//点の射影位置を計算(スカラー値)
-	float productionVector = (unitVector.x * AP.x) + (unitVector.y * AP.y) + (unitVector.z * AP.z);
+	float productionVector = VDot(edgeAP, unitVector);
 
 	//線分上の最近点を計算
-	VECTOR AX;
-	AX.x = a.x + (unitVector.x * productionVector);
-	AX.y = a.y + (unitVector.y * productionVector);
-	AX.z = a.z + (unitVector.z * productionVector);
+	VECTOR edgeAX = VAdd(capsulePos1, VScale(unitVector, productionVector));
 
-	return AX;
+	/*if (edgeAX.y <= capsulePos2.y)
+	{
+		edgeAX.y = capsulePos2.y;
+	}
+	if (edgeAX.y >= capsulePos1.y)
+	{
+		edgeAX.y = capsulePos1.y;
+	}*/
+
+	return edgeAX;
 }
 
-/// <summary>
-/// 縦の長さを求める
-/// </summary>
-/// <param name="a"></param>
-/// <param name="b"></param>
-/// <returns></returns>
-float Calculation::GetVerticalLength(const VECTOR& a,
-	const VECTOR& b)
-{
-	VECTOR sub = VSub(a, b);
-	sub = VGet(0.0f, sub.y, 0.0f);
-
-	float vertical_length = VSize(sub);
-
-	return vertical_length;
-}
-
-
-float Calculation::TriangleByVerticalLength(const VECTOR& a, 
-	const VECTOR& b, 
-	const VECTOR& c)
-{
-	VECTOR highestPosition = a;
-
-	if (highestPosition.y < b.y)
-	{
-		highestPosition = b;
-	}
-
-	if (highestPosition.y < c.y)
-	{
-		highestPosition = c;
-	}
-
-	VECTOR lowestPosition = a;
-
-	if (lowestPosition.y > b.y)
-	{
-		lowestPosition = b;
-	}
-
-	if (lowestPosition.y > c.y)
-	{
-		lowestPosition = c;
-	}
-
-	return GetVerticalLength(highestPosition,lowestPosition);
-}
-
-/// <summary>
-/// ラープ
-/// </summary>
-/// <param name="cameraPosition"></param>
-VECTOR Calculation::Leap(const VECTOR& changePosition, const VECTOR& latestPosition, const float& speed)
+VECTOR Calculation::LeapVector(const VECTOR& changePosition,
+	const VECTOR& latestPosition,
+	const float speed)
 {
 	VECTOR SubPosition = VSub(latestPosition, changePosition);
 	VECTOR scalePosition = VGet(0, 0, 0);
@@ -283,8 +177,6 @@ VECTOR Calculation::Leap(const VECTOR& changePosition, const VECTOR& latestPosit
 
 	return VAdd(changePosition, scalePosition);
 }
-
-
 
 float Calculation::RotationAngleDegree(
 	const float targetDegree,
@@ -326,13 +218,6 @@ float Calculation::RotationAngleDegree(
 	return targetDegree - differenceAngle;
 }
 
-/// <summary>
-/// 進行度に基づいて結果を計算
-/// </summary>
-/// <param name="easedValue"></param>
-/// <param name="maxValue"></param>
-/// <param name="minValue"></param>
-/// <returns></returns>
 float Calculation::InterpolationCalc(
 	const float progressValue,
 	const float maxValue,
@@ -341,17 +226,10 @@ float Calculation::InterpolationCalc(
 	return minValue + (maxValue - minValue) * progressValue;
 }
 
-/// <summary>
-/// 進行値(0～1)を現在の値から求める
-/// </summary>
-/// <param name="maxValue"></param>
-/// <param name="minValue"></param>
-/// <param name="nowValue"></param>
-/// <returns></returns>
 float Calculation::CalculateBackProgress(
-	float maxValue,
-	float minValue,
-	float nowValue)
+	const float maxValue,
+	const float minValue,
+	const float nowValue)
 {
 	if (nowValue < minValue) return 0.0f;
 	if (nowValue > maxValue) return 1.0f;
@@ -359,12 +237,7 @@ float Calculation::CalculateBackProgress(
 	return (nowValue - minValue) / (maxValue - minValue);
 }
 
-/// <summary>
-/// イースアウト
-/// </summary>
-/// <param name="normalDistanceProgress"></param>
-/// <returns></returns>
-float Calculation::EaseOutQuad(float normalDistanceProgress)
+float Calculation::EaseOutQuad(const float normalDistanceProgress)
 {
 	const float kMaxSize = 1.0f;
 
@@ -374,25 +247,15 @@ float Calculation::EaseOutQuad(float normalDistanceProgress)
 	return kMaxSize - subSize;
 }
 
-/// <summary>
-/// 進行値に基づいて値を求める
-/// </summary>
-/// <param name="nowValue"></param>
-/// <returns></returns>
-float Calculation::CalculateBackEaseOutValue(float nowValue)
+float Calculation::CalculateBackEaseOutValue(const float nowValue)
 {
 	const float maxSize = 1.0f;
 
 	return maxSize - (maxSize - pow(maxSize, nowValue));
 }
 
-/// <summary>
-/// 二つのべクトルのなす角
-/// </summary>
-/// <param name="direction1"></param>
-/// <param name="direction2"></param>
-/// <returns></returns>
-float Calculation::AngleBetWeenTwoVectors(const VECTOR& direction1, const VECTOR& direction2)
+float Calculation::AngleBetWeenTwoVectors(const VECTOR& direction1,
+	const VECTOR& direction2)
 {
 	float cosTheta = VDot(direction1, direction2) /
 		((VSize(direction1) * VSize(direction2)));
@@ -401,44 +264,17 @@ float Calculation::AngleBetWeenTwoVectors(const VECTOR& direction1, const VECTOR
 	return RadToDeg(radian);
 }
 
-MATRIX Calculation::Rotate(const VECTOR& wall_normal)
-{
-	VECTOR up = wall_normal;
-	VECTOR forward = VGet(0.0f, 1.0f, 0.0f);
-	VECTOR right = VGet(1.0f, 0.0f, 0.0f);
-	forward = VNorm(VCross(up, right));
-
-	MATRIX rotate;
-	rotate.m[0][0] = right.x;	rotate.m[0][1] = right.y;   rotate.m[0][2] = right.z;   rotate.m[0][3] = 0;
-	rotate.m[1][0] = up.x;      rotate.m[1][1] = up.y;      rotate.m[1][2] = up.z;      rotate.m[1][3] = 0;
-	rotate.m[2][0] = forward.x; rotate.m[2][1] = forward.y; rotate.m[2][2] = forward.z; rotate.m[2][3] = 0;
-	rotate.m[3][0] = 0;         rotate.m[3][1] = 0;         rotate.m[3][2] = 0;         rotate.m[3][3] = 1;
-
-	return rotate;
-}
-
-/// <summary>
-/// ラジアンから度に変換
-/// </summary>
-/// <param name="radian"></param>
-/// <returns></returns>
-float Calculation::RadToDeg(float radian)
+float Calculation::RadToDeg(const float radian)
 {
 	return radian * 180.0f / DX_PI_F;
 }
 
-float Calculation::DegToRad(float degree)
+float Calculation::DegToRad(const float degree)
 {
 	return degree * DX_PI_F / 180.0f;
 }
 
-/// <summary>
-/// 角度値から方向ベクトルを求める
-/// (0,0,1) = 0°
-/// </summary>
-/// <param name="degree"></param>
-/// <returns></returns>
-VECTOR Calculation::GetDirectionFromDegree(float degree)
+VECTOR Calculation::DirectionFromDegree(const float degree)
 {
 	VECTOR dir = VGet(0.0f, 0.0f, 1.0f);
 
@@ -449,57 +285,27 @@ VECTOR Calculation::GetDirectionFromDegree(float degree)
 	}
 
 	//ラジアン値に変換
-	float radian = degree * DX_PI_F / 180.0f;
+	float radian = RadToDeg(degree);
 
 	return VGet(sinf(radian), 0.0f, cosf(radian));
-
 }
 
-/// <summary>
-/// ロドリゲスの回転
-/// </summary>
-/// <param name="center"></param>
-/// <param name="rotatePos"></param>
-/// <param name="dir"></param>
-/// <param name="radian"></param>
-/// <returns></returns>
 VECTOR Calculation::RotateLineSegment(
 	const VECTOR& center,
 	const VECTOR& rotatePos,		//回転移動させたい座標
 	const VECTOR& dir,				//回転軸方向
 	const float& degree)			//回転°
 {
-
-	const float radian = DegToRad(degree);
+	float radian = DegToRad(degree);
 	VECTOR sub = VSub(rotatePos, center);
 	float cos = cosf(radian);
 	float sin = sinf(radian);
 
-	VECTOR term_1 = VScale(sub, cos);
-	VECTOR term_2 = VScale(VCross(dir, sub), sin);
-	VECTOR term_3 = VScale(dir, ((1 - cos) * VDot(sub, dir)));
+	VECTOR term1 = VScale(sub, cos);
+	VECTOR term2 = VScale(VCross(dir, sub), sin);
+	VECTOR term3 = VScale(dir, ((1 - cos) * VDot(sub, dir)));
 
-	VECTOR rotated = VAdd(term_1, VAdd(term_2, term_3));
+	VECTOR rotate = VAdd(term1, VAdd(term2, term3));
 
-	return VAdd(center, rotated);
-}
-
-void Calculation::Initialize()
-{
-	/*if (instance != nullptr)
-	{
-		return;
-	}
-
-	instance = new Calculation;*/
-}
-
-void Calculation::UnInitialize()
-{
-	//if (instance)
-	//{
-	//	delete instance;
-
-	//	instance = nullptr;
-	//}
+	return VAdd(center, rotate);
 }

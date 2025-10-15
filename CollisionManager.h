@@ -21,7 +21,9 @@ public:
 
 	VECTOR HeadCollisionCheck(const std::vector<std::weak_ptr<BaseObject>>& collisionObjects,
 		const VECTOR& subjectPos,
-		const VECTOR& velocity, const PositionData& positionData, const float& radius);
+		const VECTOR& velocity,
+		const PositionData& positionData,
+		const float& radius);
 
 	VECTOR WallCollisionCheck(const std::vector<std::weak_ptr<BaseObject>>& collisionObjects,
 		const VECTOR& subjectPos, const VECTOR& velocity, const PositionData& positionData,

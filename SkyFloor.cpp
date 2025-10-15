@@ -43,7 +43,7 @@ void SkyFloor::Load(const nlohmann::json& jsonData)
 		jsonData[1].get<float>(),
 		jsonData[2].get<float>());
 
-	moveDirection = Calculation::GetDirectionFromDegree(degree);
+	moveDirection = Calculation::DirectionFromDegree(degree);
 	this->tag = tag;
 }
 

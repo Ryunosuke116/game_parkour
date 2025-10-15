@@ -14,9 +14,6 @@
 class HitCheck
 {
 public:
-	HitCheck();
-	~HitCheck();
-
 	/// <summary>
 	/// rayの当たり判定
 	/// </summary>
@@ -68,14 +65,14 @@ public:
 	/// 面との接触座標の計算
 	/// </summary>
 	/// <param name="point"></param>
-	/// <param name="vertex1"></param>
-	/// <param name="vertex2"></param>
-	/// <param name="vertex3"></param>
+	/// <param name="vertexA"></param>
+	/// <param name="vertexB"></param>
+	/// <param name="vertexC"></param>
 	/// <returns></returns>
 	static VECTOR ClosestPtToPointTriangle(const VECTOR& point,
-		const VECTOR& vertex1,
-		const VECTOR& vertex2,
-		const VECTOR& vertex3);
+		const VECTOR& vertexA,
+		const VECTOR& vertexB,
+		const VECTOR& vertexC);
 
 	/// <summary>
 	/// AABB同士が接触しているか
@@ -99,38 +96,46 @@ public:
 		const float radius2);
 
 	/// <summary>
-	/// 対象の座標から最も近いカプセルの軸座標を算出
-	/// </summary>
-	/// <param name="capsulePos1"></param>
-	/// <param name="capsulePos2"></param>
-	/// <param name="point"></param>
-	/// <returns></returns>
-	static VECTOR CapsuleHitConfirmation(const VECTOR& capsulePos1,
-		const VECTOR& capsulePos2,
-		const VECTOR& point);
-
-	/// <summary>
-	/// 面積を使った点の内外判定計算
+	/// 線分と三角形の最短距離
+	/// 最短距離の線分点と面の接触座標を返す
 	/// </summary>
 	/// <param name="startLinePos"></param>
 	/// <param name="endLinePos"></param>
-	/// <param name="vertex1"></param>
-	/// <param name="vertex2"></param>
-	/// <param name="vertex3"></param>
+	/// <param name="vertexA"></param>
+	/// <param name="vertexB"></param>
+	/// <param name="vertexC"></param>
 	/// <param name="normal"></param>
 	/// <returns></returns>
 	static std::pair<VECTOR,VECTOR> SegmentTriangleDistance(
 		const VECTOR& startLinePos,
 		const VECTOR& endLinePos,
-		const VECTOR& vertex1,
-		const VECTOR& vertex2,
-		const VECTOR& vertex3,
+		const VECTOR& vertexA,
+		const VECTOR& vertexB,
+		const VECTOR& vertexC,
 		const VECTOR& normal);
 
-	static bool TriangleAreaCheck(const VECTOR& point, const VECTOR& a, const VECTOR& b, const VECTOR& c);
-	static bool TriangleAreaCheck_ground(const VECTOR& point, const VECTOR& a, const VECTOR& b, const VECTOR& c);
+	/// <summary>
+	/// 三角形の内側に点があるか
+	/// </summary>
+	/// <param name="point"></param>
+	/// <param name="vertexA"></param>
+	/// <param name="vertexB"></param>
+	/// <param name="vertexC"></param>
+	/// <returns></returns>
+	static bool TriangleAreaCheck(const VECTOR& point,
+		const VECTOR& vertexA,
+		const VECTOR& vertexB,
+		const VECTOR& vertexC);
 
-
+	/// <summary>
+	/// 崖掴み判定
+	/// </summary>
+	/// <param name="collisionObjects"></param>
+	/// <param name="position"></param>
+	/// <param name="topPosition"></param>
+	/// <param name="moveDirection"></param>
+	/// <param name="radius"></param>
+	/// <returns></returns>
 	static HangingData CliffGrabbing(
 		const std::vector<std::weak_ptr<BaseObject>>& collisionObjects,
 		const VECTOR& position,
@@ -139,6 +144,7 @@ public:
 		const float& radius);
 
 private:
-
+	HitCheck() = default;
+	~HitCheck() = default;
 };
 

@@ -4,6 +4,8 @@
 #include "GameInstanceSubSystem.h"
 #include <cassert>
 #include "DebugDrawer.h"
+#include "Calculation.h"
+#include "HitCheck.h"
 
 /// <summary>
 /// コンストラクタ
@@ -221,7 +223,7 @@ bool Coin::IsHitPlayer(const VECTOR& topPlayerPos,
 	if (isHitPlayer)return false;
 
 	//対象の座標から最も近いカプセルの軸座標を算出
-	VECTOR nearCapsulePos = HitCheck::CapsuleHitConfirmation(topPlayerPos, bottomPlayerPos, position);
+	VECTOR nearCapsulePos = Calculation::ProjectionDirection(topPlayerPos, bottomPlayerPos, position);
 
 	//プレイヤーと接触しているか
 	if (HitCheck::HitConfirmation(position, nearCapsulePos, kRadius, playerRadius))

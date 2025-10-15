@@ -63,6 +63,8 @@ void ControlManualUi::Update()
 	const float targetManualPosX = 90.0f;
 	const float targetCommandsBackPosX = 30.0f;
 
+	drawUis.clear();
+
 	drawUis.push_back(uiHandles.at("move_camera"));
 	drawUis.push_back(uiHandles.at("reset_camera"));
 

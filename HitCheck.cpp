@@ -3,23 +3,6 @@
 #include "Calculation.h"
 #include "DebugDrawer.h"
 
-
-/// <summary>
-/// コンストラクタ
-/// </summary>
-HitCheck::HitCheck()
-{
-
-}
-
-/// <summary>
-/// デストラクタ
-/// </summary>
-HitCheck::~HitCheck()
-{
-
-}
-
 bool HitCheck::RayHitJudge(const int modelHandle, 
 	const int frameIndex,
 	const VECTOR& startLinePos, 
@@ -60,20 +43,20 @@ bool HitCheck::CapsuleHitJudge(const int modelHandle,
 }
 
 VECTOR HitCheck::ClosestPtToPointTriangle(const VECTOR& point,
-	const VECTOR& vertex1,
-	const VECTOR& vertex2,
-	const VECTOR& vertex3)
+	const VECTOR& vertexA,
+	const VECTOR& vertexB,
+	const VECTOR& vertexC)
 {
 	//PがAの外側の頂点座標の中にあるかどうかチェック
-	VECTOR edgeAB = VSub(vertex2, vertex1);
-	VECTOR edgeAC = VSub(vertex3, vertex1);
-	VECTOR vecAP = VSub(point, vertex1);
+	VECTOR edgeAB = VSub(vertexB, vertexA);
+	VECTOR edgeAC = VSub(vertexC, vertexA);
+	VECTOR vecAP = VSub(point, vertexA);
 
 	float dotAB_AP = VDot(edgeAB, vecAP);
 	float dotAC_AP = VDot(edgeAC, vecAP);
 
 	//PがBの外側の頂点領域の中にあるかどうかチェック
-	VECTOR vecBP = VSub(point, vertex2);
+	VECTOR vecBP = VSub(point, vertexB);
 	float dotAB_BP = VDot(edgeAB, vecBP);
 	float dotAC_BP = VDot(edgeAC, vecBP);
 
@@ -81,7 +64,7 @@ VECTOR HitCheck::ClosestPtToPointTriangle(const VECTOR& point,
 	float areaAB = dotAB_AP * dotAC_BP - dotAB_BP * dotAC_AP;
 
 	//PがCの外側の頂点領域の中にあるかどうかチェック
-	VECTOR vecCP = VSub(point, vertex3);
+	VECTOR vecCP = VSub(point, vertexC);
 	float dotAB_CP = VDot(edgeAB, vecCP);
 	float dotAC_CP = VDot(edgeAC, vecCP);
 
@@ -96,7 +79,7 @@ VECTOR HitCheck::ClosestPtToPointTriangle(const VECTOR& point,
 	float baryV = areaAC * baryDenom;
 	float baryW = areaAB * baryDenom;
 
-	return VAdd(vertex1, VAdd(VScale(edgeAB, baryV), VScale(edgeAC, baryW)));
+	return VAdd(vertexA, VAdd(VScale(edgeAB, baryV), VScale(edgeAC, baryW)));
 
 }
 
@@ -138,62 +121,31 @@ bool HitCheck::HitConfirmation(
 	return false;
 }
 
-VECTOR HitCheck::CapsuleHitConfirmation(const VECTOR& capsulePos1,
-	const VECTOR& capsulePos2,
-	const VECTOR& point)
-{
-	VECTOR edgeAB = VSub(capsulePos2, capsulePos1);
-	VECTOR edgeAP = VSub(point, capsulePos1);
-
-	//単位ベクトル(正規化)
-	VECTOR unitVector = VNorm(edgeAB);
-
-	//点の射影位置を計算(スカラー値)
-	float productionVector = VDot(edgeAP, unitVector);
-
-	//線分上の最近点を計算
-	VECTOR edgeAX;
-	edgeAX.x = capsulePos1.x + (unitVector.x * productionVector);
-	edgeAX.y = capsulePos1.y + (unitVector.y * productionVector);
-	edgeAX.z = capsulePos1.z + (unitVector.z * productionVector);
-
-
-	if (edgeAX.y <= capsulePos2.y)
-	{
-		edgeAX.y = capsulePos2.y;
-	}
-	if (edgeAX.y >= capsulePos1.y)
-	{
-		edgeAX.y = capsulePos1.y;
-	}
-
-	return edgeAX;
-}
-
 std::pair<VECTOR, VECTOR> HitCheck::SegmentTriangleDistance(
 	const VECTOR& startLinePos,
 	const VECTOR& endLinePos,
-	const VECTOR& vertex1,
-	const VECTOR& vertex2,
-	const VECTOR& vertex3,
+	const VECTOR& vertexA,
+	const VECTOR& vertexB,
+	const VECTOR& vertexC,
 	const VECTOR& normal)
 {
 	//線分の方向ベクトル
-	VECTOR PQ = VSub(endLinePos, startLinePos);
+	VECTOR lineDirection = VSub(endLinePos, startLinePos);
 
-	//線分をx分割して一つずつ調べる
+	//線分を100分割して一つずつ調べる
 	const int num = 100;
 	float minSize = 1000;
-	bool flag = false;
-	VECTOR lineSegmentPointClosestSurface;		//面と一番近い線分点
-	VECTOR hittingPointSurface;					//面との接触点
+	bool isReturnMinSizePoint = false;
+	VECTOR lineSegmentPointClosestSurface = VGet(0.0f, 0.0f, 0.0f);			//面と一番近い線分点
+	VECTOR hittingPointSurface = VGet(0.0f, 0.0f, 0.0f);					//面との接触点
 
-	VECTOR startPoint = ClosestPtToPointTriangle(startLinePos, vertex1, vertex2, vertex3);
-	VECTOR endPoint = ClosestPtToPointTriangle(endLinePos, vertex1, vertex2, vertex3);
+	VECTOR startPoint = ClosestPtToPointTriangle(startLinePos, vertexA, vertexB, vertexC);
+	VECTOR endPoint = ClosestPtToPointTriangle(endLinePos, vertexA, vertexB, vertexC);
 
-	//面に線の両端
- 	if (TriangleAreaCheck(startPoint, vertex1, vertex2, vertex3) &&
-		TriangleAreaCheck(endPoint, vertex1, vertex2, vertex3))
+	//線分の両端が面の内側に存在するか
+	//存在するなら距離が短い方を返す
+ 	if (TriangleAreaCheck(startPoint, vertexA, vertexB, vertexC) &&
+		TriangleAreaCheck(endPoint, vertexA, vertexB, vertexC))
 	{
 		//小さい方を返す
 		if (VSize(startPoint) < VSize(endPoint))
@@ -206,35 +158,38 @@ std::pair<VECTOR, VECTOR> HitCheck::SegmentTriangleDistance(
 		}
 	}
 	
+	//線分を分割して各点から三角形への最近点を調べる
 	for (int i = 0; i < num; i++)
 	{
 		float normalDistanceProgress = float(i) / num;
 
-		//線分のどこを調べるか
+		//線分のどこのポイントを調べるか
 		VECTOR linePoint = VAdd(startLinePos,
-			VScale(PQ, normalDistanceProgress));
+			VScale(lineDirection, normalDistanceProgress));
 
-		//面のどこに当たっているか
-		VECTOR point = ClosestPtToPointTriangle(linePoint, vertex1, vertex2, vertex3);
+		//面のどこに接触しているか
+		VECTOR contactPoint = ClosestPtToPointTriangle(linePoint, vertexA, vertexB, vertexC);
 
 		//三角形の内側かどうか
-		if (TriangleAreaCheck(point, vertex1, vertex2, vertex3))
+		if (TriangleAreaCheck(contactPoint, vertexA, vertexB, vertexC))
 		{
-			//線分の点から接触面までの大きさ
-			VECTOR size = VSub(point, linePoint);
+			//線分のポイントから接触面までの距離
+			VECTOR distance = VSub(contactPoint, linePoint);
+			float distanceSize = VSize(distance);
 
-			//一番距離が近いものを選択
-			if (minSize > VSize(size))
+			//一番距離が近いポイントを代入
+			if (minSize > distanceSize)
 			{
-				minSize = VSize(size);
+				minSize = distanceSize;
 				lineSegmentPointClosestSurface = linePoint;
-				hittingPointSurface = point;
-				flag = true;
+				hittingPointSurface = contactPoint;
+				isReturnMinSizePoint = true;
 			}
 		}
 	}
 
-	if (!flag)
+	//最近点が見つからなければ終点の情報を返す
+	if (!isReturnMinSizePoint)
 	{
 		return std::make_pair(endLinePos, endPoint);
 	}
@@ -248,74 +203,33 @@ std::pair<VECTOR, VECTOR> HitCheck::SegmentTriangleDistance(
 /// 三角形の内側に点があるか
 /// </summary>
 /// <param name="point"></param>
-/// <param name="a"></param>
-/// <param name="b"></param>
-/// <param name="c"></param>
+/// <param name="vertexA"></param>
+/// <param name="vertexB"></param>
+/// <param name="vertexC"></param>
 /// <returns></returns>
-bool HitCheck::TriangleAreaCheck(const VECTOR& point, const VECTOR& a, const VECTOR& b, const VECTOR& c)
+bool HitCheck::TriangleAreaCheck(const VECTOR& point, 
+	const VECTOR& vertexA,
+	const VECTOR& vertexB, 
+	const VECTOR& vertexC)
 {
 	//面積を求める
-	float area = fabs(Calculation::area(a, b, c));
-	float area_1 = fabs(Calculation::area(a, b, point));
-	float area_2 = fabs(Calculation::area(b, c, point));
-	float area_3 = fabs(Calculation::area(c, a, point));
+	float area = fabs(Calculation::area(vertexA, vertexB, vertexC));
+	float area1 = fabs(Calculation::area(vertexA, vertexB, point));
+	float area2 = fabs(Calculation::area(vertexB, vertexC, point));
+	float area3 = fabs(Calculation::area(vertexC, vertexA, point));
 
-	//総面積と点を使った面積の合計の差が無いか
-	float abs_ = abs((area_1 + area_2 + area_3) - area);
+	//総面積と点を使った面積の合計の差を絶対値にして取得
+	float areaAbs = abs((area1 + area2 + area3) - area);
 
-	//0より上かつ差があるか
-	bool area_equal = abs_ < 1e-10;
-	bool inside = area_1 > 0 && area_2 > 0 && area_3 > 0;
+	//面積の差がほぼ無いか
+	bool isAreaEqual = areaAbs < 1e-10f;
 
-	return (area_equal && inside) ? true : false;
+	//それぞれの面積が0より大きいか
+	bool isInside = area1 > 0 && area2 > 0 && area3 > 0;
+
+	return (isAreaEqual && isInside) ? true : false;
 }
 
-/// <summary>
-/// 三角形の内側に点があるか
-///		床用
-/// </summary>
-/// <param name="point"></param>
-/// <param name="a"></param>
-/// <param name="b"></param>
-/// <param name="c"></param>
-/// <returns></returns>
-bool HitCheck::TriangleAreaCheck_ground(const VECTOR& point, const VECTOR& a, const VECTOR& b, const VECTOR& c)
-{
-	VECTOR point_ = point;
-	VECTOR a_ = a;
-	VECTOR b_ = b;
-	VECTOR c_ = c;
-
-	point_.y = 0.0f;
-	a_.y = 0.0f;
-	b_.y = 0.0f;
-	c_.y = 0.0f;
-
-	//面積を求める
-	float area = fabs(Calculation::area(a_, b_, c_));
-	float area_1 = fabs(Calculation::area(a_, b_, point_));
-	float area_2 = fabs(Calculation::area(b_, c_, point_));
-	float area_3 = fabs(Calculation::area(c_, a_, point_));
-
-	//総面積と点を使った面積の合計の差が無いか
-	float abs_ = abs((area_1 + area_2 + area_3) - area);
-
-	//0より上かつ差があるか
-	bool area_equal = abs_ < 1e-1;
-	bool inside = area_1 > 0 && area_2 > 0 && area_3 > 0;
-
-	return (area_equal && inside) ? true : false;
-}
-
-/// <summary>
-/// 崖掴み判定
-/// </summary>
-/// <param name="collisionObjects"></param>
-/// <param name="position"></param>
-/// <param name="topPosition"></param>
-/// <param name="moveDirection"></param>
-/// <param name="radius"></param>
-/// <returns></returns>
 HangingData HitCheck::CliffGrabbing(
 	const std::vector<std::weak_ptr<BaseObject>>& collisionObjects,
 	const VECTOR& position,
@@ -327,6 +241,7 @@ HangingData HitCheck::CliffGrabbing(
 	const float kMaxVelocity = 11.2f;			//移動量の最大値
 	const float kCheckWidth = 4.0f;				//床確認の幅
 	const float kAngleRange = 50.0f;
+	const float kLeapSpeed = 0.2f;			//移動量の補間スピード
 	const VECTOR kLengthDirection = VGet(0.0f, 1.0f, 0.0f);
 
 	VECTOR spherePos = VAdd(topPosition, VScale(moveDirection, 5.0f));
@@ -342,16 +257,16 @@ HangingData HitCheck::CliffGrabbing(
 	{
 		auto sharedCollisionObject = fieldObject.lock();
 
-		MV1_COLL_RESULT_POLY_DIM poly_dim;
+		MV1_COLL_RESULT_POLY_DIM polyDim;
 
-		HitCheck::SphereHitJudge(
+		SphereHitJudge(
 			sharedCollisionObject->GetModelHandle(),
-			-1,
+			kFrameIndex,
 			radius,
 			spherePos, 
-			poly_dim);
+			polyDim);
 
-		if (poly_dim.HitNum >= 1)
+		if (polyDim.HitNum >= 1)
 		{
 			if (sharedCollisionObject->GetTag() != "field")
 			{
@@ -360,9 +275,9 @@ HangingData HitCheck::CliffGrabbing(
 
 			float minSize = NULL;
 
-			for (int i = 0; i < poly_dim.HitNum; i++)
+			for (int i = 0; i < polyDim.HitNum; i++)
 			{
-				MV1_COLL_RESULT_POLY subjectPoly = poly_dim.Dim[i];
+				MV1_COLL_RESULT_POLY subjectPoly = polyDim.Dim[i];
 				MV1_COLL_RESULT_POLY rayCheckWall;
 
 				//三角形ポリゴンの法線と上方向ベクトルとの
@@ -379,12 +294,12 @@ HangingData HitCheck::CliffGrabbing(
 				{
 					//三角形の一番近い辺から一番近い点を求める
 					VECTOR nearestOutSide = 
-						Calculation::SphereMeshOutsideTriangle(
+						Calculation::NearestPointOnTriangleEdge(
 						subjectPoly,
 						position);
 
 					//playerの座標から三角形のnearestOurSideとの間に壁があったら飛ばす
-					HitCheck::RayHitJudge(sharedCollisionObject->GetModelHandle(),
+					RayHitJudge(sharedCollisionObject->GetModelHandle(),
 						kFrameIndex,
 						position,
 						nearestOutSide,
@@ -438,14 +353,14 @@ HangingData HitCheck::CliffGrabbing(
 					{
 						//掴む所の幅を確認して、一定の幅がないと掴めないようにする
 						auto spCollisionObject = wpCollisionObject.lock();
-						HitCheck::RayHitJudge(
+						RayHitJudge(
 							spCollisionObject->GetModelHandle(),
 							kFrameIndex,
 							leftRayPoint,
 							endLeftRayPoint,
 							leftRayCheck);
 
-						HitCheck::RayHitJudge(
+						RayHitJudge(
 							spCollisionObject->GetModelHandle(),
 							kFrameIndex,
 							rightRayPoint,
@@ -469,16 +384,16 @@ HangingData HitCheck::CliffGrabbing(
 					depthDistance = VAdd(nearestOutSide, depthDistance);
 
 					//少し浮かせる
-					VECTOR startWallCheckLine = VAdd(nearestOutSide, VScale(subjectPoly.Normal, 0.2f));
-					VECTOR endWallCheckLine = VAdd(depthDistance, VScale(subjectPoly.Normal, 0.2f));
+					VECTOR startWallCheckLine = VAdd(nearestOutSide, VScale(subjectPoly.Normal, kLeapSpeed));
+					VECTOR endWallCheckLine = VAdd(depthDistance, VScale(subjectPoly.Normal, kLeapSpeed));
 
+					//デバック
 					DebugDrawer::GetInstance().InformationInput_capsule(startWallCheckLine, endWallCheckLine,1.0f, GetColor(255, 0, 255));
 
 					MV1_COLL_RESULT_POLY wallCheck = {};
 
 					//壁に当たっていたら崖掴みができない
-					HitCheck::RayHitJudge(
-						sharedCollisionObject->GetModelHandle(),
+					RayHitJudge(sharedCollisionObject->GetModelHandle(),
 						kFrameIndex,
 						startWallCheckLine,
 						endWallCheckLine,
@@ -510,13 +425,11 @@ HangingData HitCheck::CliffGrabbing(
 		}
 
 		// 検出したプレイヤーの周囲のポリゴン情報を開放する
-		MV1CollResultPolyDimTerminate(poly_dim);
+		MV1CollResultPolyDimTerminate(polyDim);
 	}
 	
 	DebugDrawer::GetInstance().InformationInput_sphere(spherePos, radius, GetColor(255, 255, 255));
 	DebugDrawer::GetInstance().InformationInput_line(startUpperCheckPos, endUpperCheckPos, GetColor(255, 0, 255));
 
 	return hangingData;
-
-	//trueの場合に崖をつかむようにする
 }

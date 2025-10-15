@@ -9,9 +9,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="ソース ファイル\Base">
-      <UniqueIdentifier>{e6d7322f-8b86-418c-9e4a-56bebf97fe86}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\manager">
       <UniqueIdentifier>{c3d54e97-a0bd-410e-83c8-25079eaae248}</UniqueIdentifier>
     </Filter>
@@ -19,26 +16,11 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
-    <Filter Include="ソース ファイル\Base\BaseChara">
-      <UniqueIdentifier>{664a45f2-e5e7-4051-97ee-a2ea2a076b72}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\Base\BaseObject">
-      <UniqueIdentifier>{5ac518b0-1420-4c76-901c-f90170dca77b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\scene">
       <UniqueIdentifier>{807cd1ef-3b24-4a77-a629-7dad3c8a1009}</UniqueIdentifier>
     </Filter>
     <Filter Include="ソース ファイル\Interface">
       <UniqueIdentifier>{afce07c3-8b4b-4627-8ebd-9c137f3559d0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\Base\ObjectManger">
-      <UniqueIdentifier>{3c9af978-4dce-4a6a-a3a2-4ce57e88ddaa}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\Observer">
-      <UniqueIdentifier>{459a351b-37b9-47ad-bac3-326a179a787f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\Observer\coin">
-      <UniqueIdentifier>{e2711408-00da-4bab-8418-b491d612c8f1}</UniqueIdentifier>
     </Filter>
     <Filter Include="ソース ファイル\scene\game">
       <UniqueIdentifier>{9eccd043-a013-4e79-b8f8-cfb630ddb564}</UniqueIdentifier>
@@ -52,32 +34,11 @@
     <Filter Include="ソース ファイル\static">
       <UniqueIdentifier>{4f17fc1a-f8a2-447c-87ed-88689d1bdfd5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\static\Calculation">
-      <UniqueIdentifier>{cf99dbc9-50f2-4910-97b1-cd46a3c5e262}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\static\hitCheck">
       <UniqueIdentifier>{747415d6-9e60-46ba-8625-edba46362216}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\static\Debug">
-      <UniqueIdentifier>{60b018f4-5600-4481-a5d7-0e2b4316e13a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\static\Pad">
-      <UniqueIdentifier>{d2f54360-56d9-43c7-a511-49726d43ccd9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\scene\result">
       <UniqueIdentifier>{c1f0c082-192f-467c-81eb-b67f7ef24bda}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\Base\UI">
-      <UniqueIdentifier>{d5b51631-8c3b-41df-8337-fa8a8aa08ccf}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\manager\UI">
-      <UniqueIdentifier>{0cd8d1ae-02d9-40ae-bcd4-85c71d8cc491}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\Observer\playerState">
-      <UniqueIdentifier>{d6b58774-3bf9-4b89-aba4-0877ea9343aa}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\Base\BaseScene">
-      <UniqueIdentifier>{378eeac6-818c-493c-b8c7-d8a11c305dc3}</UniqueIdentifier>
     </Filter>
     <Filter Include="ソース ファイル\object\result">
       <UniqueIdentifier>{65675199-6e5e-473c-8ac2-f810db254481}</UniqueIdentifier>
@@ -87,9 +48,6 @@
     </Filter>
     <Filter Include="ソース ファイル\static\json">
       <UniqueIdentifier>{c2fdffe0-4070-4057-9cf7-b8f503264f1b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\Base\BaseManager">
-      <UniqueIdentifier>{ef9054aa-afc2-4b68-8b2b-943aed8a8bc9}</UniqueIdentifier>
     </Filter>
     <Filter Include="ソース ファイル\manager\sound">
       <UniqueIdentifier>{341d67ca-21c1-418e-9b81-a681b704a6eb}</UniqueIdentifier>
@@ -109,14 +67,8 @@
     <Filter Include="ソース ファイル\object\title">
       <UniqueIdentifier>{eafa151f-6c0c-49da-86c7-21684ba99c08}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\object\title\BackGround">
-      <UniqueIdentifier>{a1095ea5-ed9a-4e84-a18c-e10cf39144f8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\manager\coin">
       <UniqueIdentifier>{c758f02e-15db-456a-bfba-6b68200967d1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\manager\CollisionObjectManager">
-      <UniqueIdentifier>{7de00fb0-6208-4a32-afb8-a970b4dd8b91}</UniqueIdentifier>
     </Filter>
     <Filter Include="ソース ファイル\manager\effect">
       <UniqueIdentifier>{5e5cd968-670e-44f1-a594-3cd0abd7bd68}</UniqueIdentifier>
@@ -127,14 +79,8 @@
     <Filter Include="ソース ファイル\manager\player">
       <UniqueIdentifier>{2a33576b-268e-4832-9dee-8902d408c493}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\manager\Collision">
-      <UniqueIdentifier>{2330dc01-06b8-4627-a8c4-ec50186a5a27}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ヘッダー ファイル\JsonResult">
       <UniqueIdentifier>{8ee20bde-fb5d-471f-b7e7-9fb60a21ed31}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\manager\Object">
-      <UniqueIdentifier>{733bd2bf-452d-40b4-a80b-71e93c23b571}</UniqueIdentifier>
     </Filter>
     <Filter Include="ソース ファイル\manager\scene">
       <UniqueIdentifier>{6ed27899-6b7f-44a8-b8d7-0648099a58a6}</UniqueIdentifier>
@@ -142,14 +88,8 @@
     <Filter Include="ソース ファイル\cell">
       <UniqueIdentifier>{94ce5b17-2956-4d81-a845-612d7db9a6fb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\object\result\UIButton">
-      <UniqueIdentifier>{6de7afc0-0661-4e91-a0ae-8a4532e5c5ef}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\static\blackOut">
       <UniqueIdentifier>{339009be-2dcc-4bb8-b021-48b2d122fbf4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\manager\Liner8TreeManager">
-      <UniqueIdentifier>{89701cc4-9c02-4c3e-830a-802cecef408b}</UniqueIdentifier>
     </Filter>
     <Filter Include="ソース ファイル\object\game">
       <UniqueIdentifier>{d34609d8-b5f8-4b9f-b2b1-6fce63407292}</UniqueIdentifier>
@@ -180,9 +120,6 @@
     </Filter>
     <Filter Include="ソース ファイル\object\game\player\state">
       <UniqueIdentifier>{25ee530f-5c21-4ee8-9271-3b0bedbca70d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\object\game\player\state\Base">
-      <UniqueIdentifier>{94073645-165e-4d0d-b42d-68b29060cef2}</UniqueIdentifier>
     </Filter>
     <Filter Include="ソース ファイル\object\game\player\state\jump">
       <UniqueIdentifier>{f027c21f-f61a-4446-8085-ab3822338f95}</UniqueIdentifier>
@@ -217,15 +154,6 @@
     <Filter Include="ソース ファイル\object\game\shadow">
       <UniqueIdentifier>{fc540499-a255-488c-9209-0f2b29b3851c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\object\game\UI">
-      <UniqueIdentifier>{c948dba5-aa4d-4d17-aee9-30e4bf5bc655}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\object\game\UI\coin">
-      <UniqueIdentifier>{8df00727-c934-4d6b-9b46-d1764bc00fed}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\object\game\UI\gameTimer">
-      <UniqueIdentifier>{4366f260-6c87-43af-b722-fcca0dfe2fc4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\object\game\skyBox">
       <UniqueIdentifier>{0564d51b-3b2a-45a6-905c-a0ad4e3256b2}</UniqueIdentifier>
     </Filter>
@@ -238,8 +166,80 @@
     <Filter Include="ソース ファイル\object\game\collisionObject\skyFloor">
       <UniqueIdentifier>{828f1d62-3c20-4137-8228-5f854e5c690e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\object\game\UI\controlManual">
+    <Filter Include="ソース ファイル\base">
+      <UniqueIdentifier>{e6d7322f-8b86-418c-9e4a-56bebf97fe86}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\base\baseChara">
+      <UniqueIdentifier>{664a45f2-e5e7-4051-97ee-a2ea2a076b72}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\base\baseObject">
+      <UniqueIdentifier>{5ac518b0-1420-4c76-901c-f90170dca77b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\base\objectManger">
+      <UniqueIdentifier>{3c9af978-4dce-4a6a-a3a2-4ce57e88ddaa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\base\ui">
+      <UniqueIdentifier>{d5b51631-8c3b-41df-8337-fa8a8aa08ccf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\base\baseScene">
+      <UniqueIdentifier>{378eeac6-818c-493c-b8c7-d8a11c305dc3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\base\baseManager">
+      <UniqueIdentifier>{ef9054aa-afc2-4b68-8b2b-943aed8a8bc9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\manager\collision">
+      <UniqueIdentifier>{2330dc01-06b8-4627-a8c4-ec50186a5a27}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\manager\collisionObjectManager">
+      <UniqueIdentifier>{7de00fb0-6208-4a32-afb8-a970b4dd8b91}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\manager\liner8TreeManager">
+      <UniqueIdentifier>{89701cc4-9c02-4c3e-830a-802cecef408b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\manager\object">
+      <UniqueIdentifier>{733bd2bf-452d-40b4-a80b-71e93c23b571}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\manager\ui">
+      <UniqueIdentifier>{0cd8d1ae-02d9-40ae-bcd4-85c71d8cc491}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\object\game\ui">
+      <UniqueIdentifier>{c948dba5-aa4d-4d17-aee9-30e4bf5bc655}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\object\game\ui\coin">
+      <UniqueIdentifier>{8df00727-c934-4d6b-9b46-d1764bc00fed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\object\game\ui\gameTimer">
+      <UniqueIdentifier>{4366f260-6c87-43af-b722-fcca0dfe2fc4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\object\game\ui\controlManual">
       <UniqueIdentifier>{2cc8af79-44e4-41ff-b736-2c506a061bfc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\object\result\uiButton">
+      <UniqueIdentifier>{6de7afc0-0661-4e91-a0ae-8a4532e5c5ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\object\title\backGround">
+      <UniqueIdentifier>{a1095ea5-ed9a-4e84-a18c-e10cf39144f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\observer">
+      <UniqueIdentifier>{459a351b-37b9-47ad-bac3-326a179a787f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\observer\coin">
+      <UniqueIdentifier>{e2711408-00da-4bab-8418-b491d612c8f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\observer\playerState">
+      <UniqueIdentifier>{d6b58774-3bf9-4b89-aba4-0877ea9343aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\static\calculation">
+      <UniqueIdentifier>{cf99dbc9-50f2-4910-97b1-cd46a3c5e262}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\static\debug">
+      <UniqueIdentifier>{60b018f4-5600-4481-a5d7-0e2b4316e13a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\static\pad">
+      <UniqueIdentifier>{d2f54360-56d9-43c7-a511-49726d43ccd9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\object\game\player\state\base">
+      <UniqueIdentifier>{94073645-165e-4d0d-b42d-68b29060cef2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -253,13 +253,13 @@
       <Filter>ソース ファイル\object\game\skyBox</Filter>
     </ClCompile>
     <ClCompile Include="PlayerStateBase.cpp">
-      <Filter>ソース ファイル\object\game\player\state\Base</Filter>
+      <Filter>ソース ファイル\object\game\player\state\base</Filter>
     </ClCompile>
     <ClCompile Include="Field.cpp">
       <Filter>ソース ファイル\object\game\field</Filter>
     </ClCompile>
     <ClCompile Include="CollisionManager.cpp">
-      <Filter>ソース ファイル\manager\Collision</Filter>
+      <Filter>ソース ファイル\manager\collision</Filter>
     </ClCompile>
     <ClCompile Include="Coin.cpp">
       <Filter>ソース ファイル\object\game\coin</Filter>
@@ -274,13 +274,13 @@
       <Filter>ソース ファイル\object\game\collisionObject\mesh</Filter>
     </ClCompile>
     <ClCompile Include="Calculation.cpp">
-      <Filter>ソース ファイル\static\Calculation</Filter>
+      <Filter>ソース ファイル\static\calculation</Filter>
     </ClCompile>
     <ClCompile Include="CoinManager.cpp">
       <Filter>ソース ファイル\manager\coin</Filter>
     </ClCompile>
     <ClCompile Include="PadInput.cpp">
-      <Filter>ソース ファイル\static\Pad</Filter>
+      <Filter>ソース ファイル\static\pad</Filter>
     </ClCompile>
     <ClCompile Include="PlayerCalculation.cpp">
       <Filter>ソース ファイル\object\game\player\moveCalclation</Filter>
@@ -313,22 +313,22 @@
       <Filter>ソース ファイル\manager\layout</Filter>
     </ClCompile>
     <ClCompile Include="BaseChara.cpp">
-      <Filter>ソース ファイル\Base\BaseChara</Filter>
+      <Filter>ソース ファイル\base\baseChara</Filter>
     </ClCompile>
     <ClCompile Include="BaseManager.cpp">
-      <Filter>ソース ファイル\Base\BaseManager</Filter>
+      <Filter>ソース ファイル\base\baseManager</Filter>
     </ClCompile>
     <ClCompile Include="BaseObject.cpp">
-      <Filter>ソース ファイル\Base\BaseObject</Filter>
+      <Filter>ソース ファイル\base\baseObject</Filter>
     </ClCompile>
     <ClCompile Include="BaseScene.cpp">
-      <Filter>ソース ファイル\Base\BaseScene</Filter>
+      <Filter>ソース ファイル\base\baseScene</Filter>
     </ClCompile>
     <ClCompile Include="JsonManager.cpp">
       <Filter>ソース ファイル\static\json</Filter>
     </ClCompile>
     <ClCompile Include="BaseGameObjectManager.cpp">
-      <Filter>ソース ファイル\Base\ObjectManger</Filter>
+      <Filter>ソース ファイル\base\objectManger</Filter>
     </ClCompile>
     <ClCompile Include="SkyFloor.cpp">
       <Filter>ソース ファイル\object\game\collisionObject\skyFloor</Filter>
@@ -340,7 +340,7 @@
       <Filter>ソース ファイル\object\game\shadow</Filter>
     </ClCompile>
     <ClCompile Include="DebugDrawer.cpp">
-      <Filter>ソース ファイル\static\Debug</Filter>
+      <Filter>ソース ファイル\static\debug</Filter>
     </ClCompile>
     <ClCompile Include="Game.cpp">
       <Filter>ソース ファイル\scene\game</Filter>
@@ -358,22 +358,22 @@
       <Filter>ソース ファイル\static\blackOut</Filter>
     </ClCompile>
     <ClCompile Include="GameTimer.cpp">
-      <Filter>ソース ファイル\object\game\UI\gameTimer</Filter>
+      <Filter>ソース ファイル\object\game\ui\gameTimer</Filter>
     </ClCompile>
     <ClCompile Include="EffectManager.cpp">
       <Filter>ソース ファイル\manager\effect</Filter>
     </ClCompile>
     <ClCompile Include="BaseUI.cpp">
-      <Filter>ソース ファイル\Base\UI</Filter>
+      <Filter>ソース ファイル\base\ui</Filter>
     </ClCompile>
     <ClCompile Include="CoinUi.cpp">
-      <Filter>ソース ファイル\object\game\UI\coin</Filter>
+      <Filter>ソース ファイル\object\game\ui\coin</Filter>
     </ClCompile>
     <ClCompile Include="UIManager.cpp">
-      <Filter>ソース ファイル\manager\UI</Filter>
+      <Filter>ソース ファイル\manager\ui</Filter>
     </ClCompile>
     <ClCompile Include="ControlManualUi.cpp">
-      <Filter>ソース ファイル\object\game\UI\controlManual</Filter>
+      <Filter>ソース ファイル\object\game\ui\controlManual</Filter>
     </ClCompile>
     <ClCompile Include="Walk.cpp">
       <Filter>ソース ファイル\object\game\player\state\walk</Filter>
@@ -400,27 +400,30 @@
       <Filter>ソース ファイル\subSystem</Filter>
     </ClCompile>
     <ClCompile Include="CollisionObjectManager.cpp">
-      <Filter>ソース ファイル\manager\CollisionObjectManager</Filter>
+      <Filter>ソース ファイル\manager\collisionObjectManager</Filter>
     </ClCompile>
     <ClCompile Include="BackGround.cpp">
-      <Filter>ソース ファイル\object\title\BackGround</Filter>
+      <Filter>ソース ファイル\object\title\backGround</Filter>
     </ClCompile>
     <ClCompile Include="Cell.cpp">
       <Filter>ソース ファイル\cell</Filter>
     </ClCompile>
     <ClCompile Include="Liner8TreeManager.cpp">
-      <Filter>ソース ファイル\manager\Liner8TreeManager</Filter>
+      <Filter>ソース ファイル\manager\liner8TreeManager</Filter>
     </ClCompile>
     <ClCompile Include="Victory.cpp">
       <Filter>ソース ファイル\object\game\player\state\victory</Filter>
     </ClCompile>
     <ClCompile Include="UIButton.cpp">
-      <Filter>ソース ファイル\object\result\UIButton</Filter>
+      <Filter>ソース ファイル\object\result\uiButton</Filter>
     </ClCompile>
     <ClCompile Include="ObjectManager.cpp">
-      <Filter>ソース ファイル\manager\Object</Filter>
+      <Filter>ソース ファイル\manager\object</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisitonDetector.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -438,7 +441,7 @@
       <Filter>ソース ファイル\object\game\skyBox</Filter>
     </ClInclude>
     <ClInclude Include="PlayerStateBase.h">
-      <Filter>ソース ファイル\object\game\player\state\Base</Filter>
+      <Filter>ソース ファイル\object\game\player\state\base</Filter>
     </ClInclude>
     <ClInclude Include="PlayerState.h">
       <Filter>ヘッダー ファイル</Filter>
@@ -462,13 +465,13 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Calculation.h">
-      <Filter>ソース ファイル\static\Calculation</Filter>
+      <Filter>ソース ファイル\static\calculation</Filter>
     </ClInclude>
     <ClInclude Include="CoinManager.h">
       <Filter>ソース ファイル\manager\coin</Filter>
     </ClInclude>
     <ClInclude Include="PadInput.h">
-      <Filter>ソース ファイル\static\Pad</Filter>
+      <Filter>ソース ファイル\static\pad</Filter>
     </ClInclude>
     <ClInclude Include="Common.h">
       <Filter>ヘッダー ファイル</Filter>
@@ -507,22 +510,22 @@
       <Filter>ソース ファイル\manager\layout</Filter>
     </ClInclude>
     <ClInclude Include="BaseChara.h">
-      <Filter>ソース ファイル\Base\BaseChara</Filter>
+      <Filter>ソース ファイル\base\baseChara</Filter>
     </ClInclude>
     <ClInclude Include="BaseManager.h">
-      <Filter>ソース ファイル\Base\BaseManager</Filter>
+      <Filter>ソース ファイル\base\baseManager</Filter>
     </ClInclude>
     <ClInclude Include="BaseObject.h">
-      <Filter>ソース ファイル\Base\BaseObject</Filter>
+      <Filter>ソース ファイル\base\baseObject</Filter>
     </ClInclude>
     <ClInclude Include="BaseScene.h">
-      <Filter>ソース ファイル\Base\BaseScene</Filter>
+      <Filter>ソース ファイル\base\baseScene</Filter>
     </ClInclude>
     <ClInclude Include="JsonManager.h">
       <Filter>ソース ファイル\static\json</Filter>
     </ClInclude>
     <ClInclude Include="BaseGameObjectManager.h">
-      <Filter>ソース ファイル\Base\ObjectManger</Filter>
+      <Filter>ソース ファイル\base\objectManger</Filter>
     </ClInclude>
     <ClInclude Include="SkyFloor.h">
       <Filter>ソース ファイル\object\game\collisionObject\skyFloor</Filter>
@@ -540,10 +543,10 @@
       <Filter>ソース ファイル\object\game\shadow</Filter>
     </ClInclude>
     <ClInclude Include="DebugDrawer.h">
-      <Filter>ソース ファイル\static\Debug</Filter>
+      <Filter>ソース ファイル\static\debug</Filter>
     </ClInclude>
     <ClInclude Include="CoinObserver.h">
-      <Filter>ソース ファイル\Observer\coin</Filter>
+      <Filter>ソース ファイル\observer\coin</Filter>
     </ClInclude>
     <ClInclude Include="Game.h">
       <Filter>ソース ファイル\scene\game</Filter>
@@ -561,7 +564,7 @@
       <Filter>ソース ファイル\static\blackOut</Filter>
     </ClInclude>
     <ClInclude Include="GameTimer.h">
-      <Filter>ソース ファイル\object\game\UI\gameTimer</Filter>
+      <Filter>ソース ファイル\object\game\ui\gameTimer</Filter>
     </ClInclude>
     <ClInclude Include="EffectManager.h">
       <Filter>ソース ファイル\manager\effect</Filter>
@@ -573,22 +576,22 @@
       <Filter>ソース ファイル\Interface</Filter>
     </ClInclude>
     <ClInclude Include="BaseUI.h">
-      <Filter>ソース ファイル\Base\UI</Filter>
+      <Filter>ソース ファイル\base\ui</Filter>
     </ClInclude>
     <ClInclude Include="CoinUi.h">
-      <Filter>ソース ファイル\object\game\UI\coin</Filter>
+      <Filter>ソース ファイル\object\game\ui\coin</Filter>
     </ClInclude>
     <ClInclude Include="UIManager.h">
-      <Filter>ソース ファイル\manager\UI</Filter>
+      <Filter>ソース ファイル\manager\ui</Filter>
     </ClInclude>
     <ClInclude Include="ControlManualUi.h">
-      <Filter>ソース ファイル\object\game\UI\controlManual</Filter>
+      <Filter>ソース ファイル\object\game\ui\controlManual</Filter>
     </ClInclude>
     <ClInclude Include="PlayerStateObserver.h">
-      <Filter>ソース ファイル\Observer\playerState</Filter>
+      <Filter>ソース ファイル\observer\playerState</Filter>
     </ClInclude>
     <ClInclude Include="CollisionManager.h">
-      <Filter>ソース ファイル\manager\Collision</Filter>
+      <Filter>ソース ファイル\manager\collision</Filter>
     </ClInclude>
     <ClInclude Include="Walk.h">
       <Filter>ソース ファイル\object\game\player\state\walk</Filter>
@@ -618,13 +621,13 @@
       <Filter>ソース ファイル\subSystem</Filter>
     </ClInclude>
     <ClInclude Include="CollisionObjectManager.h">
-      <Filter>ソース ファイル\manager\CollisionObjectManager</Filter>
+      <Filter>ソース ファイル\manager\collisionObjectManager</Filter>
     </ClInclude>
     <ClInclude Include="BackGround.h">
-      <Filter>ソース ファイル\object\title\BackGround</Filter>
+      <Filter>ソース ファイル\object\title\backGround</Filter>
     </ClInclude>
     <ClInclude Include="ObjectManager.h">
-      <Filter>ソース ファイル\manager\Object</Filter>
+      <Filter>ソース ファイル\manager\object</Filter>
     </ClInclude>
     <ClInclude Include="ObjectForTree.hpp">
       <Filter>ヘッダー ファイル</Filter>
@@ -633,7 +636,7 @@
       <Filter>ソース ファイル\cell</Filter>
     </ClInclude>
     <ClInclude Include="Liner8TreeManager.hpp">
-      <Filter>ソース ファイル\manager\Liner8TreeManager</Filter>
+      <Filter>ソース ファイル\manager\liner8TreeManager</Filter>
     </ClInclude>
     <ClInclude Include="BoundaryRange.h">
       <Filter>ヘッダー ファイル</Filter>
@@ -642,7 +645,10 @@
       <Filter>ソース ファイル\object\game\player\state\victory</Filter>
     </ClInclude>
     <ClInclude Include="UIButton.h">
-      <Filter>ソース ファイル\object\result\UIButton</Filter>
+      <Filter>ソース ファイル\object\result\uiButton</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisitonDetector.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

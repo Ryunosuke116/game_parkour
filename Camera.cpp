@@ -524,11 +524,11 @@ void Camera::PosCalc()
 	//lookPos‚ª‹…‚ÌŠO‘¤‚É‚¢‚Á‚½ê‡‹…‚Ì’†SÀ•W‚ğ‚¸‚ç‚·
 	if (!HitCheck::HitConfirmation(screenCenterPosition, centerPointSpherePos, kLookRadius, kCenterPointSphereRadius))
 	{
-		screenCenterPosition = Calculation::Leap(screenCenterPosition, centerPointSpherePos, kOutSphereCameraSpeed);
+		screenCenterPosition = Calculation::LeapVector(screenCenterPosition, centerPointSpherePos, kOutSphereCameraSpeed);
 	}
 	else
 	{
-		screenCenterPosition = Calculation::Leap(screenCenterPosition, centerPointSpherePos, kNormalCameraSpeed);
+		screenCenterPosition = Calculation::LeapVector(screenCenterPosition, centerPointSpherePos, kNormalCameraSpeed);
 	}
 }
 

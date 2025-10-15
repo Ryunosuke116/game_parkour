@@ -1,5 +1,4 @@
 #pragma once
-#include "HitCheck.h"
 #include "BaseObject.h"
 
 class EffectManager;
@@ -28,8 +27,6 @@ public:
 	bool IsHitPlayer(const VECTOR& topPlayerPos,
 		const VECTOR& bottomPlayerPos,
 		const float playerRadius);
-
-	HitCheck hitCheck;
 
 	bool GetIsHitPlayer()const { return isHitPlayer; }
 	bool GetIsDelete()const { return isDelete; }

@@ -88,11 +88,11 @@ CollisionResult CollisionManager::AllCheck(
 /// <summary>
 /// “ªã‚Ì“–‚½‚è”»’è
 /// </summary>
-/// <param name="modelHandle"></param>
-/// <param name="newPosition"></param>
-/// <param name="charaPositionData.addTopPos"></param>
-/// <param name="charaPositionData.charaRadius"></param>
-/// <param name="charaPositionData.addBottomPos"></param>
+/// <param name="wpCollisionObjects"></param>
+/// <param name="charaPosition"></param>
+/// <param name="charaVelocity"></param>
+/// <param name="charaPositionData"></param>
+/// <param name="charaRadius"></param>
 /// <returns></returns>
 VECTOR CollisionManager::HeadCollisionCheck(
 	const std::vector<std::weak_ptr<BaseObject>>& wpCollisionObjects,
@@ -259,6 +259,7 @@ CollisionResult CollisionManager::GroundCollisionCheck(
 			collisionResult.newPosition = VAdd(
 				collisionResult.newPosition,
 				collisionObject->GetDifferencePosition());
+
 			break;
 		}
 	}
