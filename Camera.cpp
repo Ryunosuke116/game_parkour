@@ -120,6 +120,8 @@ void Camera::Update()
 
 	cameraDirection = VSub(screenCenterPosition, cameraPosition);
 	cameraDirection = VNorm(cameraDirection);
+
+	DebugDrawer::GetInstance().InformationInputSphere(screenCenterPosition, 3.0f, GetColor(255, 255, 0));
 }
 
 /// <summary>
@@ -321,8 +323,8 @@ void Camera::DistanceUpdate()
 		}
 	}
 
-	DebugDrawer::GetInstance().InformationInput_string_float("normalDistanceProgress %f\n", normalDistanceProgress);
-	DebugDrawer::GetInstance().InformationInput_string_float("normalCameraHeightProgress %f\n", normalCameraHeightProgress);
+	DebugDrawer::GetInstance().InformationInputStringFloat("normalDistanceProgress %f\n", normalDistanceProgress);
+	DebugDrawer::GetInstance().InformationInputStringFloat("normalCameraHeightProgress %f\n", normalCameraHeightProgress);
 
 	//リニア値からカメラの距離を求める
 	normalCameraDistanceSize = Calculation::InterpolationCalc(normalLinearProgress, kMaxDistanceSize, kMinDistanceSize);
@@ -477,12 +479,12 @@ void Camera::AdjustCameraPosition()
 	cameraPosition.z = screenCenterPosition.z + cameraDistanceSize * sin(angleRadian);
 	cameraPosition.y = normalCameraPosition.y;
 
-	DebugDrawer::GetInstance().InformationInput_string_float("cameraDistanceSize %f\n", cameraDistanceSize);
-	DebugDrawer::GetInstance().InformationInput_string_float("normalCameraDistanceSize %f\n", normalCameraDistanceSize);
-	DebugDrawer::GetInstance().InformationInput_string_float("progressCameraPosition %f\n", progressCameraPosition);
-	DebugDrawer::GetInstance().InformationInput_string_VECTOR("normalCameraPosition %f %f %f\n", normalCameraPosition);
-	DebugDrawer::GetInstance().InformationInput_string_VECTOR("cameraPosition %f %f %f\n", cameraPosition);
-	DebugDrawer::GetInstance().InformationInput_string_VECTOR("screenCenterPosition %f %f %f\n", screenCenterPosition);
+	DebugDrawer::GetInstance().InformationInputStringFloat("cameraDistanceSize %f\n", cameraDistanceSize);
+	DebugDrawer::GetInstance().InformationInputStringFloat("normalCameraDistanceSize %f\n", normalCameraDistanceSize);
+	DebugDrawer::GetInstance().InformationInputStringFloat("progressCameraPosition %f\n", progressCameraPosition);
+	DebugDrawer::GetInstance().InformationInputStringVector("normalCameraPosition %f %f %f\n", normalCameraPosition);
+	DebugDrawer::GetInstance().InformationInputStringVector("cameraPosition %f %f %f\n", cameraPosition);
+	DebugDrawer::GetInstance().InformationInputStringVector("screenCenterPosition %f %f %f\n", screenCenterPosition);
 }
 
 /// <summary>
@@ -538,7 +540,7 @@ void Camera::PosCalc()
 void Camera::CaluclateCameraAndTargetDistanceSize()
 {
 	//高さは合わせる
-	VECTOR cameraPositionForCalculation = VGet(cameraPosition.x, centerPointSpherePos.y, cameraPosition.z);
+	VECTOR cameraPositionForCalculation = VGet(cameraPosition.x, cameraPosition.y, cameraPosition.z);
 	
 	VECTOR cameraAndTargetDistance = VSub(cameraPositionForCalculation, centerPointSpherePos);
 

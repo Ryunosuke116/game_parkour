@@ -126,11 +126,11 @@ bool PlayerStateBase::MotionUpdate(PlayerData& playerData)
 
 void PlayerStateBase::Draw()
 {
-    DebugDrawer::GetInstance().InformationInput_string_int("nowAttachIndex %d\n", nowAnimState.attachIndex);
-    DebugDrawer::GetInstance().InformationInput_string_int("oldAttachIndex %d\n", oldAnimState.attachIndex);
+    DebugDrawer::GetInstance().InformationInputStringInt("nowAttachIndex %d\n", nowAnimState.attachIndex);
+    DebugDrawer::GetInstance().InformationInputStringInt("oldAttachIndex %d\n", oldAnimState.attachIndex);
 
-    DebugDrawer::GetInstance().InformationInput_string_float("nowPlayTime_anim %f\n", nowAnimState.playAnimTime);
-    DebugDrawer::GetInstance().InformationInput_string_float("oldPlayTime_anim %f\n", oldAnimState.playAnimTime);
+    DebugDrawer::GetInstance().InformationInputStringFloat("nowPlayTime_anim %f\n", nowAnimState.playAnimTime);
+    DebugDrawer::GetInstance().InformationInputStringFloat("oldPlayTime_anim %f\n", oldAnimState.playAnimTime);
 }
 
 /// <summary>

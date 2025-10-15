@@ -7,49 +7,49 @@ DebugDrawer& DebugDrawer::GetInstance()
     return instance;
 }
 
-void DebugDrawer::InformationInput_line(const VECTOR& start, const VECTOR& end, unsigned int color)
+void DebugDrawer::InformationInputLine(const VECTOR& start, const VECTOR& end, unsigned int color)
 {
     if (!EnableDebugDraw) return;
     lines.push_back({ start, end, color });
 }
 
-void DebugDrawer::InformationInput_sphere(const VECTOR& center, float radius, unsigned int color)
+void DebugDrawer::InformationInputSphere(const VECTOR& center, float radius, unsigned int color)
 {
     if (!EnableDebugDraw) return;
     spheres.push_back({ center, radius, color });
 }
 
-void DebugDrawer::InformationInput_capsule(const VECTOR& top, const VECTOR& bottom, const float radius, unsigned int color)
+void DebugDrawer::InformationInputCapsule(const VECTOR& top, const VECTOR& bottom, const float radius, unsigned int color)
 {
     if (!EnableDebugDraw) return;
     capsules.push_back({ top, bottom, radius, color });
 }
 
-void DebugDrawer::InformationInput_string_int(const std::string& text, const int& variable)
+void DebugDrawer::InformationInputStringInt(const std::string& text, const int& variable)
 {
     if (!EnableDebugDraw) return;
     texts_int.push_back({ text, variable});
 }
 
-void DebugDrawer::InformationInput_string_float(const std::string& text, const float& variable)
+void DebugDrawer::InformationInputStringFloat(const std::string& text, const float& variable)
 {
     if (!EnableDebugDraw) return;
     texts_float.push_back({ text, variable });
 }
 
-void DebugDrawer::InformationInput_string_bool(const std::string& text, const bool& variable)
+void DebugDrawer::InformationInputStringBool(const std::string& text, const bool& variable)
 {
     if (!EnableDebugDraw) return;
     texts_bool.push_back({ text, variable });
 }
 
-void DebugDrawer::InformationInput_string_VECTOR(const std::string& text, const VECTOR& variable)
+void DebugDrawer::InformationInputStringVector(const std::string& text, const VECTOR& variable)
 {
     if (!EnableDebugDraw) return;
     texts_VECTOR.push_back({ text, variable });
 }
 
-void DebugDrawer::InformationInput_AABB(const VECTOR& min, const VECTOR& max, unsigned int color)
+void DebugDrawer::InformationInputAABB(const VECTOR& min, const VECTOR& max, unsigned int color)
 {
     if (!EnableDebugDraw) return;
     aabbs.push_back({ min,max,color });

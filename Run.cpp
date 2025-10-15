@@ -73,7 +73,7 @@ std::pair<VECTOR, PlayerData> Run::Update(
 /// <returns></returns>
 std::pair<VECTOR,PlayerData> Run::NormalUpdate(
 	const VECTOR& cameraDirection,
-	Player& player )
+	Player& player)
 {
 	PlayerData playerData = player.GetData();
 

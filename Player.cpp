@@ -475,45 +475,45 @@ void Player::DebugUpdate()
     float nowPadDegree = Calculation::RadToDeg(padRadian);
 
     //カプセル
-    DebugDrawer::GetInstance().InformationInput_capsule(positionData.capsuleTopPosition,
+    DebugDrawer::GetInstance().InformationInputCapsule(positionData.capsuleTopPosition,
         positionData.capsuleBottomPosition, radius, GetColor(255, 0, 0));
     
     //string_VECTOR
-    DebugDrawer::GetInstance().InformationInput_string_VECTOR("playerPosition.x %f\nplayerPosition.y %f\nplayerPosition.z %f\n", position);
-    DebugDrawer::GetInstance().InformationInput_string_VECTOR("nowMoveDirection.x %f\nowMoveDirection.y %f\nowMoveDirection.z %f\n", nowMoveDirection);
-    DebugDrawer::GetInstance().InformationInput_string_VECTOR("faceDirection %f %f %f\n", faceDirection);
+    DebugDrawer::GetInstance().InformationInputStringVector("playerPosition.x %f\nplayerPosition.y %f\nplayerPosition.z %f\n", position);
+    DebugDrawer::GetInstance().InformationInputStringVector("nowMoveDirection.x %f\nowMoveDirection.y %f\nowMoveDirection.z %f\n", nowMoveDirection);
+    DebugDrawer::GetInstance().InformationInputStringVector("faceDirection %f %f %f\n", faceDirection);
 
     //string_int
-    DebugDrawer::GetInstance().InformationInput_string_int("frame現在数%d\n", nowFrameNumber);
-    DebugDrawer::GetInstance().InformationInput_string_int("coinCount %f\n", coinCount);
+    DebugDrawer::GetInstance().InformationInputStringInt("frame現在数%d\n", nowFrameNumber);
+    DebugDrawer::GetInstance().InformationInputStringInt("coinCount %f\n", coinCount);
 
     //string_flaot
-    DebugDrawer::GetInstance().InformationInput_string_float("JoyPad_x_left %f\n", -PadInput::GetJoyPadXLeft());
-    DebugDrawer::GetInstance().InformationInput_string_float("JoyPad_y_left %f\n", -PadInput::GetJoyPadYLeft());
-    DebugDrawer::GetInstance().InformationInput_string_float("nowPadDegree %f\n", nowPadDegree);
-    DebugDrawer::GetInstance().InformationInput_string_float("playerDegree %f\n", GetDegree());
+    DebugDrawer::GetInstance().InformationInputStringFloat("JoyPad_x_left %f\n", -PadInput::GetJoyPadXLeft());
+    DebugDrawer::GetInstance().InformationInputStringFloat("JoyPad_y_left %f\n", -PadInput::GetJoyPadYLeft());
+    DebugDrawer::GetInstance().InformationInputStringFloat("nowPadDegree %f\n", nowPadDegree);
+    DebugDrawer::GetInstance().InformationInputStringFloat("playerDegree %f\n", GetDegree());
 
     //string_bool
-    DebugDrawer::GetInstance().InformationInput_string_bool("isGround %d\n", playerData.isGround);
-    DebugDrawer::GetInstance().InformationInput_string_bool("isIdle %d\n", playerData.isIdle);
-    DebugDrawer::GetInstance().InformationInput_string_bool("isMove %d\n", playerData.isMove);
-    DebugDrawer::GetInstance().InformationInput_string_bool("isRun %d\n", playerData.isRun);
-    DebugDrawer::GetInstance().InformationInput_string_bool("isRunWall %d\n", playerData.isRunWall);
-    DebugDrawer::GetInstance().InformationInput_string_bool("isUseWallJump %d\n", playerData.isUseWallJump);
-    DebugDrawer::GetInstance().InformationInput_string_bool("isStopRun %d\n", playerData.isStopRun);
-    DebugDrawer::GetInstance().InformationInput_string_bool("isJump %d\n", playerData.isJump);
-    DebugDrawer::GetInstance().InformationInput_string_bool("isFirstJump %d\n", playerData.isFirstJump);
-    DebugDrawer::GetInstance().InformationInput_string_bool("isSecondJump %d\n", playerData.isSecondJump);
-    DebugDrawer::GetInstance().InformationInput_string_bool("isAllJump %d\n", playerData.isAllJump);
-    DebugDrawer::GetInstance().InformationInput_string_bool("isWalljump %d\n", playerData.isWalljump);
-    DebugDrawer::GetInstance().InformationInput_string_bool("isUseWallJump %d\n", playerData.isUseWallJump);
-    DebugDrawer::GetInstance().InformationInput_string_bool("isRoll %d\n", playerData.isRoll);
-    DebugDrawer::GetInstance().InformationInput_string_bool("isUseRoll %d\n", playerData.isUseRoll);
-    DebugDrawer::GetInstance().InformationInput_string_bool("isFalling %d\n", playerData.isFalling);
-    DebugDrawer::GetInstance().InformationInput_string_bool("isHanging %d\n", playerData.isHanging);
-    DebugDrawer::GetInstance().InformationInput_string_bool("isNowHanging %d\n", playerData.isNowHanging);
-    DebugDrawer::GetInstance().InformationInput_string_bool("isUseHanging %d\n", playerData.isUseHanging);
-    DebugDrawer::GetInstance().InformationInput_string_bool("isHangToCrouch %d\n", playerData.isHangToCrouch);
+    DebugDrawer::GetInstance().InformationInputStringBool("isGround %d\n", playerData.isGround);
+    DebugDrawer::GetInstance().InformationInputStringBool("isIdle %d\n", playerData.isIdle);
+    DebugDrawer::GetInstance().InformationInputStringBool("isMove %d\n", playerData.isMove);
+    DebugDrawer::GetInstance().InformationInputStringBool("isRun %d\n", playerData.isRun);
+    DebugDrawer::GetInstance().InformationInputStringBool("isRunWall %d\n", playerData.isRunWall);
+    DebugDrawer::GetInstance().InformationInputStringBool("isUseWallJump %d\n", playerData.isUseWallJump);
+    DebugDrawer::GetInstance().InformationInputStringBool("isStopRun %d\n", playerData.isStopRun);
+    DebugDrawer::GetInstance().InformationInputStringBool("isJump %d\n", playerData.isJump);
+    DebugDrawer::GetInstance().InformationInputStringBool("isFirstJump %d\n", playerData.isFirstJump);
+    DebugDrawer::GetInstance().InformationInputStringBool("isSecondJump %d\n", playerData.isSecondJump);
+    DebugDrawer::GetInstance().InformationInputStringBool("isAllJump %d\n", playerData.isAllJump);
+    DebugDrawer::GetInstance().InformationInputStringBool("isWalljump %d\n", playerData.isWalljump);
+    DebugDrawer::GetInstance().InformationInputStringBool("isUseWallJump %d\n", playerData.isUseWallJump);
+    DebugDrawer::GetInstance().InformationInputStringBool("isRoll %d\n", playerData.isRoll);
+    DebugDrawer::GetInstance().InformationInputStringBool("isUseRoll %d\n", playerData.isUseRoll);
+    DebugDrawer::GetInstance().InformationInputStringBool("isFalling %d\n", playerData.isFalling);
+    DebugDrawer::GetInstance().InformationInputStringBool("isHanging %d\n", playerData.isHanging);
+    DebugDrawer::GetInstance().InformationInputStringBool("isNowHanging %d\n", playerData.isNowHanging);
+    DebugDrawer::GetInstance().InformationInputStringBool("isUseHanging %d\n", playerData.isUseHanging);
+    DebugDrawer::GetInstance().InformationInputStringBool("isHangToCrouch %d\n", playerData.isHangToCrouch);
 }
 
 /// @brief プレイヤーが特定の位置より下に落下した場合に、位置と状態をリセット

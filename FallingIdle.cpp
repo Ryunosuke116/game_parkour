@@ -64,7 +64,7 @@ std::pair<VECTOR, PlayerData> FallingIdle::Update(const VECTOR& cameraDirection,
             fieldObjects,
             player.GetPosition(),
             spherePos,
-            player.GetNowMoveDirection(),
+            player.GetFaceDirection(),
             kCliffRadius);
         
         //íÕÇﬁÇ∆Ç±ÇÎÇ™ïΩçsÇæÇ¡ÇΩèÍçá
@@ -79,7 +79,7 @@ std::pair<VECTOR, PlayerData> FallingIdle::Update(const VECTOR& cameraDirection,
             Calculation::NearestResult nearestResult =
                 Calculation::SphereMeshOutsideTriangleLine(resultCheckCliff.hangingPoly, spherePos);
 
-            DebugDrawer::GetInstance().InformationInput_line(nearestResult.startLinePos,
+            DebugDrawer::GetInstance().InformationInputLine(nearestResult.startLinePos,
                 nearestResult.endLinePos, 
                 GetColor(255, 0, 0));
             
@@ -110,7 +110,9 @@ std::pair<VECTOR, PlayerData> FallingIdle::Update(const VECTOR& cameraDirection,
     return std::make_pair(moveDirection, playerData);
 }
 
-VECTOR FallingIdle::Command(const VECTOR& cameraDirection, PlayerData& playerData, Player& player)
+VECTOR FallingIdle::Command(const VECTOR& cameraDirection,
+    PlayerData& playerData,
+    Player& player)
 {
     VECTOR moveDirection = VGet(0.0f, 0.0f, 0.0f);
     auto collisionObjectManager = WorldSubSystem::GetInstance().GetSubSystem<CollisionObjectManager>();

@@ -344,9 +344,9 @@ HangingData HitCheck::CliffGrabbing(
 					MV1_COLL_RESULT_POLY rightRayCheck;
 
 					//デバック
-					DebugDrawer::GetInstance().InformationInput_line(leftRayPoint, endLeftRayPoint, GetColor(255, 255, 255));
-					DebugDrawer::GetInstance().InformationInput_line(rightRayPoint, endRightRayPoint, GetColor(255, 255, 255));
-					DebugDrawer::GetInstance().InformationInput_sphere(nearestOutSide, 2.5f, GetColor(255, 0, 255));
+					DebugDrawer::GetInstance().InformationInputLine(leftRayPoint, endLeftRayPoint, GetColor(255, 255, 255));
+					DebugDrawer::GetInstance().InformationInputLine(rightRayPoint, endRightRayPoint, GetColor(255, 255, 255));
+					DebugDrawer::GetInstance().InformationInputSphere(nearestOutSide, 2.5f, GetColor(255, 0, 255));
 				
 					//rayを飛ばして確認
 					for (const auto& wpCollisionObject : collisionObjects)
@@ -388,7 +388,7 @@ HangingData HitCheck::CliffGrabbing(
 					VECTOR endWallCheckLine = VAdd(depthDistance, VScale(subjectPoly.Normal, kLeapSpeed));
 
 					//デバック
-					DebugDrawer::GetInstance().InformationInput_capsule(startWallCheckLine, endWallCheckLine,1.0f, GetColor(255, 0, 255));
+					DebugDrawer::GetInstance().InformationInputCapsule(startWallCheckLine, endWallCheckLine,1.0f, GetColor(255, 0, 255));
 
 					MV1_COLL_RESULT_POLY wallCheck = {};
 
@@ -428,8 +428,8 @@ HangingData HitCheck::CliffGrabbing(
 		MV1CollResultPolyDimTerminate(polyDim);
 	}
 	
-	DebugDrawer::GetInstance().InformationInput_sphere(spherePos, radius, GetColor(255, 255, 255));
-	DebugDrawer::GetInstance().InformationInput_line(startUpperCheckPos, endUpperCheckPos, GetColor(255, 0, 255));
+	DebugDrawer::GetInstance().InformationInputSphere(spherePos, radius, GetColor(255, 255, 255));
+	DebugDrawer::GetInstance().InformationInputLine(startUpperCheckPos, endUpperCheckPos, GetColor(255, 0, 255));
 
 	return hangingData;
 }

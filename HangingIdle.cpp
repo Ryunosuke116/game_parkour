@@ -87,6 +87,7 @@ std::pair<VECTOR, PlayerData> HangingIdle::Update(const VECTOR& cameraDirection,
         playerData.isFalling = true;
         playerData.isNowHanging = false;
         playerData.isUseHanging = false;
+        playerData.isUseWallJump = false;
     }
 
     return std::make_pair(moveDirection, playerData);

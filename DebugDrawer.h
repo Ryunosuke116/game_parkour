@@ -7,14 +7,14 @@ class DebugDrawer
 public:
     static DebugDrawer& GetInstance();  // シングルトン取得
 
-    void InformationInput_line(const VECTOR& start, const VECTOR& end, unsigned int color);
-    void InformationInput_sphere(const VECTOR& center, const float radius, unsigned int color);
-    void InformationInput_AABB(const VECTOR& min, const VECTOR& max, unsigned int color);
-    void InformationInput_capsule(const VECTOR& top, const VECTOR& bottom, const float radius, unsigned int color);
-    void InformationInput_string_int(const std::string& text,  const int& variable );
-    void InformationInput_string_float(const std::string& text, const float& variable);
-    void InformationInput_string_bool(const std::string& text, const bool& variable);
-    void InformationInput_string_VECTOR(const std::string& text, const VECTOR& variable);
+    void InformationInputLine(const VECTOR& start, const VECTOR& end, unsigned int color);
+    void InformationInputSphere(const VECTOR& center, const float radius, unsigned int color);
+    void InformationInputAABB(const VECTOR& min, const VECTOR& max, unsigned int color);
+    void InformationInputCapsule(const VECTOR& top, const VECTOR& bottom, const float radius, unsigned int color);
+    void InformationInputStringInt(const std::string& text,  const int& variable );
+    void InformationInputStringFloat(const std::string& text, const float& variable);
+    void InformationInputStringBool(const std::string& text, const bool& variable);
+    void InformationInputStringVector(const std::string& text, const VECTOR& variable);
     void DrawAABB(const VECTOR& min, const VECTOR& max, unsigned int color);
     void Clear(); // 描画リストを削除
     void Draw(); // 登録された全てのデバッグ描画を行う
