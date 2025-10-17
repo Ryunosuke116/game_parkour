@@ -195,11 +195,11 @@ void ObjectManager::WhenDebugUpdate()
 	}
 	else
 	{
-		actualShadow->Update();
 		actualCoinManager->Update();
 		actualCamera->LayOutUpdate();
 		layout->Update(WorldSubSystem::GetInstance().GetSubSystem<Camera>()->GetScreenCenterPosition(),
 			*actualCoinManager);
+		actualShadow->LayoutUpdate(WorldSubSystem::GetInstance().GetSubSystem<Camera>()->GetScreenCenterPosition());
 	}
 }
 
@@ -282,6 +282,11 @@ void ObjectManager::Draw()
 		}
 	}
 
+	if (isCamera)
+	{
+		layout->Draw();
+	}
+
 	//シャドウマップへの描画を終了
 	ShadowMap_DrawEnd();
 
@@ -298,13 +303,14 @@ void ObjectManager::Draw()
 		object->Draw();
 	}
 
-	// 描画に使用するシャドウマップの設定を解除
-	SetUseShadowMap(0, -1);
-
 	if (isCamera)
 	{
 		layout->Draw();
 	}
+
+	// 描画に使用するシャドウマップの設定を解除
+	SetUseShadowMap(0, -1);
+
 
 	tutorialDraw();
 

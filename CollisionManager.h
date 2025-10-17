@@ -60,7 +60,7 @@ private:
 
 	PositionData GetPositionData() { return positionData; }
 
-	static constexpr float kAngleRange = 50.0f;
+	static constexpr float kAngleRange = 60.0f;
 	static constexpr int kFrameIndex = -1;
 	const VECTOR kLengthDirection = VGet(0.0f, 1.0f, 0.0f);
 };

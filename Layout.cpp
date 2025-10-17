@@ -29,7 +29,6 @@ void Layout::Update(const VECTOR& pos,
 	BaseGameObjectManager& manager)
 {
 	MV1SetPosition(modelHandle, pos);
-	DebugDrawer::GetInstance().InformationInputStringVector("position x %f  y %f  z %f\n", pos);
 
 	if (CheckHitKey(KEY_INPUT_SPACE) ||
 		PadInput::IsPushA())
@@ -46,16 +45,16 @@ void Layout::Update(const VECTOR& pos,
 	{
 		isPush = false;
 	}
+
+	DebugDrawer::GetInstance().InformationInputStringVector("position x %f  y %f  z %f\n", pos);
 }
 
 void Layout::Draw()
 {
 	const int kMaxAlpha = 255;
 	const int kMinAlpha = 0;
-	// マテリアルのブレンドパラメータを 128 に変更する
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, kMaxAlpha);
+
 	MV1DrawModel(modelHandle);
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, kMinAlpha);
 }
 
 void Layout::InputFile(const VECTOR& inputPosition)

@@ -25,7 +25,7 @@ Jump::Jump(const int modelHandle) :
 /// </summary>
 Jump::~Jump()
 {
-  //  MV1DetachAnim(modelHandle, this->nowAnimState.attachIndex);
+
 }
 
 /// <summary>
@@ -37,8 +37,10 @@ void Jump::Initialize(const int modelHandle,const int changeNum, Player& player)
     // ３Ｄモデルの０番目のアニメーションをアタッチする
     //ランジャンプ
     player.GetData().isMove ?
-        PlayerStateBase::Initialize(modelHandle, animNum::runJump, player) :
+        PlayerStateBase::Initialize(modelHandle, animNum::secondJump, player) :
         PlayerStateBase::Initialize(modelHandle, animNum::jump, player);
+
+
 
     this->nowAnimState.PlayAnimSpeed = kPlayAnimSpeed;
 
@@ -104,7 +106,6 @@ bool Jump::MotionUpdate(PlayerData& playerData)
 
     if (nowAnimState.attachIndex != -1)
     {
-
         // アタッチしたアニメーションの総再生時間を取得する
         totalTime_anim = MV1GetAttachAnimTotalTime(modelHandle, nowAnimState.attachIndex);
 
@@ -124,7 +125,6 @@ bool Jump::MotionUpdate(PlayerData& playerData)
         //アニメーションのモデルに対する反映率をセット
         MV1SetAttachAnimBlendRate(modelHandle, nowAnimState.attachIndex, animBlendRate);
     }
-
 
     //再生しているアニメーション２の処理
     if (oldAnimState.attachIndex != -1)

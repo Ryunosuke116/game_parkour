@@ -53,6 +53,17 @@ void Shadow::Update()
 	SetShadowMapDrawArea(shadowMapHandle, minPos, maxPos);
 }
 
+void Shadow::LayoutUpdate(const VECTOR& pos)
+{
+	const VECTOR drawRange = VGet(100.0f, 50.0f, 100.0f);
+
+	//シャドウを描画する範囲を指定
+	VECTOR minPos = VSub(pos, drawRange);
+	VECTOR maxPos = VAdd(pos, drawRange);
+
+	SetShadowMapDrawArea(shadowMapHandle, minPos, maxPos);
+}
+
 /// <summary>
 /// リザルトシーン時の生成
 /// </summary>

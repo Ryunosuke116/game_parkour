@@ -111,7 +111,7 @@ std::shared_ptr<PlayerStateBase> AnimationChanger::ChangeState(
     //ƒWƒƒƒ“ƒv
     if (playerData.isJump &&
         nowAnimNumber != animNum::jump &&
-        nowAnimNumber != animNum::runJump)
+        nowAnimNumber != animNum::secondJump)
     {
         Change(animNum::jump, player, playerData);
     }

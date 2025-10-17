@@ -39,7 +39,7 @@ public:
 	void ResetOldAnimState();
 	void ResetNowAnimState();
 	void Draw();
-	void SwitchingAnimation(const int& animNum);
+	void SwitchingAnimation(const int animNum);
 	void ResetIsJumps(PlayerData& playerData);
 
 	//////////////////////////////////////////////

@@ -18,6 +18,7 @@ enum animNum : int
 	runningForwardFlip,			//走りながら回転ジャンプ
 	runningTurnLeft,			//急回転
 	runningTurnRight,
+	secondJump,
 	victory,					//勝利ポーズ
 	walk,						//歩く
 	wallClimb					//駆け上がる

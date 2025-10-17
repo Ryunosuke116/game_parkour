@@ -326,7 +326,7 @@ void PlayerStateBase::ResetIsJumps(PlayerData& playerData)
 /// アタッチするアニメーションを変更
 /// </summary>
 /// <param name="animNum"></param>
-void PlayerStateBase::SwitchingAnimation(const int& animNum)
+void PlayerStateBase::SwitchingAnimation(const int animNum)
 {
     //古い情報を削除
     if (this->oldAnimState.attachIndex != -1)

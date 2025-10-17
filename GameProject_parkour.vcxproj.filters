@@ -73,9 +73,6 @@
     <Filter Include="ソース ファイル\manager\effect">
       <UniqueIdentifier>{5e5cd968-670e-44f1-a594-3cd0abd7bd68}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\manager\layout">
-      <UniqueIdentifier>{d5d9db3e-28bd-4cfe-902b-76f058d3efb3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\manager\player">
       <UniqueIdentifier>{2a33576b-268e-4832-9dee-8902d408c493}</UniqueIdentifier>
     </Filter>
@@ -241,6 +238,9 @@
     <Filter Include="ソース ファイル\object\game\player\state\base">
       <UniqueIdentifier>{94073645-165e-4d0d-b42d-68b29060cef2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\object\game\layout">
+      <UniqueIdentifier>{d5d9db3e-28bd-4cfe-902b-76f058d3efb3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp">
@@ -310,7 +310,7 @@
       <Filter>ソース ファイル\object\game\player\state\bracedHangToCrouch</Filter>
     </ClCompile>
     <ClCompile Include="Layout.cpp">
-      <Filter>ソース ファイル\manager\layout</Filter>
+      <Filter>ソース ファイル\object\game\layout</Filter>
     </ClCompile>
     <ClCompile Include="BaseChara.cpp">
       <Filter>ソース ファイル\base\baseChara</Filter>
@@ -507,7 +507,7 @@
       <Filter>ソース ファイル\object\game\player\state\bracedHangToCrouch</Filter>
     </ClInclude>
     <ClInclude Include="Layout.h">
-      <Filter>ソース ファイル\manager\layout</Filter>
+      <Filter>ソース ファイル\object\game\layout</Filter>
     </ClInclude>
     <ClInclude Include="BaseChara.h">
       <Filter>ソース ファイル\base\baseChara</Filter>

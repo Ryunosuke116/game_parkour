@@ -18,6 +18,8 @@ public:
 	void ResultInitialize()override;
 	void ResultUpdate()override;
 
+	void LayoutUpdate(const VECTOR& pos);
+
 	int GetShadowMapHandle()const { return shadowMapHandle; }
 
 private:
