@@ -14,7 +14,6 @@
 /// <param name="modelHandle"></param>
 Jump::Jump(const int modelHandle) :
     PlayerStateBase(modelHandle),
-    isFirstJump(false),
     isSecondJump(false)
 {
     
@@ -32,20 +31,24 @@ Jump::~Jump()
 /// 初期化
 /// </summary>
 /// <param name="modelHandle"></param>
-void Jump::Initialize(const int modelHandle,const int changeNum, Player& player)
+void Jump::Initialize(const int modelHandle,
+    const int changeNum, 
+    Player& player)
 {
     // ３Ｄモデルの０番目のアニメーションをアタッチする
-    //ランジャンプ
-    player.GetData().isMove ?
-        PlayerStateBase::Initialize(modelHandle, animNum::secondJump, player) :
+    if (player.GetData().isMove)
+    {
+        PlayerStateBase::Initialize(modelHandle, animNum::secondJump, player);
+        nowAnimState.playAnimTime = 12.0f;
+        isSecondJump = true;
+    }
+    else
+    {
         PlayerStateBase::Initialize(modelHandle, animNum::jump, player);
-
-
+        isSecondJump = false;
+    }
 
     this->nowAnimState.PlayAnimSpeed = kPlayAnimSpeed;
-
-    isFirstJump = player.GetData().isJump;
-    isSecondJump = player.GetData().isSecondJump;
 }
 
 /// <summary>
@@ -90,9 +93,14 @@ std::pair<VECTOR, PlayerData> Jump::Update(
 /// <returns></returns>
 bool Jump::MotionUpdate(PlayerData& playerData)
 {
-    bool flag = false;
-
     float totalTime_anim;
+
+    if (nowAnimState.playAnimTime >= 41.0f)
+    {
+        playerData.isFalling = true;
+        isChangeState = true;
+        return true;
+    }
 
     // ブレンド率が１以下の場合は１に近づける
     if (animBlendRate < 1.0f)
@@ -148,7 +156,7 @@ bool Jump::MotionUpdate(PlayerData& playerData)
         MV1SetAttachAnimBlendRate(modelHandle, oldAnimState.attachIndex, 1.0f - animBlendRate);
     }
 
-    return flag;
+    return true;
 }
 
 VECTOR Jump::Command(const VECTOR& cameraDirection, PlayerData& playerData, Player& player)

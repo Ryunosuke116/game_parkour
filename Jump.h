@@ -21,7 +21,6 @@ private:
 
 	bool isPush;		//ƒ{ƒ^ƒ“‚ð‰Ÿ‚µ‚½‚©
 	bool isRun;
-	bool isFirstJump;
 	bool isSecondJump;
 };
 
