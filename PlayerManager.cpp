@@ -86,7 +86,7 @@ void PlayerManager::Update()
 	else
 	{
 		collisionManager->Update(*player, actualPlayer->GetData());
-		actualPlayer->Receive_CollisionResult();
+		actualPlayer->ReceiveCollisionResult();
 	}
 
 	//À•WXV

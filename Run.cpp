@@ -34,6 +34,7 @@ Run::Run(const int modelHandle) :
 /// </summary>
 Run::~Run()
 {
+	//èàóùÇ»Çµ
 }
 
 std::pair<VECTOR, PlayerData> Run::Update(
@@ -126,6 +127,8 @@ std::pair<VECTOR, PlayerData> Run::WallRunUpdate(
 		playerData.isFalling = true;
 		playerData.isUseWallJump = false;
 		player.SetRotateX(0.0f);
+
+		return std::make_pair(moveDir, playerData);
 	}
 
    //äRíÕÇ›îªíË
@@ -260,7 +263,7 @@ VECTOR Run::Move(
 		VScale(upMove, -PadInput::GetJoyPadYLeft()));
 
 	//0Ç≈Ç»ÇØÇÍÇŒê≥ãKâª
-	if (VSize(moveDirection) != 0)
+	if (VSize(moveDirection) >= 1e-4f)
 	{
 		moveDirection = VNorm(moveDirection);
 		stopTime = 0.0f;
@@ -280,10 +283,8 @@ VECTOR Run::Move(
 		playerData.isMove = true;
 	}
 
-
 	//ïKÇ∏ê≥ãKâªÇ≥ÇÍÇΩÇ‡ÇÃÇ©0Çï‘Ç∑
 	return moveDirection;
-
 }
 
 void Run::DashMove(PlayerData& playerData)
@@ -293,7 +294,8 @@ void Run::DashMove(PlayerData& playerData)
 		playerData.isDash = false;
 }
 
-void Run::Enter(const AnimState& oldAnimState, const AnimState& nowAnimState)
+void Run::Enter(const AnimState& oldAnimState, 
+	const AnimState& nowAnimState)
 {
 	PlayerStateBase::Enter(oldAnimState, nowAnimState);
 	const auto soundPlayer =

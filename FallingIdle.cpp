@@ -26,7 +26,7 @@ FallingIdle::FallingIdle(const int modelHandle) :
 /// </summary>
 FallingIdle::~FallingIdle()
 {
-	//MV1DetachAnim(modelHandle, nowAnimState.attachIndex);
+    //ˆ—‚È‚µ
 }
 
 /// <summary>

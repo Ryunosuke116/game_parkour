@@ -22,7 +22,7 @@ Victory::Victory(const int modelHandle) :
 /// @brief デストラクタ
 Victory::~Victory()
 {
-
+    //処理なし
 }
 
 /// @brief 更新処理
@@ -41,8 +41,8 @@ std::pair<VECTOR, PlayerData> Victory::Update(
 
 bool Victory::MotionUpdate(PlayerData& playerData)
 {
-    bool flag = false;
-
+    const float kPoseFrame = 32.0f;
+    
     // ブレンド率が１以下の場合は１に近づける
     if (animBlendRate < 1.0f)
     {
@@ -55,15 +55,13 @@ bool Victory::MotionUpdate(PlayerData& playerData)
 
     if (nowAnimState.attachIndex != -1)
     {
-        float poseFrame = 32.0f;
-
         //再生時間更新
         nowAnimState.playAnimTime += nowAnimState.PlayAnimSpeed;
 
         //32f(決めポーズ時)になったらそこでアニメーションを停止する
-        if (nowAnimState.playAnimTime >= poseFrame)
+        if (nowAnimState.playAnimTime >= kPoseFrame)
         {
-            nowAnimState.playAnimTime = poseFrame;
+            nowAnimState.playAnimTime = kPoseFrame;
         }
 
         // 再生時間をセットする
@@ -72,7 +70,8 @@ bool Victory::MotionUpdate(PlayerData& playerData)
         //アニメーションのモデルに対する反映率をセット
         MV1SetAttachAnimBlendRate(modelHandle, nowAnimState.attachIndex, animBlendRate);
     }
-    return flag;
+
+    return true;
 }
 
 VECTOR Victory::Command(const VECTOR& cameraDirection, PlayerData& playerData, Player& player)

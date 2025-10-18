@@ -74,7 +74,7 @@ void PlayerStateBase::Initialize(const int modelHandle,
 /// <returns></returns>
 bool PlayerStateBase::MotionUpdate(PlayerData& playerData)
 {
-    float totalTime_anim;
+    float totalPlayAnimTime = 0.0f;
 
     // ブレンド率が１以下の場合は１に近づける
     if (animBlendRate < 1.0f)
@@ -88,16 +88,13 @@ bool PlayerStateBase::MotionUpdate(PlayerData& playerData)
 
     if (nowAnimState.attachIndex != -1)
     {
-        // アタッチしたアニメーションの総再生時間を取得する
-        totalTime_anim = MV1GetAttachAnimTotalTime(modelHandle, nowAnimState.attachIndex);
-
         //再生時間更新
         nowAnimState.playAnimTime += nowAnimState.PlayAnimSpeed;
 
         //総再生時間を超えたらリセット
-        if (nowAnimState.playAnimTime >= totalTime_anim)
+        if (nowAnimState.playAnimTime >= nowAnimState.totalPlayAnimTime)
         {
-            nowAnimState.playAnimTime = static_cast<float>(fmod(nowAnimState.playAnimTime, totalTime_anim));
+            nowAnimState.playAnimTime = static_cast<float>(fmod(nowAnimState.playAnimTime, nowAnimState.totalPlayAnimTime));
         }
 
         // 再生時間をセットする
@@ -111,7 +108,7 @@ bool PlayerStateBase::MotionUpdate(PlayerData& playerData)
     if (oldAnimState.attachIndex != -1)
     {
         // アニメーションの総時間を取得
-        totalTime_anim = MV1GetAttachAnimTotalTime(modelHandle, oldAnimState.attachIndex);
+        totalPlayAnimTime = MV1GetAttachAnimTotalTime(modelHandle, oldAnimState.attachIndex);
 
         // 変更した再生時間をモデルに反映させる
         MV1SetAttachAnimTime(modelHandle, oldAnimState.attachIndex, oldAnimState.playAnimTime);
@@ -201,12 +198,18 @@ void PlayerStateBase::RollMove(PlayerData& playerData)
 void PlayerStateBase::JumpMove(PlayerData& playerData, 
     Player& player)
 {
+    bool isFirstJump = !player.playerCalculation->GetIsAddJumpPower() &&
+        !isPush &&
+        !playerData.isFirstJump;
+    
+    bool isSecondJump = playerData.isFirstJump &&
+        !isPush &&
+        !playerData.isSecondJump;
+
     if (PadInput::isJump() && !playerData.isAllJump)
     {
         //ジャンプ
-        if (!player.playerCalculation->GetIsAddJumpPower() &&
-            !isPush &&
-            !playerData.isFirstJump)
+        if (isFirstJump)
         {
             isChangeState = true;
             playerData.isJump = true;
@@ -216,13 +219,12 @@ void PlayerStateBase::JumpMove(PlayerData& playerData,
             player.playerCalculation->SetJumpPower();
         }
         //二段ジャンプ
-        else if (playerData.isFirstJump &&
-            !isPush &&
-            !playerData.isSecondJump)
+        else if (isSecondJump)
         {
             const auto effectManager = GameInstanceSubSystem::GetInstance().GetSubSystem<EffectManager>().lock();
             effectManager->PlayEffect("jump");
             effectManager->SetPosition(player.GetPosition(), "jump");
+
             if (!playerData.isJump)
             {
                 isChangeState = true;
@@ -234,7 +236,14 @@ void PlayerStateBase::JumpMove(PlayerData& playerData,
             player.playerCalculation->ChangeTrueIsAddJumpPower();
             player.playerCalculation->SetSecondJumpPower();
 
-            nowAnimState.playAnimTime = 5.0f;
+            if (playerData.isMove)
+            {
+                nowAnimState.playAnimTime = kInitMoveJumpPlayTime;
+            }
+            else
+            {
+                nowAnimState.playAnimTime = kInitNormalJumpPlayTime;
+            }
         }
     }
     else

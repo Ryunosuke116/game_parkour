@@ -30,7 +30,7 @@ public:
 	void FinishUpdate(const float timer);
 	void DebugUpdate();
 	void MoveDirectionUpdate();
-	void Receive_CollisionResult();
+	void ReceiveCollisionResult();
 	void ChangeState();
 	void CollisionUpdate();
 	void OnCoinPicked(int amount)override { coinCount += amount; }

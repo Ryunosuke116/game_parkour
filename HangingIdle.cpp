@@ -26,7 +26,7 @@ HangingIdle::HangingIdle(const int modelHandle) :
 /// </summary>
 HangingIdle::~HangingIdle()
 {
-
+    //ˆ—‚È‚µ
 }
 
 /// <summary>

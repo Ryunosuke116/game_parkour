@@ -58,6 +58,8 @@ protected:
 	static constexpr float kAnimBlendSpeed = 0.1f;		// アニメーションのブレンド率変化速度
 	static constexpr float kRunWallRotateX = 30.0f;
 	static constexpr float kCliffRadius = 4.0f;			//崖掴み判定用の半径
+	static constexpr float kInitMoveJumpPlayTime = 12.0f;
+	static constexpr float kInitNormalJumpPlayTime = 5.0f;
 
 	int modelHandle;			//モデルハンドル
 	int animOldNumber;

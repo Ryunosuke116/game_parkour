@@ -423,9 +423,6 @@
     <ClCompile Include="main.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="CollisitonDetector.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
@@ -646,9 +643,6 @@
     </ClInclude>
     <ClInclude Include="UIButton.h">
       <Filter>ソース ファイル\object\result\uiButton</Filter>
-    </ClInclude>
-    <ClInclude Include="CollisitonDetector.h">
-      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

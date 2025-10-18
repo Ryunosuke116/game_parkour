@@ -24,7 +24,7 @@ Jump::Jump(const int modelHandle) :
 /// </summary>
 Jump::~Jump()
 {
-
+    //処理なし
 }
 
 /// <summary>
@@ -39,7 +39,7 @@ void Jump::Initialize(const int modelHandle,
     if (player.GetData().isMove)
     {
         PlayerStateBase::Initialize(modelHandle, animNum::secondJump, player);
-        nowAnimState.playAnimTime = 12.0f;
+        nowAnimState.playAnimTime = kInitMoveJumpPlayTime;
         isSecondJump = true;
     }
     else
@@ -93,7 +93,7 @@ std::pair<VECTOR, PlayerData> Jump::Update(
 /// <returns></returns>
 bool Jump::MotionUpdate(PlayerData& playerData)
 {
-    float totalTime_anim;
+    float totalPlayAnimTime;
 
     if (nowAnimState.playAnimTime >= 41.0f)
     {
@@ -114,14 +114,11 @@ bool Jump::MotionUpdate(PlayerData& playerData)
 
     if (nowAnimState.attachIndex != -1)
     {
-        // アタッチしたアニメーションの総再生時間を取得する
-        totalTime_anim = MV1GetAttachAnimTotalTime(modelHandle, nowAnimState.attachIndex);
-
         //再生時間更新
         nowAnimState.playAnimTime += nowAnimState.PlayAnimSpeed;
 
         //総再生時間を超えたらリセット
-        if (nowAnimState.playAnimTime >= totalTime_anim)
+        if (nowAnimState.playAnimTime >= nowAnimState.totalPlayAnimTime)
         {
             playerData.isFalling = true;
             isChangeState = true;
@@ -138,15 +135,15 @@ bool Jump::MotionUpdate(PlayerData& playerData)
     if (oldAnimState.attachIndex != -1)
     {
         // アニメーションの総時間を取得
-        totalTime_anim = MV1GetAttachAnimTotalTime(modelHandle, oldAnimState.attachIndex);
+        totalPlayAnimTime = MV1GetAttachAnimTotalTime(modelHandle, oldAnimState.attachIndex);
 
         // 再生時間を進める
         oldAnimState.playAnimTime += oldAnimState.PlayAnimSpeed;
 
         // 再生時間が総時間に到達していたら再生時間をループさせる
-        if (oldAnimState.playAnimTime > totalTime_anim)
+        if (oldAnimState.playAnimTime > totalPlayAnimTime)
         {
-            oldAnimState.playAnimTime = static_cast<float>(fmod(oldAnimState.playAnimTime, totalTime_anim));
+            oldAnimState.playAnimTime = static_cast<float>(fmod(oldAnimState.playAnimTime, totalPlayAnimTime));
         }
 
         // 変更した再生時間をモデルに反映させる
@@ -159,7 +156,9 @@ bool Jump::MotionUpdate(PlayerData& playerData)
     return true;
 }
 
-VECTOR Jump::Command(const VECTOR& cameraDirection, PlayerData& playerData, Player& player)
+VECTOR Jump::Command(const VECTOR& cameraDirection, 
+    PlayerData& playerData, 
+    Player& player)
 {
     VECTOR moveDirection = VGet(0.0f, 0.0f, 0.0f);
 

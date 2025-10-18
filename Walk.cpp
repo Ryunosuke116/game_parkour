@@ -30,7 +30,7 @@ Walk::Walk(const int modelHandle) :
 /// </summary>
 Walk::~Walk()
 {
-	//	MV1DetachAnim(modelHandle, nowAnimState.attachIndex);
+	//ˆ—‚È‚µ
 }
 
 std::pair<VECTOR, PlayerData> Walk::Update(const VECTOR& cameraDirection,

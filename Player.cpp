@@ -295,20 +295,21 @@ void Player::MoveDirectionUpdate()
     //特定のアクション時は移動方向を変えられないように
     else if (isAction)
     {
-        const float kSpeed = 0.03f;
+        const float kLeapSpeed = 0.03f;
 
         //ゆっくり最新の方向に向く
         nowMoveDirection = Calculation::LeapVector(
             nowMoveDirection,
             targetMoveDirection, 
-            kSpeed);
+            kLeapSpeed);
 
         nowMoveDirection.y = 0.0f;
     }
 
-    if (!playerData.isRunWall)
+    if (!playerData.isRunWall &&
+        VSquareSize(nowMoveDirection) >= 1e-4f)
     {
-        faceDirection = nowMoveDirection;
+        faceDirection = VNorm(nowMoveDirection);
     }
 }
 
@@ -428,7 +429,7 @@ void Player::CollisionUpdate()
     mAABB.max = VGet(position.x + radius, positionData.rayTopPosition.y, position.z + radius);
 }
 
-void Player::Receive_CollisionResult()
+void Player::ReceiveCollisionResult()
 {
     if (isCollisionCheck)
     {
@@ -480,7 +481,7 @@ void Player::DebugUpdate()
     
     //string_VECTOR
     DebugDrawer::GetInstance().InformationInputStringVector("playerPosition.x %f\nplayerPosition.y %f\nplayerPosition.z %f\n", position);
-    DebugDrawer::GetInstance().InformationInputStringVector("nowMoveDirection.x %f\nowMoveDirection.y %f\nowMoveDirection.z %f\n", nowMoveDirection);
+    DebugDrawer::GetInstance().InformationInputStringVector("nowMoveDirection %f %f %f\n", nowMoveDirection);
     DebugDrawer::GetInstance().InformationInputStringVector("faceDirection %f %f %f\n", faceDirection);
 
     //string_int

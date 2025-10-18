@@ -26,7 +26,7 @@ QuickRoll::QuickRoll(const int modelHandle) :
 /// </summary>
 QuickRoll::~QuickRoll()
 {
-
+    //処理なし
 }
 
 /// <summary>
@@ -82,8 +82,8 @@ VECTOR QuickRoll::Command(const VECTOR& cameraDirection,
 /// <returns></returns>
 bool QuickRoll::MotionUpdate(PlayerData& playerData)
 {
-    float totalTime_anim;
-    float flag = false;
+    float totalPlayAnimTime;
+
     //空中にいるときのアニメーション最大フレーム数
     const float kWhenAirMaxAnimTime = 40.0f;
 
@@ -99,9 +99,6 @@ bool QuickRoll::MotionUpdate(PlayerData& playerData)
 
     if (nowAnimState.attachIndex != -1)
     {
-        // アタッチしたアニメーションの総再生時間を取得する
-        totalTime_anim = MV1GetAttachAnimTotalTime(modelHandle, nowAnimState.attachIndex);
-
         //再生時間更新
         nowAnimState.playAnimTime += nowAnimState.PlayAnimSpeed;
 
@@ -115,7 +112,7 @@ bool QuickRoll::MotionUpdate(PlayerData& playerData)
         }
 
         //総再生時間を超えたらリセット
-        if (nowAnimState.playAnimTime >= totalTime_anim)
+        if (nowAnimState.playAnimTime >= nowAnimState.totalPlayAnimTime)
         {
             playerData.isRun = isRun;
             playerData.isIdle = isIdle;
@@ -134,15 +131,15 @@ bool QuickRoll::MotionUpdate(PlayerData& playerData)
     if (oldAnimState.attachIndex != -1)
     {
         // アニメーションの総時間を取得
-        totalTime_anim = MV1GetAttachAnimTotalTime(modelHandle, oldAnimState.attachIndex);
+        totalPlayAnimTime = MV1GetAttachAnimTotalTime(modelHandle, oldAnimState.attachIndex);
 
         // 再生時間を進める
         oldAnimState.playAnimTime += oldAnimState.PlayAnimSpeed;
 
         // 再生時間が総時間に到達していたら再生時間をループさせる
-        if (oldAnimState.playAnimTime > totalTime_anim)
+        if (oldAnimState.playAnimTime > totalPlayAnimTime)
         {
-            oldAnimState.playAnimTime = static_cast<float>(fmod(oldAnimState.playAnimTime, totalTime_anim));
+            oldAnimState.playAnimTime = static_cast<float>(fmod(oldAnimState.playAnimTime, totalPlayAnimTime));
         }
 
         // 変更した再生時間をモデルに反映させる
@@ -152,7 +149,7 @@ bool QuickRoll::MotionUpdate(PlayerData& playerData)
         MV1SetAttachAnimBlendRate(modelHandle, oldAnimState.attachIndex, 1.0f - animBlendRate);
     }
 
-    return flag;
+    return true;
 }
 
 void QuickRoll::Exit(PlayerData& playerData)

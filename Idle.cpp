@@ -23,7 +23,7 @@ Idle::Idle(const int modelHandle) :
 /// </summary>
 Idle::~Idle()
 {
-  //  MV1DetachAnim(modelHandle, this->nowAnimState.attachIndex);
+    //ˆ—‚È‚µ
 }
 
 /// <summary>

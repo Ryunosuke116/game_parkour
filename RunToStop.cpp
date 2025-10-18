@@ -23,7 +23,7 @@ RunToStop::RunToStop(const int modelHandle) :
 /// </summary>
 RunToStop::~RunToStop()
 {
-    //  MV1DetachAnim(modelHandle, this->nowAnimState.attachIndex);
+  //ˆ—‚È‚µ
 }
 
 /// <summary>

@@ -26,7 +26,7 @@ BracedHangToCrouch::BracedHangToCrouch(const int modelHandle) :
 /// </summary>
 BracedHangToCrouch::~BracedHangToCrouch()
 {
-
+    //ˆ—‚È‚µ
 }
 
 /// <summary>

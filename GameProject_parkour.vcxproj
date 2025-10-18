@@ -160,7 +160,6 @@
     <ClCompile Include="Coin.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="CollisionObjectManager.cpp" />
-    <ClCompile Include="CollisitonDetector.cpp" />
     <ClCompile Include="DebugDrawer.cpp" />
     <ClCompile Include="EffectManager.cpp" />
     <ClCompile Include="FallingIdle.cpp" />
@@ -226,7 +225,6 @@
     <ClInclude Include="CollisionData.h" />
     <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="CollisionObjectManager.h" />
-    <ClInclude Include="CollisitonDetector.h" />
     <ClInclude Include="DebugDrawer.h" />
     <ClInclude Include="EffectData.h" />
     <ClInclude Include="EffectManager.h" />
