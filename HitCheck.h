@@ -141,10 +141,23 @@ public:
 		const VECTOR& position,
 		const VECTOR& topPosition,
 		const VECTOR& moveDirection,
-		const float& radius);
+		const float radius);
 
 private:
 	HitCheck() = default;
 	~HitCheck() = default;
+
+	static bool CliffGrabbingWidthCheck(const int collisionObjectModelHandle,
+		const int frameIndex,
+		const VECTOR& depthDirection,
+		const VECTOR& nearestOutSide,
+		const NearestResult & nearestResult);
+
+	static bool CliffGrabbingCliffFaceCheck(const int collisionObjectModelHandle,
+		const int frameIndex, 
+		const VECTOR& topPosition,
+		VECTOR& nearestOutSide,
+		MV1_COLL_RESULT_POLY& subjectPoly,
+		MV1_COLL_RESULT_POLY_DIM& polyDim);
 };
 

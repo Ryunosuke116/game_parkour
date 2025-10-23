@@ -83,5 +83,6 @@ VECTOR Victory::Command(const VECTOR& cameraDirection, PlayerData& playerData, P
 
 void Victory::Exit(PlayerData& playerData)
 {
+    PlayerStateBase::Exit(playerData);
     playerData.isVictory = false;
 }

@@ -26,6 +26,7 @@ Player::Player() :
     isCalcMoveVec(false),
     playerData({false})
 {
+
 }
 
 /// <summary>
@@ -83,7 +84,6 @@ void Player::Initialize()
     playerData.isMove = false;
     playerData.isWalk = true;
     playerData.isRoll = false;
-    playerData.isSprint = false;
     playerData.isStopRun = false;
     playerData.isUseRoll = false;
     playerData.isJumpPlayAnim = false;
@@ -95,7 +95,6 @@ void Player::Initialize()
     playerData.isRun = false;
     playerData.isRunWall = false;
     playerData.isUseWallJump = true;
-    playerData.isDash = false;
     playerData.isWallClimb = false;
     isCalc = false;
     isCalcMoveVec = false;
@@ -373,7 +372,6 @@ void Player::CollisionUpdate()
         positionData.capsuleBottomPosition.x,
         positionData.centerPosition.y + height,
         positionData.capsuleBottomPosition.z);
-
     
     //調整
     //壁衝突判定用カプセル
@@ -460,9 +458,9 @@ void Player::EffectUpdate()
             VECTOR effectPosition = position;
 
             effectPosition.y += kAddEffectPositionY;
-            effectManager->PlayEffect("foot_smoke");
-            effectManager->SetScale(kEffectScale, "foot_smoke");
-            effectManager->SetPosition(effectPosition, "foot_smoke");
+            effectManager->PlayEffect("footSmoke");
+            effectManager->SetScale(kEffectScale, "footSmoke");
+            effectManager->SetPosition(effectPosition, "footSmoke");
             effectTimer = 0.0f;
         }
     }
@@ -535,7 +533,6 @@ void Player::CounterplanBug()
         playerData.isMove = false;
         playerData.isWalk = false;
         playerData.isRoll = false;
-        playerData.isSprint = false;
         playerData.isStopRun = false;
         playerData.isUseRoll = false;
         playerData.isJumpPlayAnim = false;
@@ -547,7 +544,6 @@ void Player::CounterplanBug()
         playerData.isRun = false;
         playerData.isRunWall = false;
         playerData.isUseWallJump = true;
-        playerData.isDash = false;
         playerData.isWallClimb = false;
     }
 }

@@ -1,15 +1,10 @@
 #pragma once
 
+struct NearestResult;
+
 class Calculation
 {
 public:
-	struct NearestResult
-	{
-		VECTOR startLinePos;
-		VECTOR endLinePos;
-		VECTOR nearestPoint;
-	};
-
 	/// <summary>
 	/// –ÊÏŒvZ
 	/// </summary>

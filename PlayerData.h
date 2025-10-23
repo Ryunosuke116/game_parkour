@@ -8,7 +8,6 @@ struct PlayerData
 	bool isWalk;
 	bool isRun;						//走っているか
 	bool isRunWall;
-	bool isDash;
 	bool isJump;					//ジャンプしたか
 	bool isFirstJump;				//一回目のジャンプをしたか
 	bool isSecondJump;				//二段ジャンプしたか
@@ -18,14 +17,12 @@ struct PlayerData
 	bool isWalljump;				//壁ジャンプしているか
 	bool isRoll;					//転がるか
 	bool isUseRoll;					//ロールアクションを終えたか
-	bool isSprint;					//走り出しか
 	bool isStopRun;					//走り終わったか
 	bool isFalling;					//落下中か
 	bool isHanging;					//崖をつかむか
 	bool isNowHanging;				//崖つかみ中か
 	bool isUseHanging;				//崖掴みが可能か
 	bool isHangToCrouch;			//上に上がる
-	bool isLanding;					//着地したか
 	bool isWallClimb;
 	bool isVictory;					//勝利モーションをしているか
 

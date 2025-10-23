@@ -109,9 +109,6 @@
     <Filter Include="ソース ファイル\object\game\player">
       <UniqueIdentifier>{177446bf-eb68-46e6-99cd-5c968117d403}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\object\game\player\moveCalclation">
-      <UniqueIdentifier>{f9dc51d6-1cdb-4363-bbf5-2cf3ddbf8b9d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\object\game\player\animationChanger">
       <UniqueIdentifier>{abdff138-57d9-4360-b150-7469ae254d34}</UniqueIdentifier>
     </Filter>
@@ -241,6 +238,9 @@
     <Filter Include="ソース ファイル\object\game\layout">
       <UniqueIdentifier>{d5d9db3e-28bd-4cfe-902b-76f058d3efb3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\object\game\player\playerCalclation">
+      <UniqueIdentifier>{f9dc51d6-1cdb-4363-bbf5-2cf3ddbf8b9d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp">
@@ -283,7 +283,7 @@
       <Filter>ソース ファイル\static\pad</Filter>
     </ClCompile>
     <ClCompile Include="PlayerCalculation.cpp">
-      <Filter>ソース ファイル\object\game\player\moveCalclation</Filter>
+      <Filter>ソース ファイル\object\game\player\playerCalclation</Filter>
     </ClCompile>
     <ClCompile Include="FallingIdle.cpp">
       <Filter>ソース ファイル\object\game\player\state\fallingIdle</Filter>
@@ -477,7 +477,7 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="PlayerCalculation.h">
-      <Filter>ソース ファイル\object\game\player\moveCalclation</Filter>
+      <Filter>ソース ファイル\object\game\player\playerCalclation</Filter>
     </ClInclude>
     <ClInclude Include="FallingIdle.h">
       <Filter>ソース ファイル\object\game\player\state\fallingIdle</Filter>
@@ -655,7 +655,7 @@
     <None Include="JsonGame\field.Json">
       <Filter>ヘッダー ファイル\JsonGame</Filter>
     </None>
-    <None Include="JsonGame\floor_sky.Json">
+    <None Include="JsonGame\floorSky.Json">
       <Filter>ヘッダー ファイル\JsonGame</Filter>
     </None>
     <None Include="JsonGame\object.Json">

@@ -107,5 +107,6 @@ VECTOR HangingIdle::Command(const VECTOR& cameraDirection, PlayerData& playerDat
 
 void HangingIdle::Exit(PlayerData& playerData)
 {
+    PlayerStateBase::Exit(playerData);
     playerData.isHanging = false;
 }

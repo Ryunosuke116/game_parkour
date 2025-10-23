@@ -71,7 +71,7 @@ VECTOR RunToStop::Command(const VECTOR& cameraDirection, PlayerData& playerData,
 /// <returns></returns>
 bool RunToStop::MotionUpdate(PlayerData& playerData)
 {
-    float totalTime_anim;
+    float totalPlayAnimTime;
 
     // ブレンド率が１以下の場合は１に近づける
     if (animBlendRate < 1.0f)
@@ -86,13 +86,13 @@ bool RunToStop::MotionUpdate(PlayerData& playerData)
     if (nowAnimState.attachIndex != -1)
     {
         // アタッチしたアニメーションの総再生時間を取得する
-        totalTime_anim = MV1GetAttachAnimTotalTime(modelHandle, nowAnimState.attachIndex);
+        totalPlayAnimTime = MV1GetAttachAnimTotalTime(modelHandle, nowAnimState.attachIndex);
 
         //再生時間更新
         nowAnimState.playAnimTime += nowAnimState.PlayAnimSpeed;
 
         //総再生時間を超えたらリセット
-        if (nowAnimState.playAnimTime >= totalTime_anim)
+        if (nowAnimState.playAnimTime >= totalPlayAnimTime)
         {
             playerData.isIdle = true;
             isChangeState = true;
@@ -105,12 +105,11 @@ bool RunToStop::MotionUpdate(PlayerData& playerData)
         MV1SetAttachAnimBlendRate(modelHandle, nowAnimState.attachIndex, animBlendRate);
     }
 
-
     //再生しているアニメーション２の処理
     if (oldAnimState.attachIndex != -1)
     {
         // アニメーションの総時間を取得
-        totalTime_anim = MV1GetAttachAnimTotalTime(modelHandle, oldAnimState.attachIndex);
+        totalPlayAnimTime = MV1GetAttachAnimTotalTime(modelHandle, oldAnimState.attachIndex);
 
         // 変更した再生時間をモデルに反映させる
         MV1SetAttachAnimTime(modelHandle, oldAnimState.attachIndex, oldAnimState.playAnimTime);
@@ -129,5 +128,6 @@ bool RunToStop::MotionUpdate(PlayerData& playerData)
 
 void RunToStop::Exit(PlayerData& playerData)
 {
+    PlayerStateBase::Exit(playerData);
     playerData.isStopRun = false;
 }

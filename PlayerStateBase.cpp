@@ -23,11 +23,12 @@ PlayerStateBase::PlayerStateBase(const int modelHandle):
     modelHandle(-1),
     animOldNumber(-1),
     animBlendRate(0.0f),
+    isChangeState(false),
+    isChoiceCommand(false),
     isPush(false),
     moveDirection(VGet(0.0f, 0.0f, 0.0f)),
     nowAnimState({NULL}),
-    oldAnimState({NULL}),
-    isChangeState(false)
+    oldAnimState({NULL})
 {
     this->modelHandle = modelHandle;
     nowAnimState.attachIndex = -1;
@@ -189,6 +190,7 @@ void PlayerStateBase::RollMove(PlayerData& playerData)
         playerData.isAllJump = false;
         playerData.isSecondJump = false;
         isChangeState = true;
+        isChoiceCommand = true;
     }
 }
 
@@ -215,6 +217,7 @@ void PlayerStateBase::JumpMove(PlayerData& playerData,
             playerData.isJump = true;
             playerData.isFirstJump = true;
             isPush = true;
+            isChoiceCommand = true;
             player.playerCalculation->ChangeTrueIsAddJumpPower();
             player.playerCalculation->SetJumpPower();
         }
@@ -233,6 +236,7 @@ void PlayerStateBase::JumpMove(PlayerData& playerData,
             isPush = true;
             playerData.isSecondJump = true;
             playerData.isAllJump = true;
+            isChoiceCommand = true;
             player.playerCalculation->ChangeTrueIsAddJumpPower();
             player.playerCalculation->SetSecondJumpPower();
 
@@ -257,10 +261,16 @@ void PlayerStateBase::JumpMove(PlayerData& playerData,
 /// </summary>
 /// <param name="playerData"></param>
 /// <param name="player"></param>
-void PlayerStateBase::WallRunMove(PlayerData& playerData, 
+bool PlayerStateBase::WallRunMove(PlayerData& playerData, 
     Player& player,
     const std::shared_ptr<BaseObject>& collisionObject)
 {
+    //Šù‚És“®‚ªŒˆ‚Ü‚Á‚Ä‚¢‚½‚ç”²‚¯‚é
+    if (isChoiceCommand)
+    {
+        return false;
+    }
+
     const float kEntryDegreeWallRun = 50.0f;
     const float kAddRayEndPosition = 5.0f;
     const int kFrameIndex = -1;
@@ -307,6 +317,7 @@ void PlayerStateBase::WallRunMove(PlayerData& playerData,
             playerData.isSecondJump = false;
             playerData.isAllJump = false;
             isChangeState = true;
+            isChoiceCommand = true;
 
             player.playerCalculation->ChangeTrueIsAddJumpPower();
             player.playerCalculation->SetJumpPower();
@@ -316,6 +327,8 @@ void PlayerStateBase::WallRunMove(PlayerData& playerData,
             player.SetRotateX(kRunWallRotateX);
         }
     }
+
+    return true;
 }
 
 /// <summary>
@@ -354,27 +367,7 @@ void PlayerStateBase::SwitchingAnimation(const int animNum)
     nowAnimState.playAnimTime = 0.0f;
 }
 
-void PlayerStateBase::SetOldAnimState()
+void PlayerStateBase::Exit(PlayerData& playerData)
 {
-    oldAnimState.attachIndex = nowAnimState.attachIndex;
-    oldAnimState.PlayAnimSpeed = nowAnimState.PlayAnimSpeed;
-    oldAnimState.playAnimTime = nowAnimState.playAnimTime;
-    oldAnimState.totalPlayAnimTime = nowAnimState.totalPlayAnimTime;
-}
-
-void PlayerStateBase::ResetOldAnimState()
-{
-    oldAnimState.attachIndex = -1;
-    oldAnimState.PlayAnimSpeed = 0.0f;
-    oldAnimState.playAnimTime = 0.0f;
-    oldAnimState.totalPlayAnimTime = 0.0f;
-
-}
-
-void PlayerStateBase::ResetNowAnimState()
-{
-    nowAnimState.attachIndex = -1;
-    nowAnimState.PlayAnimSpeed = 0.0f;
-    nowAnimState.playAnimTime = 0.0f;
-    nowAnimState.totalPlayAnimTime = 0.0f;
+    isChoiceCommand = false;
 }

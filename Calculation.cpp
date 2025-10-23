@@ -10,6 +10,7 @@
 #include "DxLib.h"
 #include "Calculation.h"
 #include "DebugDrawer.h"
+#include "CollisionData.h"
 
 float Calculation::area(const VECTOR& vertexA,
 	const VECTOR& vertexB, 
@@ -88,7 +89,7 @@ VECTOR Calculation::NearestPointOnTriangleEdge(const MV1_COLL_RESULT_POLY& subje
 	return nearPoint3;
 }
 
-Calculation::NearestResult Calculation::SphereMeshOutsideTriangleLine(
+NearestResult Calculation::SphereMeshOutsideTriangleLine(
 	const MV1_COLL_RESULT_POLY& subjectPoly,
 	const VECTOR& point)
 {
@@ -153,15 +154,6 @@ VECTOR Calculation::ProjectionDirection(const VECTOR& point,
 
 	//ê¸ï™è„ÇÃç≈ãﬂì_ÇåvéZ
 	VECTOR edgeAX = VAdd(capsulePos1, VScale(unitVector, productionVector));
-
-	/*if (edgeAX.y <= capsulePos2.y)
-	{
-		edgeAX.y = capsulePos2.y;
-	}
-	if (edgeAX.y >= capsulePos1.y)
-	{
-		edgeAX.y = capsulePos1.y;
-	}*/
 
 	return edgeAX;
 }

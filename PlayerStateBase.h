@@ -27,17 +27,14 @@ public:
 		const std::vector<std::weak_ptr<BaseObject>>& fieldObjects, Player& player)abstract;
 	virtual VECTOR Command(const VECTOR& cameraDirection, PlayerData& playerData, Player& player)abstract;
 	virtual void Enter(const AnimState& oldAnimState, const AnimState& nowAnimState);		//状態に入ったとき
-	virtual void Exit(PlayerData& playerData) abstract;			//状態を抜けるとき
+	virtual void Exit(PlayerData& playerData);			//状態を抜けるとき
 
 	virtual bool MotionUpdate(PlayerData& playerData);
 	virtual VECTOR Move(const VECTOR& cameraDirection, PlayerData& playerData);
 	virtual void RollMove(PlayerData& playerData);
 	virtual void JumpMove(PlayerData& playerData, Player& player);
-	virtual void WallRunMove(PlayerData& playerData, Player& player, const std::shared_ptr<BaseObject>& collisionObjects);
+	virtual bool WallRunMove(PlayerData& playerData, Player& player, const std::shared_ptr<BaseObject>& collisionObjects);
 
-	void SetOldAnimState();
-	void ResetOldAnimState();
-	void ResetNowAnimState();
 	void Draw();
 	void SwitchingAnimation(const int animNum);
 	void ResetIsJumps(PlayerData& playerData);
@@ -57,7 +54,7 @@ public:
 protected:
 	static constexpr float kAnimBlendSpeed = 0.1f;		// アニメーションのブレンド率変化速度
 	static constexpr float kRunWallRotateX = 30.0f;
-	static constexpr float kCliffRadius = 4.0f;			//崖掴み判定用の半径
+	static constexpr float kCliffRadius = 5.0f;			//崖掴み判定用の半径
 	static constexpr float kInitMoveJumpPlayTime = 12.0f;
 	static constexpr float kInitNormalJumpPlayTime = 5.0f;
 
@@ -67,6 +64,7 @@ protected:
 
 	bool isPush;
 	bool isChangeState;
+	bool isChoiceCommand;
 
 	VECTOR moveDirection;
 

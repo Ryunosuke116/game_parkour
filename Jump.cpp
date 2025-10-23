@@ -172,6 +172,7 @@ VECTOR Jump::Command(const VECTOR& cameraDirection,
 
 void Jump::Exit(PlayerData& playerData)
 {
+    PlayerStateBase::Exit(playerData);
     playerData.isJump = false;
     playerData.isWalljump = false;
 }

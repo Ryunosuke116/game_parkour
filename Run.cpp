@@ -17,15 +17,8 @@
 /// </summary>
 /// <param name="modelHandle"></param>
 Run::Run(const int modelHandle) :
-	PlayerStateBase(modelHandle),
-	differenceDegree(0.0f),
-	stopTime(0.0f),
-	angle(-1),
-	playerMoveSpeed(-1),
-	playerMoveSpeed_max(-1),
-	degree_new(-1)
+	PlayerStateBase(modelHandle)
 {
-	animationNum_now = animNum::run;
 	this->nowAnimState.PlayAnimSpeed = kPlayAnimSpeed;
 }
 
@@ -60,8 +53,6 @@ std::pair<VECTOR, PlayerData> Run::Update(
 		moveDir = newMoveDir;
 		playerData = newPlayerData;
 	}
-
-	this->nowAnimState.PlayAnimSpeed = kPlayAnimSpeed;
 
 	return std::make_pair(moveDir, playerData);
 }
@@ -158,7 +149,7 @@ std::pair<VECTOR, PlayerData> Run::WallRunUpdate(
 				"mixamorig:Spine1");
 			VECTOR centerPosition = MV1GetFramePosition(modelHandle, kChestBoneNumber);
 
-			Calculation::NearestResult nearestResult =
+			NearestResult nearestResult =
 				Calculation::SphereMeshOutsideTriangleLine(
 				resultCheckCliff.hangingPoly,
 				centerPosition);
@@ -207,24 +198,11 @@ VECTOR Run::Command(
 	Player& player)
 {
 	VECTOR moveDir = VGet(0.0f, 0.0f, 0.0f);
-	angle = player.GetRadian();
-	playerMoveSpeed = player.playerCalculation->GetNowMoveSpeed();
-	playerMoveSpeed_max = player.playerCalculation->GetMaxMoveSpeed();
 
 	//moveDirÇéÊìæÇ∑ÇÈ
 	moveDir = Move(cameraDirection, playerData);
 	JumpMove(playerData, player);
 	RollMove(playerData);
-
-	//ëOÉtÉåÅ[ÉÄÇ∆åªç›ÇÃÉtÉåÅ[ÉÄÇ≈ì¸óÕÇ≥ÇÍÇƒÇ»ÇØÇÍÇŒìÆÇ¢ÇƒÇ»Ç¢
-	if (stopTime >= 3.0f)
-	{
-		playerData.isMove = false;
-	}
-	else
-	{
-		playerData.isMove = true;
-	}
 
 	//ã}ì]âÒÇπÇ∏Ç…é~Ç‹ÇÈèÍçá
 	if (!playerData.isMove &&
@@ -266,32 +244,15 @@ VECTOR Run::Move(
 	if (VSize(moveDirection) >= 1e-4f)
 	{
 		moveDirection = VNorm(moveDirection);
-		stopTime = 0.0f;
+		playerData.isMove = true;
 	}
 	else
-	{
-		stopTime++;
-	}
-
-	//3fÇÃä‘ì¸óÕÇ≥ÇÍÇƒÇ»ÇØÇÍÇŒìÆÇ¢ÇƒÇ»Ç¢
-	if (stopTime >= 3.0f)
 	{
 		playerData.isMove = false;
-	}
-	else
-	{
-		playerData.isMove = true;
 	}
 
 	//ïKÇ∏ê≥ãKâªÇ≥ÇÍÇΩÇ‡ÇÃÇ©0Çï‘Ç∑
 	return moveDirection;
-}
-
-void Run::DashMove(PlayerData& playerData)
-{
-	PadInput::IsPushLT() ? 
-		playerData.isDash = true :
-		playerData.isDash = false;
 }
 
 void Run::Enter(const AnimState& oldAnimState, 
@@ -305,6 +266,7 @@ void Run::Enter(const AnimState& oldAnimState,
 
 void Run::Exit(PlayerData& playerData)
 {
+	PlayerStateBase::Exit(playerData);
 	playerData.isRun = false;
 	playerData.isRunWall = false;
 	const auto soundPlayer =

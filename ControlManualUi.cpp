@@ -65,8 +65,8 @@ void ControlManualUi::Update()
 
 	drawUis.clear();
 
-	drawUis.push_back(uiHandles.at("move_camera"));
-	drawUis.push_back(uiHandles.at("reset_camera"));
+	drawUis.push_back(uiHandles.at("moveCamera"));
+	drawUis.push_back(uiHandles.at("resetCamera"));
 
 	if ((!data.isNowHanging ||
 		!data.isRunWall) &&
@@ -89,13 +89,13 @@ void ControlManualUi::Update()
 	
 	if (data.isNowHanging)
 	{
-		drawUis.push_back(uiHandles.at("move_up"));
-		drawUis.push_back(uiHandles.at("move_down"));
+		drawUis.push_back(uiHandles.at("moveUp"));
+		drawUis.push_back(uiHandles.at("moveDown"));
 	}
 
 	if (data.isRunWall)
 	{
-		drawUis.push_back(uiHandles.at("move_down"));
+		drawUis.push_back(uiHandles.at("moveDown"));
 	}
 
 	manualUiPosX = Calculation::Leap(manualUiPosX, targetManualPosX, kLeapSpeed);

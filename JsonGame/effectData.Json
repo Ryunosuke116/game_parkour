@@ -1,6 +1,6 @@
 {
   "list": [
-    [ "material/effect/foot_smoke.efkefc", "foot_smoke", 5.0 ],
+    [ "material/effect/footSmoke.efkefc", "footSmoke", 5.0 ],
     [ "material/effect/jump.efkefc", "jump", 5.0 ]
   ]
 }

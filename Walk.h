@@ -19,12 +19,5 @@ public:
 
 private:
 	static constexpr float kPlayAnimSpeed = 0.5f;	    // ˆÚ“®‘¬“x
-
-	float differenceDegree;
-	float stopTime;				//‰½fŽ~‚Ü‚Á‚Ä‚¢‚é‚©
-	float angle;
-	float playerMoveSpeed;
-	float playerMoveSpeed_max;
-	float degree_new;
 };
 

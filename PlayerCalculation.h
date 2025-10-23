@@ -1,7 +1,7 @@
 #pragma once
 #include "DxLib.h"
 #include"PlayerState.h"
-#include"Calculation.h"
+#include "CollisionData.h"
 
 class PlayerCalculation
 {
@@ -56,8 +56,8 @@ public:
 	float GetWallRunMaxStopTime()const { return kWallRunMaxStopTime; }
 	VECTOR GetHangingPoint()const { return hangingPoint; }
 	VECTOR GetWallRunGravity()const { return wallRunGravity; }
-	MV1_COLL_RESULT_POLY GetHangingPoly() { return hangingPoly; }
-	Calculation::NearestResult GetNearestResult() { return nearestResult; }
+	MV1_COLL_RESULT_POLY GetHangingPoly() const { return hangingPoly; }
+	NearestResult GetNearestResult() const { return nearestResult; }
 
 	void ChangeTrueIsAddJumpPower() { isAddJumpPower = true; }
 	void SetJumpPower() { nowJumpPower = kAddJumpPower; }
@@ -65,7 +65,7 @@ public:
 	void SetNowGroundRayPoly(const MV1_COLL_RESULT_POLY& set) { nowGroundRayPoly = set; }
 	void SetRightHandPos(const VECTOR& set) { RightHandPos = set; }
 	void SetLeftHandPos(const VECTOR& set) { leftHandPos = set; }
-	void SetNearestResult(const Calculation::NearestResult& set) { nearestResult = set; }
+	void SetNearestResult(const NearestResult& set) { nearestResult = set; }
 	void SetWallRunGravity(const VECTOR& set) { wallRunGravity = set; }
 
 private:
@@ -104,7 +104,7 @@ private:
 	VECTOR leftHandPos;
 	VECTOR wallRunGravity;
 
-	Calculation::NearestResult nearestResult;
+	NearestResult nearestResult;
 	MV1_COLL_RESULT_POLY hangingPoly;
 	MV1_COLL_RESULT_POLY nowGroundRayPoly;
 };

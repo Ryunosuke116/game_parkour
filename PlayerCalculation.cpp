@@ -11,9 +11,6 @@
 #include "Player.h"
 #include "PlayerManager.h"
 
-
-
-
 PlayerCalculation::PlayerCalculation() :
     gravityPower(0.0f),
     nowJumpPower(0.0f),

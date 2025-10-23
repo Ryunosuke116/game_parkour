@@ -17,8 +17,6 @@ public:
 	void Enter(const AnimState& oldAnimState, const AnimState& nowAnimState)override;		//ó‘Ô‚É“ü‚Á‚½‚Æ‚«
 	void Exit(PlayerData& playerData) override;			//ó‘Ô‚ğ”²‚¯‚é‚Æ‚«
 
-	void DashMove(PlayerData& playerData);
-
 	std::pair<VECTOR, PlayerData> NormalUpdate(const VECTOR& cameraDirection, Player& player);
 	std::pair<VECTOR, PlayerData> WallRunUpdate(Player& player,
 		const std::vector<std::weak_ptr<BaseObject>>& fieldObjects);
@@ -26,12 +24,5 @@ public:
 private:
 	static constexpr float kPlayAnimSpeed = 0.45f;	    // ˆÚ“®‘¬“x
 	static constexpr float DashAnimSpeed = 0.9f;
-	float differenceDegree;
-	float stopTime;				//‰½f~‚Ü‚Á‚Ä‚¢‚é‚©
-	float angle;
-	float playerMoveSpeed;
-	float playerMoveSpeed_max;
-	float degree_new;
-	int animationNum_now;
 };
 

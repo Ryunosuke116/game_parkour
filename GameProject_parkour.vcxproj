@@ -283,7 +283,7 @@
     <None Include="JsonGame\coin.Json" />
     <None Include="JsonGame\effectData.Json" />
     <None Include="JsonGame\field.Json" />
-    <None Include="JsonGame\floor_sky.Json" />
+    <None Include="JsonGame\floorSky.Json" />
     <None Include="JsonGame\object.Json" />
     <None Include="JsonGame\player.Json" />
     <None Include="JsonGame\png.Json" />

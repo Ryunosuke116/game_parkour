@@ -65,5 +65,6 @@ VECTOR Idle::Command(const VECTOR& cameraDirection, PlayerData& playerData, Play
 
 void Idle::Exit(PlayerData& playerData)
 {
+    PlayerStateBase::Exit(playerData);
     playerData.isIdle = false;
 }

@@ -76,7 +76,7 @@ std::pair<VECTOR, PlayerData> FallingIdle::Update(const VECTOR& cameraDirection,
                 "mixamorig:Spine1");
             VECTOR centerPosition = MV1GetFramePosition(modelHandle, kChestBoneNumber);
        
-            Calculation::NearestResult nearestResult =
+            NearestResult nearestResult =
                 Calculation::SphereMeshOutsideTriangleLine(resultCheckCliff.hangingPoly, spherePos);
 
             DebugDrawer::GetInstance().InformationInputLine(nearestResult.startLinePos,
@@ -133,5 +133,6 @@ VECTOR FallingIdle::Command(const VECTOR& cameraDirection,
 
 void FallingIdle::Exit(PlayerData& playerData)
 {
+    PlayerStateBase::Exit(playerData);
     playerData.isFalling = false;
 }

@@ -154,5 +154,6 @@ bool QuickRoll::MotionUpdate(PlayerData& playerData)
 
 void QuickRoll::Exit(PlayerData& playerData)
 {
+    PlayerStateBase::Exit(playerData);
     playerData.isRoll = false;
 }

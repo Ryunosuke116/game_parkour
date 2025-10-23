@@ -77,5 +77,6 @@ VECTOR BracedHangToCrouch::Command(const VECTOR& cameraDirection, PlayerData& pl
 
 void BracedHangToCrouch::Exit(PlayerData& playerData)
 {
+    PlayerStateBase::Exit(playerData);
     playerData.isHangToCrouch = false;
 }

@@ -9,6 +9,13 @@ struct CollisionResult
 	std::string objectTag = "";
 };
 
+struct NearestResult
+{
+	VECTOR startLinePos;
+	VECTOR endLinePos;
+	VECTOR nearestPoint;
+};
+
 struct PositionData
 {
 	VECTOR capsuleTopPosition;
@@ -23,7 +30,6 @@ struct PositionData
 struct HangingData
 {
 	bool isHitHanging;					//íÕÇﬂÇÈÇ©
-	VECTOR hitHangingPos;				//íÕÇﬁç¿ïW
 	MV1_COLL_RESULT_POLY hangingPoly;	
 };
 
@@ -31,4 +37,11 @@ struct AABB
 {
 	VECTOR min;
 	VECTOR max;
+};
+
+struct CollisionHitPart
+{
+	bool isHitWall;
+	bool isHitHead;
+	bool isHitFloor;
 };
