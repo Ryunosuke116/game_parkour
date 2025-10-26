@@ -206,7 +206,8 @@ VECTOR Run::Command(
 
 	//‹}“]‰ñ‚¹‚¸‚É~‚Ü‚éê‡
 	if (!playerData.isMove &&
-		!playerData.isRoll)
+		!playerData.isRoll &&
+		!playerData.isJump)
 	{
 		playerData.isStopRun = true;
 		isChangeState = true;

@@ -296,7 +296,8 @@ bool PlayerStateBase::WallRunMove(PlayerData& playerData,
         //スティックが即座に反対方向に向いた場合slipをtrue
         //radian計算
         float radianWall = atan2f(-hitWallNormal.x, -hitWallNormal.z);
-        float radianFaceDirection = atan2f(player.GetFaceDirection().x, player.GetFaceDirection().z);
+        float radianFaceDirection = atan2f(player.GetFaceDirection().x,
+            player.GetFaceDirection().z);
 
         //度数計算
         float degreeWall = abs(Calculation::RadToDeg(radianWall));

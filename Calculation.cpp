@@ -277,7 +277,7 @@ VECTOR Calculation::DirectionFromDegree(const float degree)
 	}
 
 	//ƒ‰ƒWƒAƒ“’l‚É•ÏŠ·
-	float radian = RadToDeg(degree);
+	float radian = DegToRad(degree);
 
 	return VGet(sinf(radian), 0.0f, cosf(radian));
 }

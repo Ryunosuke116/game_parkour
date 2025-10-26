@@ -24,6 +24,7 @@ Rank::Rank() :
 Rank::~Rank()
 {
     DeleteGraph(rankHandle);
+    DeleteGraph(speechBubbleHandle);
 }
 
 void Rank::Load(const nlohmann::json& jsonData)
@@ -33,7 +34,6 @@ void Rank::Load(const nlohmann::json& jsonData)
     const int kMaxRankB = 60;
     const int kMaxRankA = 100;
 
-    //îwåi
     std::unordered_map<std::string, std::string> handlePath;
     std::string speechBubblePath = jsonData["speechBubble"];
 

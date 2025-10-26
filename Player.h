@@ -66,14 +66,12 @@ private:
 	void EffectUpdate();
 
 private:
-
 	static constexpr float kModelScale = 0.06f;
 	static constexpr float kMaxMoveSpeed = 1.4f;	    // ˆÚ“®‘¬“x
 	static constexpr float kMaxRollMoveSpeed = 2.5f;	//ƒ[ƒ‹‘¬“x
 	static constexpr float kRunWallRotateX = 30.0f;
 	static constexpr float radius = 3.5f;
 	static constexpr float height = 10.0f;
-
 
 	VECTOR normalVelocity;			//’Êí‚ÌˆÚ“®—Ê
 	VECTOR nowMoveDirection;		//Œ»İŒü‚¢‚Ä‚¢‚é•ûŒü

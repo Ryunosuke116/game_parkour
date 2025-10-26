@@ -121,7 +121,8 @@ VECTOR PlayerCalculation::Jump(const VECTOR& velocity,const int& nowAnimNumber,
 
     if (isAddJumpPower)
     {
-        if (playerData.isSecondJump)
+        if (playerData.isFirstJump || 
+            playerData.isSecondJump)
         {
             newVelocity.y = 0.0f;
             gravityPower = 0.0f;

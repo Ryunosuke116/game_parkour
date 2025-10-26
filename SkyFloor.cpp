@@ -35,9 +35,9 @@ void SkyFloor::Create()
 
 void SkyFloor::Load(const nlohmann::json& jsonData)
 {
-	const float degree = jsonData[3];
+	float degree = jsonData[3];
 
-	const std::string tag = jsonData[4].get<std::string>();
+	std::string tag = jsonData[4].get<std::string>();
 
 	kInitPosition = VGet(jsonData[0].get<float>(),
 		jsonData[1].get<float>(),

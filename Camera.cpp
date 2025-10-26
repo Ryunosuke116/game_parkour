@@ -304,7 +304,7 @@ void Camera::DistanceUpdate()
 	minHeight = screenCenterPosition.y - addLowCenterPos;
 	maxHeight = screenCenterPosition.y + kAddHighCenterPos;
 
-	if (PadInput::GetJoyPadYRight() > 0.0f)
+	if (PadInput::GetJoyPadYRight() < 0.0f)
 	{
 		normalLinearProgress -= kAddNormalizedTime;
 		
@@ -313,7 +313,7 @@ void Camera::DistanceUpdate()
 			normalLinearProgress = kMinNormalizedTimeDistance;
 		}
 	}
-	if (PadInput::GetJoyPadYRight() < 0.0f)
+	if (PadInput::GetJoyPadYRight() > 0.0f)
 	{
 		normalLinearProgress += kAddNormalizedTime;
 

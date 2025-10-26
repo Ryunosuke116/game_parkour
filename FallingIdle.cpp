@@ -71,11 +71,6 @@ std::pair<VECTOR, PlayerData> FallingIdle::Update(const VECTOR& cameraDirection,
         //ŠR’Í‚İ‚Ìî•ñ‚ğ•Û‘¶
         if (resultCheckCliff.isHitHanging)
         {
-            //“·‘ÌÀ•W
-            const int kChestBoneNumber = MV1SearchFrame(modelHandle,
-                "mixamorig:Spine1");
-            VECTOR centerPosition = MV1GetFramePosition(modelHandle, kChestBoneNumber);
-       
             NearestResult nearestResult =
                 Calculation::SphereMeshOutsideTriangleLine(resultCheckCliff.hangingPoly, spherePos);
 

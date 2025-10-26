@@ -5,6 +5,7 @@
 #include "JsonManager.h"
 #include "Rank.h"
 #include "UIButton.h"
+#include "RankScoreUi.h"
 
 UIManager::UIManager() :
 	BaseGameObjectManager()
