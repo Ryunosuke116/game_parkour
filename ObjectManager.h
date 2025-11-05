@@ -52,6 +52,7 @@ private:
 	std::shared_ptr<GameTimer>					actualGameTimer = NULL;
 	std::shared_ptr<Shadow>						actualShadow = NULL;
 	std::shared_ptr<Camera>						actualCamera = NULL;
+	std::shared_ptr<SkyBox>						actualSkyBox = NULL;
 	std::shared_ptr<Liner8TreeManager<Coin>>	L8TreeManager = NULL;
 
 	bool isCamera;

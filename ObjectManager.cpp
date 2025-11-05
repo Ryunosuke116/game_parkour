@@ -40,6 +40,7 @@ ObjectManager::~ObjectManager()
 void ObjectManager::Create()
 {
 	//vector型.atを使うとき用
+	const int kSkyBoxObjectNumber = 0;
 	const int kCameraObjectNumber = 2;
 	const int kShadowObjectNumber = 3;
 	const int kCoinManagerNumber = 5;
@@ -65,11 +66,12 @@ void ObjectManager::Create()
 	objects.push_back(std::make_shared<UIManager>());
 
 	//アップキャスト
-	actualCamera = std::dynamic_pointer_cast<Camera>(objects.at(kCameraObjectNumber));
-	actualShadow = std::dynamic_pointer_cast<Shadow>(objects.at(kShadowObjectNumber));
+	actualCamera		= std::dynamic_pointer_cast<Camera>(objects.at(kCameraObjectNumber));
+	actualShadow		= std::dynamic_pointer_cast<Shadow>(objects.at(kShadowObjectNumber));
 	actualPlayerManager = std::dynamic_pointer_cast<PlayerManager>(objects.at(kPlayerManagerNumber));
-	actualCoinManager = std::dynamic_pointer_cast<CoinManager>(objects.at(kCoinManagerNumber));
-	actualUiManager = std::dynamic_pointer_cast<UIManager>(objects.at(kUiManagerNumber));
+	actualCoinManager	= std::dynamic_pointer_cast<CoinManager>(objects.at(kCoinManagerNumber));
+	actualUiManager		= std::dynamic_pointer_cast<UIManager>(objects.at(kUiManagerNumber));
+	actualSkyBox		= std::dynamic_pointer_cast<SkyBox>(objects.at(kSkyBoxObjectNumber));
 
 	//Jsonデータを取得
 	for (auto& object : objects)
@@ -237,6 +239,7 @@ void ObjectManager::StartUpdate()
 		actualShadow->Update();
 		actualPlayerManager->StartUpdate(streamStartPictureTimer);
 		actualCamera->Update();
+		actualSkyBox->Update();
 	}
 }
 
@@ -310,7 +313,6 @@ void ObjectManager::Draw()
 
 	// 描画に使用するシャドウマップの設定を解除
 	SetUseShadowMap(0, -1);
-
 
 	tutorialDraw();
 

@@ -31,7 +31,6 @@ BaseChara::~BaseChara()
 /// </summary>
 void BaseChara::Draw()
 {
-    //MV1SetWireFrameDrawFlag(modelHandle,TRUE);
     MV1DrawModel(modelHandle);
 }
 

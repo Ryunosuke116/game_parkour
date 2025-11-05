@@ -78,10 +78,8 @@ private:
 	VECTOR faceDirection;			//キャラクターの向いている方向
 
 	float effectTimer;
-	float startWalkTime;
 
 	bool isPush;					//ボタンを押したか
-	bool isCalc;
 	bool isCalcMoveVec;
 
 	//他クラス

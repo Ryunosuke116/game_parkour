@@ -25,7 +25,7 @@ void CollisionManager::Update(
 				chara.GetVelocity(),
 				chara.GetRadius(),
 				chara.GetPositionData(),
-				playerData));
+				chara.GetCollisionHitPart()));
 	}
 }
 
@@ -42,9 +42,9 @@ CollisionResult CollisionManager::AllCheck(
 	const std::vector<std::weak_ptr<BaseObject>>& wpCollisionObjects,
 	const VECTOR& playerPos,
 	const VECTOR& charaVelocity,
-	const float& charaRadius,
+	const float charaRadius,
 	const PositionData& charaPositionData,
-	const PlayerData& playerData)
+	const CollisionHitPart& collisionHitPart)
 {
 	const float kHeadRadius = 2.0f;
 
@@ -60,27 +60,36 @@ CollisionResult CollisionManager::AllCheck(
 	// —Dæ‡‚ÉÕ“Ë”»’è‚ğs‚¤
 	//----------------------------------//
 
-	//•ÇÕ“Ë”»’è
-	collisionResult.newPosition = WallCollisionCheck(wpCollisionObjects,
-		collisionResult.newPosition,
-		charaVelocity,
-		charaPositionData, 
-		charaRadius);
+	if (collisionHitPart.isHitWall)
+	{
+		//•ÇÕ“Ë”»’è
+		collisionResult.newPosition = WallCollisionCheck(wpCollisionObjects,
+			collisionResult.newPosition,
+			charaVelocity,
+			charaPositionData, 
+			charaRadius);
+	}
 
-	//“ªãÕ“Ë”»’è
-	collisionResult.newPosition = HeadCollisionCheck(wpCollisionObjects,
-		collisionResult.newPosition,
-		charaVelocity,
-		charaPositionData,
-		kHeadRadius);
+	if (collisionHitPart.isHitHead)
+	{
+		//“ªãÕ“Ë”»’è
+		collisionResult.newPosition = HeadCollisionCheck(wpCollisionObjects,
+			collisionResult.newPosition,
+			charaVelocity,
+			charaPositionData,
+			kHeadRadius);
+	}
 
-	//°Õ“Ë”»’è
-	collisionResult = GroundCollisionCheck(
-		wpCollisionObjects,
-		oldPosition,
-		collisionResult.newPosition,
-		charaVelocity,
-		charaPositionData);
+	if (collisionHitPart.isHitFloor)
+	{
+		//°Õ“Ë”»’è
+		collisionResult = GroundCollisionCheck(
+			wpCollisionObjects,
+			oldPosition,
+			collisionResult.newPosition,
+			charaVelocity,
+			charaPositionData);
+	}
 
 	return collisionResult;
 }

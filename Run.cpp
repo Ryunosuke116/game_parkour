@@ -167,7 +167,7 @@ std::pair<VECTOR, PlayerData> Run::WallRunUpdate(
 	JumpMove(playerData, player);
 
 	//•ÇƒWƒƒƒ“ƒv‚·‚é
-	if (playerData.isSecondJump)
+	if (playerData.isJump)
 	{
 		playerData.isRunWall = false;
 		playerData.isUseWallJump = true;

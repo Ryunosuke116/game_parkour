@@ -7,7 +7,6 @@
 class BaseChara : public IObject
 {
 public:
-
 	BaseChara();
 	~BaseChara();
 
@@ -29,13 +28,14 @@ public:
 	VECTOR GetVelocity()const { return velocity; }
 	PositionData GetPositionData() const { return positionData; }
 	CollisionResult GetCollisionResult()const { return resultCollision; }
+	CollisionHitPart GetCollisionHitPart()const { return collisionHitPart; }
 	virtual float GetRadius()const abstract;
 
 	void SetResultCollision(const CollisionResult& newResult) { resultCollision = newResult; }
 	void SetRotateX(const float& set) { rotateX = set; }
 	void SetIsCollisionCheck(const bool& set) { isCollisionCheck = set; }
-protected:
 
+protected:
 	int modelHandle;		//モデルハンドル
 	int nowFrameNumber;
 	int coinCount;		//コインの所持枚数
@@ -53,11 +53,12 @@ protected:
 
 	PositionData positionData;
 	CollisionResult resultCollision;
+	CollisionHitPart collisionHitPart;
 
 	static constexpr float	MoveSpeed = 0.4f;				// 移動速度
 	static constexpr float kRotationSpeedDegree = 11.0f;	// キャラクターが方向転換するスピード
 
-	const VECTOR kInitializeAimPos = VGet(-0.17f, 53.75f, -1224.4f);
+	const VECTOR kInitializeCameraPos = VGet(-0.17f, 53.75f, -1224.4f);
 	const VECTOR kInitializeSpherePos = VGet(-1.3f, 24.0f, -1172.35f);
 };
 

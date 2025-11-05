@@ -30,8 +30,11 @@ public:
 		const float& radius);
 
 	CollisionResult AllCheck(const std::vector<std::weak_ptr<BaseObject>>& collisionObjects,
-		const VECTOR& playerPos, const VECTOR& velocity, const float& radius,
-		const PositionData& positionData, const PlayerData& playerData);
+		const VECTOR& playerPos,
+		const VECTOR& velocity,
+		const float radius,
+		const PositionData& positionData,
+		const CollisionHitPart& collisionHitPart);
 
 	void Update(BaseChara& chara,
 		const PlayerData& playerData);

@@ -19,7 +19,6 @@
 /// </summary>
 Player::Player() :
     BaseChara(),
-    startWalkTime(-1),
     nowMoveDirection(VGet(0.0f, 0.0f, 0.0f)),
     normalVelocity(VGet(0.0f,0.0f,0.0f)),
     faceDirection(VGet(0.0f,0.0f,0.0f)),
@@ -64,12 +63,15 @@ void Player::Create()
 void Player::Initialize()
 {
     const VECTOR initPosition = VGet(3.0f, 9.0f, -1210.0f);
+    const VECTOR initPos = VGet(400.0f, 207.598465f, -1260.0f);
+    const VECTOR kInitFaceDirection = VGet(-0.579992771f, 0.0f, 0.814621568f);
+    const float kInitRadian = -0.618719876f;
 
-    position = initPosition;
+    position = initPos;
     targetMoveDirection = VGet(0.0f, 0.0f, 0.0f);
-    radian = 0.0f;
+    faceDirection = kInitFaceDirection;
+    radian = kInitRadian;
     rotateX = 0.0f;
-    startWalkTime = 0.0f;
 
     MV1SetPosition(modelHandle, position);
 
@@ -96,7 +98,9 @@ void Player::Initialize()
     playerData.isRunWall = false;
     playerData.isUseWallJump = true;
     playerData.isWallClimb = false;
-    isCalc = false;
+    collisionHitPart.isHitFloor = true;
+    collisionHitPart.isHitHead = true;
+    collisionHitPart.isHitWall = true;
     isCalcMoveVec = false;
     isCollisionCheck = true;
    
@@ -130,12 +134,12 @@ void Player::Update()
     }
 
     //stateに応じた挙動処理
-    auto [moveDirection_new, newData] = nowState->Update(
+    auto [newMoveDirection, newData] = nowState->Update(
         WorldSubSystem::GetInstance().GetSubSystem<Camera>()->GetCameraDirection(),
         WorldSubSystem::GetInstance().GetSubSystem<CollisionObjectManager>()->GetCollisionObjects(),
         *this);
 
-    moveDirection = moveDirection_new;
+    moveDirection = newMoveDirection;
 
     playerData = newData;
 
@@ -157,29 +161,40 @@ void Player::Update()
         animationChanger->NowGetAnimNumber(),
         playerData);
 
+    //ジャンプ時に数フレーム間床との当たり判定を行わないようにする
+    if (playerCalculation->GetIgnoreGroundTimer() > 0)
+    {
+        collisionHitPart.isHitFloor = false;
+    }
+    else
+    {
+        collisionHitPart.isHitFloor = true;
+    }
+
     EffectUpdate();
 
     ///////////////////////////////////////
     //  デバッグ用
     //////////////////////////////////////
-    if (CheckHitKey(KEY_INPUT_3))
-    {
-        nowFrameNumber++;
-    }
-    else if (CheckHitKey(KEY_INPUT_2))
-    {
-        nowFrameNumber--;
-    }
+    #if defined(_DEBUG)
+        if (CheckHitKey(KEY_INPUT_3))
+        {
+            nowFrameNumber++;
+        }
+        else if (CheckHitKey(KEY_INPUT_2))
+        {
+            nowFrameNumber--;
+        }
 
-    if (CheckHitKey(KEY_INPUT_4))
-    {
-        playerData.isHanging = false;
-        isCalc = false;
-    }
+        if (CheckHitKey(KEY_INPUT_4))
+        {
+            playerData.isHanging = false;
+        }
 
-    DebugUpdate();
-    
-    nowState->Draw();
+        DebugUpdate();
+
+        nowState->Draw();
+    #endif
 }
 
 /// <summary>
@@ -190,7 +205,7 @@ void Player::StartUpdate(const float timer)
 {
     const float kMaxTimer = 40.0f;
 
-    velocity = VGet(0.0f, 0.0f, 0.5f);
+    velocity = VGet(-0.3f, 0.0f, 0.3f);
 
     if (timer <= kMaxTimer)
     {
@@ -213,8 +228,6 @@ void Player::StartUpdate(const float timer)
 /// <param name="timer"></param>
 void Player::FinishUpdate(const float timer)
 {
-    nowState->SetIsChangeState(true);
-    playerData.isIdle = true;
     //状態変更
     ChangeState();
 
@@ -328,11 +341,8 @@ void Player::ChangeState()
 /// </summary>
 void Player::CollisionUpdate()
 {
-    bool isReverse = false;
-
     const int left = MV1SearchFrame(modelHandle, "mixamorig:LeftHandIndex4");
     const int right = MV1SearchFrame(modelHandle, "mixamorig:RightHandMiddle4_end");
-    const int head = 7;
     const float kRightAngle = 90.0f;
     const VECTOR kVerticalShaft = VGet(0.0f, 1.0f, 0.0f);
     const VECTOR kRotatePosition = VAdd(position, faceDirection);

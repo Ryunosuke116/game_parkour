@@ -50,10 +50,12 @@ public:
 
 	bool GetIsAddJumpPower()const { return isAddJumpPower; }
 	bool GetIsWhenClimbingHitGround()const { return isWhenClimbingHitGround; }
+	int GetIgnoreGroundTimer()const { return ignoreGroundTimer; }
 	float GetNowMoveSpeed() const { return nowMoveSpeed; }
 	float GetMaxMoveSpeed() const { return kMaxRunSpeed; }
 	float GetWallRunStopTime()const { return wallRunStopTime; }
 	float GetWallRunMaxStopTime()const { return kWallRunMaxStopTime; }
+	float GetGravityPower() const { return gravityPower; }
 	VECTOR GetHangingPoint()const { return hangingPoint; }
 	VECTOR GetWallRunGravity()const { return wallRunGravity; }
 	MV1_COLL_RESULT_POLY GetHangingPoly() const { return hangingPoly; }
@@ -85,6 +87,8 @@ private:
 	static constexpr float kAddSecondJumpPower = 1.5f;		//二段目ジャンプパワー
 	static constexpr float kGravity = -0.06f;
 	static constexpr float kWallRunMaxStopTime = 10.0f;	
+
+	int ignoreGroundTimer;
 
 	float nowJumpPower;			//現在のジャンプスピード
 	float nowMoveSpeed;

@@ -18,6 +18,7 @@ PlayerCalculation::PlayerCalculation() :
     nowRollMoveSpeed(0.0f),
     wallRunStopTime(0.0f),
     decelerationSpeed(0.0f),
+    ignoreGroundTimer(-1),
     isCalcDeceleration(false),
     isSlip_after(false),
     isStopRunWall(false),
@@ -33,6 +34,11 @@ VECTOR PlayerCalculation::Update(
     const PlayerData& playerData)
 {
     VECTOR velocity = moveDirection;
+
+    if (ignoreGroundTimer > 0)
+    {
+        ignoreGroundTimer--;
+    }
 
     //進むスピードを乗算
       //ロールアクション中はそれに応じた速度
@@ -114,7 +120,8 @@ VECTOR PlayerCalculation::Move(const int& nowAnimNumber,
 /// <param name="nowAnimNumber"></param>
 /// <param name="playerData"></param>
 /// <returns></returns>
-VECTOR PlayerCalculation::Jump(const VECTOR& velocity,const int& nowAnimNumber,
+VECTOR PlayerCalculation::Jump(const VECTOR& velocity,
+    const int& nowAnimNumber,
     const PlayerData& playerData)
 {
     VECTOR newVelocity = velocity;
@@ -130,6 +137,7 @@ VECTOR PlayerCalculation::Jump(const VECTOR& velocity,const int& nowAnimNumber,
         newVelocity.y += nowJumpPower;
         gravityPower += nowJumpPower;
         isAddJumpPower = false;
+        ignoreGroundTimer = 2;
     }
 
     return newVelocity;

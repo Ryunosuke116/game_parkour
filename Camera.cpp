@@ -60,7 +60,7 @@ void Camera::Create()
 /// </summary>
 void Camera::Initialize()
 {
-	cameraPosition = kInitializeAimPos;
+	cameraPosition = kInitializeCameraPos;
 	screenCenterPosition = kInitializeSpherePos;
 	nowDegree = kInitializeAngle;
 	cameraDistanceSize = kInitializeDistance;
@@ -274,8 +274,6 @@ void Camera::LayOutUpdate()
 
 	float angleRadian = Calculation::DegToRad(nowDegree);
 	this->angleRadian = angleRadian;
-
-	
 
 	cameraPosition.x = screenCenterPosition.x + cameraDistanceSize * cos(angleRadian);
 	cameraPosition.z = screenCenterPosition.z + cameraDistanceSize * sin(angleRadian);
@@ -561,13 +559,25 @@ void Camera::ResultCreate()
 /// </summary>
 void Camera::ResultInitialize()
 {
+	const VECTOR kResultInitCameraPos = VGet(-0.17f, 53.75f, -1224.4f);
+	const VECTOR kResultInitSpherePos = VGet(-1.3f, 24.0f, -1172.35f);
 	const float kInitNormalLinearProgress = 0.5f;
 	const float kInitNormalCameraDistanceSize = 3.0f;
 
-	Initialize();
+	cameraPosition = kResultInitCameraPos;
+	screenCenterPosition = kResultInitSpherePos;
+	cameraDistanceSize = kInitializeDistance;
+	normalDistanceProgress = kInitializeProgress;
+	isResetAngle = false;
+	isHitObject = false;
+	isPushRT = false;
+	isPush = false;
+	normalCameraHeightProgress = 0.0f;
 	nowDegree = kResultInitializeAngle;
 	normalLinearProgress = kInitNormalLinearProgress;
 	normalCameraDistanceSize = kInitNormalCameraDistanceSize;
+
+	SetCameraPositionAndTarget_UpVecY(cameraPosition, screenCenterPosition);
 }
 
 /// <summary>

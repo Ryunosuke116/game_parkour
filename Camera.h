@@ -76,14 +76,13 @@ private:
 	static constexpr float kCameraRadius = 4.0f;
 	static constexpr float kMaxDistanceSize = 70.0f;
 	static constexpr float kMinDistanceSize = 15.0f;
-	static constexpr float kInitializeAngle = -2.45f;
+	static constexpr float kInitializeAngle = 324.549988f; 
 	static constexpr float kResultInitializeAngle = -177.55f;
 	static constexpr float kInitializeDistance = 50.0f;
 	static constexpr float kInitializeProgress = 0.7f;
 	static constexpr float kAddCenterPosY = 15.0f;					//playerPosÇÃYé≤Ç…â¡éZÇµÇƒÉJÉÅÉâÇ∆íçéãì_ÇÃä‘ÇÃç¿ïWÇãÅÇﬂÇÈ
-	
-	const VECTOR kInitializeAimPos = VGet(-0.17f, 53.75f, -1224.4f);
-	const VECTOR kInitializeSpherePos = VGet(-1.3f, 24.0f, -1172.35f);
 
+	const VECTOR kInitializeCameraPos = VGet(426.703827f, 238.598358f, -1275.91016f);
+	const VECTOR kInitializeSpherePos = VGet(398.874207f, 222.598328f, -1238.91187f);
 };
 
