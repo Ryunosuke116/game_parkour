@@ -15,7 +15,7 @@
 RunToStop::RunToStop(const int modelHandle) :
     PlayerStateBase(modelHandle)
 {
-    this->nowAnimState.PlayAnimSpeed = kPlayAnimSpeed;
+    this->nowAnimState.playAnimSpeed = kPlayAnimSpeed;
 }
 
 /// <summary>
@@ -89,7 +89,7 @@ bool RunToStop::MotionUpdate(PlayerData& playerData)
         totalPlayAnimTime = MV1GetAttachAnimTotalTime(modelHandle, nowAnimState.attachIndex);
 
         //再生時間更新
-        nowAnimState.playAnimTime += nowAnimState.PlayAnimSpeed;
+        nowAnimState.playAnimTime += nowAnimState.playAnimSpeed;
 
         //総再生時間を超えたらリセット
         if (nowAnimState.playAnimTime >= totalPlayAnimTime)

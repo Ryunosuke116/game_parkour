@@ -16,7 +16,7 @@
 Victory::Victory(const int modelHandle) :
     PlayerStateBase(modelHandle)
 {
-    this->nowAnimState.PlayAnimSpeed = kPlayAnimSpeed;
+    this->nowAnimState.playAnimSpeed = kPlayAnimSpeed;
 }
 
 /// @brief デストラクタ
@@ -56,7 +56,7 @@ bool Victory::MotionUpdate(PlayerData& playerData)
     if (nowAnimState.attachIndex != -1)
     {
         //再生時間更新
-        nowAnimState.playAnimTime += nowAnimState.PlayAnimSpeed;
+        nowAnimState.playAnimTime += nowAnimState.playAnimSpeed;
 
         //32f(決めポーズ時)になったらそこでアニメーションを停止する
         if (nowAnimState.playAnimTime >= kPoseFrame)

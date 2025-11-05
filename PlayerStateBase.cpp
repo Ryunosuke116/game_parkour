@@ -52,7 +52,7 @@ void PlayerStateBase::Enter(const AnimState& oldAnimState,
     //いままで情報をprevに保存
     this->oldAnimState.attachIndex = nowAnimState.attachIndex;
     this->oldAnimState.playAnimTime = nowAnimState.playAnimTime;
-    this->oldAnimState.PlayAnimSpeed = nowAnimState.PlayAnimSpeed;
+    this->oldAnimState.playAnimSpeed = nowAnimState.playAnimSpeed;
 
     // ブレンド率はPrevが有効ではない場合は１．０ｆ( 現在モーションが１００％の状態 )にする
     animBlendRate = this->oldAnimState.attachIndex == -1 ? 1.0f : 0.0f;
@@ -90,7 +90,7 @@ bool PlayerStateBase::MotionUpdate(PlayerData& playerData)
     if (nowAnimState.attachIndex != -1)
     {
         //再生時間更新
-        nowAnimState.playAnimTime += nowAnimState.PlayAnimSpeed;
+        nowAnimState.playAnimTime += nowAnimState.playAnimSpeed;
 
         //総再生時間を超えたらリセット
         if (nowAnimState.playAnimTime >= nowAnimState.totalPlayAnimTime)

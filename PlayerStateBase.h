@@ -15,7 +15,7 @@ public:
 		int attachIndex;			//アニメーション情報
 		float playAnimTime;			//再生時間
 		float totalPlayAnimTime;	//総再生時間
-		float PlayAnimSpeed;		//アニメーションスピード
+		float playAnimSpeed;		//アニメーションスピード
 	};
 
 	PlayerStateBase(const int modelHandle);

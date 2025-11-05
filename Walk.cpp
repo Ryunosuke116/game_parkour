@@ -16,7 +16,7 @@
 Walk::Walk(const int modelHandle) :
 	PlayerStateBase(modelHandle)
 {
-	this->nowAnimState.PlayAnimSpeed = kPlayAnimSpeed;
+	this->nowAnimState.playAnimSpeed = kPlayAnimSpeed;
 	animBlendRate = 1.0f;
 }
 

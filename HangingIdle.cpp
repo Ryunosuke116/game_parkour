@@ -18,7 +18,7 @@
 HangingIdle::HangingIdle(const int modelHandle) :
     PlayerStateBase(modelHandle)
 {
-    this->nowAnimState.PlayAnimSpeed = kPlayAnimSpeed;
+    this->nowAnimState.playAnimSpeed = kPlayAnimSpeed;
 }
 
 /// <summary>

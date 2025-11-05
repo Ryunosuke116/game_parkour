@@ -18,7 +18,7 @@
 QuickRoll::QuickRoll(const int modelHandle) :
 	PlayerStateBase(modelHandle)
 {
-    this->nowAnimState.PlayAnimSpeed = kPlayAnimSpeed;
+    this->nowAnimState.playAnimSpeed = kPlayAnimSpeed;
 }
 
 /// <summary>
@@ -100,7 +100,7 @@ bool QuickRoll::MotionUpdate(PlayerData& playerData)
     if (nowAnimState.attachIndex != -1)
     {
         //再生時間更新
-        nowAnimState.playAnimTime += nowAnimState.PlayAnimSpeed;
+        nowAnimState.playAnimTime += nowAnimState.playAnimSpeed;
 
         if (nowAnimState.playAnimTime >= kWhenAirMaxAnimTime)
         {
@@ -134,7 +134,7 @@ bool QuickRoll::MotionUpdate(PlayerData& playerData)
         totalPlayAnimTime = MV1GetAttachAnimTotalTime(modelHandle, oldAnimState.attachIndex);
 
         // 再生時間を進める
-        oldAnimState.playAnimTime += oldAnimState.PlayAnimSpeed;
+        oldAnimState.playAnimTime += oldAnimState.playAnimSpeed;
 
         // 再生時間が総時間に到達していたら再生時間をループさせる
         if (oldAnimState.playAnimTime > totalPlayAnimTime)
