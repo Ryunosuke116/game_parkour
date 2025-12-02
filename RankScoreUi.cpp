@@ -12,7 +12,8 @@ RankScoreUi::RankScoreUi() :
 	rankPosY(-1),
 	rankWidth(-1),
 	rankHeight(-1),
-	rankHandleKey("")
+	rankHandleKey(""),
+	rate(-1.0f)
 {
 	jsonTag = "png";
 }
@@ -58,6 +59,7 @@ void RankScoreUi::Initialize()
 	rankPosY = kInitRankPosY;
 	rankWidth = lkInitRankWidth;
 	rankHeight = lkInitRankHeight;
+	rate = 0.0f;
 
 	rankHandleKey = "A";
 }
@@ -67,7 +69,14 @@ void RankScoreUi::Initialize()
 /// </summary>
 void RankScoreUi::Update()
 {
-	
+	if (CheckHitKey(KEY_INPUT_D))
+	{
+		rate += 0.01f;
+	}
+	if (CheckHitKey(KEY_INPUT_A))
+	{
+		rate -= 0.01f;
+	}
 }
 
 /// <summary>
@@ -76,9 +85,20 @@ void RankScoreUi::Update()
 /// <returns></returns>
 void RankScoreUi::Draw()
 {
-	DrawExtendGraphF(rankPosX,
+	int drawWidth = int(680.0f * rate);
+	DrawRectGraph(
+		rankPosX,
+		rankPosY,
+		0,
+		0,
+		drawWidth,
+		670,
+		umRankHandles.at(rankHandleKey),
+		TRUE);
+
+	/*DrawExtendGraphF(rankPosX,
 		rankPosY,
 		rankPosX + rankWidth,
 		rankPosY + rankHeight,
-		umRankHandles.at(rankHandleKey), TRUE);
+		umRankHandles.at(rankHandleKey), TRUE);*/
 }

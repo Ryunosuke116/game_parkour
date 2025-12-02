@@ -23,6 +23,7 @@ void UIManager::Create()
 	Add(std::make_shared<CoinUi>());
 	Add(std::make_shared<ControlManualUi>());
 	Add(std::make_shared<GameTimer>());
+	Add(std::make_shared<RankScoreUi>());
 
 	for (auto& UI : uiList)
 	{

@@ -28,5 +28,6 @@ private:
 	float rankPosY;
 	float rankWidth;
 	float rankHeight;
+	float rate;
 };
 
