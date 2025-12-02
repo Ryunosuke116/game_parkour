@@ -60,6 +60,18 @@ public:
 		return nullptr;
 	}
 
+	template <class typeName>
+	std::shared_ptr<typeName> GetUi()
+	{
+		for (auto& ui : uiList)
+		{
+			if (auto retrunUi = std::dynamic_pointer_cast<typeName>(ui))
+			{
+				return retrunUi;
+			}
+		}
+		return nullptr;
+	}
 
 private:
 	std::vector<std::shared_ptr<BaseUI>> uiList;

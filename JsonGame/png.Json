@@ -20,11 +20,16 @@
   ],
 
   "rank": [
-    [ "material/png/rank/D.png", "D" ],
-    [ "material/png/rank/C.png", "C" ],
-    [ "material/png/rank/B.png", "B" ],
-    [ "material/png/rank/A.png", "A" ],
-    [ "material/png/rank/S.png", "S" ]
+    [ "material/png/rank_game/B.png", "B" ],
+    [ "material/png/rank_game/B_color.png", "B_color" ],
+    [ "material/png/rank_game/A_.png", "A" ],
+    [ "material/png/rank_game/A_color.png", "A_color" ],
+    [ "material/png/rank_game/S.png", "S" ],
+    [ "material/png/rank_game/S_color.png", "S_color" ],
+    [ "material/png/rank_game/SS.png", "SS" ],
+    [ "material/png/rank_game/SS_color.png", "SS_color" ],
+    [ "material/png/rank_game/SSS.png", "SSS" ],
+    [ "material/png/rank_game/SSS_color.png", "SSS_color" ]
   ],
 
   "title": [

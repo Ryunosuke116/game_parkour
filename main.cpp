@@ -63,11 +63,19 @@ int WINAPI WinMain(HINSTANCE hInstance,
     std::shared_ptr<SceneManager> sceneManager = std::make_shared<SceneManager>();
     sceneManager->Create();
     PadInput::Initialize();
-    BlackOut::GetInstance().Initialize();
 
+#if defined(NDEBUG)
+    BlackOut::GetInstance().Initialize();
     sceneManager->Add<Title>("Title");
     sceneManager->Add<Game>("Game");
     sceneManager->Add<Result>("Result");
+#else
+    //@Debug
+    BlackOut::GetInstance().ResultInitialize();
+    sceneManager->Add<Game>("Game");
+    sceneManager->Add<Title>("Title");
+    sceneManager->Add<Result>("Result");
+#endif
 
     while (!ProcessMessage() && !ClearDrawScreen() && !CheckHitKey(KEY_INPUT_ESCAPE))
     {

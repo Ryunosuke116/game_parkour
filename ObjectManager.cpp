@@ -9,6 +9,7 @@
 #include "WorldSubSystem.h"
 #include "BoundaryRange.h"
 #include "BackGround.h"
+#include "RankScoreUi.h"
 
 /// <summary>
 /// コンストラクタ
@@ -82,6 +83,7 @@ void ObjectManager::Create()
 	//コインオブザーバーに追加
 	actualCoinManager->AddObserver(actualPlayerManager->GetPlayer());
 	actualCoinManager->AddObserver(actualUiManager->GetCoinUi());
+	actualCoinManager->AddObserver(actualUiManager->GetUi<RankScoreUi>());
 
 	//プレイヤーステートオブサーバーに追加
 	actualPlayerManager->AddObserver(actualUiManager->GetControlManualUi());

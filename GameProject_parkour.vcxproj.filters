@@ -244,9 +244,6 @@
     <Filter Include="ソース ファイル\object\game\ui\rankScore">
       <UniqueIdentifier>{dfcdede7-36b0-471f-b174-1ad4f3e1e04f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\object\game\ui\rankScore\updater">
-      <UniqueIdentifier>{2f627622-89d0-4e59-9183-77383e646919}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp">
@@ -431,9 +428,6 @@
     </ClCompile>
     <ClCompile Include="RankScoreUi.cpp">
       <Filter>ソース ファイル\object\game\ui\rankScore</Filter>
-    </ClCompile>
-    <ClCompile Include="RankScoreUpdater.cpp">
-      <Filter>ソース ファイル\object\game\ui\rankScore\updater</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -658,9 +652,6 @@
     </ClInclude>
     <ClInclude Include="RankScoreUi.h">
       <Filter>ソース ファイル\object\game\ui\rankScore</Filter>
-    </ClInclude>
-    <ClInclude Include="RankScoreUpdater.h">
-      <Filter>ソース ファイル\object\game\ui\rankScore\updater</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
