@@ -6,7 +6,8 @@ class CoinObserver;
 
 class RankScoreUi : 
 	public BaseUI,
-	public CoinObserver
+	public CoinObserver,
+	public std::enable_shared_from_this<RankScoreUi>
 {
 public:
 	RankScoreUi();
@@ -23,13 +24,14 @@ public:
 	void ResultUpdate()override {}
 
 	void OnCoinPicked(int amount)override;
-	
-	
 
+	std::string GetRankHandleKey()const { return rankHandleKey; }
+	
 private:
 	void RankUpdate();
 	void RankUp();
 	void RankDown();
+
 private:
 	std::unordered_map<std::string, int> umRankHandles;
 

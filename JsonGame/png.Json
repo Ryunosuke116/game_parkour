@@ -20,15 +20,19 @@
   ],
 
   "rank": [
-    [ "material/png/rank_game/B.png", "B" ],
+    [ "material/png/rank_game/D_.png", "D" ],
+    [ "material/png/rank_game/D_color.png", "D_color" ],
+    [ "material/png/rank_game/C_.png", "C" ],
+    [ "material/png/rank_game/C_color.png", "C_color" ],
+    [ "material/png/rank_game/B_.png", "B" ],
     [ "material/png/rank_game/B_color.png", "B_color" ],
     [ "material/png/rank_game/A_.png", "A" ],
     [ "material/png/rank_game/A_color.png", "A_color" ],
-    [ "material/png/rank_game/S.png", "S" ],
+    [ "material/png/rank_game/S_.png", "S" ],
     [ "material/png/rank_game/S_color.png", "S_color" ],
-    [ "material/png/rank_game/SS.png", "SS" ],
+    [ "material/png/rank_game/SS_.png", "SS" ],
     [ "material/png/rank_game/SS_color.png", "SS_color" ],
-    [ "material/png/rank_game/SSS.png", "SSS" ],
+    [ "material/png/rank_game/SSS_.png", "SSS" ],
     [ "material/png/rank_game/SSS_color.png", "SSS_color" ]
   ],
 

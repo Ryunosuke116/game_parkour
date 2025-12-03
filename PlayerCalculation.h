@@ -1,13 +1,15 @@
 #pragma once
 #include "DxLib.h"
-#include"PlayerState.h"
 #include "CollisionData.h"
+#include <string>
 
 class PlayerCalculation
 {
 public:
 	PlayerCalculation();
 	~PlayerCalculation(){}
+
+	void Initialize();
 
 	VECTOR Update(const VECTOR& moveDirection, const float playAnimTime,
 		const int nowAnimNumber, const PlayerData& playerData);
@@ -56,16 +58,14 @@ public:
 	float GetWallRunStopTime()const { return wallRunStopTime; }
 	float GetWallRunMaxStopTime()const { return kWallRunMaxStopTime; }
 	float GetGravityPower() const { return gravityPower; }
-	VECTOR GetHangingPoint()const { return hangingPoint; }
 	VECTOR GetWallRunGravity()const { return wallRunGravity; }
-	MV1_COLL_RESULT_POLY GetHangingPoly() const { return hangingPoly; }
 	NearestResult GetNearestResult() const { return nearestResult; }
 
 	void ChangeTrueIsAddJumpPower() { isAddJumpPower = true; }
 	void SetJumpPower() { nowJumpPower = kAddJumpPower; }
 	void SetSecondJumpPower() { nowJumpPower = kAddSecondJumpPower; }
 	void SetNowGroundRayPoly(const MV1_COLL_RESULT_POLY& set) { nowGroundRayPoly = set; }
-	void SetRightHandPos(const VECTOR& set) { RightHandPos = set; }
+	void SetRightHandPos(const VECTOR& set) { rightHandPos = set; }
 	void SetLeftHandPos(const VECTOR& set) { leftHandPos = set; }
 	void SetNearestResult(const NearestResult& set) { nearestResult = set; }
 	void SetWallRunGravity(const VECTOR& set) { wallRunGravity = set; }
@@ -78,6 +78,7 @@ private:
 
 	float SpeedUp();
 	float SpeedDown(const PlayerData& playerData);
+	float ChangeRankScore(float mulMoveSpeedValue);
 
 private:
 	static constexpr float kMaxRunSpeed = 1.6f;	    // 移動速度
@@ -87,29 +88,36 @@ private:
 	static constexpr float kAddSecondJumpPower = 1.5f;		//二段目ジャンプパワー
 	static constexpr float kGravity = -0.06f;
 	static constexpr float kWallRunMaxStopTime = 10.0f;	
+	static constexpr float kMulValueD = 1.0f;
+	static constexpr float kMulValueC = 1.05f;
+	static constexpr float kMulValueB = 1.1f;
+	static constexpr float kMulValueA = 1.2f;
+	static constexpr float kMulValueS = 1.3f;
+	static constexpr float kMulValueSS = 1.4f;
+	static constexpr float kMulValueSSS = 1.45f;
 
-	int ignoreGroundTimer;
+	int ignoreGroundTimer;		//接地判定を無視する時間
 
-	float nowJumpPower;			//現在のジャンプスピード
-	float nowMoveSpeed;
-	float decelerationSpeed;		//減速速度
-	float nowRollMoveSpeed;		//現在のロールスピード
+	float nowJumpPower;			//現在のジャンプ速度
+	float nowMoveSpeed;			//移動速度
+	float decelerationSpeed;	//減速速度
+	float nowRollMoveSpeed;		//現在のロール速度
 	float wallRunStopTime;		//壁に留まる時間
 	float gravityPower;			//現在かかっている重力
+	float mulMoveSpeedValue;	//現在の移動速度に乗算する値
 	
 	bool isCalcDeceleration;		//止まるときに一度だけ減速スピードを計算
-	bool isSlip_after;				//slipした後か
 	bool isStopRunWall;
 	bool isAddJumpPower;
 	bool isWhenClimbingHitGround;	//登っているときに床と接触しているか
 
-	VECTOR hangingPoint;
-	VECTOR RightHandPos;
+	VECTOR rightHandPos;
 	VECTOR leftHandPos;
 	VECTOR wallRunGravity;
 
+	std::string nowRankScore;
+
 	NearestResult nearestResult;
-	MV1_COLL_RESULT_POLY hangingPoly;
 	MV1_COLL_RESULT_POLY nowGroundRayPoly;
 };
 

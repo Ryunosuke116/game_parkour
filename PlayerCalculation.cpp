@@ -1,8 +1,7 @@
 #include "Dxlib.h"
 #include "Calculation.h"
 #include "PlayerData.h"
-#include "PlayerCalculation.h"
-#include"PlayerState.h"
+#include "PlayerState.h"
 #include "AnimTime.h"
 #include "HitCheck.h"
 #include "DebugDrawer.h"
@@ -10,6 +9,8 @@
 #include "CollisionObjectManager.h"
 #include "Player.h"
 #include "PlayerManager.h"
+#include "RankScoreUi.h"
+#include "PlayerCalculation.h"
 
 PlayerCalculation::PlayerCalculation() :
     gravityPower(0.0f),
@@ -18,13 +19,37 @@ PlayerCalculation::PlayerCalculation() :
     nowRollMoveSpeed(0.0f),
     wallRunStopTime(0.0f),
     decelerationSpeed(0.0f),
+    mulMoveSpeedValue(0.0f),
     ignoreGroundTimer(-1),
     isCalcDeceleration(false),
-    isSlip_after(false),
     isStopRunWall(false),
-    isAddJumpPower(false)
+    isAddJumpPower(false),
+    rightHandPos(VGet(0.0f,0.0f,0.0f)),
+    leftHandPos(VGet(0.0f, 0.0f, 0.0f)),
+    wallRunGravity(VGet(0.0f, 0.0f, 0.0f)),
+    nowRankScore("")
 {
 
+}
+
+void PlayerCalculation::Initialize()
+{
+    ignoreGroundTimer = 0;
+    gravityPower = 0.0f;
+    nowJumpPower = 0.0f;
+    nowMoveSpeed = 0.0f;
+    nowRollMoveSpeed = 0.0f;
+    wallRunStopTime = 0.0f;
+    decelerationSpeed = 0.0f;
+    mulMoveSpeedValue = 1.0f;
+    isCalcDeceleration = false;
+    isStopRunWall = false;
+    isAddJumpPower = false;
+    rightHandPos = VGet(0.0f, 0.0f, 0.0f);
+    leftHandPos = VGet(0.0f, 0.0f, 0.0f);
+    wallRunGravity = VGet(0.0f, 0.0f, 0.0f);
+    nearestResult = {};
+    nowRankScore = "";
 }
 
 VECTOR PlayerCalculation::Update(
@@ -35,6 +60,9 @@ VECTOR PlayerCalculation::Update(
 {
     VECTOR velocity = moveDirection;
 
+    mulMoveSpeedValue = ChangeRankScore(mulMoveSpeedValue);
+
+    //接地を無視している場合タイマーを減らす
     if (ignoreGroundTimer > 0)
     {
         ignoreGroundTimer--;
@@ -125,6 +153,7 @@ VECTOR PlayerCalculation::Jump(const VECTOR& velocity,
     const PlayerData& playerData)
 {
     VECTOR newVelocity = velocity;
+    const int kAddIgnoreGroundTimer = 2;
 
     if (isAddJumpPower)
     {
@@ -137,7 +166,7 @@ VECTOR PlayerCalculation::Jump(const VECTOR& velocity,
         newVelocity.y += nowJumpPower;
         gravityPower += nowJumpPower;
         isAddJumpPower = false;
-        ignoreGroundTimer = 2;
+        ignoreGroundTimer = kAddIgnoreGroundTimer;
     }
 
     return newVelocity;
@@ -267,14 +296,14 @@ VECTOR PlayerCalculation::HangingAngle(const MV1_COLL_RESULT_POLY& hangingPoly)
 /// 掴まる場所計算
 /// </summary>
 /// <param name="leftHandPos"></param>
-/// <param name="RightHandPos"></param>
+/// <param name="rightHandPos"></param>
 /// <param name="nearestPoint"></param>
 /// <returns></returns>
 VECTOR PlayerCalculation::HangingPosition()
 {
     const float kHalfScale = 0.5f;
 
-    VECTOR centerPos = VAdd(leftHandPos, RightHandPos);
+    VECTOR centerPos = VAdd(leftHandPos, rightHandPos);
     centerPos = VScale(centerPos, kHalfScale);
     
     VECTOR newPos = VSub(nearestResult.nearestPoint, centerPos);
@@ -311,10 +340,11 @@ VECTOR PlayerCalculation::HangToCrouchMove(
     const std::vector<std::weak_ptr<BaseObject>>& fieldObjects,
     const std::shared_ptr<Player> player)
 {
+    const float kMaxUpdateFrame = 22.0f;
     VECTOR velocity = VGet(0.0f, 0.0f, 0.0f);
 
     //指定のフレームまでは手の位置に合わせて座標を更新
-    if (player->GetNowAnimState().playAnimTime <= 22.0f)
+    if (player->GetNowAnimState().playAnimTime <= kMaxUpdateFrame)
     {
         VECTOR addPos = HangingPosition();
 
@@ -473,6 +503,10 @@ float PlayerCalculation::SpeedUp()
         newMoveSpeed = kMaxRunSpeed;
     }
 
+    newMoveSpeed *= mulMoveSpeedValue;
+
+    DebugDrawer::GetInstance().InformationInputStringFloat("mulMoveSpeedValue %f\n", mulMoveSpeedValue);
+
     return newMoveSpeed;
 }
 
@@ -522,4 +556,45 @@ void PlayerCalculation::ResetWallRun()
     isStopRunWall = false;
 }
 
+float PlayerCalculation::ChangeRankScore(float mulMoveSpeedValue)
+{
+    const auto& rankScoreUi = WorldSubSystem::GetInstance().GetSubSystem<RankScoreUi>();
+    
+    //ランクスコアが更新されたら、移動速度にかかるボーナスを変更する
+    if (nowRankScore != rankScoreUi->GetRankHandleKey())
+    {
+        if (rankScoreUi->GetRankHandleKey() == "D" ||
+            rankScoreUi->GetRankHandleKey() == "")
+        {
+            mulMoveSpeedValue = kMulValueD;
+        }
+        else if (rankScoreUi->GetRankHandleKey() == "C")
+        {
+            mulMoveSpeedValue = kMulValueC;
+        }
+        else if (rankScoreUi->GetRankHandleKey() == "B")
+        {
+            mulMoveSpeedValue = kMulValueB;
+        }
+        else if (rankScoreUi->GetRankHandleKey() == "A")
+        {
+            mulMoveSpeedValue = kMulValueA;
+        }
+        else if (rankScoreUi->GetRankHandleKey() == "S")
+        {
+            mulMoveSpeedValue = kMulValueS;
+        }
+        else if (rankScoreUi->GetRankHandleKey() == "SS")
+        {
+            mulMoveSpeedValue = kMulValueSS;
+        }
+        else if (rankScoreUi->GetRankHandleKey() == "SSS")
+        {
+            mulMoveSpeedValue = kMulValueSSS;
+        }
+    }
 
+    nowRankScore = rankScoreUi->GetRankHandleKey();
+
+    return mulMoveSpeedValue;
+}

@@ -167,6 +167,7 @@
     <ClCompile Include="FieldMesh.cpp" />
     <ClCompile Include="FinishCut.cpp" />
     <ClCompile Include="RankScoreUi.cpp" />
+    <ClCompile Include="RankScoreUpdater.cpp" />
     <ClCompile Include="SkyFloor.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameTimer.cpp" />
@@ -234,6 +235,7 @@
     <ClInclude Include="FieldMesh.h" />
     <ClInclude Include="FinishCut.h" />
     <ClInclude Include="RankScoreUi.h" />
+    <ClInclude Include="RankScoreUpdater.h" />
     <ClInclude Include="SkyFloor.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameTimer.h" />

@@ -5,6 +5,7 @@
 #include "JsonManager.h"
 #include "DebugDrawer.h"
 #include "Calculation.h"
+#include "WorldSubSystem.h"
 
 /// <summary>
 /// コンストラクタ
@@ -47,6 +48,10 @@ void RankScoreUi::Load(const nlohmann::json& jsonData)
 void RankScoreUi::Create()
 {
 	Load(JsonManager::GetInstance().GetJsons(jsonTag));
+	auto self = shared_from_this();
+
+	//サブシステムに追加
+	WorldSubSystem::GetInstance().AddSubSystem<RankScoreUi>(self);
 }
 
 /// <summary>
@@ -87,10 +92,13 @@ void RankScoreUi::Update()
 	}
 	if (CheckHitKey(KEY_INPUT_A))
 	{
-		drawRankRate -= 1.0f;
-		if (drawRankRate <= 0.0f)
+		if (rankHandleKey != "")
 		{
-			drawRankRate = 0.0f;
+			drawRankRate -= 1.0f;
+			if (drawRankRate <= 0.0f)
+			{
+				drawRankRate = 0.0f;
+			}
 		}
 	}
 #endif
@@ -106,30 +114,36 @@ void RankScoreUi::Update()
 /// <returns></returns>
 void RankScoreUi::Draw()
 {
-	int drawHeight = int(Calculation::InterpolationCalc(drawRankRate, 417.0f, 180.0f));
+	const float kMaxHeight = 417.0f;
+	const float kMinHeight = 180.0f;
+
+	int drawHeight = int(Calculation::InterpolationCalc(drawRankRate, kMaxHeight, kMinHeight));
 	DebugDrawer::GetInstance().InformationInputStringInt("drawHeight %d\n", drawHeight);
 
-	//ランクの外枠
-	DrawExtendGraphF(
-		rankPosX - rankWidth,
-		rankPosY - rankHeight,
-		rankPosX + rankWidth,
-		rankPosY + rankHeight,
-		umRankHandles.at(rankHandleKey), TRUE);
+	if (rankHandleKey != "")
+	{
+		//ランクの外枠
+		DrawExtendGraphF(
+			rankPosX - rankWidth,
+			rankPosY - rankHeight,
+			rankPosX + rankWidth,
+			rankPosY + rankHeight,
+			umRankHandles.at(rankHandleKey), TRUE);
 
-	//描画範囲を設定する
-	SetDrawArea(0, drawHeight, 10000, 10000);
+		//描画範囲を設定する
+		SetDrawArea(0, drawHeight, 10000, 10000);
 
-	//ランクの中の色の部分
-	DrawExtendGraphF(
-		rankPosX - rankWidth,
-		rankPosY - rankHeight,
-		rankPosX + rankWidth,
-		rankPosY + rankHeight,
-		umRankHandles.at(rankHandleKey + "_color"), TRUE);
+		//ランクの中の色の部分
+		DrawExtendGraphF(
+			rankPosX - rankWidth,
+			rankPosY - rankHeight,
+			rankPosX + rankWidth,
+			rankPosY + rankHeight,
+			umRankHandles.at(rankHandleKey + "_color"), TRUE);
 	
-	//描画範囲をリセット
-	SetDrawArea(0, 0, 10000, 10000);
+		//描画範囲をリセット
+		SetDrawArea(0, 0, 10000, 10000);
+	}
 }
 
 void RankScoreUi::OnCoinPicked(int amount)
@@ -157,23 +171,28 @@ void RankScoreUi::RankUpdate()
 	//ランク描画のサイズも段々元に戻っていく
 	else
 	{
-		drawRankRate += kSubRankCount;
 		rankWidth -= kSubSize;
 		rankHeight -= kSubSize;
-
-		if (rankWidth <= kMinSize)
+	
+		//ランクがついていない場合は、rate更新を行わない
+		if (rankHandleKey != "")
 		{
-			rankWidth = kMinSize;
-		}
+			drawRankRate += kSubRankCount;
 
-		if (rankHeight <= kMinSize)
-		{
-			rankHeight = kMinSize;
+			if (rankWidth <= kMinSize)
+			{
+				rankWidth = kMinSize;
+			}
+
+			if (rankHeight <= kMinSize)
+			{
+				rankHeight = kMinSize;
+			}
 		}
 	}
 
 	if (drawRankRate >= kMaxDrawRankRate &&
-		rankHandleKey != "B")
+		rankHandleKey != "")
 	{
 		RankDown();
 	}
@@ -195,7 +214,19 @@ void RankScoreUi::RankUpdate()
 
 void RankScoreUi::RankUp()
 {
-	if (rankHandleKey == "B")
+	if (rankHandleKey == "")
+	{
+		rankHandleKey = "D";
+	}
+	else if (rankHandleKey == "D")
+	{
+		rankHandleKey = "C";
+	}
+	else if (rankHandleKey == "C")
+	{
+		rankHandleKey = "B";
+	}
+	else if (rankHandleKey == "B")
 	{
 		rankHandleKey = "A";
 	}
@@ -232,6 +263,18 @@ void RankScoreUi::RankDown()
 	else if (rankHandleKey == "A")
 	{
 		rankHandleKey = "B";
+	}
+	else if (rankHandleKey == "B")
+	{
+		rankHandleKey = "C";
+	}
+	else if (rankHandleKey == "C")
+	{
+		rankHandleKey = "D";
+	}
+	else if (rankHandleKey == "D")
+	{
+		rankHandleKey = "";
 	}
 
 	drawRankRate -= kChangeAfterAddValue;

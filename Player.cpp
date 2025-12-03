@@ -77,40 +77,41 @@ void Player::Initialize()
 
     isPush = false;
 
-    playerData.isIdle = false;
-    playerData.isGround = true;
-    playerData.isJump = false;
-    playerData.isSecondJump = false;
-    playerData.isAllJump = false;
-    playerData.isWalljump = false;
-    playerData.isMove = false;
-    playerData.isWalk = true;
-    playerData.isRoll = false;
-    playerData.isStopRun = false;
-    playerData.isUseRoll = false;
-    playerData.isJumpPlayAnim = false;
-    playerData.isFalling = false;
-    playerData.isHanging = false;
-    playerData.isNowHanging = false;
-    playerData.isUseHanging = true;
-    playerData.isHangToCrouch = false;
-    playerData.isRun = false;
-    playerData.isRunWall = false;
-    playerData.isUseWallJump = true;
-    playerData.isWallClimb = false;
+    playerData.isIdle           = false;
+    playerData.isGround         = true;
+    playerData.isJump           = false;
+    playerData.isSecondJump     = false;
+    playerData.isAllJump        = false;
+    playerData.isWalljump       = false;
+    playerData.isMove           = false;
+    playerData.isWalk           = true;
+    playerData.isRoll           = false;
+    playerData.isStopRun        = false;
+    playerData.isUseRoll        = false;
+    playerData.isJumpPlayAnim   = false;
+    playerData.isFalling        = false;
+    playerData.isHanging        = false;
+    playerData.isNowHanging     = false;
+    playerData.isUseHanging     = true;
+    playerData.isHangToCrouch   = false;
+    playerData.isRun            = false;
+    playerData.isRunWall        = false;
+    playerData.isUseWallJump    = true;
+    playerData.isWallClimb      = false;
     collisionHitPart.isHitFloor = true;
-    collisionHitPart.isHitHead = true;
-    collisionHitPart.isHitWall = true;
-    isCalcMoveVec = false;
-    isCollisionCheck = true;
+    collisionHitPart.isHitHead  = true;
+    collisionHitPart.isHitWall  = true;
+    isCalcMoveVec               = false;
+    isCollisionCheck            = true;
    
-    coinCount = 0;
+    coinCount   = 0;
     effectTimer = 0.0f;
     nowMoveDirection = VGet(0.0f, 0.0f, 0.0f);
 
     MV1SetRotationXYZ(modelHandle, VGet((rotateX * DX_PI_F / 180.0f), radian + DX_PI_F, 0.0f));
 
     animationChanger->Initialize(animNum::walk, modelHandle, nowState, playerData, *this);
+    playerCalculation->Initialize();
 }
 
 /// <summary>
