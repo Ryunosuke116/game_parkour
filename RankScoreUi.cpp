@@ -1,11 +1,12 @@
 #include "common.h"
 #include <unordered_map>
-#include "CoinObserver.h"
+#include <memory>
 #include "RankScoreUi.h"
 #include "JsonManager.h"
 #include "DebugDrawer.h"
 #include "Calculation.h"
 #include "WorldSubSystem.h"
+#include "RankScoreUpdater.h"
 
 /// <summary>
 /// コンストラクタ
@@ -52,6 +53,8 @@ void RankScoreUi::Create()
 
 	//サブシステムに追加
 	WorldSubSystem::GetInstance().AddSubSystem<RankScoreUi>(self);
+
+	rankScoreUpdater = std::make_shared<RankScoreUpdater>();
 }
 
 /// <summary>
@@ -68,10 +71,11 @@ void RankScoreUi::Initialize()
 	rankPosY = kInitRankPosY;
 	rankWidth = lkInitRankWidth;
 	rankHeight = lkInitRankHeight;
-	drawRankRate = 0.0f;
+	drawRankRate = kResetRankRate;
 	rankUpCount = 0;
 
-	rankHandleKey = "S";
+	rankHandleKey = "";
+	rankScoreUpdater->Initialize();
 }
 
 /// <summary>
@@ -102,8 +106,7 @@ void RankScoreUi::Update()
 		}
 	}
 #endif
-
-	RankUpdate();
+	rankScoreUpdater->Update(rankWidth, rankHeight, drawRankRate, rankHandleKey);
 
 	DebugDrawer::GetInstance().InformationInputStringFloat("drawRankRate %f\n", drawRankRate);
 }
@@ -144,138 +147,4 @@ void RankScoreUi::Draw()
 		//描画範囲をリセット
 		SetDrawArea(0, 0, 10000, 10000);
 	}
-}
-
-void RankScoreUi::OnCoinPicked(int amount)
-{
-	rankUpCount += amount;
-}
-
-void RankScoreUi::RankUpdate()
-{
-	const float kAddRankCount = 0.2f;
-	const float kSubRankCount = 0.001f;
-	const float kMinSize = 150.0f;
-	const float kAddSize = 30.0f;
-	const float kSubSize = 1.0f;
-
-	//カウント分ランクアップする
-	if (rankUpCount >= 1)
-	{
-		drawRankRate -= kAddRankCount * float(rankUpCount);
-		rankUpCount = 0;
-		rankWidth += kAddSize;
-		rankHeight += kAddSize;
-	}
-	//ランクの値が段々減っていく
-	//ランク描画のサイズも段々元に戻っていく
-	else
-	{
-		rankWidth -= kSubSize;
-		rankHeight -= kSubSize;
-	
-		//ランクがついていない場合は、rate更新を行わない
-		if (rankHandleKey != "")
-		{
-			drawRankRate += kSubRankCount;
-
-			if (rankWidth <= kMinSize)
-			{
-				rankWidth = kMinSize;
-			}
-
-			if (rankHeight <= kMinSize)
-			{
-				rankHeight = kMinSize;
-			}
-		}
-	}
-
-	if (drawRankRate >= kMaxDrawRankRate &&
-		rankHandleKey != "")
-	{
-		RankDown();
-	}
-	else if (drawRankRate <= kMinDrawRankRate &&
-			rankHandleKey != "SSS")
-	{
-		RankUp();
-	}
-
-	if (drawRankRate >= kMaxDrawRankRate)
-	{
-		drawRankRate = kMaxDrawRankRate;
-	}
-	else if (drawRankRate <= kMinDrawRankRate)
-	{
-		drawRankRate = kMinDrawRankRate;
-	}
-}
-
-void RankScoreUi::RankUp()
-{
-	if (rankHandleKey == "")
-	{
-		rankHandleKey = "D";
-	}
-	else if (rankHandleKey == "D")
-	{
-		rankHandleKey = "C";
-	}
-	else if (rankHandleKey == "C")
-	{
-		rankHandleKey = "B";
-	}
-	else if (rankHandleKey == "B")
-	{
-		rankHandleKey = "A";
-	}
-	else if (rankHandleKey == "A")
-	{
-		rankHandleKey = "S";
-	}
-	else if (rankHandleKey == "S")
-	{
-		rankHandleKey = "SS";
-	}
-	else if (rankHandleKey == "SS")
-	{
-		rankHandleKey = "SSS";
-	}
-
-	drawRankRate += kChangeAfterAddValue;
-}
-
-void RankScoreUi::RankDown()
-{
-	if (rankHandleKey == "SSS")
-	{
-		rankHandleKey = "SS";
-	}
-	else if (rankHandleKey == "SS")
-	{
-		rankHandleKey = "S";
-	}
-	else if (rankHandleKey == "S")
-	{
-		rankHandleKey = "A";
-	}
-	else if (rankHandleKey == "A")
-	{
-		rankHandleKey = "B";
-	}
-	else if (rankHandleKey == "B")
-	{
-		rankHandleKey = "C";
-	}
-	else if (rankHandleKey == "C")
-	{
-		rankHandleKey = "D";
-	}
-	else if (rankHandleKey == "D")
-	{
-		rankHandleKey = "";
-	}
-
-	drawRankRate -= kChangeAfterAddValue;
 }

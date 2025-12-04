@@ -1,5 +1,34 @@
 #pragma once
-class RankScoreUpdater
+#include "CoinObserver.h"
+
+class CoinObserver;
+
+class RankScoreUpdater: public CoinObserver
 {
+public:
+	RankScoreUpdater();
+	~RankScoreUpdater();
+
+	void Initialize();
+	void Update(float& rankWidth,
+		float& rankHeight,
+		float& drawRankRate,
+		std::string& rankHandleKey);
+
+	void OnCoinPicked(int amount)override;
+
+private:
+	void RankUp(float& drawRankRate,
+		std::string& rankHandleKey);
+	void RankDown(float& drawRankRate,
+		std::string& rankHandleKey);
+
+
+private:
+	int rankUpCount;
+
+	static constexpr float kChangeAfterAddValue = 0.95f;
+	static constexpr int kMaxDrawRankRate = 1;
+	static constexpr int kMinDrawRankRate = 0;
 };
 

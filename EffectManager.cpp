@@ -193,3 +193,16 @@ void EffectManager::SetRotation(const VECTOR& setPosition,
 		}
 	}
 }
+
+bool EffectManager::GetIsPlayEffect(const std::string& tag)
+{
+	for (auto& effect : effectDatas)
+	{
+		if (effect->tag == tag)
+		{
+			return IsEffekseer3DEffectPlaying(effect->playingEffectHandle);
+		}
+	}
+
+	return false;
+}

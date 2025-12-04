@@ -26,6 +26,8 @@ public:
 	void PlayEffect(const std::string& tag);
 	void StopEffect(const std::string& tag);
 
+	bool GetIsPlayEffect(const std::string& tag);
+
 private:
 	std::vector<std::shared_ptr<EffectData>> effectDatas;
 };

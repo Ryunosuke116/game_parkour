@@ -454,10 +454,11 @@ void Player::ReceiveCollisionResult()
 
 void Player::EffectUpdate()
 {
+    //エフェクトマネージャーのポインタを参照
+    std::shared_ptr<EffectManager> effectManager = GameInstanceSubSystem::GetInstance().GetSubSystem<EffectManager>().lock();
+    
     if (playerData.isRun)
     {
-        //エフェクトマネージャーのポインタを参照
-        std::shared_ptr<EffectManager> effectManager = GameInstanceSubSystem::GetInstance().GetSubSystem<EffectManager>().lock();
         const float kMaxEffectTimer = 10.0f;
         const float kAddEffectPositionY = 2.0f;
         const VECTOR kEffectScale = VGet(4.0f, 4.0f, 4.0f);
@@ -472,9 +473,15 @@ void Player::EffectUpdate()
             effectManager->PlayEffect("footSmoke");
             effectManager->SetScale(kEffectScale, "footSmoke");
             effectManager->SetPosition(effectPosition, "footSmoke");
+
             effectTimer = 0.0f;
         }
     }
+    if (effectManager->GetIsPlayEffect("playerbuff"))
+    {
+        effectManager->PlayEffect("playerbuff");
+    }
+    effectManager->SetPosition(position, "playerbuff");
 }
 
 void Player::DebugUpdate()

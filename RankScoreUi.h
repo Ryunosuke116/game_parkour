@@ -2,11 +2,10 @@
 #include "BaseUI.h"
 #include <nlohmann/json.hpp>
 
-class CoinObserver;
+class RankScoreUpdater;
 
 class RankScoreUi : 
 	public BaseUI,
-	public CoinObserver,
 	public std::enable_shared_from_this<RankScoreUi>
 {
 public:
@@ -23,17 +22,12 @@ public:
 	void ResultInitialize()override {}
 	void ResultUpdate()override {}
 
-	void OnCoinPicked(int amount)override;
-
 	std::string GetRankHandleKey()const { return rankHandleKey; }
-	
-private:
-	void RankUpdate();
-	void RankUp();
-	void RankDown();
+	std::shared_ptr<RankScoreUpdater> GetRankScoreUpdater() const { return rankScoreUpdater; }
 
 private:
 	std::unordered_map<std::string, int> umRankHandles;
+	std::shared_ptr<RankScoreUpdater> rankScoreUpdater;
 
 	std::string rankHandleKey;
 
@@ -45,8 +39,6 @@ private:
 	float rankHeight;
 	float drawRankRate;
 
-	static constexpr int kMaxDrawRankRate = 1;
-	static constexpr int kMinDrawRankRate = 0;
-	static constexpr float kChangeAfterAddValue = 0.95f;
+	static constexpr float kResetRankRate = 0.05f;
 };
 
