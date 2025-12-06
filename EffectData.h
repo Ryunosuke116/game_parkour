@@ -1,12 +1,11 @@
 #pragma once
 #include "Common.h"
-#include <string>
 
 struct EffectData
 {
-    VECTOR position;
-    int time;
-    int playingEffectHandle;
-    int resourceHandle;
-    std::string tag;
+    VECTOR position = VGet(0.0f, 0.0f, 0.0f);
+    int time = 0;
+    int playingEffectHandle = 0;
+    int resourceHandle = 0;
+    std::string tag = "";
 };

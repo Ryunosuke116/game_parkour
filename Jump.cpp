@@ -5,7 +5,7 @@
 #include "PadInput.h"
 #include "PlayerData.h"
 #include "Jump.h"
-#include "AnimTime.h"
+#include "AnimNum.h"
 #include "Player.h"
 
 /// <summary>

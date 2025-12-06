@@ -1,9 +1,9 @@
 #pragma once
 #include "BaseGameObjectManager.h"
-#include "IWorldSubSystem.h"
+#include "IGameInstanceSubSystem.h"
 
 class SoundPlayer : 
-	public IWorldSubSystem
+	public IGameInstanceSubSystem
 {
 public:
 	SoundPlayer();

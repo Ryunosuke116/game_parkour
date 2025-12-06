@@ -228,6 +228,7 @@
     <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="CollisionObjectManager.h" />
     <ClInclude Include="DebugDrawer.h" />
+    <ClInclude Include="EffectColor.h" />
     <ClInclude Include="EffectData.h" />
     <ClInclude Include="EffectManager.h" />
     <ClInclude Include="FallingIdle.h" />
@@ -243,7 +244,7 @@
     <ClInclude Include="HitCheck.h" />
     <ClInclude Include="Idle.h" />
     <ClInclude Include="Input.h" />
-    <ClInclude Include="IWorldSubSystem.h" />
+    <ClInclude Include="IGameInstanceSubSystem.h" />
     <ClInclude Include="JsonManager.h" />
     <ClInclude Include="Jump.h" />
     <ClInclude Include="Layout.h" />
@@ -268,7 +269,7 @@
     <ClInclude Include="Run.h" />
     <ClInclude Include="RunToStop.h" />
     <ClInclude Include="SceneManager.h" />
-    <ClInclude Include="AnimTime.h" />
+    <ClInclude Include="AnimNum.h" />
     <ClInclude Include="Common.h" />
     <ClInclude Include="Shadow.h" />
     <ClInclude Include="SoundPlayer.h" />

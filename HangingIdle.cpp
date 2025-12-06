@@ -5,8 +5,9 @@
 #include "PlayerData.h"
 #include "PlayerStateBase.h"
 #include "HangingIdle.h"
-#include "AnimTime.h"
+#include "AnimNum.h"
 #include "Player.h"
+#include "PlayerCalculation.h"
 
 /// <summary>
 /// コンストラクタ

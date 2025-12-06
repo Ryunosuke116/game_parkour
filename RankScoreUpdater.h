@@ -16,6 +16,7 @@ public:
 		std::string& rankHandleKey);
 
 	void OnCoinPicked(int amount)override;
+	bool GetIsChangeRank()const { return isChangeRank; }
 
 private:
 	void RankUp(float& drawRankRate,
@@ -23,9 +24,9 @@ private:
 	void RankDown(float& drawRankRate,
 		std::string& rankHandleKey);
 
-
 private:
-	int rankUpCount;
+	int rankUpCount;		//スコアランクが上がる回数
+	bool isChangeRank;		//ランクが変動したか
 
 	static constexpr float kChangeAfterAddValue = 0.95f;
 	static constexpr int kMaxDrawRankRate = 1;

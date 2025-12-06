@@ -1,11 +1,9 @@
 #include "Common.h"
 #include <fstream>
-#include"PlayerState.h"
-#include "AnimTime.h"
+#include "AnimNum.h"
 #include "PadInput.h"
 #include "EffectManager.h"
 #include "Player.h"
-#include "HitCheck.h"
 #include "Calculation.h"
 #include "DebugDrawer.h"
 #include "Camera.h"
@@ -13,6 +11,8 @@
 #include "WorldSubSystem.h"
 #include "CollisionObjectManager.h"
 #include "GameInstanceSubSystem.h"
+#include "PlayerCalculation.h"
+#include "RankScoreUi.h"
 
 /// <summary>
 /// コンストラクタ
@@ -22,8 +22,12 @@ Player::Player() :
     nowMoveDirection(VGet(0.0f, 0.0f, 0.0f)),
     normalVelocity(VGet(0.0f,0.0f,0.0f)),
     faceDirection(VGet(0.0f,0.0f,0.0f)),
+    effectTimer(-1.0f),
     isCalcMoveVec(false),
-    playerData({false})
+    isPush(false),
+    mAABB({VGet(0.0f,0.0f,0.0f)}),
+    playerData({false}),
+    wpEffectManager()
 {
 
 }
@@ -55,6 +59,8 @@ void Player::Create()
     animationChanger = std::make_shared<AnimationChanger>();
     animationChanger->Create(modelHandle);
     MV1SetScale(modelHandle, VGet(kModelScale, kModelScale, kModelScale));
+    //エフェクトマネージャーのポインタを参照
+    wpEffectManager = GameInstanceSubSystem::GetInstance().GetSubSystem<EffectManager>();
 }
 
 /// <summary>
@@ -454,34 +460,34 @@ void Player::ReceiveCollisionResult()
 
 void Player::EffectUpdate()
 {
-    //エフェクトマネージャーのポインタを参照
-    std::shared_ptr<EffectManager> effectManager = GameInstanceSubSystem::GetInstance().GetSubSystem<EffectManager>().lock();
+    const float kMaxEffectTimer = 10.0f;
+    const float kAddEffectPositionY = 2.0f;
+    const VECTOR kEffectScale = VGet(4.0f, 4.0f, 4.0f);
+    VECTOR effectPosition = position;
+    effectPosition.y += kAddEffectPositionY;
     
     if (playerData.isRun)
     {
-        const float kMaxEffectTimer = 10.0f;
-        const float kAddEffectPositionY = 2.0f;
-        const VECTOR kEffectScale = VGet(4.0f, 4.0f, 4.0f);
-
         effectTimer++;
 
         if (effectTimer >= kMaxEffectTimer)
         {
-            VECTOR effectPosition = position;
-
-            effectPosition.y += kAddEffectPositionY;
-            effectManager->PlayEffect("footSmoke");
-            effectManager->SetScale(kEffectScale, "footSmoke");
-            effectManager->SetPosition(effectPosition, "footSmoke");
+            wpEffectManager.lock()->PlayEffect("footSmoke");
+            wpEffectManager.lock()->SetScale(kEffectScale, "footSmoke");
+            wpEffectManager.lock()->SetPosition(effectPosition, "footSmoke");
 
             effectTimer = 0.0f;
         }
     }
-    if (effectManager->GetIsPlayEffect("playerbuff"))
+
+    effectPosition.y += kAddEffectPositionY;
+
+    if (wpEffectManager.lock()->GetIsPlayEffect("playerbuff"))
     {
-        effectManager->PlayEffect("playerbuff");
+        wpEffectManager.lock()->PlayEffect("playerbuff");
     }
-    effectManager->SetPosition(position, "playerbuff");
+    wpEffectManager.lock()->SetPosition(effectPosition, "playerbuff");
+
 }
 
 void Player::DebugUpdate()
@@ -563,5 +569,46 @@ void Player::CounterplanBug()
         playerData.isRunWall = false;
         playerData.isUseWallJump = true;
         playerData.isWallClimb = false;
+    }
+}
+
+void Player::OnIsChangeRank()
+{
+    const auto& rankScoreUi = WorldSubSystem::GetInstance().GetSubSystem<RankScoreUi>();
+
+    if (rankScoreUi->GetIsChangeRank())
+    {
+        if (rankScoreUi->GetRankHandleKey() == "SSS")
+        {
+            wpEffectManager.lock()->SetEffectColor("playerbuff", scoreSSSColor);
+        }
+        else if (rankScoreUi->GetRankHandleKey() == "SS")
+        {
+            wpEffectManager.lock()->SetEffectColor("playerbuff", scoreSSColor);
+        }
+        else if (rankScoreUi->GetRankHandleKey() == "S")
+        {
+            wpEffectManager.lock()->SetEffectColor("playerbuff", scoreSColor);
+        }
+        else if (rankScoreUi->GetRankHandleKey() == "A")
+        {
+            wpEffectManager.lock()->SetEffectColor("playerbuff", scoreAColor);
+        }
+        else if (rankScoreUi->GetRankHandleKey() == "B")
+        {
+            wpEffectManager.lock()->SetEffectColor("playerbuff", scoreBColor);
+        }
+        else if (rankScoreUi->GetRankHandleKey() == "C")
+        {
+            wpEffectManager.lock()->SetEffectColor("playerbuff", scoreCColor);
+        }
+        else if (rankScoreUi->GetRankHandleKey() == "D")
+        {
+            wpEffectManager.lock()->SetEffectColor("playerbuff", scoreDColor);
+        }
+        else if (rankScoreUi->GetRankHandleKey() == "")
+        {
+            wpEffectManager.lock()->StopEffect("playerbuff");
+        }
     }
 }

@@ -5,6 +5,7 @@
 #include "EffectManager.h"
 #include "JsonManager.h"
 #include "GameInstanceSubSystem.h"
+#include "EffectColor.h"
 
 /// <summary>
 /// コンストラクタ
@@ -190,6 +191,17 @@ void EffectManager::SetRotation(const VECTOR& setPosition,
 		if (effect->tag == tag)
 		{
 			SetRotationPlayingEffekseer3DEffect(effect->playingEffectHandle, setPosition.x, setPosition.y, setPosition.z);
+		}
+	}
+}
+
+void EffectManager::SetEffectColor(const std::string& tag, const EffectColor& effectColor)
+{
+	for (auto& effect : effectDatas)
+	{
+		if (effect->tag == tag)
+		{
+			SetColorPlayingEffekseer3DEffect(effect->playingEffectHandle, effectColor.red, effectColor.green, effectColor.blue, effectColor.alpha);
 		}
 	}
 }

@@ -470,7 +470,7 @@
     <ClInclude Include="FieldMesh.h">
       <Filter>ソース ファイル\object\game\collisionObject\mesh</Filter>
     </ClInclude>
-    <ClInclude Include="AnimTime.h">
+    <ClInclude Include="AnimNum.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Calculation.h">
@@ -620,7 +620,7 @@
     <ClInclude Include="SoundPlayer.h">
       <Filter>ソース ファイル\manager\sound</Filter>
     </ClInclude>
-    <ClInclude Include="IWorldSubSystem.h">
+    <ClInclude Include="IGameInstanceSubSystem.h">
       <Filter>ソース ファイル\Interface</Filter>
     </ClInclude>
     <ClInclude Include="GameInstanceSubSystem.h">
@@ -661,6 +661,9 @@
     </ClInclude>
     <ClInclude Include="RankScoreUpdater.h">
       <Filter>ソース ファイル\object\game\ui\rankScore\rankScoreUpdater</Filter>
+    </ClInclude>
+    <ClInclude Include="EffectColor.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

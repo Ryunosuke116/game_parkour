@@ -3,7 +3,8 @@
 #include "RankScoreUi.h"
 
 RankScoreUpdater::RankScoreUpdater():
-	rankUpCount(-1)
+	rankUpCount(-1),
+	isChangeRank(false)
 {
 	//処理なし
 }
@@ -16,6 +17,7 @@ RankScoreUpdater::~RankScoreUpdater()
 void RankScoreUpdater::Initialize()
 {
 	rankUpCount = 0;
+	isChangeRank = false;
 }
 
 void RankScoreUpdater::Update(
@@ -29,6 +31,7 @@ void RankScoreUpdater::Update(
 	const float kMinSize = 150.0f;
 	const float kAddSize = 30.0f;
 	const float kSubSize = 1.0f;
+	isChangeRank = false;
 
 	//カウント分ランクアップする
 	if (rankUpCount >= 1)
@@ -40,25 +43,20 @@ void RankScoreUpdater::Update(
 	}
 	//ランクの値が段々減っていく
 	//ランク描画のサイズも段々元に戻っていく
-	else
+	//ランクがついていない場合は、rate更新を行わない
+	else if(rankHandleKey != "")
 	{
 		rankWidth -= kSubSize;
 		rankHeight -= kSubSize;
 
-		//ランクがついていない場合は、rate更新を行わない
-		if (rankHandleKey != "")
+		if (rankWidth <= kMinSize)
 		{
-			drawRankRate += kSubRankCount;
+			rankWidth = kMinSize;
+		}
 
-			if (rankWidth <= kMinSize)
-			{
-				rankWidth = kMinSize;
-			}
-
-			if (rankHeight <= kMinSize)
-			{
-				rankHeight = kMinSize;
-			}
+		if (rankHeight <= kMinSize)
+		{
+			rankHeight = kMinSize;
 		}
 	}
 
@@ -66,13 +64,16 @@ void RankScoreUpdater::Update(
 		rankHandleKey != "")
 	{
 		RankDown(drawRankRate, rankHandleKey);
+		isChangeRank = true;
 	}
 	else if (drawRankRate <= kMinDrawRankRate &&
 		rankHandleKey != "SSS")
 	{
 		RankUp(drawRankRate, rankHandleKey);
+		isChangeRank = true;
 	}
 
+	//レートが上下限を超えた場合、制限する
 	if (drawRankRate >= kMaxDrawRankRate)
 	{
 		drawRankRate = kMaxDrawRankRate;

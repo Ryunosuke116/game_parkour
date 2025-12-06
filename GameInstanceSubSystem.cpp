@@ -2,7 +2,7 @@
 #include <unordered_map>
 #include <memory>
 #include <typeindex>
-#include "IWorldSubSystem.h"
+#include "IGameInstanceSubSystem.h"
 #include "GameInstanceSubSystem.h"
 #include "assert.h"
 #include "SoundPlayer.h"

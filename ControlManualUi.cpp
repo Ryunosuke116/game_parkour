@@ -2,7 +2,7 @@
 #include <vector>
 #include <unordered_map>
 #include "ControlManualUi.h"
-#include "AnimTime.h"
+#include "AnimNum.h"
 #include "JsonManager.h"
 #include "Calculation.h"
 

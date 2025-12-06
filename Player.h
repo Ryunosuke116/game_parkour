@@ -1,14 +1,14 @@
 #pragma once
-#include "PlayerStateBase.h"
-#include "PlayerCalculation.h"
 #include "BaseChara.h"
-#include "CollisionManager.h"
-#include "Calculation.h"
-#include "AnimationChanger.h"
-#include  "nlohmann/json.hpp"
+#include "nlohmann/json.hpp"
 #include "CoinObserver.h"
+#include "PlayerData.h"
+#include "AnimationChanger.h"
+#include "PlayerStateBase.h"
+#include "EffectColor.h"
 
 class EffectManager;
+class PlayerCalculation;
 
 class Player : 
 	public BaseChara,
@@ -64,6 +64,7 @@ public:
 private:
 	void CounterplanBug();
 	void EffectUpdate();
+	void OnIsChangeRank();
 
 private:
 	static constexpr float kModelScale = 0.06f;
@@ -72,6 +73,13 @@ private:
 	static constexpr float kRunWallRotateX = 30.0f;
 	static constexpr float radius = 3.5f;
 	static constexpr float height = 10.0f;
+	static constexpr EffectColor scoreAColor = { 255,100,100,255 };
+	static constexpr EffectColor scoreBColor = { 255,100,100,255 };
+	static constexpr EffectColor scoreCColor = { 255,100,100,255 };
+	static constexpr EffectColor scoreDColor = { 255,100,100,255 };
+	static constexpr EffectColor scoreSColor = { 255,100,100,255 };
+	static constexpr EffectColor scoreSSColor = { 255,100,100,255 };
+	static constexpr EffectColor scoreSSSColor = { 255,100,100,255 };
 
 	VECTOR normalVelocity;			//í èÌéûÇÃà⁄ìÆó 
 	VECTOR nowMoveDirection;		//åªç›å¸Ç¢ÇƒÇ¢ÇÈï˚å¸
@@ -87,5 +95,6 @@ private:
 	std::shared_ptr<PlayerStateBase>		nowState = NULL;
 	std::shared_ptr<AnimationChanger>		animationChanger = NULL;
 	AABB mAABB;
+	std::weak_ptr<EffectManager> wpEffectManager;
 };
 

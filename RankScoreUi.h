@@ -22,6 +22,7 @@ public:
 	void ResultInitialize()override {}
 	void ResultUpdate()override {}
 
+	bool GetIsChangeRank()const;
 	std::string GetRankHandleKey()const { return rankHandleKey; }
 	std::shared_ptr<RankScoreUpdater> GetRankScoreUpdater() const { return rankScoreUpdater; }
 

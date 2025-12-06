@@ -148,3 +148,8 @@ void RankScoreUi::Draw()
 		SetDrawArea(0, 0, 10000, 10000);
 	}
 }
+
+bool RankScoreUi::GetIsChangeRank()const
+{
+	return rankScoreUpdater->GetIsChangeRank();
+}

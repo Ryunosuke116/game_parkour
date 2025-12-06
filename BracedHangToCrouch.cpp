@@ -4,9 +4,10 @@
 #include "PadInput.h"
 #include "PlayerStateBase.h"
 #include "BracedHangToCrouch.h"
-#include "AnimTime.h"
+#include "AnimNum.h"
 #include "Player.h"
 #include "HitCheck.h"
+#include "PlayerCalculation.h"
 
 /// <summary>
 /// コンストラクタ

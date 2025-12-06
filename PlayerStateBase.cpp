@@ -11,6 +11,7 @@
 #include "CollisionObjectManager.h"
 #include "EffectManager.h"
 #include "HitCheck.h"
+#include "PlayerCalculation.h"
 
 /// <summary>
 /// コンストラクタ

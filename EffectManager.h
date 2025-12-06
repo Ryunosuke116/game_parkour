@@ -1,10 +1,12 @@
 #pragma once
 #include "BaseGameObjectManager.h"
 #include "EffectData.h"
-#include "IWorldSubSystem.h"
+#include "IGameInstanceSubSystem.h"
+
+struct EffectColor;
 
 class EffectManager :
-	public IWorldSubSystem
+	public IGameInstanceSubSystem
 {
 public:
 	EffectManager();
@@ -25,6 +27,7 @@ public:
 	void SetSpeed(const float& speed, const std::string& tag);
 	void PlayEffect(const std::string& tag);
 	void StopEffect(const std::string& tag);
+	void SetEffectColor(const std::string& tag, const EffectColor& effectColor);
 
 	bool GetIsPlayEffect(const std::string& tag);
 
