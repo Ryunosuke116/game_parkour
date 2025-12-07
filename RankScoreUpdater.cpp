@@ -46,6 +46,7 @@ void RankScoreUpdater::Update(
 	//ランクがついていない場合は、rate更新を行わない
 	else if(rankHandleKey != "")
 	{
+		drawRankRate += kSubRankCount;
 		rankWidth -= kSubSize;
 		rankHeight -= kSubSize;
 

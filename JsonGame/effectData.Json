@@ -2,7 +2,7 @@
   "list": [
     [ "material/effect/foot_Smoke.efkefc", "footSmoke", 5.0 ],
     [ "material/effect/jump.efkefc", "jump", 5.0 ],
-    [ "material/effect/playerbuff.efkefc", "playerbuff", 5.0 ]
+    [ "material/effect/playerbuff_B.efkefc", "playerbuff", 5.0 ]
 
   ]
 }

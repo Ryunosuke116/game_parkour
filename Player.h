@@ -64,7 +64,7 @@ public:
 private:
 	void CounterplanBug();
 	void EffectUpdate();
-	void OnIsChangeRank();
+	void ChangeColorByScoreRank();
 
 private:
 	static constexpr float kModelScale = 0.06f;
@@ -73,10 +73,10 @@ private:
 	static constexpr float kRunWallRotateX = 30.0f;
 	static constexpr float radius = 3.5f;
 	static constexpr float height = 10.0f;
+	static constexpr EffectColor scoreDColor = { 0,255,0,255 };
+	static constexpr EffectColor scoreCColor = { 255,255,50,255 };
+	static constexpr EffectColor scoreBColor = { 0,0,255,255 };
 	static constexpr EffectColor scoreAColor = { 255,100,100,255 };
-	static constexpr EffectColor scoreBColor = { 255,100,100,255 };
-	static constexpr EffectColor scoreCColor = { 255,100,100,255 };
-	static constexpr EffectColor scoreDColor = { 255,100,100,255 };
 	static constexpr EffectColor scoreSColor = { 255,100,100,255 };
 	static constexpr EffectColor scoreSSColor = { 255,100,100,255 };
 	static constexpr EffectColor scoreSSSColor = { 255,100,100,255 };
