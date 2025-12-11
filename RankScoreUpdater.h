@@ -28,7 +28,7 @@ private:
 	int rankUpCount;		//スコアランクが上がる回数
 	bool isChangeRank;		//ランクが変動したか
 
-	static constexpr float kChangeAfterAddValue = 0.95f;
+	static constexpr float kChangeAfterAddValue = 0.95f;	
 	static constexpr int kMaxDrawRankRate = 1;
 	static constexpr int kMinDrawRankRate = 0;
 };

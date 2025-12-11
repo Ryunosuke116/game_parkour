@@ -238,14 +238,14 @@
     <Filter Include="ソース ファイル\object\game\layout">
       <UniqueIdentifier>{d5d9db3e-28bd-4cfe-902b-76f058d3efb3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\object\game\player\playerCalclation">
-      <UniqueIdentifier>{f9dc51d6-1cdb-4363-bbf5-2cf3ddbf8b9d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\object\game\ui\rankScore">
       <UniqueIdentifier>{dfcdede7-36b0-471f-b174-1ad4f3e1e04f}</UniqueIdentifier>
     </Filter>
     <Filter Include="ソース ファイル\object\game\ui\rankScore\rankScoreUpdater">
       <UniqueIdentifier>{3ace8681-d2de-4a25-9812-b473760ea1df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\object\game\player\playerCalclation">
+      <UniqueIdentifier>{f9dc51d6-1cdb-4363-bbf5-2cf3ddbf8b9d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

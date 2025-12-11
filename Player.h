@@ -73,11 +73,11 @@ private:
 	static constexpr float kRunWallRotateX = 30.0f;
 	static constexpr float radius = 3.5f;
 	static constexpr float height = 10.0f;
-	static constexpr EffectColor scoreDColor = { 0,255,0,255 };
-	static constexpr EffectColor scoreCColor = { 255,255,50,255 };
-	static constexpr EffectColor scoreBColor = { 0,0,255,255 };
-	static constexpr EffectColor scoreAColor = { 255,100,100,255 };
-	static constexpr EffectColor scoreSColor = { 255,100,100,255 };
+	static constexpr EffectColor scoreDColor = { 0,255,0,255 };			//緑色
+	static constexpr EffectColor scoreCColor = { 255,255,0,255 };		//黄色
+	static constexpr EffectColor scoreBColor = { 0,0,255,255 };			//青色
+	static constexpr EffectColor scoreAColor = { 255,100,100,255 };		//赤色
+	static constexpr EffectColor scoreSColor = { 255,100,100,255 };		//虹色
 	static constexpr EffectColor scoreSSColor = { 255,100,100,255 };
 	static constexpr EffectColor scoreSSSColor = { 255,100,100,255 };
 
@@ -91,10 +91,10 @@ private:
 	bool isCalcMoveVec;
 
 	//他クラス
-	PlayerData playerData;
-	std::shared_ptr<PlayerStateBase>		nowState = NULL;
+	PlayerData								playerData;
+	AABB									mAABB;
+	std::shared_ptr<PlayerStateBase>		nowState		 = NULL;
 	std::shared_ptr<AnimationChanger>		animationChanger = NULL;
-	AABB mAABB;
-	std::weak_ptr<EffectManager> wpEffectManager;
+	std::weak_ptr<EffectManager>			wpEffectManager;
 };
 

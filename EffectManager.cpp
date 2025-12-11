@@ -30,6 +30,7 @@ void EffectManager::Shutdown()
 {
 	for (auto& effectData : effectDatas)
 	{
+		StopEffekseer3DEffect(effectData->playingEffectHandle);
 		DeleteEffekseerEffect(effectData->resourceHandle);
 	}
 	effectDatas.clear();

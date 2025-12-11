@@ -482,11 +482,6 @@ void Player::EffectUpdate()
 
     effectPosition.y += kAddEffectPositionY;
 
-    if (wpEffectManager.lock()->GetIsPlayEffect("playerbuff"))
-    {
-        wpEffectManager.lock()->PlayEffect("playerbuff");
-    }
-
     //スコアランクに応じてエフェクトの色を変える
     ChangeColorByScoreRank();
     wpEffectManager.lock()->SetPosition(effectPosition, "playerbuff");
@@ -574,21 +569,23 @@ void Player::CounterplanBug()
     }
 }
 
+/// <summary>
+/// スコアランクに応じてエフェクトの色を変更する
+/// </summary>
 void Player::ChangeColorByScoreRank()
 {
     const auto& rankScoreUi = WorldSubSystem::GetInstance().GetSubSystem<RankScoreUi>();
+
+    //エフェクトを再生する
+    if (wpEffectManager.lock()->GetIsPlayEffect("playerbuff") &&
+        rankScoreUi->GetRankHandleKey() != "")
+    {
+        wpEffectManager.lock()->PlayEffect("playerbuff");
+    }
     
     if (rankScoreUi->GetIsChangeRank())
     {
-        if (rankScoreUi->GetRankHandleKey() == "SSS")
-        {
-            //wpEffectManager.lock()->SetEffectColor("playerbuff", scoreSSSColor);
-        }
-        else if (rankScoreUi->GetRankHandleKey() == "SS")
-        {
-           // wpEffectManager.lock()->SetEffectColor("playerbuff", scoreSSColor);
-        }
-        else if (rankScoreUi->GetRankHandleKey() == "S")
+        if (rankScoreUi->GetRankHandleKey() == "S")
         {
             wpEffectManager.lock()->StopEffect("playerbuff");
         }

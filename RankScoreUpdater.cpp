@@ -26,14 +26,14 @@ void RankScoreUpdater::Update(
 	float& drawRankRate,
 	std::string& rankHandleKey)
 {
-	const float kAddRankCount = 0.2f;
+	const float kAddRankCount = 0.15f;		//ゲージの上昇値
 	const float kSubRankCount = 0.001f;
 	const float kMinSize = 150.0f;
 	const float kAddSize = 30.0f;
 	const float kSubSize = 1.0f;
 	isChangeRank = false;
 
-	//カウント分ランクアップする
+	//カウント分ゲージが上昇する
 	if (rankUpCount >= 1)
 	{
 		drawRankRate -= kAddRankCount * float(rankUpCount);
@@ -41,6 +41,7 @@ void RankScoreUpdater::Update(
 		rankWidth += kAddSize;
 		rankHeight += kAddSize;
 	}
+
 	//ランクの値が段々減っていく
 	//ランク描画のサイズも段々元に戻っていく
 	//ランクがついていない場合は、rate更新を行わない
