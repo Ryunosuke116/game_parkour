@@ -590,7 +590,7 @@ void Player::ChangeColorByScoreRank()
         }
         else if (rankScoreUi->GetRankHandleKey() == "S")
         {
-           // wpEffectManager.lock()->SetEffectColor("playerbuff", scoreSColor);
+            wpEffectManager.lock()->StopEffect("playerbuff");
         }
         else if (rankScoreUi->GetRankHandleKey() == "A")
         {
