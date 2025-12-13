@@ -8,12 +8,25 @@
 /// <summary>
 /// コンストラクタ
 /// </summary>
-GameTimer::GameTimer():
+GameTimer::GameTimer() :
 	BaseUI(),
 	colonHandle(-1),
 	colonPosX(-1),
+	redBright(-1),
+	greenBright(-1),
+	blueBright(-1),
+	addBright(-1),
+	time(-1),
+	setTime(-1),
+	secTime(-1),
+	minTime(-1),
+	numPosX(-1.0f),
+	numPosY(-1.0f),
+	numWidth(-1.0f),
+	numHeight(-1.0f),
 	isUpdateMin(false),
-	countNumberSec("")
+	countNumberSec(""),
+	countNumberMin("")
 {
 	jsonTag = "coin";
 }
@@ -55,26 +68,32 @@ void GameTimer::Create()
 /// </summary>
 void GameTimer::Initialize()
 {
-	const float initNumPosX = 640.0;
-	const float initNumPosY = -290.0f;
-	const float initColonPosX = 765.0f;
-	const float initNumWidth = 100.0f;
-	const float initHeight = 100.0f;
-	const int	kInitTime = 0;
-	const int	kInitSec = 0;
-	const int	kInitMin = 3;
+	const float initNumPosX		= 640.0;
+	const float initNumPosY		= -290.0f;
+	const float initColonPosX	= 765.0f;
+	const float initNumWidth	= 100.0f;
+	const float initHeight		= 100.0f;
+	const int	kInitTime		= 0;
+	const int	kInitSec		= 0;
+	const int	kInitMin		= 3;
+	const int	kInitAddBright	= -3;
 
-	time = kInitTime;
-	setTime = GetNowCount();
-	sec = kInitSec;
-	min = kInitMin;
-	numPosX = initNumPosX;
-	numPosY = initNumPosY;
-	colonPosX = initColonPosX;
-	numWidth = initNumWidth;
-	numHeight = initHeight;
-	isUpdateMin = false;
-	countNumberSec = "";
+	time			= kInitTime;
+	setTime			= GetNowCount();
+	secTime			= kInitSec;
+	minTime			= kInitMin;
+	numPosX			= initNumPosX;
+	numPosY			= initNumPosY;
+	colonPosX		= initColonPosX;
+	numWidth		= initNumWidth;
+	numHeight		= initHeight;
+	isUpdateMin		= false;
+	countNumberSec	= "";
+
+	redBright	= kMaxBright;
+	greenBright = kMaxBright;
+	blueBright	= kMaxBright;
+	addBright	= -3;
 }
 
 /// <summary>
@@ -82,10 +101,11 @@ void GameTimer::Initialize()
 /// </summary>
 void GameTimer::Update()
 {
-	const int kSubMin = 1;
-	const int kMaxSec = 60;
-	const float kTargetNumPosY = 30;
-	const float kLeapSpeed = 0.1f;
+	const int kReverseMul		= -1;
+	const int kSubMin			= 1;
+	const int kMaxSec			= 60;
+	const float kTargetNumPosY	= 30;
+	const float kLeapSpeed		= 0.1f;
 
 	time = GetNowCount() - setTime;
 
@@ -93,36 +113,51 @@ void GameTimer::Update()
 	int elapsedMin = elapsedSec / 60;
 	elapsedSec -= elapsedMin * 60;
 
-	sec = kMaxSec - elapsedSec;
+	secTime = kMaxSec - elapsedSec;
 
 	//60の時に分を減らす
 	if (!isUpdateMin &&
-		sec == kMaxSec - kSubMin)
+		secTime == kMaxSec - kSubMin)
 	{
-		min = min - kSubMin;
+		minTime = minTime - kSubMin;
 
 		isUpdateMin = true;
 	}
 
-	sec = TimeForciblyZero(kMaxSec);
+	secTime = TimeForciblyZero(kMaxSec);
 
 	isUpdateMin = IsUpdateMin();
 
-	countNumberSec = CreateCountNumber(sec);
-	countNumberMin = CreateCountNumber(min);
-
+	countNumberSec = CreateCountNumber(secTime);
+	countNumberMin = CreateCountNumber(minTime);
 
 	numPosY = Calculation::Leap(numPosY, kTargetNumPosY, kLeapSpeed);
 
+	#if defined(NDEBUG)
+
+	#else
 	//----------------------------------//
 	// デバッグ用
 	//----------------------------------//
+		if (CheckHitKey(KEY_INPUT_9))
+		{
+			secTime = 0;
+			minTime = 0;
+		}
+	#endif
+		//残り1分を切ったらタイマーUIを点滅させる
+		if (minTime <= 0)
+		{
+			greenBright += addBright;
+			blueBright	+= addBright;
 
-	if (CheckHitKey(KEY_INPUT_9))
-	{
-		sec = 0;
-		min = 0;
-	}
+			//上下限に達した場合、加算値を反転させる
+			if (greenBright <= kMinBright ||
+				greenBright >= kMaxBright)
+			{
+				addBright *= kReverseMul;
+			}
+		}
 }
 
 /// <summary>
@@ -135,10 +170,13 @@ void GameTimer::Draw()
 	const int addnumPosX = 70;
 	const int addSpaceX = 40;
 
+	SetDrawBright(redBright, greenBright, blueBright);
+
 	//コイン所持数の桁数分、大きい桁から順に描画
 	for (char c : countNumberMin)
 	{
 		int digit = c - '0';
+
 		DrawExtendGraphF(numX,
 			numPosY,
 			numX + numWidth,
@@ -154,11 +192,13 @@ void GameTimer::Draw()
 		colonPosX + numWidth,
 		numPosY + numHeight,
 		colonHandle, TRUE);
+
 	numX += addSpaceX;
 
 	for (char c : countNumberSec)
 	{
 		int digit = c - '0';
+
 		DrawExtendGraphF(numX,
 			numPosY,
 			numX + numWidth,
@@ -168,6 +208,8 @@ void GameTimer::Draw()
 		//文字の幅分ずらす
 		numX += addnumPosX;
 	}
+
+	SetDrawBright(kMaxBright, kMaxBright, kMaxBright);
 }
 
 
@@ -192,22 +234,22 @@ bool GameTimer::IsUpdateMin()
 {
 	const int count = 59;
 
-	return sec == count ? true : false;
+	return secTime == count ? true : false;
 }
 
 int GameTimer::TimeForciblyZero(const int maxSec)
 {
 	int resetTime = 0;
 
-	int resultTime = sec == maxSec ? resetTime : sec;
+	int resultTime = secTime == maxSec ? resetTime : secTime;
 
 	return resultTime;
 }
 
 bool GameTimer::IsFinish()
 {
-	if (sec == 0 &&
-		min == 0)
+	if (secTime == 0 &&
+		minTime == 0)
 	{
 		return true;
 	}

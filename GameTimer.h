@@ -29,20 +29,27 @@ public:
 private:
 	int time;
 	int setTime;
-	int sec;        //•b
-	int min;        //•ª
-	int msec;       //ƒ~ƒŠ•b
+	int secTime;				//•b	
+	int minTime;				//•ª
+	int numberHandle[10];
+	int colonHandle;	
+	int redBright;			//Ô‚Ì•`‰æ‹P“x
+	int greenBright;		//—Î‚Ì•`‰æ‹P“x
+	int blueBright;			//Â‚Ì•`‰æ‹P“x
+	int addBright;
+
 	float numPosX;
 	float numPosY;
 	float numWidth;
 	float numHeight;
-	int numberHandle[10];
-	int colonHandle;
 	float colonPosX;
 
 	bool isUpdateMin;	
 
 	std::string countNumberSec;
 	std::string countNumberMin;
+
+	static constexpr int kMaxBright = 255;
+	static constexpr int kMinBright = 0;
 };
 
