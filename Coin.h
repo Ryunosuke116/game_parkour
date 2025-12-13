@@ -1,5 +1,6 @@
 #pragma once
 #include "BaseObject.h"
+#include "DxLib.h"
 
 class EffectManager;
 
@@ -27,6 +28,7 @@ public:
 	bool IsHitPlayer(const VECTOR& topPlayerPos,
 		const VECTOR& bottomPlayerPos,
 		const float playerRadius);
+	void OnHitPlayer();
 
 	bool GetIsHitPlayer()const { return isHitPlayer; }
 	bool GetIsDelete()const { return isDelete; }
@@ -42,9 +44,10 @@ private:
 	int listNumber;
 	float radianY;
 	float velocityY;
+	float flyAwaySpeed;
 
-	VECTOR flyAwayDirection;
-	VECTOR flyAwayVelocity;			//‚Á”ò‚Ô‚Æ‚«‚ÌˆÚ“®—Ê
+	VECTOR flyAwayDirection;	//‚Á”ò‚Ô‚Æ‚«‚Ì•ûŒü
+	VECTOR flyAwayVelocity;		//‚Á”ò‚Ô‚Æ‚«‚ÌˆÚ“®—Ê
 	VECTOR boundsMin;			//AABB‚ÌÅ¬’l
 	VECTOR boundsMax;			//AABB‚ÌÅ‘å’l
 

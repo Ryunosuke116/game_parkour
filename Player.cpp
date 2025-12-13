@@ -485,6 +485,14 @@ void Player::EffectUpdate()
     //スコアランクに応じてエフェクトの色を変える
     ChangeColorByScoreRank();
     wpEffectManager.lock()->SetPosition(effectPosition, "playerbuff");
+
+    //エフェクトを再生する
+    if (wpEffectManager.lock()->GetIsPlayEffect("coinTouch"))
+    {
+        wpEffectManager.lock()->PlayEffect("coinTouch");
+    }
+
+    wpEffectManager.lock()->SetPosition(effectPosition, "coinTouch");
 }
 
 void Player::DebugUpdate()

@@ -6,6 +6,9 @@
 #include "DebugDrawer.h"
 #include "Calculation.h"
 #include "HitCheck.h"
+#include "WorldSubSystem.h"
+#include "PlayerManager.h"
+#include "Player.h"
 
 /// <summary>
 /// コンストラクタ
@@ -14,6 +17,7 @@ Coin::Coin():
 	BaseObject(),
 	radianY(0.0f),
 	velocityY(0.0f),
+	flyAwaySpeed(0.0f),
 	flyAwayVelocity(VGet(0.0f, 0.0f, 0.0f)),
 	flyAwayDirection(VGet(0.0f, 0.0f, 0.0f)),
 	boundsMin(VGet(0.0f, 0.0f, 0.0f)),
@@ -59,6 +63,7 @@ void Coin::Initialize()
 	MV1SetPosition(modelHandle, position);
 	velocityY = 0.0f;
 	radianY = 0.0f;
+	flyAwaySpeed = -2.0f;
 	isHitPlayer = false;
 	isDelete = false;
 	isSound = false;
@@ -168,8 +173,17 @@ void Coin::ResultUpdate()
 void Coin::HitPlayerAction()
 {
 	const float kMaxVelocityY = 8.0f;
+	const auto& spPlayerManager = WorldSubSystem::GetInstance().GetSubSystem<PlayerManager>();
+	
+	VECTOR toPlayer = VSub(spPlayerManager->GetPlayer()->GetPosition(), position);
+	toPlayer.y = 0.0f;
+	toPlayer = VNorm(toPlayer);
+	flyAwayVelocity = VScale(toPlayer, flyAwaySpeed);
+	flyAwaySpeed += 0.1f;
 
-	if (velocityY <= kMaxVelocityY)
+	position = VAdd(position, flyAwayVelocity);
+
+	/*if (velocityY <= kMaxVelocityY)
 	{
 		velocityY += kAddVelocity;
 		position.y += kAddVelocity;
@@ -177,7 +191,7 @@ void Coin::HitPlayerAction()
 	else
 	{
 		isDelete = true;
-	}
+	}*/
 
 	MV1SetPosition(modelHandle, position);
 }
@@ -241,3 +255,7 @@ bool Coin::IsHitPlayer(const VECTOR& topPlayerPos,
 	return false;
 }
 
+void Coin::OnHitPlayer()
+{
+
+}

@@ -2,7 +2,6 @@
 #include <vector>
 #include <fstream>
 #include <string>
-#include "EffectManager.h"
 #include "CoinManager.h"
 #include "nlohmann/json.hpp"
 #include "WorldSubSystem.h"
@@ -11,10 +10,11 @@
 #include "GameInstanceSubSystem.h"
 #include "SoundPlayer.h"
 #include "Liner8TreeManager.hpp"
-#include "BoundaryRange.h"
 #include "ObjectForTree.hpp"
 #include "Cell.hpp"
 #include "DebugDrawer.h"
+#include "Coin.h"
+#include "Player.h"
 
 /// <summary>
 /// コンストラクタ
@@ -93,8 +93,8 @@ void CoinManager::Initialize()
 /// </summary>
 void CoinManager::Update()
 {
-	auto L8TreeManager = WorldSubSystem::GetInstance().GetSubSystem<Liner8TreeManager<Coin>>();
-	auto spPlayerManager = WorldSubSystem::GetInstance().GetSubSystem<PlayerManager>();
+	const auto& L8TreeManager = WorldSubSystem::GetInstance().GetSubSystem<Liner8TreeManager<Coin>>();
+	const auto& spPlayerManager = WorldSubSystem::GetInstance().GetSubSystem<PlayerManager>();
 
 	//プレイヤーがどの空間にいるか調べる
 	uint32_t playerSpaceNumber = L8TreeManager->GetMortonNumber(

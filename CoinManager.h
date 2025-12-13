@@ -1,12 +1,14 @@
 #pragma once
-#include "Coin.h"
 #include "BaseGameObjectManager.h"
-#include "Player.h"
-#include "CoinObserver.h"
 #include "ObjectForTree.hpp"
 #include <unordered_map>
+#include <memory>
+#include <vector>
+#include "DxLib.h"
 
 class EffectManager;
+class Coin;
+class CoinObserver;
 
 class CoinManager :
 	public BaseGameObjectManager,
@@ -33,19 +35,19 @@ public:
 	int GetModelHandle()const { return modelHandle; }
 private:
 	std::vector<std::shared_ptr<Coin>> activeCoins;
-	std::unordered_map<int, std::shared_ptr<Coin>> umCoins;
 	std::vector<std::weak_ptr<Coin>> resultUpdateCoins;
 	std::vector<std::weak_ptr<CoinObserver>> observers;
+	std::unordered_map<int, std::shared_ptr<Coin>> umCoins;
 	
 	int modelHandle;
 	int nowCoinCount;
 	int addNumber;
+
 	float timer;
 
 	bool isAddResultUpdateCoin;				//更新するコインを追加するか
 	
 	static constexpr float maxAddResultUpdateCoinTimer = 30.0f;
 	static constexpr int coinValue = 1;		//コインの価値
-
 };
 
