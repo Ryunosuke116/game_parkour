@@ -19,21 +19,21 @@ public:
 	/////////////////////////////////////////////
 	// ゲッター
 	/////////////////////////////////////////////
-	int GetCoinCount()const { return coinCount; }
-	int GetModelHandle()const { return modelHandle; }
-	bool GetIsCollisionCheck()const { return isCollisionCheck; }
-	float GetRadian()const { return radian; }
-	float GetDegree()const { return Calculation::RadToDeg(radian); }
-	VECTOR GetPosition()const { return position; }
-	VECTOR GetVelocity()const { return velocity; }
-	PositionData GetPositionData() const { return positionData; }
-	CollisionResult GetCollisionResult()const { return resultCollision; }
-	CollisionHitPart GetCollisionHitPart()const { return collisionHitPart; }
-	virtual float GetRadius()const abstract;
+	int GetCoinCount()						const { return coinCount; }
+	int GetModelHandle()					const { return modelHandle; }
+	bool GetIsCollisionCheck()				const { return isCollisionCheck; }
+	float GetRadian()						const { return radian; }
+	float GetDegree()						const { return Calculation::RadToDeg(radian); }
+	VECTOR GetPosition()					const { return position; }
+	VECTOR GetVelocity()					const { return velocity; }
+	PositionData GetPositionData()			const { return positionData; }
+	CollisionResult GetCollisionResult()	const { return resultCollision; }
+	CollisionHitPart GetCollisionHitPart()	const { return collisionHitPart; }
+	virtual float GetRadius()				const abstract;
 
-	void SetResultCollision(const CollisionResult& newResult) { resultCollision = newResult; }
-	void SetRotateX(const float& set) { rotateX = set; }
-	void SetIsCollisionCheck(const bool& set) { isCollisionCheck = set; }
+	void SetResultCollision(const CollisionResult& newResult)	{ resultCollision = newResult; }
+	void SetRotateX(const float& set)							{ rotateX = set; }
+	void SetIsCollisionCheck(const bool& set)					{ isCollisionCheck = set; }
 
 protected:
 	int modelHandle;		//モデルハンドル

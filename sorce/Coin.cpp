@@ -15,6 +15,7 @@
 /// </summary>
 Coin::Coin():
 	BaseObject(),
+	listNumber(-1),
 	radianY(0.0f),
 	velocityY(0.0f),
 	flyAwaySpeed(0.0f),
@@ -23,7 +24,9 @@ Coin::Coin():
 	boundsMin(VGet(0.0f, 0.0f, 0.0f)),
 	boundsMax(VGet(0.0f, 0.0f, 0.0f)),
 	isHitPlayer(false),
-	isDelete(false)
+	isDelete(false),
+	isSound(false),
+	isIgnoreHitPlayer(false)
 {
 
 }
@@ -61,16 +64,16 @@ void Coin::Initialize()
 	const VECTOR addAABB = VGet(kRadius, kRadius, kRadius);	//AABBの領域範囲
 
 	MV1SetPosition(modelHandle, position);
-	velocityY = 0.0f;
-	radianY = 0.0f;
-	flyAwaySpeed = -2.0f;
-	isHitPlayer = false;
-	isDelete = false;
-	isSound = false;
-	boundsMin = VSub(position, addAABB);
-	boundsMax = VAdd(position, addAABB);
+	velocityY			= 0.0f;
+	radianY				= 0.0f;
+	flyAwaySpeed		= -2.0f;
+	isHitPlayer			= false;
+	isDelete			= false;
+	isSound				= false;
+	isIgnoreHitPlayer	= false;
+	boundsMin			= VSub(position, addAABB);
+	boundsMax			= VAdd(position, addAABB);
 }
-
 
 /// <summary>
 /// 更新
@@ -89,23 +92,12 @@ bool Coin::Update(
 
 	if (isHitPlayer)
 	{
-		HitPlayerAction();
+		HitPlayerAction(topPlayerPos,
+			bottomPlayerPos,
+			playerRadius);
 	}
 
 	return isDelete;
-}
-
-/// <summary>
-/// 更新
-/// </summary>
-void Coin::Update()
-{
-	Rotate();
-
-	if (isHitPlayer)
-	{
-		HitPlayerAction();
-	}
 }
 
 /// <summary>
@@ -133,13 +125,13 @@ void Coin::ResultCreate()
 /// </summary>
 void Coin::ResultInitialize()
 {
-	const VECTOR kInitFlyAwayDirection = VGet(0.0f, 0.0f, 1.0f);
-	const VECTOR kInitFlyAwayVelocity = VGet(0.0f, 0.0f, 0.0f);
+	const VECTOR kInitFlyAwayDirection	= VGet(0.0f, 0.0f, 1.0f);
+	const VECTOR kInitFlyAwayVelocity	= VGet(0.0f, 0.0f, 0.0f);
 
 	flyAwayDirection = kInitFlyAwayDirection;
-	flyAwayVelocity = kInitFlyAwayVelocity;
+	flyAwayVelocity  = kInitFlyAwayVelocity;
 
-	flyAwayVelocity = VAdd(flyAwayVelocity, flyAwayDirection);
+	flyAwayVelocity	   = VAdd(flyAwayVelocity, flyAwayDirection);
 	flyAwayVelocity.y += kFlyPower;
 }
 
@@ -148,8 +140,8 @@ void Coin::ResultInitialize()
 /// </summary>
 void Coin::ResultUpdate()
 {
-	const float kGravity = -0.2f;
-	const float kAddRadian = 20.0f;
+	const float kGravity	= -0.2f;
+	const float kAddRadian	= 20.0f;
 
 	position = VAdd(position, flyAwayVelocity);
 	flyAwayVelocity.y += kGravity;
@@ -170,28 +162,44 @@ void Coin::ResultUpdate()
 /// プレイヤーと接触した時
 /// </summary>
 /// <param name="playerPos"></param>
-void Coin::HitPlayerAction()
+void Coin::HitPlayerAction(const VECTOR& topPlayerPos,
+	const VECTOR& bottomPlayerPos,
+	const float playerRadius)
 {
-	const float kMaxVelocityY = 8.0f;
-	const auto& spPlayerManager = WorldSubSystem::GetInstance().GetSubSystem<PlayerManager>();
+	const float kAddFlyAwaySpeed = 0.1f;
+	const float kMaxVelocityY	 = 8.0f;
+	const auto& spPlayerManager  = WorldSubSystem::GetInstance().GetSubSystem<PlayerManager>();
 	
-	VECTOR toPlayer = VSub(spPlayerManager->GetPlayer()->GetPosition(), position);
-	toPlayer.y = 0.0f;
-	toPlayer = VNorm(toPlayer);
+	VECTOR toPlayer = VSub(spPlayerManager->GetPlayer()->GetPositionData().centerPosition, position);
+
+	if(!isIgnoreHitPlayer)
+	{
+		toPlayer.y = 0.0f;
+	}
+
+	toPlayer		= VNorm(toPlayer);
 	flyAwayVelocity = VScale(toPlayer, flyAwaySpeed);
-	flyAwaySpeed += 0.1f;
+	flyAwaySpeed	+= kAddFlyAwaySpeed;
 
 	position = VAdd(position, flyAwayVelocity);
 
-	/*if (velocityY <= kMaxVelocityY)
-	{
-		velocityY += kAddVelocity;
-		position.y += kAddVelocity;
-	}
-	else
+	//対象の座標から最も近いカプセルの軸座標を算出
+	VECTOR nearCapsulePos = Calculation::ProjectionDirection(topPlayerPos, bottomPlayerPos, position);
+
+	//プレイヤーと接触しているか
+	if (isIgnoreHitPlayer &&
+		HitCheck::HitConfirmation(position, nearCapsulePos, kRadius, playerRadius))
 	{
 		isDelete = true;
-	}*/
+	}
+
+	//playerと最初に接触したときに一定時間、playerとの当たり判定を無効化しているため
+	//少し経ったら再度当たれるようにする
+	if (flyAwaySpeed > 0.0f &&
+		!isIgnoreHitPlayer)
+	{
+		isIgnoreHitPlayer = true;
+	}
 
 	MV1SetPosition(modelHandle, position);
 }
@@ -201,8 +209,8 @@ void Coin::HitPlayerAction()
 /// </summary>
 void Coin::Rotate()
 {
-	const float kNormalAddRadianY = 1.0f;
-	const float kAddRadianY = 20.0f;
+	const float kNormalAddRadianY	= 1.0f;
+	const float kAddRadianY			= 20.0f;
 
 	if (!isHitPlayer)
 	{
@@ -253,9 +261,4 @@ bool Coin::IsHitPlayer(const VECTOR& topPlayerPos,
 	}
 
 	return false;
-}
-
-void Coin::OnHitPlayer()
-{
-
 }

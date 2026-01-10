@@ -53,7 +53,7 @@ void CoinManager::Create()
 			i,
 			modelHandle,
 			VGet(pos[0].get<float>(), pos[1].get<float>(), pos[2].get<float>()));
-		i++;
+			i++;
 	}
 
 	WorldSubSystem::GetInstance().AddSubSystem<CoinManager>(self);
@@ -158,7 +158,9 @@ void CoinManager::Update()
 	//全コインの更新処理
 	for (auto umCoin = umCoins.begin(); umCoin != umCoins.end();)
 	{
-		umCoin->second->Update();
+		umCoin->second->Update(spPlayerManager->GetPlayer()->GetTopPos(),
+			spPlayerManager->GetPlayer()->GetBottomPos(),
+			spPlayerManager->GetPlayer()->GetRadius());
 
 		//削除してよければリストから削除
 		if (umCoin->second->GetIsDelete())
@@ -259,9 +261,9 @@ void CoinManager::ResultInitialize()
 /// </summary>
 void CoinManager::ResultUpdate()
 {
-	const size_t maxCoinCount = umCoins.size();
-	const float kResetTimer = 0.0f;
-	auto soundPlayer = GameInstanceSubSystem::GetInstance().GetSubSystem<SoundPlayer>().lock();
+	const size_t maxCoinCount	= umCoins.size();
+	const float kResetTimer		= 0.0f;
+	auto		soundPlayer		= GameInstanceSubSystem::GetInstance().GetSubSystem<SoundPlayer>().lock();
 
 	timer++;
 	//タイマーが規定値を超えたら更新処理するコインを追加する

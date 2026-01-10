@@ -111,19 +111,19 @@ NearestResult Calculation::SphereMeshOutsideTriangleLine(
 	{
 		result.nearestPoint = nearPoint1;
 		result.startLinePos = subjectPoly.Position[0];
-		result.endLinePos = subjectPoly.Position[1];
+		result.endLinePos	= subjectPoly.Position[1];
 	}
 	else if (distanceSize2 <= distanceSize3)
 	{
 		result.nearestPoint = nearPoint2;
 		result.startLinePos = subjectPoly.Position[0];
-		result.endLinePos = subjectPoly.Position[2];
+		result.endLinePos	= subjectPoly.Position[2];
 	}
 	else
 	{
 		result.nearestPoint = nearPoint3;
 		result.startLinePos = subjectPoly.Position[1];
-		result.endLinePos = subjectPoly.Position[2];
+		result.endLinePos	= subjectPoly.Position[2];
 	}
 
 	return result;
@@ -162,7 +162,7 @@ VECTOR Calculation::LeapVector(const VECTOR& changePosition,
 	const VECTOR& latestPosition,
 	const float speed)
 {
-	VECTOR SubPosition = VSub(latestPosition, changePosition);
+	VECTOR SubPosition	 = VSub(latestPosition, changePosition);
 	VECTOR scalePosition = VGet(0, 0, 0);
 
 	scalePosition = VScale(SubPosition, speed);

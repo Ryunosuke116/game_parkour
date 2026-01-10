@@ -10,25 +10,27 @@ public:
 	Coin();
 	~Coin();
 
-	void Initialize()override;
-	void Update()override;
+	void Initialize()							override;
+	void Update()								override {}
+	void Draw()									override;
+	void Load(const nlohmann::json& jsonData)	override {}
+	void Create()								override {}
+	void ResultCreate()							override;
+	void ResultInitialize()						override;
+	void ResultUpdate()							override;
+
+	void HitPlayerAction(const VECTOR& topPlayerPos,
+		const VECTOR& bottomPlayerPos,
+		const float playerRadius);
+
 	bool Update(const VECTOR& topPlayerPos,
 		const VECTOR& bottomPlayerPos,
 		const float playerRadius);
-	void Draw()override;
-	void Load(const nlohmann::json& jsonData)override{}
-	void Create()override{}
-	void ResultCreate()override;
-	void ResultInitialize()override;
-	void ResultUpdate()override;
-
-	void HitPlayerAction();
 	void Rotate();
 	void Load(const int listNumber, const int handle, const VECTOR& pos);
 	bool IsHitPlayer(const VECTOR& topPlayerPos,
 		const VECTOR& bottomPlayerPos,
 		const float playerRadius);
-	void OnHitPlayer();
 
 	bool GetIsHitPlayer()const { return isHitPlayer; }
 	bool GetIsDelete()const { return isDelete; }
@@ -40,8 +42,10 @@ private:
 	bool isHitPlayer;
 	bool isDelete;
 	bool isSound;
+	bool isIgnoreHitPlayer;
 
 	int listNumber;
+
 	float radianY;
 	float velocityY;
 	float flyAwaySpeed;

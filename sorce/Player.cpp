@@ -547,7 +547,7 @@ void Player::DebugUpdate()
 /// @brief プレイヤーが特定の位置より下に落下した場合に、位置と状態をリセット
 void Player::CounterplanBug()
 {
-    const float kMaxPosY = -10.0f;
+    const float  kMaxPosY       = -10.0f;
     const VECTOR kResetPosition = VGet(3.0f, 9.0f, -1200.0f);
 
     if (position.y < kMaxPosY)

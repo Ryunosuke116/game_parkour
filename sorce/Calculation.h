@@ -138,7 +138,7 @@ public:
 	/// </summary>
 	/// <param name="nowValue"></param>
 	/// <returns></returns>
-	static float CalculateBackEaseOutValue(const float nowValue);;
+	static float CalculateBackEaseOutValue(const float nowValue);
 
 	/// <summary>
 	/// “ñ‚Â‚Ì‚×ƒNƒgƒ‹‚Ì‚È‚·Šp

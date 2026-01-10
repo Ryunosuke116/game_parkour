@@ -18,13 +18,13 @@ public:
 	Player();
 	~Player();
 
-	void Create()override;
-	void Load(const nlohmann::json& jsonData)override;
-	void Initialize()override;
-	void Update()override;
-	void ResultCreate()override;
-	void ResultInitialize()override;
-	void ResultUpdate()override;
+	void Create()								override;
+	void Load(const nlohmann::json& jsonData)	override;
+	void Initialize()							override;
+	void Update()								override;
+	void ResultCreate()							override;
+	void ResultInitialize()						override;
+	void ResultUpdate()							override;
 
 	void StartUpdate(const float timer);
 	void FinishUpdate(const float timer);
@@ -39,25 +39,25 @@ public:
 	//　ゲッター
 	///////////////////////////////////
 
-	VECTOR GetTopPos() const { return positionData.capsuleTopPosition; }
-	VECTOR GetBottomPos() const { return positionData.capsuleBottomPosition; }
-	VECTOR GetVelocity() const { return velocity; }
-	VECTOR GetNowMoveDirection() const { return nowMoveDirection; }
-	VECTOR GetFaceDirection()const { return faceDirection; }
-	bool GetIsGround() const { return playerData.isGround; }
-	int GetNowStateNumber() const { return animationChanger->NowGetAnimNumber(); }
-	PlayerData GetData() const { return playerData; }
-	PlayerStateBase::AnimState GetNowAnimState() const { return nowState->GetNowAnimState(); }
-	float GetRadius()const override { return radius; }
-	AABB GetAABB()const { return mAABB; }
+	VECTOR GetTopPos()				const				{ return positionData.capsuleTopPosition; }
+	VECTOR GetBottomPos()			const				{ return positionData.capsuleBottomPosition; }
+	VECTOR GetVelocity()			const				{ return velocity; }
+	VECTOR GetNowMoveDirection()	const				{ return nowMoveDirection; }
+	VECTOR GetFaceDirection()		const				{ return faceDirection; }
+	bool GetIsGround()				const				{ return playerData.isGround; }
+	int GetNowStateNumber()			const				{ return animationChanger->NowGetAnimNumber(); }
+	float GetRadius()				const override		{ return radius; }
+	PlayerData GetData()			const				{ return playerData; }
+	PlayerStateBase::AnimState GetNowAnimState() const	{ return nowState->GetNowAnimState(); }
+	AABB GetAABB()					const				{ return mAABB; }
 
 	//////////////////////////////////
 	/// セッター
 	/////////////////////////////////
-	void SetIsGround(bool flag) { playerData.isGround = flag; }
-	void SetPos(VECTOR newPos) { position = newPos; }
+	void SetIsGround(bool flag)					{ playerData.isGround = flag; }
+	void SetPos(VECTOR newPos)					{ position = newPos; }
 	void SetNowMoveDirection(const VECTOR& set) { nowMoveDirection = set; }
-	void SetFaceDirection(const VECTOR& set) { faceDirection = set; }
+	void SetFaceDirection(const VECTOR& set)	{ faceDirection = set; }
 
 	std::shared_ptr<PlayerCalculation> playerCalculation = NULL;
 
@@ -67,19 +67,19 @@ private:
 	void ChangeColorByScoreRank();
 
 private:
-	static constexpr float kModelScale = 0.06f;
-	static constexpr float kMaxMoveSpeed = 1.4f;	    // 移動速度
-	static constexpr float kMaxRollMoveSpeed = 2.5f;	//ロール速度
-	static constexpr float kRunWallRotateX = 30.0f;
-	static constexpr float radius = 3.5f;
-	static constexpr float height = 10.0f;
-	static constexpr EffectColor scoreDColor = { 0,255,0,255 };			//緑色
-	static constexpr EffectColor scoreCColor = { 255,255,0,255 };		//黄色
-	static constexpr EffectColor scoreBColor = { 0,0,255,255 };			//青色
-	static constexpr EffectColor scoreAColor = { 255,100,100,255 };		//赤色
-	static constexpr EffectColor scoreSColor = { 255,100,100,255 };		//虹色
-	static constexpr EffectColor scoreSSColor = { 255,100,100,255 };
-	static constexpr EffectColor scoreSSSColor = { 255,100,100,255 };
+	static constexpr float kModelScale			= 0.06f;
+	static constexpr float kMaxMoveSpeed		= 1.4f;	    // 移動速度
+	static constexpr float kMaxRollMoveSpeed	= 2.5f;	//ロール速度
+	static constexpr float kRunWallRotateX		= 30.0f;
+	static constexpr float radius				= 3.5f;
+	static constexpr float height				= 10.0f;
+	static constexpr EffectColor scoreDColor	= { 0,255,0,255 };			//緑色
+	static constexpr EffectColor scoreCColor	= { 255,255,0,255 };		//黄色
+	static constexpr EffectColor scoreBColor	= { 0,0,255,255 };			//青色
+	static constexpr EffectColor scoreAColor	= { 255,100,100,255 };		//赤色
+	static constexpr EffectColor scoreSColor	= { 255,100,100,255 };		//虹色
+	static constexpr EffectColor scoreSSColor	= { 255,100,100,255 };
+	static constexpr EffectColor scoreSSSColor	= { 255,100,100,255 };
 
 	VECTOR normalVelocity;			//通常時の移動量
 	VECTOR nowMoveDirection;		//現在向いている方向

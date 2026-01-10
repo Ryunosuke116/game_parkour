@@ -48,36 +48,36 @@ VECTOR HitCheck::ClosestPtToPointTriangle(const VECTOR& point,
 	const VECTOR& vertexC)
 {
 	//PがAの外側の頂点座標の中にあるかどうかチェック
-	VECTOR edgeAB = VSub(vertexB, vertexA);
-	VECTOR edgeAC = VSub(vertexC, vertexA);
-	VECTOR vecAP = VSub(point, vertexA);
+	VECTOR edgeAB	= VSub(vertexB, vertexA);
+	VECTOR edgeAC	= VSub(vertexC, vertexA);
+	VECTOR vecAP	= VSub(point, vertexA);
 
-	float dotAB_AP = VDot(edgeAB, vecAP);
-	float dotAC_AP = VDot(edgeAC, vecAP);
+	float dotAB_AP	= VDot(edgeAB, vecAP);
+	float dotAC_AP	= VDot(edgeAC, vecAP);
 
 	//PがBの外側の頂点領域の中にあるかどうかチェック
-	VECTOR vecBP = VSub(point, vertexB);
-	float dotAB_BP = VDot(edgeAB, vecBP);
-	float dotAC_BP = VDot(edgeAC, vecBP);
+	VECTOR vecBP	= VSub(point, vertexB);
+	float dotAB_BP	= VDot(edgeAB, vecBP);
+	float dotAC_BP	= VDot(edgeAC, vecBP);
 
 	//PがABの辺領域の中にあるかどうかチェックし、あればPのAB上に対する射影を返す
-	float areaAB = dotAB_AP * dotAC_BP - dotAB_BP * dotAC_AP;
+	float areaAB	= dotAB_AP * dotAC_BP - dotAB_BP * dotAC_AP;
 
 	//PがCの外側の頂点領域の中にあるかどうかチェック
-	VECTOR vecCP = VSub(point, vertexC);
-	float dotAB_CP = VDot(edgeAB, vecCP);
-	float dotAC_CP = VDot(edgeAC, vecCP);
+	VECTOR vecCP	= VSub(point, vertexC);
+	float dotAB_CP	= VDot(edgeAB, vecCP);
+	float dotAC_CP	= VDot(edgeAC, vecCP);
 
 	//PがACの辺領域の中にあるかどうかチェックし、あればPのAC上に対する射影を返す
-	float areaAC = dotAB_CP * dotAC_AP - dotAB_AP * dotAC_CP;
+	float areaAC	= dotAB_CP * dotAC_AP - dotAB_AP * dotAC_CP;
 
 	//PがBCの辺領域の中にあるかどうかチェックし、あればPのBC上に対する射影を返す
-	float areaBC = dotAB_BP * dotAC_CP - dotAB_CP * dotAC_BP;
+	float areaBC	= dotAB_BP * dotAC_CP - dotAB_CP * dotAC_BP;
 
 	//Pは面領域の中にある。Qをその重心座標(u,v,w)を用いて計算
 	float baryDenom = 1.0f / (areaBC + areaAC + areaAB);
-	float baryV = areaAC * baryDenom;
-	float baryW = areaAB * baryDenom;
+	float baryV		= areaAC * baryDenom;
+	float baryW		= areaAB * baryDenom;
 
 	return VAdd(vertexA, VAdd(VScale(edgeAB, baryV), VScale(edgeAC, baryW)));
 
@@ -180,10 +180,10 @@ std::pair<VECTOR, VECTOR> HitCheck::SegmentTriangleDistance(
 			//一番距離が近いポイントを代入
 			if (minSize > distanceSize)
 			{
-				minSize = distanceSize;
-				lineSegmentPointClosestSurface = linePoint;
-				hittingPointSurface = contactPoint;
-				isReturnMinSizePoint = true;
+				minSize							= distanceSize;
+				lineSegmentPointClosestSurface	= linePoint;
+				hittingPointSurface				= contactPoint;
+				isReturnMinSizePoint			= true;
 			}
 		}
 	}
@@ -213,7 +213,7 @@ bool HitCheck::TriangleAreaCheck(const VECTOR& point,
 	const VECTOR& vertexC)
 {
 	//面積を求める
-	float area = fabs(Calculation::area(vertexA, vertexB, vertexC));
+	float area	= fabs(Calculation::area(vertexA, vertexB, vertexC));
 	float area1 = fabs(Calculation::area(vertexA, vertexB, point));
 	float area2 = fabs(Calculation::area(vertexB, vertexC, point));
 	float area3 = fabs(Calculation::area(vertexC, vertexA, point));
@@ -237,28 +237,29 @@ HangingData HitCheck::CliffGrabbing(
 	const VECTOR& moveDirection,
 	const float radius)
 {
-	const int kFrameIndex = -1;
-	const float kMaxVelocity = 11.2f;			//最大移動値
-	const float kAngleRange = 50.0f;
+	const int kFrameIndex			= -1;
+	const float kMaxVelocity		= 11.2f;			//最大移動値
+	const float kAngleRange			= 50.0f;
 	const float kScaleWallCheckLine = 0.2f;			//移動量の補間スピード
-	const float kAddSpherePos = 5.0f;
-	const float kRightAngle = 90.0f;
-	const VECTOR kLengthDirection = VGet(0.0f, 1.0f, 0.0f);
-	const VECTOR kVerticalShaft = VGet(0.0f, 1.0f, 0.0f);
+	const float kAddSpherePos		= 5.0f;
+	const float kRightAngle			= 90.0f;
+	const VECTOR kLengthDirection	= VGet(0.0f, 1.0f, 0.0f);
+	const VECTOR kVerticalShaft		= VGet(0.0f, 1.0f, 0.0f);
 
-	float minDistanceSize = FLT_MAX;
+	float minDistanceSize			= FLT_MAX;
 
-	VECTOR nearestOutSide = VGet(0.0f, 0.0f, 0.0f);
-	VECTOR spherePos = VAdd(topPosition, VScale(moveDirection, kAddSpherePos));
+	VECTOR nearestOutSide			= VGet(0.0f, 0.0f, 0.0f);
+	VECTOR spherePos				= VAdd(topPosition, VScale(moveDirection, kAddSpherePos));
 
-	HangingData hangingData = { false, NULL };
+	HangingData hangingData			= { false, NULL };
+
 	MV1_COLL_RESULT_POLY subjectPoly;
 
 	DebugDrawer::GetInstance().InformationInputSphere(spherePos, radius, GetColor(255, 255, 255));
 
 	for (const auto& wpCollisionObject : wpCollisionObjects)
 	{
-		auto spCollisionObject = wpCollisionObject.lock();
+		auto spCollisionObject		= wpCollisionObject.lock();
 		
 		if (spCollisionObject->GetTag() != "field")
 		{
@@ -298,9 +299,9 @@ HangingData HitCheck::CliffGrabbing(
 					position);
 
 			//奥行を調べるための座標
-			VECTOR depthDirection = VSub(nearestOutSide, position);
-			depthDirection.y = 0.0f;
-			depthDirection = VNorm(depthDirection);
+			VECTOR depthDirection	= VSub(nearestOutSide, position);
+			depthDirection.y		= 0.0f;
+			depthDirection			= VNorm(depthDirection);
 
 			//対象の三角形の表面を沿うための方向ベクトルを算出
 			depthDirection = Calculation::Projection(subjectPoly.Normal, depthDirection);
@@ -321,12 +322,12 @@ HangingData HitCheck::CliffGrabbing(
 			}
 
 			//奥行確認のためのrayの長さ
-			VECTOR depthDistance = VScale(depthDirection, kMaxVelocity);
-			depthDistance = VAdd(nearestOutSide, depthDistance);
+			VECTOR depthDistance	= VScale(depthDirection, kMaxVelocity);
+			depthDistance			= VAdd(nearestOutSide, depthDistance);
 
 			//少し浮かせる
-			VECTOR startWallCheckLine = VAdd(nearestOutSide, VScale(subjectPoly.Normal, kScaleWallCheckLine));
-			VECTOR endWallCheckLine = VAdd(depthDistance, VScale(subjectPoly.Normal, kScaleWallCheckLine));
+			VECTOR startWallCheckLine	= VAdd(nearestOutSide, VScale(subjectPoly.Normal, kScaleWallCheckLine));
+			VECTOR endWallCheckLine		= VAdd(depthDistance, VScale(subjectPoly.Normal, kScaleWallCheckLine));
 
 			DebugDrawer::GetInstance().InformationInputCapsule(startWallCheckLine, endWallCheckLine, 1.0f, GetColor(255, 0, 255));
 
@@ -347,7 +348,7 @@ HangingData HitCheck::CliffGrabbing(
 			}
 
 			//崖掴みの情報を取得
-			hangingData.hangingPoly = subjectPoly;
+			hangingData.hangingPoly  = subjectPoly;
 			hangingData.isHitHanging = true;
 		}
 
@@ -369,22 +370,22 @@ bool HitCheck::CliffGrabbingWidthCheck(const int collisionObjectModelHandle,
 	//一番近い三角形の辺の座標からキャラの肩幅くらい距離を
 	// 左右に取ってその座標から下にrayを飛ばして
 	// 床があるか確認する
-	VECTOR rightRayPoint = VNorm(VSub(nearestResult.endLinePos, nearestOutSide));
-	VECTOR leftRayPoint = VNorm(VSub(nearestResult.startLinePos, nearestOutSide));
+	VECTOR rightRayPoint	= VNorm(VSub(nearestResult.endLinePos, nearestOutSide));
+	VECTOR leftRayPoint		= VNorm(VSub(nearestResult.startLinePos, nearestOutSide));
 
-	rightRayPoint = VScale(rightRayPoint, kCheckWidth);
-	leftRayPoint = VScale(leftRayPoint, kCheckWidth);
+	rightRayPoint	= VScale(rightRayPoint, kCheckWidth);
+	leftRayPoint	= VScale(leftRayPoint, kCheckWidth);
 
-	rightRayPoint = VAdd(nearestOutSide, rightRayPoint);
-	leftRayPoint = VAdd(nearestOutSide, leftRayPoint);
+	rightRayPoint	= VAdd(nearestOutSide, rightRayPoint);
+	leftRayPoint	= VAdd(nearestOutSide, leftRayPoint);
 
-	rightRayPoint = VAdd(rightRayPoint, VScale(depthDirection, 0.5f));
-	leftRayPoint = VAdd(leftRayPoint, VScale(depthDirection, 0.5f));
+	rightRayPoint	= VAdd(rightRayPoint, VScale(depthDirection, 0.5f));
+	leftRayPoint	= VAdd(leftRayPoint, VScale(depthDirection, 0.5f));
 
 	VECTOR endRightRayPoint = VAdd(rightRayPoint, VGet(0.0f, -1.0f, 0.0f));
-	VECTOR endLeftRayPoint = VAdd(leftRayPoint, VGet(0.0f, -1.0f, 0.0f));
-	rightRayPoint = VAdd(rightRayPoint, VGet(0.0f, 1.0f, 0.0f));
-	leftRayPoint = VAdd(leftRayPoint, VGet(0.0f, 1.0f, 0.0f));
+	VECTOR endLeftRayPoint  = VAdd(leftRayPoint, VGet(0.0f, -1.0f, 0.0f));
+	rightRayPoint			= VAdd(rightRayPoint, VGet(0.0f, 1.0f, 0.0f));
+	leftRayPoint			= VAdd(leftRayPoint, VGet(0.0f, 1.0f, 0.0f));
 
 	MV1_COLL_RESULT_POLY leftRayCheck;
 	MV1_COLL_RESULT_POLY rightRayCheck;
@@ -425,8 +426,8 @@ bool HitCheck::CliffGrabbingCliffFaceCheck(const int collisionObjectModelHandle,
 	MV1_COLL_RESULT_POLY& subjectPoly,
 	MV1_COLL_RESULT_POLY_DIM& polyDim)
 {
-	const float kAngleRange = 50.0f;
-	const VECTOR kLengthDirection = VGet(0.0f, 1.0f, 0.0f);
+	const float kAngleRange			= 50.0f;
+	const VECTOR kLengthDirection	= VGet(0.0f, 1.0f, 0.0f);
 
 	float minDistanceSize = FLT_MAX;
 
@@ -467,9 +468,9 @@ bool HitCheck::CliffGrabbingCliffFaceCheck(const int collisionObjectModelHandle,
 
 				if (minDistanceSize > distanceSize)
 				{
-					minDistanceSize = distanceSize;
+					minDistanceSize		 = distanceSize;
 					resultNearestOutSide = nearestOutSide;
-					subjectPoly = poly;
+					subjectPoly			 = poly;
 				}
 			}
 		}
