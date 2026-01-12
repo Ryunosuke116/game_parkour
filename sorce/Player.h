@@ -5,10 +5,10 @@
 #include "PlayerData.h"
 #include "AnimationChanger.h"
 #include "PlayerStateBase.h"
-#include "EffectColor.h"
 
 class EffectManager;
 class PlayerCalculation;
+class PlayerEffectController;
 
 class Player : 
 	public BaseChara,
@@ -28,12 +28,9 @@ public:
 
 	void StartUpdate(const float timer);
 	void FinishUpdate(const float timer);
-	void DebugUpdate();
 	void MoveDirectionUpdate();
 	void ReceiveCollisionResult();
-	void ChangeState();
-	void CollisionUpdate();
-	void OnCoinPicked(int amount)override { coinCount += amount; }
+	void OnCoinPicked(int amount)override;
 
 	//////////////////////////////////
 	//　ゲッター
@@ -44,12 +41,12 @@ public:
 	VECTOR GetVelocity()			const				{ return velocity; }
 	VECTOR GetNowMoveDirection()	const				{ return nowMoveDirection; }
 	VECTOR GetFaceDirection()		const				{ return faceDirection; }
-	bool GetIsGround()				const				{ return playerData.isGround; }
-	int GetNowStateNumber()			const				{ return animationChanger->NowGetAnimNumber(); }
-	float GetRadius()				const override		{ return radius; }
+	bool   GetIsGround()			const				{ return playerData.isGround; }
+	int    GetNowStateNumber()		const				{ return animationChanger->NowGetAnimNumber(); }
+	float  GetRadius()				const override		{ return radius; }
 	PlayerData GetData()			const				{ return playerData; }
-	PlayerStateBase::AnimState GetNowAnimState() const	{ return nowState->GetNowAnimState(); }
 	AABB GetAABB()					const				{ return mAABB; }
+	PlayerStateBase::AnimState GetNowAnimState() const	{ return nowState->GetNowAnimState(); }
 
 	//////////////////////////////////
 	/// セッター
@@ -63,8 +60,9 @@ public:
 
 private:
 	void CounterplanBug();
-	void EffectUpdate();
-	void ChangeColorByScoreRank();
+	void CollisionUpdate();
+	void ChangeState();
+	void DebugUpdate();
 
 private:
 	static constexpr float kModelScale			= 0.06f;
@@ -73,13 +71,6 @@ private:
 	static constexpr float kRunWallRotateX		= 30.0f;
 	static constexpr float radius				= 3.5f;
 	static constexpr float height				= 10.0f;
-	static constexpr EffectColor scoreDColor	= { 0,255,0,255 };			//緑色
-	static constexpr EffectColor scoreCColor	= { 255,255,0,255 };		//黄色
-	static constexpr EffectColor scoreBColor	= { 0,0,255,255 };			//青色
-	static constexpr EffectColor scoreAColor	= { 255,100,100,255 };		//赤色
-	static constexpr EffectColor scoreSColor	= { 255,100,100,255 };		//虹色
-	static constexpr EffectColor scoreSSColor	= { 255,100,100,255 };
-	static constexpr EffectColor scoreSSSColor	= { 255,100,100,255 };
 
 	VECTOR normalVelocity;			//通常時の移動量
 	VECTOR nowMoveDirection;		//現在向いている方向
@@ -95,6 +86,6 @@ private:
 	AABB									mAABB;
 	std::shared_ptr<PlayerStateBase>		nowState		 = NULL;
 	std::shared_ptr<AnimationChanger>		animationChanger = NULL;
-	std::weak_ptr<EffectManager>			wpEffectManager;
+	std::shared_ptr<PlayerEffectController> effectController = NULL;
 };
 

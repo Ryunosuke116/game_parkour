@@ -137,11 +137,16 @@ void EffectManager::SetPosition(const VECTOR setPosition,
 {
 	for (auto& effect : effectDatas)
 	{
-		if (effect->tag == tag)
+		if (effect->tag == tag && 
+			!IsEffekseer3DEffectPlaying(effect->playingEffectHandle))
 		{
 			effect->position = setPosition;
 			// 再生中のエフェクトを移動する。
-			SetPosPlayingEffekseer3DEffect(effect->playingEffectHandle, effect->position.x, effect->position.y, effect->position.z);
+			SetPosPlayingEffekseer3DEffect(
+				effect->playingEffectHandle, 
+				effect->position.x, 
+				effect->position.y, 
+				effect->position.z);
 		}
 	}
 }

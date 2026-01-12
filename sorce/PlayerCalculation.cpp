@@ -34,22 +34,22 @@ PlayerCalculation::PlayerCalculation() :
 
 void PlayerCalculation::Initialize()
 {
-    ignoreGroundTimer = 0;
-    gravityPower = 0.0f;
-    nowJumpPower = 0.0f;
-    nowMoveSpeed = 0.0f;
-    nowRollMoveSpeed = 0.0f;
-    wallRunStopTime = 0.0f;
-    decelerationSpeed = 0.0f;
-    mulMoveSpeedValue = 1.0f;
-    isCalcDeceleration = false;
-    isStopRunWall = false;
-    isAddJumpPower = false;
-    rightHandPos = VGet(0.0f, 0.0f, 0.0f);
-    leftHandPos = VGet(0.0f, 0.0f, 0.0f);
-    wallRunGravity = VGet(0.0f, 0.0f, 0.0f);
-    nearestResult = {};
-    nowRankScore = "";
+    ignoreGroundTimer   = 0;
+    gravityPower        = 0.0f;
+    nowJumpPower        = 0.0f;
+    nowMoveSpeed        = 0.0f;
+    nowRollMoveSpeed    = 0.0f;
+    wallRunStopTime     = 0.0f;
+    decelerationSpeed   = 0.0f;
+    mulMoveSpeedValue   = 1.0f;
+    isCalcDeceleration  = false;
+    isStopRunWall       = false;
+    isAddJumpPower      = false;
+    rightHandPos        = VGet(0.0f, 0.0f, 0.0f);
+    leftHandPos         = VGet(0.0f, 0.0f, 0.0f);
+    wallRunGravity      = VGet(0.0f, 0.0f, 0.0f);
+    nearestResult       = {};
+    nowRankScore        = "";
 }
 
 VECTOR PlayerCalculation::Update(

@@ -143,9 +143,6 @@ void CoinManager::Update()
 				}
 			}
 
-			//コイン取得を通知
-			NotifyCoinPicked(coinValue);
-
 			//空間オブジェクトリストからコインを削除
 			it = coinList.erase(it);
 
@@ -165,6 +162,9 @@ void CoinManager::Update()
 		//削除してよければリストから削除
 		if (umCoin->second->GetIsDelete())
 		{
+			//コイン取得を通知
+			NotifyCoinPicked(coinValue);
+
 			umCoin = umCoins.erase(umCoin);
 			continue;
 		}

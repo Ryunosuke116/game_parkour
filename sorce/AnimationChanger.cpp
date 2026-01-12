@@ -20,15 +20,15 @@ AnimationChanger::~AnimationChanger()
 
 void AnimationChanger::Create(const int modelHandle)
 {
-    stateList[animNum::idle] = std::make_shared<Idle>(modelHandle);
-    stateList[animNum::bracedHangToCrouch] = std::make_shared<BracedHangToCrouch>(modelHandle);
-    stateList[animNum::fallingIdle] = std::make_shared<FallingIdle>(modelHandle);
-    stateList[animNum::hangingIdle] = std::make_shared<HangingIdle>(modelHandle);
-    stateList[animNum::jump] = std::make_shared<Jump>(modelHandle);
-    stateList[animNum::quickRoll] = std::make_shared<QuickRoll>(modelHandle);
-    stateList[animNum::run] = std::make_shared<Run>(modelHandle);
-    stateList[animNum::runToStop] = std::make_shared<RunToStop>(modelHandle);
-    stateList[animNum::walk] = std::make_shared<Walk>(modelHandle);
+    stateList[animNum::idle]                = std::make_shared<Idle>                (modelHandle);
+    stateList[animNum::bracedHangToCrouch]  = std::make_shared<BracedHangToCrouch>  (modelHandle);
+    stateList[animNum::fallingIdle]         = std::make_shared<FallingIdle>         (modelHandle);
+    stateList[animNum::hangingIdle]         = std::make_shared<HangingIdle>         (modelHandle);
+    stateList[animNum::jump]                = std::make_shared<Jump>                (modelHandle);
+    stateList[animNum::quickRoll]           = std::make_shared<QuickRoll>           (modelHandle);
+    stateList[animNum::run]                 = std::make_shared<Run>                 (modelHandle);
+    stateList[animNum::runToStop]           = std::make_shared<RunToStop>           (modelHandle);
+    stateList[animNum::walk]                = std::make_shared<Walk>                (modelHandle);
 }
 
 void AnimationChanger::Initialize(

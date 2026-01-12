@@ -12,22 +12,22 @@
 #include "CollisionObjectManager.h"
 #include "GameInstanceSubSystem.h"
 #include "PlayerCalculation.h"
+#include "PlayerEffectController.h"
 #include "RankScoreUi.h"
 
 /// <summary>
 /// コンストラクタ
 /// </summary>
 Player::Player() :
-    BaseChara(),
-    nowMoveDirection(VGet(0.0f, 0.0f, 0.0f)),
-    normalVelocity(VGet(0.0f,0.0f,0.0f)),
-    faceDirection(VGet(0.0f,0.0f,0.0f)),
-    effectTimer(-1.0f),
-    isCalcMoveVec(false),
-    isPush(false),
-    mAABB({VGet(0.0f,0.0f,0.0f)}),
-    playerData({false}),
-    wpEffectManager()
+    BaseChara           (),
+    nowMoveDirection    (VGet(0.0f, 0.0f, 0.0f)),
+    normalVelocity      (VGet(0.0f,0.0f,0.0f)),
+    faceDirection       (VGet(0.0f,0.0f,0.0f)),
+    effectTimer         (-1.0f),
+    isCalcMoveVec       (false),
+    isPush              (false),
+    mAABB               ({VGet(0.0f,0.0f,0.0f)}),
+    playerData          ({false})
 {
 
 }
@@ -48,19 +48,21 @@ Player::~Player()
 void Player::Load(const nlohmann::json& jsonData)
 {
     std::string path = jsonData["playerPath"];
-    modelHandle = MV1LoadModel(path.c_str());
+    modelHandle      = MV1LoadModel(path.c_str());
 }
 
 void Player::Create()
 {
     const std::string jsonName = "player";
     Load(JsonManager::GetInstance().GetJsons(jsonName));
-    playerCalculation = std::make_shared<PlayerCalculation>();
-    animationChanger = std::make_shared<AnimationChanger>();
+
+    playerCalculation   = std::make_shared<PlayerCalculation>();
+    animationChanger    = std::make_shared<AnimationChanger>();
+    effectController    = std::make_shared<PlayerEffectController>();
+
     animationChanger->Create(modelHandle);
+    effectController->Create();
     MV1SetScale(modelHandle, VGet(kModelScale, kModelScale, kModelScale));
-    //エフェクトマネージャーのポインタを参照
-    wpEffectManager = GameInstanceSubSystem::GetInstance().GetSubSystem<EffectManager>();
 }
 
 /// <summary>
@@ -68,16 +70,16 @@ void Player::Create()
 /// </summary>
 void Player::Initialize()
 {
-    const VECTOR initPosition = VGet(3.0f, 9.0f, -1210.0f);
-    const VECTOR initPos = VGet(400.0f, 207.598465f, -1260.0f);
+    const VECTOR initPosition       = VGet(3.0f, 9.0f, -1210.0f);
+    const VECTOR initPos            = VGet(400.0f, 207.598465f, -1260.0f);
     const VECTOR kInitFaceDirection = VGet(-0.579992771f, 0.0f, 0.814621568f);
-    const float kInitRadian = -0.618719876f;
+    const float kInitRadian         = -0.618719876f;
 
-    position = initPos;
+    position            = initPos;
     targetMoveDirection = VGet(0.0f, 0.0f, 0.0f);
-    faceDirection = kInitFaceDirection;
-    radian = kInitRadian;
-    rotateX = 0.0f;
+    faceDirection       = kInitFaceDirection;
+    radian              = kInitRadian;
+    rotateX             = 0.0f;
 
     MV1SetPosition(modelHandle, position);
 
@@ -110,14 +112,15 @@ void Player::Initialize()
     isCalcMoveVec               = false;
     isCollisionCheck            = true;
    
-    coinCount   = 0;
-    effectTimer = 0.0f;
-    nowMoveDirection = VGet(0.0f, 0.0f, 0.0f);
+    coinCount           = 0;
+    effectTimer         = 0.0f;
+    nowMoveDirection    = VGet(0.0f, 0.0f, 0.0f);
 
     MV1SetRotationXYZ(modelHandle, VGet((rotateX * DX_PI_F / 180.0f), radian + DX_PI_F, 0.0f));
 
     animationChanger->Initialize(animNum::walk, modelHandle, nowState, playerData, *this);
     playerCalculation->Initialize();
+    effectController->Initialize();
 }
 
 /// <summary>
@@ -146,9 +149,8 @@ void Player::Update()
         WorldSubSystem::GetInstance().GetSubSystem<CollisionObjectManager>()->GetCollisionObjects(),
         *this);
 
-    moveDirection = newMoveDirection;
-
-    playerData = newData;
+    moveDirection   = newMoveDirection;
+    playerData      = newData;
 
     //キャラの進行方向、向く方向ベクトル調整
     MoveDirectionUpdate();
@@ -178,7 +180,7 @@ void Player::Update()
         collisionHitPart.isHitFloor = true;
     }
 
-    EffectUpdate();
+    effectController->Update(position, playerData);
 
     ///////////////////////////////////////
     //  デバッグ用
@@ -261,8 +263,8 @@ void Player::ResultInitialize()
 {
     const VECTOR kInitPosition = VGet(0.0f, 9.0f, -1206.0f);
 
-    position = kInitPosition;
-    radian = 0.0f;
+    position    = kInitPosition;
+    radian      = 0.0f;
 
     MV1SetPosition(modelHandle, position);
 
@@ -400,10 +402,11 @@ void Player::CollisionUpdate()
     //capsule
     if (playerData.isRoll)
     {
-        int foot = MV1SearchFrame(modelHandle, "mixamorig:RightToeBase");
-        int hand = MV1SearchFrame(modelHandle, "mixamorig:RightHandIndex3");
-        VECTOR handPos = MV1GetFramePosition(modelHandle, hand);
-        VECTOR footPos = MV1GetFramePosition(modelHandle, foot);
+        int foot        = MV1SearchFrame(modelHandle, "mixamorig:RightToeBase");
+        int hand        = MV1SearchFrame(modelHandle, "mixamorig:RightHandIndex3");
+        VECTOR handPos  = MV1GetFramePosition(modelHandle, hand);
+        VECTOR footPos  = MV1GetFramePosition(modelHandle, foot);
+        
         //高さが低い方をカプセルの下部にする
         if (handPos.y > footPos.y)
         {
@@ -458,43 +461,6 @@ void Player::ReceiveCollisionResult()
     }
 }
 
-void Player::EffectUpdate()
-{
-    const float kMaxEffectTimer = 10.0f;
-    const float kAddEffectPositionY = 2.0f;
-    const VECTOR kEffectScale = VGet(4.0f, 4.0f, 4.0f);
-    VECTOR effectPosition = position;
-    effectPosition.y += kAddEffectPositionY;
-    
-    if (playerData.isRun)
-    {
-        effectTimer++;
-
-        if (effectTimer >= kMaxEffectTimer)
-        {
-            wpEffectManager.lock()->PlayEffect("footSmoke");
-            wpEffectManager.lock()->SetScale(kEffectScale, "footSmoke");
-            wpEffectManager.lock()->SetPosition(effectPosition, "footSmoke");
-
-            effectTimer = 0.0f;
-        }
-    }
-
-    effectPosition.y += kAddEffectPositionY;
-
-    //スコアランクに応じてエフェクトの色を変える
-    ChangeColorByScoreRank();
-    wpEffectManager.lock()->SetPosition(effectPosition, "playerbuff");
-
-    //エフェクトを再生する
-    if (wpEffectManager.lock()->GetIsPlayEffect("coinTouch"))
-    {
-        wpEffectManager.lock()->PlayEffect("coinTouch");
-    }
-
-    wpEffectManager.lock()->SetPosition(effectPosition, "coinTouch");
-}
-
 void Player::DebugUpdate()
 {
     float padRadian = atan2f(-PadInput::GetJoyPadXLeft(), -PadInput::GetJoyPadYLeft());
@@ -544,7 +510,9 @@ void Player::DebugUpdate()
     DebugDrawer::GetInstance().InformationInputStringBool("isHangToCrouch %d\n", playerData.isHangToCrouch);
 }
 
-/// @brief プレイヤーが特定の位置より下に落下した場合に、位置と状態をリセット
+/// <summary>
+/// プレイヤーが特定の位置より下に落下した場合に、位置と状態をリセット
+/// </summary>
 void Player::CounterplanBug()
 {
     const float  kMaxPosY       = -10.0f;
@@ -577,45 +545,8 @@ void Player::CounterplanBug()
     }
 }
 
-/// <summary>
-/// スコアランクに応じてエフェクトの色を変更する
-/// </summary>
-void Player::ChangeColorByScoreRank()
+void Player::OnCoinPicked(int amount)
 {
-    const auto& rankScoreUi = WorldSubSystem::GetInstance().GetSubSystem<RankScoreUi>();
-
-    //エフェクトを再生する
-    if (wpEffectManager.lock()->GetIsPlayEffect("playerbuff") &&
-        rankScoreUi->GetRankHandleKey() != "")
-    {
-        wpEffectManager.lock()->PlayEffect("playerbuff");
-    }
-    
-    if (rankScoreUi->GetIsChangeRank())
-    {
-        if (rankScoreUi->GetRankHandleKey() == "S")
-        {
-            wpEffectManager.lock()->StopEffect("playerbuff");
-        }
-        else if (rankScoreUi->GetRankHandleKey() == "A")
-        {
-            wpEffectManager.lock()->SetEffectColor("playerbuff", scoreAColor);
-        }
-        else if (rankScoreUi->GetRankHandleKey() == "B")
-        {
-            wpEffectManager.lock()->SetEffectColor("playerbuff", scoreBColor);
-        }
-        else if (rankScoreUi->GetRankHandleKey() == "C")
-        {
-            wpEffectManager.lock()->SetEffectColor("playerbuff", scoreCColor);
-        }
-        else if (rankScoreUi->GetRankHandleKey() == "D")
-        {
-            wpEffectManager.lock()->SetEffectColor("playerbuff", scoreDColor);
-        }
-        else if (rankScoreUi->GetRankHandleKey() == "")
-        {
-            wpEffectManager.lock()->StopEffect("playerbuff");
-        }
-    }
+    coinCount += amount;
+    effectController->PlayCoinTouchEffect();
 }

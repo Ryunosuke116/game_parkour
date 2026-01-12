@@ -11,16 +11,22 @@ public:
 
 	void Initialize();
 
-	VECTOR Update(const VECTOR& moveDirection, const float playAnimTime,
-		const int nowAnimNumber, const PlayerData& playerData);
-
-	VECTOR Move(const int& nowAnimNumber, const VECTOR& moveDirection,
-		const VECTOR& velocity, const PlayerData& playerData);
-
-	VECTOR Jump(const VECTOR& velocity, const int& nowAnimNumber,
+	VECTOR Update(const VECTOR& moveDirection,
+		const float playAnimTime,
+		const int nowAnimNumber, 
 		const PlayerData& playerData);
 
-	VECTOR GravityUpdate(const VECTOR& velocity, const PlayerData& playerData);
+	VECTOR Move(const int& nowAnimNumber,
+		const VECTOR& moveDirection,
+		const VECTOR& velocity,
+		const PlayerData& playerData);
+
+	VECTOR Jump(const VECTOR& velocity, 
+		const int& nowAnimNumber,
+		const PlayerData& playerData);
+
+	VECTOR GravityUpdate(const VECTOR& velocity,
+		const PlayerData& playerData);
 
 	VECTOR Roll(const int& nowAnimNumber,
 		const VECTOR& velocity,
@@ -50,25 +56,25 @@ public:
 	void ResetMove();
 	void ResetWallRun();
 
-	bool GetIsAddJumpPower()const { return isAddJumpPower; }
-	bool GetIsWhenClimbingHitGround()const { return isWhenClimbingHitGround; }
-	int GetIgnoreGroundTimer()const { return ignoreGroundTimer; }
-	float GetNowMoveSpeed() const { return nowMoveSpeed; }
-	float GetMaxMoveSpeed() const { return kMaxRunSpeed; }
-	float GetWallRunStopTime()const { return wallRunStopTime; }
-	float GetWallRunMaxStopTime()const { return kWallRunMaxStopTime; }
-	float GetGravityPower() const { return gravityPower; }
-	VECTOR GetWallRunGravity()const { return wallRunGravity; }
-	NearestResult GetNearestResult() const { return nearestResult; }
+	bool GetIsAddJumpPower()			const { return isAddJumpPower; }
+	bool GetIsWhenClimbingHitGround()	const { return isWhenClimbingHitGround; }
+	int GetIgnoreGroundTimer()			const { return ignoreGroundTimer; }
+	float GetNowMoveSpeed()				const { return nowMoveSpeed; }
+	float GetMaxMoveSpeed()				const { return kMaxRunSpeed; }
+	float GetWallRunStopTime()			const { return wallRunStopTime; }
+	float GetWallRunMaxStopTime()		const { return kWallRunMaxStopTime; }
+	float GetGravityPower()				const { return gravityPower; }
+	VECTOR GetWallRunGravity()			const { return wallRunGravity; }
+	NearestResult GetNearestResult()	const { return nearestResult; }
 
-	void ChangeTrueIsAddJumpPower() { isAddJumpPower = true; }
-	void SetJumpPower() { nowJumpPower = kAddJumpPower; }
-	void SetSecondJumpPower() { nowJumpPower = kAddSecondJumpPower; }
-	void SetNowGroundRayPoly(const MV1_COLL_RESULT_POLY& set) { nowGroundRayPoly = set; }
-	void SetRightHandPos(const VECTOR& set) { rightHandPos = set; }
-	void SetLeftHandPos(const VECTOR& set) { leftHandPos = set; }
-	void SetNearestResult(const NearestResult& set) { nearestResult = set; }
-	void SetWallRunGravity(const VECTOR& set) { wallRunGravity = set; }
+	void ChangeTrueIsAddJumpPower()								{ isAddJumpPower = true; }
+	void SetJumpPower()											{ nowJumpPower = kAddJumpPower; }
+	void SetSecondJumpPower()									{ nowJumpPower = kAddSecondJumpPower; }
+	void SetNowGroundRayPoly(const MV1_COLL_RESULT_POLY& set)	{ nowGroundRayPoly = set; }
+	void SetRightHandPos(const VECTOR& set)						{ rightHandPos = set; }
+	void SetLeftHandPos(const VECTOR& set)						{ leftHandPos = set; }
+	void SetNearestResult(const NearestResult& set)				{ nearestResult = set; }
+	void SetWallRunGravity(const VECTOR& set)					{ wallRunGravity = set; }
 
 private:
 	VECTOR CalcProjectionVelocity(const PlayerData& playerData,
@@ -81,20 +87,20 @@ private:
 	float ChangeRankScore(float mulMoveSpeedValue);
 
 private:
-	static constexpr float kMaxRunSpeed = 1.6f;	    // 移動速度
-	static constexpr float kMaxDashSpeed = 2.6f;	//ダッシュ速度
-	static constexpr float kMaxRollMoveSpeed = 2.5f;	//ロール速度
-	static constexpr float kAddJumpPower = 2.0f;		//ジャンプパワー
-	static constexpr float kAddSecondJumpPower = 1.5f;		//二段目ジャンプパワー
-	static constexpr float kGravity = -0.06f;
-	static constexpr float kWallRunMaxStopTime = 10.0f;	
-	static constexpr float kMulValueD = 1.0f;
-	static constexpr float kMulValueC = 1.05f;
-	static constexpr float kMulValueB = 1.1f;
-	static constexpr float kMulValueA = 1.2f;
-	static constexpr float kMulValueS = 1.3f;
-	static constexpr float kMulValueSS = 1.4f;
-	static constexpr float kMulValueSSS = 1.45f;
+	static constexpr float kMaxRunSpeed			= 1.6f;	    // 移動速度
+	static constexpr float kMaxDashSpeed		= 2.6f;		//ダッシュ速度
+	static constexpr float kMaxRollMoveSpeed	= 2.5f;		//ロール速度
+	static constexpr float kAddJumpPower		= 2.0f;		//ジャンプパワー
+	static constexpr float kAddSecondJumpPower	= 1.5f;		//二段目ジャンプパワー
+	static constexpr float kGravity				= -0.06f;
+	static constexpr float kWallRunMaxStopTime	= 10.0f;	
+	static constexpr float kMulValueD			= 1.0f;
+	static constexpr float kMulValueC			= 1.05f;
+	static constexpr float kMulValueB			= 1.1f;
+	static constexpr float kMulValueA			= 1.2f;
+	static constexpr float kMulValueS			= 1.3f;
+	static constexpr float kMulValueSS			= 1.4f;
+	static constexpr float kMulValueSSS			= 1.45f;
 
 	int ignoreGroundTimer;		//接地判定を無視する時間
 

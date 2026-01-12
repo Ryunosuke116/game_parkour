@@ -256,6 +256,12 @@
     <Filter Include="ソース ファイル\object\game\player\state\bracedHangToCrouch">
       <UniqueIdentifier>{cb3e3a28-1964-4799-969c-b1f0c1ed92c5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\object\game\player\effectController">
+      <UniqueIdentifier>{5fd09e7b-78a7-45cf-b16a-d8bef0e82190}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\effectData">
+      <UniqueIdentifier>{45d53345-c5b8-40fe-bdf9-dfa0a92e7c71}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="sorce\main.cpp">
@@ -444,6 +450,12 @@
     <ClCompile Include="sorce\BracedHangToCrouch.cpp">
       <Filter>ソース ファイル\object\game\player\state\bracedHangToCrouch</Filter>
     </ClCompile>
+    <ClCompile Include="sorce\PlayerEffectController.cpp">
+      <Filter>ソース ファイル\object\game\player\effectController</Filter>
+    </ClCompile>
+    <ClCompile Include="sorce\EffectData.cpp">
+      <Filter>ソース ファイル\effectData</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sorce\BoundaryRange.h">
@@ -459,9 +471,6 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="sorce\EffectColor.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="sorce\EffectData.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="sorce\GameObjects.h">
@@ -673,6 +682,12 @@
     </ClInclude>
     <ClInclude Include="sorce\BracedHangToCrouch.h">
       <Filter>ソース ファイル\object\game\player\state\bracedHangToCrouch</Filter>
+    </ClInclude>
+    <ClInclude Include="sorce\PlayerEffectController.h">
+      <Filter>ソース ファイル\object\game\player\effectController</Filter>
+    </ClInclude>
+    <ClInclude Include="sorce\EffectData.h">
+      <Filter>ソース ファイル\effectData</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

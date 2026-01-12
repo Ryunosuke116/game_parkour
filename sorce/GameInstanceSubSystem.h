@@ -2,6 +2,7 @@
 #include <unordered_map>
 #include <memory>
 #include <typeindex>
+#include <string>
 
 class IGameInstanceSubSystem;
 

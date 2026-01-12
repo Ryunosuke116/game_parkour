@@ -163,6 +163,7 @@
     <ClCompile Include="sorce\CollisionObjectManager.cpp" />
     <ClCompile Include="sorce\ControlManualUi.cpp" />
     <ClCompile Include="sorce\DebugDrawer.cpp" />
+    <ClCompile Include="sorce\EffectData.cpp" />
     <ClCompile Include="sorce\EffectManager.cpp" />
     <ClCompile Include="sorce\FallingIdle.cpp" />
     <ClCompile Include="sorce\Field.cpp" />
@@ -184,6 +185,7 @@
     <ClCompile Include="sorce\PadInput.cpp" />
     <ClCompile Include="sorce\Player.cpp" />
     <ClCompile Include="sorce\PlayerCalculation.cpp" />
+    <ClCompile Include="sorce\PlayerEffectController.cpp" />
     <ClCompile Include="sorce\PlayerManager.cpp" />
     <ClCompile Include="sorce\PlayerStateBase.cpp" />
     <ClCompile Include="sorce\QuickRoll.cpp" />
@@ -259,6 +261,7 @@
     <ClInclude Include="sorce\Player.h" />
     <ClInclude Include="sorce\PlayerCalculation.h" />
     <ClInclude Include="sorce\PlayerData.h" />
+    <ClInclude Include="sorce\PlayerEffectController.h" />
     <ClInclude Include="sorce\PlayerManager.h" />
     <ClInclude Include="sorce\playerState.h" />
     <ClInclude Include="sorce\PlayerStateBase.h" />
