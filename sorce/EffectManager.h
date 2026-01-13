@@ -26,7 +26,8 @@ public:
 	void SetScale(const VECTOR& scale, const std::string& tag);
 	void SetSpeed(const float& speed, const std::string& tag);
 	void PlayEffect(const std::string& tag);
-	void StopEffect(const std::string& tag);
+	void StopEffect(const std::string& tag,
+		const int playingCount);
 	void SetEffectColor(const std::string& tag, const EffectColor& effectColor);
 
 	bool GetIsPlayEffect(const std::string& tag);

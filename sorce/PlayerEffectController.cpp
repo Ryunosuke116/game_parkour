@@ -127,4 +127,9 @@ void PlayerEffectController::PlayCoinTouchEffect()
     {
         wpEffectManager.lock()->PlayEffect("coinTouch");
     }
+    else
+    {
+        wpEffectManager.lock()->StopEffect("coinTouch");
+        wpEffectManager.lock()->PlayEffect("coinTouch");
+    }
 }
