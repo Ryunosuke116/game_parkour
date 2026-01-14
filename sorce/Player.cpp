@@ -185,7 +185,8 @@ void Player::Update()
     ///////////////////////////////////////
     //  デバッグ用
     //////////////////////////////////////
-    #if defined(_DEBUG)
+    #if defined(NDEBUG)
+    #else 
         if (CheckHitKey(KEY_INPUT_3))
         {
             nowFrameNumber++;

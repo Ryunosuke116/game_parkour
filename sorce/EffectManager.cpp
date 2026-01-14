@@ -107,7 +107,7 @@ void EffectManager::PlayEffect(const std::string& tag)
 		if (effect->tag == tag)
 		{
 			// エフェクトを再生する。
-			effect->playingEffectHandles.push_back(PlayEffekseer3DEffect(effect->resourceHandle));
+			effect->playingEffectHandle = PlayEffekseer3DEffect(effect->resourceHandle);
 			break;
 		}
 	}
@@ -117,8 +117,7 @@ void EffectManager::PlayEffect(const std::string& tag)
 /// エフェクトの停止
 /// </summary>
 /// <param name="tag"></param>
-void EffectManager::StopEffect(const std::string& tag, 
-	const int playingCount)
+void EffectManager::StopEffect(const std::string& tag)
 {
 	for (auto& effect : effectDatas)
 	{

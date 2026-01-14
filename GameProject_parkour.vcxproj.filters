@@ -453,9 +453,6 @@
     <ClCompile Include="sorce\PlayerEffectController.cpp">
       <Filter>ソース ファイル\object\game\player\effectController</Filter>
     </ClCompile>
-    <ClCompile Include="sorce\EffectData.cpp">
-      <Filter>ソース ファイル\effectData</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sorce\BoundaryRange.h">

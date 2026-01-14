@@ -66,11 +66,12 @@ void PlayerEffectController::Update(const VECTOR& playerPos,
         }
     }
 
-    effectPosition.y += kAddEffectPositionY;
-
     //スコアランクに応じてエフェクトの色を変える
+    effectPosition.y += kAddEffectPositionY;
     ChangeColorByScoreRank();
     wpEffectManager.lock()->SetPosition(effectPosition, "playerbuff");
+
+    effectPosition.y += kAddEffectPositionY;
     wpEffectManager.lock()->SetPosition(effectPosition, "coinTouch");
 }
 
@@ -122,14 +123,9 @@ void PlayerEffectController::ChangeColorByScoreRank()
 /// </summary>
 void PlayerEffectController::PlayCoinTouchEffect()
 {
+    const VECTOR kEffectScale = VGet(1.8f, 1.8f, 1.8f);
+
     //エフェクトを再生する
-    if (wpEffectManager.lock()->GetIsPlayEffect("coinTouch"))
-    {
-        wpEffectManager.lock()->PlayEffect("coinTouch");
-    }
-    else
-    {
-        wpEffectManager.lock()->StopEffect("coinTouch");
-        wpEffectManager.lock()->PlayEffect("coinTouch");
-    }
+    wpEffectManager.lock()->PlayEffect("coinTouch");
+    wpEffectManager.lock()->SetScale(kEffectScale, "coinTouch");
 }
