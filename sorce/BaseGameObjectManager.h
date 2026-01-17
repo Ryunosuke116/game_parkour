@@ -8,7 +8,7 @@ class BaseGameObjectManager : public IObject
 public:
 	BaseGameObjectManager() :
 		posAddObject(VGet(0.0f, 0.0f, 0.0f)),
-		tag("")
+		tag			("")
 	{
 
 	}
@@ -25,7 +25,7 @@ public:
 	std::string GetTag() { return tag; }
 protected:
 	nlohmann::json	jsonData;
-	VECTOR posAddObject;
-	std::string tag;
+	VECTOR			posAddObject;
+	std::string		tag;
 };
 

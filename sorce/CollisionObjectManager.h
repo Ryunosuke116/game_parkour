@@ -10,14 +10,14 @@ public:
 	CollisionObjectManager();
 	~CollisionObjectManager();
 
-	void Create()		override;
-	void Initialize()	override;
-	void Update()		override;
-	void Draw()			override;
-	void Add()			override{}
-	void ResultCreate()override;
-	void ResultInitialize()override;
-	void ResultUpdate()override;
+	void Create()			override;
+	void Initialize()		override;
+	void Update()			override;
+	void Draw()				override;
+	void Add()				override{}
+	void ResultCreate()		override;
+	void ResultInitialize()	override;
+	void ResultUpdate()		override;
 
 	std::vector<std::weak_ptr<BaseObject>> const GetCollisionObjects()
 	{

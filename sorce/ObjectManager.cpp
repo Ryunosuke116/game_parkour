@@ -16,14 +16,14 @@
 /// コンストラクタ
 /// </summary>
 ObjectManager::ObjectManager() :
-	streamStartPictureTimer(-1.0f),
+	streamStartPictureTimer	(-1.0f),
 	streamFinishPictureTimer(-1.0f),
-	isStreamStartPicture(false),
-	isStreamFinishPicture(false),
-	isGoal(false),
-	isPush(false),
-	isPushResult(false),
-	isCamera(false)
+	isStreamStartPicture	(false),
+	isStreamFinishPicture	(false),
+	isGoal					(false),
+	isPush					(false),
+	isPushResult			(false),
+	isCamera				(false)
 {
 
 }
@@ -42,12 +42,12 @@ ObjectManager::~ObjectManager()
 void ObjectManager::Create()
 {
 	//vector型.atを使うとき用
-	const int kSkyBoxObjectNumber = 0;
-	const int kCameraObjectNumber = 2;
-	const int kShadowObjectNumber = 3;
-	const int kCoinManagerNumber = 5;
-	const int kPlayerManagerNumber = 6;
-	const int kUiManagerNumber = 7;
+	const int kSkyBoxObjectNumber	= 0;
+	const int kCameraObjectNumber	= 2;
+	const int kShadowObjectNumber	= 3;
+	const int kCoinManagerNumber	= 5;
+	const int kPlayerManagerNumber	= 6;
+	const int kUiManagerNumber		= 7;
 
 	//生成
 	//object生成
@@ -56,10 +56,10 @@ void ObjectManager::Create()
 	objects.push_back(std::make_shared<Camera>());
 	objects.push_back(std::make_shared<Shadow>());
 
-	layout = std::make_shared<Layout>();
-	tutorial = std::make_shared<Tutorial>();
-	finishCut = std::make_shared<FinishCut>();
-	L8TreeManager = std::make_shared<Liner8TreeManager<Coin>>();
+	layout			= std::make_shared<Layout>();
+	tutorial		= std::make_shared<Tutorial>();
+	finishCut		= std::make_shared<FinishCut>();
+	L8TreeManager	= std::make_shared<Liner8TreeManager<Coin>>();
 
 	//managerの生成
 	objects.push_back(std::make_shared<CollisionObjectManager>());
@@ -112,12 +112,12 @@ void ObjectManager::Initialize()
 	tutorial->Initialize();
 	finishCut->Initialize();
 
-	isCamera = false;
-	isPush = false;
-	isGoal = false;
-	isStreamStartPicture = true;
-	isStreamFinishPicture = false;
-	streamStartPictureTimer = 0.0f;
+	isCamera				 = false;
+	isPush					 = false;
+	isGoal					 = false;
+	isStreamStartPicture	 = true;
+	isStreamFinishPicture	 = false;
+	streamStartPictureTimer  = 0.0f;
 	streamFinishPictureTimer = 0.0f;
 }
 
@@ -210,9 +210,9 @@ void ObjectManager::WhenDebugUpdate()
 
 void ObjectManager::StartUpdate()
 {
-	const int kMinAlpha = 0;
-	const int kAddAlpha = 5;
-	const float kMaxTimer = 50.0f;
+	const int kMinAlpha		= 0;
+	const int kAddAlpha		= 5;
+	const float kMaxTimer	= 50.0f;
 
 	//画面の明転処理
 	if (BlackOut::GetInstance().GetIsLightChange())

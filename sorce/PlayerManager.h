@@ -19,22 +19,22 @@ public:
 	void StartUpdate(const float& timer);
 	void FinishUpdate(const float& timer);
 
-	void Create()		override;
-	void Initialize()	override;
-	void Update()		override;
-	void Draw()			override;
-	void Add()			override {}
-	void ResultCreate()override;
-	void ResultInitialize()override;
-	void ResultUpdate()override;
+	void Create()				override;
+	void Initialize()			override;
+	void Update()				override;
+	void Draw()					override;
+	void Add()					override {}
+	void ResultCreate()			override;
+	void ResultInitialize()		override;
+	void ResultUpdate()			override;
 
 
 	//ゲッター
-	VECTOR GetPosition()const { return player->GetPosition(); }
-	float GetRadian()const { return player->GetRadian(); }
-	float GetDegree()const { return player->GetDegree(); }
-	std::shared_ptr<Player> GetPlayer()const { return actualPlayer; }
-	int GetCoinCount()const { return player->GetCoinCount(); }
+	VECTOR GetPosition()				const { return player->GetPosition(); }
+	float GetRadian()					const { return player->GetRadian(); }
+	float GetDegree()					const { return player->GetDegree(); }
+	std::shared_ptr<Player> GetPlayer()	const { return actualPlayer; }
+	int GetCoinCount()					const { return player->GetCoinCount(); }
 
 	//オブサーバー関連
 	void AddObserver(std::shared_ptr<PlayerStateObserver> observer) { observers.push_back(observer); }
@@ -45,11 +45,11 @@ private:
 	void StateConfirmation();
 
 private:
-	std::shared_ptr<CollisionManager> collisionManager;
+	std::shared_ptr<CollisionManager>				collisionManager;
 	std::vector<std::weak_ptr<PlayerStateObserver>> observers;
 
-	std::shared_ptr<BaseChara> player = NULL;
-	std::shared_ptr<Player> actualPlayer = NULL;
-	PlayerData nowPlayerData;
+	std::shared_ptr<BaseChara>	player		 = NULL;
+	std::shared_ptr<Player>		actualPlayer = NULL;
+	PlayerData					nowPlayerData;
 };
 

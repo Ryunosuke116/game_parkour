@@ -15,23 +15,23 @@
 /// インストラクタ
 /// </summary>
 Camera::Camera():
-	maxHeight(0.0f),
-	minHeight(0.0f),
-	cameraDistanceSize(0.0f),
-	nowDegree(0.0f),
-	newDegree(0.0f),
-	angleRadian(0.0f),
-	normalDistanceProgress(0.0f),
-	normalCameraHeightProgress(0.0f),
-	isResetAngle(false),
-	isHitObject(false),
-	isPutBackDistance(false),
-	isPushRT(false),
-	cameraDirection(VGet(0.0f, 0.0f, 0.0f)),
-	normalCameraPosition(VGet(0.0f, 0.0f, 0.0f)),
-	cameraPosition(VGet(0.0f, 0.0f, 0.0f)),
-	centerPointSpherePos(VGet(0.0f, 0.0f, 0.0f)),
-	screenCenterPosition(VGet(0.0f, 0.0f, 0.0f))
+	maxHeight					(0.0f),
+	minHeight					(0.0f),
+	cameraDistanceSize			(0.0f),
+	nowDegree					(0.0f),
+	newDegree					(0.0f),
+	angleRadian					(0.0f),
+	normalDistanceProgress		(0.0f),
+	normalCameraHeightProgress	(0.0f),
+	isResetAngle				(false),
+	isHitObject					(false),
+	isPutBackDistance			(false),
+	isPushRT					(false),
+	cameraDirection				(VGet(0.0f, 0.0f, 0.0f)),
+	normalCameraPosition		(VGet(0.0f, 0.0f, 0.0f)),
+	cameraPosition				(VGet(0.0f, 0.0f, 0.0f)),
+	centerPointSpherePos		(VGet(0.0f, 0.0f, 0.0f)),
+	screenCenterPosition		(VGet(0.0f, 0.0f, 0.0f))
 {
 	// グラフィックの描画先を裏画面にセット
 	SetDrawScreen(DX_SCREEN_BACK);
@@ -60,17 +60,19 @@ void Camera::Create()
 /// </summary>
 void Camera::Initialize()
 {
-	cameraPosition = kInitializeCameraPos;
-	screenCenterPosition = kInitializeSpherePos;
-	nowDegree = kInitializeAngle;
-	cameraDistanceSize = kInitializeDistance;
+	cameraPosition			 = kInitializeCameraPos;
+	screenCenterPosition	 = kInitializeSpherePos;
+	nowDegree				 = kInitializeAngle;
+	cameraDistanceSize		 = kInitializeDistance;
 	normalCameraDistanceSize = kInitializeDistance;
-	normalDistanceProgress = kInitializeProgress;
-	normalLinearProgress = kInitializeProgress;
-	isResetAngle = false;
-	isHitObject = false;
-	isPushRT = false;
-	isPush = false;
+	normalDistanceProgress	 = kInitializeProgress;
+	normalLinearProgress	 = kInitializeProgress;
+
+	isResetAngle	= false;
+	isHitObject		= false;
+	isPushRT		= false;
+	isPush			= false;
+
 	normalCameraHeightProgress = 0.0f;
 
 	SetCameraPositionAndTarget_UpVecY(cameraPosition, screenCenterPosition);
@@ -156,9 +158,9 @@ void Camera::StartUpdate(const float& timer,
 /// </summary>
 void Camera::LayOutUpdate()
 {
-	const float kAddCameraPos = 1.0f;
-	const float kNormalAddDegree = 2.5f;
-	const float kSpecialAddDegree = 30.0f;
+	const float kAddCameraPos		= 1.0f;
+	const float kNormalAddDegree	= 2.5f;
+	const float kSpecialAddDegree	= 30.0f;
 
 	cameraDirection = VSub(screenCenterPosition, cameraPosition);
 	cameraDirection = VNorm(cameraDirection);
@@ -168,10 +170,10 @@ void Camera::LayOutUpdate()
 	VECTOR rightMove = VCross(cameraDirection, VGet(0.0f, 1.0f, 0.0f));
 
 	//正規化
-	rightMove = VNorm(rightMove);
-	VECTOR upMove = VNorm(cameraDirection);
+	rightMove		= VNorm(rightMove);
+	VECTOR upMove	= VNorm(cameraDirection);
 
-	upMove.y = 0.0f;
+	upMove.y	= 0.0f;
 	rightMove.y = 0.0f;
 
 	//パッド or arrowキーの入力方向で計算
@@ -191,39 +193,39 @@ void Camera::LayOutUpdate()
 	if (CheckHitKey(KEY_INPUT_UP) &&
 		CheckHitKey(KEY_INPUT_LCONTROL))
 	{
-		cameraPosition.y += kAddCameraPos;
-		screenCenterPosition.y += kAddCameraPos;
+		cameraPosition.y		+= kAddCameraPos;
+		screenCenterPosition.y	+= kAddCameraPos;
 	}
 	//z軸↑移動
 	else if (CheckHitKey(KEY_INPUT_UP))
 	{
-		cameraPosition.z += kAddCameraPos;
-		screenCenterPosition.z += kAddCameraPos;
+		cameraPosition.z		+= kAddCameraPos;
+		screenCenterPosition.z	+= kAddCameraPos;
 	}
 
 	//y軸↓移動
 	if (CheckHitKey(KEY_INPUT_DOWN) &&
 		CheckHitKey(KEY_INPUT_LCONTROL))
 	{
-		cameraPosition.y -= kAddCameraPos;
-		screenCenterPosition.y -= kAddCameraPos;
+		cameraPosition.y		-= kAddCameraPos;
+		screenCenterPosition.y	-= kAddCameraPos;
 	}
 	//z軸↓移動
 	else if (CheckHitKey(KEY_INPUT_DOWN))
 	{
-		cameraPosition.z -= kAddCameraPos;
-		screenCenterPosition.z -= kAddCameraPos;
+		cameraPosition.z		-= kAddCameraPos;
+		screenCenterPosition.z	-= kAddCameraPos;
 	}
 
 	if (PadInput::GetJoyPadYRight() > 0.0f)
 	{
-		cameraPosition.y += kAddCameraPos;
-		screenCenterPosition.y += kAddCameraPos;
+		cameraPosition.y		+= kAddCameraPos;
+		screenCenterPosition.y	+= kAddCameraPos;
 	}
 	if (PadInput::GetJoyPadYRight() < 0.0f)
 	{
-		cameraPosition.y -= kAddCameraPos;
-		screenCenterPosition.y -= kAddCameraPos;
+		cameraPosition.y		-= kAddCameraPos;
+		screenCenterPosition.y	-= kAddCameraPos;
 	}
 
 	if (PadInput::GetJoyPadXRight() > 0.0f)
@@ -232,8 +234,8 @@ void Camera::LayOutUpdate()
 		{
 			if (!isPushRT)
 			{
-				nowDegree -= kSpecialAddDegree;
-				isPushRT = true;
+				nowDegree	-= kSpecialAddDegree;
+				isPushRT	= true;
 			}
 		}
 		else
@@ -247,8 +249,8 @@ void Camera::LayOutUpdate()
 		{
 			if (!isPushRT)
 			{
-				nowDegree += kSpecialAddDegree;
-				isPushRT = true;
+				nowDegree	+= kSpecialAddDegree;
+				isPushRT	= true;
 			}
 		}
 		else
@@ -293,11 +295,11 @@ void Camera::Draw()
 /// </summary>
 void Camera::DistanceUpdate()
 {
-	const float kAddHighCenterPos = 40.0f;		//カメラが中心からどれだけ離れられるか
-	const float kAddNormalizedTime = 0.02f;
-	const float kMinNormalizedTimeDistance = 0.0f;
-	const float kMaxNormalizedTime = 1.0f;
-	const float addLowCenterPos = kAddCenterPosY - 5.0f;
+	const float kAddHighCenterPos			= 40.0f;		//カメラが中心からどれだけ離れられるか
+	const float kAddNormalizedTime			= 0.02f;
+	const float kMinNormalizedTimeDistance	= 0.0f;
+	const float kMaxNormalizedTime			= 1.0f;
+	const float addLowCenterPos				= kAddCenterPosY - 5.0f;
 
 	minHeight = screenCenterPosition.y - addLowCenterPos;
 	maxHeight = screenCenterPosition.y + kAddHighCenterPos;
@@ -363,9 +365,9 @@ void Camera::AngleUpdate(const float& playerAngle)
 void Camera::RotateUpdate()
 {
 	//キャラとカメラの正面方向が違うためplayerの正面方向に合わせる
-	float degreesForRdianConversion = nowDegree;
-	degreesForRdianConversion -= 90.0f;
-	const float kLookDirectionScale = 40.0f;
+	float degreesForRdianConversion		= nowDegree;
+	degreesForRdianConversion			-= 90.0f;
+	const float kLookDirectionScale		= 40.0f;
 	const float kStartRayDirectionScale = -10.0f;
 	
 	//180度以上はマイナス角度として扱う
@@ -404,11 +406,12 @@ void Camera::RotateUpdate()
 /// <param name="mapHandle"></param>
 bool Camera::CameraPosCalc(const std::vector<std::weak_ptr<BaseObject>>& collisionObjects)
 {
+	const float kVelocityScale	= 2.0f;
+	const int kFrameIndex		= -1;
+
 	MV1_COLL_RESULT_POLY hitPoly;
 	VECTOR cameraVelocity;
 	VECTOR subPosition;
-	const float kVelocityScale = 2.0f;
-	const int kFrameIndex = -1;
 
 	for (const auto& fieldObject : collisionObjects)
 	{
@@ -423,12 +426,12 @@ bool Camera::CameraPosCalc(const std::vector<std::weak_ptr<BaseObject>>& collisi
 			hitPoly))
 		{
 			//カメラの移動量を算出
-			cameraVelocity = VSub(hitPoly.HitPosition, rayCastStartPosition);
-			VECTOR cameraDirection = VNorm(cameraVelocity);
+			cameraVelocity			= VSub(hitPoly.HitPosition, rayCastStartPosition);
+			VECTOR cameraDirection		= VNorm(cameraVelocity);
 
 			//オブジェクトからカメラを押し戻す
 			VECTOR newCameraPosition = VAdd(normalCameraPosition, cameraVelocity);
-			cameraPosition = VGet(newCameraPosition.x, cameraPosition.y, newCameraPosition.z);
+			cameraPosition			 = VGet(newCameraPosition.x, cameraPosition.y, newCameraPosition.z);
 
 			subPosition = VGet(cameraPosition.x, centerPointSpherePos.y, cameraPosition.z);
 
@@ -437,7 +440,7 @@ bool Camera::CameraPosCalc(const std::vector<std::weak_ptr<BaseObject>>& collisi
 
 			//オブジェクトに当たっているときのカメラの距離を求める
 			cameraDistanceWhenHittingObject = VSize(distanceCenterAndCamera);
-			cameraDistanceSize = cameraDistanceWhenHittingObject;
+			cameraDistanceSize				= cameraDistanceWhenHittingObject;
 
 			//当たっているので抜け出す
 			return hitPoly.HitFlag;
@@ -452,8 +455,8 @@ bool Camera::CameraPosCalc(const std::vector<std::weak_ptr<BaseObject>>& collisi
 /// </summary>
 void Camera::AdjustCameraPosition()
 {
-	const float kLeapSpeed = 0.2f;
-	const float kSlowLeapSpeed = 0.02f;
+	const float kLeapSpeed		= 0.2f;
+	const float kSlowLeapSpeed	= 0.02f;
 	
 	if (!isHitObject)
 	{
@@ -517,9 +520,9 @@ void Camera::ResetAngle(const float& angle_player)
 
 void Camera::PosCalc()
 {
-	static constexpr float kNormalCameraSpeed = 0.05f;
-	const float kOutSphereCameraSpeed = 0.1f;
-	const float kCenterPointSphereRadius = 0.5f;
+	static constexpr float kNormalCameraSpeed	= 0.05f;
+	const float kOutSphereCameraSpeed			= 0.1f;
+	const float kCenterPointSphereRadius		= 0.5f;
 
 	//lookPosが球の外側にいった場合球の中心座標をずらす
 	if (!HitCheck::HitConfirmation(screenCenterPosition, centerPointSpherePos, kLookRadius, kCenterPointSphereRadius))
@@ -559,23 +562,23 @@ void Camera::ResultCreate()
 /// </summary>
 void Camera::ResultInitialize()
 {
-	const VECTOR kResultInitCameraPos = VGet(-0.17f, 53.75f, -1224.4f);
-	const VECTOR kResultInitSpherePos = VGet(-1.3f, 24.0f, -1172.35f);
-	const float kInitNormalLinearProgress = 0.5f;
-	const float kInitNormalCameraDistanceSize = 3.0f;
+	const VECTOR kResultInitCameraPos			= VGet(-0.17f, 53.75f, -1224.4f);
+	const VECTOR kResultInitSpherePos			= VGet(-1.3f, 24.0f, -1172.35f);
+	const float kInitNormalLinearProgress		= 0.5f;
+	const float kInitNormalCameraDistanceSize	= 3.0f;
 
-	cameraPosition = kResultInitCameraPos;
-	screenCenterPosition = kResultInitSpherePos;
-	cameraDistanceSize = kInitializeDistance;
-	normalDistanceProgress = kInitializeProgress;
-	isResetAngle = false;
-	isHitObject = false;
-	isPushRT = false;
-	isPush = false;
-	normalCameraHeightProgress = 0.0f;
-	nowDegree = kResultInitializeAngle;
-	normalLinearProgress = kInitNormalLinearProgress;
-	normalCameraDistanceSize = kInitNormalCameraDistanceSize;
+	cameraPosition				= kResultInitCameraPos;
+	screenCenterPosition		= kResultInitSpherePos;
+	cameraDistanceSize			= kInitializeDistance;
+	normalDistanceProgress		= kInitializeProgress;
+	isResetAngle				= false;
+	isHitObject					= false;
+	isPushRT					= false;
+	isPush						= false;
+	normalCameraHeightProgress	= 0.0f;
+	nowDegree					= kResultInitializeAngle;
+	normalLinearProgress		= kInitNormalLinearProgress;
+	normalCameraDistanceSize	= kInitNormalCameraDistanceSize;
 
 	SetCameraPositionAndTarget_UpVecY(cameraPosition, screenCenterPosition);
 }
@@ -585,16 +588,16 @@ void Camera::ResultInitialize()
 /// </summary>
 void Camera::ResultUpdate()
 {
-	const float kAddHighCenterPos = 40.0f;		//カメラが中心からどれだけ離れられるか
-	const float kAddLowCenterPos = kAddCenterPosY - 5.0f;
-	const float kAddCenterPosX = -3.0f;
+	const float kAddHighCenterPos	= 40.0f;		//カメラが中心からどれだけ離れられるか
+	const float kAddLowCenterPos	= kAddCenterPosY - 5.0f;
+	const float kAddCenterPosX		= -3.0f;
 
 	minHeight = screenCenterPosition.y - kAddLowCenterPos;
 	maxHeight = screenCenterPosition.y + kAddHighCenterPos;
 
-	centerPointSpherePos = WorldSubSystem::GetInstance().GetSubSystem<PlayerManager>()->GetPosition();
-	centerPointSpherePos.y += kAddCenterPosY;
-	centerPointSpherePos.x += kAddCenterPosX;
+	centerPointSpherePos	= WorldSubSystem::GetInstance().GetSubSystem<PlayerManager>()->GetPosition();
+	centerPointSpherePos.y	+= kAddCenterPosY;
+	centerPointSpherePos.x	+= kAddCenterPosX;
 	
 	//注視する座標からplayerがずれたら修正する
 	PosCalc();

@@ -15,10 +15,10 @@ public:
 	ObjectManager();
 	~ObjectManager();
 
-	void Create()override;
-	void Initialize()override;
-	void Update()override;
-	void Draw()override;
+	void Create()		override;
+	void Initialize()	override;
+	void Update()		override;
+	void Draw()			override;
 
 	void StartUpdate();
 	void FinishUpdate();
@@ -42,18 +42,18 @@ public:
 private:
 	std::vector<std::shared_ptr<IObject>> objects;
 
-	std::shared_ptr<Layout>					layout = NULL;
-	std::shared_ptr<Tutorial>				tutorial = NULL;
+	std::shared_ptr<Layout>					layout	  = NULL;
+	std::shared_ptr<Tutorial>				tutorial  = NULL;
 	std::shared_ptr<FinishCut>				finishCut = NULL;
 
 	std::shared_ptr<PlayerManager>				actualPlayerManager = NULL;
-	std::shared_ptr<CoinManager>				actualCoinManager = NULL;
-	std::shared_ptr<UIManager>					actualUiManager = NULL;
-	std::shared_ptr<GameTimer>					actualGameTimer = NULL;
-	std::shared_ptr<Shadow>						actualShadow = NULL;
-	std::shared_ptr<Camera>						actualCamera = NULL;
-	std::shared_ptr<SkyBox>						actualSkyBox = NULL;
-	std::shared_ptr<Liner8TreeManager<Coin>>	L8TreeManager = NULL;
+	std::shared_ptr<CoinManager>				actualCoinManager	= NULL;
+	std::shared_ptr<UIManager>					actualUiManager		= NULL;
+	std::shared_ptr<GameTimer>					actualGameTimer		= NULL;
+	std::shared_ptr<Shadow>						actualShadow		= NULL;
+	std::shared_ptr<Camera>						actualCamera		= NULL;
+	std::shared_ptr<SkyBox>						actualSkyBox		= NULL;
+	std::shared_ptr<Liner8TreeManager<Coin>>	L8TreeManager		= NULL;
 
 	bool isCamera;
 	bool isPush;

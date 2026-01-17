@@ -34,8 +34,9 @@ void PlayerManager::Create()
 
 	collisionManager = std::make_shared<CollisionManager>();
 
-	player = std::make_shared<Player>();
-	actualPlayer = std::dynamic_pointer_cast<Player>(player);
+	player			= std::make_shared<Player>();
+	actualPlayer	= std::dynamic_pointer_cast<Player>(player);
+
 	player->Create();
 
 	//サブシステムに追加

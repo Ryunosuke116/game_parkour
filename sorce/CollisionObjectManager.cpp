@@ -20,10 +20,10 @@ CollisionObjectManager::~CollisionObjectManager()
 
 void CollisionObjectManager::Create()
 {
-	const nlohmann::json dataFloorSky = JsonManager::GetInstance().GetJsons("floorSky");
-	const std::string path_floor_sky = dataFloorSky["modelPath"];
-	const int modelHandle = MV1LoadModel(path_floor_sky.c_str());
-	const auto self = shared_from_this();
+	const nlohmann::json dataFloorSky	= JsonManager::GetInstance().GetJsons("floorSky");
+	const std::string path_floor_sky	= dataFloorSky["modelPath"];
+	const int modelHandle				= MV1LoadModel(path_floor_sky.c_str());
+	const auto self						= shared_from_this();
 
 	collisionObjects.push_back(std::make_shared<FieldMesh>());
 

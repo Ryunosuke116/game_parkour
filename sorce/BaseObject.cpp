@@ -4,11 +4,11 @@
 /// インスタンス
 /// </summary>
 BaseObject::BaseObject():
-	modelHandle(-1),
-	position(VGet(-1.0f, -1.0f, -1.0f)),
-	differencePosition(VGet(-1.0f, -1.0f, -1.0f)),
-	tag(""),
-	jsonTag("")
+	modelHandle			(-1),
+	position			(VGet(-1.0f, -1.0f, -1.0f)),
+	differencePosition	(VGet(-1.0f, -1.0f, -1.0f)),
+	tag					(""),
+	jsonTag				("")
 {
 }
 

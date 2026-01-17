@@ -19,7 +19,12 @@
 /// <summary>
 /// コンストラクタ
 /// </summary>
-CoinManager::CoinManager()
+CoinManager::CoinManager():
+	modelHandle(-1),
+	nowCoinCount(-1),
+	addNumber(-1),
+	timer(-1.0f),
+	isAddResultUpdateCoin(false)
 {
 	tag = "coin";
 }
@@ -40,11 +45,11 @@ void CoinManager::Create()
 {
 	auto self = shared_from_this();
 
-	nlohmann::json data = JsonManager::GetInstance().GetJsons("coin");
-	std::string modelPath = data["modelPath"];
+	nlohmann::json data		= JsonManager::GetInstance().GetJsons("coin");
+	std::string modelPath	= data["modelPath"];
 
 	modelHandle = MV1LoadModel(modelPath.c_str());
-	int i = 0;
+	int i		= 0;
 
 	for (auto& pos : data["coin_list"])
 	{
@@ -93,7 +98,7 @@ void CoinManager::Initialize()
 /// </summary>
 void CoinManager::Update()
 {
-	const auto& L8TreeManager = WorldSubSystem::GetInstance().GetSubSystem<Liner8TreeManager<Coin>>();
+	const auto& L8TreeManager	= WorldSubSystem::GetInstance().GetSubSystem<Liner8TreeManager<Coin>>();
 	const auto& spPlayerManager = WorldSubSystem::GetInstance().GetSubSystem<PlayerManager>();
 
 	//プレイヤーがどの空間にいるか調べる
@@ -252,8 +257,8 @@ void CoinManager::ResultInitialize()
 	{
 		coin.second->ResultInitialize();
 	}
-	timer = kInitTimer;
-	nowCoinCount = kInitNowCoinCount;
+	timer			= kInitTimer;
+	nowCoinCount	= kInitNowCoinCount;
 }
 
 /// <summary>

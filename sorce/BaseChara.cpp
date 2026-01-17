@@ -5,18 +5,18 @@
 
 
 BaseChara::BaseChara() :
-    modelHandle(-1),
-    coinCount(-1),
-    nowFrameNumber(-1),
-    radian(-1),
-    rotateX(-1.0f),
-    isCollisionCheck(false),
-    position(VGet(-1.0f, -1.0f, -1.0f)),
-    framePosition(VGet(-1.0f, -1.0f, -1.0f)),
-    velocity(VGet(-1.0f, -1.0f, -1.0f)),
-    targetMoveDirection(VGet(-1.0f, -1.0f, -1.0f)),
-    moveDirection(VGet(-1.0f, -1.0f, -1.0f)),
-    positionData({ NULL })
+    modelHandle         (-1),
+    coinCount           (-1),
+    nowFrameNumber      (-1),
+    radian              (-1),
+    rotateX             (-1.0f),
+    isCollisionCheck    (false),
+    position            (VGet(-1.0f, -1.0f, -1.0f)),
+    framePosition       (VGet(-1.0f, -1.0f, -1.0f)),
+    velocity            (VGet(-1.0f, -1.0f, -1.0f)),
+    targetMoveDirection (VGet(-1.0f, -1.0f, -1.0f)),
+    moveDirection       (VGet(-1.0f, -1.0f, -1.0f)),
+    positionData        ({ NULL })
 {
 
 }
@@ -48,8 +48,8 @@ void BaseChara::UpdateAngle(const VECTOR& direction)
 
     const float targetDegree = Calculation::RadToDeg(targetRadian);
 
-    nowDegree = Calculation::RotationAngleDegree(targetDegree, nowDegree, kRotationSpeedDegree);
-    radian = Calculation::DegToRad(nowDegree);
+    nowDegree   = Calculation::RotationAngleDegree(targetDegree, nowDegree, kRotationSpeedDegree);
+    radian      = Calculation::DegToRad(nowDegree);
 
     DebugDrawer::GetInstance().InformationInputStringFloat("radian %f\n", radian);
     DebugDrawer::GetInstance().InformationInputStringFloat("rotateX %f\n", rotateX);

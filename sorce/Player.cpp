@@ -225,6 +225,7 @@ void Player::StartUpdate(const float timer)
     {
         nowState->SetIsChangeState(true);
         playerData.isIdle = true;
+
         //状態変更
         ChangeState();
     }
@@ -252,8 +253,8 @@ void Player::ResultCreate()
 {
     const std::string jsonName = "player";
     Load(JsonManager::GetInstance().GetJsons(jsonName));
-    playerCalculation = std::make_shared<PlayerCalculation>();
-    animationChanger = std::make_shared<AnimationChanger>();
+    playerCalculation   = std::make_shared<PlayerCalculation>();
+    animationChanger    = std::make_shared<AnimationChanger>();
     MV1SetScale(modelHandle, VGet(kModelScale, kModelScale, kModelScale));
 }
 
@@ -351,11 +352,11 @@ void Player::ChangeState()
 /// </summary>
 void Player::CollisionUpdate()
 {
-    const int left = MV1SearchFrame(modelHandle, "mixamorig:LeftHandIndex4");
-    const int right = MV1SearchFrame(modelHandle, "mixamorig:RightHandMiddle4_end");
-    const float kRightAngle = 90.0f;
-    const VECTOR kVerticalShaft = VGet(0.0f, 1.0f, 0.0f);
-    const VECTOR kRotatePosition = VAdd(position, faceDirection);
+    const int left                  = MV1SearchFrame(modelHandle, "mixamorig:LeftHandIndex4");
+    const int right                 = MV1SearchFrame(modelHandle, "mixamorig:RightHandMiddle4_end");
+    const float kRightAngle         = 90.0f;
+    const VECTOR kVerticalShaft     = VGet(0.0f, 1.0f, 0.0f);
+    const VECTOR kRotatePosition    = VAdd(position, faceDirection);
     const VECTOR kAddCenterPosition = VGet(0.0f, 10.0f, 0.0f);       //キャラの足もとから中心までの差
 
     playerCalculation->SetLeftHandPos(MV1GetFramePosition(modelHandle, left));
@@ -363,12 +364,12 @@ void Player::CollisionUpdate()
     positionData.oldPosition = position;
 
     //床衝突判定用ray
-    positionData.centerPosition = VAdd(position, kAddCenterPosition);
-    positionData.rayTopPosition = VGet(position.x, positionData.centerPosition.y + height, position.z);
-    positionData.rayBottomPosition = position;
+    positionData.centerPosition     = VAdd(position, kAddCenterPosition);
+    positionData.rayTopPosition     = VGet(position.x, positionData.centerPosition.y + height, position.z);
+    positionData.rayBottomPosition  = position;
     
-    positionData.rayTopPosition.x = positionData.rayBottomPosition.x;
-    positionData.rayTopPosition.z = positionData.rayBottomPosition.z;
+    positionData.rayTopPosition.x   = positionData.rayBottomPosition.x;
+    positionData.rayTopPosition.z   = positionData.rayBottomPosition.z;
      
     //投影で歩くためのごまかし
     if ((playerData.isRun &&
@@ -397,7 +398,7 @@ void Player::CollisionUpdate()
     //壁衝突判定用カプセル
     //カプセルなので上下、設定座標よりも半径分足し引きする
     positionData.capsuleBottomPosition.y += radius;
-    positionData.capsuleTopPosition.y -= radius;
+    positionData.capsuleTopPosition.y    -= radius;
 
     //bottomPosよりも下にいかないように
     //capsule
@@ -521,28 +522,28 @@ void Player::CounterplanBug()
 
     if (position.y < kMaxPosY)
     {
-        position = kResetPosition;
-        playerData.isIdle = true;
-        playerData.isGround = false;
-        playerData.isJump = false;
-        playerData.isSecondJump = false;
-        playerData.isAllJump = false;
-        playerData.isWalljump = false;
-        playerData.isMove = false;
-        playerData.isWalk = false;
-        playerData.isRoll = false;
-        playerData.isStopRun = false;
-        playerData.isUseRoll = false;
-        playerData.isJumpPlayAnim = false;
-        playerData.isFalling = false;
-        playerData.isHanging = false;
-        playerData.isNowHanging = false;
-        playerData.isUseHanging = true;
-        playerData.isHangToCrouch = false;
-        playerData.isRun = false;
-        playerData.isRunWall = false;
-        playerData.isUseWallJump = true;
-        playerData.isWallClimb = false;
+        position                    = kResetPosition;
+        playerData.isIdle           = true;
+        playerData.isGround         = false;
+        playerData.isJump           = false;
+        playerData.isSecondJump     = false;
+        playerData.isAllJump        = false;
+        playerData.isWalljump       = false;
+        playerData.isMove           = false;
+        playerData.isWalk           = false;
+        playerData.isRoll           = false;
+        playerData.isStopRun        = false;
+        playerData.isUseRoll        = false;
+        playerData.isJumpPlayAnim   = false;
+        playerData.isFalling        = false;
+        playerData.isHanging        = false;
+        playerData.isNowHanging     = false;
+        playerData.isUseHanging     = true;
+        playerData.isHangToCrouch   = false;
+        playerData.isRun            = false;
+        playerData.isRunWall        = false;
+        playerData.isUseWallJump    = true;
+        playerData.isWallClimb      = false;
     }
 }
 

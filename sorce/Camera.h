@@ -11,14 +11,14 @@ public:
 	Camera();
 	~Camera();
 
-	void Create()override;
-	void Load(const nlohmann::json& jsonData)override{}
-	void Initialize()override;
-	void Update()override;
-	void Draw()override;
-	void ResultCreate()override;
-	void ResultInitialize()override;
-	void ResultUpdate()override;
+	void Create()								override;
+	void Load(const nlohmann::json& jsonData)	override	{}
+	void Initialize()							override;
+	void Update()								override;
+	void Draw()									override;
+	void ResultCreate()							override;
+	void ResultInitialize()						override;
+	void ResultUpdate()							override;
 
 	void RotateUpdate();
 	void AngleUpdate(const float& playerAngle);
@@ -37,10 +37,10 @@ public:
 	///////////////////////////////////////////////////////
 	// ゲッター
 	///////////////////////////////////////////////////////
-	VECTOR GetCameraDirection() { return cameraDirection; }
-	VECTOR GetScreenCenterPosition() { return screenCenterPosition; }
-	float GetCameraDistance() { return cameraDistanceSize; }
-	float GetCameraAndTargetDistanceSize() { return cameraAndTargetDistanceSize; }
+	VECTOR GetCameraDirection()				{ return cameraDirection; }
+	VECTOR GetScreenCenterPosition()		{ return screenCenterPosition; }
+	float GetCameraDistance()				{ return cameraDistanceSize; }
+	float GetCameraAndTargetDistanceSize()	{ return cameraAndTargetDistanceSize; }
 
 private:
 	VECTOR cameraPosition;
@@ -72,15 +72,15 @@ private:
 	bool isPushRT;
 	bool isPush;
 
-	static constexpr float kLookRadius = 1.0f;
-	static constexpr float kCameraRadius = 4.0f;
-	static constexpr float kMaxDistanceSize = 70.0f;
-	static constexpr float kMinDistanceSize = 15.0f;
-	static constexpr float kInitializeAngle = 324.549988f; 
-	static constexpr float kResultInitializeAngle = -177.55f;
-	static constexpr float kInitializeDistance = 50.0f;
-	static constexpr float kInitializeProgress = 0.7f;
-	static constexpr float kAddCenterPosY = 15.0f;					//playerPosのY軸に加算してカメラと注視点の間の座標を求める
+	static constexpr float kLookRadius				= 1.0f;
+	static constexpr float kCameraRadius			= 4.0f;
+	static constexpr float kMaxDistanceSize			= 70.0f;
+	static constexpr float kMinDistanceSize			= 15.0f;
+	static constexpr float kInitializeAngle			= 324.549988f; 
+	static constexpr float kResultInitializeAngle	= -177.55f;
+	static constexpr float kInitializeDistance		= 50.0f;
+	static constexpr float kInitializeProgress		= 0.7f;
+	static constexpr float kAddCenterPosY			= 15.0f;					//playerPosのY軸に加算してカメラと注視点の間の座標を求める
 
 	const VECTOR kInitializeCameraPos = VGet(426.703827f, 238.598358f, -1275.91016f);
 	const VECTOR kInitializeSpherePos = VGet(398.874207f, 222.598328f, -1238.91187f);

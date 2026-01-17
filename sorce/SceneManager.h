@@ -6,7 +6,6 @@
 class SceneManager : public BaseManager
 {
 public:
-
     SceneManager();
     ~SceneManager();
 
@@ -31,9 +30,9 @@ public:
     void ChangeScene(std::string_view name, const int coinCount);
 
 private:
-    std::unordered_map<std::string_view, BaseScene*>scenes;
+    std::unordered_map<std::string_view, BaseScene*> scenes;
 
-    BaseScene* nowScene;
-    std::shared_ptr<BaseScene> nowScenee;
+    BaseScene*                  nowScene;
+    std::shared_ptr<BaseScene>  nowScenee;
 };
 

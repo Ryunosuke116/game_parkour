@@ -51,6 +51,7 @@ public:
 
 		//各レベルでの空間数を算出
 		iPow[0] = 1;
+
 		for (int i = 1; i < maxLevel + 1; i++)
 		{
 			iPow[i] = iPow[i - 1] * 8;
@@ -60,12 +61,12 @@ public:
 		cellNumber = (iPow[spaceLevel + 1] - 1) / 7;
 
 		//領域を登録
-		regionMin = min;
-		regionMax = max;
-		regionWidth = VSub(regionMax, regionMin);
-		regionSideLength.x = regionWidth.x / ((float)(1 << spaceLevel));
-		regionSideLength.y = regionWidth.y / ((float)(1 << spaceLevel));
-		regionSideLength.z = regionWidth.z / ((float)(1 << spaceLevel));
+		regionMin			= min;
+		regionMax			= max;
+		regionWidth			= VSub(regionMax, regionMin);
+		regionSideLength.x  = regionWidth.x / ((float)(1 << spaceLevel));
+		regionSideLength.y  = regionWidth.y / ((float)(1 << spaceLevel));
+		regionSideLength.z  = regionWidth.z / ((float)(1 << spaceLevel));
 
 		lowestLevel = spaceLevel;
 
@@ -137,12 +138,12 @@ public:
 		mObjectMax = VAdd(mObjectMax, BoundaryRange::parallelVelocity);
 
 		//最小レベルにおける各軸位置を算出
-		uint32_t leftTop = GetPointElem(mObjectMin);
+		uint32_t leftTop	 = GetPointElem(mObjectMin);
 		uint32_t rightBottom = GetPointElem(mObjectMax);
 
-		uint32_t xorNumber = rightBottom ^ leftTop;
+		uint32_t xorNumber	= rightBottom ^ leftTop;
 		uint32_t spaceIndex = 0;
-		uint32_t shift = 0; 
+		uint32_t shift		= 0; 
 
 		//空間レベル数分、差があるかチェック
 		for (unsigned int i = 0; i < lowestLevel; i++)
@@ -151,8 +152,8 @@ public:
 			//3ビット分マスクして
 			if ((checkNumber & 0x7) != 0)
 			{
-				spaceIndex = (i + 1);
-				shift = spaceIndex * 3;
+				spaceIndex	= (i + 1);
+				shift		= spaceIndex * 3;
 			}
 		}
 
@@ -329,13 +330,13 @@ public:
 private:
 	static constexpr uint32_t maxLevel = 8;	//空間分割の最大レベル
 
-	unsigned int iPow[maxLevel + 1];	//べき乗数値配列
-	VECTOR regionWidth;				//領域の幅
-	VECTOR regionMin;				//領域の最小値
-	VECTOR regionMax;				//領域の最大値
-	VECTOR regionSideLength;		//最小領域の辺の長さ
-	uint32_t cellNumber;			//空間の数
-	unsigned int lowestLevel;		//最下位レベル
+	unsigned int	iPow[maxLevel + 1];		//べき乗数値配列
+	unsigned int	lowestLevel;			//最下位レベル
+	VECTOR			regionWidth;			//領域の幅
+	VECTOR			regionMin;				//領域の最小値
+	VECTOR			regionMax;				//領域の最大値
+	VECTOR			regionSideLength;		//最小領域の辺の長さ
+	uint32_t		cellNumber;				//空間の数
 
 	std::unordered_map <uint32_t, std::shared_ptr<Cell<Type>>> cellArray;		//空間リスト
 };

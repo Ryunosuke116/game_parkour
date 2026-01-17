@@ -11,14 +11,14 @@ public:
 	UIManager();
 	~UIManager();
 
-	void Create()		override;
-	void Initialize()	override;
-	void Update()		override;
-	void Draw()			override;
-	void Add()			override{}
-	void ResultCreate()override{}
-	void ResultInitialize()override;
-	void ResultUpdate()override;
+	void Create()				override;
+	void Initialize()			override;
+	void Update()				override;
+	void Draw()					override;
+	void Add()					override	{}
+	void ResultCreate()			override	{}
+	void ResultInitialize()		override;
+	void ResultUpdate()			override;
 
 	void ResultCreate(const int coinCount);
 	void Add(std::shared_ptr<BaseUI> ui);
