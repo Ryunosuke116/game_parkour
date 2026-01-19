@@ -39,10 +39,18 @@ void RankScoreUi::Load(const nlohmann::json& jsonData)
 {
 	for (auto& data : jsonData["rank"])
 	{
-		std::string handlePath = data[0];     //HandlePath
-		std::string name = data[1];				//pathの名前
+		std::string handlePath	= data[0];     //HandlePath
+		std::string name		= data[1];				//pathの名前
 
 		umRankHandles[name] = LoadGraph(handlePath.c_str());
+	}
+
+	for (auto& data : jsonData["speedBonus"])
+	{
+		std::string handlePath	= data[0];
+		std::string name		= data[1];
+
+		umSpeedBonus[name] = LoadGraph(handlePath.c_str());
 	}
 }
 
@@ -62,17 +70,25 @@ void RankScoreUi::Create()
 /// </summary>
 void RankScoreUi::Initialize()
 {
-	const float kInitRankPosX = 1350.0f;
-	const float kInitRankPosY = 300.0f;
-	const float lkInitRankWidth = 150.0f;
-	const float lkInitRankHeight = 150.0f;
+	const float kInitRankPosX			= 1350.0f;
+	const float kInitRankPosY			= 300.0f;
+	const float kInitRankWidth			= 150.0f;
+	const float kInitRankHeight			= 150.0f;
+	const float kInitSpeedBonusPosX		= 1350.0f;
+	const float kInitSpeedBonusPosY		= 450.0f;
+	const float kInitSpeedBonusWidth	= 180.0f;
+	const float kInitSpeedBonusHeight	= 100.0f;
 
-	rankPosX = kInitRankPosX;
-	rankPosY = kInitRankPosY;
-	rankWidth = lkInitRankWidth;
-	rankHeight = lkInitRankHeight;
-	drawRankRate = kResetRankRate;
-	rankUpCount = 0;
+	rankPosX		 = kInitRankPosX;
+	rankPosY		 = kInitRankPosY;
+	speedBonusPosX	 = kInitSpeedBonusPosX;
+	speedBonusPosY	 = kInitSpeedBonusPosY;
+	rankWidth		 = kInitRankWidth;
+	rankHeight		 = kInitRankHeight;
+	speedBonusWidth  = kInitSpeedBonusWidth;
+	speedBonusHeight = kInitSpeedBonusHeight;
+	drawRankRate	 = kResetRankRate;
+	rankUpCount		 = 0;
 
 	rankHandleKey = "";
 	rankScoreUpdater->Initialize();
@@ -146,6 +162,16 @@ void RankScoreUi::Draw()
 	
 		//描画範囲をリセット
 		SetDrawArea(0, 0, 10000, 10000);
+
+		if (rankHandleKey != "D")
+		{
+			DrawExtendGraphF(
+				speedBonusPosX - speedBonusWidth,
+				speedBonusPosY - speedBonusHeight,
+				speedBonusPosX + speedBonusWidth,
+				speedBonusPosY + speedBonusHeight,
+				umSpeedBonus.at(rankHandleKey), TRUE);
+		}
 	}
 }
 

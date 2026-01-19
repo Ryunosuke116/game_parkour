@@ -28,7 +28,7 @@ void Shadow::Initialize()
 	const VECTOR kInitLightDirection = VGet(0.5f, -1.0f, 0.5f);
 
 	shadowMapHandle = MakeShadowMap(shadowQuality, shadowQuality);
-	lightDirection = kInitLightDirection;
+	lightDirection	= kInitLightDirection;
 
 	//ライトの方向を設定
 	SetLightDirection(lightDirection);
@@ -43,8 +43,8 @@ void Shadow::Initialize()
 /// <param name="pos"></param>
 void Shadow::Update()
 {
-	const VECTOR drawRange = VGet(100.0f, 50.0f, 100.0f);
-	const std::shared_ptr<PlayerManager> playerManager = WorldSubSystem::GetInstance().GetSubSystem<PlayerManager>();
+	const VECTOR drawRange								= VGet(100.0f, 50.0f, 100.0f);
+	const std::shared_ptr<PlayerManager> playerManager	= WorldSubSystem::GetInstance().GetSubSystem<PlayerManager>();
 
 	//シャドウを描画する範囲を指定
 	VECTOR minPos = VSub(playerManager->GetPosition(), drawRange);

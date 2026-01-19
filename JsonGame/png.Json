@@ -36,6 +36,13 @@
     [ "material/png/rank_game/SSS_color.png", "SSS_color" ]
   ],
 
+  "speedBonus": [
+    [ "material/png/speedBonus/SpeedBonus_C.png", "C" ],
+    [ "material/png/speedBonus/SpeedBonus_B.png", "B" ],
+    [ "material/png/speedBonus/SpeedBonus_A.png", "A" ],
+    [ "material/png/speedBonus/SpeedBonus_S.png", "S" ]
+  ],
+
   "title": [
     [ "material/png/title.png", "title" ]
   ],

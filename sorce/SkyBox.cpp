@@ -23,8 +23,8 @@ SkyBox::~SkyBox()
 
 void SkyBox::Load(const nlohmann::json& jsonData)
 {
-	std::string path = jsonData["skyBoxPath"];
-	modelHandle = MV1LoadModel(path.c_str());
+	std::string path	= jsonData["skyBoxPath"];
+	modelHandle			= MV1LoadModel(path.c_str());
 }
 
 void SkyBox::Create()
@@ -41,6 +41,7 @@ void SkyBox::Create()
 void SkyBox::Initialize()
 {
 	const VECTOR kInitPos = VGet(0.0f, 0.0f, 0.0f);
+	
 	position = kInitPos;
 	MV1SetPosition(modelHandle, position);
 }

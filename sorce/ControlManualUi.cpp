@@ -41,17 +41,17 @@ void ControlManualUi::Create()
 
 void ControlManualUi::Initialize()
 {
-	const float initManualUiPosX = -350.0f;
-	const float initManualUiPosY = 120.0f;
-	const float initCommandsBackPosX = -290.0f;
-	const float initCommandsBackPosY = 60.0f;
-	const int initStateNumber = -1;
+	const float initManualUiPosX		= -350.0f;
+	const float initManualUiPosY		= 120.0f;
+	const float initCommandsBackPosX	= -290.0f;
+	const float initCommandsBackPosY	= 60.0f;
+	const int initStateNumber			= -1;
 
-	manualUiPosX = initManualUiPosX;
-	manualUiPosY = initManualUiPosY;
-	commandsBackPosX = initCommandsBackPosX;
-	commandsBackPosY = initCommandsBackPosY;
-	stateNumber = initStateNumber;
+	manualUiPosX		= initManualUiPosX;
+	manualUiPosY		= initManualUiPosY;
+	commandsBackPosX	= initCommandsBackPosX;
+	commandsBackPosY	= initCommandsBackPosY;
+	stateNumber			= initStateNumber;
 }
 
 /// <summary>
@@ -59,9 +59,9 @@ void ControlManualUi::Initialize()
 /// </summary>
 void ControlManualUi::Update()
 {
-	const float kLeapSpeed = 0.1f;
-	const float targetManualPosX = 90.0f;
-	const float targetCommandsBackPosX = 30.0f;
+	const float kLeapSpeed				= 0.1f;
+	const float targetManualPosX		= 90.0f;
+	const float targetCommandsBackPosX  = 30.0f;
 
 	drawUis.clear();
 

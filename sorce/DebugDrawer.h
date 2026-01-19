@@ -37,18 +37,18 @@ private:
     struct Text_bool { std::string text; bool variable; };
     struct Text_VECTOR { std::string text; VECTOR variable; };
 
-    std::vector<Line> lines;
-    std::vector<Sphere> spheres;
-    std::vector<AABB> aabbs;
-    std::vector<Capsule> capsules;
-    std::vector<Text_int> texts_int;
-    std::vector<Text_float> texts_float;
-    std::vector<Text_bool> texts_bool;
-    std::vector<Text_VECTOR> texts_VECTOR;
+    std::vector<Line>           lines;
+    std::vector<Sphere>         spheres;
+    std::vector<AABB>           aabbs;
+    std::vector<Capsule>        capsules;
+    std::vector<Text_int>       texts_int;
+    std::vector<Text_float>     texts_float;
+    std::vector<Text_bool>      texts_bool;
+    std::vector<Text_VECTOR>    texts_VECTOR;
 
-    int frameCount = 0;
-    int startTime = 0;
-    float fps = 0.0f;
+    int frameCount  = 0;
+    int startTime   = 0;
+    float fps       = 0.0f;
 
     DebugDrawer() = default;
     ~DebugDrawer() = default;

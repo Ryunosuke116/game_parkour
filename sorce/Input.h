@@ -27,16 +27,16 @@ public:
 
 	void Update();
 
-	int GetNowFrameInput() const { return nowFrameInput; }
-	int GetNowFrameNewInput() const { return nowFrameNewInput; }
-	int GetNowFrameInput_direct_Z()const { return input_direct.Z; }
-	float GetJoyPadXLeft() const { return joyPad->inputXLeft; }
-	float GetJoyPadYLeft() const { return joyPad->inputYLeft; }
-	float GetJoyPadXRight() const { return joyPad->inputXRight; }
-	float GetJoyPadYRight() const { return joyPad->inputYRight; }
-	float GetOldJoyPadXLeft() const { return OldJoyPad->inputXLeft; }
-	float GetOldJoyPadYLeft() const { return OldJoyPad->inputYLeft; }
-	float GetOldJoyPadXRight() const { return OldJoyPad->inputXRight; }
-	float GetOldJoyPadYRight() const { return OldJoyPad->inputYRight; }
+	int GetNowFrameInput()			const { return nowFrameInput; }
+	int GetNowFrameNewInput()		const { return nowFrameNewInput; }
+	int GetNowFrameInput_direct_Z()	const { return input_direct.Z; }
+	float GetJoyPadXLeft()			const { return joyPad->inputXLeft; }
+	float GetJoyPadYLeft()			const { return joyPad->inputYLeft; }
+	float GetJoyPadXRight()			const { return joyPad->inputXRight; }
+	float GetJoyPadYRight()			const { return joyPad->inputYRight; }
+	float GetOldJoyPadXLeft()		const { return OldJoyPad->inputXLeft; }
+	float GetOldJoyPadYLeft()		const { return OldJoyPad->inputYLeft; }
+	float GetOldJoyPadXRight()		const { return OldJoyPad->inputXRight; }
+	float GetOldJoyPadYRight()		const { return OldJoyPad->inputYRight; }
 };
 

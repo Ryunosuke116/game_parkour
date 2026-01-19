@@ -7,15 +7,15 @@ public:
 	GameTimer();
 	~GameTimer();
 
-	void Load(const nlohmann::json& jsonData)override;
-	void Initialize()override;
-	void Update()override;
-	void Draw()override;
-	void Create()override;
-	void Add()override{}
-	void ResultCreate()override{}
-	void ResultInitialize()override{}
-	void ResultUpdate()override{}
+	void Load(const nlohmann::json& jsonData)		override;
+	void Initialize()								override;
+	void Update()									override;
+	void Draw()										override;
+	void Create()									override;
+	void Add()										override {}
+	void ResultCreate()								override {}
+	void ResultInitialize()							override {}
+	void ResultUpdate()								override {}
 
 	bool IsUpdateMin();
 

@@ -8,23 +8,25 @@ public:
 	ControlManualUi();
 	~ControlManualUi();
 
-	void Create()override;
-	void Add()override{}
-	void Load(const nlohmann::json& jsonData)override;
-	void Initialize()override;
-	void Update()override;
-	void Draw()override;
-	void ResultCreate()override;
-	void ResultInitialize()override;
-	void ResultUpdate()override;
+	void Create()								override;
+	void Add()									override {}
+	void Load(const nlohmann::json& jsonData)	override;
+	void Initialize()							override;
+	void Update()								override;
+	void Draw()									override;
+	void ResultCreate()							override;
+	void ResultInitialize()						override;
+	void ResultUpdate()							override;
 
 	void OnChangeState(const PlayerData& playerData)override;
 
 private:
 	std::unordered_map<std::string, int> uiHandles;
 	std::vector<int> drawUis;
+
 	int stateNumber;
 	int commandsBackHandle;
+
 	float commandsBackPosX;
 	float commandsBackPosY;
 	float manualUiPosX;

@@ -25,12 +25,12 @@ public:
 	void ResultCreate()							override;
 	void ResultInitialize()						override;
 	void ResultUpdate()							override;
+	void OnCoinPicked(int amount)				override;
 
 	void StartUpdate(const float timer);
 	void FinishUpdate(const float timer);
 	void MoveDirectionUpdate();
 	void ReceiveCollisionResult();
-	void OnCoinPicked(int amount)override;
 
 	//////////////////////////////////
 	//　ゲッター

@@ -31,13 +31,13 @@ void BackGround::Initialize()
 {
 	const int kInitStartButtonX = 350;
 	const int kInitStartButtonY = 650;
-	const int kInitAlpha = 254;
-	const int kInitAddAlpha = 2;
+	const int kInitAlpha		= 254;
+	const int kInitAddAlpha		= 2;
 	
 	startButtonX = kInitStartButtonX;
 	startButtonY = kInitStartButtonY;
-	alpha = kInitAlpha;
-	addAlpha = kInitAddAlpha;
+	alpha		 = kInitAlpha;
+	addAlpha	 = kInitAddAlpha;
 }
 
 void BackGround::Update()

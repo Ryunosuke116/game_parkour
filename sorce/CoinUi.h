@@ -10,15 +10,15 @@ public:
 	CoinUi();
 	~CoinUi();
 
-	void Create()override;
-	void Add()override{}
-	void Load(const nlohmann::json& jsonData)override;
-	void Initialize()override;
-	void Update()override;
-	void Draw()override;
-	void ResultCreate()override{}
-	void ResultInitialize()override;
-	void ResultUpdate()override;
+	void Create()								override;
+	void Add()									override  {}
+	void Load(const nlohmann::json& jsonData)	override;
+	void Initialize()							override;
+	void Update()								override;
+	void Draw()									override;
+	void ResultCreate()							override  {}
+	void ResultInitialize()						override;
+	void ResultUpdate()							override;
 
 	void ResultCreate(const int coinCount);
 	void OnCoinPicked(int amount)override { coinCount += amount; }

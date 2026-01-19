@@ -6,10 +6,10 @@
 
 CoinUi::CoinUi() :
 	BaseUI(),
-	coinHandle(-1),
-	crossHandle(-1),
-	coinCount(-1),
-	countNumber("")
+	coinHandle	(-1),
+	crossHandle	(-1),
+	coinCount	(-1),
+	countNumber	("")
 {
 	std::fill(
 		std::begin(numberHandle),
@@ -31,11 +31,11 @@ CoinUi::~CoinUi()
 
 void CoinUi::Load(const nlohmann::json& jsonData)
 {
-	const int kXNum = 10;
-	const int kYNum = 10;
-	const int kAllNum = 1;
-	const int kXSize = 480;
-	const int kYSize = 500;
+	const int kXNum		= 10;
+	const int kYNum		= 10;
+	const int kAllNum	= 1;
+	const int kXSize	= 480;
+	const int kYSize	= 500;
 
 	std::unordered_map<std::string, std::string> uiPath;
 
@@ -64,46 +64,46 @@ void CoinUi::Create()
 void CoinUi::Initialize()
 {
 	//•`‰æˆÊ’u
-	const float InitCoinPosX = -480.0f;
-	const float InitCoinPosY = 690.0f;
-	const float InitCrossX = -345.0f;
-	const float InitCrossY = 760.0f;
-	const float InitNumberX = -290.0f;
-	const float InitNumberY = 730.0f;
-	const float kInitCoinWidth = 140.0f;
-	const float kInitCoinHeight = 152.0f;
-	const float kInitCrossWidth = 60.0f;
-	const float kInitCrossHeight = 60.0f;
-	const float kInitNumberWidth = 100.0f;
-	const float kInitNumberHeight = 100.0f;
-	const float kInitAddNumberX = 60.0f;
-	const std::string initNumber = "00";
+	const float InitCoinPosX		= -480.0f;
+	const float InitCoinPosY		= 690.0f;
+	const float InitCrossX			= -345.0f;
+	const float InitCrossY			= 760.0f;
+	const float InitNumberX			= -290.0f;
+	const float InitNumberY			= 730.0f;
+	const float kInitCoinWidth		= 140.0f;
+	const float kInitCoinHeight		= 152.0f;
+	const float kInitCrossWidth		= 60.0f;
+	const float kInitCrossHeight	= 60.0f;
+	const float kInitNumberWidth	= 100.0f;
+	const float kInitNumberHeight	= 100.0f;
+	const float kInitAddNumberX		= 60.0f;
+	const std::string initNumber	= "00";
 
-	coinPosX = InitCoinPosX;
-	coinPosY = InitCoinPosY;
-	crossPosX = InitCrossX;
-	crossPosY = InitCrossY;
-	numberPosX = InitNumberX;
-	numberPosY = InitNumberY;
+	coinPosX	= InitCoinPosX;
+	coinPosY	= InitCoinPosY;
+	crossPosX	= InitCrossX;
+	crossPosY	= InitCrossY;
+	numberPosX	= InitNumberX;
+	numberPosY	= InitNumberY;
 
-	coinWidth = kInitCoinWidth;
-	coinHeight = kInitCoinHeight;
-	crossWidth = kInitCrossWidth;
-	crossHeight = kInitCrossHeight;
-	numberWidth = kInitNumberWidth;
+	coinWidth	 = kInitCoinWidth;
+	coinHeight	 = kInitCoinHeight;
+	crossWidth	 = kInitCrossWidth;
+	crossHeight  = kInitCrossHeight;
+	numberWidth  = kInitNumberWidth;
 	numberHeight = kInitNumberHeight;
-	addNumberX = kInitAddNumberX;
+	addNumberX   = kInitAddNumberX;
 
 	countNumber = initNumber;
-	coinCount = 0;
+	coinCount	= 0;
 }
 
 void CoinUi::Update()
 {
-	const float targetCoinPosX = 20;
-	const float targetCrossX = 155;
-	const float targetNumberX = 210;
-	const float kLeapSpeed = 0.1f;
+	const float targetCoinPosX	= 20;
+	const float targetCrossX	= 155;
+	const float targetNumberX	= 210;
+	const float kLeapSpeed		= 0.1f;
 
 	countNumber = std::to_string(coinCount);
 
@@ -113,9 +113,9 @@ void CoinUi::Update()
 		countNumber.insert(0, "0");
 	}
 
-	coinPosX = Calculation::Leap(coinPosX, targetCoinPosX, kLeapSpeed);
-	crossPosX = Calculation::Leap(crossPosX, targetCrossX, kLeapSpeed);
-	numberPosX = Calculation::Leap(numberPosX, targetNumberX, kLeapSpeed);
+	coinPosX	= Calculation::Leap(coinPosX, targetCoinPosX, kLeapSpeed);
+	crossPosX	= Calculation::Leap(crossPosX, targetCrossX, kLeapSpeed);
+	numberPosX	= Calculation::Leap(numberPosX, targetNumberX, kLeapSpeed);
 }
 
 void CoinUi::Draw()
@@ -166,34 +166,34 @@ void CoinUi::ResultCreate(const int coinCount)
 /// </summary>
 void CoinUi::ResultInitialize()
 {
-	const float InitCoinPosX = 1800.0f;
-	const float InitCoinPosY = 630.0f;
-	const float InitCrossX = 2005.0f;
-	const float InitCrossY = 740.0f;
-	const float InitNumberX = 2060.0f;
-	const float InitNumberY = 690.0f;
-	const float kInitCoinWidth = 200.0f;
-	const float kInitCoinHeight = 212.0f;
-	const float kInitCrossWidth = 76.0f;
-	const float kInitCrossHeight = 76.0f;
-	const float kInitNumberWidth = 150.0f;
-	const float kInitNumberHeight = 150.0f;
-	const float kInitAddNumberX = 120.0f;
+	const float InitCoinPosX		= 1800.0f;
+	const float InitCoinPosY		= 630.0f;
+	const float InitCrossX			= 2005.0f;
+	const float InitCrossY			= 740.0f;
+	const float InitNumberX			= 2060.0f;
+	const float InitNumberY			= 690.0f;
+	const float kInitCoinWidth		= 200.0f;
+	const float kInitCoinHeight		= 212.0f;
+	const float kInitCrossWidth		= 76.0f;
+	const float kInitCrossHeight	= 76.0f;
+	const float kInitNumberWidth	= 150.0f;
+	const float kInitNumberHeight	= 150.0f;
+	const float kInitAddNumberX		= 120.0f;
 
-	coinPosX = InitCoinPosX;
-	coinPosY = InitCoinPosY;
-	crossPosX = InitCrossX;
-	crossPosY = InitCrossY;
-	numberPosX = InitNumberX;
-	numberPosY = InitNumberY;
+	coinPosX	= InitCoinPosX;
+	coinPosY	= InitCoinPosY;
+	crossPosX	= InitCrossX;
+	crossPosY	= InitCrossY;
+	numberPosX	= InitNumberX;
+	numberPosY	= InitNumberY;
 
-	coinWidth = kInitCoinHeight;
-	coinHeight = kInitCoinHeight;
-	crossWidth = kInitCrossWidth;
-	crossHeight = kInitCrossHeight;
-	numberWidth = kInitNumberWidth;
-	numberHeight = kInitNumberHeight;
-	addNumberX = kInitAddNumberX;
+	coinWidth		= kInitCoinHeight;
+	coinHeight		= kInitCoinHeight;
+	crossWidth		= kInitCrossWidth;
+	crossHeight		= kInitCrossHeight;
+	numberWidth		= kInitNumberWidth;
+	numberHeight	= kInitNumberHeight;
+	addNumberX		= kInitAddNumberX;
 
 	countNumber = std::to_string(coinCount);
 
@@ -210,11 +210,11 @@ void CoinUi::ResultInitialize()
 void CoinUi::ResultUpdate()
 {
 	const float kTargetCoinPosX = 960.0f;
-	const float kTargetCrossX = 1165.0f;
-	const float kTargetNumberX = 1220.0f;
-	const float kLeapSpeed = 0.1f;
+	const float kTargetCrossX	= 1165.0f;
+	const float kTargetNumberX	= 1220.0f;
+	const float kLeapSpeed		= 0.1f;
 
-	coinPosX = Calculation::Leap(coinPosX, kTargetCoinPosX, kLeapSpeed);
-	crossPosX = Calculation::Leap(crossPosX, kTargetCrossX, kLeapSpeed);
-	numberPosX = Calculation::Leap(numberPosX, kTargetNumberX, kLeapSpeed);
+	coinPosX	= Calculation::Leap(coinPosX, kTargetCoinPosX, kLeapSpeed);
+	crossPosX	= Calculation::Leap(crossPosX, kTargetCrossX, kLeapSpeed);
+	numberPosX	= Calculation::Leap(numberPosX, kTargetNumberX, kLeapSpeed);
 }

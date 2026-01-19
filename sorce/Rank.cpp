@@ -6,17 +6,17 @@
 #include "Calculation.h"
 
 Rank::Rank() :
-    rankHandle(-1),
-    speechBubbleHandle(-1),
-    coinCount(-1),
-    rankPosX(-1),
-    rankPosY(-1),
-    rankWidth(-1),
-    rankHeight(-1),
-    speechBubblePosX(-1),
-    speechBubblePosY(-1),
-    speechBubbleWidth(-1),
-    speechBubbleHeight(-1)
+    rankHandle          (-1),
+    speechBubbleHandle  (-1),
+    coinCount           (-1),
+    rankPosX            (-1),
+    rankPosY            (-1),
+    rankWidth           (-1),
+    rankHeight          (-1),
+    speechBubblePosX    (-1),
+    speechBubblePosY    (-1),
+    speechBubbleWidth   (-1),
+    speechBubbleHeight  (-1)
 {
     jsonTag = "png";
 }
@@ -77,36 +77,36 @@ void Rank::ResultCreate(const int coinCount)
 
 void Rank::ResultInitialize()
 {
-    const float kInitRankPosX = 1840.0f;
-    const float kInitRankPosY = 150.0f;
-    const float lkInitRankWidth = 300.0f;
-    const float lkInitRankHeight = 300.0f;
-    const float kInitSpeechBubblePosX = 1690.0f;
-    const float kInitSpeechBubblePosY = 0.0f;
-    const float kInitSpeechBubbleWidth = 600.0f;
+    const float kInitRankPosX           = 1840.0f;
+    const float kInitRankPosY           = 150.0f;
+    const float lkInitRankWidth         = 300.0f;
+    const float lkInitRankHeight        = 300.0f;
+    const float kInitSpeechBubblePosX   = 1690.0f;
+    const float kInitSpeechBubblePosY   = 0.0f;
+    const float kInitSpeechBubbleWidth  = 600.0f;
     const float kInitSpeechBubbleHeight = 600.0f;
-    const int   kInitRankScale = 0;
-    const int   kInitAddScaling = 2;
+    const int   kInitRankScale          = 0;
+    const int   kInitAddScaling         = 2;
 
-    rankPosX = kInitRankPosX;
-    rankPosY = kInitRankPosY;
-    rankWidth = lkInitRankWidth;
-    rankHeight = lkInitRankHeight;
-    speechBubblePosX = kInitSpeechBubblePosX;
-    speechBubblePosY = kInitSpeechBubblePosY;
-    speechBubbleWidth = kInitSpeechBubbleWidth;
-    speechBubbleHeight = kInitSpeechBubbleHeight;
+    rankPosX            = kInitRankPosX;
+    rankPosY            = kInitRankPosY;
+    rankWidth           = lkInitRankWidth;
+    rankHeight          = lkInitRankHeight;
+    speechBubblePosX    = kInitSpeechBubblePosX;
+    speechBubblePosY    = kInitSpeechBubblePosY;
+    speechBubbleWidth   = kInitSpeechBubbleWidth;
+    speechBubbleHeight  = kInitSpeechBubbleHeight;
     
-    rankScale = kInitRankScale;
-    addScaling = kInitAddScaling;
+    rankScale   = kInitRankScale;
+    addScaling  = kInitAddScaling;
 }
 
 void Rank::ResultUpdate()
 {
-    const int kMaxRankScale = 50;
-    const float kTargetrankPosX = 1000.0f;
+    const int kMaxRankScale             = 50;
+    const float kTargetrankPosX         = 1000.0f;
     const float kTargetspeechBubblePosX = 850.0f;
-    const float kLeapSpeed = 0.1f;
+    const float kLeapSpeed              = 0.1f;
 
     rankScale += addScaling;
 

@@ -38,27 +38,27 @@ void UIButton::ResultCreate()
 
 void UIButton::ResultInitialize()
 {
-    const int kInitAlpha = 0;
-    const int kInitAddAlpha = 2;
-    const float kInitBackGroundX = 140.0f;
-    const float kInitBackGroundY = 680.0f;
-    const float kInitTitleButtonX = 200.0f;
-    const float kInitTitleButtonY = 740.0f;
-    const float kInitBackGroundWidth = 820.0f;
-    const float kInitBackGroundHeight = 220.0f;
-    const float kInitTitleButtonWidth = 770.0f;
-    const float kInitTitleButtonHeight = 100.0f;
+    const int kInitAlpha                = 0;
+    const int kInitAddAlpha             = 2;
+    const float kInitBackGroundX        = 140.0f;
+    const float kInitBackGroundY        = 680.0f;
+    const float kInitTitleButtonX       = 200.0f;
+    const float kInitTitleButtonY       = 740.0f;
+    const float kInitBackGroundWidth    = 820.0f;
+    const float kInitBackGroundHeight   = 220.0f;
+    const float kInitTitleButtonWidth   = 770.0f;
+    const float kInitTitleButtonHeight  = 100.0f;
 
-    backGroundX = kInitBackGroundX;
-    backGroundY = kInitBackGroundY;
-    backGroundWidth = kInitBackGroundWidth;
-    backGroundHeight = kInitBackGroundHeight;
-    titleButtonX = kInitTitleButtonX;
-    titleButtonY = kInitTitleButtonY;
-    titleButtonWidth = kInitTitleButtonWidth;
-    titleButtonHeight = kInitTitleButtonHeight;
+    backGroundX         = kInitBackGroundX;
+    backGroundY         = kInitBackGroundY;
+    backGroundWidth     = kInitBackGroundWidth;
+    backGroundHeight    = kInitBackGroundHeight;
+    titleButtonX        = kInitTitleButtonX;
+    titleButtonY        = kInitTitleButtonY;
+    titleButtonWidth    = kInitTitleButtonWidth;
+    titleButtonHeight   = kInitTitleButtonHeight;
 
-    alpha = kInitAlpha;
+    alpha    = kInitAlpha;
     addAlpha = kInitAddAlpha;
 }
 

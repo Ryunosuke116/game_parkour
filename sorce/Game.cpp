@@ -27,14 +27,14 @@ Game::~Game()
 
 void Game::Create()
 {
-	const std::string jsonFileName = "JsonGame";
-	const int kAlpha = 255;
+	const std::string jsonFileName	= "JsonGame";
+	const int kAlpha				= 255;
 
 	JsonManager::GetInstance().Create(jsonFileName);
 	GameInstanceSubSystem::GetInstance().Load(jsonFileName);
 
-	gameObjectManager = std::make_shared<ObjectManager>();
-	gameObjectManager_actual = std::dynamic_pointer_cast<ObjectManager>(gameObjectManager);
+	gameObjectManager			= std::make_shared<ObjectManager>();
+	gameObjectManager_actual	= std::dynamic_pointer_cast<ObjectManager>(gameObjectManager);
 
 	gameObjectManager->Create();
 	BlackOut::GetInstance().SetAlpha(kAlpha);

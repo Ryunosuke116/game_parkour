@@ -13,21 +13,21 @@
 #include "PlayerCalculation.h"
 
 PlayerCalculation::PlayerCalculation() :
-    gravityPower(0.0f),
-    nowJumpPower(0.0f),
-    nowMoveSpeed(0.0f),
-    nowRollMoveSpeed(0.0f),
-    wallRunStopTime(0.0f),
-    decelerationSpeed(0.0f),
-    mulMoveSpeedValue(0.0f),
-    ignoreGroundTimer(-1),
-    isCalcDeceleration(false),
-    isStopRunWall(false),
-    isAddJumpPower(false),
-    rightHandPos(VGet(0.0f,0.0f,0.0f)),
-    leftHandPos(VGet(0.0f, 0.0f, 0.0f)),
-    wallRunGravity(VGet(0.0f, 0.0f, 0.0f)),
-    nowRankScore("")
+    gravityPower        (0.0f),
+    nowJumpPower        (0.0f),
+    nowMoveSpeed        (0.0f),
+    nowRollMoveSpeed    (0.0f),
+    wallRunStopTime     (0.0f),
+    decelerationSpeed   (0.0f),
+    mulMoveSpeedValue   (0.0f),
+    ignoreGroundTimer   (-1),
+    isCalcDeceleration  (false),
+    isStopRunWall       (false),
+    isAddJumpPower      (false),
+    rightHandPos        (VGet(0.0f,0.0f,0.0f)),
+    leftHandPos         (VGet(0.0f, 0.0f, 0.0f)),
+    wallRunGravity      (VGet(0.0f, 0.0f, 0.0f)),
+    nowRankScore        ("")
 {
 
 }

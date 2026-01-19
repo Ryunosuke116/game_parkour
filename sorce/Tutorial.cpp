@@ -6,12 +6,12 @@
 
 
 Tutorial::Tutorial():
-	tutorialGraphPosX(-1),
-	tutorialGraphPosY(-1),
-	startGraphPosX(-1),
-	startGraphPosY(-1),
-	startGraphTimer(-1),
-	isPushStart(false)
+	tutorialGraphPosX	(-1),
+	tutorialGraphPosY	(-1),
+	startGraphPosX		(-1),
+	startGraphPosY		(-1),
+	startGraphTimer		(-1),
+	isPushStart			(false)
 {
 	tag = "tutorial";
 }
@@ -24,20 +24,20 @@ Tutorial::~Tutorial()
 
 void Tutorial::Load(const nlohmann::json& jsonData)
 {
-	std::string tutorialPath = jsonData["tutorialPath"];
-	std::string startPath = jsonData["startPath"];
-	tutorialHandle = LoadGraph(tutorialPath.c_str());
-	startHandle = LoadGraph(startPath.c_str());
+	std::string tutorialPath	= jsonData["tutorialPath"];
+	std::string startPath		= jsonData["startPath"];
+	tutorialHandle	= LoadGraph(tutorialPath.c_str());
+	startHandle		= LoadGraph(startPath.c_str());
 }
 
 void Tutorial::Initialize()
 {
-	isPushStart = false;
-	startGraphTimer = 0.0f;
-	tutorialGraphPosX = 0;
-	tutorialGraphPosY = 0;
-	startGraphPosX = 600;
-	startGraphPosY = 350;
+	isPushStart			= false;
+	startGraphTimer		= 0.0f;
+	tutorialGraphPosX	= 0;
+	tutorialGraphPosY	= 0;
+	startGraphPosX		= 600;
+	startGraphPosY		= 350;
 }
 
 bool Tutorial::Update()

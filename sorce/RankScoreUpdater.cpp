@@ -16,8 +16,8 @@ RankScoreUpdater::~RankScoreUpdater()
 
 void RankScoreUpdater::Initialize()
 {
-	rankUpCount = 0;
-	isChangeRank = false;
+	rankUpCount		= 0;
+	isChangeRank	= false;
 }
 
 void RankScoreUpdater::Update(
@@ -26,12 +26,13 @@ void RankScoreUpdater::Update(
 	float& drawRankRate,
 	std::string& rankHandleKey)
 {
-	const float kAddRankCount = 0.15f;		//ゲージの上昇値
-	const float kSubRankCount = 0.001f;
-	const float kMinSize = 150.0f;
-	const float kAddSize = 30.0f;
-	const float kSubSize = 1.0f;
-	isChangeRank = false;
+	const float kAddRankCount	= 0.15f;		//ゲージの上昇値
+	const float kSubRankCount	= 0.001f;
+	const float kMinSize		= 150.0f;
+	const float kAddSize		= 30.0f;
+	const float kSubSize		= 1.0f;
+
+	isChangeRank				= false;
 
 	//カウント分ゲージが上昇する
 	if (rankUpCount >= 1)

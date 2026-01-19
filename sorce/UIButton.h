@@ -7,15 +7,15 @@ public:
 	UIButton();
 	~UIButton();
 
-	void Add()override {}
-	void Create()override {}
-	void Load(const nlohmann::json& jsonData)override;
-	void Initialize()override {}
-	void Update()override {}
-	void Draw()override;
-	void ResultCreate()override;
-	void ResultInitialize()override;
-	void ResultUpdate()override;
+	void Add()									override {}
+	void Create()								override {}
+	void Load(const nlohmann::json& jsonData)	override;
+	void Initialize()							override {}
+	void Update()								override {}
+	void Draw()									override;
+	void ResultCreate()							override;
+	void ResultInitialize()						override;
+	void ResultUpdate()							override;
 
 private:
 	int backGroundHandle;

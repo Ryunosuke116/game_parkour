@@ -5,9 +5,9 @@ struct PlayerData
 	bool isGround;					//接地しているか
 	bool isIdle;					//止まっているか
 	bool isMove;					//動いているか
-	bool isWalk;
+	bool isWalk;					//歩いているか
 	bool isRun;						//走っているか
-	bool isRunWall;
+	bool isRunWall;					//壁を走っているか
 	bool isJump;					//ジャンプしたか
 	bool isFirstJump;				//一回目のジャンプをしたか
 	bool isSecondJump;				//二段ジャンプしたか
