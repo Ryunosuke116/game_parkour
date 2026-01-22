@@ -20,11 +20,11 @@
 /// コンストラクタ
 /// </summary>
 CoinManager::CoinManager():
-	modelHandle(-1),
-	nowCoinCount(-1),
-	addNumber(-1),
-	timer(-1.0f),
-	isAddResultUpdateCoin(false)
+	modelHandle				(-1),
+	nowCoinCount			(-1),
+	addNumber				(-1),
+	timer					(-1.0f),
+	isAddResultUpdateCoin	(false)
 {
 	tag = "coin";
 }

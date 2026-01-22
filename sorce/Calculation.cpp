@@ -16,12 +16,14 @@ float Calculation::area(const VECTOR& vertexA,
 	const VECTOR& vertexB, 
 	const VECTOR& vertexC)
 {
+	const float OneHalf = 0.5f;
+
 	VECTOR edgeAB = VSub(vertexB, vertexA);
 	VECTOR edgeAC = VSub(vertexC, vertexA);
 	VECTOR crossAB_AC = VCross(edgeAB, edgeAC);
 
 	//éOäpå`ÇÃñ êœÇï‘Ç∑
-	return 0.5f * VSize(crossAB_AC);
+	return OneHalf * VSize(crossAB_AC);
 }
 
 VECTOR Calculation::NearestPoint(

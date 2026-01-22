@@ -40,7 +40,9 @@
     [ "material/png/speedBonus/SpeedBonus_C.png", "C" ],
     [ "material/png/speedBonus/SpeedBonus_B.png", "B" ],
     [ "material/png/speedBonus/SpeedBonus_A.png", "A" ],
-    [ "material/png/speedBonus/SpeedBonus_S.png", "S" ]
+    [ "material/png/speedBonus/SpeedBonus_S.png", "S" ],
+    [ "material/png/speedBonus/SpeedBonus_SS.png", "SS" ],
+    [ "material/png/speedBonus/SpeedBonus_SSS.png", "SSS" ]
   ],
 
   "title": [

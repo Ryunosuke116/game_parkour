@@ -83,7 +83,7 @@ void Camera::Initialize()
 /// </summary>
 void Camera::Update()
 {
-	centerPointSpherePos = WorldSubSystem::GetInstance().GetSubSystem<PlayerManager>()->GetPosition();
+	centerPointSpherePos	= WorldSubSystem::GetInstance().GetSubSystem<PlayerManager>()->GetPosition();
 	centerPointSpherePos.y += kAddCenterPosY;
 	
 	//’‹‚·‚éÀ•W‚©‚çplayer‚ª‚¸‚ê‚½‚çC³‚·‚é

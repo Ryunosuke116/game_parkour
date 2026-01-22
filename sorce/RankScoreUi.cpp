@@ -12,7 +12,7 @@
 /// コンストラクタ
 /// </summary>
 RankScoreUi::RankScoreUi() :
-	BaseUI(),
+	BaseUI		(),
 	rankPosX(-1),
 	rankPosY(-1),
 	rankWidth(-1),
@@ -90,7 +90,7 @@ void RankScoreUi::Initialize()
 	drawRankRate	 = kResetRankRate;
 	rankUpCount		 = 0;
 
-	rankHandleKey = "";
+	rankHandleKey	= "";
 	rankScoreUpdater->Initialize();
 }
 
