@@ -29,7 +29,7 @@ public:
 private:
 	std::unordered_map<std::string, int> umRankHandles;
 	std::unordered_map<std::string, int> umSpeedBonus;
-	std::shared_ptr<RankScoreUpdater> rankScoreUpdater;
+	std::shared_ptr<RankScoreUpdater>	rankScoreUpdater;
 
 	std::string rankHandleKey;
 

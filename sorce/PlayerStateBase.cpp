@@ -182,6 +182,12 @@ VECTOR PlayerStateBase::Move(const VECTOR& cameraDirection,
 /// </summary>
 void PlayerStateBase::RollMove(PlayerData& playerData)
 {
+    //‘¼‚Ìó‘Ô‚É‘JˆÚ‚·‚é‚±‚Æ‚ªŒˆ‚Ü‚Á‚Ä‚¢‚éê‡ˆ—‚ðs‚í‚È‚¢
+    if (isChangeState)
+    {
+        return;
+    }
+
     if (PadInput::IsPushRT() && 
         !playerData.isRoll && 
         !playerData.isUseRoll)
@@ -201,6 +207,12 @@ void PlayerStateBase::RollMove(PlayerData& playerData)
 void PlayerStateBase::JumpMove(PlayerData& playerData, 
     Player& player)
 {
+    //‘¼‚Ìó‘Ô‚É‘JˆÚ‚·‚é‚±‚Æ‚ªŒˆ‚Ü‚Á‚Ä‚¢‚éê‡ˆ—‚ðs‚í‚È‚¢
+    if (isChangeState)
+    {
+        return;
+    }
+
     bool isFirstJump = !player.playerCalculation->GetIsAddJumpPower() &&
         !isPush &&
         !playerData.isFirstJump;
