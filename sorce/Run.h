@@ -10,12 +10,12 @@ public:
 	~Run();
 
 	std::pair<VECTOR, PlayerData> Update(const VECTOR& cameraDirection,
-		const std::vector<std::weak_ptr<BaseObject>>& fieldObjects, Player& player)override;
+		const std::vector<std::weak_ptr<BaseObject>>& fieldObjects, Player& player)			override;
 	
-	VECTOR Command(const VECTOR& cameraDirection, PlayerData& playerData, Player& player)override;
-	VECTOR Move(const VECTOR& cameraDirection, PlayerData& playerData)override;
-	void Enter(const AnimState& oldAnimState, const AnimState& nowAnimState)override;		//ó‘Ô‚É“ü‚Á‚½‚Æ‚«
-	void Exit(PlayerData& playerData) override;			//ó‘Ô‚ğ”²‚¯‚é‚Æ‚«
+	VECTOR Command(const VECTOR& cameraDirection, PlayerData& playerData, Player& player)	override;
+	VECTOR Move(const VECTOR& cameraDirection, PlayerData& playerData)						override;
+	void Enter(const AnimState& oldAnimState, const AnimState& nowAnimState)				override;		//ó‘Ô‚É“ü‚Á‚½‚Æ‚«
+	void Exit(PlayerData& playerData)														override;			//ó‘Ô‚ğ”²‚¯‚é‚Æ‚«
 
 	std::pair<VECTOR, PlayerData> NormalUpdate(const VECTOR& cameraDirection, Player& player);
 	std::pair<VECTOR, PlayerData> WallRunUpdate(Player& player,

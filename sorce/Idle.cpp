@@ -36,11 +36,9 @@ Idle::~Idle()
 std::pair<VECTOR, PlayerData> Idle::Update(const VECTOR& cameraDirection,
     const std::vector<std::weak_ptr<BaseObject>>& fieldObjects, Player& player)
 {
-    VECTOR moveDirection = VGet(0.0f, 0.0f, 0.0f);
-
-    PlayerData playerData = player.GetData();
-
-    moveDirection = Command(cameraDirection, playerData, player);
+    VECTOR moveDirection    = VGet(0.0f, 0.0f, 0.0f);
+    PlayerData playerData   = player.GetData();
+    moveDirection           = Command(cameraDirection, playerData, player);
 
     return std::make_pair(moveDirection, playerData);
 }
@@ -56,8 +54,8 @@ VECTOR Idle::Command(const VECTOR& cameraDirection, PlayerData& playerData, Play
 
     if (VSize(moveDirection) != 0.0f && !playerData.isRoll)
     {
-        playerData.isRun = true;
-        isChangeState = true;
+        playerData.isRun    = true;
+        isChangeState       = true;
     }
 
     return moveDirection;

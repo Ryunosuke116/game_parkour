@@ -36,11 +36,11 @@ RunToStop::~RunToStop()
 std::pair<VECTOR, PlayerData> RunToStop::Update(const VECTOR& cameraDirection,
     const std::vector<std::weak_ptr<BaseObject>>& fieldObjects, Player& player)
 {
-    VECTOR moveDirection = VGet(0.0f, 0.0f, 0.0f);
+    VECTOR moveDirection    = VGet(0.0f, 0.0f, 0.0f);
 
-    PlayerData playerData = player.GetData();
+    PlayerData playerData   = player.GetData();
 
-    moveDirection = Command(cameraDirection, playerData, player);
+    moveDirection           = Command(cameraDirection, playerData, player);
 
     return std::make_pair(moveDirection, playerData);
 }
@@ -56,9 +56,9 @@ VECTOR RunToStop::Command(const VECTOR& cameraDirection, PlayerData& playerData,
 
     if (VSize(moveDirection) != 0.0f && !playerData.isRoll)
     {
-        playerData.isRun = true;
-        playerData.isStopRun = false;
-        isChangeState = true;
+        playerData.isRun        = true;
+        playerData.isStopRun    = false;
+        isChangeState           = true;
     }
 
     return moveDirection;
@@ -94,8 +94,8 @@ bool RunToStop::MotionUpdate(PlayerData& playerData)
         //総再生時間を超えたらリセット
         if (nowAnimState.playAnimTime >= totalPlayAnimTime)
         {
-            playerData.isIdle = true;
-            isChangeState = true;
+            playerData.isIdle   = true;
+            isChangeState       = true;
         }
 
         // 再生時間をセットする

@@ -15,11 +15,11 @@ BackGround::~BackGround()
 
 void BackGround::Load(const nlohmann::json& jsonData)
 {
-	std::string backGroundPath = jsonData["backGround"];
-	std::string startButton = jsonData["startButton"];
+	std::string backGroundPath	= jsonData["backGround"];
+	std::string startButton		= jsonData["startButton"];
 
-	backGroundHandle = LoadGraph(backGroundPath.c_str());
-	startButtonHandle = LoadGraph(startButton.c_str());
+	backGroundHandle	= LoadGraph(backGroundPath.c_str());
+	startButtonHandle	= LoadGraph(startButton.c_str());
 }
 
 void BackGround::Create()

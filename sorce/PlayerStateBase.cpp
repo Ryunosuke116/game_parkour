@@ -142,14 +142,14 @@ VECTOR PlayerStateBase::Move(const VECTOR& cameraDirection,
 {
     moveDirection = VGet(0.0f, 0.0f, 0.0f);
 
-    playerData.isMove = false;
-    VECTOR rightMove = VCross(cameraDirection, VGet(0.0f, 1.0f, 0.0f));
+    playerData.isMove   = false;
+    VECTOR rightMove    = VCross(cameraDirection, VGet(0.0f, 1.0f, 0.0f));
 
     //正規化
-    rightMove = VNorm(rightMove);
-    VECTOR upMove = VNorm(cameraDirection);
+    rightMove       = VNorm(rightMove);
+    VECTOR upMove   = VNorm(cameraDirection);
 
-    upMove.y = 0.0f;
+    upMove.y    = 0.0f;
     rightMove.y = 0.0f;
 
     //パッド or arrowキーの入力方向で計算
@@ -192,12 +192,12 @@ void PlayerStateBase::RollMove(PlayerData& playerData)
         !playerData.isRoll && 
         !playerData.isUseRoll)
     {
-        playerData.isRoll = true;
-        playerData.isUseRoll = true;
-        playerData.isAllJump = false;
+        playerData.isRoll       = true;
+        playerData.isUseRoll    = true;
+        playerData.isAllJump    = false;
         playerData.isSecondJump = false;
-        isChangeState = true;
-        isChoiceCommand = true;
+        isChangeState           = true;
+        isChoiceCommand         = true;
     }
 }
 
@@ -226,11 +226,11 @@ void PlayerStateBase::JumpMove(PlayerData& playerData,
         //ジャンプ
         if (isFirstJump)
         {
-            isChangeState = true;
-            playerData.isJump = true;
-            playerData.isFirstJump = true;
-            isPush = true;
-            isChoiceCommand = true;
+            isChangeState           = true;
+            playerData.isJump       = true;
+            playerData.isFirstJump  = true;
+            isPush                  = true;
+            isChoiceCommand         = true;
             player.playerCalculation->ChangeTrueIsAddJumpPower();
             player.playerCalculation->SetJumpPower();
         }
@@ -243,13 +243,14 @@ void PlayerStateBase::JumpMove(PlayerData& playerData,
 
             if (!playerData.isJump)
             {
-                isChangeState = true;
-                playerData.isJump = true;
+                isChangeState       = true;
+                playerData.isJump   = true;
             }
-            isPush = true;
+
+            isPush                  = true;
             playerData.isSecondJump = true;
-            playerData.isAllJump = true;
-            isChoiceCommand = true;
+            playerData.isAllJump    = true;
+            isChoiceCommand         = true;
             player.playerCalculation->ChangeTrueIsAddJumpPower();
             player.playerCalculation->SetSecondJumpPower();
 
@@ -285,13 +286,13 @@ bool PlayerStateBase::WallRunMove(PlayerData& playerData,
     }
 
     const float kEntryDegreeWallRun = 50.0f;
-    const float kAddRayEndPosition = 5.0f;
-    const int kFrameIndex = -1;
+    const float kAddRayEndPosition  = 5.0f;
+    const int kFrameIndex           = -1;
 
     MV1_COLL_RESULT_POLY hitPoly;
-    VECTOR addPos = VScale(player.GetFaceDirection(), kAddRayEndPosition);
-    addPos.y = 0.0f;
-    VECTOR rayEndPosition = VAdd(player.GetPositionData().rayTopPosition, addPos);
+    VECTOR addPos           = VScale(player.GetFaceDirection(), kAddRayEndPosition);
+    addPos.y                = 0.0f;
+    VECTOR rayEndPosition   = VAdd(player.GetPositionData().rayTopPosition, addPos);
 
     //壁を走れるか
     bool isUseWallRun = HitCheck::RayHitJudge(collisionObject->GetModelHandle(),
@@ -308,13 +309,13 @@ bool PlayerStateBase::WallRunMove(PlayerData& playerData,
 
         //スティックが即座に反対方向に向いた場合slipをtrue
         //radian計算
-        float radianWall = atan2f(-hitWallNormal.x, -hitWallNormal.z);
-        float radianFaceDirection = atan2f(player.GetFaceDirection().x,
+        float radianWall            = atan2f(-hitWallNormal.x, -hitWallNormal.z);
+        float radianFaceDirection   = atan2f(player.GetFaceDirection().x,
             player.GetFaceDirection().z);
 
         //度数計算
-        float degreeWall = abs(Calculation::RadToDeg(radianWall));
-        float degreeFaceDirection = abs(Calculation::RadToDeg(radianFaceDirection));
+        float degreeWall            = abs(Calculation::RadToDeg(radianWall));
+        float degreeFaceDirection   = abs(Calculation::RadToDeg(radianFaceDirection));
 
         //スティック入力と壁の角度の差を求める
         float degreePadWallDifference = degreeFaceDirection - degreeWall;
@@ -325,13 +326,13 @@ bool PlayerStateBase::WallRunMove(PlayerData& playerData,
             const float kInversionScale = -1.0f;
 
             //ロールアクションとジャンプをできないように
-            playerData.isRunWall = true;
-            playerData.isRun = true;
+            playerData.isRunWall     = true;
+            playerData.isRun         = true;
             playerData.isUseWallJump = false;
-            playerData.isSecondJump = false;
-            playerData.isAllJump = false;
-            isChangeState = true;
-            isChoiceCommand = true;
+            playerData.isSecondJump  = false;
+            playerData.isAllJump     = false;
+            isChangeState            = true;
+            isChoiceCommand          = true;
 
             player.playerCalculation->ChangeTrueIsAddJumpPower();
             player.playerCalculation->SetJumpPower();

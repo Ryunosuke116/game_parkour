@@ -75,13 +75,13 @@ std::pair<VECTOR, PlayerData> Jump::Update(
 
     if (playerData.isGround && !isRun)
     {
-        playerData.isIdle = true;
-        isChangeState = true;
+        playerData.isIdle   = true;
+        isChangeState       = true;
     }
     else if (playerData.isGround && isRun)
     {
-        playerData.isRun = true;
-        isChangeState = true;
+        playerData.isRun    = true;
+        isChangeState       = true;
     }
 
     return std::make_pair(moveDirection, playerData);
@@ -97,8 +97,8 @@ bool Jump::MotionUpdate(PlayerData& playerData)
 
     if (nowAnimState.playAnimTime >= 41.0f)
     {
-        playerData.isFalling = true;
-        isChangeState = true;
+        playerData.isFalling    = true;
+        isChangeState           = true;
         return true;
     }
 
@@ -120,8 +120,8 @@ bool Jump::MotionUpdate(PlayerData& playerData)
         //総再生時間を超えたらリセット
         if (nowAnimState.playAnimTime >= nowAnimState.totalPlayAnimTime)
         {
-            playerData.isFalling = true;
-            isChangeState = true;
+            playerData.isFalling    = true;
+            isChangeState           = true;
         }
 
         // 再生時間をセットする
@@ -173,6 +173,6 @@ VECTOR Jump::Command(const VECTOR& cameraDirection,
 void Jump::Exit(PlayerData& playerData)
 {
     PlayerStateBase::Exit(playerData);
-    playerData.isJump = false;
-    playerData.isWalljump = false;
+    playerData.isJump       = false;
+    playerData.isWalljump   = false;
 }

@@ -12,14 +12,14 @@
 /// コンストラクタ
 /// </summary>
 RankScoreUi::RankScoreUi() :
-	BaseUI		(),
-	rankPosX(-1),
-	rankPosY(-1),
-	rankWidth(-1),
-	rankHeight(-1),
-	rankUpCount(-1),
-	rankHandleKey(""),
-	drawRankRate(-1.0f)
+	BaseUI			(),
+	rankPosX		(-1),
+	rankPosY		(-1),
+	rankWidth		(-1),
+	rankHeight		(-1),
+	rankUpCount		(-1),
+	rankHandleKey	(""),
+	drawRankRate	(-1.0f)
 {
 	jsonTag = "png";
 }

@@ -26,8 +26,8 @@ void Tutorial::Load(const nlohmann::json& jsonData)
 {
 	std::string tutorialPath	= jsonData["tutorialPath"];
 	std::string startPath		= jsonData["startPath"];
-	tutorialHandle	= LoadGraph(tutorialPath.c_str());
-	startHandle		= LoadGraph(startPath.c_str());
+	tutorialHandle				= LoadGraph(tutorialPath.c_str());
+	startHandle					= LoadGraph(startPath.c_str());
 }
 
 void Tutorial::Initialize()

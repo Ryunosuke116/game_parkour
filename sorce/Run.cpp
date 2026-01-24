@@ -91,21 +91,21 @@ std::pair<VECTOR, PlayerData> Run::WallRunUpdate(
 	Player& player, 
 	const std::vector<std::weak_ptr<BaseObject>>& fieldObjects)
 {
-	PlayerData playerData = player.GetData();
+	PlayerData playerData	= player.GetData();
+	VECTOR moveDir			= VGet(0.0f, 0.0f, 0.0f);
 
-	VECTOR moveDir = VGet(0.0f, 0.0f, 0.0f);
-	const float wallRunStopTime = player.playerCalculation->GetWallRunStopTime();
-	const float wallRunMaxStopTime = player.playerCalculation->GetWallRunMaxStopTime();
-	const int kMinJoyPadLeft = 1000;
+	const float wallRunStopTime		= player.playerCalculation->GetWallRunStopTime();
+	const float wallRunMaxStopTime	= player.playerCalculation->GetWallRunMaxStopTime();
+	const int kMinJoyPadLeft		= 1000;
 
 	//—Ž‚¿‚é
 	if (PadInput::GetJoyPadYLeft() >= kMinJoyPadLeft &&
 		!(PadInput::GetOldJoyPadYLeft() >= kMinJoyPadLeft))
 	{
-		playerData.isRunWall = false;
-		playerData.isUseWallJump = false;
-		playerData.isFalling = true;
-		isChangeState = true;
+		playerData.isRunWall		= false;
+		playerData.isUseWallJump	= false;
+		playerData.isFalling		= true;
+		isChangeState				= true;
 		player.playerCalculation->ResetWallRun();
 		player.SetRotateX(0.0f);
 
@@ -115,9 +115,9 @@ std::pair<VECTOR, PlayerData> Run::WallRunUpdate(
 	//Ž~‚Ü‚Á‚Äˆê’èŽžŠÔ‰ß‚¬‚½‚ç—Ž‰º‚·‚é
 	if (wallRunStopTime >= wallRunMaxStopTime)
 	{
-		isChangeState = true;
-		playerData.isFalling = true;
-		playerData.isUseWallJump = false;
+		isChangeState				= true;
+		playerData.isFalling		= true;
+		playerData.isUseWallJump	= false;
 		player.SetRotateX(0.0f);
 
 		return std::make_pair(moveDir, playerData);
@@ -130,9 +130,9 @@ std::pair<VECTOR, PlayerData> Run::WallRunUpdate(
 			VSub(player.GetPositionData().rayTopPosition,
 				player.GetPositionData().rayBottomPosition);
 
-		float playerSize = VSize(distancePlayerTopAndBottom);
-		VECTOR normalPlayerTopPosition = player.GetPositionData().rayBottomPosition;
-		normalPlayerTopPosition.y += playerSize;
+		float playerSize				= VSize(distancePlayerTopAndBottom);
+		VECTOR normalPlayerTopPosition	= player.GetPositionData().rayBottomPosition;
+		normalPlayerTopPosition.y		+= playerSize;
 
 		auto resultCheckCliff = HitCheck::CliffGrabbing(
 			fieldObjects,
@@ -155,9 +155,10 @@ std::pair<VECTOR, PlayerData> Run::WallRunUpdate(
 				resultCheckCliff.hangingPoly,
 				centerPosition);
 
-			playerData.isHanging = resultCheckCliff.isHitHanging;
-			playerData.isMove = false;
-			isChangeState = true;
+			playerData.isHanging	= resultCheckCliff.isHitHanging;
+			playerData.isMove		= false;
+			isChangeState			= true;
+
 			player.playerCalculation->SetNearestResult(nearestResult);
 			player.SetRotateX(0.0f);
 			
@@ -170,13 +171,13 @@ std::pair<VECTOR, PlayerData> Run::WallRunUpdate(
 	//•ÇƒWƒƒƒ“ƒv‚·‚é
 	if (playerData.isJump)
 	{
-		playerData.isRunWall = false;
-		playerData.isUseWallJump = true;
-		playerData.isWalljump = true;
+		playerData.isRunWall		= false;
+		playerData.isUseWallJump	= true;
+		playerData.isWalljump		= true;
 		player.playerCalculation->ResetWallRun();
 
 		VECTOR hitWallNormal = player.playerCalculation->GetWallRunGravity();
-		moveDir = hitWallNormal;
+		moveDir				 = hitWallNormal;
 		player.SetNowMoveDirection(moveDir);
 		player.SetRotateX(0.0f);
 	}
@@ -210,8 +211,8 @@ VECTOR Run::Command(
 		!playerData.isRoll &&
 		!playerData.isJump)
 	{
-		playerData.isStopRun = true;
-		isChangeState = true;
+		playerData.isStopRun	= true;
+		isChangeState			= true;
 	}
 
 	return moveDir;
@@ -228,14 +229,14 @@ VECTOR Run::Move(
 {
 	VECTOR moveDirection = VGet(0.0f, 0.0f, 0.0f);
 
-	playerData.isMove = false;
-	VECTOR rightMove = VCross(cameraDirection, VGet(0.0f, 1.0f, 0.0f));
+	playerData.isMove	= false;
+	VECTOR rightMove	= VCross(cameraDirection, VGet(0.0f, 1.0f, 0.0f));
 
 	//³‹K‰»
-	rightMove = VNorm(rightMove);
-	VECTOR upMove = VNorm(cameraDirection);
+	rightMove		= VNorm(rightMove);
+	VECTOR upMove	= VNorm(cameraDirection);
 
-	upMove.y = 0.0f;
+	upMove.y	= 0.0f;
 	rightMove.y = 0.0f;
 
 	//ƒpƒbƒh or arrowƒL[‚Ì“ü—Í•ûŒü‚ÅŒvŽZ
@@ -245,8 +246,8 @@ VECTOR Run::Move(
 	//0‚Å‚È‚¯‚ê‚Î³‹K‰»
 	if (VSize(moveDirection) >= 1e-4f)
 	{
-		moveDirection = VNorm(moveDirection);
-		playerData.isMove = true;
+		moveDirection		= VNorm(moveDirection);
+		playerData.isMove	= true;
 	}
 	else
 	{

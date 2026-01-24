@@ -10,11 +10,11 @@ public:
 
 	~HangingIdle();
 
-	void Initialize(const int modelHandle,const int changeNum, Player& player)override;
+	void Initialize(const int modelHandle,const int changeNum, Player& player)				override;
 	std::pair<VECTOR, PlayerData> Update(const VECTOR& cameraDirection,
-		const std::vector<std::weak_ptr<BaseObject>>& fieldObjects, Player& player)override;
-	VECTOR Command(const VECTOR& cameraDirection, PlayerData& playerData, Player& player)override;
-	void Exit(PlayerData& playerData) override;			//ó‘Ô‚ğ”²‚¯‚é‚Æ‚«
+		const std::vector<std::weak_ptr<BaseObject>>& fieldObjects, Player& player)			override;
+	VECTOR Command(const VECTOR& cameraDirection, PlayerData& playerData, Player& player)	override;
+	void Exit(PlayerData& playerData)														override;			//ó‘Ô‚ğ”²‚¯‚é‚Æ‚«
 
 
 private:

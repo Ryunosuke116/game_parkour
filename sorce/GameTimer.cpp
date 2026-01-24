@@ -9,24 +9,24 @@
 /// コンストラクタ
 /// </summary>
 GameTimer::GameTimer() :
-	BaseUI(),
-	colonHandle(-1),
-	colonPosX(-1),
-	redBright(-1),
-	greenBright(-1),
-	blueBright(-1),
-	addBright(-1),
-	time(-1),
-	setTime(-1),
-	secTime(-1),
-	minTime(-1),
-	numPosX(-1.0f),
-	numPosY(-1.0f),
-	numWidth(-1.0f),
-	numHeight(-1.0f),
-	isUpdateMin(false),
-	countNumberSec(""),
-	countNumberMin("")
+	BaseUI			(),
+	colonHandle		(-1),
+	colonPosX		(-1),
+	redBright		(-1),
+	greenBright		(-1),
+	blueBright		(-1),
+	addBright		(-1),
+	time			(-1),
+	setTime			(-1),
+	secTime			(-1),
+	minTime			(-1),
+	numPosX			(-1.0f),
+	numPosY			(-1.0f),
+	numWidth		(-1.0f),
+	numHeight		(-1.0f),
+	isUpdateMin		(false),
+	countNumberSec	(""),
+	countNumberMin	("")
 {
 	jsonTag = "coin";
 }
@@ -44,14 +44,14 @@ GameTimer::~GameTimer()
 
 void GameTimer::Load(const nlohmann::json& jsonData)
 {
-	const int kXNum = 10;
-	const int kYNum = 10;
-	const int kAllNum = 1;
-	const int kXSize = 480;
-	const int kYSize = 500;
+	const int kXNum		= 10;
+	const int kYNum		= 10;
+	const int kAllNum	= 1;
+	const int kXSize	= 480;
+	const int kYSize	= 500;
 
-	std::string path = jsonData["coin"][2][0];
-	std::string colonPath = jsonData["coin"][3][0];
+	std::string path		= jsonData["coin"][2][0];
+	std::string colonPath	= jsonData["coin"][3][0];
 
 	LoadDivGraph(path.c_str(),
 		kXNum, kYNum, kAllNum, kXSize, kYSize, numberHandle);
@@ -109,9 +109,9 @@ void GameTimer::Update()
 
 	time = GetNowCount() - setTime;
 
-	int elapsedSec = time / 1000;
-	int elapsedMin = elapsedSec / 60;
-	elapsedSec -= elapsedMin * 60;
+	int elapsedSec	= time / 1000;
+	int elapsedMin	= elapsedSec / 60;
+	elapsedSec		-= elapsedMin * 60;
 
 	secTime = kMaxSec - elapsedSec;
 
@@ -124,12 +124,10 @@ void GameTimer::Update()
 		isUpdateMin = true;
 	}
 
-	secTime = TimeForciblyZero(kMaxSec);
-
-	isUpdateMin = IsUpdateMin();
-
-	countNumberSec = CreateCountNumber(secTime);
-	countNumberMin = CreateCountNumber(minTime);
+	secTime			= TimeForciblyZero(kMaxSec);
+	isUpdateMin		= IsUpdateMin();
+	countNumberSec	= CreateCountNumber(secTime);
+	countNumberMin	= CreateCountNumber(minTime);
 
 	numPosY = Calculation::Leap(numPosY, kTargetNumPosY, kLeapSpeed);
 
@@ -166,9 +164,9 @@ void GameTimer::Update()
 /// <returns></returns>
 void GameTimer::Draw()
 {
-	float numX = numPosX;
-	const int addnumPosX = 70;
-	const int addSpaceX = 40;
+	float numX				= numPosX;
+	const int addnumPosX	= 70;
+	const int addSpaceX		= 40;
 
 	SetDrawBright(redBright, greenBright, blueBright);
 
@@ -215,9 +213,9 @@ void GameTimer::Draw()
 
 std::string GameTimer::CreateCountNumber(const int time)
 {
-	std::string countNumber = "";
-	const int kCharacterCount = 1;
-	const int kFirstCount = 0;
+	std::string countNumber		= "";
+	const int kCharacterCount	= 1;
+	const int kFirstCount		= 0;
 
 	countNumber = std::to_string(time);
 
@@ -239,9 +237,8 @@ bool GameTimer::IsUpdateMin()
 
 int GameTimer::TimeForciblyZero(const int maxSec)
 {
-	int resetTime = 0;
-
-	int resultTime = secTime == maxSec ? resetTime : secTime;
+	int resetTime	= 0;
+	int resultTime	= secTime == maxSec ? resetTime : secTime;
 
 	return resultTime;
 }

@@ -41,10 +41,10 @@ std::pair<VECTOR, PlayerData> FallingIdle::Update(const VECTOR& cameraDirection,
     const std::vector<std::weak_ptr<BaseObject>>& fieldObjects, 
     Player& player)
 {
-    VECTOR moveDirection = VGet(0.0f, 0.0f, 0.0f);
-    PlayerData playerData = player.GetData();
+    VECTOR moveDirection    = VGet(0.0f, 0.0f, 0.0f);
+    PlayerData playerData   = player.GetData();
 
-    moveDirection = Command(cameraDirection, playerData, player);
+    moveDirection           = Command(cameraDirection, playerData, player);
 
     ResetIsJumps(playerData);
 
@@ -98,9 +98,9 @@ std::pair<VECTOR, PlayerData> FallingIdle::Update(const VECTOR& cameraDirection,
             playerData.isIdle = true;
         }
 
-        playerData.isUseWallJump = true;
-        playerData.isUseHanging = true;
-        isChangeState = true;
+        playerData.isUseWallJump    = true;
+        playerData.isUseHanging     = true;
+        isChangeState               = true;
     }
 
     return std::make_pair(moveDirection, playerData);

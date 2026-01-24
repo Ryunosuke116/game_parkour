@@ -64,31 +64,31 @@ void HangingIdle::Initialize(const int modelHandle,
 std::pair<VECTOR, PlayerData> HangingIdle::Update(const VECTOR& cameraDirection,
     const std::vector<std::weak_ptr<BaseObject>>& fieldObjects, Player& player)
 {   
-    VECTOR moveDirection = player.GetNowMoveDirection();
-    PlayerData playerData = player.GetData();
-    playerData.isNowHanging = true;
-    playerData.isGround = true;
+    VECTOR moveDirection        = player.GetNowMoveDirection();
+    PlayerData playerData       = player.GetData();
+    playerData.isNowHanging     = true;
+    playerData.isGround         = true;
 
     //è„Ç…ìoÇÈ
     if (PadInput::isUp())
     {
-        playerData.isHangToCrouch = true;
+        playerData.isHangToCrouch   = true;
         player.SetIsCollisionCheck(false);
-        isChangeState = true;
-        playerData.isFirstJump = false;
-        playerData.isSecondJump = false;
-        playerData.isAllJump = false;
-        playerData.isNowHanging = false;
+        isChangeState               = true;
+        playerData.isFirstJump      = false;
+        playerData.isSecondJump     = false;
+        playerData.isAllJump        = false;
+        playerData.isNowHanging     = false;
     }
 
     //ç~ÇËÇÈ
     if (PadInput::isDown())
     {
-        isChangeState = true;
-        playerData.isFalling = true;
-        playerData.isNowHanging = false;
-        playerData.isUseHanging = false;
-        playerData.isUseWallJump = false;
+        isChangeState               = true;
+        playerData.isFalling        = true;
+        playerData.isNowHanging     = false;
+        playerData.isUseHanging     = false;
+        playerData.isUseWallJump    = false;
     }
 
     return std::make_pair(moveDirection, playerData);

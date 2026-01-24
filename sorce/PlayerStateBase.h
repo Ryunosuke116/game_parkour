@@ -24,10 +24,10 @@ public:
 	//純粋仮想関数
 	virtual void Initialize(const int modelHandle,const int changeNum, Player& player);
 	virtual std::pair<VECTOR, PlayerData> Update(const VECTOR& cameraDirection,
-		const std::vector<std::weak_ptr<BaseObject>>& fieldObjects, Player& player)abstract;
-	virtual VECTOR Command(const VECTOR& cameraDirection, PlayerData& playerData, Player& player)abstract;
-	virtual void Enter(const AnimState& oldAnimState, const AnimState& nowAnimState);		//状態に入ったとき
-	virtual void Exit(PlayerData& playerData);			//状態を抜けるとき
+		const std::vector<std::weak_ptr<BaseObject>>& fieldObjects, Player& player)					abstract;
+	virtual VECTOR Command(const VECTOR& cameraDirection, PlayerData& playerData, Player& player)	abstract;
+	virtual void Enter(const AnimState& oldAnimState, const AnimState& nowAnimState);							//状態に入ったとき
+	virtual void Exit(PlayerData& playerData);																	//状態を抜けるとき
 
 	virtual bool MotionUpdate(PlayerData& playerData);
 	virtual VECTOR Move(const VECTOR& cameraDirection, PlayerData& playerData);
@@ -44,19 +44,19 @@ public:
 	//////////////////////////////////////////////
 	AnimState GetOldAnimState() const { return oldAnimState; }
 	AnimState GetNowAnimState() const { return nowAnimState; }
-	float GetAnimBlendRate()const { return animBlendRate; }
-	bool GetIsChangeState()const { return isChangeState; }
+	float GetAnimBlendRate()	const { return animBlendRate; }
+	bool GetIsChangeState()		const { return isChangeState; }
 
 	void SetPlayAnimSpeed_now(const float set) { nowAnimState.playAnimTime = set; }
 	void SetOldAnimNumber(const int num) { animOldNumber = num; }
 	void SetIsChangeState(const bool set) { isChangeState = set; }
 	
 protected:
-	static constexpr float kAnimBlendSpeed = 0.1f;		// アニメーションのブレンド率変化速度
-	static constexpr float kRunWallRotateX = 30.0f;
-	static constexpr float kCliffRadius = 5.0f;			//崖掴み判定用の半径
-	static constexpr float kInitMoveJumpPlayTime = 12.0f;
-	static constexpr float kInitNormalJumpPlayTime = 5.0f;
+	static constexpr float kAnimBlendSpeed			= 0.1f;		// アニメーションのブレンド率変化速度
+	static constexpr float kRunWallRotateX			= 30.0f;
+	static constexpr float kCliffRadius				= 5.0f;			//崖掴み判定用の半径
+	static constexpr float kInitMoveJumpPlayTime	= 12.0f;
+	static constexpr float kInitNormalJumpPlayTime	= 5.0f;
 
 	int modelHandle;			//モデルハンドル
 	int animOldNumber;
