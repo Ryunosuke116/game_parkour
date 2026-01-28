@@ -6,9 +6,9 @@
 /// コンストラクタ
 /// </summary>
 Field::Field() : 
-	BaseObject(),
-	isPush(false),
-	isPoly(false)
+	BaseObject	(),
+	isPush		(false),
+	isPoly		(false)
 {
 	jsonTag = "field";
 }
@@ -23,12 +23,12 @@ Field::~Field()
 
 void Field::Load(const nlohmann::json& jsonData)
 {
-	std::string path = jsonData["path"];
-	std::string bullPath = jsonData["bullPath"];
+	std::string path		= jsonData["path"];
+	std::string bullPath	= jsonData["bullPath"];
 
-	tag = "field";
+	tag			= "field";
 	modelHandle = MV1LoadModel(path.c_str());
-	bullHandle = MV1LoadModel(bullPath.c_str());
+	bullHandle	= MV1LoadModel(bullPath.c_str());
 }
 
 void Field::Create()

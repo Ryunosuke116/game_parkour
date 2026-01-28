@@ -37,10 +37,10 @@ public:
 	///////////////////////////////////////////////////////
 	// ゲッター
 	///////////////////////////////////////////////////////
-	VECTOR GetCameraDirection()				{ return cameraDirection; }
-	VECTOR GetScreenCenterPosition()		{ return screenCenterPosition; }
-	float GetCameraDistance()				{ return cameraDistanceSize; }
-	float GetCameraAndTargetDistanceSize()	{ return cameraAndTargetDistanceSize; }
+	VECTOR GetCameraDirection()				const		{ return cameraDirection; }
+	VECTOR GetScreenCenterPosition()		const		{ return screenCenterPosition; }
+	float GetCameraDistance()				const		{ return cameraDistanceSize; }
+	float GetCameraAndTargetDistanceSize()	const		{ return cameraAndTargetDistanceSize; }
 
 private:
 	VECTOR cameraPosition;
@@ -52,7 +52,7 @@ private:
 	VECTOR rayCastStartPosition;			//rayの開始座標
 
 	float angleRadian;
-	float cameraDistanceWhenHittingObject;	//オブジェクトに当たっているときのカメラの距離
+	float cameraDistanceWhenHittingObject;		//オブジェクトに当たっているときのカメラの距離
 	float normalCameraDistanceSize;				//通常時のカメラ距離
 	float cameraDistanceSize;					//カメラの距離
 	float cameraAndTargetDistanceSize;			//カメラと目標との距離

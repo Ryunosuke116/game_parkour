@@ -123,7 +123,7 @@ void PlayerEffectController::ChangeColorByScoreRank()
 /// </summary>
 void PlayerEffectController::PlayCoinTouchEffect()
 {
-    const VECTOR kEffectScale = VGet(1.8f, 1.8f, 1.8f);
+    const VECTOR kEffectScale = VGet(2.0f, 2.0f, 2.0f);
 
     //エフェクトを再生する
     wpEffectManager.lock()->PlayEffect("coinTouch");

@@ -21,8 +21,15 @@ public:
 	void ResultUpdate()							override;
 
 	void ResultCreate(const int coinCount);
-	void OnCoinPicked(int amount)override { coinCount += amount; }
+	void OnCoinPicked(int amount)override;
+
 private:
+	void PositionUp();
+
+private:
+
+	bool isUp;
+
 	int coinHandle;
 	int numberHandle[10];
 	int crossHandle;

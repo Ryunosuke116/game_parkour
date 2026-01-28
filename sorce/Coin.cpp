@@ -15,18 +15,18 @@
 /// </summary>
 Coin::Coin():
 	BaseObject(),
-	listNumber(-1),
-	radianY(0.0f),
-	velocityY(0.0f),
-	flyAwaySpeed(0.0f),
-	flyAwayVelocity(VGet(0.0f, 0.0f, 0.0f)),
-	flyAwayDirection(VGet(0.0f, 0.0f, 0.0f)),
-	boundsMin(VGet(0.0f, 0.0f, 0.0f)),
-	boundsMax(VGet(0.0f, 0.0f, 0.0f)),
-	isHitPlayer(false),
-	isDelete(false),
-	isSound(false),
-	isIgnoreHitPlayer(false)
+	listNumber			(-1),
+	radianY				(0.0f),
+	velocityY			(0.0f),
+	flyAwaySpeed		(0.0f),
+	flyAwayVelocity		(VGet(0.0f, 0.0f, 0.0f)),
+	flyAwayDirection	(VGet(0.0f, 0.0f, 0.0f)),
+	boundsMin			(VGet(0.0f, 0.0f, 0.0f)),
+	boundsMax			(VGet(0.0f, 0.0f, 0.0f)),
+	isHitPlayer			(false),
+	isDelete			(false),
+	isSound				(false),
+	isIgnoreHitPlayer	(false)
 {
 
 }

@@ -8,14 +8,14 @@ public:
 		const nlohmann::json& jsonData);
 	~SkyFloor();
 
-	void Load(const nlohmann::json& jsonData)override;
-	void Create()override;
-	void Initialize()override;
-	void Update()override;
-	void Draw()override;
-	void ResultCreate()override;
-	void ResultInitialize()override;
-	void ResultUpdate()override;
+	void Load(const nlohmann::json& jsonData)	override;
+	void Create()								override;
+	void Initialize()							override;
+	void Update()								override;
+	void Draw()									override;
+	void ResultCreate()							override;
+	void ResultInitialize()						override;
+	void ResultUpdate()							override;
 
 private:
 	static constexpr float kVelocity = 0.5f;

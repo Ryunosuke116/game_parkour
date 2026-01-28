@@ -93,8 +93,6 @@ void SkyFloor::Update()
 		moveAmount -= kVelocity;
 	}
 
-	//newPos = VAdd(newPos, addPos);
-
 	differencePosition = VSub(newPos, position);
 
 	position = newPos;

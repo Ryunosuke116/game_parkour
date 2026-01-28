@@ -6,9 +6,23 @@
 
 CoinUi::CoinUi() :
 	BaseUI(),
+	isUp(false),
 	coinHandle	(-1),
 	crossHandle	(-1),
 	coinCount	(-1),
+	coinPosX	(-1.0f),
+	coinPosY	(-1.0f),
+	crossPosX	(-1.0f),
+	crossPosY	(-1.0f),
+	numberPosX	(-1.0f),
+	numberPosY	(-1.0f),
+	coinWidth	(-1.0f),
+	coinHeight	(-1.0f),
+	crossWidth	(-1.0f),
+	crossHeight	(-1.0f),
+	numberWidth	(-1.0f),
+	numberHeight(-1.0f),
+	addNumberX	(-1.0f),
 	countNumber	("")
 {
 	std::fill(
@@ -96,6 +110,7 @@ void CoinUi::Initialize()
 
 	countNumber = initNumber;
 	coinCount	= 0;
+	isUp = false;
 }
 
 void CoinUi::Update()
@@ -217,4 +232,18 @@ void CoinUi::ResultUpdate()
 	coinPosX	= Calculation::Leap(coinPosX, kTargetCoinPosX, kLeapSpeed);
 	crossPosX	= Calculation::Leap(crossPosX, kTargetCrossX, kLeapSpeed);
 	numberPosX	= Calculation::Leap(numberPosX, kTargetNumberX, kLeapSpeed);
+}
+
+void CoinUi::OnCoinPicked(int amount)
+{ 
+	coinCount += amount; 
+	isUp = true;
+}
+
+void CoinUi::PositionUp()
+{
+	if (isUp)
+	{
+
+	}
 }

@@ -13,14 +13,14 @@ BlackOut& BlackOut::GetInstance()
 /// </summary>
 void BlackOut::Initialize()
 {
-    alpha = 0;
-    isLightChange = false;
+    alpha           = 0;
+    isLightChange   = false;
 }
 
 void BlackOut::ResultInitialize()
 {
-    alpha = kMaxAlpha;
-    isLightChange = true;
+    alpha           = kMaxAlpha;
+    isLightChange   = true;
 }
 
 /// <summary>

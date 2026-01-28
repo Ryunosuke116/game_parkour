@@ -8,11 +8,11 @@
 /// </summary>
 /// <param name="path"></param>
 FieldMesh::FieldMesh():
-	BaseObject(),
-	isPoly(true),
-	isPush(true)
+	BaseObject	(),
+	isPoly		(true),
+	isPush		(true)
 {
-	tag = "field";
+	tag		= "field";
 	jsonTag = "field";
 }
 
@@ -26,8 +26,8 @@ FieldMesh::~FieldMesh()
 
 void FieldMesh::Load(const nlohmann::json& jsonData)
 {
-	std::string path = jsonData["meshPath"];
-	modelHandle = MV1LoadModel(path.c_str());
+	std::string path	= jsonData["meshPath"];
+	modelHandle			= MV1LoadModel(path.c_str());
 }
 
 void FieldMesh::Create()
