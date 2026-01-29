@@ -107,6 +107,7 @@ void Coin::Draw()
 {
 	if (!CheckCameraViewClip(position))
 	{
+		MV1SetMaterialSpcColor(modelHandle, 0, GetColorF(1.0f, 1.0f, 1.0f, 1.0f));
 		MV1DrawModel(modelHandle);
 	}
 }

@@ -78,11 +78,11 @@ void CoinUi::Create()
 void CoinUi::Initialize()
 {
 	//•`‰æˆÊ’u
-	const float InitCoinPosX		= -480.0f;
+	const float InitCoinPosX		= 2080.0f;
 	const float InitCoinPosY		= 690.0f;
-	const float InitCrossX			= -345.0f;
+	const float InitCrossX			= 1945.0f;
 	const float InitCrossY			= 760.0f;
-	const float InitNumberX			= -290.0f;
+	const float InitNumberX			= 1890.0f;
 	const float InitNumberY			= 730.0f;
 	const float kInitCoinWidth		= 140.0f;
 	const float kInitCoinHeight		= 152.0f;
@@ -115,9 +115,9 @@ void CoinUi::Initialize()
 
 void CoinUi::Update()
 {
-	const float targetCoinPosX	= 20;
-	const float targetCrossX	= 155;
-	const float targetNumberX	= 210;
+	const float targetCoinPosX	= 1110.0f;
+	const float targetCrossX	= 1245.0f;
+	const float targetNumberX	= 1300.0f;
 	const float kLeapSpeed		= 0.1f;
 
 	countNumber = std::to_string(coinCount);

@@ -45,9 +45,10 @@ void PlayerEffectController::Initialize()
 void PlayerEffectController::Update(const VECTOR& playerPos,
     const PlayerData& playerData)
 {
-    const float     kMaxEffectTimer     = 10.0f;
-    const float     kAddEffectPositionY = 2.0f;
-    const VECTOR    kEffectScale        = VGet(4.0f, 4.0f, 4.0f);
+    const float     kMaxEffectTimer         = 10.0f;
+    const float     kAddEffectPositionY     = 2.0f;
+    const float     kAddCoinTouchEffectPosY = 6.0f;
+    const VECTOR    kEffectScale            = VGet(4.0f, 4.0f, 4.0f);
 
     VECTOR effectPosition = playerPos;
     effectPosition.y += kAddEffectPositionY;
@@ -71,7 +72,7 @@ void PlayerEffectController::Update(const VECTOR& playerPos,
     ChangeColorByScoreRank();
     wpEffectManager.lock()->SetPosition(effectPosition, "playerbuff");
 
-    effectPosition.y += kAddEffectPositionY;
+    effectPosition.y += kAddCoinTouchEffectPosY;
     wpEffectManager.lock()->SetPosition(effectPosition, "coinTouch");
 }
 
@@ -123,7 +124,7 @@ void PlayerEffectController::ChangeColorByScoreRank()
 /// </summary>
 void PlayerEffectController::PlayCoinTouchEffect()
 {
-    const VECTOR kEffectScale = VGet(2.0f, 2.0f, 2.0f);
+    const VECTOR kEffectScale = VGet(2.5f, 2.5f, 2.5f);
 
     //エフェクトを再生する
     wpEffectManager.lock()->PlayEffect("coinTouch");
