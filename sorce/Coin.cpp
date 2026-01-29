@@ -17,7 +17,6 @@ Coin::Coin():
 	BaseObject(),
 	listNumber			(-1),
 	radianY				(0.0f),
-	velocityY			(0.0f),
 	flyAwaySpeed		(0.0f),
 	flyAwayVelocity		(VGet(0.0f, 0.0f, 0.0f)),
 	flyAwayDirection	(VGet(0.0f, 0.0f, 0.0f)),
@@ -64,7 +63,6 @@ void Coin::Initialize()
 	const VECTOR addAABB = VGet(kRadius, kRadius, kRadius);	//AABB‚Ì—Ìˆæ”ÍˆÍ
 
 	MV1SetPosition(modelHandle, position);
-	velocityY			= 0.0f;
 	radianY				= 0.0f;
 	flyAwaySpeed		= -2.0f;
 	isHitPlayer			= false;
@@ -107,7 +105,6 @@ void Coin::Draw()
 {
 	if (!CheckCameraViewClip(position))
 	{
-		MV1SetMaterialSpcColor(modelHandle, 0, GetColorF(1.0f, 1.0f, 1.0f, 1.0f));
 		MV1DrawModel(modelHandle);
 	}
 }

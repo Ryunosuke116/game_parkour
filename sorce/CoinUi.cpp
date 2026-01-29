@@ -23,6 +23,7 @@ CoinUi::CoinUi() :
 	numberWidth	(-1.0f),
 	numberHeight(-1.0f),
 	addNumberX	(-1.0f),
+	uiPosMoveY	(-1.0f),
 	countNumber	("")
 {
 	std::fill(
@@ -79,11 +80,11 @@ void CoinUi::Initialize()
 {
 	//•`‰æˆÊ’u
 	const float InitCoinPosX		= 2080.0f;
-	const float InitCoinPosY		= 690.0f;
+	const float InitCoinPosY		= 660.0f;
 	const float InitCrossX			= 1945.0f;
-	const float InitCrossY			= 760.0f;
+	const float InitCrossY			= 730.0f;
 	const float InitNumberX			= 1890.0f;
-	const float InitNumberY			= 730.0f;
+	const float InitNumberY			= 700.0f;
 	const float kInitCoinWidth		= 140.0f;
 	const float kInitCoinHeight		= 152.0f;
 	const float kInitCrossWidth		= 60.0f;
@@ -110,7 +111,7 @@ void CoinUi::Initialize()
 
 	countNumber = initNumber;
 	coinCount	= 0;
-	isUp = false;
+	isUp		= false;
 }
 
 void CoinUi::Update()
@@ -128,6 +129,8 @@ void CoinUi::Update()
 		countNumber.insert(0, "0");
 	}
 
+	PositionUp();
+
 	coinPosX	= Calculation::Leap(coinPosX, targetCoinPosX, kLeapSpeed);
 	crossPosX	= Calculation::Leap(crossPosX, targetCrossX, kLeapSpeed);
 	numberPosX	= Calculation::Leap(numberPosX, targetNumberX, kLeapSpeed);
@@ -137,16 +140,16 @@ void CoinUi::Draw()
 {
 	//ƒRƒCƒ“ƒCƒ‰ƒXƒg•`‰æ
 	DrawExtendGraphF(coinPosX, 
-		coinPosY,
+		coinPosY + uiPosMoveY,
 		coinPosX + coinWidth,
-		coinPosY + coinHeight,
+		coinPosY + coinHeight + uiPosMoveY,
 		coinHandle, TRUE);
 
 	//cross•`‰æ
 	DrawExtendGraphF(crossPosX, 
-		crossPosY,
+		crossPosY + uiPosMoveY,
 		crossPosX + crossWidth,
-		crossPosY + crossHeight,
+		crossPosY + crossHeight + uiPosMoveY,
 		crossHandle, TRUE);
 
 	float nowNumberPosX = numberPosX;
@@ -156,9 +159,9 @@ void CoinUi::Draw()
 	{
 		int digit = c - '0';
 		DrawExtendGraphF(nowNumberPosX,
-			numberPosY,
+			numberPosY + uiPosMoveY,
 			nowNumberPosX + numberWidth,
-			numberPosY + numberHeight,
+			numberPosY + numberHeight + uiPosMoveY,
 			numberHandle[digit], TRUE);
 
 		//•¶Žš‚Ì••ª‚¸‚ç‚·
@@ -244,6 +247,16 @@ void CoinUi::PositionUp()
 {
 	if (isUp)
 	{
-
+		uiPosMoveY	= -30.0f;
+		isUp		= false;
+	}
+	else
+	{
+		uiPosMoveY += 1.0f;
+		
+		if (uiPosMoveY > 0.0f)
+		{
+			uiPosMoveY = 0.0f;
+		}
 	}
 }

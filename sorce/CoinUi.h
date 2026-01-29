@@ -48,6 +48,8 @@ private:
 	float numberWidth;
 	float numberHeight;
 	float addNumberX;
+	float uiPosMoveY;
+
 	std::string countNumber;
 };
 

@@ -137,7 +137,8 @@ void Camera::StartUpdate(const float& timer,
 	const float playerAngle)
 {
 	const float kAddCenterPointSpherePosY = 15.0f;
-	centerPointSpherePos = playerPosition;
+
+	centerPointSpherePos	= playerPosition;
 	centerPointSpherePos.y += kAddCenterPointSpherePosY;
 
 	DistanceUpdate();
@@ -165,9 +166,8 @@ void Camera::LayOutUpdate()
 	cameraDirection = VSub(screenCenterPosition, cameraPosition);
 	cameraDirection = VNorm(cameraDirection);
 
-	VECTOR moveDirection = VGet(0.0f, 0.0f, 0.0f);
-
-	VECTOR rightMove = VCross(cameraDirection, VGet(0.0f, 1.0f, 0.0f));
+	VECTOR moveDirection	= VGet(0.0f, 0.0f, 0.0f);
+	VECTOR rightMove		= VCross(cameraDirection, VGet(0.0f, 1.0f, 0.0f));
 
 	//正規化
 	rightMove		= VNorm(rightMove);
@@ -186,8 +186,8 @@ void Camera::LayOutUpdate()
 		moveDirection = VNorm(moveDirection);
 	}
 
-	cameraPosition = VAdd(cameraPosition, moveDirection);
-	screenCenterPosition = VAdd(screenCenterPosition, moveDirection);
+	cameraPosition			= VAdd(cameraPosition, moveDirection);
+	screenCenterPosition	= VAdd(screenCenterPosition, moveDirection);
 
 	//y軸↑移動
 	if (CheckHitKey(KEY_INPUT_UP) &&
@@ -390,14 +390,14 @@ void Camera::RotateUpdate()
 	normalCameraPosition.y = Calculation::InterpolationCalc(normalLinearProgress, maxHeight, minHeight);
 
 	//注視点はカメラとは反対方向に距離と高さを求める
-	VECTOR dir = VSub(screenCenterPosition, normalCameraPosition);
-	dir = VNorm(dir);
-	VECTOR add = VScale(dir, kLookDirectionScale);
-	lookPosition = VAdd(screenCenterPosition, add);
+	VECTOR dir		= VSub(screenCenterPosition, normalCameraPosition);
+	dir				= VNorm(dir);
+	VECTOR add		= VScale(dir, kLookDirectionScale);
+	lookPosition	= VAdd(screenCenterPosition, add);
 
 	//rayCast用の座標を算出
-	VECTOR addStartRayCast = VScale(dir, kStartRayDirectionScale);
-	rayCastStartPosition = VAdd(normalCameraPosition, addStartRayCast);
+	VECTOR addStartRayCast	= VScale(dir, kStartRayDirectionScale);
+	rayCastStartPosition	= VAdd(normalCameraPosition, addStartRayCast);
 }
 
 /// <summary>
@@ -426,7 +426,7 @@ bool Camera::CameraPosCalc(const std::vector<std::weak_ptr<BaseObject>>& collisi
 			hitPoly))
 		{
 			//カメラの移動量を算出
-			cameraVelocity			= VSub(hitPoly.HitPosition, rayCastStartPosition);
+			cameraVelocity				= VSub(hitPoly.HitPosition, rayCastStartPosition);
 			VECTOR cameraDirection		= VNorm(cameraVelocity);
 
 			//オブジェクトからカメラを押し戻す
@@ -465,8 +465,8 @@ void Camera::AdjustCameraPosition()
 			cameraDistanceSize = Calculation::Leap(cameraDistanceSize, normalCameraDistanceSize, kLeapSpeed);
 		}
 		else if (PadInput::GetJoyPadXLeft() != 0.0f ||
-			PadInput::GetJoyPadYLeft() != 0.0f ||
-			PadInput::GetJoyPadXRight() != 0.0f)
+				PadInput::GetJoyPadYLeft() != 0.0f ||
+				PadInput::GetJoyPadXRight() != 0.0f)
 		{
 			cameraDistanceSize = Calculation::Leap(cameraDistanceSize, normalCameraDistanceSize, kSlowLeapSpeed);
 		}

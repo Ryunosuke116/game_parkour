@@ -202,15 +202,6 @@
     <Filter Include="ソース ファイル\object\title\backGround">
       <UniqueIdentifier>{a1095ea5-ed9a-4e84-a18c-e10cf39144f8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\observer">
-      <UniqueIdentifier>{459a351b-37b9-47ad-bac3-326a179a787f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\observer\coin">
-      <UniqueIdentifier>{e2711408-00da-4bab-8418-b491d612c8f1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\observer\playerState">
-      <UniqueIdentifier>{d6b58774-3bf9-4b89-aba4-0877ea9343aa}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\static\calculation">
       <UniqueIdentifier>{cf99dbc9-50f2-4910-97b1-cd46a3c5e262}</UniqueIdentifier>
     </Filter>
@@ -261,6 +252,15 @@
     </Filter>
     <Filter Include="ソース ファイル\effectData">
       <UniqueIdentifier>{45d53345-c5b8-40fe-bdf9-dfa0a92e7c71}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\observer">
+      <UniqueIdentifier>{459a351b-37b9-47ad-bac3-326a179a787f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\observer\coin">
+      <UniqueIdentifier>{e2711408-00da-4bab-8418-b491d612c8f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\observer\playerState">
+      <UniqueIdentifier>{d6b58774-3bf9-4b89-aba4-0877ea9343aa}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
