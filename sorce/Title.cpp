@@ -14,8 +14,7 @@ class Game;
 /// インスタンス化
 /// </summary>
 /// <param name="manager"></param>
-Title::Title(SceneManager& manager) : BaseScene{ manager },
-modelHandle(-1)
+Title::Title(SceneManager& manager) : BaseScene{ manager }
 {
 
 }
@@ -81,6 +80,7 @@ void Title::Update()
         BlackOut::GetInstance().BlackOutUpdate(kAddAlpha);
         if (BlackOut::GetInstance().GetAlpha() >= kMaxAlpha)
         {
+            objectManager->~ObjectManager();
             BlackOut::GetInstance().SetIsLightChange(true);
             soundPlayer->Stop("titleBGM");
             ChangeScene("Game",0);

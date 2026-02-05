@@ -72,8 +72,8 @@ int WINAPI WinMain(HINSTANCE hInstance,
 #else
     //@Debug
     BlackOut::GetInstance().ResultInitialize();
-    sceneManager->Add<Game>("Game");
     sceneManager->Add<Title>("Title");
+    sceneManager->Add<Game>("Game");
     sceneManager->Add<Result>("Result");
 #endif
 

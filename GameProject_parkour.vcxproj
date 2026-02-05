@@ -306,6 +306,7 @@
     <None Include="JsonResult\player.Json" />
     <None Include="JsonResult\png.Json" />
     <None Include="JsonResult\sound.Json" />
+    <None Include="JsonTitle\backGround.Json" />
     <None Include="JsonTitle\png.Json" />
     <None Include="JsonTitle\sound.Json" />
   </ItemGroup>

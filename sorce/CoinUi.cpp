@@ -7,6 +7,7 @@
 CoinUi::CoinUi() :
 	BaseUI(),
 	isUp(false),
+	isUpSecondDigit(false),
 	coinHandle	(-1),
 	crossHandle	(-1),
 	coinCount	(-1),
@@ -25,7 +26,8 @@ CoinUi::CoinUi() :
 	addNumberX	(-1.0f),
 	uiPosMoveY	(-1.0f),
 	nowAddUiPosMoveY(-1.0f),
-	countNumber	("")
+	countNumber	(""),
+	oldCountNumber("")
 {
 	std::fill(
 		std::begin(numberHandle),
@@ -63,7 +65,7 @@ void CoinUi::Load(const nlohmann::json& jsonData)
 		uiPath[name] = path;
 	}
 
-	coinHandle = LoadGraph(uiPath.at("coin").c_str());
+	coinHandle	= LoadGraph(uiPath.at("coin").c_str());
 	crossHandle = LoadGraph(uiPath.at("cross").c_str());
 	LoadDivGraph(uiPath.at("number").c_str(),
 		kXNum, kYNum, kAllNum, kXSize, kYSize, numberHandle);
@@ -111,6 +113,7 @@ void CoinUi::Initialize()
 	addNumberX   = kInitAddNumberX;
 
 	countNumber			= initNumber;
+	oldCountNumber		= initNumber;
 	coinCount			= 0;
 	nowAddUiPosMoveY	= 0.0f;
 	isUp				= false;
@@ -123,6 +126,8 @@ void CoinUi::Update()
 	const float targetNumberX	= 1360.0f;
 	const float kLeapSpeed		= 0.1f;
 
+	oldCountNumber = countNumber;
+
 	countNumber = std::to_string(coinCount);
 
 	//一文字しか入ってない場合先頭に0を挿入する
@@ -131,43 +136,68 @@ void CoinUi::Update()
 		countNumber.insert(0, "0");
 	}
 
+	IsAddNumberUiDataCheck();
+	NumberDifferentCheck();
+
 	PositionUp();
 
 	coinPosX	= Calculation::Leap(coinPosX, targetCoinPosX, kLeapSpeed);
 	crossPosX	= Calculation::Leap(crossPosX, targetCrossX, kLeapSpeed);
 	numberPosX	= Calculation::Leap(numberPosX, targetNumberX, kLeapSpeed);
+
+	for (auto& numberUiData : numberUiDatas)
+	{
+		numberUiData.posX = numberPosX;
+	}
 }
 
 void CoinUi::Draw()
 {
 	//コインイラスト描画
-	DrawExtendGraphF(coinPosX, 
-		coinPosY + uiPosMoveY,
+	DrawExtendGraphF(
+		coinPosX, 
+		coinPosY,
 		coinPosX + coinWidth,
 		coinPosY + coinHeight,
-		coinHandle, TRUE);
+		coinHandle,
+		TRUE);
 
 	//cross描画
-	DrawExtendGraphF(crossPosX, 
-		crossPosY + uiPosMoveY,
+	DrawExtendGraphF(
+		crossPosX, 
+		crossPosY,
 		crossPosX + crossWidth,
 		crossPosY + crossHeight,
-		crossHandle, TRUE);
+		crossHandle, 
+		TRUE);
 
-	float nowNumberPosX = numberPosX;
+	float newNumberPosX = numberPosX;
+
+	int digitCount = 0;
 
 	//コイン所持数の桁数分、大きい桁から順に描画
 	for (char c : countNumber)
 	{
+		//数字は何か
 		int digit = c - '0';
-		DrawExtendGraphF(nowNumberPosX,
-			numberPosY		+ uiPosMoveY,
-			nowNumberPosX	+ numberWidth,
-			numberPosY		+ numberHeight + uiPosMoveY,
-			numberHandle[digit], TRUE);
+		float newNumberPosY = numberUiDatas[digitCount].posY;
+
+		if (numberUiDatas[digitCount].isUp)
+		{
+			newNumberPosY += uiPosMoveY;
+		}
+
+		DrawExtendGraphF(
+			newNumberPosX,
+			newNumberPosY,
+			newNumberPosX	+ numberWidth,
+			newNumberPosY	+ numberHeight,
+			numberHandle[digit], 
+			TRUE);
 
 		//文字の幅分ずらす
-		nowNumberPosX += addNumberX;
+		newNumberPosX += addNumberX;
+		digitCount++;
 	}
 }
 
@@ -222,6 +252,8 @@ void CoinUi::ResultInitialize()
 	{
 		countNumber.insert(0, "0");
 	}
+
+	IsAddNumberUiDataCheck();
 }
 
 /// <summary>
@@ -237,6 +269,11 @@ void CoinUi::ResultUpdate()
 	coinPosX	= Calculation::Leap(coinPosX,	kTargetCoinPosX, kLeapSpeed);
 	crossPosX	= Calculation::Leap(crossPosX,	kTargetCrossX,	kLeapSpeed);
 	numberPosX	= Calculation::Leap(numberPosX, kTargetNumberX, kLeapSpeed);
+
+	for (auto& numberUiData : numberUiDatas)
+	{
+		numberUiData.posX = numberPosX;
+	}
 }
 
 void CoinUi::OnCoinPicked(int amount)
@@ -254,6 +291,7 @@ void CoinUi::PositionUp()
 	{
 		uiPosMoveY -= kAddValue;
 		
+		//一定値に到達したら元に数値を段々戻していく
 		if (uiPosMoveY <= -kMaxPosY)
 		{
 			uiPosMoveY	= -kMaxPosY;
@@ -264,9 +302,51 @@ void CoinUi::PositionUp()
 	{
 		uiPosMoveY += kAddValue;
 		
+		//0以上になった場合動作を終了する
 		if (uiPosMoveY > 0.0f)
 		{
 			uiPosMoveY = 0.0f;
+			for (auto& numberUiData : numberUiDatas)
+			{
+				numberUiData.isUp = false;
+			}
 		}
+	}
+}
+
+/// <summary>
+/// 前フレームと現フレームの数字が違うか
+/// </summary>
+/// <param name="digitCount"></param>
+void CoinUi::NumberDifferentCheck()
+{
+	for (int i = 0; i < numberUiDatas.size(); i++)
+	{
+		//桁が変動したときのエラー対策
+		if (oldCountNumber.size() != countNumber.size())
+		{
+			numberUiDatas[i].isUp = true;
+			continue;
+		}
+		else if (oldCountNumber.at(i) != countNumber.at(i))
+		{
+			numberUiDatas[i].isUp = true;
+		}
+	}
+}
+
+/// <summary>
+/// 桁数を増やすかどうか
+/// </summary>
+void CoinUi::IsAddNumberUiDataCheck()
+{
+	//桁数が増えたら追加する
+	while (numberUiDatas.size() != countNumber.size())
+	{
+		NumberUiData numberUiData;
+		numberUiData.posX = numberPosX;
+		numberUiData.posY = numberPosY;
+		numberUiData.isUp = false;
+		numberUiDatas.push_back(numberUiData);
 	}
 }

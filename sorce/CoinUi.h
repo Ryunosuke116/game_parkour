@@ -1,6 +1,7 @@
 #pragma once
 #include "BaseUI.h"
 #include "CoinObserver.h"
+#include <vector>
 
 class CoinUi :
 	public BaseUI,
@@ -25,10 +26,19 @@ public:
 
 private:
 	void PositionUp();
+	void NumberDifferentCheck();
+	void IsAddNumberUiDataCheck();
+
+	struct NumberUiData
+	{
+		float posX;			//Š–‡”UI‚ÌXÀ•W
+		float posY;			//Š–‡”UI‚ÌYÀ•W
+		bool  isUp;
+	};
 
 private:
-
 	bool isUp;
+	bool isUpSecondDigit;
 
 	int coinHandle;
 	int numberHandle[10];
@@ -52,5 +62,8 @@ private:
 	float nowAddUiPosMoveY;		//Œ»İc²‚É‰ÁZ‚µ‚Ä‚¢‚é’l
 
 	std::string countNumber;
+	std::string oldCountNumber;
+
+	std::vector<NumberUiData> numberUiDatas;
 };
 

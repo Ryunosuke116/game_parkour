@@ -19,10 +19,17 @@ public:
 private:
 	int backGroundHandle;
 	int startButtonHandle;
+	int playMovieHandle;
 	int startButtonX;
 	int startButtonY;
 	int alpha;
-
+	int playMovieTime;
+	int setTime;
+	int sec;
 	int addAlpha;
+
+	bool isPlayMovie;
+
+	static constexpr int kCanPlayMovieSec = 15;		//‰½•b‚Å“®‰æ‚ğÄ¶‚³‚¹‚é‚©
 };
 

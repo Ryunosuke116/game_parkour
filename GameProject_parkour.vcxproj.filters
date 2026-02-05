@@ -739,5 +739,8 @@
     <None Include="JsonResult\png.Json">
       <Filter>ヘッダー ファイル\JsonResult</Filter>
     </None>
+    <None Include="JsonTitle\backGround.Json">
+      <Filter>ヘッダー ファイル\JsonTitle</Filter>
+    </None>
   </ItemGroup>
 </Project>
