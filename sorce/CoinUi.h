@@ -35,20 +35,21 @@ private:
 	int crossHandle;
 	int coinCount;
 
-	float coinPosX;
-	float coinPosY;
-	float crossPosX;
-	float crossPosY;
-	float numberPosX;
-	float numberPosY;
-	float coinWidth;
-	float coinHeight;
-	float crossWidth;
-	float crossHeight;
-	float numberWidth;
-	float numberHeight;
-	float addNumberX;
-	float uiPosMoveY;
+	float coinPosX;				//コインUIのX座標
+	float coinPosY;				//コインUIのY座標
+	float crossPosX;			//xUIのX座標
+	float crossPosY;			//xUIのY座標
+	float numberPosX;			//所持枚数UIのX座標
+	float numberPosY;			//所持枚数UIのY座標
+	float coinWidth;			//コインUIの横幅
+	float coinHeight;			//コインUIの縦幅
+	float crossWidth;			//xUIの横幅
+	float crossHeight;			//xUIの縦幅
+	float numberWidth;			//所持枚数UIの横幅
+	float numberHeight;			//所持枚数UIの縦幅
+	float addNumberX;			
+	float uiPosMoveY;			//uiの座標の加算値
+	float nowAddUiPosMoveY;		//現在縦軸に加算している値
 
 	std::string countNumber;
 };

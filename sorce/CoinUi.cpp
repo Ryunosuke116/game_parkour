@@ -24,6 +24,7 @@ CoinUi::CoinUi() :
 	numberHeight(-1.0f),
 	addNumberX	(-1.0f),
 	uiPosMoveY	(-1.0f),
+	nowAddUiPosMoveY(-1.0f),
 	countNumber	("")
 {
 	std::fill(
@@ -109,9 +110,10 @@ void CoinUi::Initialize()
 	numberHeight = kInitNumberHeight;
 	addNumberX   = kInitAddNumberX;
 
-	countNumber = initNumber;
-	coinCount	= 0;
-	isUp		= false;
+	countNumber			= initNumber;
+	coinCount			= 0;
+	nowAddUiPosMoveY	= 0.0f;
+	isUp				= false;
 }
 
 void CoinUi::Update()
@@ -142,14 +144,14 @@ void CoinUi::Draw()
 	DrawExtendGraphF(coinPosX, 
 		coinPosY + uiPosMoveY,
 		coinPosX + coinWidth,
-		coinPosY + coinHeight + uiPosMoveY,
+		coinPosY + coinHeight,
 		coinHandle, TRUE);
 
 	//crossï`âÊ
 	DrawExtendGraphF(crossPosX, 
 		crossPosY + uiPosMoveY,
 		crossPosX + crossWidth,
-		crossPosY + crossHeight + uiPosMoveY,
+		crossPosY + crossHeight,
 		crossHandle, TRUE);
 
 	float nowNumberPosX = numberPosX;
@@ -159,9 +161,9 @@ void CoinUi::Draw()
 	{
 		int digit = c - '0';
 		DrawExtendGraphF(nowNumberPosX,
-			numberPosY + uiPosMoveY,
-			nowNumberPosX + numberWidth,
-			numberPosY + numberHeight + uiPosMoveY,
+			numberPosY		+ uiPosMoveY,
+			nowNumberPosX	+ numberWidth,
+			numberPosY		+ numberHeight + uiPosMoveY,
 			numberHandle[digit], TRUE);
 
 		//ï∂éöÇÃïùï™Ç∏ÇÁÇ∑
@@ -232,27 +234,35 @@ void CoinUi::ResultUpdate()
 	const float kTargetNumberX	= 1220.0f;
 	const float kLeapSpeed		= 0.1f;
 
-	coinPosX	= Calculation::Leap(coinPosX, kTargetCoinPosX, kLeapSpeed);
-	crossPosX	= Calculation::Leap(crossPosX, kTargetCrossX, kLeapSpeed);
+	coinPosX	= Calculation::Leap(coinPosX,	kTargetCoinPosX, kLeapSpeed);
+	crossPosX	= Calculation::Leap(crossPosX,	kTargetCrossX,	kLeapSpeed);
 	numberPosX	= Calculation::Leap(numberPosX, kTargetNumberX, kLeapSpeed);
 }
 
 void CoinUi::OnCoinPicked(int amount)
 { 
-	coinCount += amount; 
-	isUp = true;
+	coinCount	+= amount; 
+	isUp		= true;
 }
 
 void CoinUi::PositionUp()
 {
+	const float kMaxPosY	= 30.0f;
+	const float kAddValue	= 3.0f;
+
 	if (isUp)
 	{
-		uiPosMoveY	= -30.0f;
-		isUp		= false;
+		uiPosMoveY -= kAddValue;
+		
+		if (uiPosMoveY <= -kMaxPosY)
+		{
+			uiPosMoveY	= -kMaxPosY;
+			isUp		= false;
+		}
 	}
 	else
 	{
-		uiPosMoveY += 1.0f;
+		uiPosMoveY += kAddValue;
 		
 		if (uiPosMoveY > 0.0f)
 		{
