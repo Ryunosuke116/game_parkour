@@ -50,8 +50,8 @@ void PlayerEffectController::Update(const VECTOR& playerPos,
     const float     kAddCoinTouchEffectPosY = 6.0f;
     const VECTOR    kEffectScale            = VGet(4.0f, 4.0f, 4.0f);
 
-    VECTOR effectPosition = playerPos;
-    effectPosition.y += kAddEffectPositionY;
+    VECTOR effectPosition   = playerPos;
+    effectPosition.y        += kAddEffectPositionY;
 
     if (playerData.isRun)
     {

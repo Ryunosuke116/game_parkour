@@ -36,7 +36,8 @@ void EffectManager::Shutdown()
 	effectDatas.clear();
 }
 
-void EffectManager::Create(const std::string& sceneName)
+void EffectManager::Create(
+	const std::string& sceneName)
 {
 	if (effectDatas.size() != 0)
 	{
@@ -64,7 +65,9 @@ void EffectManager::Create(const std::string& sceneName)
 /// <param name="path"></param>
 /// <param name="scale"></param>
 /// <param name="setPos"></param>
-void EffectManager::Add(const char* path, std::string& setTag,
+void EffectManager::Add(
+	const char* path,
+	std::string& setTag,
 	const float& scale)
 {
 	std::shared_ptr<EffectData> data = std::make_shared<EffectData>();
@@ -100,7 +103,8 @@ void EffectManager::PlayEffectUpdate()
 /// エフェクトを再生
 /// </summary>
 /// <param name="tag"></param>
-void EffectManager::PlayEffect(const std::string& tag)
+void EffectManager::PlayEffect(
+	const std::string& tag)
 {
 	for (auto& effect : effectDatas)
 	{
@@ -117,7 +121,8 @@ void EffectManager::PlayEffect(const std::string& tag)
 /// エフェクトの停止
 /// </summary>
 /// <param name="tag"></param>
-void EffectManager::StopEffect(const std::string& tag)
+void EffectManager::StopEffect(
+	const std::string& tag)
 {
 	for (auto& effect : effectDatas)
 	{
@@ -132,7 +137,8 @@ void EffectManager::StopEffect(const std::string& tag)
 /// ポジションを保存
 /// </summary>
 /// <param name="setPosition"></param>
-void EffectManager::SetPosition(const VECTOR setPosition,
+void EffectManager::SetPosition(
+	const VECTOR setPosition,
 	const std::string& tag)
 {
 	for (auto& effect : effectDatas)
@@ -156,7 +162,8 @@ void EffectManager::SetPosition(const VECTOR setPosition,
 /// </summary>
 /// <param name="scale"></param>
 /// <param name="tag"></param>
-void EffectManager::SetScale(const VECTOR& scale,
+void EffectManager::SetScale(
+	const VECTOR& scale,
 	const std::string& tag)
 {
 	for (auto& effect : effectDatas)
@@ -173,7 +180,9 @@ void EffectManager::SetScale(const VECTOR& scale,
 /// </summary>
 /// <param name="speed"></param>
 /// <param name="tag"></param>
-void EffectManager::SetSpeed(const float& speed, const std::string& tag)
+void EffectManager::SetSpeed(
+	const float& speed, 
+	const std::string& tag)
 {
 	for (auto& effect : effectDatas)
 	{
@@ -189,7 +198,8 @@ void EffectManager::SetSpeed(const float& speed, const std::string& tag)
 /// </summary>
 /// <param name="setPosition"></param>
 /// <param name="tag"></param>
-void EffectManager::SetRotation(const VECTOR& setPosition,
+void EffectManager::SetRotation(
+	const VECTOR& setPosition,
 	const std::string& tag)
 {
 	for (auto& effect : effectDatas)

@@ -110,7 +110,7 @@ VECTOR FallingIdle::Command(const VECTOR& cameraDirection,
     PlayerData& playerData,
     Player& player)
 {
-    VECTOR moveDirection = VGet(0.0f, 0.0f, 0.0f);
+    VECTOR moveDirection        = VGet(0.0f, 0.0f, 0.0f);
     auto collisionObjectManager = WorldSubSystem::GetInstance().GetSubSystem<CollisionObjectManager>();
 
     //moveDir‚ðŽæ“¾‚·‚é

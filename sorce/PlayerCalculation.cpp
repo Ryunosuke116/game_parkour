@@ -163,9 +163,9 @@ VECTOR PlayerCalculation::Jump(const VECTOR& velocity,
             newVelocity.y = 0.0f;
             gravityPower = 0.0f;
         }
-        newVelocity.y += nowJumpPower;
-        gravityPower += nowJumpPower;
-        isAddJumpPower = false;
+        newVelocity.y   += nowJumpPower;
+        gravityPower    += nowJumpPower;
+        isAddJumpPower  = false;
         ignoreGroundTimer = kAddIgnoreGroundTimer;
     }
 
@@ -284,8 +284,8 @@ VECTOR PlayerCalculation::RunWall(
 VECTOR PlayerCalculation::HangingAngle(const MV1_COLL_RESULT_POLY& hangingPoly)
 {
     //張り付く壁の法線ベクトルを利用してplayerの向きを調整
-    VECTOR direction = hangingPoly.Normal;
-    direction.y = 0.0f;
+    VECTOR direction    = hangingPoly.Normal;
+    direction.y         = 0.0f;
 
     direction = VScale(direction, -1.0f);
 
@@ -304,7 +304,7 @@ VECTOR PlayerCalculation::HangingPosition()
     const float kHalfScale = 0.5f;
 
     VECTOR centerPos = VAdd(leftHandPos, rightHandPos);
-    centerPos = VScale(centerPos, kHalfScale);
+    centerPos        = VScale(centerPos, kHalfScale);
     
     VECTOR newPos = VSub(nearestResult.nearestPoint, centerPos);
     return newPos;
@@ -325,7 +325,7 @@ VECTOR PlayerCalculation::HangingDirection(const VECTOR& centerPos)
         nearestResult.endLinePos);
 
     VECTOR direction = VSub(projectionDirection, centerPos);
-    direction.y = 0.0f;
+    direction.y      = 0.0f;
 
     direction = VNorm(direction);
 
@@ -400,8 +400,8 @@ std::pair<bool, VECTOR> PlayerCalculation::GroundCollisionCheckHangToCrouch(
     const VECTOR& endRayPos,
     const VECTOR& position)
 {
-    const int kFrameIndex = -1;
-    VECTOR bottomPos = VGet(startRayPos.x, endRayPos.y, startRayPos.z);
+    const int kFrameIndex   = -1;
+    VECTOR bottomPos        = VGet(startRayPos.x, endRayPos.y, startRayPos.z);
 
     MV1_COLL_RESULT_POLY groundRayPoly;
     VECTOR newPosition = position;
@@ -521,8 +521,8 @@ float PlayerCalculation::SpeedDown(const PlayerData& playerData)
         if (!isCalcDeceleration)
         {
             const float kStopFrame = 10.0f;
-            decelerationSpeed = newMoveSpeed / kStopFrame;
-            isCalcDeceleration = true;
+            decelerationSpeed   = newMoveSpeed / kStopFrame;
+            isCalcDeceleration  = true;
         }
 
         newMoveSpeed -= decelerationSpeed;
@@ -531,6 +531,7 @@ float PlayerCalculation::SpeedDown(const PlayerData& playerData)
     else
     {
         const float kDownSpeed = 0.02f;
+
         //徐々に下げる
         newMoveSpeed -= kDownSpeed;
     }

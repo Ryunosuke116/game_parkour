@@ -137,7 +137,8 @@ void PlayerStateBase::Draw()
 /// </summary>
 /// <param name="input"></param>
 /// <param name="velocity"></param>
-VECTOR PlayerStateBase::Move(const VECTOR& cameraDirection,
+VECTOR PlayerStateBase::Move(
+    const VECTOR& cameraDirection,
     PlayerData& playerData)
 {
     moveDirection = VGet(0.0f, 0.0f, 0.0f);

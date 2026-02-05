@@ -32,8 +32,8 @@ public:
 	virtual float GetRadius()				const abstract;
 
 	void SetResultCollision	(const CollisionResult& newResult)	{ resultCollision = newResult; }
-	void SetRotateX			(const float& set)					{ rotateX = set; }
-	void SetIsCollisionCheck(const bool& set)					{ isCollisionCheck = set; }
+	void SetRotateX			(const float set)					{ rotateX = set; }
+	void SetIsCollisionCheck(const bool set)					{ isCollisionCheck = set; }
 
 protected:
 	int modelHandle;		//ƒ‚ƒfƒ‹ƒnƒ“ƒhƒ‹

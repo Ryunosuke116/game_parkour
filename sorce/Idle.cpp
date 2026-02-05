@@ -33,8 +33,10 @@ Idle::~Idle()
 /// <param name="fieldObjects"></param>
 /// <param name="player"></param>
 /// <returns></returns>
-std::pair<VECTOR, PlayerData> Idle::Update(const VECTOR& cameraDirection,
-    const std::vector<std::weak_ptr<BaseObject>>& fieldObjects, Player& player)
+std::pair<VECTOR, PlayerData> Idle::Update(
+    const VECTOR& cameraDirection,
+    const std::vector<std::weak_ptr<BaseObject>>& fieldObjects, 
+    Player& player)
 {
     VECTOR moveDirection    = VGet(0.0f, 0.0f, 0.0f);
     PlayerData playerData   = player.GetData();
@@ -43,7 +45,9 @@ std::pair<VECTOR, PlayerData> Idle::Update(const VECTOR& cameraDirection,
     return std::make_pair(moveDirection, playerData);
 }
 
-VECTOR Idle::Command(const VECTOR& cameraDirection, PlayerData& playerData, Player& player)
+VECTOR Idle::Command(
+    const VECTOR& cameraDirection, 
+    PlayerData& playerData, Player& player)
 {
     VECTOR moveDirection = VGet(0.0f, 0.0f, 0.0f);
 

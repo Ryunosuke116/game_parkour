@@ -270,9 +270,9 @@ void Run::Enter(const AnimState& oldAnimState,
 void Run::Exit(PlayerData& playerData)
 {
 	PlayerStateBase::Exit(playerData);
-	playerData.isRun = false;
-	playerData.isRunWall = false;
-	const auto soundPlayer =
+	playerData.isRun		= false;
+	playerData.isRunWall	= false;
+	const auto soundPlayer	=
 		GameInstanceSubSystem::GetInstance().GetSubSystem<SoundPlayer>().lock();
 
 	soundPlayer->Stop("dash");
