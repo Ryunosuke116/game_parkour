@@ -155,7 +155,7 @@ VECTOR CollisionManager::HeadCollisionCheck(
 					hitDirection = VScale(hitDirection, charaRadius);
 
 					//接触座標までの方向に球の中心から半径分を加算して
-					// 球の表面の座標を求める
+					//球の表面の座標を求める
 					VECTOR hitSpherePosition = VAdd(newTopPosition, hitDirection);
 
 					//押し戻し量を計算
@@ -294,7 +294,7 @@ VECTOR CollisionManager::WallCollisionCheck(
 {
 	const float kReviseBottomPosY = 1.0f;
 
-	VECTOR newTopPosition = VAdd(charaPositionData.capsuleTopPosition, charaVelocity);
+	VECTOR newTopPosition	 = VAdd(charaPositionData.capsuleTopPosition, charaVelocity);
 	VECTOR newBottomPosition = VAdd(charaPositionData.capsuleBottomPosition, charaVelocity);
 
 	//ちょっとした段差を壁として扱わないように座標を調整
@@ -418,13 +418,14 @@ VECTOR CollisionManager::WallGroundCollisionCheck(
 	const float charaRadius,
 	const PositionData& charaPositionData)
 {
-	bool isHitGround = false;
-	bool returnFlag = false;
-	const float kReverseScale = -1.0f;		//方向ベクトル反転用
-	const float kExtendRayScale = 15.0f;		//rayの大きさ
-	const int kFrameIndex = -1;
-	const VECTOR gravityForWallRun = VScale(gravityDirection, kReverseScale);
-	std::string returnTag = "";
+	const int kFrameIndex			= -1;
+	const float kReverseScale		= -1.0f;		//方向ベクトル反転用
+	const float kExtendRayScale		= 15.0f;		//rayの大きさ
+	const VECTOR gravityForWallRun	= VScale(gravityDirection, kReverseScale);
+	
+	bool returnFlag			= false;
+	bool isHitGround		= false;
+	std::string returnTag	= "";
 
 	//ray開始を少しずらさないと壁に埋まって反応しないためずらす
 	VECTOR rayStartPosition = VGet(
@@ -434,7 +435,7 @@ VECTOR CollisionManager::WallGroundCollisionCheck(
 
 	VECTOR rayEndPosition = VAdd(rayStartPosition, VScale(gravityForWallRun, kExtendRayScale));
 
-	VECTOR returnNewPos = newPosition;
+	VECTOR returnNewPos			 = newPosition;
 	VECTOR HitWallPlayerPosition = VAdd(newPosition, VScale(gravityForWallRun, charaRadius));
 
 	MV1_COLL_RESULT_POLY groundRayPoly;
@@ -458,11 +459,11 @@ VECTOR CollisionManager::WallGroundCollisionCheck(
 			VECTOR newPlayerPos = VGet(0.0f, 0.0f, 0.0f);
 
 			//横の座標だけ壁に沿って押し戻す
-			newPlayerPos = VSub(groundRayPoly.HitPosition, HitWallPlayerPosition);
-			newPlayerPos.y = 0.0f;
-			returnNewPos = VAdd(returnNewPos, newPlayerPos);
-			returnFlag = true;
-			returnTag = collisionObject->GetTag();
+			newPlayerPos	= VSub(groundRayPoly.HitPosition, HitWallPlayerPosition);
+			newPlayerPos.y	= 0.0f;
+			returnNewPos	= VAdd(returnNewPos, newPlayerPos);
+			returnFlag		= true;
+			returnTag		= collisionObject->GetTag();
 		}
 	}
 

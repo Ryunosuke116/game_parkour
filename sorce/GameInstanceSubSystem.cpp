@@ -28,6 +28,8 @@ void GameInstanceSubSystem::Create()
 	{
 		assert("subSystemsの初期化が行われていません");
 	}
+
+	//オブジェクトを生成+管理
 	GameInstanceSubSystem::GetInstance().AddSubSystem<SoundPlayer>();
 	GameInstanceSubSystem::GetInstance().AddSubSystem<EffectManager>();
 }
@@ -48,6 +50,9 @@ void GameInstanceSubSystem::Draw()
 	}
 }
 
+/// <summary>
+/// 管理しているオブジェクトのdelete処理
+/// </summary>
 void GameInstanceSubSystem::ShutdownAll()
 {
 	for (auto& system : subSystems)

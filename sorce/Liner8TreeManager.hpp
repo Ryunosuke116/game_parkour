@@ -106,6 +106,9 @@ public:
 	/// <param name="spaceNumber"></param>
 	bool CreateNewCell(uint32_t spaceNumber)
 	{
+		const int kParentSpaceShift = 3;	//親空間に行くためのシフト量
+
+
 		//空間がある場合は抜ける
 		if (cellArray.find(spaceNumber) != cellArray.end()) return false;
 
@@ -116,7 +119,7 @@ public:
 			cellArray[spaceNumber] = std::make_shared<Cell<Type>>();
 
 			//親空間に移動
-			spaceNumber = (spaceNumber - 1) >> 3;
+			spaceNumber = (spaceNumber - 1) >> kParentSpaceShift;
 			if (spaceNumber >= cellNumber)break;
 		}
 		return true;
@@ -130,6 +133,7 @@ public:
 	/// <returns></returns>
 	uint32_t GetMortonNumber(const VECTOR& min, const VECTOR& max)
 	{
+		const int kMaskValue = 3;
 		VECTOR mObjectMin = min;
 		VECTOR mObjectMax = max;
 
@@ -148,12 +152,13 @@ public:
 		//空間レベル数分、差があるかチェック
 		for (unsigned int i = 0; i < lowestLevel; i++)
 		{
-			uint32_t checkNumber = (xorNumber >> (i * 3));
+			uint32_t checkNumber = (xorNumber >> (i * kMaskValue));
+
 			//3ビット分マスクして
 			if ((checkNumber & 0x7) != 0)
 			{
 				spaceIndex	= (i + 1);
-				shift		= spaceIndex * 3;
+				shift		= spaceIndex * kMaskValue;
 			}
 		}
 

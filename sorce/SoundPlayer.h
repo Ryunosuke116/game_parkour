@@ -17,7 +17,6 @@ public:
 	void Stop(const std::string& name);
 
 private:
-
 	struct SoundData
 	{
 		int handle;

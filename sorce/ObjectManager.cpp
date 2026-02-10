@@ -167,6 +167,9 @@ void ObjectManager::NormalUpdate()
 	}
 }
 
+/// <summary>
+/// デバッグ用の更新処理
+/// </summary>
 void ObjectManager::WhenDebugUpdate()
 {
 	if (CheckHitKey(KEY_INPUT_0))
@@ -208,6 +211,9 @@ void ObjectManager::WhenDebugUpdate()
 	}
 }
 
+/// <summary>
+/// ゲーム開始時の処理
+/// </summary>
 void ObjectManager::StartUpdate()
 {
 	const int kMinAlpha		= 0;

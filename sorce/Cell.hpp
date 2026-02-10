@@ -25,7 +25,6 @@ public:
 		//‹óŠÔ‚ÉV‹K“o˜^‚·‚é
 		objectList.push_back(spOFT);
 
-
 		//‚±‚Ì‹óŠÔ‚É“o˜^‚³‚ê‚Ä‚¢‚é‚±‚Æ‚ð’Ê’m
 		spOFT->RegistCell(self);
 
